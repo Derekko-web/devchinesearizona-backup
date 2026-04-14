@@ -1,0 +1,41 @@
+# ----------------------------------------------------------------------
+# 1. GENERAL SERVER & LOGS
+# ----------------------------------------------------------------------
+*.log
+logs/
+.env
+.env.local
+.env.*.local
+.DS_Store
+
+# ----------------------------------------------------------------------
+# 2. NEXT.JS APP (dev.chinesearizona.com)
+# ----------------------------------------------------------------------
+node_modules/
+.next/
+out/
+build/
+.pnp
+.pnp.js
+coverage/
+
+# ----------------------------------------------------------------------
+# 3. WORDPRESS (chinesearizona.com)
+# ----------------------------------------------------------------------
+# Ignore all WordPress core files
+chinesearizona.com/public/wp-admin/
+chinesearizona.com/public/wp-includes/
+chinesearizona.com/public/wp-*.php
+chinesearizona.com/public/index.php
+chinesearizona.com/public/xmlrpc.php
+chinesearizona.com/public/license.txt
+chinesearizona.com/public/readme.html
+
+# Ignore massive or sensitive WordPress folders
+chinesearizona.com/public/wp-content/uploads/
+chinesearizona.com/public/wp-content/cache/
+chinesearizona.com/public/wp-content/upgrade/
+chinesearizona.com/public/wp-content/backup-db/
+
+# IMPORTANT: Never commit the wp-config file (contains DB passwords!)
+chinesearizona.com/public/wp-config.php
