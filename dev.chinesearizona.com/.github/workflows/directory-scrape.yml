@@ -1,0 +1,33 @@
+name: Directory Scrape
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 10 * * *'
+
+jobs:
+  scrape-directory:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run directory scraper
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          DIRECTORY_STORAGE_BUCKET: ${{ secrets.DIRECTORY_STORAGE_BUCKET }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TRANSLATION_MODEL: ${{ secrets.OPENAI_TRANSLATION_MODEL }}
+        run: npm run scrape:directory

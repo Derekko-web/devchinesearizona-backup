@@ -1,0 +1,222 @@
+[
+  {
+    "id": "sig_tsmc_corridor_supplier_pressure_2026_04_14",
+    "slug": "tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure",
+    "title": {
+      "en": "TSMC Corridor Watch: Supplier Growth Is Changing How Families Compare North Phoenix and Peoria",
+      "zh": "TSMC 走廊觀察：供應鏈成長正改變家庭比較北鳳凰城與 Peoria 的方式"
+    },
+    "series": "tsmc-corridor-watch",
+    "reviewStatus": "approved",
+    "priorityScore": 100,
+    "sourceName": "TSMC Corporate Updates",
+    "sourceUrl": "https://www.tsmc.com/english",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "tsmc_newcomers",
+      "business_owners"
+    ],
+    "ctaBusinessSlugs": [
+      "elite-az-realty-team",
+      "sonoran-career-bridge",
+      "chen-cpa-associates"
+    ],
+    "publishedAt": "2026-04-14T10:00:00.000Z",
+    "directoryFollowUp": {
+      "action": "expand_category",
+      "status": "queued",
+      "notes": {
+        "en": "Identify two more bilingual West Valley hiring or supplier-support listings for the jobs category.",
+        "zh": "為 jobs 分類再補兩筆雙語西谷徵才或供應鏈支援商家。"
+      }
+    }
+  },
+  {
+    "id": "sig_restaurant_radar_east_valley_2026_04_12",
+    "slug": "restaurant-opening-radar-east-valley-plaza-shifts",
+    "title": {
+      "en": "Restaurant Opening Radar: East Valley Plaza Shifts Worth Watching This Month",
+      "zh": "新店雷達：本月值得關注的東谷商場變化"
+    },
+    "series": "restaurant-opening-radar",
+    "reviewStatus": "approved",
+    "priorityScore": 100,
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnowphoenix.com/",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "local_families",
+      "students"
+    ],
+    "ctaBusinessSlugs": [
+      "taste-of-taiwan",
+      "99-ranch-market-chandler",
+      "85-degrees-chandler"
+    ],
+    "publishedAt": "2026-04-12T09:15:00.000Z",
+    "directoryFollowUp": {
+      "action": "verify_listing",
+      "status": "queued",
+      "notes": {
+        "en": "Check whether the newest East Valley dessert and boba openings already exist in the directory before the next radar post.",
+        "zh": "下次雷達更新前先核對東谷最新甜點與手搖飲店是否已在目錄中。"
+      }
+    }
+  },
+  {
+    "id": "sig_route_watch_connector_playbook_2026_04_13",
+    "slug": "phoenix-route-watch-asia-connector-playbook",
+    "title": {
+      "en": "Phoenix Route Watch: The Asia Connector Playbook Families Keep Rebuilding",
+      "zh": "航線觀察：鳳凰城家庭反覆重建的亞洲轉機攻略"
+    },
+    "series": "route-watch",
+    "reviewStatus": "approved",
+    "priorityScore": 98,
+    "sourceName": "Phoenix Sky Harbor",
+    "sourceUrl": "https://www.skyharbor.com/",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "tsmc_newcomers",
+      "local_families",
+      "students"
+    ],
+    "ctaBusinessSlugs": [
+      "lotus-travel-center",
+      "desert-bridge-relocation"
+    ],
+    "publishedAt": "2026-04-13T08:30:00.000Z"
+  },
+  {
+    "id": "sig_trend_radar_apartment_myths_2026_04_11",
+    "slug": "trend-radar-phoenix-apartment-myths-short-video-apps",
+    "title": {
+      "en": "Trend Radar: Phoenix Apartment Myths Newcomers Keep Hearing on Short-Video Apps",
+      "zh": "趨勢雷達：新居民在短影音平台上反覆聽到的鳳凰城租屋迷思"
+    },
+    "series": "trend-radar",
+    "reviewStatus": "approved",
+    "priorityScore": 96,
+    "sourceName": "TikTok Phoenix Apartments Tag",
+    "sourceUrl": "https://www.tiktok.com/tag/phoenixapartments",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "tsmc_newcomers",
+      "students"
+    ],
+    "ctaBusinessSlugs": [
+      "elite-az-realty-team",
+      "desert-bridge-relocation",
+      "profix-home-services"
+    ],
+    "publishedAt": "2026-04-11T08:45:00.000Z"
+  },
+  {
+    "id": "sig_restaurant_radar_nw_valley_2026_04_10",
+    "slug": "trend-radar-what-phoenix-food-posts-keep-highlighting",
+    "title": {
+      "en": "Trend Radar: What Phoenix Food Posts Keep Highlighting This Week",
+      "zh": "趨勢雷達：本週鳳凰城美食貼文反覆在推什麼"
+    },
+    "series": "trend-radar",
+    "reviewStatus": "approved",
+    "priorityScore": 96,
+    "sourceName": "TikTok Phoenix Food Tag",
+    "sourceUrl": "https://www.tiktok.com/tag/phoenixfood",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "local_families",
+      "students"
+    ],
+    "ctaBusinessSlugs": [
+      "taste-of-taiwan",
+      "99-ranch-market-chandler",
+      "85-degrees-chandler"
+    ],
+    "publishedAt": "2026-04-10T11:20:00.000Z"
+  },
+  {
+    "id": "sig_restaurant_queue_2026_04_19",
+    "slug": "restaurant-opening-radar-west-valley-category-build",
+    "title": {
+      "en": "Restaurant Radar Queue: West Valley Category Build",
+      "zh": "新店雷達待發：西谷分類補強"
+    },
+    "series": "restaurant-opening-radar",
+    "reviewStatus": "review_ready",
+    "priorityScore": 95,
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnowphoenix.com/",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "local_families"
+    ],
+    "ctaBusinessSlugs": [
+      "taste-of-taiwan",
+      "99-ranch-market-chandler"
+    ],
+    "publishedAt": "2026-04-19T09:00:00.000Z",
+    "directoryFollowUp": {
+      "action": "create_listing",
+      "status": "in_progress",
+      "notes": {
+        "en": "Build the first West Valley dessert listing bundle before publishing this radar item.",
+        "zh": "發佈前先建立第一批西谷甜點商家頁。"
+      }
+    }
+  },
+  {
+    "id": "sig_route_watch_queue_2026_04_18",
+    "slug": "route-watch-summer-departure-pressure-at-phx",
+    "title": {
+      "en": "Route Watch Queue: Summer Departure Pressure at PHX",
+      "zh": "航線觀察待發：PHX 暑期出發壓力"
+    },
+    "series": "route-watch",
+    "reviewStatus": "queued",
+    "priorityScore": 89,
+    "sourceName": "Phoenix Sky Harbor",
+    "sourceUrl": "https://www.skyharbor.com/",
+    "freshnessTier": "weekly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "local_families",
+      "students"
+    ],
+    "ctaBusinessSlugs": [
+      "lotus-travel-center"
+    ],
+    "publishedAt": "2026-04-18T08:00:00.000Z"
+  },
+  {
+    "id": "sig_housing_watch_west_valley_compare_2026_04_15",
+    "slug": "housing-watch-where-tsmc-families-compare-first",
+    "title": {
+      "en": "Housing Watch: Where TSMC-Area Families Are Actually Comparing First",
+      "zh": "房市觀察：TSMC 周邊家庭最先比較的落腳區"
+    },
+    "series": "housing-watch",
+    "reviewStatus": "approved",
+    "priorityScore": 82,
+    "sourceName": "Zillow Phoenix Housing Search",
+    "sourceUrl": "https://www.zillow.com/",
+    "freshnessTier": "monthly",
+    "destinationSurface": "community_news",
+    "personaTargets": [
+      "tsmc_newcomers",
+      "local_families"
+    ],
+    "ctaBusinessSlugs": [
+      "elite-az-realty-team",
+      "desert-bridge-relocation",
+      "arizona-chinese-language-academy"
+    ],
+    "publishedAt": "2026-04-15T09:00:00.000Z"
+  }
+]

@@ -23,6 +23,11 @@
 # misc
 .DS_Store
 *.pem
+.venv/
+__pycache__/
+.pytest_cache/
+.python-packages/
+data/atlas-obscura-staging/
 
 # debug
 npm-debug.log*

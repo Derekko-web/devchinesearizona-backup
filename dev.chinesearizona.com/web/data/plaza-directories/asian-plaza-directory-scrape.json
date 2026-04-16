@@ -1,0 +1,4554 @@
+{
+  "generatedAt": "2026-04-15T21:34:08+00:00",
+  "centers": [
+    {
+      "id": "mekong-plaza",
+      "name": "Mekong Plaza",
+      "city": "Mesa",
+      "centerAddress": "66 S Dobson Rd, Mesa, AZ 85202",
+      "centerCoordinates": {
+        "lat": 33.4131879,
+        "lng": -111.8761049
+      },
+      "summary": "Mesa Asian District shopping center anchored by Mekong Supermarket. The official stores page currently exposes a large in-plaza tenant list, and map data adds a few immediately adjacent businesses.",
+      "status": "active",
+      "sourceUrls": [
+        "https://mekongplaza.com/mekong-plaza",
+        "https://mekongplaza.com/stores-1",
+        "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 45,
+        "nearbyListings": 3,
+        "plannedListings": 0,
+        "totalListings": 48
+      },
+      "listings": [
+        {
+          "name": "Roll Avenue Ice Cream Rolls",
+          "canonicalName": "roll avenue ice cream rolls",
+          "category": "ice_cream",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 20.6,
+          "coordinates": {
+            "lat": 33.4132452,
+            "lng": -111.8758933
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Thai Spices",
+          "canonicalName": "thai spices",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 20.7,
+          "coordinates": {
+            "lat": 33.4131178,
+            "lng": -111.8758981
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Heng's Kitchen",
+          "canonicalName": "heng s kitchen",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": "https://www.hengskitchenmesaaz.com/",
+          "phone": "(480) 256-0638",
+          "distanceMeters": 23.1,
+          "coordinates": {
+            "lat": 33.4133726,
+            "lng": -111.8762177
+          },
+          "description": "Online ordering menu for Heng's Kitchen.",
+          "hours": [],
+          "sourceLabels": [
+            "local-site-fixture",
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": {
+            "slug": "heng-s-kitchen-mesa",
+            "id": "scraped_0031"
+          }
+        },
+        {
+          "name": "Tea Snow Lounge",
+          "canonicalName": "tea snow",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": "+1-480-834-2303",
+          "distanceMeters": 24.4,
+          "coordinates": {
+            "lat": 33.4133271,
+            "lng": -111.8759013
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Cơm Tấm Thuận Kiều",
+          "canonicalName": "com tam thuan kieu",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 25.1,
+          "coordinates": {
+            "lat": 33.413044,
+            "lng": -111.8758963
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Wong Insurance Agency",
+          "canonicalName": "wong insurance agency",
+          "category": "insurance",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 25.5,
+          "coordinates": {
+            "lat": 33.413412,
+            "lng": -111.8761636
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Huế Gourmet",
+          "canonicalName": "hue gourmet",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 27.1,
+          "coordinates": {
+            "lat": 33.4134135,
+            "lng": -111.8762158
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "An Lac",
+          "canonicalName": "an lac",
+          "category": "interior_decoration",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": "+1-480-310-7021",
+          "distanceMeters": 29.7,
+          "coordinates": {
+            "lat": 33.4134446,
+            "lng": -111.8761941
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Hi-Tech Dentistry",
+          "canonicalName": "hi tech dentistry",
+          "category": "dentist",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 31.3,
+          "coordinates": {
+            "lat": 33.4129066,
+            "lng": -111.8760867
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Mekong Supermarket",
+          "canonicalName": "mekong supermarket",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 32.6,
+          "coordinates": {
+            "lat": 33.412907,
+            "lng": -111.8762037
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Wholly Grill",
+          "canonicalName": "wholly grill",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 32.8,
+          "coordinates": {
+            "lat": 33.4134645,
+            "lng": -111.8762288
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Binh Duong Quan",
+          "canonicalName": "binh duong quan",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 33.2,
+          "coordinates": {
+            "lat": 33.4134724,
+            "lng": -111.8762144
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Hong Kong Gifts",
+          "canonicalName": "hong kong gifts",
+          "category": "gift",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 42.2,
+          "coordinates": {
+            "lat": 33.4128146,
+            "lng": -111.8760234
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Hung's Hair Design by Victor",
+          "canonicalName": "hung s hair design by victor",
+          "category": "hairdresser",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 42.9,
+          "coordinates": {
+            "lat": 33.4135672,
+            "lng": -111.8760188
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Jerky King",
+          "canonicalName": "the jerky king",
+          "category": "confectionery",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": "+1-480-264-3325",
+          "distanceMeters": 42.9,
+          "coordinates": {
+            "lat": 33.4135734,
+            "lng": -111.8760774
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Artistic Dragon Jeweler",
+          "canonicalName": "artistic dragon jeweler",
+          "category": "jewelry",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 44.0,
+          "coordinates": {
+            "lat": 33.4135692,
+            "lng": -111.875979
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "AA Ozzy Bakery",
+          "canonicalName": "aa ozzy bakery",
+          "category": "bakery",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 44.7,
+          "coordinates": {
+            "lat": 33.4127975,
+            "lng": -111.8762211
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Sizzling & Ramen",
+          "canonicalName": "sizzling and ramen",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 48.2,
+          "coordinates": {
+            "lat": 33.4135687,
+            "lng": -111.8758575
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Unphởgettable",
+          "canonicalName": "unphogettable",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 48.6,
+          "coordinates": {
+            "lat": 33.4127908,
+            "lng": -111.8758855
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "MeKong Palace",
+          "canonicalName": "mekong palace",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": "https://www.facebook.com/mekongpalace/",
+          "phone": "(480) 962-0493",
+          "distanceMeters": 50.0,
+          "coordinates": {
+            "lat": 33.4136341,
+            "lng": -111.8761694
+          },
+          "description": "Home About Menu(Dim Sum) Menu(All Day) Contact More Freshly Handmade Dim Sum Signature Roast Duck",
+          "hours": [],
+          "sourceLabels": [
+            "local-site-fixture",
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": {
+            "slug": "mekong-palace-mesa",
+            "id": "scraped_0032"
+          }
+        },
+        {
+          "name": "Thai Foot Massage",
+          "canonicalName": "thai foot massage",
+          "category": "massage",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 52.6,
+          "coordinates": {
+            "lat": 33.4136191,
+            "lng": -111.875873
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Xian Fusing Cafe",
+          "canonicalName": "xian fusing cafe",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 53.8,
+          "coordinates": {
+            "lat": 33.4127362,
+            "lng": -111.8758957
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Coconut Jelly King",
+          "canonicalName": "coconut jelly king",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 57.4,
+          "coordinates": {
+            "lat": 33.413668,
+            "lng": -111.8758786
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Deer Garden Signature",
+          "canonicalName": "deer garden signature",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 60.4,
+          "coordinates": {
+            "lat": 33.4126746,
+            "lng": -111.8758928
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Global Courier Express",
+          "canonicalName": "global courier express",
+          "category": "post_office",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 61.0,
+          "coordinates": {
+            "lat": 33.4137057,
+            "lng": -111.8758872
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Mekong Vietnamese Sandwiches",
+          "canonicalName": "mekong vietnamese sandwiches",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 71.4,
+          "coordinates": {
+            "lat": 33.4138069,
+            "lng": -111.8758996
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "BBQ Chiecken",
+          "canonicalName": "bbq chicken",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Bún Bò Huế",
+          "canonicalName": "bun bo hue",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Claw Zone",
+          "canonicalName": "claw zone",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Cloud Studio",
+          "canonicalName": "cloud studio",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Fu Jing Funding LLC",
+          "canonicalName": "fu jing funding llc",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Haidilao",
+          "canonicalName": "haidilao",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Happy Bao's",
+          "canonicalName": "happy baos",
+          "category": "dining",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": "https://www.happybaos.com/",
+          "phone": "(480) 912-1207",
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": "Happy Baos was founded by Chef Mei, who grew up in Northern China, where making hand-made dishes from fresh dough was just as much part of the culture as it was his family tradition.",
+          "hours": [],
+          "sourceLabels": [
+            "local-site-fixture",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": {
+            "slug": "happy-bao-s-mesa",
+            "id": "scraped_0017"
+          }
+        },
+        {
+          "name": "Heads Up! Spa",
+          "canonicalName": "heads up spa",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Hong Kong Cafe",
+          "canonicalName": "hong kong cafe",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Hung’s Hair Design",
+          "canonicalName": "hungs hair design",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Meet Fresh",
+          "canonicalName": "meet fresh",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "MINISO",
+          "canonicalName": "miniso",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Phoenix Int'l Travel & Tours",
+          "canonicalName": "phoenix int l travel and tours",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Populus Beauty",
+          "canonicalName": "populus beauty",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Snowy Village",
+          "canonicalName": "snowy village",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Sweet Time Bakery",
+          "canonicalName": "sweet time bakery",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Tasty Pot",
+          "canonicalName": "tasty pot",
+          "category": "dining",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": "https://www.tastypotusa.com",
+          "phone": "(480) 809-6780",
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": "At Tasty Pot, we firmly believe that in order to live well, you must eat well.",
+          "hours": [],
+          "sourceLabels": [
+            "local-site-fixture",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": {
+            "slug": "tasty-pot-mesa",
+            "id": "scraped_0018"
+          }
+        },
+        {
+          "name": "Udon Shin",
+          "canonicalName": "udon shin",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "ZhengXin Chicken Steak",
+          "canonicalName": "zhengxin chicken steak",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "66 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://mekongplaza.com/mekong-plaza",
+            "https://mekongplaza.com/stores-1",
+            "https://phxrailfood.com/2022/04/22/com-tam-thuan-kieu/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Kickin' Crab",
+          "canonicalName": "kickin crab",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "28, South Dobson Road, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 117.4,
+          "coordinates": {
+            "lat": 33.413879,
+            "lng": -111.8751485
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Tan Hua Inc.",
+          "canonicalName": "tan hua inc",
+          "category": "spices",
+          "placement": "nearby",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 150.0,
+          "coordinates": {
+            "lat": 33.4141793,
+            "lng": -111.8750092
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "LoanMax",
+          "canonicalName": "loanmax",
+          "category": "money_lender",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2009, West Main Street, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 175.4,
+          "coordinates": {
+            "lat": 33.4144725,
+            "lng": -111.875008
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "chandler-ranch",
+      "name": "Chandler Ranch",
+      "city": "Chandler",
+      "centerAddress": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+      "centerCoordinates": {
+        "lat": 33.3076161,
+        "lng": -111.8748813
+      },
+      "summary": "Asian-focused Chandler shopping center anchored by 99 Ranch Market. The official NewQuest property page lists highlighted tenants, while map data fills in the broader current business mix around the center.",
+      "status": "active",
+      "sourceUrls": [
+        "https://www.newquest.com/property/chandler-ranch/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 21,
+        "nearbyListings": 10,
+        "plannedListings": 0,
+        "totalListings": 31
+      },
+      "listings": [
+        {
+          "name": "99 Ranch Market",
+          "canonicalName": "99 ranch market",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": "https://www.99ranch.com/",
+          "phone": "+1-928-938-8899",
+          "distanceMeters": 11.8,
+          "coordinates": {
+            "lat": 33.3075099,
+            "lng": -111.8748806
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "85 Degrees",
+          "canonicalName": "85 degrees",
+          "category": "bakery",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 49.6,
+          "coordinates": {
+            "lat": 33.3072628,
+            "lng": -111.8745557
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Miracle-Ear",
+          "canonicalName": "miracle ear",
+          "category": "department_store",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1900, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 57.6,
+          "coordinates": {
+            "lat": 33.3072903,
+            "lng": -111.8744
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Serene Healing Massage and Reflexology",
+          "canonicalName": "serene healing massage and reflexology",
+          "category": "massage",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1940, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "https://www.serenehealingmassage.com",
+          "phone": "+1 480 995-1555",
+          "distanceMeters": 58.3,
+          "coordinates": {
+            "lat": 33.3075998,
+            "lng": -111.8755088
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Kura Sushi",
+          "canonicalName": "kura sushi",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 60.0,
+          "coordinates": {
+            "lat": 33.3073145,
+            "lng": -111.8754166
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "A Ma's Kitchen & Pho",
+          "canonicalName": "a ma s kitchen and pho",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 62.7,
+          "coordinates": {
+            "lat": 33.3072873,
+            "lng": -111.874333
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Boba & Brew Tea House",
+          "canonicalName": "boba and brew tea house",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 66.8,
+          "coordinates": {
+            "lat": 33.307288,
+            "lng": -111.8742792
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The UPS Store",
+          "canonicalName": "the ups store",
+          "category": "copyshop",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1940, West Chandler Boulevard, Chandler, AZ",
+          "website": null,
+          "phone": "+1 480 855-9740",
+          "distanceMeters": 71.2,
+          "coordinates": {
+            "lat": 33.3077031,
+            "lng": -111.87564
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Sola Salons",
+          "canonicalName": "sola salons",
+          "category": "beauty",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1940, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 78.5,
+          "coordinates": {
+            "lat": 33.3072987,
+            "lng": -111.875636
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Los Favoritos Taco Shop",
+          "canonicalName": "los favoritos taco shop",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1900, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": "+1 480 782-9400",
+          "distanceMeters": 81.4,
+          "coordinates": {
+            "lat": 33.3072924,
+            "lng": -111.874096
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Subway",
+          "canonicalName": "subway",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1900, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "https://restaurants.subway.com/united-states/az/chandler/1900-w-chandler-blvd",
+          "phone": "+1 480-855-6665",
+          "distanceMeters": 93.8,
+          "coordinates": {
+            "lat": 33.3072936,
+            "lng": -111.8739487
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "BBQ Chicken",
+          "canonicalName": "bbq chicken",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 100.7,
+          "coordinates": {
+            "lat": 33.3072913,
+            "lng": -111.8738703
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Meet Fresh",
+          "canonicalName": "meet fresh",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 108.8,
+          "coordinates": {
+            "lat": 33.3072973,
+            "lng": -111.8737747
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "kisses nails",
+          "canonicalName": "kisses nails",
+          "category": "beauty",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 116.1,
+          "coordinates": {
+            "lat": 33.307291,
+            "lng": -111.8736943
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Teso Life",
+          "canonicalName": "teso life",
+          "category": "general",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": "https://www.tesolife.com/en/",
+          "phone": null,
+          "distanceMeters": 130.1,
+          "coordinates": {
+            "lat": 33.3073575,
+            "lng": -111.8735161
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "BMO",
+          "canonicalName": "bmo",
+          "category": "bank",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1990, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 138.5,
+          "coordinates": {
+            "lat": 33.3066057,
+            "lng": -111.8757521
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Daiso Japan",
+          "canonicalName": "daiso japan",
+          "category": "variety_store",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 154.0,
+          "coordinates": {
+            "lat": 33.3074218,
+            "lng": -111.8732408
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "FedEx Office",
+          "canonicalName": "fedex office",
+          "category": "copyshop",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 155.0,
+          "coordinates": {
+            "lat": 33.3064703,
+            "lng": -111.8739318
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Gen Korean BBQ",
+          "canonicalName": "gen korean bbq",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 171.7,
+          "coordinates": {
+            "lat": 33.3074021,
+            "lng": -111.8730513
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "SomiSomi",
+          "canonicalName": "somisomi",
+          "category": "ice_cream",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 202.6,
+          "coordinates": {
+            "lat": 33.3074309,
+            "lng": -111.8727123
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Ramen Hood",
+          "canonicalName": "ramen hood",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "NEC of W Chandler Blvd & N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://www.newquest.com/property/chandler-ranch/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Axia Senior Insurance Advisors",
+          "canonicalName": "axia senior insurance advisors",
+          "category": "insurance",
+          "placement": "nearby",
+          "status": "active",
+          "address": "333, North Dobson Road, Chandler, AZ, 85224",
+          "website": "https://www.axiasiadvisors.com/",
+          "phone": "+1-602-576-1838",
+          "distanceMeters": 125.9,
+          "coordinates": {
+            "lat": 33.3086007,
+            "lng": -111.875551
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Jack in the Box",
+          "canonicalName": "jack in the box",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1790, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "https://locations.jackinthebox.com/us/az/chandler/1790-w-chandler-blvd",
+          "phone": "+1 480-726-3758",
+          "distanceMeters": 131.9,
+          "coordinates": {
+            "lat": 33.3064859,
+            "lng": -111.8744502
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Discover Vein & Vascular",
+          "canonicalName": "discover vein and vascular",
+          "category": "doctors",
+          "placement": "nearby",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 217.2,
+          "coordinates": {
+            "lat": 33.3074563,
+            "lng": -111.8725514
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Hungry Monk",
+          "canonicalName": "the hungry monk",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1760, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": "+1-480-963-8000",
+          "distanceMeters": 220.7,
+          "coordinates": {
+            "lat": 33.3066386,
+            "lng": -111.8728148
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Cyclo Vietnamese Cuisine",
+          "canonicalName": "cyclo vietnamese cuisine",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1919, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "https://www.ordercyclo.com",
+          "phone": null,
+          "distanceMeters": 235.6,
+          "coordinates": {
+            "lat": 33.3055171,
+            "lng": -111.8745323
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Salad and Go",
+          "canonicalName": "salad and go",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2020;2000, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "http://saladandgo.com",
+          "phone": "+1-480-666-9940",
+          "distanceMeters": 237.4,
+          "coordinates": {
+            "lat": 33.3065022,
+            "lng": -111.8770607
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Denny's",
+          "canonicalName": "denny s",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1750, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 245.6,
+          "coordinates": {
+            "lat": 33.3066153,
+            "lng": -111.8725252
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Walgreens",
+          "canonicalName": "walgreens",
+          "category": "chemist",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1925, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": "https://www.walgreens.com/locator/walgreens-1925+w+chandler+blvd-chandler-az-85224/id=2056",
+          "phone": null,
+          "distanceMeters": 248.4,
+          "coordinates": {
+            "lat": 33.3053835,
+            "lng": -111.874794
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Circle K",
+          "canonicalName": "circle k",
+          "category": "convenience",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1995, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 264.1,
+          "coordinates": {
+            "lat": 33.3053275,
+            "lng": -111.8756425
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Arizona Central Credit Union",
+          "canonicalName": "arizona central credit union",
+          "category": "bank",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1805, West Chandler Boulevard, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 267.0,
+          "coordinates": {
+            "lat": 33.3055052,
+            "lng": -111.8735128
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "lee-lee-plaza-tucson",
+      "name": "Lee Lee Plaza Tucson",
+      "city": "Tucson",
+      "centerAddress": "Orange Grove Rd & La Cholla Blvd, Tucson, AZ 85704",
+      "centerCoordinates": {
+        "lat": 32.3237024,
+        "lng": -111.009924
+      },
+      "summary": "Tucson Lee Lee cluster around Orange Grove and La Cholla. There does not appear to be a clean public tenant directory, so this scrape leans on Lee Lee location context, Tucson reporting, and map-confirmed businesses around the center.",
+      "status": "active",
+      "sourceUrls": [
+        "https://leeleesupermarket.com/tucson/",
+        "https://tucsonfoodie.com/2023/05/18/lee-lee-acquired-4-stores/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 6,
+        "nearbyListings": 1,
+        "plannedListings": 0,
+        "totalListings": 7
+      },
+      "listings": [
+        {
+          "name": "Chinese Combo Thai",
+          "canonicalName": "chinese combo thai",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1980, West Orange Grove, Tucson, AZ, 85704",
+          "website": "https://chinesecombotucson.menufy.com",
+          "phone": "+1 520-219-1645",
+          "distanceMeters": 0.0,
+          "coordinates": {
+            "lat": 32.3237024,
+            "lng": -111.009924
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Lee Lee Oriental Supermarket",
+          "canonicalName": "lee lee oriental supermarket",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "Orange Grove Rd & La Cholla Blvd, Tucson, AZ 85704",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 49.7,
+          "coordinates": {
+            "lat": 32.324149,
+            "lng": -111.0099044
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "brand-location-context",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/tucson/",
+            "https://tucsonfoodie.com/2023/05/18/lee-lee-acquired-4-stores/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "9 Spa",
+          "canonicalName": "9 spa",
+          "category": "massage",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 137.2,
+          "coordinates": {
+            "lat": 32.3246248,
+            "lng": -111.0108941
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Ikkyu",
+          "canonicalName": "ikkyu",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2040, West Orange Grove Road, 85704",
+          "website": "https://ikkyutucson.com",
+          "phone": "+1-520-297-9011",
+          "distanceMeters": 142.0,
+          "coordinates": {
+            "lat": 32.3246153,
+            "lng": -111.01098
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Circle K",
+          "canonicalName": "circle k",
+          "category": "convenience",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 148.4,
+          "coordinates": {
+            "lat": 32.3240387,
+            "lng": -111.0114527
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Olé Mexican Grill",
+          "canonicalName": "ole mexican grill",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2080, West Orange Grove Road, Tucson, AZ, 85704",
+          "website": null,
+          "phone": "+1 520-219-7215",
+          "distanceMeters": 167.9,
+          "coordinates": {
+            "lat": 32.3245054,
+            "lng": -111.0114378
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Walgreens",
+          "canonicalName": "walgreens",
+          "category": "chemist",
+          "placement": "nearby",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 232.2,
+          "coordinates": {
+            "lat": 32.3220456,
+            "lng": -111.011428
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "dobson-park-plaza-chandler",
+      "name": "Dobson Park Plaza Chandler",
+      "city": "Chandler",
+      "centerAddress": "2025 N Dobson Rd, Chandler, AZ 85224",
+      "centerCoordinates": {
+        "lat": 33.3363504,
+        "lng": -111.8741328
+      },
+      "summary": "Dobson Park Plaza is a Chandler Lee Lee-anchored center with limited public directory data. The scrape combines the LoopNet select-tenant listing, current map data, and your local business fixture matches.",
+      "status": "active",
+      "sourceUrls": [
+        "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+        "https://leeleesupermarket.com/chandler/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 5,
+        "nearbyListings": 3,
+        "plannedListings": 0,
+        "totalListings": 8
+      },
+      "listings": [
+        {
+          "name": "Lee Lee Oriental Supermarket",
+          "canonicalName": "lee lee oriental supermarket",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": "http://leeleesupermarket.com",
+          "phone": "+1 480 899 2887",
+          "distanceMeters": 0.0,
+          "coordinates": {
+            "lat": 33.3363504,
+            "lng": -111.8741328
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "brand-location-context",
+            "leasing-listing",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/chandler/",
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "CVS Pharmacy",
+          "canonicalName": "cvs pharmacy",
+          "category": "pharmacy",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": "https://www.cvs.com/store-locator/chandler-az-pharmacies/2005-n-dobson-rd-chandler-az-85224/storeid=5315",
+          "phone": "+1-480-812-0063",
+          "distanceMeters": 135.4,
+          "coordinates": {
+            "lat": 33.3360087,
+            "lng": -111.8755316
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "leasing-listing",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/chandler/",
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Bambu Dessert Drink",
+          "canonicalName": "bambu dessert drink",
+          "category": "dessert",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "leasing-listing"
+          ],
+          "sourceUrls": [
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+            "https://leeleesupermarket.com/chandler/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "China Magic Noodle House",
+          "canonicalName": "china magic noodle house",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": "(480) 786-8002",
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": "Chinese dining listing sourced from the AZ AANHPI Directory.",
+          "hours": [],
+          "sourceLabels": [
+            "leasing-listing",
+            "local-site-fixture"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/chandler/",
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/"
+          ],
+          "matchedLocalListing": {
+            "slug": "china-magic-noodle-house-chandler",
+            "id": "scraped_0073"
+          }
+        },
+        {
+          "name": "USA Tae Kwon Do",
+          "canonicalName": "usa tae kwon do",
+          "category": "martial_arts",
+          "placement": "plaza",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "leasing-listing"
+          ],
+          "sourceUrls": [
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+            "https://leeleesupermarket.com/chandler/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "McDonald's",
+          "canonicalName": "mcdonald s",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2025 N Dobson Rd, Chandler, AZ 85224",
+          "website": "https://www.mcdonalds.com/us/en-us/location/11340.html",
+          "phone": "+1 480-899-7578",
+          "distanceMeters": 121.7,
+          "coordinates": {
+            "lat": 33.3356459,
+            "lng": -111.875136
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "leasing-listing",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/chandler/",
+            "https://www.loopnet.com/Listing/2025-N-Dobson-Rd-Chandler-AZ/32461828/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Lee's Sandwiches",
+          "canonicalName": "lee s sandwiches",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1901, West Warner Road, Chandler, AZ, 85224",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 207.1,
+          "coordinates": {
+            "lat": 33.3345762,
+            "lng": -111.8748121
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Walgreens",
+          "canonicalName": "walgreens",
+          "category": "chemist",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1919, North Dobson Road, Chandler, AZ, 85224",
+          "website": "https://www.walgreens.com/locator/walgreens-1919+n+dobson+rd-chandler-az-85224/id=3727",
+          "phone": "+1 480 899 6713",
+          "distanceMeters": 252.1,
+          "coordinates": {
+            "lat": 33.3344357,
+            "lng": -111.8755869
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "peoria-lee-lee-center",
+      "name": "Peoria Lee Lee center",
+      "city": "Peoria",
+      "centerAddress": "7575 W Cactus Rd, Peoria, AZ 85381",
+      "centerCoordinates": {
+        "lat": 33.5947986,
+        "lng": -112.222189
+      },
+      "summary": "Peoria Lee Lee cluster centered on the Cactus Road location. Public tenant information is sparse, so this directory is primarily built from map-confirmed businesses around the center plus Lee Lee location context.",
+      "status": "active",
+      "sourceUrls": [
+        "https://leeleesupermarket.com/peoria/",
+        "https://tucsonfoodie.com/2023/05/18/lee-lee-acquired-4-stores/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 12,
+        "nearbyListings": 6,
+        "plannedListings": 0,
+        "totalListings": 18
+      },
+      "listings": [
+        {
+          "name": "Lee Lee Oriental Supermarket",
+          "canonicalName": "lee lee oriental supermarket",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7575 W Cactus Rd, Peoria, AZ 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 0.0,
+          "coordinates": {
+            "lat": 33.5947986,
+            "lng": -112.222189
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "brand-location-context",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://leeleesupermarket.com/peoria/",
+            "https://tucsonfoodie.com/2023/05/18/lee-lee-acquired-4-stores/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Ocean Jewelers",
+          "canonicalName": "ocean jewelers",
+          "category": "jewelry",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 33.2,
+          "coordinates": {
+            "lat": 33.5950308,
+            "lng": -112.2224137
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Steven Crazy Nails",
+          "canonicalName": "steven crazy nails",
+          "category": "beauty",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 48.9,
+          "coordinates": {
+            "lat": 33.5945436,
+            "lng": -112.221759
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Beauty Bar",
+          "canonicalName": "beauty bar",
+          "category": "beauty",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 68.1,
+          "coordinates": {
+            "lat": 33.5944206,
+            "lng": -112.221611
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Banner Urgent Care",
+          "canonicalName": "banner urgent care",
+          "category": "clinic",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7611, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 78.1,
+          "coordinates": {
+            "lat": 33.5953819,
+            "lng": -112.2226589
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Nail Supply",
+          "canonicalName": "nail supply",
+          "category": "beauty",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 81.6,
+          "coordinates": {
+            "lat": 33.5943579,
+            "lng": -112.221484
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "H&R Block",
+          "canonicalName": "h and r block",
+          "category": "tax_advisor",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 89.7,
+          "coordinates": {
+            "lat": 33.59437,
+            "lng": -112.221368
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Parrot Nation",
+          "canonicalName": "parrot nation",
+          "category": "e-cigarette",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 101.4,
+          "coordinates": {
+            "lat": 33.5943796,
+            "lng": -112.221217
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Subway",
+          "canonicalName": "subway",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7549, West Cactus Road, Peoria, AZ, 85381",
+          "website": "https://restaurants.subway.com/united-states/az/peoria/7549-w-cactus-road",
+          "phone": "+1 623-486-0880",
+          "distanceMeters": 111.9,
+          "coordinates": {
+            "lat": 33.5943814,
+            "lng": -112.221089
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Bomboba",
+          "canonicalName": "bomboba",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7521, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 132.6,
+          "coordinates": {
+            "lat": 33.5943651,
+            "lng": -112.220855
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Little Caesars",
+          "canonicalName": "little caesars",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7521, West Cactus Road, Peoria, AZ, 85381",
+          "website": "https://littlecaesars.com/en-us/store/1353/",
+          "phone": null,
+          "distanceMeters": 148.7,
+          "coordinates": {
+            "lat": 33.5943691,
+            "lng": -112.220669
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Panda Express",
+          "canonicalName": "panda express",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "7521, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 155.6,
+          "coordinates": {
+            "lat": 33.5943765,
+            "lng": -112.220587
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Carl's Jr.",
+          "canonicalName": "carl s jr",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "12110, North 75th Avenue, Peoria, AZ, 85345",
+          "website": "https://locations.carlsjr.com/az/peoria/12110-n-75th-ave",
+          "phone": "+1 623-412-1053",
+          "distanceMeters": 141.7,
+          "coordinates": {
+            "lat": 33.595026,
+            "lng": -112.2206837
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Fry's Fuel",
+          "canonicalName": "fry s fuel",
+          "category": "convenience",
+          "placement": "nearby",
+          "status": "active",
+          "address": "7509, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 145.7,
+          "coordinates": {
+            "lat": 33.595338,
+            "lng": -112.220756
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Global Credit Union",
+          "canonicalName": "global credit union",
+          "category": "bank",
+          "placement": "nearby",
+          "status": "active",
+          "address": "7570, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": "+1-907-563-4567",
+          "distanceMeters": 165.6,
+          "coordinates": {
+            "lat": 33.5962729,
+            "lng": -112.2219365
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "CVS Pharmacy",
+          "canonicalName": "cvs pharmacy",
+          "category": "pharmacy",
+          "placement": "nearby",
+          "status": "active",
+          "address": "7530, West Cactus Road, Peoria, AZ, 85381",
+          "website": "https://www.cvs.com/store-locator/peoria-az-pharmacies/7530-w-cactus-rd-peoria-az-85381/storeid=7115",
+          "phone": null,
+          "distanceMeters": 200.6,
+          "coordinates": {
+            "lat": 33.5964809,
+            "lng": -112.221335
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "MidFirst Bank",
+          "canonicalName": "midfirst bank",
+          "category": "bank",
+          "placement": "nearby",
+          "status": "active",
+          "address": "7485, North 75th Avenue, Peoria, AZ, 85381",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 225.8,
+          "coordinates": {
+            "lat": 33.5952983,
+            "lng": -112.2198256
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Ace Hardware",
+          "canonicalName": "ace hardware",
+          "category": "doityourself",
+          "placement": "nearby",
+          "status": "active",
+          "address": "7465, West Cactus Road, Peoria, AZ, 85381",
+          "website": null,
+          "phone": "+1 623-486-0041",
+          "distanceMeters": 232.2,
+          "coordinates": {
+            "lat": 33.5945037,
+            "lng": -112.2197077
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "mesa-main-marketplace-h-mart",
+      "name": "Mesa Main Marketplace / H Mart",
+      "city": "Mesa",
+      "centerAddress": "1919 W Main St, Mesa, AZ 85201",
+      "centerCoordinates": {
+        "lat": 33.4132826,
+        "lng": -111.8726114
+      },
+      "summary": "West Mesa retail cluster anchored by H Mart. There is no simple public center directory, so this scrape uses map-confirmed businesses and nearby Mesa Asian District context.",
+      "status": "active",
+      "sourceUrls": [
+        "https://www.hmart.com/",
+        "https://phxrailfood.com/2022/01/21/the-stone-korean-tofu-house/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 8,
+        "nearbyListings": 7,
+        "plannedListings": 0,
+        "totalListings": 15
+      },
+      "listings": [
+        {
+          "name": "H Mart",
+          "canonicalName": "h mart",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1919 W Main St, Mesa, AZ 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 1.0,
+          "coordinates": {
+            "lat": 33.4132914,
+            "lng": -111.8726113
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "brand-location-context",
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://phxrailfood.com/2022/01/21/the-stone-korean-tofu-house/",
+            "https://www.hmart.com/",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Da Pan",
+          "canonicalName": "da pan",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1919, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 31.8,
+          "coordinates": {
+            "lat": 33.4134284,
+            "lng": -111.872317
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Paris Baguette",
+          "canonicalName": "paris baguette",
+          "category": "bakery",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1919, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 34.7,
+          "coordinates": {
+            "lat": 33.4135737,
+            "lng": -111.872477
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Snowtime",
+          "canonicalName": "snowtime",
+          "category": "ice_cream",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1919, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 36.8,
+          "coordinates": {
+            "lat": 33.4132985,
+            "lng": -111.872215
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Daiso Japan",
+          "canonicalName": "daiso japan",
+          "category": "variety_store",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 67.0,
+          "coordinates": {
+            "lat": 33.4137963,
+            "lng": -111.8722331
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Two Hands",
+          "canonicalName": "two hands",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1933, West Main Street, Mesa, AZ, 85201",
+          "website": "https://www.twohandsus.com",
+          "phone": "+1 480-366-4527",
+          "distanceMeters": 73.0,
+          "coordinates": {
+            "lat": 33.4132612,
+            "lng": -111.873398
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Cha Tea",
+          "canonicalName": "cha tea",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1911, West Main Street, Mesa, AZ, 85201",
+          "website": "https://www.chateaboba.com/",
+          "phone": "+1-480-534-1251",
+          "distanceMeters": 87.5,
+          "coordinates": {
+            "lat": 33.4139706,
+            "lng": -111.8721531
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Tipsy Chicken",
+          "canonicalName": "tipsy chicken",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1933, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 93.0,
+          "coordinates": {
+            "lat": 33.4133054,
+            "lng": -111.8736127
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Discount Tire",
+          "canonicalName": "discount tire",
+          "category": "tyres",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1929, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 149.0,
+          "coordinates": {
+            "lat": 33.4144395,
+            "lng": -111.873422
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Jack in the Box",
+          "canonicalName": "jack in the box",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1945, West Main Street, Mesa, AZ, 85201",
+          "website": "https://locations.jackinthebox.com/us/az/mesa/1945-w-main-st",
+          "phone": "+1 480-867-1830",
+          "distanceMeters": 175.1,
+          "coordinates": {
+            "lat": 33.4144058,
+            "lng": -111.8739337
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Stone Kroean Tofu House",
+          "canonicalName": "the stone kroean tofu house",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1870, West Main Street, Mesa, AZ, 85201",
+          "website": "https://thestonetofuaz.com/",
+          "phone": null,
+          "distanceMeters": 215.0,
+          "coordinates": {
+            "lat": 33.4151823,
+            "lng": -111.8721776
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Tan Hua Inc.",
+          "canonicalName": "tan hua inc",
+          "category": "spices",
+          "placement": "nearby",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 243.9,
+          "coordinates": {
+            "lat": 33.4141793,
+            "lng": -111.8750092
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Kickin' Crab",
+          "canonicalName": "kickin crab",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "28, South Dobson Road, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 244.6,
+          "coordinates": {
+            "lat": 33.413879,
+            "lng": -111.8751485
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "LoanMax",
+          "canonicalName": "loanmax",
+          "category": "money_lender",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2009, West Main Street, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 258.8,
+          "coordinates": {
+            "lat": 33.4144725,
+            "lng": -111.875008
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Krispy Kreme",
+          "canonicalName": "krispy kreme",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1984, West Main Street, Mesa, AZ, 85201",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 267.0,
+          "coordinates": {
+            "lat": 33.4153241,
+            "lng": -111.8741258
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "dobson-square",
+      "name": "Dobson Square",
+      "city": "Mesa",
+      "centerAddress": "1116 S Dobson Rd, Mesa, AZ 85202",
+      "centerCoordinates": {
+        "lat": 33.3943583,
+        "lng": -111.8759179
+      },
+      "summary": "Dobson Square has one of the cleanest public directories in this batch. The official property page provides a tenant list, and map data adds nearby businesses on the same corner.",
+      "status": "active",
+      "sourceUrls": [
+        "https://rentazretail.com/dobson-square-center",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 16,
+        "nearbyListings": 11,
+        "plannedListings": 0,
+        "totalListings": 27
+      },
+      "listings": [
+        {
+          "name": "Tara Thai 2go",
+          "canonicalName": "tara thai",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 12.3,
+          "coordinates": {
+            "lat": 33.3944454,
+            "lng": -111.8758359
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Best Hong Kong Dining",
+          "canonicalName": "best hong kong dining",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": "http://besthongkongdining.com",
+          "phone": "(480) 655-8262",
+          "distanceMeters": 37.5,
+          "coordinates": {
+            "lat": 33.3946784,
+            "lng": -111.875792
+          },
+          "description": "We pride ourselves in having the finest Hong Kong Style BBQ, Authentic Cantonese & Mandarin Cuisine & Live Seafood Available.",
+          "hours": [],
+          "sourceLabels": [
+            "local-site-fixture",
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": {
+            "slug": "best-hong-kong-dining-mesa",
+            "id": "scraped_0029"
+          }
+        },
+        {
+          "name": "Hodori",
+          "canonicalName": "hodori",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 58.3,
+          "coordinates": {
+            "lat": 33.3947231,
+            "lng": -111.8754674
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Street",
+          "canonicalName": "the street",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 70.1,
+          "coordinates": {
+            "lat": 33.3947432,
+            "lng": -111.8753195
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Teazers Hair Salon",
+          "canonicalName": "teazers hair salon",
+          "category": "hairdresser",
+          "placement": "plaza",
+          "status": "active",
+          "address": null,
+          "website": null,
+          "phone": null,
+          "distanceMeters": 81.2,
+          "coordinates": {
+            "lat": 33.3947364,
+            "lng": -111.8751692
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Name Brand Exchange",
+          "canonicalName": "name brand exchange",
+          "category": "clothes",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 102.7,
+          "coordinates": {
+            "lat": 33.3947675,
+            "lng": -111.8749258
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current",
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center",
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Beijing Acupuncture and Health Center",
+          "canonicalName": "beijing acupuncture and health center",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Comfort Foot & Body Massage",
+          "canonicalName": "comfort foot and body massage",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Daruma",
+          "canonicalName": "daruma",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Dong Feng Seafood City",
+          "canonicalName": "dong feng seafood city",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Friggin Jerk (Beef Jerky)",
+          "canonicalName": "friggin jerk beef jerky",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Jax & Ko International",
+          "canonicalName": "jax and ko international",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Jina's Salon",
+          "canonicalName": "jina s salon",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "P & Y Insurance",
+          "canonicalName": "p and y insurance",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Art Gallery",
+          "canonicalName": "the art gallery",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "YJP Spine Center",
+          "canonicalName": "yjp spine center",
+          "category": "business",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1116 S Dobson Rd, Mesa, AZ 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "official-center-page"
+          ],
+          "sourceUrls": [
+            "https://rentazretail.com/dobson-square-center"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Saketini",
+          "canonicalName": "saketini",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1120, South Dobson Road, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 80.0,
+          "coordinates": {
+            "lat": 33.3942684,
+            "lng": -111.875063
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Circle K",
+          "canonicalName": "circle k",
+          "category": "convenience",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2012, West Southern Avenue, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 87.0,
+          "coordinates": {
+            "lat": 33.393685,
+            "lng": -111.8754405
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Oregano's Pizza Bistro",
+          "canonicalName": "oregano s pizza bistro",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1130, South Dobson Road, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 92.9,
+          "coordinates": {
+            "lat": 33.3939563,
+            "lng": -111.8750405
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Filiberto's",
+          "canonicalName": "filiberto s",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2064, West Southern Avenue, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 131.7,
+          "coordinates": {
+            "lat": 33.3934227,
+            "lng": -111.8767879
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Firehouse Subs",
+          "canonicalName": "firehouse subs",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2110, West Southern Avenue, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 132.3,
+          "coordinates": {
+            "lat": 33.3936985,
+            "lng": -111.8771036
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Little Caesars",
+          "canonicalName": "little caesars",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2110, West Southern Avenue, Mesa, AZ, 85202",
+          "website": "https://littlecaesars.com/en-us/store/10875/",
+          "phone": null,
+          "distanceMeters": 149.5,
+          "coordinates": {
+            "lat": 33.393469,
+            "lng": -111.8771251
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Taco Bell",
+          "canonicalName": "taco bell",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1125, South Dobson Road, Mesa, AZ, 85202",
+          "website": "https://locations.tacobell.com/az/mesa/1125-s-dobson-rd.html",
+          "phone": "+1 480-835-1011",
+          "distanceMeters": 164.2,
+          "coordinates": {
+            "lat": 33.3942649,
+            "lng": -111.8741524
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Nagasaki Grill Toh Zan",
+          "canonicalName": "nagasaki grill toh zan",
+          "category": "restaurant",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2120, West Southern Avenue, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 171.7,
+          "coordinates": {
+            "lat": 33.3934813,
+            "lng": -111.8774405
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Simon Med",
+          "canonicalName": "simon med",
+          "category": "clinic",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1111, South Dobson Road, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 172.2,
+          "coordinates": {
+            "lat": 33.3946233,
+            "lng": -111.87409
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Wendy's",
+          "canonicalName": "wendy s",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "1155, South Dobson Road",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 199.8,
+          "coordinates": {
+            "lat": 33.39333,
+            "lng": -111.8741535
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "McDonald's",
+          "canonicalName": "mcdonald s",
+          "category": "fast_food",
+          "placement": "nearby",
+          "status": "active",
+          "address": "2130, West Southern Avenue, Mesa, AZ, 85202",
+          "website": "https://www.mcdonalds.com/us/en-us/location/2771.html",
+          "phone": "+1 480-833-5761",
+          "distanceMeters": 211.0,
+          "coordinates": {
+            "lat": 33.3934173,
+            "lng": -111.877892
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "three-fountains-plaza",
+      "name": "Three Fountains Plaza",
+      "city": "Mesa",
+      "centerAddress": "1350 S Longmore Rd, Mesa, AZ 85202",
+      "centerCoordinates": {
+        "lat": 33.3908634,
+        "lng": -111.8649282
+      },
+      "summary": "Southern Avenue / Longmore Road plaza in Mesa with a visible Asian business cluster. Public directory coverage is limited, so this scrape is mostly map-driven with the LoopNet center listing as supporting context.",
+      "status": "active",
+      "sourceUrls": [
+        "https://www.loopnet.com/Listing/1350-S-Longmore-Rd-Mesa-AZ/21038126/",
+        "https://www.openstreetmap.org/copyright"
+      ],
+      "counts": {
+        "plazaListings": 12,
+        "nearbyListings": 0,
+        "plannedListings": 0,
+        "totalListings": 12
+      },
+      "listings": [
+        {
+          "name": "Saigon Jade",
+          "canonicalName": "saigon jade",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1316, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 53.8,
+          "coordinates": {
+            "lat": 33.3904551,
+            "lng": -111.865239
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Pizza Hut Express",
+          "canonicalName": "pizza hut express",
+          "category": "fast_food",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1230, South Longmore, Mesa, AZ, 85202",
+          "website": "https://locations.pizzahut.com/az/mesa/1230-s-longmore-avenue",
+          "phone": null,
+          "distanceMeters": 53.9,
+          "coordinates": {
+            "lat": 33.3910569,
+            "lng": -111.86546
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "1-800 Flowers",
+          "canonicalName": "1 800 flowers",
+          "category": "florist",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 90.9,
+          "coordinates": {
+            "lat": 33.3900952,
+            "lng": -111.8645949
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Target",
+          "canonicalName": "target",
+          "category": "department_store",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1230, South Longmore, Mesa, AZ, 85202",
+          "website": "https://www.target.com/sl/mesa-west/1429",
+          "phone": "+1 480-281-0105",
+          "distanceMeters": 97.0,
+          "coordinates": {
+            "lat": 33.3916667,
+            "lng": -111.8653365
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Diamond National",
+          "canonicalName": "diamond national",
+          "category": "jewelry",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 97.1,
+          "coordinates": {
+            "lat": 33.390184,
+            "lng": -111.8642709
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Racing Collectibles",
+          "canonicalName": "racing collectibles",
+          "category": "collector",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 118.7,
+          "coordinates": {
+            "lat": 33.3899285,
+            "lng": -111.865546
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Morris Liu Oriental Pottery",
+          "canonicalName": "morris liu oriental pottery",
+          "category": "pottery",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 133.8,
+          "coordinates": {
+            "lat": 33.3897873,
+            "lng": -111.8655723
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "CVS Pharmacy",
+          "canonicalName": "cvs pharmacy",
+          "category": "pharmacy",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1230, South Longmore, Mesa, AZ, 85202",
+          "website": "https://www.cvs.com/store-locator/mesa-az-pharmacies/1230-s-longmore-ave-mesa-az-85202/storeid=16765",
+          "phone": null,
+          "distanceMeters": 152.3,
+          "coordinates": {
+            "lat": 33.3922316,
+            "lng": -111.865004
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Jag's Billiards",
+          "canonicalName": "jag s billiards",
+          "category": "bar",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 164.6,
+          "coordinates": {
+            "lat": 33.3894782,
+            "lng": -111.8655537
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Gangnam BBQ",
+          "canonicalName": "gangnam bbq",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 190.4,
+          "coordinates": {
+            "lat": 33.3892374,
+            "lng": -111.8655701
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "YZ's KTV Karaoke Cafe",
+          "canonicalName": "yz s ktv karaoke cafe",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 203.7,
+          "coordinates": {
+            "lat": 33.3890445,
+            "lng": -111.864668
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Korea Mart",
+          "canonicalName": "korea mart",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "active",
+          "address": "1350, South Longmore, Mesa, AZ, 85202",
+          "website": null,
+          "phone": null,
+          "distanceMeters": 204.9,
+          "coordinates": {
+            "lat": 33.3890313,
+            "lng": -111.8651618
+          },
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "map-current"
+          ],
+          "sourceUrls": [
+            "https://www.openstreetmap.org/copyright"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    },
+    {
+      "id": "the-mosaic",
+      "name": "The Mosaic",
+      "city": "Glendale",
+      "centerAddress": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+      "centerCoordinates": {
+        "lat": 33.6438676,
+        "lng": -112.2274792
+      },
+      "summary": "The Mosaic is still in development at Arrowhead Towne Center, so the directory here is a planned-tenant list rather than a current open-business roster.",
+      "status": "planned",
+      "sourceUrls": [
+        "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+        "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+      ],
+      "counts": {
+        "plazaListings": 12,
+        "nearbyListings": 0,
+        "plannedListings": 12,
+        "totalListings": 12
+      },
+      "listings": [
+        {
+          "name": "99 Ranch Market",
+          "canonicalName": "99 ranch market",
+          "category": "supermarket",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Bafang Dumpling",
+          "canonicalName": "bafang dumpling",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Fat Miilk Coffee",
+          "canonicalName": "fat miilk coffee",
+          "category": "cafe",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Kinokuniya Books",
+          "canonicalName": "kinokuniya books",
+          "category": "bookstore",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Lady M Cakes",
+          "canonicalName": "lady m cakes",
+          "category": "bakery",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Pho 602",
+          "canonicalName": "pho 602",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Royce Chocolate",
+          "canonicalName": "royce chocolate",
+          "category": "confectionery",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Somi Somi",
+          "canonicalName": "somisomi",
+          "category": "dessert",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "T-Swirl Crepe",
+          "canonicalName": "t swirl crepe",
+          "category": "dessert",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Teso Life",
+          "canonicalName": "teso life",
+          "category": "discount_store",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "The Alley Bubble Tea",
+          "canonicalName": "the alley bubble tea",
+          "category": "bubble_tea",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        },
+        {
+          "name": "Tokyo Shokudo",
+          "canonicalName": "tokyo shokudo",
+          "category": "restaurant",
+          "placement": "plaza",
+          "status": "planned",
+          "address": "Former Sears at Arrowhead Towne Center, Glendale, AZ 85308",
+          "website": null,
+          "phone": null,
+          "distanceMeters": null,
+          "coordinates": null,
+          "description": null,
+          "hours": [],
+          "sourceLabels": [
+            "development-report"
+          ],
+          "sourceUrls": [
+            "https://www.everythingarrowhead.com/p/update-the-mosaic-at-arrowhead-towne-center-6e28",
+            "https://hoodline.com/2026/03/empty-glendale-sears-to-be-reborn-as-99-ranch-powered-asian-food-hub/"
+          ],
+          "matchedLocalListing": null
+        }
+      ]
+    }
+  ]
+}

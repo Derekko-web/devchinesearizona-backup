@@ -1,0 +1,102 @@
+[
+  {
+    "slug": "zillow-phoenix",
+    "name": "Zillow Phoenix Housing Search",
+    "url": "https://www.zillow.com/",
+    "sourceType": "housing_portal",
+    "personaTargets": ["tsmc_newcomers", "local_families"],
+    "allowedUse": "summary_link",
+    "cadence": "weekly",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "redfin-phoenix",
+    "name": "Redfin Phoenix Market Pages",
+    "url": "https://www.redfin.com/",
+    "sourceType": "housing_portal",
+    "personaTargets": ["tsmc_newcomers", "local_families"],
+    "allowedUse": "summary_link",
+    "cadence": "weekly",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "tsmc-global-news",
+    "name": "TSMC Corporate Updates",
+    "url": "https://www.tsmc.com/english",
+    "sourceType": "corporate_newsroom",
+    "personaTargets": ["tsmc_newcomers", "business_owners"],
+    "allowedUse": "summary_link",
+    "cadence": "weekly",
+    "destinationSurface": "mixed"
+  },
+  {
+    "slug": "arizona-commerce-authority",
+    "name": "Arizona Commerce Authority",
+    "url": "https://www.azcommerce.com/",
+    "sourceType": "official_data",
+    "personaTargets": ["tsmc_newcomers", "business_owners"],
+    "allowedUse": "summary_link",
+    "cadence": "weekly",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "phoenix-sky-harbor",
+    "name": "Phoenix Sky Harbor",
+    "url": "https://www.skyharbor.com/",
+    "sourceType": "airport_newsroom",
+    "personaTargets": ["tsmc_newcomers", "local_families", "students"],
+    "allowedUse": "summary_link",
+    "cadence": "weekly",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "tsa-travel",
+    "name": "TSA Travel Guidance",
+    "url": "https://www.tsa.gov/travel",
+    "sourceType": "official_data",
+    "personaTargets": ["tsmc_newcomers", "local_families", "students"],
+    "allowedUse": "summary_link",
+    "cadence": "monthly",
+    "destinationSurface": "relocation_guide"
+  },
+  {
+    "slug": "what-now-phoenix",
+    "name": "What Now Phoenix",
+    "url": "https://whatnowphoenix.com/",
+    "sourceType": "local_media",
+    "personaTargets": ["local_families", "students", "business_owners"],
+    "allowedUse": "summary_link",
+    "cadence": "daily",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "tiktok-phoenix-food",
+    "name": "TikTok Phoenix Food Tag",
+    "url": "https://www.tiktok.com/tag/phoenixfood",
+    "sourceType": "social_signal",
+    "personaTargets": ["local_families", "students"],
+    "allowedUse": "signal_only",
+    "cadence": "daily",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "tiktok-phoenix-apartments",
+    "name": "TikTok Phoenix Apartments Tag",
+    "url": "https://www.tiktok.com/tag/phoenixapartments",
+    "sourceType": "social_signal",
+    "personaTargets": ["tsmc_newcomers", "students"],
+    "allowedUse": "signal_only",
+    "cadence": "daily",
+    "destinationSurface": "community_news"
+  },
+  {
+    "slug": "az-school-report-cards",
+    "name": "Arizona School Report Cards",
+    "url": "https://azreportcards.azed.gov/",
+    "sourceType": "official_data",
+    "personaTargets": ["tsmc_newcomers", "local_families"],
+    "allowedUse": "summary_link",
+    "cadence": "monthly",
+    "destinationSurface": "relocation_guide"
+  }
+]

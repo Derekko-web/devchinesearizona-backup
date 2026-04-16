@@ -1,39 +1,73 @@
+'use client';
+
+import { Compass, Plus } from 'lucide-react';
 import Link from 'next/link';
-import { Compass, Globe, Plus } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Suspense } from 'react';
+
+import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { localeLangAttribute } from '@/lib/i18n';
+import { localeFromPath, withLocale } from '@/lib/routing';
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const locale = localeFromPath(pathname);
+  const navItems = [
+    {
+      href: '/directory',
+      label: locale === 'zh' ? '商家目錄' : 'Directory',
+    },
+    {
+      href: '/hidden-arizona',
+      label: locale === 'zh' ? '亞利桑那秘境' : 'Hidden Arizona',
+    },
+    {
+      href: '/relocation-guide',
+      label: locale === 'zh' ? '搬遷指南' : 'Relocation Guide',
+    },
+    {
+      href: '/community',
+      label: locale === 'zh' ? '社群中心' : 'Community',
+    },
+  ];
+
   return (
-    <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <Link href="/" className="flex-shrink-0 flex items-center space-x-2">
-            <div className="w-8 h-8 bg-brand-900 text-white rounded-lg flex items-center justify-center font-bold text-lg">
-              <Compass className="w-5 h-5" />
+    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link href={withLocale(locale, '/')} className="flex flex-shrink-0 items-center space-x-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-900 text-lg font-bold text-white">
+              <Compass className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-bold text-xl tracking-tight text-brand-900 block leading-tight">ChineseArizona</span>
-              <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider block leading-none relative top-[-2px]">亞利桑那華人指南</span>
+              <span className="block text-xl font-bold leading-tight tracking-tight text-brand-900">ChineseArizona</span>
+              <span
+                className="relative top-[-2px] block text-[10px] font-medium uppercase leading-none tracking-wider text-slate-500"
+                lang={localeLangAttribute(locale)}
+              >
+                {locale === 'zh' ? '亞利桑那華語指南' : 'Arizona bilingual guide'}
+              </span>
             </div>
           </Link>
 
-          <div className="hidden md:flex space-x-8 items-center">
-            <Link href="/directory" className="text-slate-600 font-medium text-sm hover:text-brand-500 transition-colors">
-              Directory <span className="text-xs text-slate-500 font-normal ml-1">目錄</span>
-            </Link>
-            <Link href="/relocation-guide" className="text-slate-600 font-medium text-sm hover:text-brand-500 transition-colors">
-              Relocation Guide <span className="text-xs text-slate-500 font-normal ml-1">搬遷指南</span>
-            </Link>
-            <Link href="/community" className="text-slate-600 font-medium text-sm hover:text-brand-500 transition-colors">
-              Community <span className="text-xs text-slate-500 font-normal ml-1">社區</span>
-            </Link>
-            
-            <div className="h-6 w-px bg-slate-200 mx-2"></div>
-            
-            <button className="flex items-center text-sm text-slate-600 hover:text-brand-900 group">
-              <Globe className="w-4 h-4 mr-1 text-slate-400 group-hover:text-brand-500" /> EN / 繁
-            </button>
-            <Link href="/add-business" className="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-brand-900 hover:bg-brand-800 transition-colors">
-              Add Business <Plus className="w-4 h-4 ml-1" />
+          <div className="hidden items-center space-x-8 md:flex">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={withLocale(locale, item.href)}
+                className="text-sm font-medium text-slate-600 transition-colors hover:text-brand-500"
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <div className="mx-2 h-6 w-px bg-slate-200" />
+
+            <Suspense fallback={null}>
+              <LocaleSwitcher currentLocale={locale} />
+            </Suspense>
+            <Link href={withLocale(locale, '/add-business')} className="inline-flex items-center justify-center rounded-md border border-transparent bg-brand-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-800">
+              {locale === 'zh' ? '新增商家' : 'Add Business'} <Plus className="ml-1 h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
         </div>

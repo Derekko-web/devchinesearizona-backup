@@ -6,9 +6,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "atlas:sync": "PYTHONPATH=.python-packages python3 -m scripts.atlas_obscura_ingest.cli sync",
+    "atlas:publish": "PYTHONPATH=.python-packages python3 -m scripts.atlas_obscura_ingest.cli publish",
+    "atlas:test": "PYTHONPATH=.python-packages python3 -m unittest scripts.tests.test_atlas_obscura_ingest",
+    "scrape:discover": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli discover",
+    "scrape:enrich": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli enrich",
+    "scrape:dedupe": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli dedupe_score",
+    "scrape:site-fixtures": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli export_site_fixtures",
+    "scrape:run": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli run",
+    "scrape:test": "PYTHONPATH=.python-packages python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+    "scrape:articles:sunbird": "PYTHONPATH=.python-packages python3 -m scripts.article_ingest.cli run",
+    "scrape:signal-desk": "PYTHONPATH=.python-packages python3 -m scripts.signal_desk.cli run",
+    "plaza:site-fixtures": "python3 scripts/plaza_directory_site_export.py"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.56.1",
+    "cheerio": "^1.2.0",
     "lucide-react": "^1.8.0",
     "next": "16.2.3",
     "react": "19.2.4",
@@ -22,6 +37,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.4"
   }
 }
