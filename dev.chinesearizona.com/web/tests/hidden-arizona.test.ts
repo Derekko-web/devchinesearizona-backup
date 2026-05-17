@@ -82,11 +82,11 @@ describe('hidden arizona seo surfaces', () => {
     expect(urls).toContain('https://chinesearizona.com/hidden-arizona/places/the-wave');
   });
 
-  it('wires hidden arizona into navbar and footer navigation', () => {
+  it('keeps hidden arizona out of top-level navbar and footer navigation', () => {
     const navbar = fs.readFileSync(path.join(process.cwd(), 'src', 'components', 'Navbar.tsx'), 'utf-8');
     const footer = fs.readFileSync(path.join(process.cwd(), 'src', 'components', 'Footer.tsx'), 'utf-8');
 
-    expect(navbar).toContain("/hidden-arizona");
-    expect(footer).toContain("/hidden-arizona");
+    expect(navbar).not.toContain("/hidden-arizona");
+    expect(footer).not.toContain("/hidden-arizona");
   });
 });

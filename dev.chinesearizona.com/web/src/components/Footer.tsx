@@ -45,7 +45,6 @@ export default function Footer() {
     { href: '/', label: locale === 'zh' ? '首頁' : 'Home' },
     { href: '/business', label: locale === 'zh' ? '商家' : 'Business' },
     { href: '/community', label: locale === 'zh' ? '社區' : 'Community' },
-    { href: '/hidden-arizona', label: locale === 'zh' ? '亞利桑那秘境' : 'Hidden Arizona' },
     ...(shopEnabled ? [{ href: '/shop', label: locale === 'zh' ? '市集' : 'Shop' }] : []),
   ];
 

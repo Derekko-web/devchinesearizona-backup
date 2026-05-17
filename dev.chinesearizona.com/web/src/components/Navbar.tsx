@@ -120,11 +120,6 @@ export default function Navbar() {
       label: locale === 'zh' ? '亞利桑那新聞' : 'News',
       subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
     },
-    {
-      path: '/hidden-arizona',
-      label: locale === 'zh' ? '秘境' : 'Hidden AZ',
-      subLabel: oppositeCopy(locale, 'Hidden Arizona', '亞利桑那秘境'),
-    },
     ...(shopEnabled
       ? [
           {
