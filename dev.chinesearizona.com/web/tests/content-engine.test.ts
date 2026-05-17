@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getArticleBySlug, getArticles } from '@/lib/content';
+import { getArticleBySlug, getArticles, getCommunityTrendingArticles } from '@/lib/content';
 import { getMonitoredSources, getSignalDeskQueue, getSignalDeskSummary } from '@/lib/signal-desk';
 
 describe('content engine', () => {
@@ -30,6 +30,17 @@ describe('content engine', () => {
 
     expect(articles[0]?.slug).toBe('housing-watch-where-tsmc-families-compare-first');
     expect(articles[1]?.slug).toBe('tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure');
+  });
+
+  it('curates a trending rail around TSMC, air service, and Arizona restaurant openings', () => {
+    const articles = getCommunityTrendingArticles(4);
+
+    expect(articles.map((article) => article.slug)).toEqual([
+      'tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure',
+      'phoenix-route-watch-asia-connector-playbook',
+      'trend-radar-what-phoenix-food-posts-keep-highlighting',
+      'restaurant-opening-radar-east-valley-plaza-shifts',
+    ]);
   });
 
   it('loads monitored sources and signal desk queue summary', () => {

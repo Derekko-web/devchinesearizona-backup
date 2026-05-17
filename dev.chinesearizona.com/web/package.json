@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "convex:dev": "convex dev --local",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
@@ -16,6 +17,9 @@
     "scrape:dedupe": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli dedupe_score",
     "scrape:site-fixtures": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli export_site_fixtures",
     "scrape:run": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli run",
+    "scrape:discover-arizona": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/discover_arizona_tiktok/collector.cjs run",
+    "scrape:arizona-radar": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/arizona_radar/run.cjs run",
+    "scrape:arizona-radar:backfill": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/arizona_radar/backfill_to_supabase.cjs",
     "scrape:test": "PYTHONPATH=.python-packages python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
     "scrape:articles:sunbird": "PYTHONPATH=.python-packages python3 -m scripts.article_ingest.cli run",
     "scrape:signal-desk": "PYTHONPATH=.python-packages python3 -m scripts.signal_desk.cli run",
@@ -24,10 +28,12 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.56.1",
     "cheerio": "^1.2.0",
+    "convex": "^1.35.1",
     "lucide-react": "^1.8.0",
     "next": "16.2.3",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "stripe": "^22.0.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -36,6 +42,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
+    "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.4"

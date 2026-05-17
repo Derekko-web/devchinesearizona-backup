@@ -1,0 +1,30 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="320" fill="#F1E9DD"/>
+  <rect width="1200" height="320" fill="url(#paper)"/>
+  <path d="M-8 269C107 220 201 247 284 214C358 185 402 137 496 132C579 128 622 170 706 170C791 170 853 109 931 109C1037 109 1099 180 1208 167" stroke="#D4C6B4" stroke-width="10" stroke-linecap="round"/>
+  <path d="M-20 87C77 115 137 98 222 125C307 152 388 237 466 237C556 237 599 169 691 169C780 169 827 226 920 226C1017 226 1083 155 1224 139" stroke="#DCCFBF" stroke-width="8" stroke-linecap="round"/>
+  <path d="M88 9C140 58 153 126 239 126C320 126 356 61 442 61C520 61 567 115 653 115C752 115 799 42 916 42C1003 42 1058 85 1132 75" stroke="#E0D3C4" stroke-width="6" stroke-linecap="round"/>
+  <path d="M216 320C253 236 290 221 352 212C427 201 443 237 507 237C586 237 611 185 684 185C770 185 786 233 861 233C919 233 966 203 999 174" stroke="#E0D3C4" stroke-width="5" stroke-linecap="round"/>
+  <path d="M76 172L207 172" stroke="#C7D9C7" stroke-width="28" stroke-linecap="round" opacity="0.75"/>
+  <path d="M867 57L1055 57" stroke="#D6E4D0" stroke-width="30" stroke-linecap="round" opacity="0.6"/>
+  <path d="M490 48L625 48" stroke="#CADCCB" stroke-width="24" stroke-linecap="round" opacity="0.55"/>
+  <g opacity="0.5">
+    <path d="M97 70H286" stroke="#EFE7DD" stroke-width="4" stroke-dasharray="10 12"/>
+    <path d="M651 260H1100" stroke="#EFE7DD" stroke-width="4" stroke-dasharray="10 12"/>
+    <path d="M552 24V288" stroke="#EFE7DD" stroke-width="4" stroke-dasharray="10 12"/>
+    <path d="M934 28V296" stroke="#EFE7DD" stroke-width="4" stroke-dasharray="10 12"/>
+  </g>
+  <g>
+    <circle cx="250" cy="182" r="14" fill="#C53E2F" stroke="white" stroke-width="8"/>
+    <circle cx="445" cy="118" r="14" fill="#C53E2F" stroke="white" stroke-width="8"/>
+    <circle cx="602" cy="206" r="14" fill="#C53E2F" stroke="white" stroke-width="8"/>
+    <circle cx="828" cy="148" r="14" fill="#C53E2F" stroke="white" stroke-width="8"/>
+    <circle cx="1010" cy="197" r="14" fill="#C53E2F" stroke="white" stroke-width="8"/>
+  </g>
+  <defs>
+    <linearGradient id="paper" x1="600" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4EDE4"/>
+      <stop offset="1" stop-color="#EDE2D4"/>
+    </linearGradient>
+  </defs>
+</svg>

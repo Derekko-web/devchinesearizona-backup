@@ -78,29 +78,29 @@
   {
     "slug": "tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure",
     "title": {
-      "en": "TSMC Corridor Watch: Supplier Growth Is Changing How Families Compare North Phoenix and Peoria",
-      "zh": "TSMC 走廊觀察：供應鏈成長正改變家庭比較北鳳凰城與 Peoria 的方式"
+      "en": "TSMC Arizona Update: First Fab Is Running, Fab 2 Targets 2027 as the Buildout Grows",
+      "zh": "TSMC 亞利桑那更新：首座晶圓廠已量產，二廠目標 2027 年啟動，整體布局持續擴大"
     },
     "excerpt": {
-      "en": "The newest corridor conversations are no longer just about one employer. Families are now comparing hiring spillover, commute stability, and school-day logistics across the broader supplier ecosystem.",
-      "zh": "最新的走廊討論已不只圍繞單一雇主，而是開始一起評估供應鏈外溢招聘、通勤穩定性與學校日常安排。"
+      "en": "TSMC says its first Arizona fab began high-volume N4 production in Q4 2024, the second fab structure was completed in 2025, and N3 volume production is targeted for the second half of 2027.",
+      "zh": "TSMC 表示，亞利桑那首座晶圓廠已於 2024 年第四季開始 N4 高量產，第二座晶圓廠結構於 2025 年完工，N3 量產目標為 2027 年下半年。"
     },
     "heroImage": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
     "publishedAt": "2026-04-14T10:00:00.000Z",
-    "updatedAt": "2026-04-14T10:00:00.000Z",
+    "updatedAt": "2026-04-16T12:00:00.000Z",
     "category": "news",
     "body": [
       {
-        "en": "The corridor story has widened. Once suppliers and adjacent service firms enter the conversation, families stop asking only whether a house is close to TSMC and start asking whether the wider work pattern will still make sense six months from now.",
-        "zh": "這條走廊的故事已經變大。當供應商與周邊服務公司都被納入考量後，家庭不再只問房子離 TSMC 近不近，而會進一步思考半年後整體工作型態是否仍然合理。"
+        "en": "As of April 2026, the clearest TSMC Arizona story is execution, not rumor. On its Arizona site, TSMC says the first Phoenix fab started high-volume N4 production in Q4 2024. The company also says the second fab structure was completed in 2025 and N3 volume production is targeted for the second half of 2027.",
+        "zh": "截至 2026 年 4 月，TSMC 亞利桑那最清楚的主線已經不是傳言，而是實際執行。TSMC 在其亞利桑那專頁表示，鳳凰城首座晶圓廠已於 2024 年第四季開始 N4 高量產；公司也指出，第二座晶圓廠結構已於 2025 年完工，N3 量產目標為 2027 年下半年。"
       },
       {
-        "en": "That shift changes housing, school, and job planning at the same time. One household may need a shorter factory commute, while another is optimizing for where the second adult can job-search, where children can settle fastest, and how far weekend community life will feel from home.",
-        "zh": "這個轉變會同時影響住房、學校與求職規劃。有些家庭在乎更短的工廠通勤，有些則同時考慮第二位大人在哪裡找工作、孩子在哪裡更快穩定，以及週末社群生活離家會不會太遠。"
+        "en": "TSMC now describes the Phoenix campus as a much larger long-term buildout. Its Arizona page says the plan includes six wafer fabs, two advanced packaging facilities and an R&D team center. In a March 4, 2025 press release, TSMC said its total planned U.S. investment would reach $165 billion, with Arizona already employing more than 3,000 people.",
+        "zh": "TSMC 現在把鳳凰城園區描述為更大規模的長期布局。其亞利桑那頁面指出，整體計畫包含六座晶圓廠、兩座先進封裝設施與一個研發團隊中心。TSMC 在 2025 年 3 月 4 日的新聞稿中表示，其美國總投資規劃將達 1650 億美元，而亞利桑那園區目前已有超過 3000 名員工。"
       },
       {
-        "en": "ChineseArizona is treating the corridor as a mixed audience watch. For newcomers it is a relocation issue. For local business owners it is a demand-shift issue. For both groups, the useful move is pairing signal watching with trusted real-estate, career, and cross-border tax guidance.",
-        "zh": "ChineseArizona 把這條走廊視為混合受眾的觀察主題。對新居民來說，它是搬遷問題；對在地商家來說，它是需求轉移問題。對兩邊都一樣有用的做法，是把訊號追蹤和可信任的房產、職涯與跨境稅務支援放在一起看。"
+        "en": "For Arizona readers, that changes the local conversation. The live questions are now supplier hiring, workforce training, housing pressure, and Taiwan-linked business travel around a campus that is already producing chips and still getting bigger.",
+        "zh": "對亞利桑那讀者來說，這讓在地討論焦點明顯改變。現在真正需要追蹤的，是供應鏈招聘、人才培訓、住房壓力，以及圍繞這座已經開始生產且仍在擴張的園區所帶動的台美商務往返。"
       }
     ],
     "series": "tsmc-corridor-watch",
@@ -123,52 +123,52 @@
     "sourceLinks": [
       {
         "label": {
-          "en": "TSMC corporate updates",
-          "zh": "TSMC 官方更新"
+          "en": "TSMC Arizona site",
+          "zh": "TSMC Arizona 專頁"
         },
-        "url": "https://www.tsmc.com/english",
+        "url": "https://www.tsmc.com/static/abouttsmcaz/index.htm",
         "source": "TSMC"
       },
       {
         "label": {
-          "en": "Arizona Commerce Authority",
-          "zh": "亞利桑那商務局"
+          "en": "TSMC $165 billion U.S. investment release",
+          "zh": "TSMC 1650 億美元美國投資新聞稿"
         },
-        "url": "https://www.azcommerce.com/",
-        "source": "Arizona Commerce Authority"
+        "url": "https://pr.tsmc.com/english/news/3210",
+        "source": "TSMC"
       }
     ],
     "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_tsmc_corridor_supplier_pressure_2026_04_14",
+    "sourceName": "ChineseArizona News Desk",
+    "sourceId": "ca_tsmc_arizona_update_2026_04_16",
     "republishedWithPermission": false
   },
   {
     "slug": "phoenix-route-watch-asia-connector-playbook",
     "title": {
-      "en": "Phoenix Route Watch: The Asia Connector Playbook Families Keep Rebuilding",
-      "zh": "航線觀察：鳳凰城家庭反覆重建的亞洲轉機攻略"
+      "en": "Phoenix Air Service Update: Taipei Flights Are Live and Porter Adds New Canada Routes",
+      "zh": "鳳凰城航線更新：台北直飛已上線，Porter 再增加拿大新航點"
     },
     "excerpt": {
-      "en": "Direct options still matter, but most Arizona households planning Taiwan or Asia trips are really optimizing for calmer connector choices, baggage predictability, and school-break timing.",
-      "zh": "直飛當然重要，但多數規劃往返台灣或亞洲的亞州家庭，真正優化的是更穩定的轉機選擇、行李可預測性與寒暑假時間帶。"
+      "en": "Phoenix now has two Taipei carriers at Sky Harbor. China Airlines launched on Dec. 3, 2025, STARLUX launched on Jan. 15, 2026 and increased service in March, and Porter added Vancouver and Ottawa for the 2026 winter season.",
+      "zh": "鳳凰城天港機場現在已有兩家台北直飛航空公司。華航於 2025 年 12 月 3 日開航，STARLUX 於 2026 年 1 月 15 日開航並在 3 月增班，Porter 也為 2026 冬季新增溫哥華與渥太華。"
     },
     "heroImage": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
     "publishedAt": "2026-04-13T08:30:00.000Z",
-    "updatedAt": "2026-04-13T08:30:00.000Z",
+    "updatedAt": "2026-04-16T12:00:00.000Z",
     "category": "news",
     "body": [
       {
-        "en": "Phoenix route news is useful only when it is translated into family planning language. A new option or timetable change matters because it can reduce one painful transfer, shorten an overnight layover, or make a parent-and-child trip feel manageable instead of exhausting.",
-        "zh": "只有把航線消息翻成家庭規劃的語言，它才真正有用。新的選項或時刻變動之所以重要，是因為它可能少掉一次痛苦轉機、縮短過夜時間，或讓親子同行從筋疲力盡變成可以承受。"
+        "en": "Phoenix air service is no longer stuck at the rumor stage. China Airlines began nonstop Taipei service on Dec. 3, 2025, giving Phoenix its first nonstop route to Asia. On Jan. 15, 2026, STARLUX launched its own Taipei service, and Sky Harbor says STARLUX increased from three weekly flights to four in March 2026.",
+        "zh": "鳳凰城的國際航線消息已經不是停留在傳聞階段。華航於 2025 年 12 月 3 日開通鳳凰城直飛台北，為鳳凰城帶來首條亞洲直飛航線。到了 2026 年 1 月 15 日，STARLUX 也開通自家台北航線，而天港機場表示 STARLUX 已在 2026 年 3 月由每週三班增至四班。"
       },
       {
-        "en": "That is why ChineseArizona is watching connector logic as much as destination headlines. Readers keep asking which airport is easier with checked bags, where drive time to the departure airport cancels out the fare savings, and how much flexibility disappears once school calendars lock in.",
-        "zh": "因此 ChineseArizona 不只看目的地新聞，更重視轉機邏輯。讀者反覆在問的是：哪個機場對托運行李更友善、開去轉機機場的時間會不會抵銷票價差，以及學校行事曆一旦固定後彈性還剩多少。"
+        "en": "That means Arizona travelers now have two Taipei carriers at PHX, both using Airbus A350 aircraft with 306 seats. Phoenix Sky Harbor also says Porter added new winter routes from Vancouver starting Feb. 2, 2026 and Ottawa starting Feb. 7, 2026, giving PHX more international and transborder options at the same time.",
+        "zh": "這代表亞利桑那旅客現在在 PHX 已有兩家台北直飛航空公司，兩者都使用 306 座的 Airbus A350 機型。鳳凰城天港機場也表示，Porter 新增自 2026 年 2 月 2 日起的溫哥華航線，以及自 2026 年 2 月 7 日起的渥太華航線，讓 PHX 同時擴大了國際與跨境選擇。"
       },
       {
-        "en": "Always confirm airport and security details on official sites before booking. When the itinerary involves grandparents, students, or multi-city family plans, it often saves time to use a bilingual travel specialist instead of re-running the same search by yourself for three nights in a row.",
-        "zh": "訂票前請一定回到官方機場與安檢頁面確認細節。若行程牽涉長輩、學生，或多人多城市安排，與其自己連續三晚重跑同一堆搜尋，通常找熟悉雙語需求的旅行顧問更省時間。"
+        "en": "The practical takeaway for local readers is simple: Phoenix’s map looks different than it did a year ago. For Taiwan trips, supplier visits, school-break travel, and cross-Pacific family planning, the question is now which schedule and partnership works best, not whether Phoenix has service at all.",
+        "zh": "對本地讀者來說，最實際的重點很簡單：鳳凰城的航線版圖已經和一年前不一樣。對於往返台灣、供應鏈商務行程、寒暑假旅行與跨太平洋家庭規劃而言，現在要比較的是哪一個班表與合作網路更適合，而不是鳳凰城到底有沒有航班。"
       }
     ],
     "series": "route-watch",
@@ -190,52 +190,60 @@
     "sourceLinks": [
       {
         "label": {
-          "en": "Phoenix Sky Harbor official site",
-          "zh": "鳳凰城機場官網"
+          "en": "China Airlines Taipei launch at PHX",
+          "zh": "華航鳳凰城台北開航"
         },
-        "url": "https://www.skyharbor.com/",
+        "url": "https://www.skyharbor.com/about-phx/news-media/press-releases/china-airlines-begins-service-to-taipei/",
         "source": "Phoenix Sky Harbor"
       },
       {
         "label": {
-          "en": "TSA travel guidance",
-          "zh": "TSA 旅行指引"
+          "en": "STARLUX Taipei launch at PHX",
+          "zh": "STARLUX 鳳凰城台北開航"
         },
-        "url": "https://www.tsa.gov/travel",
-        "source": "Transportation Security Administration"
+        "url": "https://www.skyharbor.com/about-phx/news-media/press-releases/starlux-airlines-launches-nonstop-service-between-taipei-and-phoenix/",
+        "source": "Phoenix Sky Harbor"
+      },
+      {
+        "label": {
+          "en": "Porter Vancouver and Ottawa announcement",
+          "zh": "Porter 溫哥華與渥太華新航線"
+        },
+        "url": "https://www.skyharbor.com/about-phx/news-media/phx-check-in/2025/october-2025/porter-airlines-announces-vancouver-ottawa-service/",
+        "source": "Phoenix Sky Harbor"
       }
     ],
     "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_route_watch_connector_playbook_2026_04_13",
+    "sourceName": "ChineseArizona News Desk",
+    "sourceId": "ca_phx_air_service_update_2026_04_16",
     "republishedWithPermission": false
   },
   {
     "slug": "restaurant-opening-radar-east-valley-plaza-shifts",
     "title": {
-      "en": "Restaurant Opening Radar: East Valley Plaza Shifts Worth Watching This Month",
-      "zh": "新店雷達：本月值得關注的東谷商場變化"
+      "en": "Chandler Dining District Watch: Seafood City Is Due in 2026 and Din Tai Fung in 2027",
+      "zh": "Chandler 餐飲區觀察：Seafood City 預定 2026 年進場，Din Tai Fung 接續於 2027 年登場"
     },
     "excerpt": {
-      "en": "The useful story is not just one new opening. It is whether plaza momentum is clustering around boba, bakery, hot pot, and grocery anchors that make an area feel easier for everyday Chinese-speaking life.",
-      "zh": "真正有用的重點不只是某一家新店，而是商場動能是否正圍繞手搖飲、烘焙、火鍋與超市主力店聚集，讓一個區域更適合日常華語生活。"
+      "en": "Chandler Fashion Center says its outdoor dining refresh includes Seafood City opening in 2026 and Din Tai Fung set for 2027, signaling a larger Asian dining buildout instead of a one-off opening.",
+      "zh": "Chandler Fashion Center 表示，其戶外餐飲改造將包含 2026 年開設的 Seafood City，以及預定 2027 年進場的 Din Tai Fung，顯示這是一波更完整的亞洲餐飲布局，而不只是單一新店。"
     },
     "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
     "publishedAt": "2026-04-12T09:15:00.000Z",
-    "updatedAt": "2026-04-12T09:15:00.000Z",
+    "updatedAt": "2026-04-16T12:00:00.000Z",
     "category": "news",
     "body": [
       {
-        "en": "ChineseArizona is treating restaurant coverage as neighborhood utility, not just hype. A new opening matters more when it changes where families actually stop for dessert after Chinese school, where students linger near late-night boba, or where weekend errands can be stacked into one loop.",
-        "zh": "ChineseArizona 把餐廳報導當成社區實用資訊，而不是單純追新。某家店之所以重要，往往是因為它改變了家庭上完中文課後去哪裡吃甜點、學生晚上會在哪裡續攤，或週末能不能把一整圈 errands 一次跑完。"
+        "en": "On Chandler Fashion Center’s official refresh page, the mall says a new outdoor dining district is taking shape. The clearest named tenants are Seafood City, which the site says is opening in 2026, and Din Tai Fung, which the mall lists for 2027.",
+        "zh": "在 Chandler Fashion Center 的官方改造頁面上，商場表示一個新的戶外餐飲區正在成形。當中最明確被點名的品牌是預計於 2026 年開幕的 Seafood City，以及商場列為 2027 年進駐的 Din Tai Fung。"
       },
       {
-        "en": "This month the clearest East Valley signal is plaza consolidation. Readers care less about one menu launch in isolation and more about whether a plaza is becoming a dependable anchor with groceries, bakery, boba, and a couple of crowd-tested meal options in one stop.",
-        "zh": "本月東谷最明顯的訊號是商場機能開始集中。讀者在意的不是單一菜單上線，而是一個商場是否逐漸形成穩定據點，能一次滿足買菜、麵包、手搖飲和幾個經得起回訪的吃飯選項。"
+        "en": "That matters because Seafood City is more than one storefront. The mall describes it as a Filipino grocery with in-house restaurants, bakery items, street food and seafood tanks, while Din Tai Fung would add a high-profile Taiwanese full-service anchor later.",
+        "zh": "這之所以重要，是因為 Seafood City 並不只是單一店面。商場把它描述為結合熟食餐飲、烘焙、街頭小吃與海鮮活水槽的菲律賓超市，而 Din Tai Fung 則會在之後補上更高辨識度的台灣餐飲主力店。"
       },
       {
-        "en": "Every radar item should trigger a directory action. If a promising spot already has coverage, we verify it. If it does not, we queue a listing build so discovery on social and local media eventually becomes searchable utility on the directory side.",
-        "zh": "每一次雷達更新都應該帶出目錄動作。若某個值得關注的店已經有頁面，就去核對；若還沒有，就排進建立清單。這樣社群媒體與在地媒體上的發現，最終才能變成目錄裡可搜尋的實用內容。"
+        "en": "For East Valley readers, the useful read is timing. Scottsdale’s Din Tai Fung is the near-term Arizona debut, but Chandler’s refresh looks like the broader neighborhood-utility play: grocery traffic, prepared food and a restaurant lineup designed to keep people on site longer.",
+        "zh": "對東谷讀者來說，真正有用的是時間表。Scottsdale 的 Din Tai Fung 才是眼前這一波的亞利桑那首發，但 Chandler 的改造更像是完整的社區機能布局：把超市人流、熟食需求與餐飲停留時間一起做大。"
       }
     ],
     "series": "restaurant-opening-radar",
@@ -257,16 +265,24 @@
     "sourceLinks": [
       {
         "label": {
-          "en": "What Now Phoenix",
-          "zh": "What Now Phoenix"
+          "en": "Chandler Fashion Center refresh page",
+          "zh": "Chandler Fashion Center 改造頁面"
         },
-        "url": "https://whatnowphoenix.com/",
-        "source": "What Now Phoenix"
+        "url": "https://www.shopchandlerfashioncenter.com/refresh",
+        "source": "Chandler Fashion Center"
+      },
+      {
+        "label": {
+          "en": "Arizona’s Family Din Tai Fung Arizona report",
+          "zh": "Arizona’s Family Din Tai Fung 亞利桑那報導"
+        },
+        "url": "https://www.azfamily.com/2026/02/24/din-tai-fung-announces-scottsdale-opening-date/",
+        "source": "Arizona’s Family"
       }
     ],
     "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_restaurant_radar_east_valley_2026_04_12",
+    "sourceName": "ChineseArizona News Desk",
+    "sourceId": "ca_chandler_dining_district_watch_2026_04_16",
     "republishedWithPermission": false
   },
   {
@@ -332,41 +348,40 @@
   {
     "slug": "trend-radar-what-phoenix-food-posts-keep-highlighting",
     "title": {
-      "en": "Trend Radar: What Phoenix Food Posts Keep Highlighting This Week",
-      "zh": "趨勢雷達：本週鳳凰城美食貼文反覆在推什麼"
+      "en": "Scottsdale Restaurant Watch: Din Tai Fung Targets April 20, 2026 at Fashion Square",
+      "zh": "Scottsdale 餐飲觀察：Din Tai Fung 預計於 2026 年 4 月 20 日進駐 Fashion Square"
     },
     "excerpt": {
-      "en": "The strongest signal is not one viral dish. It is the repeat appearance of bakeries, boba, and dessert stops that make a plaza feel worth the drive for families and students alike.",
-      "zh": "最有用的訊號不是某一道爆紅餐點，而是烘焙、手搖與甜點據點反覆出現，讓一個商場同時對家庭和學生都變得值得專程前往。"
+      "en": "As of April 16, 2026, Arizona’s Family reports that Din Tai Fung’s first Arizona restaurant is scheduled to open on April 20 at Scottsdale Fashion Square.",
+      "zh": "截至 2026 年 4 月 16 日，Arizona’s Family 報導 Din Tai Fung 亞利桑那首店預計將於 4 月 20 日在 Scottsdale Fashion Square 開幕。"
     },
     "heroImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
     "publishedAt": "2026-04-10T11:20:00.000Z",
-    "updatedAt": "2026-04-10T11:20:00.000Z",
+    "updatedAt": "2026-04-16T12:00:00.000Z",
     "category": "news",
     "body": [
       {
-        "en": "Food posts move fast, but the repeat patterns are still valuable. When the same bakery, tea stop, or dessert counter keeps surfacing across accounts, it usually means the location is becoming part of people’s real routine instead of a one-time novelty stop.",
-        "zh": "美食貼文變化很快，但重複出現的模式依然有價值。當同一家麵包店、茶飲店或甜點櫃台在不同帳號裡一再冒出來，通常表示它正在變成大家真實生活的一部分，而不是只去一次的新鮮點。"
+        "en": "As of April 16, 2026, the most concrete Din Tai Fung news in Arizona is in Scottsdale, not Chandler. Arizona’s Family reported on Feb. 24 that the company’s first Arizona restaurant is scheduled to open on April 20 at Scottsdale Fashion Square.",
+        "zh": "截至 2026 年 4 月 16 日，Din Tai Fung 在亞利桑那最明確的消息發生在 Scottsdale，而不是 Chandler。Arizona’s Family 在 2 月 24 日報導，品牌在亞利桑那的首間餐廳預計將於 4 月 20 日在 Scottsdale Fashion Square 開幕。"
       },
       {
-        "en": "That makes the discovery useful for directory strategy. We can ask whether the plaza now deserves stronger search coverage, whether the grocery anchor nearby should be featured together with dessert stops, and whether a newcomer can solve an entire weekend craving loop in one place.",
-        "zh": "這讓這些發現對目錄策略變得有用。我們可以進一步問：這個商場是否值得更強的搜尋覆蓋、附近的超市主力店是否應該和甜點店一起被推薦，以及新居民能不能在同一站解決整個週末想吃想買的需求。"
+        "en": "That report said reservations opened on Feb. 26 and described the restaurant as a roughly 10,000-square-foot space with about 340 seats and a dumpling expo kitchen. Scottsdale Fashion Square’s own materials still list Din Tai Fung as a lower-level culinary arrival, which matches the fact that the opening is only days away, not months away.",
+        "zh": "該報導指出，訂位已於 2 月 26 日開放，餐廳空間約 1 萬平方英尺、約 340 個座位，並設有可觀看製作過程的包餃展示廚房。Scottsdale Fashion Square 的官方資料目前也仍把 Din Tai Fung 列為下層的新餐飲進駐品牌，這與目前距離開幕只剩幾天、而不是幾個月的節奏一致。"
       },
       {
-        "en": "As with all Trend Radar items, ChineseArizona rewrites the insight in original language and links readers back to the sources instead of copying captions or relying on embeds for context.",
-        "zh": "和所有 Trend Radar 內容一樣，ChineseArizona 會用自己的文字重寫觀察，再把讀者帶回來源，而不是複製 caption 或靠嵌入影片來交代脈絡。"
+        "en": "For readers deciding where to plan a spring visit, the practical answer is straightforward. Scottsdale is the immediate launch market. Chandler is still part of the brand’s Arizona expansion story, but the East Valley location is currently planned for a later phase.",
+        "zh": "對正在安排春季聚餐或探店的人來說，實際答案很直接：Scottsdale 才是眼前這一波的正式落地市場。Chandler 仍然是品牌在亞利桑那擴張故事的一部分，但東谷據點目前還屬於後續階段。"
       }
     ],
-    "series": "trend-radar",
+    "series": "restaurant-opening-radar",
     "freshnessTier": "weekly",
-    "sourcePolicy": "signal_only",
+    "sourcePolicy": "summary_link",
     "relatedCategorySlugs": [
       "dining",
       "shopping"
     ],
     "ctaBusinessSlugs": [
       "taste-of-taiwan",
-      "99-ranch-market-chandler",
       "85-degrees-chandler"
     ],
     "personaTargets": [
@@ -376,16 +391,24 @@
     "sourceLinks": [
       {
         "label": {
-          "en": "TikTok Phoenix food tag",
-          "zh": "TikTok 鳳凰城美食標籤"
+          "en": "Arizona’s Family Scottsdale opening report",
+          "zh": "Arizona’s Family Scottsdale 開幕報導"
         },
-        "url": "https://www.tiktok.com/tag/phoenixfood",
-        "source": "TikTok"
+        "url": "https://www.azfamily.com/2026/02/24/din-tai-fung-announces-scottsdale-opening-date/",
+        "source": "Arizona’s Family"
+      },
+      {
+        "label": {
+          "en": "Scottsdale Fashion Square dining page",
+          "zh": "Scottsdale Fashion Square 餐飲頁面"
+        },
+        "url": "https://www.fashionsquare.com/dining/restaurants",
+        "source": "Scottsdale Fashion Square"
       }
     ],
     "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_restaurant_radar_nw_valley_2026_04_10",
+    "sourceName": "ChineseArizona News Desk",
+    "sourceId": "ca_scottsdale_dtf_watch_2026_04_16",
     "republishedWithPermission": false
   }
 ]

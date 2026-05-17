@@ -81,6 +81,7 @@ CATEGORY_BY_RAW_KIND = {
     "money_lender": "legal-finance",
     "tax_advisor": "legal-finance",
     "martial_arts": "education",
+    "place_of_worship": "faith-community",
     "copyshop": "local-services",
     "post_office": "local-services",
     "interior_decoration": "home-services",
@@ -156,9 +157,16 @@ BUSINESS_SERVICES = {
     "medical": "Health and medical support",
     "legal-finance": "Finance and practical support",
     "education": "Classes and learning support",
+    "faith-community": "Faith and community support",
     "home-services": "Home and decor support",
     "local-services": "Everyday local service",
     "shopping": "Shopping and retail stop",
+}
+
+EXCLUDED_BUSINESS_SLUGS = {
+    "morris-liu-oriental-pottery-mesa",
+    "tan-hua-inc-mesa",
+    "tan-hua-inc-mesa-2",
 }
 
 
@@ -430,7 +438,9 @@ def plaza_entries(payload: dict[str, Any]) -> list[tuple[dict[str, Any], dict[st
 
 
 def main() -> None:
-    existing_businesses = read_json(SCRAPED_FIXTURE_PATH)
+    existing_businesses = [
+        row for row in read_json(SCRAPED_FIXTURE_PATH) if row["slug"] not in EXCLUDED_BUSINESS_SLUGS
+    ]
     plaza_payload = read_json(PLAZA_SCRAPE_PATH)
     generated_at = plaza_payload["generatedAt"]
 
@@ -458,6 +468,8 @@ def main() -> None:
             continue
 
         candidate = build_business_record(entry, center, seen_slugs, next_index)
+        if candidate["slug"] in EXCLUDED_BUSINESS_SLUGS:
+            continue
         signature = exact_business_signature(candidate)
         if signature and signature in new_businesses_by_signature:
             merge_plaza_context(new_businesses_by_signature[signature], center, entry, generated_at)

@@ -1,0 +1,106 @@
+[
+  {
+    "slug": "az-commerce",
+    "name": "Arizona Commerce Authority",
+    "url": "https://www.azcommerce.com/news-events/news/",
+    "sourceType": "official_data",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for statewide business, economic development, and relocation signals tied to Arizona.",
+      "zh": "用於亞利桑那州商務、經濟發展與搬遷相關的官方訊號。"
+    }
+  },
+  {
+    "slug": "phoenix-sky-harbor-news",
+    "name": "Phoenix Sky Harbor News",
+    "url": "https://www.skyharbor.com/about-phx/news-media/",
+    "sourceType": "airport_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for route, airport, and traveler logistics updates that affect Arizona families.",
+      "zh": "用於影響亞利桑那家庭的航線、機場與旅運更新。"
+    }
+  },
+  {
+    "slug": "tsmc-press",
+    "name": "TSMC Press Center",
+    "url": "https://pr.tsmc.com/english/news",
+    "sourceType": "corporate_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "housing",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Watch only for Arizona-relevant plant, hiring, or supplier signals.",
+      "zh": "只追蹤和亞利桑那廠區、招募或供應鏈有關的訊號。"
+    }
+  },
+  {
+    "slug": "what-now-phoenix",
+    "name": "What Now Phoenix",
+    "url": "https://whatnow.com/phoenix/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for restaurant, plaza, and retail opening signals around metro Phoenix.",
+      "zh": "用於大鳳凰城餐廳、商場與零售開店訊號。"
+    }
+  },
+  {
+    "slug": "phx-rise-up",
+    "name": "PHX Rise Up",
+    "url": "https://www.phxrisesup.com/blog",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for local events, community initiatives, and neighborhood change signals in Arizona.",
+      "zh": "用於亞利桑那在地活動、社群倡議與街區變化訊號。"
+    }
+  },
+  {
+    "slug": "tiktok-phoenix-food",
+    "name": "TikTok Phoenix Food",
+    "url": "https://www.tiktok.com/tag/phoenixfood",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "social",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use only for trend framing and signal summaries. Do not reuse captions or media.",
+      "zh": "只可用於趨勢整理與訊號摘要，不得重用 caption 或素材。"
+    }
+  },
+  {
+    "slug": "tiktok-phoenix-apartments",
+    "name": "TikTok Phoenix Apartments",
+    "url": "https://www.tiktok.com/tag/phoenixapartments",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "housing",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for recurring rental and neighborhood signals only, with original summaries.",
+      "zh": "只用於租屋與社區重複訊號，並以原創摘要呈現。"
+    }
+  },
+  {
+    "slug": "instagram-downtown-phoenix",
+    "name": "Instagram Downtown Phoenix",
+    "url": "https://www.instagram.com/explore/locations/213385402/downtown-phoenix/",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use only for recurring public-location signals and never for reposting creator copy.",
+      "zh": "只用於公開地標的重複訊號，不得重貼創作者文字。"
+    }
+  }
+]

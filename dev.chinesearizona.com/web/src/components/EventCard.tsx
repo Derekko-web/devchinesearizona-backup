@@ -25,9 +25,7 @@ export function EventCard({ event, locale }: EventCardProps) {
       </div>
       <div className="space-y-4 p-6">
         <div className="space-y-2">
-          <div className="inline-flex rounded-full bg-accent-50 px-2.5 py-1 text-xs font-semibold text-accent-600">
-            {event.verifiedOrganizer ? (locale === 'zh' ? '已驗證主辦' : 'Verified Organizer') : event.organizer}
-          </div>
+          <p className="text-sm font-medium text-slate-500">{event.organizer}</p>
           <h3 className="text-xl font-bold text-slate-900">{t(event.title, locale)}</h3>
           <p className="text-sm leading-6 text-slate-600">{t(event.excerpt, locale)}</p>
         </div>
@@ -44,7 +42,7 @@ export function EventCard({ event, locale }: EventCardProps) {
           {event.ticketUrl ? (
             <p className="flex items-center gap-2">
               <Ticket className="h-4 w-4 text-slate-400" />
-              {locale === 'zh' ? '提供活動頁面' : 'Ticket / RSVP link available'}
+              {locale === 'zh' ? '已附官方活動頁' : 'Official event page linked'}
             </p>
           ) : null}
         </div>

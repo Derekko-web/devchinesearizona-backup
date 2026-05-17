@@ -4,20 +4,20 @@ import { localeFromPath, stripLocaleFromPath, switchLocaleInPathname, withLocale
 
 describe('routing helpers', () => {
   it('prefixes localized paths for both supported locales', () => {
-    expect(withLocale('en', '/directory')).toBe('/en/directory');
-    expect(withLocale('zh', '/directory')).toBe('/zh/directory');
+    expect(withLocale('en', '/business')).toBe('/en/business');
+    expect(withLocale('zh', '/business')).toBe('/zh/business');
     expect(withLocale('zh', '/hidden-arizona')).toBe('/zh/hidden-arizona');
   });
 
   it('strips locale prefixes from incoming paths', () => {
     expect(stripLocaleFromPath('/zh/community/news/post')).toBe('/community/news/post');
-    expect(stripLocaleFromPath('/en/directory')).toBe('/directory');
+    expect(stripLocaleFromPath('/en/business')).toBe('/business');
   });
 
   it('switches locales while preserving the path', () => {
     expect(switchLocaleInPathname('/zh/community', 'en')).toBe('/en/community');
-    expect(switchLocaleInPathname('/directory/business/elite-az-realty-team', 'zh')).toBe(
-      '/zh/directory/business/elite-az-realty-team'
+    expect(switchLocaleInPathname('/business/elite-az-realty-team', 'zh')).toBe(
+      '/zh/business/elite-az-realty-team'
     );
     expect(switchLocaleInPathname('/hidden-arizona/places/the-wave', 'zh')).toBe(
       '/zh/hidden-arizona/places/the-wave'
@@ -25,8 +25,8 @@ describe('routing helpers', () => {
   });
 
   it('preserves query params when switching locales', () => {
-    expect(switchLocaleInPathname('/zh/directory', 'en', 'city=Mesa&language=Mandarin')).toBe(
-      '/en/directory?city=Mesa&language=Mandarin'
+    expect(switchLocaleInPathname('/zh/business', 'en', 'city=Mesa&language=Mandarin')).toBe(
+      '/en/business?city=Mesa&language=Mandarin'
     );
   });
 

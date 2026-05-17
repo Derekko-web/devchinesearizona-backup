@@ -2,18 +2,26 @@
 
 import { useState } from 'react';
 
-import type { Locale } from '@/lib/types';
+import { AuthActionPrompt } from '@/components/auth/AuthActionPrompt';
+import { useAuth } from '@/components/auth/AuthProvider';
+import type { Locale, ModerationReport } from '@/lib/types';
 
 type ReportIssueFormProps = {
   entitySlug: string;
-  entityType?: 'community_post' | 'business' | 'review';
+  entityType?: ModerationReport['entityType'];
   locale: Locale;
 };
 
 export function ReportIssueForm({ entitySlug, entityType = 'community_post', locale }: ReportIssueFormProps) {
+  const { user } = useAuth();
   const [status, setStatus] = useState<string | null>(null);
 
   async function handleSubmit(formData: FormData) {
+    if (!user) {
+      setStatus(locale === 'zh' ? '請先登入，再送出檢舉。' : 'Please log in before sending a report.');
+      return;
+    }
+
     const payload = Object.fromEntries(formData.entries());
     const response = await fetch('/api/report', {
       method: 'POST',
@@ -29,6 +37,22 @@ export function ReportIssueForm({ entitySlug, entityType = 'community_post', loc
     });
     const data = (await response.json()) as { message: string };
     setStatus(data.message);
+  }
+
+  if (!user) {
+    return (
+      <AuthActionPrompt
+        locale={locale}
+        title={locale === 'zh' ? '登入以回報問題' : 'Log in to report an issue'}
+        description={
+          locale === 'zh'
+            ? '瀏覽內容不需要帳號，但檢舉與修正回報會綁定到一個帳號，方便我們防止濫用並在需要時追蹤後續。'
+            : 'Browsing stays open, but reports are tied to an account so we can prevent abuse and follow up when a correction needs more context.'
+        }
+        ctaLabel={locale === 'zh' ? '登入或註冊' : 'Log in or sign up'}
+        variant="compact"
+      />
+    );
   }
 
   return (

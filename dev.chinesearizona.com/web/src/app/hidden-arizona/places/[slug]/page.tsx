@@ -10,12 +10,12 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps) {
-  return hiddenArizonaEntryMetadata('en', 'place', (await params).slug) ?? {};
+  return (await hiddenArizonaEntryMetadata('en', 'place', (await params).slug)) ?? {};
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const rendered = HiddenArizonaDetailPageView({ locale: 'en', kind: 'place', slug });
+  const rendered = await HiddenArizonaDetailPageView({ locale: 'en', kind: 'place', slug });
   if (!rendered) {
     notFound();
   }

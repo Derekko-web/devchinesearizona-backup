@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    ".python-packages/**",
+    "coverage/**",
+    "convex/_generated/**",
+    "scripts/**",
   ]),
 ]);
 

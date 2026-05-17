@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { t } from '@/lib/i18n';
 import { getHiddenArizonaEntryPath, getHiddenArizonaMapPoints } from '@/lib/hidden-arizona';
 import { withLocale } from '@/lib/routing';
 import type { HiddenArizonaPlace, Locale } from '@/lib/types';
@@ -7,9 +8,10 @@ import type { HiddenArizonaPlace, Locale } from '@/lib/types';
 type HiddenArizonaMapProps = {
   entries: HiddenArizonaPlace[];
   locale: Locale;
+  localizedTitleBySlug?: Record<string, string>;
 };
 
-export function HiddenArizonaMap({ entries, locale }: HiddenArizonaMapProps) {
+export function HiddenArizonaMap({ entries, locale, localizedTitleBySlug }: HiddenArizonaMapProps) {
   const { points, hiddenCount } = getHiddenArizonaMapPoints(entries);
 
   if (entries.length === 0) {
@@ -44,7 +46,7 @@ export function HiddenArizonaMap({ entries, locale }: HiddenArizonaMapProps) {
               <span className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500/20 blur-md transition-transform duration-300 group-hover:scale-125" />
               <span className="relative flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-brand-600 shadow-md" />
               <span className="absolute left-1/2 top-6 hidden min-w-44 -translate-x-1/2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-lg group-hover:block">
-                {entry.title[locale] ?? entry.title.en}
+                {localizedTitleBySlug?.[entry.slug] ?? t(entry.title, locale)}
               </span>
             </Link>
           ))}

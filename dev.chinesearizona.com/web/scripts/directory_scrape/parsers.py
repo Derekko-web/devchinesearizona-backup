@@ -238,12 +238,12 @@ def parse_azaanhpi_directory(page_html: str, source_url: str) -> list[ScrapedBus
                 phone=phone,
                 website=website,
                 officialSiteUrl=website,
-                shortDescription=f"{heading} dining listing sourced from the AZ AANHPI Directory.",
+                shortDescription=f"{heading} restaurant in {city}, Arizona.",
                 description=(
-                    f"Listed in the {heading} section of the AZ AANHPI Directory for {city}, Arizona. "
+                    f"{name_en} is a {heading.lower()} restaurant in {city}, Arizona. "
                     f"Public contact phone: {phone or 'not listed'}."
                 ),
-                searchAliases=[heading, city, "AZ AANHPI Directory"],
+                searchAliases=[name_en, heading, city],
                 sourceUrls=[source_url],
                 chineseSignal=[
                     {

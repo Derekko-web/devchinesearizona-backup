@@ -2,7 +2,16 @@ import { resolveArticleText } from '@/lib/article-localization';
 import type { Metadata } from 'next';
 
 import {
-  getArticleBySlug,
+  getArizonaNewsArchivePath,
+  getArizonaNewsArticlePath,
+  getArizonaNewsPath,
+} from '@/lib/arizona-news';
+import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
+import {
+  getArticleBySlugAsync,
+  isLegacyArticle,
+  resolveArticleArchiveFilters,
+  type ArticleArchiveSearchParams,
   getBusinessCategories,
   getCommunityPostBySlug,
   getEventBySlug,
@@ -10,20 +19,103 @@ import {
   getProfileBySlug,
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
+import { getDiscoverArticleBySlug, getDiscoveryCategory } from '@/lib/discover-arizona';
 import { getDirectoryBusinessBySlug } from '@/lib/directory';
 import { getHiddenArizonaEntryBySlug, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
+import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-localization';
 import { t } from '@/lib/i18n';
 import { buildMetadata } from '@/lib/seo';
-import type { CommunityPostType, HiddenArizonaKind, Locale } from '@/lib/types';
+import { appendSearch } from '@/lib/routing';
+import type { CommunityPostType, DiscoveryCategory, HiddenArizonaKind, Locale } from '@/lib/types';
 
-export function directoryMetadata(locale: Locale, path = '/directory'): Metadata {
+type DirectoryMetadataSearchParams = {
+  q?: string;
+  city?: string;
+  category?: string;
+  minRating?: string;
+  sort?: string;
+  page?: string;
+};
+
+function parseDirectoryPageNumber(value?: string): number {
+  if (!value) {
+    return 1;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 1 ? Math.floor(parsed) : 1;
+}
+
+function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearchParams): string {
+  const filters = resolveArticleArchiveFilters(searchParams);
+  const params = new URLSearchParams();
+
+  if (filters.bucket === 'legacy') {
+    params.set('bucket', 'legacy');
+  }
+  if (filters.series) {
+    params.set('series', filters.series);
+  }
+  if (filters.sourcePolicy) {
+    params.set('sourcePolicy', filters.sourcePolicy);
+  }
+  if (filters.year) {
+    params.set('year', String(filters.year));
+  }
+  if (filters.month) {
+    params.set('month', String(filters.month));
+  }
+  if (filters.page > 1) {
+    params.set('page', String(filters.page));
+  }
+
+  return getArizonaNewsArchivePath(params.toString());
+}
+
+export function homeMetadata(locale: Locale): Metadata {
   return buildMetadata({
-    title: locale === 'zh' ? '商家目錄 | ChineseArizona' : 'Business Directory | ChineseArizona',
+    title:
+      locale === 'zh'
+        ? 'ChineseArizona | 亞利桑那華人商家、新聞與生活資源'
+        : 'ChineseArizona | Arizona Chinese Community Directory, News, and Resources',
     description:
       locale === 'zh'
-        ? '可依城市、分類與評分篩選的亞利桑那雙語商家目錄。'
-        : 'A bilingual Arizona directory you can filter by city, category, and rating.',
-    path,
+        ? 'ChineseArizona 是服務亞利桑那華人與新移民的雙語平台，整合可信商家目錄、在地新聞、搬遷指南與社群資源。'
+        : 'ChineseArizona is a bilingual Arizona platform for the Chinese community, with trusted local businesses, local news, relocation guides, and community resources.',
+    path: '/',
+    locale,
+  });
+}
+
+export function directoryMetadata(
+  locale: Locale,
+  path = '/business',
+  searchParams?: DirectoryMetadataSearchParams
+): Metadata {
+  const currentPage = parseDirectoryPageNumber(searchParams?.page);
+  const hasFilteredQuery = Boolean(
+    searchParams?.q?.trim() ||
+      searchParams?.city ||
+      searchParams?.category ||
+      searchParams?.minRating ||
+      (searchParams?.sort && searchParams.sort !== 'featured')
+  );
+  const baseTitle = locale === 'zh' ? '華人商家 | ChineseArizona' : 'Chinese Businesses | ChineseArizona';
+  const title =
+    currentPage > 1 && !hasFilteredQuery
+      ? locale === 'zh'
+        ? `華人商家第 ${currentPage} 頁 | ChineseArizona`
+        : `Chinese Businesses Page ${currentPage} | ChineseArizona`
+      : baseTitle;
+  const pathWithPage = currentPage > 1 && !hasFilteredQuery ? appendSearch(path, `page=${currentPage}`) : path;
+
+  return buildMetadata({
+    title,
+    description:
+      locale === 'zh'
+        ? '可依城市、分類與評分篩選的亞利桑那華人商家。'
+        : 'Chinese businesses in Arizona, filterable by city, category, and rating.',
+    path: pathWithPage,
     locale,
   });
 }
@@ -33,34 +125,97 @@ export function addBusinessMetadata(locale: Locale): Metadata {
     title: locale === 'zh' ? '新增或認領商家 | ChineseArizona' : 'Add or Claim a Business | ChineseArizona',
     description:
       locale === 'zh'
-        ? '送出商家認領或新商家申請，並經過 email 驗證與人工審核。'
-        : 'Submit a business claim or new listing request with email verification and manual review.',
+        ? '用商家主理人帳號送出商家認領或新商家申請，並進入人工審核流程。'
+        : 'Use an owner account to submit a business claim or new listing request for manual review.',
     path: '/add-business',
     locale,
   });
 }
 
-export function communityMetadata(locale: Locale): Metadata {
+export function authMetadata(locale: Locale): Metadata {
   return buildMetadata({
-    title: locale === 'zh' ? '社群中心 | ChineseArizona' : 'Community Hub | ChineseArizona',
+    title: locale === 'zh' ? '商家與供稿帳號 | ChineseArizona' : 'Owner & Contributor Account | ChineseArizona',
     description:
       locale === 'zh'
-        ? '活動、新聞、社群看板與分類資訊集中在同一個雙語入口。'
-        : 'A bilingual hub for events, news, community board posts, and classifieds.',
+        ? '用 email／密碼或 Google 登入商家 / 供稿帳號，並回到你原本的認領、發文、儲存或後台流程。'
+        : 'Log in with email/password or Google for owner and contributor actions, then return to the claim, posting, saved-item, or dashboard flow you started.',
+    path: '/auth',
+    locale,
+    noIndex: true,
+  });
+}
+
+export function resetPasswordMetadata(locale: Locale): Metadata {
+  return buildMetadata({
+    title: locale === 'zh' ? '重設密碼 | ChineseArizona' : 'Reset Password | ChineseArizona',
+    description:
+      locale === 'zh'
+        ? '要求重設密碼信件，或在驗證後直接設定新的帳號密碼。'
+        : 'Request a password reset email or set a new password after opening your recovery link.',
+    path: '/auth/reset-password',
+    locale,
+    noIndex: true,
+  });
+}
+
+export function communityMetadata(locale: Locale): Metadata {
+  return buildMetadata({
+    title: locale === 'zh' ? '社群資源 | ChineseArizona' : 'Community Resources | ChineseArizona',
+    description:
+      locale === 'zh'
+        ? '亞利桑那華人學校、教會、乒乓球俱樂部與社群活動集中在同一個雙語入口。'
+        : 'A bilingual guide to Arizona Chinese community schools, churches, ping pong clubs, and events.',
     path: '/community',
     locale,
   });
 }
 
-export function communityNewsMetadata(locale: Locale): Metadata {
+export function communityRadarMetadata(locale: Locale): Metadata {
   return buildMetadata({
-    title: locale === 'zh' ? '新聞檔案 | ChineseArizona' : 'News Archive | ChineseArizona',
+    title: locale === 'zh' ? '亞利桑那新聞 | ChineseArizona' : 'Arizona News | ChineseArizona',
     description:
       locale === 'zh'
-        ? '瀏覽完整新聞文章檔案，包含原創摘要、系列觀察與授權轉載內容。'
-        : 'Browse the full news archive, including original summary series, staff editorial, and permission-based republished content.',
-    path: '/community/news',
+        ? '每 5 分鐘更新的亞利桑那新聞首頁，整理住房、官方、社群與新店訊號成可用的雙語摘要。'
+        : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening signals.',
+    path: getArizonaNewsPath(),
     locale,
+  });
+}
+
+export function communityNewsMetadata(
+  locale: Locale,
+  searchParams?: ArticleArchiveSearchParams
+): Metadata {
+  const filters = resolveArticleArchiveFilters(searchParams);
+  const isLegacyBucket = filters.bucket === 'legacy';
+  const currentPage = filters.page;
+  const baseTitle = isLegacyBucket
+    ? locale === 'zh'
+      ? 'Arizona News 舊聞檔案 | ChineseArizona'
+      : 'Arizona News Legacy Archive | ChineseArizona'
+    : locale === 'zh'
+      ? 'Arizona News 檔案 | ChineseArizona'
+      : 'Arizona News Archive | ChineseArizona';
+  const title =
+    currentPage > 1
+      ? locale === 'zh'
+        ? `${baseTitle.replace(' | ChineseArizona', '')}第 ${currentPage} 頁 | ChineseArizona`
+        : `${baseTitle.replace(' | ChineseArizona', '')} Page ${currentPage} | ChineseArizona`
+      : baseTitle;
+
+  return buildMetadata({
+    title,
+    description:
+      isLegacyBucket
+        ? locale === 'zh'
+          ? '瀏覽歷史社群轉載與舊聞檔案。這些頁面仍可存取，但不作為搜尋收錄主入口。'
+          : 'Browse the historical community-wire and legacy archive. These pages remain reachable, but they are no longer primary indexed entry points.'
+        : locale === 'zh'
+          ? '瀏覽目前主打的原創摘要、系列觀察與最新編輯內容。'
+          : 'Browse current editorial coverage, including original summaries, recurring series, and current published work.',
+    path: buildArizonaNewsArchiveMetadataPath(searchParams),
+    locale,
+    noIndex: isLegacyBucket,
   });
 }
 
@@ -88,14 +243,75 @@ export function hiddenArizonaMetadata(locale: Locale): Metadata {
   });
 }
 
-export function dashboardMetadata(locale: Locale): Metadata {
+export function discoverArizonaMetadata(locale: Locale): Metadata {
   return buildMetadata({
-    title: locale === 'zh' ? '商家後台 | ChineseArizona' : 'Owner Dashboard | ChineseArizona',
+    title: locale === 'zh' ? '探索亞利桑那 | ChineseArizona' : 'Discover Arizona | ChineseArizona',
     description:
       locale === 'zh'
-        ? '商家管理、評論監看、活動提交與認領追蹤。'
-        : 'Business management, review monitoring, event submissions, and claim tracking.',
+        ? '把 Arizona 旅行內容整理成雙語文章、分類頁與 Hidden Arizona 延伸探索。'
+        : 'A bilingual Arizona travel hub with category pages, usable articles, and scenic follow-through.',
+    path: '/discover-arizona',
+    locale,
+  });
+}
+
+export function discoverArizonaCategoryMetadata(
+  locale: Locale,
+  category: DiscoveryCategory
+): Metadata | null {
+  const categoryRecord = getDiscoveryCategory(category);
+  if (!categoryRecord) {
+    return null;
+  }
+
+  return buildMetadata({
+    title: `${t(categoryRecord.title, locale)} | ChineseArizona`,
+    description: t(categoryRecord.description, locale),
+    path: `/discover-arizona/${category}`,
+    locale,
+  });
+}
+
+export async function discoverArizonaArticleMetadata(
+  locale: Locale,
+  category: DiscoveryCategory,
+  slug: string
+): Promise<Metadata | null> {
+  const article = await getDiscoverArticleBySlug(slug);
+  if (!article || article.primaryCategory !== category || article.queueStatus !== 'published' || !article.embedEnabled) {
+    return null;
+  }
+
+  return buildMetadata({
+    title: `${t(article.title, locale)} | ChineseArizona`,
+    description: t(article.excerpt, locale),
+    path: `/discover-arizona/${category}/${slug}`,
+    locale,
+    image: article.heroImageUrl,
+  });
+}
+
+export function dashboardMetadata(locale: Locale): Metadata {
+  return buildMetadata({
+    title: locale === 'zh' ? '後台 | ChineseArizona' : 'Dashboard | ChineseArizona',
+    description:
+      locale === 'zh'
+        ? '管理商家、認領與帳號活動。'
+        : 'Manage listings, claims, and account activity.',
     path: '/dashboard',
+    locale,
+    noIndex: true,
+  });
+}
+
+export function profileSettingsMetadata(locale: Locale): Metadata {
+  return buildMetadata({
+    title: locale === 'zh' ? '編輯個人資料 | ChineseArizona' : 'Edit Your Profile | ChineseArizona',
+    description:
+      locale === 'zh'
+        ? '更新你的站內名稱、個人簡介、頭像連結，以及帳號 email / 密碼設定。'
+        : 'Update your public handle, profile details, avatar, and account email or password settings.',
+    path: '/dashboard/profile',
     locale,
     noIndex: true,
   });
@@ -120,10 +336,12 @@ export async function businessMetadata(locale: Locale, slug: string): Promise<Me
     return null;
   }
 
+  const localizedBusinessText = await resolveLocalizedBusinessDetailText(business, locale);
+
   return buildMetadata({
     title: `${t(business.name, locale)} | ChineseArizona`,
-    description: t(business.shortDescription, locale),
-    path: `/directory/business/${business.slug}`,
+    description: localizedBusinessText.shortDescription,
+    path: `/business/${business.slug}`,
     locale,
     image: business.heroImage ?? undefined,
   });
@@ -139,7 +357,7 @@ export function cityCategoryMetadata(locale: Locale, city: string, categorySlug:
   return buildMetadata({
     title,
     description: t(category.description, locale),
-    path: `/directory/${city}/${category.slug}`,
+    path: `/business/${city}/${category.slug}`,
     locale,
   });
 }
@@ -174,19 +392,20 @@ export function eventMetadata(locale: Locale, slug: string): Metadata | null {
   });
 }
 
-export function hiddenArizonaEntryMetadata(
+export async function hiddenArizonaEntryMetadata(
   locale: Locale,
   kind: HiddenArizonaKind,
   slug: string
-): Metadata | null {
+): Promise<Metadata | null> {
   const entry = getHiddenArizonaEntryBySlug(kind, slug);
   if (!entry) {
     return null;
   }
+  const localizedEntry = await resolveLocalizedHiddenArizonaSummaryText(entry, locale);
 
   return buildMetadata({
-    title: `${t(entry.title, locale)} | ChineseArizona`,
-    description: t(entry.excerpt, locale),
+    title: `${localizedEntry.title} | ChineseArizona`,
+    description: localizedEntry.excerpt,
     path: getHiddenArizonaEntryPath(entry),
     locale,
     image: entry.heroImage ?? undefined,
@@ -194,7 +413,7 @@ export function hiddenArizonaEntryMetadata(
 }
 
 export async function articleMetadata(locale: Locale, slug: string): Promise<Metadata | null> {
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlugAsync(slug);
   if (!article) {
     return null;
   }
@@ -204,9 +423,10 @@ export async function articleMetadata(locale: Locale, slug: string): Promise<Met
   return buildMetadata({
     title: `${localizedArticle.title} | ChineseArizona`,
     description: localizedArticle.excerpt,
-    path: `/community/news/${article.slug}`,
+    path: getArizonaNewsArticlePath(article.slug),
     locale,
     image: article.heroImage,
+    noIndex: isLegacyArticle(article),
   });
 }
 
@@ -240,5 +460,6 @@ export function profileMetadata(locale: Locale, slug: string): Metadata | null {
     description: t(profile.bio, locale),
     path: `/profile/${profile.slug}`,
     locale,
+    noIndex: true,
   });
 }

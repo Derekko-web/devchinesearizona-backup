@@ -29,7 +29,7 @@ type SelectFieldProps = {
 function SelectField({ id, label, name, defaultValue, children }: SelectFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-semibold text-slate-800">
+      <label htmlFor={id} className="mb-2 block text-sm font-semibold text-[#47362d]">
         {label}
       </label>
       <div className="relative">
@@ -37,11 +37,11 @@ function SelectField({ id, label, name, defaultValue, children }: SelectFieldPro
           id={id}
           name={name}
           defaultValue={defaultValue}
-          className="w-full appearance-none rounded-lg border border-slate-200 bg-white px-3 py-2.5 pr-12 text-sm leading-5 text-slate-700 shadow-sm outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+          className="w-full appearance-none rounded-[14px] border border-[#dfd0c0] bg-[#fffdfa] px-3 py-2.5 pr-12 text-sm leading-5 text-[#58463a] shadow-[0_12px_28px_-24px_rgba(72,49,27,0.5)] outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
         >
           {children}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9a8575]" />
       </div>
     </div>
   );
@@ -53,7 +53,7 @@ export function DirectoryFilters({
   cities,
   values,
 }: DirectoryFiltersProps) {
-  const resetHref = withLocale(locale, '/directory');
+  const resetHref = withLocale(locale, '/business');
   const hasActiveFilters = countActiveDirectoryFilters(values) > 0;
   const distanceNeedsCity = values.sort === 'distance' && !values.city;
 
@@ -61,20 +61,20 @@ export function DirectoryFilters({
     <form
       action={resetHref}
       method="get"
-      className="space-y-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+      className="space-y-5 rounded-[22px] border border-[#e1d0bd] bg-[#fffaf3] p-5 shadow-[0_24px_54px_-48px_rgba(72,49,27,0.48)]"
     >
       <div>
-        <label htmlFor="q" className="mb-2 block text-sm font-semibold text-slate-800">
+        <label htmlFor="q" className="mb-2 block text-sm font-semibold text-[#47362d]">
           {locale === 'zh' ? '搜尋關鍵字' : 'Search'}
         </label>
-        <div className="flex items-center rounded-lg border border-slate-200 bg-slate-50 px-3 shadow-sm">
-          <Search className="h-4 w-4 text-slate-400" />
+        <div className="flex items-center rounded-[14px] border border-[#dfd0c0] bg-[#fffdfa] px-3 shadow-[0_12px_28px_-24px_rgba(72,49,27,0.5)]">
+          <Search className="h-4 w-4 text-[#9a8575]" />
           <input
             id="q"
             name="q"
             defaultValue={values.q}
             placeholder={locale === 'zh' ? '例如：房仲、牛肉麵、醫師' : 'realtor, doctor, beef noodle...'}
-            className="w-full bg-transparent px-3 py-2.5 text-sm text-slate-700 outline-none"
+            className="w-full bg-transparent px-3 py-2.5 text-sm text-[#58463a] outline-none placeholder:text-[#9c8879]"
           />
         </div>
       </div>
@@ -126,7 +126,7 @@ export function DirectoryFilters({
             label={locale === 'zh' ? '排序' : 'Sort'}
             defaultValue={values.sort ?? 'featured'}
           >
-            <option value="featured">{locale === 'zh' ? '精選優先' : 'Featured'}</option>
+            <option value="featured">{locale === 'zh' ? '贊助優先' : 'Sponsored first'}</option>
             <option value="rating">{locale === 'zh' ? '評分最高' : 'Highest rated'}</option>
             <option value="reviewed">{locale === 'zh' ? '評論最多' : 'Most reviewed'}</option>
             <option value="alphabetical">{locale === 'zh' ? '依字母排序' : 'A-Z'}</option>
@@ -142,7 +142,7 @@ export function DirectoryFilters({
             <option value="newest">{locale === 'zh' ? '最近更新' : 'Newest'}</option>
           </SelectField>
           {distanceNeedsCity ? (
-            <p className="text-xs text-amber-700">
+            <p className="text-xs leading-5 text-[#9a6530]">
               {locale === 'zh'
                 ? '距離排序需要先選城市，系統才知道要以哪個地區為基準。'
                 : 'Distance sorting works once a city is selected, so we know which area to measure from.'}
@@ -154,17 +154,17 @@ export function DirectoryFilters({
       <div className="flex items-center gap-3">
         <button
           type="submit"
-          className="inline-flex min-w-0 flex-1 items-center justify-center rounded-lg bg-brand-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-800"
+          className="inline-flex min-w-0 flex-1 items-center justify-center rounded-[14px] bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-[0_18px_36px_-26px_rgba(187,61,41,0.9)] transition-colors hover:bg-brand-700"
         >
           {locale === 'zh' ? '套用篩選' : 'Apply filters'}
         </button>
         <Link
           href={resetHref}
           className={[
-            'inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border px-4 py-3 text-sm font-semibold shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200',
+            'inline-flex shrink-0 items-center justify-center gap-2 rounded-[14px] border px-4 py-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200',
             hasActiveFilters
               ? 'border-brand-200 bg-brand-50 text-brand-900 hover:border-brand-300 hover:bg-brand-100'
-              : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-800',
+              : 'border-[#dfd0c0] bg-[#fffdfa] text-[#6f5a4b] hover:border-[#d3bda7] hover:text-[#30231c]',
           ].join(' ')}
         >
           <RotateCcw className="h-3.5 w-3.5" />

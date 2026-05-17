@@ -1,0 +1,24 @@
+<svg width="720" height="240" viewBox="0 0 720 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="240" rx="28" fill="#C89A6E"/>
+  <rect width="720" height="158" fill="url(#sky)"/>
+  <path d="M0 175C28 157 54 142 83 124C110 107 139 96 166 96C185 96 200 102 219 103C239 104 257 98 276 87C296 75 315 66 336 66C364 66 385 85 410 103C434 120 455 130 480 130C500 130 515 121 531 109C547 97 563 86 581 86C600 86 616 98 632 113C651 131 672 150 720 171V240H0V175Z" fill="#85533E"/>
+  <path d="M88 152C112 133 139 96 172 73C199 54 224 47 251 49C275 51 294 66 311 91C321 76 332 63 346 53C361 42 378 38 395 41C419 45 436 63 450 93C458 82 466 72 477 64C490 54 505 49 521 49C539 49 554 56 566 69C582 85 594 109 602 144L88 152Z" fill="#B36949"/>
+  <path d="M0 181C67 174 118 162 177 162C233 162 275 177 330 177C384 177 436 163 490 163C548 163 611 177 720 189V240H0V181Z" fill="#B78A62"/>
+  <path d="M0 205C58 197 104 191 156 191C211 191 250 198 306 198C363 198 412 187 469 187C540 187 602 198 720 214V240H0V205Z" fill="#8D674D"/>
+  <path d="M0 221C61 218 117 210 182 210C242 210 293 219 351 219C404 219 454 208 507 208C576 208 640 219 720 229V240H0V221Z" fill="#6D4B37"/>
+  <rect x="63" y="171" width="74" height="28" rx="2" fill="#D4B28A"/>
+  <rect x="142" y="166" width="58" height="33" rx="2" fill="#CEAB80"/>
+  <rect x="211" y="173" width="92" height="31" rx="2" fill="#C79E73"/>
+  <rect x="322" y="168" width="61" height="35" rx="2" fill="#D9B78E"/>
+  <rect x="391" y="174" width="84" height="30" rx="2" fill="#CDA37A"/>
+  <rect x="494" y="167" width="65" height="36" rx="2" fill="#D6B088"/>
+  <rect x="571" y="171" width="81" height="31" rx="2" fill="#C79C72"/>
+  <path d="M73 178H639" stroke="#8A735C" stroke-width="3.5" opacity="0.28"/>
+  <defs>
+    <linearGradient id="sky" x1="360" y1="0" x2="360" y2="158" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8BB8E0"/>
+      <stop offset="0.52" stop-color="#9CC6E8"/>
+      <stop offset="1" stop-color="#D7C6AA"/>
+    </linearGradient>
+  </defs>
+</svg>

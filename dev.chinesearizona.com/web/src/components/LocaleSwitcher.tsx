@@ -1,6 +1,5 @@
 'use client';
 
-import { Globe } from 'lucide-react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { appendSearch, switchLocaleInPathname } from '@/lib/routing';
@@ -23,11 +22,10 @@ export function LocaleSwitcher({ currentLocale }: LocaleSwitcherProps) {
 
   return (
     <div
-      className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1"
+      className="inline-flex items-center rounded-full border border-[#d8c7b4] bg-[#fbf5ec] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]"
       role="navigation"
       aria-label={switcherLabel}
     >
-      <Globe className="mx-1 h-4 w-4 text-slate-400" aria-hidden="true" />
       <LocaleOption
         href={englishHref}
         isActive={currentLocale === 'en'}
@@ -53,8 +51,8 @@ type LocaleOptionProps = {
 
 function LocaleOption({ href, isActive, shortLabel, fullLabel }: LocaleOptionProps) {
   const className = isActive
-    ? 'inline-flex min-w-10 items-center justify-center rounded-full bg-brand-900 px-3 py-1 text-xs font-semibold text-white'
-    : 'inline-flex min-w-10 items-center justify-center rounded-full px-3 py-1 text-xs font-semibold text-slate-600 transition-colors hover:bg-white hover:text-brand-700';
+    ? 'inline-flex min-w-10 shrink-0 items-center justify-center rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap bg-brand-600 text-white shadow-sm'
+    : 'inline-flex min-w-10 shrink-0 items-center justify-center rounded-full px-3 py-1 text-xs font-semibold whitespace-nowrap text-[#5d4c41] transition-colors hover:bg-white hover:text-brand-700';
 
   if (isActive) {
     return (

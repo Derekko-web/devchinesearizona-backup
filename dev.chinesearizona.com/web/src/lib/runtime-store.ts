@@ -45,6 +45,8 @@ export function createBusinessClaim(
     category?: string;
     city?: string;
     details?: string;
+    heroImage?: string;
+    gallery?: string[];
   }
 ): BusinessClaim {
   const claim = {
@@ -57,6 +59,8 @@ export function createBusinessClaim(
     category: details?.category,
     city: details?.city,
     details: details?.details,
+    heroImage: details?.heroImage,
+    gallery: details?.gallery ?? [],
     status: 'pending' as const,
     createdAt: new Date().toISOString(),
   };

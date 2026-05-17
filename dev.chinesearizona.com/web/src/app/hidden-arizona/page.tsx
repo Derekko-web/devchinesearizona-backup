@@ -14,5 +14,5 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  return <HiddenArizonaHubPageView locale="en" searchParams={await searchParams} />;
+  return await HiddenArizonaHubPageView({ locale: 'en', searchParams: await searchParams });
 }

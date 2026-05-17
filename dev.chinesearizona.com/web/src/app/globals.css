@@ -1,31 +1,211 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', 'Noto Sans TC', sans-serif;
+  --font-sans: var(--font-inter), var(--font-noto-sans-tc), sans-serif;
+  --font-display: var(--font-cormorant), serif;
 
   /* Brand Colors */
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
-  --color-brand-900: #1e3a8a;
+  --color-brand-50: #fff4ef;
+  --color-brand-100: #ffe1d4;
+  --color-brand-200: #f7c6b0;
+  --color-brand-300: #eda17e;
+  --color-brand-400: #df734d;
+  --color-brand-500: #cf5435;
+  --color-brand-600: #bb3d29;
+  --color-brand-700: #9b311f;
+  --color-brand-800: #7d281b;
+  --color-brand-900: #662116;
 
   /* Accent Colors */
-  --color-accent-50: #fff7ed;
-  --color-accent-100: #ffedd5;
-  --color-accent-500: #f97316;
-  --color-accent-600: #ea580c;
+  --color-accent-50: #fff8ef;
+  --color-accent-100: #f7e8d0;
+  --color-accent-500: #d59a52;
+  --color-accent-600: #b87f3d;
+}
+
+:root {
+  color-scheme: light;
 }
 
 body {
-  background-color: #f8fafc;
-  color: #1e293b; /* slate-800 */
+  background:
+    radial-gradient(circle at top left, rgba(255, 243, 228, 0.88), transparent 26%),
+    radial-gradient(circle at right 20%, rgba(248, 225, 201, 0.34), transparent 22%),
+    linear-gradient(180deg, #faf6ef 0%, #f2e8db 100%);
+  color: #241913;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.35), transparent 32%);
+  z-index: -1;
+}
+
+::selection {
+  background: rgba(187, 61, 41, 0.18);
+}
+
+@keyframes homepage-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes homepage-float {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes shop-dashboard-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shop-dashboard-rule {
+  from {
+    opacity: 0;
+    transform: scaleX(0.3);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes mission-control-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mission-control-glow {
+  from {
+    box-shadow: 0 0 0 rgba(99, 102, 241, 0);
+  }
+
+  to {
+    box-shadow: 0 24px 70px -38px rgba(99, 102, 241, 0.48);
+  }
+}
+
+@keyframes mission-control-column-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .homepage-rise {
+    opacity: 0;
+    animation: homepage-rise 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .homepage-rise-delay-1 {
+    animation-delay: 80ms;
+  }
+
+  .homepage-rise-delay-2 {
+    animation-delay: 160ms;
+  }
+
+  .homepage-rise-delay-3 {
+    animation-delay: 240ms;
+  }
+
+  .homepage-float {
+    animation: homepage-float 6s ease-in-out infinite;
+  }
+
+  .homepage-card {
+    transition:
+      transform 240ms ease,
+      box-shadow 240ms ease,
+      border-color 240ms ease;
+  }
+
+  .homepage-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px -34px rgba(78, 47, 20, 0.22);
+    border-color: rgba(187, 61, 41, 0.28);
+  }
+
+  .shop-dashboard-shell {
+    animation: shop-dashboard-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .shop-dashboard-band {
+    animation: shop-dashboard-enter 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .shop-dashboard-panel {
+    animation: shop-dashboard-enter 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .shop-dashboard-line {
+    transform-origin: center;
+    animation: shop-dashboard-rule 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .mission-control-shell {
+    animation: mission-control-rise 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .mission-control-metric,
+  .mission-control-column {
+    opacity: 0;
+    animation: mission-control-rise 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .mission-control-card:hover {
+    animation: mission-control-glow 180ms ease-out both;
+  }
+
+  .mission-control-column {
+    opacity: 0;
+    animation: mission-control-column-rise 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }

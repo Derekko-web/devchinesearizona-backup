@@ -1,18 +1,23 @@
-import { directoryMetadata } from '@/lib/page-metadata';
-import { DirectoryPageView } from '@/views/site-pages';
+import { permanentRedirect } from 'next/navigation';
 
-export const metadata = directoryMetadata('en');
+import { appendSearch } from '@/lib/routing';
 
 type PageProps = {
-  searchParams: Promise<{
-    q?: string;
-    city?: string;
-    category?: string;
-    minRating?: string;
-    sort?: string;
-  }>;
+  searchParams: Promise<Record<string, string | undefined>>;
 };
 
+function buildSearchString(params: Record<string, string | undefined>): string {
+  const search = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value === 'string' && value.length > 0) {
+      search.set(key, value);
+    }
+  }
+
+  return search.toString();
+}
+
 export default async function Page({ searchParams }: PageProps) {
-  return <DirectoryPageView locale="en" searchParams={await searchParams} />;
+  permanentRedirect(appendSearch('/business', buildSearchString(await searchParams)));
 }

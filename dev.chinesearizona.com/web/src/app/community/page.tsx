@@ -1,9 +1,8 @@
 import { communityMetadata } from '@/lib/page-metadata';
-import { CommunityPageView } from '@/views/site-pages';
+import { CommunityPageView } from '@/views/community-page';
 
 export const metadata = communityMetadata('en');
-export const dynamic = 'force-dynamic';
 
-export default async function Page() {
-  return await CommunityPageView({ locale: 'en' });
+export default function Page() {
+  return <CommunityPageView locale="en" />;
 }

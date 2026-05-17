@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { requireApiUser, withApiAuthSession } from '@/lib/api-auth';
 import { resolveLocale } from '@/lib/i18n';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { createCommunityPost, recordAnalyticsEvent } from '@/lib/runtime-store';
@@ -10,9 +11,20 @@ function requesterKey(request: NextRequest): string {
 
 export async function POST(request: NextRequest) {
   const locale = resolveLocale(request.headers.get('x-locale') ?? undefined);
+  const auth = await requireApiUser(
+    request,
+    locale,
+    locale === 'zh' ? '發佈社群貼文' : 'publish in the community'
+  );
+  if (auth.response) {
+    return auth.response;
+  }
+  const json = (body: unknown, init?: ResponseInit) =>
+    withApiAuthSession(NextResponse.json(body, init), auth);
+
   const key = requesterKey(request);
   if (!checkRateLimit(`community-post:${key}`, 4, 60_000)) {
-    return NextResponse.json(
+    return json(
       {
         message:
           locale === 'zh'
@@ -46,7 +58,7 @@ export async function POST(request: NextRequest) {
     !body.bodyZh ||
     !body.city
   ) {
-    return NextResponse.json(
+    return json(
       { message: locale === 'zh' ? '缺少必填欄位。' : 'Missing required fields.' },
       { status: 400 }
     );
@@ -76,7 +88,7 @@ export async function POST(request: NextRequest) {
 
   recordAnalyticsEvent('community_post_submission', post.slug, '/community');
 
-  return NextResponse.json({
+  return json({
     message:
       locale === 'zh'
         ? `貼文已發布，現在就能查看；在帳號建立信任之前，搜尋引擎仍會維持不收錄。Slug：${post.slug}`

@@ -24,6 +24,7 @@ from scripts.directory_scrape.pipeline import merge_candidate_group
 from scripts.directory_scrape.site_export import candidate_to_business
 from scripts.directory_scrape.taxonomy import (
     compute_completeness_score,
+    infer_category_slug,
     is_relevant_candidate,
     mark_candidate,
     passes_trust_gate,
@@ -82,6 +83,16 @@ class DirectoryScrapeTests(unittest.TestCase):
         self.assertNotIn("https://images.unsplash.com/photo-123456", candidate.gallery)
         self.assertIn("Mandarin", candidate.languages)
         self.assertTrue(candidate.chineseSignal)
+
+    def test_infer_category_slug_covers_faith_community_terms(self) -> None:
+        self.assertEqual(
+            infer_category_slug("Greater Phoenix Chinese Christian Church", "Mandarin worship and Bible study"),
+            "faith-community",
+        )
+        self.assertEqual(
+            infer_category_slug("Contemporary Chinese School of Arizona", "Weekend Mandarin classes"),
+            "education",
+        )
 
     def test_relevance_filter_excludes_non_chinese_candidate_without_signal(self) -> None:
         candidate = ScrapedBusinessCandidate(

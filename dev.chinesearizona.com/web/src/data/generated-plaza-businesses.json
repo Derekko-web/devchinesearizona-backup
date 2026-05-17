@@ -2644,70 +2644,6 @@
   },
   {
     "id": "plaza_0043",
-    "slug": "tan-hua-inc-mesa",
-    "name": {
-      "en": "Tan Hua Inc.",
-      "zh": null
-    },
-    "categorySlug": "shopping",
-    "city": "Mesa",
-    "region": "Greater Phoenix",
-    "address": "66 S Dobson Rd, Mesa, AZ 85202",
-    "serviceAreaText": null,
-    "phone": null,
-    "email": null,
-    "website": null,
-    "menuUrl": null,
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Shopping and retail listing near Mekong Plaza in Mesa.",
-      "zh": null
-    },
-    "description": {
-      "en": "Tan Hua Inc. is listed near Mekong Plaza in Mesa. This profile was generated from plaza directory sources and map-based verification, so direct business contact details may still be incomplete.",
-      "zh": null
-    },
-    "services": [
-      {
-        "en": "Near Mekong Plaza",
-        "zh": null
-      },
-      {
-        "en": "Shopping and retail stop",
-        "zh": null
-      }
-    ],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Tan Hua Inc.",
-      "Mekong Plaza",
-      "Mesa",
-      "shopping",
-      "spices",
-      "66 S Dobson Rd, Mesa, AZ 85202",
-      "nearby"
-    ],
-    "verified": true,
-    "bilingual": false,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-15T21:34:08+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.4141793,
-      "lng": -111.8750092
-    }
-  },
-  {
-    "id": "plaza_0044",
     "slug": "loanmax-mesa",
     "name": {
       "en": "LoanMax",
@@ -2777,7 +2713,7 @@
     }
   },
   {
-    "id": "plaza_0045",
+    "id": "plaza_0044",
     "slug": "99-ranch-market-chandler",
     "name": {
       "en": "99 Ranch Market",
@@ -2842,7 +2778,7 @@
     }
   },
   {
-    "id": "plaza_0046",
+    "id": "plaza_0045",
     "slug": "85-degrees-chandler",
     "name": {
       "en": "85 Degrees",
@@ -2906,7 +2842,7 @@
     }
   },
   {
-    "id": "plaza_0047",
+    "id": "plaza_0046",
     "slug": "miracle-ear-chandler",
     "name": {
       "en": "Miracle-Ear",
@@ -2970,7 +2906,7 @@
     }
   },
   {
-    "id": "plaza_0048",
+    "id": "plaza_0047",
     "slug": "serene-healing-massage-and-reflexology-chandler",
     "name": {
       "en": "Serene Healing Massage and Reflexology",
@@ -3035,7 +2971,7 @@
     }
   },
   {
-    "id": "plaza_0049",
+    "id": "plaza_0048",
     "slug": "kura-sushi-chandler",
     "name": {
       "en": "Kura Sushi",
@@ -3099,7 +3035,7 @@
     }
   },
   {
-    "id": "plaza_0050",
+    "id": "plaza_0049",
     "slug": "a-ma-s-kitchen-and-pho-chandler",
     "name": {
       "en": "A Ma's Kitchen & Pho",
@@ -3163,7 +3099,7 @@
     }
   },
   {
-    "id": "plaza_0051",
+    "id": "plaza_0050",
     "slug": "boba-and-brew-tea-house-chandler",
     "name": {
       "en": "Boba & Brew Tea House",
@@ -3227,7 +3163,7 @@
     }
   },
   {
-    "id": "plaza_0052",
+    "id": "plaza_0051",
     "slug": "the-ups-store-chandler",
     "name": {
       "en": "The UPS Store",
@@ -3291,7 +3227,7 @@
     }
   },
   {
-    "id": "plaza_0053",
+    "id": "plaza_0052",
     "slug": "sola-salons-chandler",
     "name": {
       "en": "Sola Salons",
@@ -3355,7 +3291,7 @@
     }
   },
   {
-    "id": "plaza_0054",
+    "id": "plaza_0053",
     "slug": "los-favoritos-taco-shop-chandler",
     "name": {
       "en": "Los Favoritos Taco Shop",
@@ -3419,7 +3355,7 @@
     }
   },
   {
-    "id": "plaza_0055",
+    "id": "plaza_0054",
     "slug": "subway-chandler",
     "name": {
       "en": "Subway",
@@ -3484,7 +3420,7 @@
     }
   },
   {
-    "id": "plaza_0056",
+    "id": "plaza_0055",
     "slug": "bbq-chicken-chandler",
     "name": {
       "en": "BBQ Chicken",
@@ -3548,7 +3484,7 @@
     }
   },
   {
-    "id": "plaza_0057",
+    "id": "plaza_0056",
     "slug": "meet-fresh-chandler",
     "name": {
       "en": "Meet Fresh",
@@ -3612,7 +3548,7 @@
     }
   },
   {
-    "id": "plaza_0058",
+    "id": "plaza_0057",
     "slug": "kisses-nails-chandler",
     "name": {
       "en": "kisses nails",
@@ -3676,7 +3612,7 @@
     }
   },
   {
-    "id": "plaza_0059",
+    "id": "plaza_0058",
     "slug": "teso-life-chandler",
     "name": {
       "en": "Teso Life",
@@ -3741,7 +3677,7 @@
     }
   },
   {
-    "id": "plaza_0060",
+    "id": "plaza_0059",
     "slug": "bmo-chandler",
     "name": {
       "en": "BMO",
@@ -3805,7 +3741,7 @@
     }
   },
   {
-    "id": "plaza_0061",
+    "id": "plaza_0060",
     "slug": "daiso-japan-chandler",
     "name": {
       "en": "Daiso Japan",
@@ -3869,7 +3805,7 @@
     }
   },
   {
-    "id": "plaza_0062",
+    "id": "plaza_0061",
     "slug": "fedex-office-chandler",
     "name": {
       "en": "FedEx Office",
@@ -3933,7 +3869,7 @@
     }
   },
   {
-    "id": "plaza_0063",
+    "id": "plaza_0062",
     "slug": "gen-korean-bbq-chandler",
     "name": {
       "en": "Gen Korean BBQ",
@@ -3997,7 +3933,7 @@
     }
   },
   {
-    "id": "plaza_0064",
+    "id": "plaza_0063",
     "slug": "somisomi-chandler",
     "name": {
       "en": "SomiSomi",
@@ -4061,7 +3997,7 @@
     }
   },
   {
-    "id": "plaza_0065",
+    "id": "plaza_0064",
     "slug": "ramen-hood-chandler",
     "name": {
       "en": "Ramen Hood",
@@ -4122,7 +4058,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0066",
+    "id": "plaza_0065",
     "slug": "axia-senior-insurance-advisors-chandler",
     "name": {
       "en": "Axia Senior Insurance Advisors",
@@ -4187,7 +4123,7 @@
     }
   },
   {
-    "id": "plaza_0067",
+    "id": "plaza_0066",
     "slug": "jack-in-the-box-chandler",
     "name": {
       "en": "Jack in the Box",
@@ -4252,7 +4188,7 @@
     }
   },
   {
-    "id": "plaza_0068",
+    "id": "plaza_0067",
     "slug": "discover-vein-and-vascular-chandler",
     "name": {
       "en": "Discover Vein & Vascular",
@@ -4316,7 +4252,7 @@
     }
   },
   {
-    "id": "plaza_0069",
+    "id": "plaza_0068",
     "slug": "the-hungry-monk-chandler",
     "name": {
       "en": "The Hungry Monk",
@@ -4380,7 +4316,7 @@
     }
   },
   {
-    "id": "plaza_0070",
+    "id": "plaza_0069",
     "slug": "cyclo-vietnamese-cuisine-chandler",
     "name": {
       "en": "Cyclo Vietnamese Cuisine",
@@ -4445,7 +4381,7 @@
     }
   },
   {
-    "id": "plaza_0071",
+    "id": "plaza_0070",
     "slug": "salad-and-go-chandler",
     "name": {
       "en": "Salad and Go",
@@ -4510,7 +4446,7 @@
     }
   },
   {
-    "id": "plaza_0072",
+    "id": "plaza_0071",
     "slug": "denny-s-chandler",
     "name": {
       "en": "Denny's",
@@ -4574,7 +4510,7 @@
     }
   },
   {
-    "id": "plaza_0073",
+    "id": "plaza_0072",
     "slug": "walgreens-chandler",
     "name": {
       "en": "Walgreens",
@@ -4639,7 +4575,7 @@
     }
   },
   {
-    "id": "plaza_0074",
+    "id": "plaza_0073",
     "slug": "circle-k-chandler",
     "name": {
       "en": "Circle K",
@@ -4703,7 +4639,7 @@
     }
   },
   {
-    "id": "plaza_0075",
+    "id": "plaza_0074",
     "slug": "arizona-central-credit-union-chandler",
     "name": {
       "en": "Arizona Central Credit Union",
@@ -4767,7 +4703,7 @@
     }
   },
   {
-    "id": "plaza_0076",
+    "id": "plaza_0075",
     "slug": "chinese-combo-thai-tucson",
     "name": {
       "en": "Chinese Combo Thai",
@@ -4832,7 +4768,7 @@
     }
   },
   {
-    "id": "plaza_0077",
+    "id": "plaza_0076",
     "slug": "lee-lee-oriental-supermarket-tucson",
     "name": {
       "en": "Lee Lee Oriental Supermarket",
@@ -4896,7 +4832,7 @@
     }
   },
   {
-    "id": "plaza_0078",
+    "id": "plaza_0077",
     "slug": "9-spa-tucson",
     "name": {
       "en": "9 Spa",
@@ -4960,7 +4896,7 @@
     }
   },
   {
-    "id": "plaza_0079",
+    "id": "plaza_0078",
     "slug": "ikkyu-tucson",
     "name": {
       "en": "Ikkyu",
@@ -5025,7 +4961,7 @@
     }
   },
   {
-    "id": "plaza_0080",
+    "id": "plaza_0079",
     "slug": "circle-k-tucson",
     "name": {
       "en": "Circle K",
@@ -5089,7 +5025,7 @@
     }
   },
   {
-    "id": "plaza_0081",
+    "id": "plaza_0080",
     "slug": "ole-mexican-grill-tucson",
     "name": {
       "en": "Olé Mexican Grill",
@@ -5153,7 +5089,7 @@
     }
   },
   {
-    "id": "plaza_0082",
+    "id": "plaza_0081",
     "slug": "walgreens-tucson",
     "name": {
       "en": "Walgreens",
@@ -5217,7 +5153,7 @@
     }
   },
   {
-    "id": "plaza_0083",
+    "id": "plaza_0082",
     "slug": "lee-lee-oriental-supermarket-chandler",
     "name": {
       "en": "Lee Lee Oriental Supermarket",
@@ -5282,7 +5218,7 @@
     }
   },
   {
-    "id": "plaza_0084",
+    "id": "plaza_0083",
     "slug": "cvs-pharmacy-chandler",
     "name": {
       "en": "CVS Pharmacy",
@@ -5347,7 +5283,7 @@
     }
   },
   {
-    "id": "plaza_0085",
+    "id": "plaza_0084",
     "slug": "bambu-dessert-drink-chandler",
     "name": {
       "en": "Bambu Dessert Drink",
@@ -5408,7 +5344,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0086",
+    "id": "plaza_0085",
     "slug": "usa-tae-kwon-do-chandler",
     "name": {
       "en": "USA Tae Kwon Do",
@@ -5469,7 +5405,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0087",
+    "id": "plaza_0086",
     "slug": "mcdonald-s-chandler",
     "name": {
       "en": "McDonald's",
@@ -5534,7 +5470,7 @@
     }
   },
   {
-    "id": "plaza_0088",
+    "id": "plaza_0087",
     "slug": "lee-s-sandwiches-chandler",
     "name": {
       "en": "Lee's Sandwiches",
@@ -5598,7 +5534,7 @@
     }
   },
   {
-    "id": "plaza_0089",
+    "id": "plaza_0088",
     "slug": "walgreens-chandler-2",
     "name": {
       "en": "Walgreens",
@@ -5663,7 +5599,7 @@
     }
   },
   {
-    "id": "plaza_0090",
+    "id": "plaza_0089",
     "slug": "lee-lee-oriental-supermarket-peoria",
     "name": {
       "en": "Lee Lee Oriental Supermarket",
@@ -5727,7 +5663,7 @@
     }
   },
   {
-    "id": "plaza_0091",
+    "id": "plaza_0090",
     "slug": "ocean-jewelers-peoria",
     "name": {
       "en": "Ocean Jewelers",
@@ -5791,7 +5727,7 @@
     }
   },
   {
-    "id": "plaza_0092",
+    "id": "plaza_0091",
     "slug": "steven-crazy-nails-peoria",
     "name": {
       "en": "Steven Crazy Nails",
@@ -5855,7 +5791,7 @@
     }
   },
   {
-    "id": "plaza_0093",
+    "id": "plaza_0092",
     "slug": "beauty-bar-peoria",
     "name": {
       "en": "Beauty Bar",
@@ -5919,7 +5855,7 @@
     }
   },
   {
-    "id": "plaza_0094",
+    "id": "plaza_0093",
     "slug": "banner-urgent-care-peoria",
     "name": {
       "en": "Banner Urgent Care",
@@ -5983,7 +5919,7 @@
     }
   },
   {
-    "id": "plaza_0095",
+    "id": "plaza_0094",
     "slug": "nail-supply-peoria",
     "name": {
       "en": "Nail Supply",
@@ -6047,7 +5983,7 @@
     }
   },
   {
-    "id": "plaza_0096",
+    "id": "plaza_0095",
     "slug": "h-and-r-block-peoria",
     "name": {
       "en": "H&R Block",
@@ -6111,7 +6047,7 @@
     }
   },
   {
-    "id": "plaza_0097",
+    "id": "plaza_0096",
     "slug": "parrot-nation-peoria",
     "name": {
       "en": "Parrot Nation",
@@ -6175,7 +6111,7 @@
     }
   },
   {
-    "id": "plaza_0098",
+    "id": "plaza_0097",
     "slug": "subway-peoria",
     "name": {
       "en": "Subway",
@@ -6240,7 +6176,7 @@
     }
   },
   {
-    "id": "plaza_0099",
+    "id": "plaza_0098",
     "slug": "bomboba-peoria",
     "name": {
       "en": "Bomboba",
@@ -6304,7 +6240,7 @@
     }
   },
   {
-    "id": "plaza_0100",
+    "id": "plaza_0099",
     "slug": "little-caesars-peoria",
     "name": {
       "en": "Little Caesars",
@@ -6369,7 +6305,7 @@
     }
   },
   {
-    "id": "plaza_0101",
+    "id": "plaza_0100",
     "slug": "panda-express-peoria",
     "name": {
       "en": "Panda Express",
@@ -6433,7 +6369,7 @@
     }
   },
   {
-    "id": "plaza_0102",
+    "id": "plaza_0101",
     "slug": "carl-s-jr-peoria",
     "name": {
       "en": "Carl's Jr.",
@@ -6498,7 +6434,7 @@
     }
   },
   {
-    "id": "plaza_0103",
+    "id": "plaza_0102",
     "slug": "fry-s-fuel-peoria",
     "name": {
       "en": "Fry's Fuel",
@@ -6562,7 +6498,7 @@
     }
   },
   {
-    "id": "plaza_0104",
+    "id": "plaza_0103",
     "slug": "global-credit-union-peoria",
     "name": {
       "en": "Global Credit Union",
@@ -6626,7 +6562,7 @@
     }
   },
   {
-    "id": "plaza_0105",
+    "id": "plaza_0104",
     "slug": "cvs-pharmacy-peoria",
     "name": {
       "en": "CVS Pharmacy",
@@ -6691,7 +6627,7 @@
     }
   },
   {
-    "id": "plaza_0106",
+    "id": "plaza_0105",
     "slug": "midfirst-bank-peoria",
     "name": {
       "en": "MidFirst Bank",
@@ -6755,7 +6691,7 @@
     }
   },
   {
-    "id": "plaza_0107",
+    "id": "plaza_0106",
     "slug": "ace-hardware-peoria",
     "name": {
       "en": "Ace Hardware",
@@ -6819,7 +6755,7 @@
     }
   },
   {
-    "id": "plaza_0108",
+    "id": "plaza_0107",
     "slug": "h-mart-mesa",
     "name": {
       "en": "H Mart",
@@ -6883,7 +6819,7 @@
     }
   },
   {
-    "id": "plaza_0109",
+    "id": "plaza_0108",
     "slug": "da-pan-mesa",
     "name": {
       "en": "Da Pan",
@@ -6947,7 +6883,7 @@
     }
   },
   {
-    "id": "plaza_0110",
+    "id": "plaza_0109",
     "slug": "paris-baguette-mesa",
     "name": {
       "en": "Paris Baguette",
@@ -7011,7 +6947,7 @@
     }
   },
   {
-    "id": "plaza_0111",
+    "id": "plaza_0110",
     "slug": "snowtime-mesa",
     "name": {
       "en": "Snowtime",
@@ -7075,7 +7011,7 @@
     }
   },
   {
-    "id": "plaza_0112",
+    "id": "plaza_0111",
     "slug": "daiso-japan-mesa",
     "name": {
       "en": "Daiso Japan",
@@ -7139,7 +7075,7 @@
     }
   },
   {
-    "id": "plaza_0113",
+    "id": "plaza_0112",
     "slug": "two-hands-mesa",
     "name": {
       "en": "Two Hands",
@@ -7204,7 +7140,7 @@
     }
   },
   {
-    "id": "plaza_0114",
+    "id": "plaza_0113",
     "slug": "cha-tea-mesa",
     "name": {
       "en": "Cha Tea",
@@ -7269,7 +7205,7 @@
     }
   },
   {
-    "id": "plaza_0115",
+    "id": "plaza_0114",
     "slug": "tipsy-chicken-mesa",
     "name": {
       "en": "Tipsy Chicken",
@@ -7333,7 +7269,7 @@
     }
   },
   {
-    "id": "plaza_0116",
+    "id": "plaza_0115",
     "slug": "discount-tire-mesa",
     "name": {
       "en": "Discount Tire",
@@ -7397,7 +7333,7 @@
     }
   },
   {
-    "id": "plaza_0117",
+    "id": "plaza_0116",
     "slug": "jack-in-the-box-mesa",
     "name": {
       "en": "Jack in the Box",
@@ -7462,7 +7398,7 @@
     }
   },
   {
-    "id": "plaza_0118",
+    "id": "plaza_0117",
     "slug": "the-stone-kroean-tofu-house-mesa",
     "name": {
       "en": "The Stone Kroean Tofu House",
@@ -7527,71 +7463,7 @@
     }
   },
   {
-    "id": "plaza_0119",
-    "slug": "tan-hua-inc-mesa-2",
-    "name": {
-      "en": "Tan Hua Inc.",
-      "zh": null
-    },
-    "categorySlug": "shopping",
-    "city": "Mesa",
-    "region": "Greater Phoenix",
-    "address": "1919 W Main St, Mesa, AZ 85201",
-    "serviceAreaText": null,
-    "phone": null,
-    "email": null,
-    "website": null,
-    "menuUrl": null,
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Shopping and retail listing near Mesa Main Marketplace / H Mart in Mesa.",
-      "zh": null
-    },
-    "description": {
-      "en": "Tan Hua Inc. is listed near Mesa Main Marketplace / H Mart in Mesa. This profile was generated from plaza directory sources and map-based verification, so direct business contact details may still be incomplete.",
-      "zh": null
-    },
-    "services": [
-      {
-        "en": "Near Mesa Main Marketplace / H Mart",
-        "zh": null
-      },
-      {
-        "en": "Shopping and retail stop",
-        "zh": null
-      }
-    ],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Tan Hua Inc.",
-      "Mesa Main Marketplace / H Mart",
-      "Mesa",
-      "shopping",
-      "spices",
-      "1919 W Main St, Mesa, AZ 85201",
-      "nearby"
-    ],
-    "verified": true,
-    "bilingual": false,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-15T21:34:08+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.4141793,
-      "lng": -111.8750092
-    }
-  },
-  {
-    "id": "plaza_0120",
+    "id": "plaza_0118",
     "slug": "krispy-kreme-mesa",
     "name": {
       "en": "Krispy Kreme",
@@ -7655,7 +7527,7 @@
     }
   },
   {
-    "id": "plaza_0121",
+    "id": "plaza_0119",
     "slug": "tara-thai-2go-mesa",
     "name": {
       "en": "Tara Thai 2go",
@@ -7719,7 +7591,7 @@
     }
   },
   {
-    "id": "plaza_0122",
+    "id": "plaza_0120",
     "slug": "hodori-mesa",
     "name": {
       "en": "Hodori",
@@ -7783,7 +7655,7 @@
     }
   },
   {
-    "id": "plaza_0123",
+    "id": "plaza_0121",
     "slug": "the-street-mesa",
     "name": {
       "en": "The Street",
@@ -7847,7 +7719,7 @@
     }
   },
   {
-    "id": "plaza_0124",
+    "id": "plaza_0122",
     "slug": "teazers-hair-salon-mesa",
     "name": {
       "en": "Teazers Hair Salon",
@@ -7911,7 +7783,7 @@
     }
   },
   {
-    "id": "plaza_0125",
+    "id": "plaza_0123",
     "slug": "name-brand-exchange-mesa",
     "name": {
       "en": "Name Brand Exchange",
@@ -7975,7 +7847,7 @@
     }
   },
   {
-    "id": "plaza_0126",
+    "id": "plaza_0124",
     "slug": "beijing-acupuncture-and-health-center-mesa",
     "name": {
       "en": "Beijing Acupuncture and Health Center",
@@ -8036,7 +7908,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0127",
+    "id": "plaza_0125",
     "slug": "comfort-foot-and-body-massage-mesa",
     "name": {
       "en": "Comfort Foot & Body Massage",
@@ -8097,7 +7969,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0128",
+    "id": "plaza_0126",
     "slug": "daruma-mesa",
     "name": {
       "en": "Daruma",
@@ -8158,7 +8030,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0129",
+    "id": "plaza_0127",
     "slug": "dong-feng-seafood-city-mesa",
     "name": {
       "en": "Dong Feng Seafood City",
@@ -8219,7 +8091,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0130",
+    "id": "plaza_0128",
     "slug": "friggin-jerk-beef-jerky-mesa",
     "name": {
       "en": "Friggin Jerk (Beef Jerky)",
@@ -8280,7 +8152,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0131",
+    "id": "plaza_0129",
     "slug": "jax-and-ko-international-mesa",
     "name": {
       "en": "Jax & Ko International",
@@ -8341,7 +8213,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0132",
+    "id": "plaza_0130",
     "slug": "jina-s-salon-mesa",
     "name": {
       "en": "Jina's Salon",
@@ -8402,7 +8274,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0133",
+    "id": "plaza_0131",
     "slug": "p-and-y-insurance-mesa",
     "name": {
       "en": "P & Y Insurance",
@@ -8463,7 +8335,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0134",
+    "id": "plaza_0132",
     "slug": "the-art-gallery-mesa",
     "name": {
       "en": "The Art Gallery",
@@ -8524,7 +8396,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0135",
+    "id": "plaza_0133",
     "slug": "yjp-spine-center-mesa",
     "name": {
       "en": "YJP Spine Center",
@@ -8585,7 +8457,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0136",
+    "id": "plaza_0134",
     "slug": "saketini-mesa",
     "name": {
       "en": "Saketini",
@@ -8649,7 +8521,7 @@
     }
   },
   {
-    "id": "plaza_0137",
+    "id": "plaza_0135",
     "slug": "circle-k-mesa",
     "name": {
       "en": "Circle K",
@@ -8713,7 +8585,7 @@
     }
   },
   {
-    "id": "plaza_0138",
+    "id": "plaza_0136",
     "slug": "oregano-s-pizza-bistro-mesa",
     "name": {
       "en": "Oregano's Pizza Bistro",
@@ -8777,7 +8649,7 @@
     }
   },
   {
-    "id": "plaza_0139",
+    "id": "plaza_0137",
     "slug": "filiberto-s-mesa",
     "name": {
       "en": "Filiberto's",
@@ -8841,7 +8713,7 @@
     }
   },
   {
-    "id": "plaza_0140",
+    "id": "plaza_0138",
     "slug": "firehouse-subs-mesa",
     "name": {
       "en": "Firehouse Subs",
@@ -8905,7 +8777,7 @@
     }
   },
   {
-    "id": "plaza_0141",
+    "id": "plaza_0139",
     "slug": "little-caesars-mesa",
     "name": {
       "en": "Little Caesars",
@@ -8970,7 +8842,7 @@
     }
   },
   {
-    "id": "plaza_0142",
+    "id": "plaza_0140",
     "slug": "taco-bell-mesa",
     "name": {
       "en": "Taco Bell",
@@ -9035,7 +8907,7 @@
     }
   },
   {
-    "id": "plaza_0143",
+    "id": "plaza_0141",
     "slug": "nagasaki-grill-toh-zan-mesa",
     "name": {
       "en": "Nagasaki Grill Toh Zan",
@@ -9099,7 +8971,7 @@
     }
   },
   {
-    "id": "plaza_0144",
+    "id": "plaza_0142",
     "slug": "simon-med-mesa",
     "name": {
       "en": "Simon Med",
@@ -9163,7 +9035,7 @@
     }
   },
   {
-    "id": "plaza_0145",
+    "id": "plaza_0143",
     "slug": "wendy-s-mesa",
     "name": {
       "en": "Wendy's",
@@ -9227,7 +9099,7 @@
     }
   },
   {
-    "id": "plaza_0146",
+    "id": "plaza_0144",
     "slug": "mcdonald-s-mesa",
     "name": {
       "en": "McDonald's",
@@ -9292,7 +9164,7 @@
     }
   },
   {
-    "id": "plaza_0147",
+    "id": "plaza_0145",
     "slug": "saigon-jade-mesa",
     "name": {
       "en": "Saigon Jade",
@@ -9356,7 +9228,7 @@
     }
   },
   {
-    "id": "plaza_0148",
+    "id": "plaza_0146",
     "slug": "pizza-hut-express-mesa",
     "name": {
       "en": "Pizza Hut Express",
@@ -9421,7 +9293,7 @@
     }
   },
   {
-    "id": "plaza_0149",
+    "id": "plaza_0147",
     "slug": "1-800-flowers-mesa",
     "name": {
       "en": "1-800 Flowers",
@@ -9485,7 +9357,7 @@
     }
   },
   {
-    "id": "plaza_0150",
+    "id": "plaza_0148",
     "slug": "target-mesa",
     "name": {
       "en": "Target",
@@ -9550,7 +9422,7 @@
     }
   },
   {
-    "id": "plaza_0151",
+    "id": "plaza_0149",
     "slug": "diamond-national-mesa",
     "name": {
       "en": "Diamond National",
@@ -9614,7 +9486,7 @@
     }
   },
   {
-    "id": "plaza_0152",
+    "id": "plaza_0150",
     "slug": "racing-collectibles-mesa",
     "name": {
       "en": "Racing Collectibles",
@@ -9678,71 +9550,7 @@
     }
   },
   {
-    "id": "plaza_0153",
-    "slug": "morris-liu-oriental-pottery-mesa",
-    "name": {
-      "en": "Morris Liu Oriental Pottery",
-      "zh": null
-    },
-    "categorySlug": "shopping",
-    "city": "Mesa",
-    "region": "Greater Phoenix",
-    "address": "1350, South Longmore, Mesa, AZ, 85202",
-    "serviceAreaText": null,
-    "phone": null,
-    "email": null,
-    "website": null,
-    "menuUrl": null,
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Shopping and retail listing inside Three Fountains Plaza in Mesa.",
-      "zh": null
-    },
-    "description": {
-      "en": "Morris Liu Oriental Pottery is listed within Three Fountains Plaza in Mesa. This profile was generated from plaza directory sources and map-based verification, so direct business contact details may still be incomplete.",
-      "zh": null
-    },
-    "services": [
-      {
-        "en": "Located in Three Fountains Plaza",
-        "zh": null
-      },
-      {
-        "en": "Shopping and retail stop",
-        "zh": null
-      }
-    ],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Morris Liu Oriental Pottery",
-      "Three Fountains Plaza",
-      "Mesa",
-      "shopping",
-      "pottery",
-      "1350 S Longmore Rd, Mesa, AZ 85202",
-      "plaza"
-    ],
-    "verified": true,
-    "bilingual": false,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-15T21:34:08+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.3897873,
-      "lng": -111.8655723
-    }
-  },
-  {
-    "id": "plaza_0154",
+    "id": "plaza_0151",
     "slug": "cvs-pharmacy-mesa",
     "name": {
       "en": "CVS Pharmacy",
@@ -9807,7 +9615,7 @@
     }
   },
   {
-    "id": "plaza_0155",
+    "id": "plaza_0152",
     "slug": "jag-s-billiards-mesa",
     "name": {
       "en": "Jag's Billiards",
@@ -9871,7 +9679,7 @@
     }
   },
   {
-    "id": "plaza_0156",
+    "id": "plaza_0153",
     "slug": "gangnam-bbq-mesa",
     "name": {
       "en": "Gangnam BBQ",
@@ -9935,7 +9743,7 @@
     }
   },
   {
-    "id": "plaza_0157",
+    "id": "plaza_0154",
     "slug": "yz-s-ktv-karaoke-cafe-mesa",
     "name": {
       "en": "YZ's KTV Karaoke Cafe",
@@ -9999,7 +9807,7 @@
     }
   },
   {
-    "id": "plaza_0158",
+    "id": "plaza_0155",
     "slug": "korea-mart-mesa",
     "name": {
       "en": "Korea Mart",
@@ -10063,7 +9871,7 @@
     }
   },
   {
-    "id": "plaza_0159",
+    "id": "plaza_0156",
     "slug": "99-ranch-market-glendale",
     "name": {
       "en": "99 Ranch Market",
@@ -10124,7 +9932,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0160",
+    "id": "plaza_0157",
     "slug": "bafang-dumpling-glendale",
     "name": {
       "en": "Bafang Dumpling",
@@ -10185,7 +9993,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0161",
+    "id": "plaza_0158",
     "slug": "fat-miilk-coffee-glendale",
     "name": {
       "en": "Fat Miilk Coffee",
@@ -10246,7 +10054,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0162",
+    "id": "plaza_0159",
     "slug": "kinokuniya-books-glendale",
     "name": {
       "en": "Kinokuniya Books",
@@ -10307,7 +10115,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0163",
+    "id": "plaza_0160",
     "slug": "lady-m-cakes-glendale",
     "name": {
       "en": "Lady M Cakes",
@@ -10368,7 +10176,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0164",
+    "id": "plaza_0161",
     "slug": "pho-602-glendale",
     "name": {
       "en": "Pho 602",
@@ -10429,7 +10237,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0165",
+    "id": "plaza_0162",
     "slug": "royce-chocolate-glendale",
     "name": {
       "en": "Royce Chocolate",
@@ -10490,7 +10298,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0166",
+    "id": "plaza_0163",
     "slug": "somi-somi-glendale",
     "name": {
       "en": "Somi Somi",
@@ -10551,7 +10359,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0167",
+    "id": "plaza_0164",
     "slug": "t-swirl-crepe-glendale",
     "name": {
       "en": "T-Swirl Crepe",
@@ -10612,7 +10420,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0168",
+    "id": "plaza_0165",
     "slug": "teso-life-glendale",
     "name": {
       "en": "Teso Life",
@@ -10673,7 +10481,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0169",
+    "id": "plaza_0166",
     "slug": "the-alley-bubble-tea-glendale",
     "name": {
       "en": "The Alley Bubble Tea",
@@ -10734,7 +10542,7 @@
     "coordinates": null
   },
   {
-    "id": "plaza_0170",
+    "id": "plaza_0167",
     "slug": "tokyo-shokudo-glendale",
     "name": {
       "en": "Tokyo Shokudo",

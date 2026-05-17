@@ -7,14 +7,44 @@ import path from 'node:path';
 import type { Article, Locale, LocalizedText } from '@/lib/types';
 
 const CJK_PATTERN = /[\u3400-\u9fff\u3040-\u30ff]/u;
-const TRANSLATION_SPLIT_TOKEN = '<<<CA_TRANSLATION_SPLIT_TOKEN>>>';
-const MAX_TRANSLATION_BATCH_CHAR_COUNT = 1200;
-const TRANSLATION_CACHE_PATH = path.join(
-  process.cwd(),
-  'data',
-  'article-ingest-staging',
-  'english-translation-cache.json'
-);
+const ENGLISH_TRANSLATION_CACHE_PATH =
+  process.env.ARTICLE_EN_TRANSLATION_CACHE_PATH ??
+  path.join(
+    process.cwd(),
+    'data',
+    'article-ingest-staging',
+    'english-translation-cache.json'
+  );
+const CHINESE_TRANSLATION_CACHE_PATH =
+  process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH ??
+  path.join(
+    process.cwd(),
+    'data',
+    'article-ingest-staging',
+    'chinese-translation-cache.json'
+  );
+const TRANSLATION_SEPARATOR = '<<<CA_ZH_SPLIT>>>';
+const TRANSLATION_BATCH_MAX_CHARS = 1600;
+
+type TranslationCacheState = {
+  cache: TranslationCache | null;
+  loadPromise: Promise<TranslationCache> | null;
+  path: string;
+};
+
+const englishTranslationState: TranslationCacheState = {
+  cache: null,
+  loadPromise: null,
+  path: ENGLISH_TRANSLATION_CACHE_PATH,
+};
+
+const chineseTranslationState: TranslationCacheState = {
+  cache: null,
+  loadPromise: null,
+  path: CHINESE_TRANSLATION_CACHE_PATH,
+};
+
+type TranslationResponsePayload = Array<Array<[string, ...unknown[]]>>;
 
 type TranslationCacheEntry = {
   sourceText: string;
@@ -24,9 +54,14 @@ type TranslationCacheEntry = {
 
 type TranslationCache = Record<string, TranslationCacheEntry>;
 
-let translationCache: TranslationCache | null = null;
-let translationCacheLoadPromise: Promise<TranslationCache> | null = null;
-let translationCacheWriteQueue: Promise<void> = Promise.resolve();
+const articleTextCache = new Map<
+  string,
+  Promise<{
+    title: string;
+    excerpt: string;
+    body: string[];
+  }>
+>();
 
 function cacheKey(text: string): string {
   return createHash('sha1').update(text).digest('hex');
@@ -40,6 +75,16 @@ function normalizeChineseValue(value: LocalizedText): string {
   return (value.zh ?? value.en).trim();
 }
 
+function needsChineseTranslation(value: LocalizedText): boolean {
+  const english = normalizeEnglishValue(value);
+  if (!english || CJK_PATTERN.test(english)) {
+    return false;
+  }
+
+  const chinese = value.zh?.trim();
+  return !chinese || chinese === english;
+}
+
 function needsEnglishTranslation(value: LocalizedText): boolean {
   const english = normalizeEnglishValue(value);
   if (!english) {
@@ -49,156 +94,189 @@ function needsEnglishTranslation(value: LocalizedText): boolean {
   return CJK_PATTERN.test(english);
 }
 
-async function loadTranslationCache(): Promise<TranslationCache> {
-  if (translationCache) {
-    return translationCache;
+async function loadTranslationCacheState(state: TranslationCacheState): Promise<TranslationCache> {
+  if (state.cache) {
+    return state.cache;
   }
 
-  if (!translationCacheLoadPromise) {
-    translationCacheLoadPromise = (async () => {
+  if (!state.loadPromise) {
+    state.loadPromise = (async () => {
       try {
-        const payload = await fs.readFile(TRANSLATION_CACHE_PATH, 'utf-8');
-        translationCache = JSON.parse(payload) as TranslationCache;
+        const payload = await fs.readFile(state.path, 'utf-8');
+        state.cache = JSON.parse(payload) as TranslationCache;
       } catch {
-        translationCache = {};
+        state.cache = {};
       }
 
-      return translationCache;
+      return state.cache;
     })();
   }
 
-  return translationCacheLoadPromise;
+  return state.loadPromise;
 }
 
-async function saveTranslationCache(cache: TranslationCache): Promise<void> {
-  translationCache = cache;
-  translationCacheWriteQueue = translationCacheWriteQueue.then(async () => {
-    await fs.mkdir(path.dirname(TRANSLATION_CACHE_PATH), { recursive: true });
-    await fs.writeFile(
-      TRANSLATION_CACHE_PATH,
-      JSON.stringify(cache, null, 2) + '\n',
-      'utf-8'
-    );
-  });
-
-  await translationCacheWriteQueue;
-}
-
-async function requestEnglishTranslationsBatch(texts: string[]): Promise<string[]> {
-  const joined = texts.join(`\n${TRANSLATION_SPLIT_TOKEN}\n`);
-  const url = new URL('https://translate.googleapis.com/translate_a/single');
-  url.searchParams.set('client', 'gtx');
-  url.searchParams.set('sl', 'auto');
-  url.searchParams.set('tl', 'en');
-  url.searchParams.set('dt', 't');
-  url.searchParams.set('q', joined);
-
-  const response = await fetch(url.toString(), {
-    headers: {
-      Accept: 'application/json',
-      'User-Agent': 'ChineseArizonaArticleSync/1.0',
-    },
-    cache: 'no-store',
-  });
-
-  if (!response.ok) {
-    throw new Error(`Translation request failed with ${response.status}.`);
+async function saveTranslationCacheState(state: TranslationCacheState): Promise<void> {
+  if (!state.cache) {
+    return;
   }
 
-  const payload = (await response.json()) as unknown[];
-  const translated = Array.isArray(payload?.[0])
-    ? (payload[0] as Array<[string]>)
-        .map((part) => (Array.isArray(part) && typeof part[0] === 'string' ? part[0] : ''))
-        .join('')
-    : joined;
-  const parts = translated.split(TRANSLATION_SPLIT_TOKEN).map((part) => part.trim());
+  await fs.mkdir(path.dirname(state.path), { recursive: true });
+  await fs.writeFile(state.path, `${JSON.stringify(state.cache, null, 2)}\n`, 'utf-8');
+}
+
+async function fetchChineseTranslationBatch(texts: string[]): Promise<string[]> {
+  if (texts.length === 0) {
+    return [];
+  }
+
+  const query = encodeURIComponent(texts.join(TRANSLATION_SEPARATOR));
+  const response = await fetch(
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh-TW&dt=t&q=${query}`,
+    {
+      cache: 'no-store',
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Chinese translation request failed with status ${response.status}.`);
+  }
+
+  const payload = (await response.json()) as TranslationResponsePayload;
+  const translated = (Array.isArray(payload?.[0]) ? payload[0] : [])
+    .map((segment) => (Array.isArray(segment) && typeof segment[0] === 'string' ? segment[0] : ''))
+    .join('');
+  const parts = translated.split(TRANSLATION_SEPARATOR).map((part) => part.trim());
 
   if (parts.length !== texts.length) {
-    throw new Error('Translation batch split mismatch.');
+    throw new Error('Chinese translation batch split mismatch.');
   }
 
   return parts;
 }
 
-async function requestEnglishTranslations(texts: string[]): Promise<string[]> {
+async function fetchEnglishTranslationBatch(texts: string[]): Promise<string[]> {
   if (texts.length === 0) {
     return [];
   }
 
-  try {
-    return await requestEnglishTranslationsBatch(texts);
-  } catch (error) {
-    if (texts.length === 1) {
-      console.error('English translation failed; falling back to original text.', error);
-      return texts;
+  const query = encodeURIComponent(texts.join(TRANSLATION_SEPARATOR));
+  const response = await fetch(
+    `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${query}`,
+    {
+      cache: 'no-store',
     }
+  );
 
-    const midpoint = Math.ceil(texts.length / 2);
-    const left = await requestEnglishTranslations(texts.slice(0, midpoint));
-    const right = await requestEnglishTranslations(texts.slice(midpoint));
-    return [...left, ...right];
-  }
-}
-
-function chunkTextsForTranslation(texts: string[]): string[][] {
-  const batches: string[][] = [];
-  let currentBatch: string[] = [];
-  let currentSize = 0;
-
-  texts.forEach((text) => {
-    const nextSize =
-      currentSize + text.length + (currentBatch.length > 0 ? TRANSLATION_SPLIT_TOKEN.length + 2 : 0);
-
-    if (currentBatch.length > 0 && nextSize > MAX_TRANSLATION_BATCH_CHAR_COUNT) {
-      batches.push(currentBatch);
-      currentBatch = [text];
-      currentSize = text.length;
-      return;
-    }
-
-    currentBatch.push(text);
-    currentSize = nextSize;
-  });
-
-  if (currentBatch.length > 0) {
-    batches.push(currentBatch);
+  if (!response.ok) {
+    throw new Error(`English translation request failed with status ${response.status}.`);
   }
 
-  return batches;
+  const payload = (await response.json()) as TranslationResponsePayload;
+  const translated = (Array.isArray(payload?.[0]) ? payload[0] : [])
+    .map((segment) => (Array.isArray(segment) && typeof segment[0] === 'string' ? segment[0] : ''))
+    .join('');
+  const parts = translated.split(TRANSLATION_SEPARATOR).map((part) => part.trim());
+
+  if (parts.length !== texts.length) {
+    throw new Error('English translation batch split mismatch.');
+  }
+
+  return parts;
 }
 
-async function translateMissingEnglish(texts: string[]): Promise<Map<string, string>> {
-  const cache = await loadTranslationCache();
+async function resolveChineseTranslations(texts: string[]): Promise<Map<string, string>> {
+  const cache = await loadTranslationCacheState(chineseTranslationState);
   const uniqueTexts = Array.from(new Set(texts.filter(Boolean)));
-  const pendingTexts = uniqueTexts.filter((text) => !cache[cacheKey(text)]);
+  const missingTexts = uniqueTexts.filter((text) => !cache[cacheKey(text)]);
 
-  if (pendingTexts.length > 0) {
-    const nextCache = { ...cache };
-    const batches = chunkTextsForTranslation(pendingTexts);
+  if (missingTexts.length > 0) {
+    const translatedTexts: string[] = [];
+    let batch: string[] = [];
+    let batchLength = 0;
 
-    for (const batch of batches) {
-      const translatedTexts = await requestEnglishTranslations(batch);
+    try {
+      for (const text of missingTexts) {
+        const projectedLength = batchLength + text.length + TRANSLATION_SEPARATOR.length;
+        if (batch.length > 0 && projectedLength > TRANSLATION_BATCH_MAX_CHARS) {
+          translatedTexts.push(...(await fetchChineseTranslationBatch(batch)));
+          batch = [];
+          batchLength = 0;
+        }
 
-      batch.forEach((text, index) => {
-        nextCache[cacheKey(text)] = {
+        batch.push(text);
+        batchLength += text.length + TRANSLATION_SEPARATOR.length;
+      }
+
+      if (batch.length > 0) {
+        translatedTexts.push(...(await fetchChineseTranslationBatch(batch)));
+      }
+
+      missingTexts.forEach((text, index) => {
+        cache[cacheKey(text)] = {
           sourceText: text,
-          translatedText: translatedTexts[index] || text,
+          translatedText: translatedTexts[index] ?? text,
           updatedAt: new Date().toISOString(),
         };
       });
-    }
 
-    if (batches.length > 0) {
-      await saveTranslationCache(nextCache);
-      translationCache = nextCache;
+      await saveTranslationCacheState(chineseTranslationState);
+    } catch {
+      // Leave missing values uncached so future requests can retry translation.
     }
   }
 
   const resolved = new Map<string, string>();
-  const latestCache = await loadTranslationCache();
-
   uniqueTexts.forEach((text) => {
-    resolved.set(text, latestCache[cacheKey(text)]?.translatedText || text);
+    resolved.set(text, cache[cacheKey(text)]?.translatedText || text);
+  });
+
+  return resolved;
+}
+
+async function resolveEnglishTranslations(texts: string[]): Promise<Map<string, string>> {
+  const cache = await loadTranslationCacheState(englishTranslationState);
+  const uniqueTexts = Array.from(new Set(texts.filter(Boolean)));
+  const missingTexts = uniqueTexts.filter((text) => !cache[cacheKey(text)]);
+
+  if (missingTexts.length > 0) {
+    const translatedTexts: string[] = [];
+    let batch: string[] = [];
+    let batchLength = 0;
+
+    try {
+      for (const text of missingTexts) {
+        const projectedLength = batchLength + text.length + TRANSLATION_SEPARATOR.length;
+        if (batch.length > 0 && projectedLength > TRANSLATION_BATCH_MAX_CHARS) {
+          translatedTexts.push(...(await fetchEnglishTranslationBatch(batch)));
+          batch = [];
+          batchLength = 0;
+        }
+
+        batch.push(text);
+        batchLength += text.length + TRANSLATION_SEPARATOR.length;
+      }
+
+      if (batch.length > 0) {
+        translatedTexts.push(...(await fetchEnglishTranslationBatch(batch)));
+      }
+
+      missingTexts.forEach((text, index) => {
+        cache[cacheKey(text)] = {
+          sourceText: text,
+          translatedText: translatedTexts[index] ?? text,
+          updatedAt: new Date().toISOString(),
+        };
+      });
+
+      await saveTranslationCacheState(englishTranslationState);
+    } catch {
+      // Leave missing values uncached so future requests can retry translation.
+    }
+  }
+
+  const resolved = new Map<string, string>();
+  uniqueTexts.forEach((text) => {
+    resolved.set(text, cache[cacheKey(text)]?.translatedText || text);
   });
 
   return resolved;
@@ -206,7 +284,13 @@ async function translateMissingEnglish(texts: string[]): Promise<Map<string, str
 
 export async function resolveLocalizedText(value: LocalizedText, locale: Locale): Promise<string> {
   if (locale === 'zh') {
-    return normalizeChineseValue(value);
+    if (!needsChineseTranslation(value)) {
+      return normalizeChineseValue(value);
+    }
+
+    const english = normalizeEnglishValue(value);
+    const translated = await resolveChineseTranslations([english]);
+    return translated.get(english) || normalizeChineseValue(value);
   }
 
   if (!needsEnglishTranslation(value)) {
@@ -218,7 +302,7 @@ export async function resolveLocalizedText(value: LocalizedText, locale: Locale)
     return normalizeEnglishValue(value);
   }
 
-  const translated = await translateMissingEnglish([sourceText]);
+  const translated = await resolveEnglishTranslations([sourceText]);
   return translated.get(sourceText) || normalizeEnglishValue(value);
 }
 
@@ -227,7 +311,23 @@ export async function resolveLocalizedTextList(
   locale: Locale
 ): Promise<string[]> {
   if (locale === 'zh') {
-    return values.map((value) => normalizeChineseValue(value));
+    const sourceTextsToTranslate = values
+      .filter((value) => needsChineseTranslation(value))
+      .map((value) => normalizeEnglishValue(value))
+      .filter(Boolean);
+    const translatedTexts =
+      sourceTextsToTranslate.length > 0
+        ? await resolveChineseTranslations(sourceTextsToTranslate)
+        : new Map<string, string>();
+
+    return values.map((value) => {
+      if (!needsChineseTranslation(value)) {
+        return normalizeChineseValue(value);
+      }
+
+      const english = normalizeEnglishValue(value);
+      return translatedTexts.get(english) || normalizeChineseValue(value);
+    });
   }
 
   const sourceTextsToTranslate = values
@@ -236,7 +336,7 @@ export async function resolveLocalizedTextList(
     .filter(Boolean);
   const translatedTexts =
     sourceTextsToTranslate.length > 0
-      ? await translateMissingEnglish(sourceTextsToTranslate)
+      ? await resolveEnglishTranslations(sourceTextsToTranslate)
       : new Map<string, string>();
 
   return values.map((value) => {
@@ -257,14 +357,44 @@ export async function resolveArticleText(
   excerpt: string;
   body: string[];
 }> {
-  const [title, excerpt, ...body] = await resolveLocalizedTextList(
-    [article.title, article.excerpt, ...article.body],
-    locale
+  const articleValues = [article.title, article.excerpt, ...article.body];
+  const shouldBypassArticleCache = articleValues.some((value) =>
+    locale === 'zh' ? needsChineseTranslation(value) : needsEnglishTranslation(value)
   );
+  const cacheKey = [
+    locale,
+    article.slug,
+    article.updatedAt ?? article.publishedAt,
+    article.body.length,
+  ].join(':');
+  const cached = shouldBypassArticleCache ? null : articleTextCache.get(cacheKey);
+  if (cached) {
+    return cached;
+  }
 
-  return {
-    title,
-    excerpt,
-    body,
-  };
+  const pending = (async () => {
+    const [title, excerpt, ...body] = await resolveLocalizedTextList(
+      [article.title, article.excerpt, ...article.body],
+      locale
+    );
+
+    return {
+      title,
+      excerpt,
+      body,
+    };
+  })();
+
+  if (shouldBypassArticleCache) {
+    return pending;
+  }
+
+  articleTextCache.set(cacheKey, pending);
+
+  try {
+    return await pending;
+  } catch (error) {
+    articleTextCache.delete(cacheKey);
+    throw error;
+  }
 }

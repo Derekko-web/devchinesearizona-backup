@@ -82,10 +82,24 @@ function hasCjkText(value: string): boolean {
   return /[\u3400-\u9fff]/.test(value);
 }
 
-function cleanStructuredServiceLabel(service: LocalizedText, business: Business, locale: Locale): string | undefined {
-  const source = service.en.trim();
+export function formatBusinessServiceHighlightLabel(
+  business: Business,
+  sourceLabel: string,
+  localizedLabel: string
+): string | undefined {
+  const source = sourceLabel.trim();
+  const localized = localizedLabel.trim();
+
   if (!source) {
     return undefined;
+  }
+
+  if (!localized) {
+    return undefined;
+  }
+
+  if (hasCjkText(source)) {
+    return localized;
   }
 
   const blockedTokens = new Set([
@@ -106,7 +120,6 @@ function cleanStructuredServiceLabel(service: LocalizedText, business: Business,
     return undefined;
   }
 
-  const localized = t(service, locale).trim();
   if (hasCjkText(localized)) {
     return localized;
   }
@@ -126,6 +139,27 @@ function pushUnique(accumulator: string[], value: string | undefined) {
   if (!accumulator.some((item) => item.toLowerCase() === value.toLowerCase())) {
     accumulator.push(value);
   }
+}
+
+export function getBusinessDescriptionServiceHighlights(
+  business: Business,
+  locale: Locale,
+  limit = 3,
+  existingHighlights: string[] = []
+): string[] {
+  const highlights = [...existingHighlights];
+  const descriptionText = [business.shortDescription.en, business.description.en].join(' ');
+
+  for (const item of DESCRIPTION_SERVICE_PATTERNS) {
+    if (item.pattern.test(descriptionText)) {
+      pushUnique(highlights, t(item.label, locale));
+    }
+    if (highlights.length >= limit) {
+      return highlights.slice(0, limit);
+    }
+  }
+
+  return highlights.slice(0, limit);
 }
 
 export function getBusinessHoursPreview(hours: Business['hours'], locale: Locale, limit = 2): HoursPreview {
@@ -199,21 +233,14 @@ export function getBusinessServiceHighlights(
   const highlights: string[] = [];
 
   for (const service of business.services) {
-    pushUnique(highlights, cleanStructuredServiceLabel(service, business, locale));
+    pushUnique(
+      highlights,
+      formatBusinessServiceHighlightLabel(business, service.en, t(service, locale))
+    );
     if (highlights.length >= limit) {
       return highlights.slice(0, limit);
     }
   }
 
-  const descriptionText = [business.shortDescription.en, business.description.en].join(' ');
-  for (const item of DESCRIPTION_SERVICE_PATTERNS) {
-    if (item.pattern.test(descriptionText)) {
-      pushUnique(highlights, t(item.label, locale));
-    }
-    if (highlights.length >= limit) {
-      return highlights.slice(0, limit);
-    }
-  }
-
-  return highlights.slice(0, limit);
+  return getBusinessDescriptionServiceHighlights(business, locale, limit, highlights);
 }

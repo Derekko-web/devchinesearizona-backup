@@ -21,8 +21,15 @@ import {
   getEntityReportCount,
   getModerationReports,
 } from '@/lib/runtime-store';
+import {
+  getPublishedRadarArticlesAsArticlesAsync,
+  radarArticleToArticle,
+  getRadarArticleBySlugAsync,
+} from '@/lib/radar';
 import type {
   Article,
+  ArticleArchiveBucket,
+  ArticleSeries,
   Business,
   BusinessCategory,
   CommunityPost,
@@ -32,8 +39,10 @@ import type {
   Locale,
   Profile,
   Review,
+  SourcePolicy,
   SortOption,
 } from '@/lib/types';
+import { compareMostPopularDirectoryBusinesses } from '@/lib/directory-highlights';
 
 type BusinessFilters = {
   q?: string;
@@ -45,7 +54,31 @@ type BusinessFilters = {
   sort?: SortOption;
 };
 
+export type ArticleArchiveSearchParams = {
+  bucket?: string;
+  series?: string;
+  sourcePolicy?: string;
+  year?: string;
+  month?: string;
+  page?: string;
+};
+
+export type ResolvedArticleArchiveFilters = {
+  bucket: ArticleArchiveBucket;
+  series?: ArticleSeries;
+  sourcePolicy?: SourcePolicy;
+  year?: number;
+  month?: number;
+  page: number;
+};
+
 const GENERATED_IMPORTED_ARTICLES_PATH = path.join(process.cwd(), 'src', 'data', 'generated-imported-articles.json');
+const communityTrendingArticleSlugs = [
+  'tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure',
+  'phoenix-route-watch-asia-connector-playbook',
+  'trend-radar-what-phoenix-food-posts-keep-highlighting',
+  'restaurant-opening-radar-east-valley-plaza-shifts',
+] as const;
 
 let importedArticlesCache:
   | {
@@ -82,6 +115,77 @@ function readImportedArticles(): Article[] {
 
 function getAllArticles(): Article[] {
   return [...localArticles, ...readImportedArticles()];
+}
+
+function sortArticlesNewestFirst(articles: Article[]): Article[] {
+  return articles
+    .slice()
+    .sort(
+      (left, right) =>
+        new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime()
+    );
+}
+
+function isArticleSeries(value: string): value is ArticleSeries {
+  return (
+    value === 'housing-watch' ||
+    value === 'tsmc-corridor-watch' ||
+    value === 'route-watch' ||
+    value === 'restaurant-opening-radar' ||
+    value === 'trend-radar' ||
+    value === 'arizona-radar' ||
+    value === 'community-wire'
+  );
+}
+
+function isSourcePolicy(value: string): value is SourcePolicy {
+  return (
+    value === 'summary_link' ||
+    value === 'signal_only' ||
+    value === 'republish_with_permission'
+  );
+}
+
+function parseArchiveNumber(
+  value: string | undefined,
+  options: {
+    minimum: number;
+    maximum?: number;
+  }
+): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return undefined;
+  }
+
+  const integer = Math.floor(parsed);
+  if (integer < options.minimum) {
+    return undefined;
+  }
+
+  if (typeof options.maximum === 'number' && integer > options.maximum) {
+    return undefined;
+  }
+
+  return integer;
+}
+
+function articlePublishedParts(article: Article) {
+  const date = new Date(article.publishedAt);
+  return {
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+  };
+}
+
+function getArticlesForArchiveBucket(bucket: ArticleArchiveBucket): Article[] {
+  return bucket === 'legacy'
+    ? sortArticlesNewestFirst(readImportedArticles())
+    : sortArticlesNewestFirst(localArticles);
 }
 
 function normalize(value: string): string {
@@ -159,6 +263,11 @@ export function getBusinesses(locale: Locale, filters: BusinessFilters = {}): Bu
       return new Date(right.lastUpdated).getTime() - new Date(left.lastUpdated).getTime();
     }
 
+    const mostPopularDelta = compareMostPopularDirectoryBusinesses(left, right);
+    if (mostPopularDelta !== 0) {
+      return mostPopularDelta;
+    }
+
     const featuredDelta = Number(right.featured) - Number(left.featured);
     if (featuredDelta !== 0) {
       return featuredDelta;
@@ -210,11 +319,73 @@ export function getGuideBySlug(slug: string): Guide | undefined {
 }
 
 export function getArticles(limit?: number): Article[] {
-  const sortedArticles = getAllArticles().sort(
-    (left, right) => new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime()
-  );
+  const sortedArticles = sortArticlesNewestFirst(getAllArticles());
 
   return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
+}
+
+export async function getArticlesAsync(limit?: number): Promise<Article[]> {
+  const sortedArticles = sortArticlesNewestFirst([
+    ...getAllArticles(),
+    ...(await getPublishedRadarArticlesAsArticlesAsync()),
+  ]);
+
+  return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
+}
+
+export function getCurrentArticles(limit?: number): Article[] {
+  const articles = getArticlesForArchiveBucket('current');
+  return typeof limit === 'number' ? articles.slice(0, limit) : articles;
+}
+
+export async function getCurrentArticlesAsync(limit?: number): Promise<Article[]> {
+  const articles = sortArticlesNewestFirst([
+    ...getArticlesForArchiveBucket('current'),
+    ...(await getPublishedRadarArticlesAsArticlesAsync()),
+  ]);
+
+  return typeof limit === 'number' ? articles.slice(0, limit) : articles;
+}
+
+export function getLegacyArticles(limit?: number): Article[] {
+  const articles = getArticlesForArchiveBucket('legacy');
+  return typeof limit === 'number' ? articles.slice(0, limit) : articles;
+}
+
+export function getCommunityTrendingArticles(limit = communityTrendingArticleSlugs.length): Article[] {
+  const prioritized = communityTrendingArticleSlugs
+    .map((slug) => getArticleBySlug(slug))
+    .filter((article): article is Article => Boolean(article));
+  const seen = new Set<string>();
+
+  return [...prioritized, ...getCurrentArticles()].filter((article) => {
+    if (seen.has(article.slug)) {
+      return false;
+    }
+
+    seen.add(article.slug);
+    return true;
+  }).slice(0, limit);
+}
+
+export async function getCommunityTrendingArticlesAsync(
+  limit = communityTrendingArticleSlugs.length
+): Promise<Article[]> {
+  const prioritized = (
+    await Promise.all(communityTrendingArticleSlugs.map((slug) => getArticleBySlugAsync(slug)))
+  ).filter((article): article is Article => Boolean(article));
+  const seen = new Set<string>();
+
+  return [...prioritized, ...(await getCurrentArticlesAsync())]
+    .filter((article) => {
+      if (seen.has(article.slug)) {
+        return false;
+      }
+
+      seen.add(article.slug);
+      return true;
+    })
+    .slice(0, limit);
 }
 
 export function getArticlePage(page: number, pageSize: number) {
@@ -234,8 +405,177 @@ export function getArticlePage(page: number, pageSize: number) {
   };
 }
 
+export function resolveArticleArchiveFilters(
+  searchParams?: ArticleArchiveSearchParams
+): ResolvedArticleArchiveFilters {
+  const bucket: ArticleArchiveBucket =
+    searchParams?.bucket === 'legacy' ? 'legacy' : 'current';
+  const year = parseArchiveNumber(searchParams?.year, { minimum: 2000, maximum: 2100 });
+  const month = year
+    ? parseArchiveNumber(searchParams?.month, { minimum: 1, maximum: 12 })
+    : undefined;
+  const page = parseArchiveNumber(searchParams?.page, { minimum: 1 }) ?? 1;
+
+  return {
+    bucket,
+    series:
+      searchParams?.series && isArticleSeries(searchParams.series)
+        ? searchParams.series
+        : undefined,
+    sourcePolicy:
+      searchParams?.sourcePolicy && isSourcePolicy(searchParams.sourcePolicy)
+        ? searchParams.sourcePolicy
+        : undefined,
+    year,
+    month,
+    page,
+  };
+}
+
+export function getArticleArchivePage(
+  searchParams?: ArticleArchiveSearchParams,
+  pageSize = 24
+) {
+  const filters = resolveArticleArchiveFilters(searchParams);
+  const normalizedPageSize = Math.max(1, pageSize);
+  const bucketArticles = getArticlesForArchiveBucket(filters.bucket);
+  const availableYears = Array.from(
+    new Set(bucketArticles.map((article) => articlePublishedParts(article).year))
+  ).sort((left, right) => right - left);
+  const availableMonths = filters.year
+    ? Array.from(
+        new Set(
+          bucketArticles
+            .filter((article) => articlePublishedParts(article).year === filters.year)
+            .map((article) => articlePublishedParts(article).month)
+        )
+      ).sort((left, right) => left - right)
+    : [];
+
+  const filteredArticles = bucketArticles.filter((article) => {
+    if (filters.series && article.series !== filters.series) {
+      return false;
+    }
+
+    if (filters.sourcePolicy && article.sourcePolicy !== filters.sourcePolicy) {
+      return false;
+    }
+
+    const publishedParts = articlePublishedParts(article);
+    if (filters.year && publishedParts.year !== filters.year) {
+      return false;
+    }
+
+    if (filters.month && publishedParts.month !== filters.month) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const totalCount = filteredArticles.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / normalizedPageSize));
+  const currentPage = Math.min(Math.max(1, filters.page), totalPages);
+  const startIndex = (currentPage - 1) * normalizedPageSize;
+
+  return {
+    articles: filteredArticles.slice(startIndex, startIndex + normalizedPageSize),
+    currentPage,
+    pageSize: normalizedPageSize,
+    totalCount,
+    totalPages,
+    filters: {
+      ...filters,
+      page: currentPage,
+    },
+    availableYears,
+    availableMonths,
+  };
+}
+
+export async function getArticleArchivePageAsync(
+  searchParams?: ArticleArchiveSearchParams,
+  pageSize = 24
+) {
+  const filters = resolveArticleArchiveFilters(searchParams);
+  const normalizedPageSize = Math.max(1, pageSize);
+  const bucketArticles =
+    filters.bucket === 'legacy'
+      ? sortArticlesNewestFirst(readImportedArticles())
+      : sortArticlesNewestFirst([
+          ...getArticlesForArchiveBucket('current'),
+          ...(await getPublishedRadarArticlesAsArticlesAsync()),
+        ]);
+  const availableYears = Array.from(
+    new Set(bucketArticles.map((article) => articlePublishedParts(article).year))
+  ).sort((left, right) => right - left);
+  const availableMonths = filters.year
+    ? Array.from(
+        new Set(
+          bucketArticles
+            .filter((article) => articlePublishedParts(article).year === filters.year)
+            .map((article) => articlePublishedParts(article).month)
+        )
+      ).sort((left, right) => left - right)
+    : [];
+
+  const filteredArticles = bucketArticles.filter((article) => {
+    if (filters.series && article.series !== filters.series) {
+      return false;
+    }
+
+    if (filters.sourcePolicy && article.sourcePolicy !== filters.sourcePolicy) {
+      return false;
+    }
+
+    const publishedParts = articlePublishedParts(article);
+    if (filters.year && publishedParts.year !== filters.year) {
+      return false;
+    }
+
+    if (filters.month && publishedParts.month !== filters.month) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const totalCount = filteredArticles.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / normalizedPageSize));
+  const currentPage = Math.min(Math.max(1, filters.page), totalPages);
+  const startIndex = (currentPage - 1) * normalizedPageSize;
+
+  return {
+    articles: filteredArticles.slice(startIndex, startIndex + normalizedPageSize),
+    currentPage,
+    pageSize: normalizedPageSize,
+    totalCount,
+    totalPages,
+    filters: {
+      ...filters,
+      page: currentPage,
+    },
+    availableYears,
+    availableMonths,
+  };
+}
+
 export function getArticleBySlug(slug: string): Article | undefined {
   return getAllArticles().find((article) => article.slug === slug);
+}
+
+export async function getArticleBySlugAsync(slug: string): Promise<Article | undefined> {
+  const radarArticle = await getRadarArticleBySlugAsync(slug);
+  if (radarArticle?.isPublished) {
+    return radarArticleToArticle(radarArticle);
+  }
+
+  return getArticleBySlug(slug);
+}
+
+export function isLegacyArticle(articleOrSlug: Article | string): boolean {
+  const slug = typeof articleOrSlug === 'string' ? articleOrSlug : articleOrSlug.slug;
+  return readImportedArticles().some((article) => article.slug === slug);
 }
 
 export function getEvents(): Event[] {

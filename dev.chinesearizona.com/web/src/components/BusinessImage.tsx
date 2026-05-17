@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import { CategoryIcon } from '@/components/CategoryIcon';
 import type { BusinessCategory, Locale } from '@/lib/types';
 
@@ -9,6 +11,7 @@ type BusinessImageProps = {
   className?: string;
   sizes?: string;
   priority?: boolean;
+  style?: CSSProperties;
 };
 
 export function BusinessImage({
@@ -19,6 +22,7 @@ export function BusinessImage({
   className = '',
   sizes = '100vw',
   priority = false,
+  style,
 }: BusinessImageProps) {
   if (imageUrl) {
     return (
@@ -31,6 +35,7 @@ export function BusinessImage({
         referrerPolicy="no-referrer"
         sizes={sizes}
         className={`h-full w-full ${className || 'object-cover'}`}
+        style={style}
       />
     );
   }

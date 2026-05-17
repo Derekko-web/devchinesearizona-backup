@@ -1,4 +1,10 @@
 import { businessCategories, businesses as fixtureBusinesses } from '@/data/platform-data';
+import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
+import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
+import {
+  compareMostPopularDirectoryBusinesses,
+  MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS,
+} from '@/lib/directory-highlights';
 import type {
   Business,
   BusinessCategory,
@@ -8,7 +14,8 @@ import type {
   VerificationState,
 } from '@/lib/types';
 import { formatPhoneNumber } from '@/lib/phone';
-import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase';
+import { getDirectoryAiReplacementImage } from '@/lib/directory-ai-replacements';
+import { getSupabaseClient, getSupabaseServiceClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export type DirectoryFilters = {
   q?: string;
@@ -26,6 +33,15 @@ type DirectoryQueryOptions = {
   excludeSlug?: string;
   includeNonPublic?: boolean;
   limit?: number;
+  usePaidPromotion?: boolean;
+};
+
+export type DirectoryPage = {
+  businesses: Business[];
+  currentPage: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
 };
 
 type DirectoryCategoryRow = {
@@ -85,6 +101,7 @@ type DirectoryBusinessRow = {
   status?: DirectoryStatus | null;
   verification_state?: VerificationState | null;
   category?: DirectoryCategoryRow | DirectoryCategoryRow[] | null;
+  owner_profile?: { slug?: string | null } | Array<{ slug?: string | null }> | null;
 };
 
 export const launchCities = ['Phoenix', 'Chandler', 'Tempe', 'Mesa', 'Gilbert', 'Scottsdale'] as const;
@@ -97,6 +114,7 @@ export const launchCategoryShortcuts = [
 ] as const;
 
 const FEATURED_HOME_THRESHOLD = 4;
+const DIRECTORY_PAGE_FETCH_LIMIT = 1000;
 const SEARCH_DOMINANT_TOTAL_THRESHOLD = 100;
 const SEARCH_DOMINANT_CATEGORY_THRESHOLD = 5;
 type Coordinates = NonNullable<Business['coordinates']>;
@@ -142,6 +160,9 @@ const BASE_DIRECTORY_SELECT_FIELDS = `
   last_updated,
   status,
   verification_state,
+  owner_profile:profiles!businesses_owner_profile_id_fkey (
+    slug
+  ),
   category:business_categories!inner (
     slug,
     name_en,
@@ -161,6 +182,10 @@ const DIRECTORY_SELECT_FIELDS = `
 
 function normalize(value?: string | null): string {
   return value?.trim().toLowerCase() ?? '';
+}
+
+function getDirectoryDbClient() {
+  return getSupabaseServiceClient() ?? getSupabaseClient();
 }
 
 const arizonaTimeFormatter = new Intl.DateTimeFormat('en-US', {
@@ -467,7 +492,35 @@ function getDistanceReferencePoint(
   };
 }
 
-function compareFeaturedSignals(left: Business, right: Business): number {
+export function compareFeaturedSignals(left: Business, right: Business, usePaidPromotion = false): number {
+  const mostPopularDelta = compareMostPopularDirectoryBusinesses(left, right);
+  if (mostPopularDelta !== 0) {
+    return mostPopularDelta;
+  }
+
+  if (usePaidPromotion) {
+    const leftPaidCampaign = left.activeDirectoryAdCampaign;
+    const rightPaidCampaign = right.activeDirectoryAdCampaign;
+    const paidCampaignDelta = Number(Boolean(rightPaidCampaign)) - Number(Boolean(leftPaidCampaign));
+    if (paidCampaignDelta !== 0) {
+      return paidCampaignDelta;
+    }
+
+    if (leftPaidCampaign && rightPaidCampaign) {
+      const remainingBudgetDelta =
+        rightPaidCampaign.remainingBudgetCents - leftPaidCampaign.remainingBudgetCents;
+      if (remainingBudgetDelta !== 0) {
+        return remainingBudgetDelta;
+      }
+
+      const activationDelta =
+        new Date(rightPaidCampaign.startsAt).getTime() - new Date(leftPaidCampaign.startsAt).getTime();
+      if (activationDelta !== 0) {
+        return activationDelta;
+      }
+    }
+  }
+
   const featuredDelta = Number(right.featured) - Number(left.featured);
   if (featuredDelta !== 0) {
     return featuredDelta;
@@ -479,7 +532,9 @@ function compareFeaturedSignals(left: Business, right: Business): number {
     return trustedDelta;
   }
 
-  const sponsoredDelta = Number(right.sponsored) - Number(left.sponsored);
+  const sponsoredDelta =
+    Number(Boolean(right.legacySponsored ?? right.sponsored)) -
+    Number(Boolean(left.legacySponsored ?? left.sponsored));
   if (sponsoredDelta !== 0) {
     return sponsoredDelta;
   }
@@ -511,6 +566,16 @@ function categoryFromRow(row: DirectoryBusinessRow): BusinessCategory | undefine
   return category ? toCategoryRecord(category) : undefined;
 }
 
+function ownerProfileSlugFromRow(row: DirectoryBusinessRow): string | undefined {
+  if (!row.owner_profile) {
+    return undefined;
+  }
+
+  const ownerProfile = Array.isArray(row.owner_profile) ? row.owner_profile[0] : row.owner_profile;
+  const slug = ownerProfile?.slug?.trim();
+  return slug || undefined;
+}
+
 function fixtureBusinessesEnabled(): boolean {
   return (
     process.env.DIRECTORY_USE_FIXTURES === '1' ||
@@ -520,14 +585,15 @@ function fixtureBusinessesEnabled(): boolean {
 }
 
 function mapFixtureBusiness(business: Business): Business {
-  return {
+  return applyBusinessDirectoryOverride({
     ...business,
+    legacySponsored: business.legacySponsored ?? business.sponsored,
     serviceAreaText: business.serviceAreaText,
     phone: formatPhoneNumber(business.phone),
-    heroImage: business.heroImage,
+    heroImage: getDirectoryAiReplacementImage(business.slug, business.heroImage),
     status: business.status ?? 'live',
     verificationState: business.verificationState ?? (business.verified ? 'editor_verified' : 'unverified'),
-  };
+  });
 }
 
 function mapFixtureCategory(slug: string): BusinessCategory | undefined {
@@ -539,7 +605,7 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
   const website = row.website ?? undefined;
   const verificationState = row.verification_state ?? (row.verified ? 'editor_verified' : 'unverified');
 
-  return {
+  return applyBusinessDirectoryOverride({
     id: row.id,
     slug: row.slug,
     name: {
@@ -555,7 +621,7 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
     email: row.email ?? undefined,
     website,
     menuUrl: row.menu_url ?? undefined,
-    heroImage: row.hero_image ?? undefined,
+    heroImage: getDirectoryAiReplacementImage(row.slug, row.hero_image ?? undefined),
     gallery: row.gallery ?? [],
     shortDescription: {
       en: row.short_description_en ?? row.description_en ?? row.name_en,
@@ -572,8 +638,9 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
     bilingual: row.bilingual ?? Boolean(row.languages?.some((item) => /mandarin|chinese|taiwanese/i.test(item))),
     newcomerFriendly: row.newcomer_friendly ?? false,
     sponsored: row.sponsored ?? false,
+    legacySponsored: row.sponsored ?? false,
     featured: row.featured ?? false,
-    ownerProfileSlug: undefined,
+    ownerProfileSlug: ownerProfileSlugFromRow(row),
     rating: parseNumber(row.rating) ?? 0,
     reviewCount: row.review_count ?? 0,
     priceRange: row.price_range ?? undefined,
@@ -588,7 +655,7 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
             lng: parseNumber(row.lng) ?? 0,
           }
         : undefined,
-  };
+  });
 }
 
 export function hasPlaceholderDomain(url?: string | null): boolean {
@@ -617,12 +684,17 @@ export function hasPlaceholderPhone(phone?: string | null): boolean {
 export function hasPublicContactMethod(business: Business): boolean {
   return Boolean(
     (business.phone && !hasPlaceholderPhone(business.phone)) ||
-      (business.website && !hasPlaceholderDomain(business.website))
+      (business.website && !hasPlaceholderDomain(business.website)) ||
+      business.email?.trim()
   );
 }
 
 export function hasPublicLocation(business: Business): boolean {
-  return Boolean(business.address || business.serviceAreaText);
+  return Boolean(
+    business.address ||
+      business.serviceAreaText ||
+      (business.verificationState === 'claimed' && business.city.trim())
+  );
 }
 
 export function isPublicDirectoryBusiness(business: Business): boolean {
@@ -648,8 +720,11 @@ export function isPublicDirectoryBusiness(business: Business): boolean {
 export function qualifiesForHomepageFeature(business: Business): boolean {
   return (
     (business.status ?? 'pending_review') === 'live' &&
-    hasPublicContactMethod(business) &&
-    hasPublicLocation(business) &&
+    Boolean(
+      (business.phone && !hasPlaceholderPhone(business.phone)) ||
+        (business.website && !hasPlaceholderDomain(business.website))
+    ) &&
+    Boolean(business.address || business.serviceAreaText) &&
     (business.verificationState === 'claimed' || business.verificationState === 'editor_verified')
   );
 }
@@ -658,7 +733,10 @@ function sortBusinesses(
   left: Business,
   right: Business,
   sort: SortOption,
-  referencePoint?: Coordinates
+  referencePoint?: Coordinates,
+  options: {
+    usePaidPromotion?: boolean;
+  } = {}
 ): number {
   if (sort === 'distance' && referencePoint) {
     const leftDistance = left.coordinates ? getDistanceMiles(referencePoint, left.coordinates) : Number.POSITIVE_INFINITY;
@@ -702,7 +780,7 @@ function sortBusinesses(
     }
   }
 
-  const featuredSignalDelta = compareFeaturedSignals(left, right);
+  const featuredSignalDelta = compareFeaturedSignals(left, right, options.usePaidPromotion);
   if (featuredSignalDelta !== 0) {
     return featuredSignalDelta;
   }
@@ -719,6 +797,7 @@ type DirectorySupabaseQuery = {
   contains(column: string, value: readonly unknown[]): DirectorySupabaseQuery;
   eq(column: string, value: unknown): DirectorySupabaseQuery;
   gte(column: string, value: unknown): DirectorySupabaseQuery;
+  ilike(column: string, value: string): DirectorySupabaseQuery;
   in(column: string, values: readonly unknown[]): DirectorySupabaseQuery;
   limit(count: number): DirectorySupabaseQuery;
   neq(column: string, value: unknown): DirectorySupabaseQuery;
@@ -749,7 +828,7 @@ export function applyDirectoryQueryFilters<T extends DirectorySupabaseQuery>(
   }
 
   if (filters.city) {
-    nextQuery = nextQuery.eq('city', filters.city) as T;
+    nextQuery = nextQuery.ilike('city', filters.city) as T;
   }
 
   if (filters.category) {
@@ -861,8 +940,21 @@ function applyClientFilters(
   });
 
   return filtered
-    .sort((left, right) => sortBusinesses(left, right, sort, referencePoint))
+    .sort((left, right) => sortBusinesses(left, right, sort, referencePoint, options))
     .slice(0, options.limit);
+}
+
+function dedupeDirectoryBusinessRowsBySlug(rows: DirectoryBusinessRow[]): DirectoryBusinessRow[] {
+  const seen = new Set<string>();
+
+  return rows.filter((row) => {
+    if (seen.has(row.slug)) {
+      return false;
+    }
+
+    seen.add(row.slug);
+    return true;
+  });
 }
 
 async function runSupabaseBusinessQuery(
@@ -870,7 +962,7 @@ async function runSupabaseBusinessQuery(
   options: DirectoryQueryOptions,
   selectFields: string
 ): Promise<{ data: DirectoryBusinessRow[] | null; error: unknown }> {
-  const client = getSupabaseClient();
+  const client = getDirectoryDbClient();
   if (!client) {
     return { data: null, error: null };
   }
@@ -888,23 +980,76 @@ async function runSupabaseBusinessQuery(
   };
 }
 
-async function querySupabaseBusinesses(filters: DirectoryFilters, options: DirectoryQueryOptions = {}): Promise<Business[]> {
-  if (!getSupabaseClient()) {
-    return [];
+async function runSupabaseBusinessQueryWithFallback(
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Promise<DirectoryBusinessRow[] | null> {
+  let result = await runSupabaseBusinessQuery(filters, options, DIRECTORY_SELECT_FIELDS);
+  if (result.error || !result.data) {
+    result = await runSupabaseBusinessQuery(filters, options, BASE_DIRECTORY_SELECT_FIELDS);
   }
 
-  let { data, error } = await runSupabaseBusinessQuery(filters, options, DIRECTORY_SELECT_FIELDS);
-  if (error || !data) {
-    const legacyResult = await runSupabaseBusinessQuery(filters, options, BASE_DIRECTORY_SELECT_FIELDS);
-    data = legacyResult.data;
-    error = legacyResult.error;
+  return result.error || !result.data ? null : result.data;
+}
+
+async function querySupabaseMostPopularBusinesses(
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Promise<DirectoryBusinessRow[] | null> {
+  const client = getDirectoryDbClient();
+  if (!client) {
+    return null;
+  }
+  const activeClient = client;
+
+  async function runPriorityQuery(selectFields: string) {
+    let query = activeClient
+      .from('businesses')
+      .select(selectFields)
+      .in('slug', [...MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS]);
+
+    query = applyDirectoryQueryFilters(query, filters, options);
+    query = query.limit(MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS.length);
+
+    const { data, error } = await query;
+    return {
+      data: data as DirectoryBusinessRow[] | null,
+      error,
+    };
   }
 
-  if (error || !data) {
-    return [];
+  let result = await runPriorityQuery(DIRECTORY_SELECT_FIELDS);
+  if (result.error || !result.data) {
+    result = await runPriorityQuery(BASE_DIRECTORY_SELECT_FIELDS);
   }
 
-  return applyClientFilters(data.map(rowToBusiness), filters, options);
+  return result.error || !result.data ? null : result.data;
+}
+
+async function querySupabaseBusinesses(
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Promise<Business[] | null> {
+  if (!getDirectoryDbClient()) {
+    return null;
+  }
+
+  const data = await runSupabaseBusinessQueryWithFallback(filters, options);
+  if (!data) {
+    return null;
+  }
+
+  const mostPopularRows = await querySupabaseMostPopularBusinesses(filters, options);
+  const mergedRows = dedupeDirectoryBusinessRowsBySlug([
+    ...(mostPopularRows ?? []),
+    ...data,
+  ]);
+
+  return applyClientFilters(
+    await attachActiveDirectoryAdCampaigns(mergedRows.map(rowToBusiness)),
+    filters,
+    options
+  );
 }
 
 function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQueryOptions = {}): Business[] {
@@ -977,7 +1122,7 @@ function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQue
   });
 
   return filtered
-    .sort((left, right) => sortBusinesses(left, right, sort, referencePoint))
+    .sort((left, right) => sortBusinesses(left, right, sort, referencePoint, options))
     .slice(0, options.limit);
 }
 
@@ -990,11 +1135,38 @@ export async function getDirectoryBusinesses(
   }
 
   const results = await querySupabaseBusinesses(filters, options);
-  if (results.length > 0 || getSupabaseClient()) {
+  if (results) {
     return results;
   }
 
   return queryFixtureBusinesses(filters, options);
+}
+
+export async function getDirectoryPage(
+  filters: DirectoryFilters = {},
+  page = 1,
+  pageSize = 24,
+  options: DirectoryQueryOptions = {}
+): Promise<DirectoryPage> {
+  const normalizedPageSize = Math.max(1, Math.floor(pageSize));
+  const requestedPage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+  // Public-directory gating still happens client-side, so we page after loading the filtered set.
+  const businesses = await getDirectoryBusinesses(filters, {
+    ...options,
+    limit: DIRECTORY_PAGE_FETCH_LIMIT,
+  });
+  const totalCount = businesses.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / normalizedPageSize));
+  const currentPage = Math.min(Math.max(1, requestedPage), totalPages);
+  const startIndex = (currentPage - 1) * normalizedPageSize;
+
+  return {
+    businesses: businesses.slice(startIndex, startIndex + normalizedPageSize),
+    currentPage,
+    pageSize: normalizedPageSize,
+    totalCount,
+    totalPages,
+  };
 }
 
 export async function getDirectoryBusinessBySlug(slug: string, options: DirectoryQueryOptions = {}): Promise<Business | undefined> {
@@ -1007,7 +1179,7 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
     return options.includeNonPublic || isPublicDirectoryBusiness(business) ? business : undefined;
   }
 
-  const client = getSupabaseClient();
+  const client = getDirectoryDbClient();
   if (client) {
     const initialResult = await client
       .from('businesses')
@@ -1029,7 +1201,7 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
     }
 
     if (!error && data) {
-      const business = rowToBusiness(data);
+      const [business] = await attachActiveDirectoryAdCampaigns([rowToBusiness(data)]);
       if (options.includeNonPublic || isPublicDirectoryBusiness(business)) {
         return business;
       }
@@ -1050,7 +1222,7 @@ export async function getDirectoryCategories(): Promise<BusinessCategory[]> {
     return businessCategories;
   }
 
-  const client = getSupabaseClient();
+  const client = getDirectoryDbClient();
   if (client) {
     const { data, error } = await client
       .from('business_categories')
@@ -1124,11 +1296,11 @@ export async function getDirectoryBusinessSlugs(): Promise<string[]> {
     return queryFixtureBusinesses({}, {}).map((business) => business.slug);
   }
 
-  const client = getSupabaseClient();
+  const client = getDirectoryDbClient();
   if (client) {
     const { data, error } = await client
       .from('businesses')
-      .select('slug, status, phone, website, address, service_area_text')
+      .select('slug, city, status, verification_state, phone, website, email, address, service_area_text')
       .in('status', ['live', 'stale']);
 
     if (!error && data) {
@@ -1138,7 +1310,7 @@ export async function getDirectoryBusinessSlugs(): Promise<string[]> {
             ...row,
             id: row.slug,
             name_en: row.slug,
-            city: '',
+            city: row.city ?? '',
           } as DirectoryBusinessRow)
         )
         .filter(isPublicDirectoryBusiness)

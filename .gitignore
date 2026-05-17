@@ -39,3 +39,23 @@ chinesearizona.com/public/wp-content/backup-db/
 
 # IMPORTANT: Never commit the wp-config file (contains DB passwords!)
 chinesearizona.com/public/wp-config.php
+
+# ----------------------------------------------------------------------
+# 4. ADDITIONAL DOMAIN ROOTS & GENERATED SERVER ARTIFACTS
+# ----------------------------------------------------------------------
+chineseaustin.com/
+chineselosangeles.com/
+chinesesfbay.com/
+lachinesenews.com/
+phoenixchinesenews.com/
+phoenixchineserealestate.com/
+phoenixhouses4rent.com/
+section8arizona.com/
+ops/generated/
+
+# Main-domain deployment copy; source of truth lives in dev.chinesearizona.com/web.
+chinesearizona.com/app/
+
+# Local runtime/generated state.
+dev.chinesearizona.com/skills-lock.json
+dev.chinesearizona.com/web/data/radar-runtime/

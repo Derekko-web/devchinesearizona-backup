@@ -80,6 +80,16 @@
     "destinationSurface": "community_news"
   },
   {
+    "slug": "tiktok-arizona-travel",
+    "name": "TikTok Arizona Travel Hub",
+    "url": "https://www.tiktok.com/travel/Arizona-22535865260516610",
+    "sourceType": "social_signal",
+    "personaTargets": ["local_families", "students", "tsmc_newcomers"],
+    "allowedUse": "signal_only",
+    "cadence": "daily",
+    "destinationSurface": "discover_arizona"
+  },
+  {
     "slug": "tiktok-phoenix-apartments",
     "name": "TikTok Phoenix Apartments Tag",
     "url": "https://www.tiktok.com/tag/phoenixapartments",

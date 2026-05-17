@@ -1,18 +1,10 @@
-import { directoryMetadata } from '@/lib/page-metadata';
-import { DirectoryPageView } from '@/views/site-pages';
+import { homeMetadata } from '@/lib/page-metadata';
+import { HomePageView } from '@/views/home-page';
 
-export const metadata = directoryMetadata('en', '/');
+export async function generateMetadata() {
+  return homeMetadata('en');
+}
 
-type PageProps = {
-  searchParams: Promise<{
-    q?: string;
-    city?: string;
-    category?: string;
-    minRating?: string;
-    sort?: string;
-  }>;
-};
-
-export default async function Page({ searchParams }: PageProps) {
-  return <DirectoryPageView locale="en" searchParams={await searchParams} />;
+export default function Page() {
+  return <HomePageView locale="en" />;
 }

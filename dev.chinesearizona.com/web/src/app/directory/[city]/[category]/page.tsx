@@ -1,7 +1,4 @@
-import { notFound } from 'next/navigation';
-
-import { cityCategoryMetadata } from '@/lib/page-metadata';
-import { CityCategoryPageView } from '@/views/site-pages';
+import { permanentRedirect } from 'next/navigation';
 
 type PageProps = {
   params: Promise<{
@@ -10,17 +7,7 @@ type PageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: PageProps) {
-  const { city, category } = await params;
-  return cityCategoryMetadata('en', city, category) ?? {};
-}
-
 export default async function Page({ params }: PageProps) {
   const { city, category } = await params;
-  const rendered = await CityCategoryPageView({ locale: 'en', city, category });
-  if (!rendered) {
-    notFound();
-  }
-
-  return rendered;
+  permanentRedirect(`/business/${city}/${category}`);
 }

@@ -8,7 +8,7 @@ from datetime import UTC, datetime
 from html import unescape
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlencode
+from urllib.parse import unquote, urlencode
 
 PER_PAGE = 100
 SOURCE_NAME = "Sunbird Arizona"
@@ -168,8 +168,9 @@ def _slugify(value: str) -> str:
 
 def _build_slug(post: dict[str, Any]) -> str:
     raw_slug = str(post.get("slug") or "").strip()
+    decoded_slug = unescape(unquote(raw_slug))
     title = _strip_tags(post.get("title", {}).get("rendered", "")) or f"article-{post['id']}"
-    slug_base = title if not raw_slug or NUMERIC_SLUG_PATTERN.fullmatch(raw_slug) else raw_slug
+    slug_base = title if not decoded_slug or NUMERIC_SLUG_PATTERN.fullmatch(decoded_slug) else decoded_slug
     return _slugify(f"{slug_base}-{post['id']}")
 
 

@@ -3,6 +3,7 @@ import type { DirectoryStatus, Locale, VerificationState } from '@/lib/types';
 
 type TrustBadgesProps = {
   locale: Locale;
+  mostPopular?: boolean;
   verified?: boolean;
   bilingual?: boolean;
   sponsored?: boolean;
@@ -12,7 +13,8 @@ type TrustBadgesProps = {
 
 function copy(locale: Locale) {
   return {
-    sponsored: locale === 'zh' ? '精選推薦' : 'Featured',
+    mostPopular: locale === 'zh' ? '人氣熱門' : 'Most Popular',
+    sponsored: locale === 'zh' ? '贊助' : 'Sponsored',
     verified: locale === 'zh' ? '已驗證' : 'Verified',
     bilingual: locale === 'zh' ? '雙語服務' : 'Bilingual',
   };
@@ -20,6 +22,7 @@ function copy(locale: Locale) {
 
 export function TrustBadges({
   locale,
+  mostPopular,
   verified,
   bilingual,
   sponsored,
@@ -30,6 +33,11 @@ export function TrustBadges({
 
   return (
     <div className="flex flex-wrap gap-2">
+      {mostPopular ? (
+        <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+          {labels.mostPopular}
+        </span>
+      ) : null}
       {sponsored ? (
         <span className="inline-flex items-center rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
           {labels.sponsored}

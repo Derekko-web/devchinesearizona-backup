@@ -1,15 +1,29 @@
-import { communityNewsMetadata } from '@/lib/page-metadata';
-import { NewsArchivePageView } from '@/views/site-pages';
+import { permanentRedirect } from 'next/navigation';
 
-export const metadata = communityNewsMetadata('en');
-export const dynamic = 'force-dynamic';
+import { getArizonaNewsArchivePath } from '@/lib/arizona-news';
 
 type PageProps = {
   searchParams: Promise<{
+    bucket?: string;
+    series?: string;
+    sourcePolicy?: string;
+    year?: string;
+    month?: string;
     page?: string;
   }>;
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page({ searchParams }: PageProps) {
-  return await NewsArchivePageView({ locale: 'en', searchParams: await searchParams });
+  const resolvedSearchParams = await searchParams;
+  const search = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(resolvedSearchParams)) {
+    if (typeof value === 'string' && value.length > 0) {
+      search.set(key, value);
+    }
+  }
+
+  permanentRedirect(getArizonaNewsArchivePath(search.toString()));
 }

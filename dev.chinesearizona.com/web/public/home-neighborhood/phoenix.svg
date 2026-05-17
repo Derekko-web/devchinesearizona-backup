@@ -1,0 +1,23 @@
+<svg width="720" height="240" viewBox="0 0 720 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="240" rx="28" fill="#C39871"/>
+  <rect width="720" height="157" fill="url(#phoenix-sky)"/>
+  <ellipse cx="129" cy="49" rx="96" ry="24" fill="#FFF2DD" opacity="0.38"/>
+  <path d="M0 179C63 156 123 142 184 129C240 118 292 116 349 103C400 92 445 72 492 64C530 58 566 62 599 78C642 99 675 134 720 179V240H0V179Z" fill="#7C4B39"/>
+  <path d="M169 158C193 127 216 96 244 73C272 50 300 37 331 35C361 34 387 45 410 69C431 91 450 121 467 158H169Z" fill="#9F6044"/>
+  <path d="M0 191C57 183 109 181 162 181C222 181 273 190 332 190C392 190 446 178 508 178C575 178 634 188 720 203V240H0V191Z" fill="#AA805E"/>
+  <path d="M0 210C53 206 97 199 147 199C205 199 257 208 315 208C375 208 427 195 487 195C561 195 625 208 720 220V240H0V210Z" fill="#87634B"/>
+  <path d="M0 225C66 225 123 214 189 214C244 214 291 223 346 223C410 223 470 212 535 212C597 212 651 221 720 230V240H0V225Z" fill="#684936"/>
+  <rect x="86" y="183" width="66" height="24" rx="2" fill="#D5B18A"/>
+  <rect x="158" y="176" width="84" height="31" rx="2" fill="#CAA076"/>
+  <rect x="250" y="181" width="52" height="26" rx="2" fill="#DCBF98"/>
+  <rect x="314" y="175" width="94" height="32" rx="2" fill="#C69A70"/>
+  <rect x="420" y="182" width="60" height="25" rx="2" fill="#D4B188"/>
+  <rect x="491" y="177" width="87" height="30" rx="2" fill="#C29A73"/>
+  <defs>
+    <linearGradient id="phoenix-sky" x1="360" y1="0" x2="360" y2="157" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#95B6D8"/>
+      <stop offset="0.55" stop-color="#A9C5E1"/>
+      <stop offset="1" stop-color="#E2C8A9"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -15,6 +15,7 @@ const articleImageHosts = [
   'img4.cache.netease.com',
   'img5.cache.netease.com',
   'jxo.idq.mybluehost.me',
+  'lh3.googleusercontent.com',
   'lh4.googleusercontent.com',
   'mail.google.com',
   'mmbiz.qlogo.cn',

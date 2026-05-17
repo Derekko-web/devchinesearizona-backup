@@ -64,21 +64,22 @@ describe('hidden arizona content', () => {
 });
 
 describe('hidden arizona seo surfaces', () => {
-  it('builds metadata for the hub and detail routes', () => {
+  it('builds metadata for the hub and detail routes', async () => {
     const hubMetadata = hiddenArizonaMetadata('en');
-    const detailMetadata = hiddenArizonaEntryMetadata('en', 'place', 'the-wave');
+    const detailMetadata = await hiddenArizonaEntryMetadata('en', 'place', 'the-wave');
 
     expect(hubMetadata.title).toBe('Hidden Arizona | ChineseArizona');
-    expect(detailMetadata?.alternates?.canonical).toBe('https://dev.chinesearizona.com/hidden-arizona/places/the-wave');
+    expect(detailMetadata?.alternates?.canonical).toBe('https://chinesearizona.com/hidden-arizona/places/the-wave');
   });
 
   it('adds hub and detail routes to the sitemap', async () => {
     const entries = await sitemap();
     const urls = entries.map((entry) => entry.url);
 
-    expect(urls).toContain('https://dev.chinesearizona.com/hidden-arizona');
-    expect(urls).toContain('https://dev.chinesearizona.com/en/hidden-arizona');
-    expect(urls).toContain('https://dev.chinesearizona.com/hidden-arizona/places/the-wave');
+    expect(urls).toContain('https://chinesearizona.com/hidden-arizona');
+    expect(urls).not.toContain('https://chinesearizona.com/en/hidden-arizona');
+    expect(urls).toContain('https://chinesearizona.com/zh/hidden-arizona');
+    expect(urls).toContain('https://chinesearizona.com/hidden-arizona/places/the-wave');
   });
 
   it('wires hidden arizona into navbar and footer navigation', () => {

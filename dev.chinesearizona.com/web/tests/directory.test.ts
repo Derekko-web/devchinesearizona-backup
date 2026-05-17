@@ -1,14 +1,17 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   applyDirectoryQueryFilters,
+  compareFeaturedSignals,
   countActiveDirectoryFilters,
+  getDirectoryPage,
   getBusinessHoursState,
   hasPlaceholderDomain,
   hasPlaceholderPhone,
   isPublicDirectoryBusiness,
   qualifiesForHomepageFeature,
 } from '@/lib/directory';
+import { directoryMetadata } from '@/lib/page-metadata';
 import type { Business } from '@/lib/types';
 
 function businessFixture(overrides: Partial<Business> = {}): Business {
@@ -69,6 +72,11 @@ class FakeDirectoryQuery {
     return this;
   }
 
+  ilike(column: string, value: string) {
+    this.calls.push({ method: 'ilike', args: [column, value] });
+    return this;
+  }
+
   in(column: string, values: readonly unknown[]) {
     this.calls.push({ method: 'in', args: [column, values] });
     return this;
@@ -102,6 +110,51 @@ class FakeDirectoryQuery {
   }
 }
 
+const originalNodeEnv = process.env.NODE_ENV;
+const originalSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const originalSupabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const originalSupabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+function setEnv(name: string, value?: string) {
+  const env = process.env as Record<string, string | undefined>;
+
+  if (value === undefined) {
+    delete env[name];
+    return;
+  }
+
+  env[name] = value;
+}
+
+afterEach(() => {
+  vi.resetModules();
+  vi.restoreAllMocks();
+
+  if (originalNodeEnv === undefined) {
+    setEnv('NODE_ENV');
+  } else {
+    setEnv('NODE_ENV', originalNodeEnv);
+  }
+
+  if (originalSupabaseUrl === undefined) {
+    setEnv('NEXT_PUBLIC_SUPABASE_URL');
+  } else {
+    setEnv('NEXT_PUBLIC_SUPABASE_URL', originalSupabaseUrl);
+  }
+
+  if (originalSupabasePublishableKey === undefined) {
+    setEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY');
+  } else {
+    setEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', originalSupabasePublishableKey);
+  }
+
+  if (originalSupabaseAnonKey === undefined) {
+    setEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  } else {
+    setEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', originalSupabaseAnonKey);
+  }
+});
+
 describe('directory trust gates', () => {
   it('rejects placeholder domains and 555 phone numbers', () => {
     expect(hasPlaceholderDomain('https://example.com/business')).toBe(true);
@@ -124,9 +177,24 @@ describe('directory trust gates', () => {
         businessFixture({
           phone: undefined,
           website: undefined,
+          email: undefined,
         })
       )
     ).toBe(false);
+
+    expect(
+      isPublicDirectoryBusiness(
+        businessFixture({
+          address: undefined,
+          serviceAreaText: undefined,
+          phone: undefined,
+          website: undefined,
+          email: 'owner@trustedtest.com',
+          verificationState: 'claimed',
+          verified: true,
+        })
+      )
+    ).toBe(true);
   });
 
   it('requires claimed or editor verified listings for homepage features', () => {
@@ -139,6 +207,19 @@ describe('directory trust gates', () => {
         })
       )
     ).toBe(true);
+    expect(
+      qualifiesForHomepageFeature(
+        businessFixture({
+          address: undefined,
+          serviceAreaText: undefined,
+          phone: undefined,
+          website: undefined,
+          email: 'owner@trustedtest.com',
+          verificationState: 'claimed',
+          verified: true,
+        })
+      )
+    ).toBe(false);
   });
 
   it('counts active filters including rating, status, and non-default sort values', () => {
@@ -211,7 +292,7 @@ describe('directory trust gates', () => {
     expect(query.calls).toEqual([
       { method: 'neq', args: ['slug', 'trusted-test-business'] },
       { method: 'in', args: ['status', ['live', 'stale']] },
-      { method: 'eq', args: ['city', 'Phoenix'] },
+      { method: 'ilike', args: ['city', 'Phoenix'] },
       { method: 'eq', args: ['category.slug', 'medical'] },
       { method: 'neq', args: ['verification_state', 'unverified'] },
       { method: 'contains', args: ['languages', ['Mandarin']] },
@@ -222,5 +303,156 @@ describe('directory trust gates', () => {
         args: ['search_document', 'family doctor', { config: 'simple', type: 'websearch' }],
       },
     ]);
+  });
+
+  it('prioritizes active paid campaigns ahead of legacy sponsored listings when paid promotion is enabled', () => {
+    const legacySponsored = businessFixture({
+      sponsored: true,
+      legacySponsored: true,
+      rating: 5,
+      reviewCount: 40,
+    });
+    const paidCampaign = businessFixture({
+      id: 'biz-paid',
+      slug: 'paid-campaign-business',
+      activeDirectoryAdCampaign: {
+        id: 'campaign-1',
+        businessId: 'biz-paid',
+        ownerProfileId: 'profile-1',
+        status: 'active',
+        budgetCents: 25_000,
+        remainingBudgetCents: 14_000,
+        costPerClickCents: 300,
+        scopeCity: 'Phoenix',
+        scopeCategory: 'real-estate',
+        startsAt: '2026-04-15T00:00:00.000Z',
+        endsAt: '2026-05-15T00:00:00.000Z',
+        createdAt: '2026-04-15T00:00:00.000Z',
+        updatedAt: '2026-04-15T00:00:00.000Z',
+      },
+      sponsored: true,
+      legacySponsored: false,
+      rating: 4.2,
+      reviewCount: 8,
+    });
+
+    expect(compareFeaturedSignals(paidCampaign, legacySponsored, true)).toBeLessThan(0);
+    expect(compareFeaturedSignals(legacySponsored, paidCampaign, true)).toBeGreaterThan(0);
+  });
+
+  it('keeps manually promoted most-popular listings ahead of paid and sponsored placements', () => {
+    const mostPopular = businessFixture({
+      id: 'biz-bido',
+      slug: 'bido-cafe',
+      name: { en: 'Bido Cafe' },
+      verificationState: 'claimed',
+    });
+    const paidCampaign = businessFixture({
+      id: 'biz-paid',
+      slug: 'paid-campaign-business',
+      activeDirectoryAdCampaign: {
+        id: 'campaign-1',
+        businessId: 'biz-paid',
+        ownerProfileId: 'profile-1',
+        status: 'active',
+        budgetCents: 25_000,
+        remainingBudgetCents: 14_000,
+        costPerClickCents: 300,
+        scopeCity: 'Phoenix',
+        scopeCategory: 'real-estate',
+        startsAt: '2026-04-15T00:00:00.000Z',
+        endsAt: '2026-05-15T00:00:00.000Z',
+        createdAt: '2026-04-15T00:00:00.000Z',
+        updatedAt: '2026-04-15T00:00:00.000Z',
+      },
+      sponsored: true,
+      legacySponsored: false,
+    });
+
+    expect(compareFeaturedSignals(mostPopular, paidCampaign, true)).toBeLessThan(0);
+    expect(compareFeaturedSignals(paidCampaign, mostPopular, true)).toBeGreaterThan(0);
+  });
+
+  it('paginates the public directory listing set', async () => {
+    const page = await getDirectoryPage({}, 2, 5);
+
+    expect(page.currentPage).toBe(2);
+    expect(page.pageSize).toBe(5);
+    expect(page.totalCount).toBeGreaterThan(5);
+    expect(page.businesses.length).toBe(Math.min(5, page.totalCount - 5));
+  });
+
+  it('falls back to fixture businesses when the Supabase query errors', async () => {
+    setEnv('NODE_ENV', 'development');
+    setEnv('NEXT_PUBLIC_SUPABASE_URL', 'https://example.supabase.co');
+    setEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', 'test-publishable-key');
+
+    const failingQuery = {
+      contains() {
+        return this;
+      },
+      eq() {
+        return this;
+      },
+      gte() {
+        return this;
+      },
+      ilike() {
+        return this;
+      },
+      in() {
+        return this;
+      },
+      limit() {
+        return this;
+      },
+      neq() {
+        return this;
+      },
+      order() {
+        return this;
+      },
+      textSearch() {
+        return this;
+      },
+      data: null,
+      error: {
+        message: 'relation "public.businesses" does not exist',
+      },
+    };
+
+    vi.doMock('@/lib/supabase', () => ({
+      getSupabaseClient: () => ({
+        from: () => ({
+          select: () => failingQuery,
+        }),
+      }),
+      getSupabaseServiceClient: () => null,
+      isSupabaseConfigured: () => true,
+    }));
+
+    const { getDirectoryBusinesses: getReloadedDirectoryBusinesses } = await import('@/lib/directory');
+    const businesses = await getReloadedDirectoryBusinesses();
+
+    expect(businesses.length).toBeGreaterThan(200);
+  });
+
+  it('keeps plain paginated directory pages self-canonical', () => {
+    const metadata = directoryMetadata('en', '/business', { page: '2' });
+
+    expect(metadata.title).toBe('Chinese Businesses Page 2 | ChineseArizona');
+    expect(metadata.alternates?.canonical).toBe('https://chinesearizona.com/business?page=2');
+    expect(metadata.alternates?.languages?.en).toBe('https://chinesearizona.com/business?page=2');
+  });
+
+  it('canonicalizes filtered directory queries back to the base directory page', () => {
+    const metadata = directoryMetadata('en', '/business', {
+      q: 'doctor',
+      page: '3',
+      sort: 'rating',
+    });
+
+    expect(metadata.title).toBe('Chinese Businesses | ChineseArizona');
+    expect(metadata.alternates?.canonical).toBe('https://chinesearizona.com/business');
   });
 });

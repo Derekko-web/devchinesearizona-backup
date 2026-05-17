@@ -1,6 +1,9 @@
 import type {
   Article,
   ArticleSeries,
+  DiscoverArticle,
+  DiscoveryCategory,
+  DiscoveryQueueStatus,
   DestinationSurface,
   DirectoryFollowUpAction,
   DirectoryFollowUpStatus,
@@ -14,6 +17,7 @@ import type {
   MonitoredSource,
   PersonaTarget,
   ProfileRole,
+  RadarLane,
   SignalDeskReviewStatus,
   SourcePolicy,
   VerificationState,
@@ -79,6 +83,8 @@ export function guideSectionLabel(section: Guide['section'], locale: Locale): st
     schools: { en: 'Schools', 'zh': '學校教育' },
     healthcare: { en: 'Healthcare', 'zh': '醫療保健' },
     transportation: { en: 'Transportation', 'zh': '交通移動' },
+    community: { en: 'Community', 'zh': '華人社群' },
+    safety: { en: 'Safety and legal', 'zh': '安全與法律' },
   };
 
   return t(labels[section], locale);
@@ -104,6 +110,40 @@ export function hiddenArizonaKindLabel(kind: HiddenArizonaKind, locale: Locale):
   return t(labels[kind], locale);
 }
 
+export function discoveryCategoryLabel(category: DiscoveryCategory, locale: Locale): string {
+  const labels: Record<DiscoveryCategory, LocalizedText> = {
+    beautiful_arizona: { en: 'Beautiful Arizona', zh: '美麗亞利桑那' },
+    things_to_do: { en: 'Things to Do', zh: '玩樂體驗' },
+    restaurants: { en: 'Restaurants', zh: '餐廳美食' },
+    hotels: { en: 'Hotels', zh: '旅宿飯店' },
+    parks: { en: 'Parks', zh: '公園綠地' },
+    shopping: { en: 'Shopping', zh: '購物逛街' },
+  };
+
+  return t(labels[category], locale);
+}
+
+export function discoveryQueueStatusLabel(status: DiscoveryQueueStatus, locale: Locale): string {
+  const labels: Record<DiscoveryQueueStatus, LocalizedText> = {
+    queued: { en: 'Queued', zh: '排隊中' },
+    review_ready: { en: 'Review ready', zh: '待編輯審核' },
+    approved: { en: 'Approved', zh: '已核准' },
+    published: { en: 'Published', zh: '已發佈' },
+    blocked: { en: 'Blocked', zh: '已阻擋' },
+    stale: { en: 'Stale', zh: '已過時' },
+  };
+
+  return t(labels[status], locale);
+}
+
+export function discoveryArticleByline(article: DiscoverArticle, locale: Locale): string {
+  const creator = article.creatorHandle ? `@${article.creatorHandle}` : article.sourceUrl;
+
+  return locale === 'zh'
+    ? `來源：${creator}`
+    : `Source: ${creator}`;
+}
+
 export function articleSeriesLabel(series: ArticleSeries, locale: Locale): string {
   const labels: Record<ArticleSeries, LocalizedText> = {
     'housing-watch': { en: 'Housing Watch', zh: '房市觀察' },
@@ -111,6 +151,7 @@ export function articleSeriesLabel(series: ArticleSeries, locale: Locale): strin
     'route-watch': { en: 'Phoenix Route Watch', zh: '航線觀察' },
     'restaurant-opening-radar': { en: 'Restaurant Opening Radar', zh: '新店雷達' },
     'trend-radar': { en: 'Trend Radar', zh: '趨勢雷達' },
+    'arizona-radar': { en: 'Arizona News', zh: '亞利桑那新聞' },
     'community-wire': { en: 'Community Wire', zh: '社群轉載' },
   };
 
@@ -131,12 +172,24 @@ export function freshnessTierLabel(tier: FreshnessTier, locale: Locale): string 
 
 export function sourcePolicyLabel(policy: SourcePolicy, locale: Locale): string {
   const labels: Record<SourcePolicy, LocalizedText> = {
-    summary_link: { en: 'Original summary + source links', zh: '原創摘要＋來源連結' },
+    summary_link: { en: 'Original rewrite + source links', zh: '原創重寫＋來源連結' },
     signal_only: { en: 'Signal only', zh: '僅作訊號參考' },
     republish_with_permission: { en: 'Republished with permission', zh: '授權轉載' },
   };
 
   return t(labels[policy], locale);
+}
+
+export function radarLaneLabel(lane: RadarLane, locale: Locale): string {
+  const labels: Record<RadarLane, LocalizedText> = {
+    housing: { en: 'Housing', zh: '住房' },
+    openings: { en: 'Openings', zh: '新店' },
+    community: { en: 'Community', zh: '社群' },
+    official: { en: 'Official', zh: '官方' },
+    social: { en: 'Social signals', zh: '社群訊號' },
+  };
+
+  return t(labels[lane], locale);
 }
 
 export function personaTargetLabel(target: PersonaTarget, locale: Locale): string {
@@ -168,6 +221,7 @@ export function destinationSurfaceLabel(surface: DestinationSurface, locale: Loc
     community_news: { en: 'Community news', zh: '社群新聞' },
     relocation_guide: { en: 'Relocation guide', zh: '搬遷指南' },
     directory_followup: { en: 'Directory follow-up', zh: '目錄跟進' },
+    discover_arizona: { en: 'Discover Arizona', zh: '探索亞利桑那' },
     mixed: { en: 'Mixed surfaces', zh: '混合入口' },
   };
 

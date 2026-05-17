@@ -60,6 +60,22 @@ class ArticleIngestTests(unittest.TestCase):
         self.assertEqual(article["body"][0]["zh"], "第一段。")
         self.assertEqual(article["body"][1]["en"], "Second paragraph.")
 
+    def test_post_to_article_decodes_percent_encoded_slugs_before_slugifying(self) -> None:
+        post = {
+            "id": 501,
+            "slug": "%E4%BA%9E%E5%88%A9%E6%A1%91%E9%82%A3-%E8%8F%AF%E4%BA%BA-%E7%A4%BE%E5%8D%80",
+            "link": "https://www.sunbirdarizona.com/2026/04/17/example/",
+            "date_gmt": "2026-04-17T10:00:00",
+            "modified_gmt": "2026-04-17T10:05:00",
+            "title": {"rendered": "Example title"},
+            "excerpt": {"rendered": "<p>Example excerpt.</p>"},
+            "content": {"rendered": "<p>Example body.</p>"},
+        }
+
+        article = post_to_article(post)
+
+        self.assertEqual(article["slug"], "501")
+
 
 if __name__ == "__main__":
     unittest.main()

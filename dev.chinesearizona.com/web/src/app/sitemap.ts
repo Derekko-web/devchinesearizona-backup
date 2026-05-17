@@ -1,60 +1,117 @@
 import type { MetadataRoute } from 'next';
 
-import { communityPosts, events, guides, profiles } from '@/data/platform-data';
-import { getArticles } from '@/lib/content';
-import { getDirectoryBusinessSlugs } from '@/lib/directory';
+import {
+  ARIZONA_NEWS_ARCHIVE_PATH,
+  ARIZONA_NEWS_PATH,
+  getArizonaNewsArticlePath,
+} from '@/lib/arizona-news';
+import {
+  getCommunityPosts,
+  getCurrentArticlesAsync,
+  getEvents,
+  getGuides,
+  shouldNoIndexCommunityPost,
+} from '@/lib/content';
+import { getPublishedDiscoverArticles, discoveryCategories } from '@/lib/discover-arizona';
+import { getDirectoryBusinesses } from '@/lib/directory';
 import { getHiddenArizonaEntries, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
-import { siteUrl } from '@/lib/seo';
+import { isShopPublicLaunchReady } from '@/lib/shop-launch-server';
+import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
+import { getPublicShopSitemapData } from '@/lib/shop-service';
 import { locales } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 const staticRoutes = [
   '/',
-  '/directory',
+  '/business',
+  '/discover-arizona',
   '/hidden-arizona',
   '/relocation-guide',
+  ARIZONA_NEWS_PATH,
+  ARIZONA_NEWS_ARCHIVE_PATH,
   '/community',
-  '/community/news',
   '/add-business',
-  '/dashboard',
-  '/admin',
 ] as const;
+const localizedSitemapLocales = locales.filter((locale) => locale !== 'en');
+
+type SitemapEntry = MetadataRoute.Sitemap[number];
+
+function buildSitemapEntry(
+  url: string,
+  path: string,
+  generatedAt: Date,
+  priority: number
+): SitemapEntry {
+  return {
+    url,
+    lastModified: generatedAt,
+    changeFrequency: 'weekly',
+    priority,
+    alternates: {
+      languages: buildAlternates(path, 'en').languages,
+    },
+  };
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const businessSlugs = await getDirectoryBusinessSlugs();
-  const articles = getArticles();
+  const [directoryBusinesses, articles, discoverArticles] = await Promise.all([
+    getDirectoryBusinesses({}, { limit: 1000 }),
+    getCurrentArticlesAsync(),
+    getPublishedDiscoverArticles(),
+  ]);
   const hiddenArizonaEntries = getHiddenArizonaEntries();
+  const guides = getGuides();
+  const events = getEvents();
+  const communityPosts = getCommunityPosts().filter((post) => !shouldNoIndexCommunityPost(post));
+  const shopReady = isShopPublicLaunchReady();
+  const publicShopData = shopReady
+    ? await getPublicShopSitemapData()
+    : { listings: [], sellers: [] };
+  const businessRoutes = directoryBusinesses.map((business) => `/business/${business.slug}`);
+  const cityCategoryRoutes = Array.from(
+    new Set(
+      directoryBusinesses.map(
+        (business) =>
+          `/business/${encodeURIComponent(business.city.toLowerCase())}/${encodeURIComponent(business.categorySlug)}`
+      )
+    )
+  );
   const dynamicRoutes = [
-    ...businessSlugs.map((slug) => `/directory/business/${slug}`),
+    ...businessRoutes,
+    ...cityCategoryRoutes,
+    ...discoveryCategories.map((category) => `/discover-arizona/${category.slug}`),
+    ...discoverArticles.map((article) => `/discover-arizona/${article.primaryCategory}/${article.slug}`),
     ...hiddenArizonaEntries.map((entry) => getHiddenArizonaEntryPath(entry)),
     ...guides.map((guide) => `/relocation-guide/${guide.slug}`),
-    ...articles.map((article) => `/community/news/${article.slug}`),
+    ...articles.map((article) => getArizonaNewsArticlePath(article.slug)),
     ...events.map((event) => `/community/events/${event.slug}`),
     ...communityPosts.map((post) =>
       `/community/${post.type === 'classified' ? 'classifieds' : 'board'}/${post.slug}`
     ),
-    ...profiles.map((profile) => `/profile/${profile.slug}`),
+    ...publicShopData.listings.map((listing) => `/shop/item/${listing.slug}`),
+    ...publicShopData.sellers.map((seller) => `/shop/seller/${seller.slug}`),
   ];
 
-  const allRoutes = [...staticRoutes, ...dynamicRoutes];
+  const allRoutes = Array.from(
+    new Set([
+      ...staticRoutes,
+      ...(shopReady ? ['/shop' as const] : []),
+      ...dynamicRoutes,
+    ])
+  );
+  const generatedAt = new Date();
 
   const localizedEntries = allRoutes.flatMap((path) =>
-    locales.map((locale) => ({
-      url: `${siteUrl}${withLocale(locale, path)}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: path === '/' ? 1 : 0.7,
+    localizedSitemapLocales.map((locale) => ({
+      ...buildSitemapEntry(absoluteUrl(withLocale(locale, path)), path, generatedAt, path === '/' ? 1 : 0.7),
     }))
   );
 
-  const xDefaultEntries = allRoutes.map((path) => ({
-    url: `${siteUrl}${path === '/' ? '' : path}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: path === '/' ? 1 : 0.6,
-  }));
+  const xDefaultEntries = allRoutes.map((path) =>
+    buildSitemapEntry(absoluteUrl(path), path, generatedAt, path === '/' ? 1 : 0.6)
+  );
 
   return [...xDefaultEntries, ...localizedEntries];
 }
