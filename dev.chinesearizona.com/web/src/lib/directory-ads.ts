@@ -74,12 +74,6 @@ export const DIRECTORY_AD_BUDGET_INCREMENT_CENTS = 2_500;
 export const DIRECTORY_AD_COST_PER_CLICK_CENTS = 300;
 export const DIRECTORY_AD_CAMPAIGN_DURATION_DAYS = 30;
 
-const ACTIVEISH_CAMPAIGN_STATUSES: DirectoryAdCampaignStatus[] = [
-  'active',
-  'paused',
-  'exhausted',
-  'pending_payment',
-];
 const DIRECTORY_AD_SCHEMA_CACHE_TTL_MS = 60_000;
 const STRIPE_FALLBACK_CACHE_TTL_MS = 60_000;
 const STRIPE_FALLBACK_MAX_PAGES = 5;

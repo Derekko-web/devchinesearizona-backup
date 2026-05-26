@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { proxy, shouldRedirectToApex } from '@/proxy';
+import { proxy, shouldBypassApexRedirect, shouldRedirectToApex } from '@/proxy';
 
 function buildRequest(url: string, host: string) {
+  const nextUrl = new URL(url);
+
   return {
     headers: new Headers({ host }),
     nextUrl: {
+      pathname: nextUrl.pathname,
       clone: () => new URL(url),
     },
   };
@@ -32,5 +35,15 @@ describe('proxy host handling', () => {
     expect(response.headers.get('location')).toBe(
       'https://chinesearizona.com/zh/community?tab=events'
     );
+  });
+
+  it('does not redirect ads.txt on the www alias', () => {
+    const response = proxy(
+      buildRequest('https://www.chinesearizona.com/ads.txt', 'www.chinesearizona.com') as never
+    );
+
+    expect(shouldBypassApexRedirect('/ads.txt')).toBe(true);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('location')).toBeNull();
   });
 });

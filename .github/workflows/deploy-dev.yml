@@ -1,0 +1,90 @@
+name: Deploy Dev
+
+on:
+  workflow_run:
+    workflows:
+      - Dev CI
+    branches:
+      - main
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Exact commit SHA to deploy. Defaults to the selected ref.
+        required: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev.chinesearizona.com/web
+    env:
+      DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+      VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
+      VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
+      VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
+      VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify before deploy
+        run: npm run verify
+
+      - name: Configure SSH
+        run: |
+          test -n "$VPS_HOST"
+          test -n "$VPS_USER"
+          test -n "$VPS_SSH_KEY"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
+          chmod 600 ~/.ssh/dev_key
+          ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy exact SHA to VPS
+        run: |
+          ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          cd /var/www
+          if [ -n "$(git status --porcelain)" ]; then
+            git status --short
+            echo "Refusing to deploy over a dirty VPS working tree. Commit or stash direct edits first." >&2
+            exit 1
+          fi
+
+          git fetch origin "$DEPLOY_SHA"
+          git checkout --force "$DEPLOY_SHA"
+
+          cd /var/www/dev.chinesearizona.com/web
+          npm ci
+          npm run build
+
+          export GIT_SHA="$DEPLOY_SHA"
+          export NEXT_PUBLIC_GIT_SHA="$DEPLOY_SHA"
+          export BUILD_TIME="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          export NEXT_PUBLIC_BUILD_TIME="$BUILD_TIME"
+          pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
+          pm2 save
+
+          if ! npm run smoke:dev; then
+            npm run loop:collect || true
+            exit 1
+          fi
+
+          npm run loop:collect || true
+          REMOTE

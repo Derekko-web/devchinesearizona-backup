@@ -1,0 +1,8 @@
+[Unit]
+Description=Collect dev.chinesearizona.com closed-loop signals
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/www/dev.chinesearizona.com/web
+EnvironmentFile=-/var/www/ops/closed-loop/.env
+ExecStart=/usr/bin/npm run loop:collect

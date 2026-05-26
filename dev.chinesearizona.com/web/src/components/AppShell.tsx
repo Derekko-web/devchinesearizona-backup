@@ -8,12 +8,14 @@ import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { localeLangAttribute } from '@/lib/i18n';
 import { localeFromPath } from '@/lib/routing';
+import type { SiteProfile } from '@/lib/site-config';
 
 type AppShellProps = {
   children: ReactNode;
+  site: SiteProfile;
 };
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, site }: AppShellProps) {
   const pathname = usePathname();
   const locale = localeFromPath(pathname);
   const lang = localeLangAttribute(locale);
@@ -34,12 +36,12 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <>
       <Suspense fallback={null}>
-        <Navbar />
+        <Navbar site={site} />
       </Suspense>
       <main lang={lang} className="flex flex-1 flex-col">
         {children}
       </main>
-      <Footer />
+      <Footer site={site} />
     </>
   );
 }

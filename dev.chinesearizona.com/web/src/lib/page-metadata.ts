@@ -20,11 +20,13 @@ import {
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
 import { getDiscoverArticleBySlug, getDiscoveryCategory } from '@/lib/discover-arizona';
-import { getDirectoryBusinessBySlug } from '@/lib/directory';
+import { getDirectoryBusinessBySlug, shouldNoIndexDirectoryBusiness } from '@/lib/directory';
 import { getHiddenArizonaEntryBySlug, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
 import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-localization';
 import { t } from '@/lib/i18n';
+import { getPublisherPageCopy, type PublisherPageSlug } from '@/lib/publisher-pages';
 import { buildMetadata } from '@/lib/seo';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import { appendSearch } from '@/lib/routing';
 import type { CommunityPostType, DiscoveryCategory, HiddenArizonaKind, Locale } from '@/lib/types';
 
@@ -72,18 +74,19 @@ function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearch
   return getArizonaNewsArchivePath(params.toString());
 }
 
-export function homeMetadata(locale: Locale): Metadata {
+export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
   return buildMetadata({
     title:
       locale === 'zh'
-        ? 'ChineseArizona | 亞利桑那華人商家、新聞與生活資源'
-        : 'ChineseArizona | Arizona Chinese Community Directory, News, and Resources',
+        ? `${site.brandName} | ${site.regionNameZh}華人商家、新聞與生活資源`
+        : `${site.brandName} | ${site.regionName} Chinese Community Directory, News, and Resources`,
     description:
       locale === 'zh'
-        ? 'ChineseArizona 是服務亞利桑那華人與新移民的雙語平台，整合可信商家目錄、在地新聞、搬遷指南與社群資源。'
-        : 'ChineseArizona is a bilingual Arizona platform for the Chinese community, with trusted local businesses, local news, relocation guides, and community resources.',
+        ? site.description.zh
+        : site.description.en,
     path: '/',
     locale,
+    site,
   });
 }
 
@@ -132,6 +135,22 @@ export function addBusinessMetadata(locale: Locale): Metadata {
   });
 }
 
+export function publisherPageMetadata(
+  locale: Locale,
+  slug: PublisherPageSlug,
+  site: SiteProfile = defaultSiteProfile
+): Metadata {
+  const page = getPublisherPageCopy(slug, locale, site);
+
+  return buildMetadata({
+    title: `${page.title} | ${site.brandName}`,
+    description: page.description,
+    path: `/${slug}`,
+    locale,
+    site,
+  });
+}
+
 export function authMetadata(locale: Locale): Metadata {
   return buildMetadata({
     title: locale === 'zh' ? '商家與供稿帳號 | ChineseArizona' : 'Owner & Contributor Account | ChineseArizona',
@@ -175,8 +194,8 @@ export function communityRadarMetadata(locale: Locale): Metadata {
     title: locale === 'zh' ? '亞利桑那新聞 | ChineseArizona' : 'Arizona News | ChineseArizona',
     description:
       locale === 'zh'
-        ? '每 5 分鐘更新的亞利桑那新聞首頁，整理住房、官方、社群與新店訊號成可用的雙語摘要。'
-        : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening signals.',
+        ? '每 5 分鐘更新的亞利桑那新聞首頁，整理住房、官方、社群與新店資訊成可用的雙語摘要。'
+        : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening updates.',
     path: getArizonaNewsPath(),
     locale,
   });
@@ -344,6 +363,7 @@ export async function businessMetadata(locale: Locale, slug: string): Promise<Me
     path: `/business/${business.slug}`,
     locale,
     image: business.heroImage ?? undefined,
+    noIndex: shouldNoIndexDirectoryBusiness(business),
   });
 }
 
@@ -359,6 +379,7 @@ export function cityCategoryMetadata(locale: Locale, city: string, categorySlug:
     description: t(category.description, locale),
     path: `/business/${city}/${category.slug}`,
     locale,
+    noIndex: true,
   });
 }
 

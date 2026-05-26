@@ -172,8 +172,8 @@ export function freshnessTierLabel(tier: FreshnessTier, locale: Locale): string 
 
 export function sourcePolicyLabel(policy: SourcePolicy, locale: Locale): string {
   const labels: Record<SourcePolicy, LocalizedText> = {
-    summary_link: { en: 'Original rewrite + source links', zh: '原創重寫＋來源連結' },
-    signal_only: { en: 'Signal only', zh: '僅作訊號參考' },
+    summary_link: { en: 'Source links', zh: '來源連結' },
+    signal_only: { en: 'Discovery only', zh: '僅作題材發現' },
     republish_with_permission: { en: 'Republished with permission', zh: '授權轉載' },
   };
 
@@ -186,7 +186,7 @@ export function radarLaneLabel(lane: RadarLane, locale: Locale): string {
     openings: { en: 'Openings', zh: '新店' },
     community: { en: 'Community', zh: '社群' },
     official: { en: 'Official', zh: '官方' },
-    social: { en: 'Social signals', zh: '社群訊號' },
+    social: { en: 'Social posts', zh: '社群貼文' },
   };
 
   return t(labels[lane], locale);
@@ -210,7 +210,7 @@ export function sourceTypeLabel(sourceType: MonitoredSource['sourceType'], local
     official_data: { en: 'Official data', zh: '官方資料' },
     airport_newsroom: { en: 'Airport newsroom', zh: '機場消息' },
     local_media: { en: 'Local media', zh: '在地媒體' },
-    social_signal: { en: 'Social signal', zh: '社群訊號' },
+    social_signal: { en: 'Social source', zh: '社群來源' },
   };
 
   return t(labels[sourceType], locale);

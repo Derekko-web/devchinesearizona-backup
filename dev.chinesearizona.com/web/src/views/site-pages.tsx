@@ -41,8 +41,6 @@ import { DiscoverArticleImage } from '@/components/DiscoverArticleImage';
 import { EmptyState } from '@/components/EmptyState';
 import { EventCard } from '@/components/EventCard';
 import { HousingListingsSection } from '@/components/HousingListingsSection';
-import { LocalDateTime } from '@/components/LocalDateTime';
-import { RadarArticleCard } from '@/components/RadarArticleCard';
 import { TrackedLink } from '@/components/TrackedLink';
 import { DashboardAccessNotice } from '@/components/auth/DashboardAccessNotice';
 import { BusinessClaimApprovalCard } from '@/components/admin/BusinessClaimApprovalCard';
@@ -63,11 +61,8 @@ import {
 } from '@/lib/business-display';
 import {
   getAdminSnapshot,
-  getArticleArchivePage,
   getArticleArchivePageAsync,
-  getArticleBySlug,
   getArticleBySlugAsync,
-  getCurrentArticles,
   getCurrentArticlesAsync,
   isLegacyArticle,
   getBusinessReviews,
@@ -104,6 +99,8 @@ import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import {
   getDirectoryAdCampaignsForOwnerBusinesses,
   getDirectoryAdsAvailability,
+  type DirectoryAdsRuntimeMode,
+  type DirectoryAdsUnavailableReason,
 } from '@/lib/directory-ads';
 import {
   getModerationReportsSnapshot,
@@ -117,6 +114,7 @@ import {
   businessHoursValue,
   descriptiveImageAlt,
   destinationSurfaceLabel,
+  directoryStatusLabel,
   directoryFollowUpActionLabel,
   directoryFollowUpStatusLabel,
   formatDate,
@@ -190,6 +188,7 @@ type NewsArchiveSearchParams = {
 
 type RadarSearchParams = {
   lane?: string;
+  page?: string;
 };
 
 const directorySortOptions: SortOption[] = [
@@ -201,6 +200,7 @@ const directorySortOptions: SortOption[] = [
   'newest',
 ];
 const DIRECTORY_PAGE_SIZE = 24;
+const RADAR_FEED_PAGE_SIZE = 12;
 const directoryQuickCategorySlugs = ['dining', 'real-estate', 'medical', 'education', 'local-services'] as const;
 const radarLaneOptions: RadarLane[] = ['housing', 'openings', 'community', 'official', 'social'];
 const articleSeriesOptions: ArticleSeries[] = [
@@ -299,12 +299,18 @@ function parseRadarLane(value?: string): RadarLane | undefined {
     : undefined;
 }
 
-function buildRadarHref(locale: Locale, lane?: RadarLane): string {
-  if (!lane) {
-    return getLocalizedArizonaNewsPath(locale);
+function buildRadarHref(locale: Locale, lane?: RadarLane, page?: number): string {
+  const params = new URLSearchParams();
+
+  if (lane) {
+    params.set('lane', lane);
   }
 
-  return getLocalizedArizonaNewsPath(locale, `lane=${lane}`);
+  if (page && page > 1) {
+    params.set('page', String(page));
+  }
+
+  return getLocalizedArizonaNewsPath(locale, params.toString());
 }
 
 function newsArchiveHref(
@@ -389,24 +395,6 @@ function buildDirectoryHref(
   return `${withLocale(locale, '/business')}${search ? `?${search}` : ''}`;
 }
 
-function articleSourcePolicyDescription(policy: Article['sourcePolicy'], locale: Locale): string {
-  if (policy === 'signal_only') {
-    return locale === 'zh'
-      ? '短影音與社群平台只用來發現重複出現的問題與題材，不重用 caption、嵌入或影片素材。'
-      : 'Short-video and social platforms are used only to discover recurring topics. ChineseArizona does not reuse captions, embeds, or media assets.';
-  }
-
-  if (policy === 'republish_with_permission') {
-    return locale === 'zh'
-      ? '這篇內容屬於授權轉載或經許可同步，保留原始來源連結。'
-      : 'This piece is republished or synchronized with permission and keeps a link back to the original source.';
-  }
-
-  return locale === 'zh'
-    ? '這篇內容是 ChineseArizona 根據來源頁面撰寫的原創重寫，重點在於完整整理、補充脈絡與保留來源連結，而不是複製來源內容。'
-    : 'This piece is an original ChineseArizona rewrite built from linked source pages. The goal is fuller synthesis, added context, and traceable source links rather than copied source copy.';
-}
-
 function ArticleMetaRow({
   article,
   locale,
@@ -469,6 +457,27 @@ async function localizeArticleSummaries(articles: Article[], locale: Locale) {
       excerpt: localizedText[index * 2 + 1] ?? article.excerpt.en,
     },
   }));
+}
+
+function cleanArizonaNewsCopy(value: string): string {
+  return value
+    .replace(/\bSignals\b/g, 'Indicators')
+    .replace(/\bsignals\b/g, 'indicators')
+    .replace(/\bSignal\b/g, 'Indicator')
+    .replace(/\bsignal\b/g, 'indicator')
+    .replace(/訊號/g, '資訊');
+}
+
+function cleanLocalizedArticleSummary<T extends { localizedText: { title: string; excerpt: string } }>(
+  item: T
+): T {
+  return {
+    ...item,
+    localizedText: {
+      title: cleanArizonaNewsCopy(item.localizedText.title),
+      excerpt: cleanArizonaNewsCopy(item.localizedText.excerpt),
+    },
+  };
 }
 
 export async function DirectoryPageView({
@@ -2460,108 +2469,109 @@ export async function CommunityRadarPageView({
   searchParams?: RadarSearchParams;
 }) {
   const activeLane = parseRadarLane(searchParams?.lane);
-  const [liveNowRadarArticles, feedRadarArticles] = await Promise.all([
-    getRadarArticlesAsync({ limit: 3 }),
-    getRadarArticlesAsync({ lane: activeLane }),
-  ]);
-  const liveNowArticles = liveNowRadarArticles.map(radarArticleToArticle);
-  const feedArticles = feedRadarArticles.map(radarArticleToArticle);
-  const [localizedLiveNowArticles, localizedFeedArticles] = await Promise.all([
-    localizeArticleSummaries(liveNowArticles, locale),
-    localizeArticleSummaries(feedArticles, locale),
-  ]);
+  const requestedPage = parsePageNumber(searchParams?.page);
+  const allRadarArticles = await getRadarArticlesAsync();
+  const allFeedArticles = allRadarArticles
+    .filter((article) => (activeLane ? article.lane === activeLane : true))
+    .map(radarArticleToArticle);
+  const totalFeedArticles = allFeedArticles.length;
+  const totalFeedPages = Math.max(1, Math.ceil(totalFeedArticles / RADAR_FEED_PAGE_SIZE));
+  const currentFeedPage = Math.min(requestedPage, totalFeedPages);
+  const startFeedIndex = (currentFeedPage - 1) * RADAR_FEED_PAGE_SIZE;
+  const endFeedIndex = Math.min(startFeedIndex + RADAR_FEED_PAGE_SIZE, totalFeedArticles);
+  const feedArticles = allFeedArticles.slice(startFeedIndex, endFeedIndex);
+  const localizedFeedArticles = await localizeArticleSummaries(feedArticles, locale);
+  const displayFeedArticles = localizedFeedArticles.map(cleanLocalizedArticleSummary);
   const showSidebarAd = shouldRenderAdSensePlacement('community_radar_sidebar');
+  const previousFeedHref =
+    currentFeedPage > 1 ? buildRadarHref(locale, activeLane, currentFeedPage - 1) : null;
+  const nextFeedHref =
+    currentFeedPage < totalFeedPages ? buildRadarHref(locale, activeLane, currentFeedPage + 1) : null;
+  const feedNavigation = (
+    <div className="flex flex-wrap items-center gap-2">
+      {previousFeedHref ? (
+        <Link
+          href={previousFeedHref}
+          className="inline-flex h-9 items-center rounded-xl border border-[#d9c7b6] bg-white/80 px-3 text-sm font-semibold text-[#5b4739] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-700 active:translate-y-0"
+        >
+          {locale === 'zh' ? '上一頁' : 'Previous page'}
+        </Link>
+      ) : (
+        <span className="inline-flex h-9 items-center rounded-xl border border-[#e4d6c8] bg-white/50 px-3 text-sm font-semibold text-[#b5a391]">
+          {locale === 'zh' ? '上一頁' : 'Previous page'}
+        </span>
+      )}
+      {nextFeedHref ? (
+        <Link
+          href={nextFeedHref}
+          className="inline-flex h-9 items-center rounded-xl bg-brand-600 px-3 text-sm font-semibold text-white shadow-[0_16px_34px_-26px_rgba(187,61,41,0.95)] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 hover:bg-brand-700 active:translate-y-0"
+        >
+          {locale === 'zh' ? '下一頁' : 'Next page'}
+        </Link>
+      ) : (
+        <span className="inline-flex h-9 items-center rounded-xl border border-[#e4d6c8] bg-[#efe3d5]/70 px-3 text-sm font-semibold text-[#b5a391]">
+          {locale === 'zh' ? '下一頁' : 'Next page'}
+        </span>
+      )}
+    </div>
+  );
+  const topicFilters = [
+    {
+      key: 'all',
+      href: buildRadarHref(locale),
+      label: locale === 'zh' ? '全部新聞' : 'All news',
+      active: !activeLane,
+    },
+    ...radarLaneOptions.map((lane) => ({
+      key: lane,
+      href: buildRadarHref(locale, lane),
+      label: radarLaneLabel(lane, locale),
+      active: activeLane === lane,
+    })),
+  ];
 
   return sectionContainer(
-    <div className="space-y-8 py-12">
-      <h1 className="sr-only">{locale === 'zh' ? '亞利桑那新聞' : 'Arizona News'}</h1>
-
+    <div className="py-10 md:py-14">
       <div className={showSidebarAd ? 'grid gap-8 xl:grid-cols-[minmax(0,1fr),320px] xl:items-start' : ''}>
-        <div className="space-y-8">
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={buildRadarHref(locale)}
-              className={`inline-flex rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                !activeLane
-                  ? 'bg-brand-900 text-white'
-                  : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-              }`}
-            >
-              {locale === 'zh' ? '全部訊號' : 'All signals'}
-            </Link>
-            {radarLaneOptions.map((lane) => (
-              <Link
-                key={lane}
-                href={buildRadarHref(locale, lane)}
-                className={`inline-flex rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
-                  activeLane === lane
-                    ? 'bg-brand-900 text-white'
-                    : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {radarLaneLabel(lane, locale)}
-              </Link>
-            ))}
-          </div>
-
-          {liveNowArticles.length > 0 ? (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-slate-900">
-                {locale === 'zh' ? '最新亞利桑那新聞' : 'Newest Arizona News'}
-              </h2>
-
-              <div className="grid gap-4 lg:grid-cols-3">
-                {localizedLiveNowArticles.map(({ article, localizedText }) => (
+        <div className="space-y-10">
+          <nav
+            aria-label={locale === 'zh' ? '新聞分類' : 'News topics'}
+            className="border-y border-[#d9c7b6] py-3"
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+              <Newspaper className="hidden h-4 w-4 flex-shrink-0 text-brand-700 lg:block" />
+              <div className="flex gap-1 overflow-x-auto pb-1 lg:pb-0">
+                {topicFilters.map((topic) => (
                   <Link
-                    key={`radar-live-${article.slug}`}
-                    href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
-                    className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
+                    key={topic.key}
+                    href={topic.href}
+                    aria-current={topic.active ? 'page' : undefined}
+                    className={`inline-flex min-w-max items-center border-b-2 px-3 py-2 text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:text-brand-700 ${
+                      topic.active
+                        ? 'border-brand-600 text-brand-700'
+                        : 'border-transparent text-[#6f5a4a]'
+                    }`}
                   >
-                    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">
-                      <span>
-                        {article.radarLane
-                          ? radarLaneLabel(article.radarLane, locale)
-                          : locale === 'zh'
-                            ? '新聞'
-                            : 'News'}
-                      </span>
-                      {article.sourceType ? (
-                        <>
-                          <span className="text-slate-300">/</span>
-                          <span className="tracking-normal text-slate-500">
-                            {sourceTypeLabel(article.sourceType, locale)}
-                          </span>
-                        </>
-                      ) : null}
-                    </div>
-                    <h3 className="mt-3 text-lg font-bold tracking-tight text-slate-900">
-                      {localizedText.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">{localizedText.excerpt}</p>
+                    {topic.label}
                   </Link>
                 ))}
               </div>
             </div>
-          ) : null}
+          </nav>
 
-          <div id="radar-feed" className="space-y-4">
-            <div className="flex flex-wrap items-end justify-between gap-3">
+          <div id="radar-feed" className="space-y-5">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900">
+                <h2 className="text-3xl font-semibold leading-tight text-[#2b1f18] [font-family:var(--font-display)]">
                   {activeLane
                     ? locale === 'zh'
-                      ? `${radarLaneLabel(activeLane, locale)}動態`
-                      : `${radarLaneLabel(activeLane, locale)} feed`
+                      ? `${radarLaneLabel(activeLane, locale)}新聞`
+                      : `${radarLaneLabel(activeLane, locale)} news`
                     : locale === 'zh'
                       ? '完整亞利桑那新聞'
-                      : 'The full Arizona News feed'}
+                      : 'All Arizona News'}
                 </h2>
               </div>
-              <p className="text-sm font-medium text-slate-500">
-                {locale === 'zh'
-                  ? `${feedArticles.length} 則新聞`
-                  : `${feedArticles.length} news items`}
-              </p>
             </div>
 
             {feedArticles.length === 0 ? (
@@ -2573,21 +2583,63 @@ export async function CommunityRadarPageView({
                 }
                 description={
                   locale === 'zh'
-                    ? '可以切回全部訊號，或等待下一輪排程把新的可用內容送上來。'
-                    : 'Switch back to all signals, or wait for the next run to publish new usable content.'
+                    ? '可以切回全部新聞，或稍後再查看新的可用內容。'
+                    : 'Switch back to all news, or check back after the next update.'
                 }
               />
             ) : (
-              <div className="grid gap-5 lg:grid-cols-2">
-                {localizedFeedArticles.map(({ article, localizedText }) => (
-                  <RadarArticleCard
-                    key={`radar-feed-${article.slug}`}
-                    article={article}
-                    locale={locale}
-                    localizedTitle={localizedText.title}
-                    localizedExcerpt={localizedText.excerpt}
-                  />
-                ))}
+              <div className="space-y-5">
+                <div className="divide-y divide-[#e0d0bf]">
+                  {displayFeedArticles.map(({ article, localizedText }) => (
+                    <Link
+                      key={`radar-feed-${article.slug}`}
+                      href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
+                      className="group grid gap-4 py-5 transition-colors hover:bg-white/45 md:grid-cols-[112px_minmax(0,1fr)_auto] md:items-center"
+                    >
+                      <div className="relative h-24 overflow-hidden rounded-2xl bg-[#eaded0] md:h-20">
+                        <DiscoverArticleImage
+                          src={article.heroImage}
+                          alt={localizedText.title}
+                          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04]"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8b6e5d]">
+                          <span>{article.radarLane ? radarLaneLabel(article.radarLane, locale) : locale === 'zh' ? '新聞' : 'News'}</span>
+                          {article.sourceName ? (
+                            <>
+                              <span className="text-[#cbb8a6]">/</span>
+                              <span className="tracking-normal">{article.sourceName}</span>
+                            </>
+                          ) : null}
+                          <span className="text-[#cbb8a6]">/</span>
+                          <span className="tracking-normal">{formatDate(article.publishedAt, locale)}</span>
+                        </div>
+                        <h3 className="mt-2 text-lg font-bold leading-snug tracking-tight text-[#2b1f18] transition-colors group-hover:text-brand-700">
+                          {localizedText.title}
+                        </h3>
+                        <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#6b5a4e]">
+                          {localizedText.excerpt}
+                        </p>
+                      </div>
+                      <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 md:justify-self-end">
+                        {locale === 'zh' ? '閱讀全文' : 'Read article'}
+                        <ChevronRight className="h-4 w-4 text-brand-600 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-1 group-hover:text-brand-800" />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+
+                {totalFeedPages > 1 ? (
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-y border-[#d9c7b6] py-3">
+                    <div className="text-sm font-medium text-[#8b6e5d]">
+                      {locale === 'zh'
+                        ? `${currentFeedPage} / ${totalFeedPages}`
+                        : `${currentFeedPage} / ${totalFeedPages}`}
+                    </div>
+                    {feedNavigation}
+                  </div>
+                ) : null}
               </div>
             )}
           </div>
@@ -3028,6 +3080,15 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
   const legacyArticle = isLegacyArticle(article);
   const categories = await getDirectoryCategories();
   const localizedArticle = await resolveArticleText(article, locale);
+  const displayArticle =
+    article.series === 'arizona-radar'
+      ? {
+          ...localizedArticle,
+          title: cleanArizonaNewsCopy(localizedArticle.title),
+          excerpt: cleanArizonaNewsCopy(localizedArticle.excerpt),
+          body: localizedArticle.body.map(cleanArizonaNewsCopy),
+        }
+      : localizedArticle;
   const author = article.authorProfileSlug ? getProfileBySlug(article.authorProfileSlug) : undefined;
   const relatedBusinesses = getRelatedBusinesses(article.ctaBusinessSlugs);
   const relatedCategories = article.relatedCategorySlugs
@@ -3043,8 +3104,8 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: localizedArticle.title,
-      description: localizedArticle.excerpt,
+      headline: displayArticle.title,
+      description: displayArticle.excerpt,
       datePublished: article.publishedAt,
       dateModified: article.updatedAt ?? article.publishedAt,
       image: [article.heroImage],
@@ -3071,7 +3132,7 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
           name: locale === 'zh' ? '亞利桑那新聞' : 'Arizona News',
           item: absoluteUrl(getLocalizedArizonaNewsPath(locale)),
         },
-        { '@type': 'ListItem', position: 3, name: localizedArticle.title, item: absoluteUrl(getLocalizedArizonaNewsArticlePath(locale, article.slug)) },
+        { '@type': 'ListItem', position: 3, name: displayArticle.title, item: absoluteUrl(getLocalizedArizonaNewsArticlePath(locale, article.slug)) },
       ],
     },
   ];
@@ -3083,7 +3144,7 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
         <div className="relative h-72 w-full bg-slate-200">
           <DiscoverArticleImage
             src={article.heroImage}
-            alt={descriptiveImageAlt(localizedArticle.title, 'article', locale)}
+            alt={descriptiveImageAlt(displayArticle.title, 'article', locale)}
             className="object-cover"
           />
         </div>
@@ -3095,35 +3156,19 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
                 {locale === 'zh' ? '舊聞檔案／不收錄搜尋' : 'Legacy archive / noindex'}
               </div>
             ) : null}
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">{localizedArticle.title}</h1>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500">
-              <span>{sourcePolicyLabel(article.sourcePolicy, locale)}</span>
-              {author ? (
-                <>
-                  <span className="text-slate-300">/</span>
-                  <span className="font-medium text-brand-700">{author.name}</span>
-                </>
-              ) : null}
-            </div>
-            {article.series === 'arizona-radar' ? (
-              <div className="flex flex-wrap gap-2">
-                {article.radarLane ? (
-                  <span className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
-                    {radarLaneLabel(article.radarLane, locale)}
-                  </span>
-                ) : null}
-                {article.sourceType ? (
-                  <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    {sourceTypeLabel(article.sourceType, locale)}
-                  </span>
-                ) : null}
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900">{displayArticle.title}</h1>
+            {author ? (
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500">
+                <span className="font-medium text-brand-700">{author.name}</span>
               </div>
             ) : null}
-            <p className="max-w-3xl text-base leading-7 text-slate-600">{localizedArticle.excerpt}</p>
-            <ArticleAudienceChips article={article} locale={locale} />
+            <p className="max-w-3xl text-base leading-7 text-slate-600">{displayArticle.excerpt}</p>
+            {article.series === 'arizona-radar' ? null : (
+              <ArticleAudienceChips article={article} locale={locale} />
+            )}
           </div>
           <div className="space-y-5">
-            {localizedArticle.body.map((paragraph, index) => (
+            {displayArticle.body.map((paragraph, index) => (
               <p key={`${article.slug}-${index}`} className="text-base leading-8 text-slate-700">
                 {paragraph}
               </p>
@@ -3133,65 +3178,8 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
           <div className="grid gap-6 lg:grid-cols-[1.05fr,0.95fr]">
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <h2 className="text-lg font-semibold text-slate-900">
-                {locale === 'zh' ? '來源與使用方式' : 'Sources and usage'}
+                {locale === 'zh' ? '來源' : 'Sources'}
               </h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">
-                {articleSourcePolicyDescription(article.sourcePolicy, locale)}
-              </p>
-              {article.series === 'arizona-radar' ? (
-                <div className="mt-4 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      {locale === 'zh' ? '來源類型' : 'Source type'}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">
-                      {article.sourceType
-                        ? sourceTypeLabel(article.sourceType, locale)
-                        : locale === 'zh'
-                          ? '雷達'
-                          : 'Radar'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      {locale === 'zh' ? '最後檢查' : 'Last checked'}
-                    </p>
-                    <LocalDateTime
-                      date={article.lastCheckedAt ?? article.updatedAt ?? article.publishedAt}
-                      locale={locale}
-                      className="mt-1 block text-sm font-semibold text-slate-900"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      {locale === 'zh' ? '圖片政策' : 'Image policy'}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">
-                      {article.heroImagePolicy === 'source_allowed'
-                        ? locale === 'zh'
-                          ? '使用來源文章主圖'
-                          : 'Source article hero image'
-                        : locale === 'zh'
-                          ? '僅可使用安全替代主圖'
-                          : 'Fallback-safe hero only'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                      {locale === 'zh' ? '內容聲明' : 'Content label'}
-                    </p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">
-                      {article.aiGeneratedSummary
-                        ? locale === 'zh'
-                          ? 'ChineseArizona 重寫整理文章'
-                          : 'ChineseArizona rewritten article'
-                        : locale === 'zh'
-                          ? 'ChineseArizona 編輯文章'
-                          : 'ChineseArizona editorial article'}
-                    </p>
-                  </div>
-                </div>
-              ) : null}
               {article.sourceLinks.length > 0 ? (
                 <ul className="mt-4 space-y-3">
                   {article.sourceLinks.map((sourceLink, index) => (
@@ -3213,7 +3201,13 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
                     </li>
                   ))}
                 </ul>
-              ) : null}
+              ) : (
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  {locale === 'zh'
+                    ? '這篇文章目前沒有列出的外部來源連結。'
+                    : 'No external source links are listed for this article.'}
+                </p>
+              )}
             </div>
 
             <div className="space-y-4">
@@ -3235,23 +3229,6 @@ export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; 
                   </div>
                 </div>
               ) : null}
-
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <h2 className="text-lg font-semibold text-slate-900">
-                  {locale === 'zh' ? '內容策略標籤' : 'Editorial tags'}
-                </h2>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    {articleSeriesLabel(article.series, locale)}
-                  </span>
-                  <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    {freshnessTierLabel(article.freshnessTier, locale)}
-                  </span>
-                  <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    {sourcePolicyLabel(article.sourcePolicy, locale)}
-                  </span>
-                </div>
-              </div>
 
               {showSidebarAd ? (
                 <AdSidebarRail placement="article_detail_sidebar" locale={locale} sticky={false} />
@@ -3448,14 +3425,14 @@ export async function AddBusinessPageView({
   ];
 
   return (
-    <div className="flex-grow overflow-x-hidden bg-[#fcf8f1] text-[#261b15]">
-      <section className="overflow-hidden border-b border-[#dccbbb] bg-[#fcf8f1]">
+    <div className="flex-grow overflow-x-hidden bg-[#f7f1e8] text-[#2c2722]">
+      <section className="overflow-hidden border-b border-[#ded5c9] bg-[#f7f1e8]">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
           <div className="grid items-stretch gap-8 lg:grid-cols-[0.96fr_1.04fr]">
             <div className="homepage-rise flex flex-col justify-center py-3">
               <Link
                 href={withLocale(locale, '/business')}
-                className="inline-flex w-fit items-center gap-2 rounded-full bg-[#f2e6d9] px-3.5 py-2 text-xs font-semibold text-[#6a5548] transition-colors hover:bg-[#ead8c5] hover:text-brand-700"
+                className="inline-flex w-fit items-center gap-2 rounded-md bg-[#efe7dc] px-3.5 py-2 text-xs font-semibold text-[#5b5047] transition-colors hover:bg-[#e7d9ca] hover:text-[#bd2730]"
               >
                 <Store className="h-4 w-4" aria-hidden="true" />
                 {locale === 'zh' ? '華人商家目錄' : 'ChineseArizona business directory'}
@@ -3470,12 +3447,12 @@ export async function AddBusinessPageView({
                 {locale === 'zh' ? '認領或新增商家' : 'Claim or add a business'}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-lg font-semibold leading-7 text-brand-600">
+              <p className="mt-5 max-w-2xl text-lg font-semibold leading-7 text-[#bd2730]">
                 {locale === 'zh'
                   ? '讓可信的亞利桑那華人商家被找到、被維護、被驗證。'
                   : 'Help trusted Arizona Chinese businesses get found, maintained, and verified.'}
               </p>
-              <p className="mt-3 max-w-2xl text-base leading-7 text-[#69564a]">
+              <p className="mt-3 max-w-2xl text-base leading-7 text-[#6d6258]">
                 {locale === 'zh'
                   ? '先搜尋是否已有商家頁面，再送出認領或新增申請。核准後，商家會進入目錄，主理人也能進入後台管理資料與照片。'
                   : 'Search existing coverage first, then submit a claim or a new listing request. After approval, the business enters the directory and the owner can manage details and photos from the dashboard.'}
@@ -3487,16 +3464,16 @@ export async function AddBusinessPageView({
 
                   return (
                     <div key={fact.title} className="border-l border-[#ddcdbb] pl-4">
-                      <Icon className="h-5 w-5 text-brand-600" aria-hidden="true" />
+                      <Icon className="h-5 w-5 text-[#bd2730]" aria-hidden="true" />
                       <p className="mt-3 text-sm font-semibold text-[#2c2019]">{fact.title}</p>
-                      <p className="mt-1 text-xs leading-5 text-[#7c685a]">{fact.description}</p>
+                      <p className="mt-1 text-xs leading-5 text-[#6d6258]">{fact.description}</p>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="homepage-rise homepage-rise-delay-1 relative min-h-[330px] overflow-hidden rounded-[34px] border border-[#dfcebd] bg-[#b06a35] shadow-[0_30px_80px_-58px_rgba(75,48,26,0.65)] sm:min-h-[420px]">
+            <div className="homepage-rise homepage-rise-delay-1 relative min-h-[330px] overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#d8c7b5] shadow-[0_24px_70px_rgba(85,58,28,0.12)] sm:min-h-[420px]">
               <Image
                 src="/directory-ai-replacements/lee-lee-oriental-supermarket-chandler.webp"
                 alt={locale === 'zh' ? '亞利桑那華人商家店面' : 'Arizona Chinese business storefront'}
@@ -3505,27 +3482,27 @@ export async function AddBusinessPageView({
                 className="object-cover"
                 loading="eager"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(45,24,12,0.02),rgba(45,24,12,0.34))]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,30,22,0),rgba(42,30,22,0.26))]" />
 
-              <div className="absolute left-5 top-5 max-w-[17rem] rounded-[24px] border border-white/45 bg-[#fffaf3]/95 p-4 shadow-[0_24px_50px_-34px_rgba(48,31,18,0.65)] backdrop-blur">
-                <p className="text-xs font-semibold tracking-[0.18em] text-[#8c6d58]">
+              <div className="absolute left-5 top-5 max-w-[17rem] border-l-4 border-[#bd2730] bg-[#fbf7f0]/92 px-4 py-3 shadow-[0_16px_40px_rgba(42,30,22,0.16)] backdrop-blur">
+                <p className="text-xs font-semibold tracking-[0.18em] text-[#8b8176]">
                   {locale === 'zh' ? '審核佇列' : 'REVIEW QUEUE'}
                 </p>
-                <p className="mt-2 text-lg font-semibold leading-tight text-[#2c2019]">
+                <p className="mt-2 text-lg font-semibold leading-tight text-[#2c2722]">
                   {locale === 'zh' ? '認領、新增、照片，一次送審。' : 'Claims, new listings, and photos in one request.'}
                 </p>
               </div>
 
-              <div className="absolute bottom-5 right-5 w-[min(22rem,calc(100%-2.5rem))] rounded-[26px] border border-[#eadac8] bg-[#fffaf3] p-4 shadow-[0_28px_55px_-36px_rgba(44,27,15,0.72)]">
+              <div className="absolute bottom-5 right-5 w-[min(22rem,calc(100%-2.5rem))] border border-[#dfd4c8] bg-[#fbf7f0] p-4 shadow-[0_16px_40px_rgba(42,30,22,0.16)]">
                 <div className="flex items-start gap-3">
-                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[16px] bg-brand-600 text-white">
+                  <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-md bg-[#bd2730] text-white">
                     <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-[#2c2019]">
+                    <p className="text-sm font-semibold text-[#2c2722]">
                       {locale === 'zh' ? '商家資料通過審核後上架' : 'Approved profiles go live in the directory'}
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-[#7a6658]">
+                    <p className="mt-1 text-xs leading-5 text-[#6d6258]">
                       {locale === 'zh'
                         ? '雙語搜尋、分類、城市、照片與後台管理會一起啟用。'
                         : 'Bilingual search, category, city, photos, and owner tools activate together.'}
@@ -3541,9 +3518,9 @@ export async function AddBusinessPageView({
 
                 return (
                   <div key={fact.title} className="border-l border-[#ddcdbb] pl-4">
-                    <Icon className="h-5 w-5 text-brand-600" aria-hidden="true" />
+                    <Icon className="h-5 w-5 text-[#bd2730]" aria-hidden="true" />
                     <p className="mt-3 text-sm font-semibold text-[#2c2019]">{fact.title}</p>
-                    <p className="mt-1 text-xs leading-5 text-[#7c685a]">{fact.description}</p>
+                    <p className="mt-1 text-xs leading-5 text-[#6d6258]">{fact.description}</p>
                   </div>
                 );
               })}
@@ -3552,7 +3529,7 @@ export async function AddBusinessPageView({
         </div>
       </section>
 
-      <section className="border-b border-[#dccbbb] bg-[#f7eddf]">
+      <section className="border-b border-[#ded5c9] bg-[#fbf7f0]">
         <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
             <BusinessClaimForm
@@ -3563,40 +3540,40 @@ export async function AddBusinessPageView({
             />
 
             <aside className="homepage-rise homepage-rise-delay-2 lg:sticky lg:top-24 lg:self-start">
-              <div className="overflow-hidden rounded-[28px] border border-[#dfcebd] bg-[#fffaf3] shadow-[0_26px_60px_-50px_rgba(76,49,27,0.58)]">
-                <div className="border-b border-[#eadac9] p-5">
-                  <p className="text-xs font-semibold tracking-[0.16em] text-[#9a806c]">
+              <div className="border-y border-[#d9cbbd] bg-[#f7f1e8]">
+                <div className="border-b border-[#ded2c5] p-5">
+                  <p className="text-xs font-semibold tracking-[0.16em] text-[#8b8176]">
                     {locale === 'zh' ? '上架流程' : 'LISTING WORKFLOW'}
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold leading-tight tracking-tight text-[#261b15] [font-family:var(--font-display)]">
+                  <h2 className="mt-2 text-2xl font-semibold leading-tight tracking-tight text-[#2c2722] [font-family:var(--font-display)]">
                     {locale === 'zh' ? '從提交到上架的節奏' : 'From request to live profile'}
                   </h2>
                 </div>
 
-                <ol className="divide-y divide-[#eadac9]">
+                <ol className="divide-y divide-[#ded2c5]">
                   {workflowSteps.map((step) => (
                     <li key={step.label} className="grid grid-cols-[3.25rem_1fr] gap-4 p-5">
-                      <span className="text-sm font-black text-brand-600 [font-variant-numeric:tabular-nums]">
+                      <span className="text-sm font-black text-[#bd2730] [font-variant-numeric:tabular-nums]">
                         {step.label}
                       </span>
                       <span>
-                        <span className="block text-sm font-semibold text-[#2f231c]">{step.title}</span>
-                        <span className="mt-1 block text-sm leading-6 text-[#735f51]">{step.description}</span>
+                        <span className="block text-sm font-semibold text-[#3d342e]">{step.title}</span>
+                        <span className="mt-1 block text-sm leading-6 text-[#6d6258]">{step.description}</span>
                       </span>
                     </li>
                   ))}
                 </ol>
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-[28px] border border-[#dfcebd] bg-[#fcf8f1]">
+              <div className="mt-5 border-l-4 border-[#bd2730] bg-[#f7f1e8]">
                 <div className="p-5">
-                  <h2 className="text-xl font-semibold leading-tight text-[#261b15] [font-family:var(--font-display)]">
+                  <h2 className="text-xl font-semibold leading-tight text-[#2c2722] [font-family:var(--font-display)]">
                     {locale === 'zh' ? '平台營運原則' : 'Platform operating principles'}
                   </h2>
-                  <ul className="mt-4 space-y-3 text-sm leading-6 text-[#705c4f]">
+                  <ul className="mt-4 space-y-3 text-sm leading-6 text-[#6d6258]">
                     {operatingPrinciples.map((principle) => (
                       <li key={principle} className="flex gap-3">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-600" aria-hidden="true" />
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#bd2730]" aria-hidden="true" />
                         <span>{principle}</span>
                       </li>
                     ))}
@@ -3676,6 +3653,246 @@ export async function ProfilePageView({ locale, slug }: { locale: Locale; slug: 
   );
 }
 
+function DashboardMetricCard({
+  icon,
+  label,
+  value,
+  detail,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: React.ReactNode;
+  detail: string;
+}) {
+  return (
+    <div className="group rounded-[1.35rem] border border-slate-200/80 bg-white/80 p-5 shadow-[0_18px_45px_rgba(74,49,27,0.06)] transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:bg-white active:translate-y-px">
+      <div className="flex items-start justify-between gap-4">
+        <div className="rounded-2xl bg-[#f6eee5] p-2.5 text-brand-800 transition duration-300 group-hover:bg-brand-900 group-hover:text-white">
+          {icon}
+        </div>
+        <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(102,33,22,0.22),transparent)]" />
+      </div>
+      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{label}</p>
+      <p className="mt-2 font-mono text-4xl font-semibold leading-none tracking-tight text-slate-950">{value}</p>
+      <p className="mt-3 text-sm leading-6 text-slate-600">{detail}</p>
+    </div>
+  );
+}
+
+function DashboardQuickAction({
+  href,
+  icon,
+  title,
+  description,
+  cta,
+  primary = false,
+  className = '',
+}: {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  cta: string;
+  primary?: boolean;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`group flex h-full flex-col justify-between rounded-[1.35rem] border p-5 transition duration-300 hover:-translate-y-0.5 active:translate-y-px ${
+        primary
+          ? 'border-brand-900 bg-brand-900 text-white shadow-[0_24px_60px_rgba(102,33,22,0.2)]'
+          : 'border-slate-200/80 bg-white/80 text-slate-950 shadow-[0_18px_45px_rgba(74,49,27,0.06)] hover:border-brand-200 hover:bg-white'
+      } ${className}`}
+    >
+      <div className="space-y-4">
+        <div
+          className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
+            primary ? 'bg-white/[0.12] text-white' : 'bg-[#f6eee5] text-brand-800'
+          }`}
+        >
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
+          <p className={`mt-2 text-sm leading-6 ${primary ? 'text-white/75' : 'text-slate-600'}`}>{description}</p>
+        </div>
+      </div>
+      <span
+        className={`mt-6 inline-flex items-center gap-2 text-sm font-semibold ${
+          primary ? 'text-white' : 'text-brand-700'
+        }`}
+      >
+        {cta}
+        <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+      </span>
+    </Link>
+  );
+}
+
+function DashboardChecklistItem({
+  icon,
+  title,
+  description,
+  active = false,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  active?: boolean;
+}) {
+  return (
+    <li className="flex gap-3 border-t border-slate-200/80 py-4 first:border-t-0 first:pt-0 last:pb-0">
+      <div
+        className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl ${
+          active ? 'bg-brand-900 text-white' : 'bg-slate-100 text-slate-500'
+        }`}
+      >
+        {icon}
+      </div>
+      <div>
+        <p className="font-semibold text-slate-950">{title}</p>
+        <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
+      </div>
+    </li>
+  );
+}
+
+function dashboardCampaignStatusLabel(status: DirectoryAdCampaign['status'], locale: Locale) {
+  const labels: Record<DirectoryAdCampaign['status'], { en: string; zh: string }> = {
+    pending_payment: { en: 'Pending payment', zh: '待付款' },
+    active: { en: 'Sponsored', zh: '贊助中' },
+    paused: { en: 'Paused', zh: '已暫停' },
+    cancelled: { en: 'Cancelled', zh: '已取消' },
+    exhausted: { en: 'Budget spent', zh: '預算用盡' },
+    expired: { en: 'Expired', zh: '已到期' },
+  };
+
+  return locale === 'zh' ? labels[status].zh : labels[status].en;
+}
+
+function ManagedBusinessWorkspaceRow({
+  business,
+  locale,
+  adsAvailable,
+  adsMode,
+  campaign,
+  readOnlyReason,
+}: {
+  business: Business;
+  locale: Locale;
+  adsAvailable: boolean;
+  adsMode: DirectoryAdsRuntimeMode;
+  campaign?: DirectoryAdCampaign;
+  readOnlyReason?: DirectoryAdsUnavailableReason;
+}) {
+  const detailHref = withLocale(locale, `/business/${business.slug}`);
+  const photoCount = (business.heroImage ? 1 : 0) + business.gallery.length;
+  const statusLabel = business.status
+    ? directoryStatusLabel(business.status, locale)
+    : locale === 'zh'
+      ? '已收錄'
+      : 'Listed';
+  const verificationLabel = business.verificationState
+    ? verificationStateLabel(business.verificationState, locale)
+    : locale === 'zh'
+      ? '未驗證'
+      : 'Unverified';
+  const placementLabel = campaign
+    ? dashboardCampaignStatusLabel(campaign.status, locale)
+    : business.sponsored || business.legacySponsored
+      ? locale === 'zh'
+        ? '人工精選'
+        : 'Manual placement'
+      : locale === 'zh'
+        ? '未啟用'
+        : 'Not active';
+
+  return (
+    <details className="group overflow-hidden rounded-[1.2rem] border border-slate-200/80 bg-white/80 shadow-[0_18px_45px_rgba(74,49,27,0.055)] transition duration-300 open:bg-white open:shadow-[0_24px_60px_rgba(74,49,27,0.08)]">
+      <summary className="grid cursor-pointer list-none gap-4 px-4 py-4 outline-none transition duration-300 hover:bg-[#fff8ef] focus-visible:ring-2 focus-visible:ring-brand-200 sm:grid-cols-[minmax(0,1.45fr)_0.65fr_0.65fr_0.65fr_auto] sm:items-center [&::-webkit-details-marker]:hidden">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#eadccb]">
+            <BusinessImage
+              imageUrl={business.heroImage}
+              label={descriptiveImageAlt(t(business.name, locale), 'business', locale)}
+              locale={locale}
+              sizes="56px"
+              className="object-cover"
+            />
+          </div>
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-semibold tracking-tight text-slate-950">
+              {t(business.name, locale)}
+            </h3>
+            <p className="mt-1 truncate text-sm text-slate-500">
+              {business.address ?? business.serviceAreaText ?? `${business.city}, AZ`}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            {locale === 'zh' ? '狀態' : 'Status'}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-slate-800">{statusLabel}</p>
+        </div>
+
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            {locale === 'zh' ? '驗證' : 'Verification'}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-slate-800">{verificationLabel}</p>
+        </div>
+
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+            {locale === 'zh' ? '推廣' : 'Placement'}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-slate-800">{placementLabel}</p>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 sm:justify-end">
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600">
+            {locale === 'zh' ? `${photoCount} 張照片` : `${photoCount} photos`}
+          </span>
+          <ChevronRight className="h-5 w-5 text-slate-400 transition-transform duration-300 group-open:rotate-90" />
+        </div>
+      </summary>
+
+      <div className="border-t border-slate-200/80 bg-[#fffdfa] px-4 py-5">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-sm leading-6 text-slate-600">
+            {locale === 'zh'
+              ? '展開後只顯示這筆商家的管理工具，避免整個頁面變成長卡片列表。'
+              : 'Expanded rows show only this listing’s management tools, keeping the workspace compact.'}
+          </p>
+          <Link
+            href={detailHref}
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-800 active:translate-y-px"
+          >
+            {locale === 'zh' ? '查看公開頁面' : 'View public page'}
+            <ExternalLink className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="space-y-4">
+          <BusinessPhotoEditor business={business} locale={locale} />
+          <DirectoryAdCampaignPanel
+            adsAvailable={adsAvailable}
+            adsMode={adsMode}
+            business={business}
+            initialCampaign={campaign}
+            locale={locale}
+            readOnlyReason={readOnlyReason}
+          />
+          <OwnedBusinessDeleteButton business={business} locale={locale} />
+        </div>
+      </div>
+    </details>
+  );
+}
+
 export async function DashboardPageView({ locale }: { locale: Locale }) {
   const user = await getServerUserFromCookies();
   const normalizedUserEmail = user?.email?.trim().toLowerCase() ?? '';
@@ -3707,62 +3924,245 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
   const adsAvailable = directoryAdsMode !== 'read_only';
   const recentReviews = managedBusinesses.flatMap((business) => getBusinessReviews(business.slug));
   const claimBusinessHref = withLocale(locale, '/add-business');
+  const editProfileHref = withLocale(locale, '/dashboard/profile');
+  const directoryHref = withLocale(locale, '/directory');
+  const accountName = profile?.name ?? user?.email ?? (locale === 'zh' ? '主理人' : 'Owner');
+  const accountRoleLabel = profileRoleLabel(profile?.role ?? 'member', locale);
+  const firstName = accountName.split(/\s+/)[0] || accountName;
+  const adsReadinessLabel = adsAvailable
+    ? locale === 'zh'
+      ? '廣告可用'
+      : 'Ads ready'
+    : locale === 'zh'
+      ? '廣告設定中'
+      : 'Ads read-only';
 
   return sectionContainer(
-    <div className="space-y-10 py-12">
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-3">
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">
-              {locale === 'zh' ? '後台' : 'Dashboard'}
-            </h1>
-            <p className="max-w-3xl text-base leading-7 text-slate-600">
-              {locale === 'zh'
-                ? user
-                  ? '在這裡管理已連結的商家、查看近期互動，並處理帳號相關工作。'
-                  : '登入後即可在這裡管理商家、追蹤認領與查看帳號相關活動。'
-                : user
-                  ? 'Manage connected listings, review recent activity, and handle account tasks in one place.'
-                  : 'Sign in to manage listings, follow claims, and view account activity in one place.'}
-            </p>
-          </div>
-          {user ? (
-            <Link
-              href={claimBusinessHref}
-              className="inline-flex items-center justify-center rounded-lg bg-brand-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-800"
-            >
-              {locale === 'zh' ? '認領商家' : 'Claim business'}
-            </Link>
-          ) : null}
-        </div>
-      </div>
+    <div className="space-y-8 py-10 sm:py-12 lg:py-14">
+      <section className="relative overflow-hidden rounded-[2rem] border border-[#e5d7c8] bg-[#fffdfa] shadow-[0_30px_80px_rgba(74,49,27,0.09)]">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#662116,#b87f3d,#f7e8d0)]" />
+        <div className="grid gap-8 p-6 sm:p-8 xl:grid-cols-[minmax(0,1.16fr)_minmax(320px,0.84fr)] xl:p-10">
+          <div className="flex min-h-[21rem] flex-col justify-between gap-10">
+            <div className="space-y-5">
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-brand-800">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                {locale === 'zh' ? '主理人工作台' : 'Owner workspace'}
+              </div>
+              <div className="space-y-4">
+                <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+                  {locale === 'zh' ? `${firstName}，今天從這裡開始` : `Start here, ${firstName}`}
+                </h1>
+                <p className="max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                  {locale === 'zh'
+                    ? user
+                      ? '把認領、已連結商家、近期互動與帳號設定放在同一個清楚的工作區，少一點翻找，多一點掌控。'
+                      : '登入後即可在這裡管理商家、追蹤認領與查看帳號相關活動。'
+                    : user
+                      ? 'Claims, connected listings, recent activity, and account settings now live in one clearer owner workspace.'
+                      : 'Sign in to manage listings, follow claims, and view account activity in one place.'}
+                </p>
+              </div>
+            </div>
 
-      <DashboardAccessNotice locale={locale} email={user?.email ?? ''} role={profile?.role ?? 'member'} />
+            {user ? (
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={claimBusinessHref}
+                  className="inline-flex items-center justify-center rounded-xl bg-brand-900 px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_35px_rgba(102,33,22,0.18)] transition duration-300 hover:-translate-y-0.5 hover:bg-brand-800 active:translate-y-px"
+                >
+                  {locale === 'zh' ? '認領商家' : 'Claim business'}
+                </Link>
+                <Link
+                  href={editProfileHref}
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-800 active:translate-y-px"
+                >
+                  {locale === 'zh' ? '編輯帳號' : 'Edit profile'}
+                </Link>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="space-y-4">
+            <DashboardAccessNotice locale={locale} email={user?.email ?? ''} role={profile?.role ?? 'member'} />
+            <div className="rounded-[1.25rem] border border-slate-200/80 bg-white/70 p-5 shadow-[0_18px_45px_rgba(74,49,27,0.06)] backdrop-blur">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                {locale === 'zh' ? '目前概況' : 'Current snapshot'}
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div>
+                  <p className="font-mono text-3xl font-semibold text-slate-950">{managedBusinesses.length}</p>
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                    {locale === 'zh' ? '已連結商家' : 'connected listings'}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-3xl font-semibold text-slate-950">{claimableBusinesses.length}</p>
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                    {locale === 'zh' ? '待認領符合項' : 'claim matches'}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 rounded-2xl bg-slate-950 px-4 py-3 text-sm leading-6 text-white">
+                {locale === 'zh' ? `帳號角色：${accountRoleLabel}` : `Account role: ${accountRoleLabel}`}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {user ? (
         <>
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <h2 className="text-lg font-semibold text-slate-900">{locale === 'zh' ? '管理中的商家' : 'Managed listings'}</h2>
-              <p className="mt-2 text-4xl font-bold text-slate-900">{managedBusinesses.length}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <h2 className="text-lg font-semibold text-slate-900">{locale === 'zh' ? '近期評論' : 'Recent reviews'}</h2>
-              <p className="mt-2 text-4xl font-bold text-slate-900">{recentReviews.length}</p>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <h2 className="text-lg font-semibold text-slate-900">{locale === 'zh' ? '帳號角色' : 'Account role'}</h2>
-              <p className="mt-2 text-2xl font-bold text-slate-900">
-                {profileRoleLabel(profile?.role ?? 'member', locale)}
-              </p>
-            </div>
+          <div className="grid gap-4 lg:grid-cols-[1.35fr_0.9fr_0.9fr_1fr]">
+            <DashboardMetricCard
+              icon={<Store className="h-5 w-5" />}
+              label={locale === 'zh' ? '管理中的商家' : 'Managed listings'}
+              value={managedBusinesses.length}
+              detail={
+                locale === 'zh'
+                  ? '已經連結到這個帳號、可以維護資料與圖片的商家。'
+                  : 'Listings connected to this account for details, photos, and owner tools.'
+              }
+            />
+            <DashboardMetricCard
+              icon={<MessageCircle className="h-5 w-5" />}
+              label={locale === 'zh' ? '近期評論' : 'Recent reviews'}
+              value={recentReviews.length}
+              detail={
+                locale === 'zh'
+                  ? '來自你已管理商家的新近互動。'
+                  : 'Fresh interaction across the listings you manage.'
+              }
+            />
+            <DashboardMetricCard
+              icon={<CheckCircle2 className="h-5 w-5" />}
+              label={locale === 'zh' ? '待認領符合項' : 'Claim matches'}
+              value={claimableBusinesses.length}
+              detail={
+                locale === 'zh'
+                  ? '聯絡 Email 與這個帳號相符的未綁定商家。'
+                  : 'Unassigned listings with contact email matching this account.'
+              }
+            />
+            <DashboardMetricCard
+              icon={<UserRound className="h-5 w-5" />}
+              label={locale === 'zh' ? '帳號角色' : 'Account role'}
+              value={<span className="text-2xl">{accountRoleLabel}</span>}
+              detail={
+                locale === 'zh'
+                  ? '角色會決定可用的管理與審核工具。'
+                  : 'Role controls the owner and review tools available here.'
+              }
+            />
           </div>
 
+          <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+            <div className="grid gap-4 md:grid-cols-[1.15fr_0.85fr]">
+              <DashboardQuickAction
+                href={claimBusinessHref}
+                icon={<Building2 className="h-5 w-5" />}
+                title={locale === 'zh' ? '認領或新增商家' : 'Claim or add a listing'}
+                description={
+                  locale === 'zh'
+                    ? '搜尋現有資料、送出主理人認領，或建立目前還沒有收錄的新商家。'
+                    : 'Search the directory, submit an owner claim, or add a business that is not listed yet.'
+                }
+                cta={locale === 'zh' ? '開始認領' : 'Start claim'}
+                primary
+                className="md:row-span-2"
+              />
+              <DashboardQuickAction
+                href={editProfileHref}
+                icon={<UserRound className="h-5 w-5" />}
+                title={locale === 'zh' ? '整理帳號資料' : 'Tune account details'}
+                description={
+                  locale === 'zh'
+                    ? '更新你的帳號資料，讓後續認領與管理流程更容易核對。'
+                    : 'Keep profile details current so claims and management work stay easy to verify.'
+                }
+                cta={locale === 'zh' ? '開啟設定' : 'Open settings'}
+              />
+              <DashboardQuickAction
+                href={directoryHref}
+                icon={<Search className="h-5 w-5" />}
+                title={locale === 'zh' ? '查看公開目錄' : 'Review the public directory'}
+                description={
+                  locale === 'zh'
+                    ? '從瀏覽者角度檢查商家頁面、分類與搜尋結果。'
+                    : 'Check listings, categories, and search results from a visitor point of view.'
+                }
+                cta={locale === 'zh' ? '前往目錄' : 'Go to directory'}
+              />
+            </div>
+
+            <aside className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 p-5 shadow-[0_18px_45px_rgba(74,49,27,0.06)]">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    {locale === 'zh' ? '下一步' : 'Next checks'}
+                  </p>
+                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-slate-950">
+                    {locale === 'zh' ? '保持商家頁面可用' : 'Keep listings ready'}
+                  </h2>
+                </div>
+                <span className="rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-800">
+                  {adsReadinessLabel}
+                </span>
+              </div>
+              <ul className="mt-5">
+                <DashboardChecklistItem
+                  icon={<Store className="h-4 w-4" />}
+                  title={locale === 'zh' ? '連結商家' : 'Connect listings'}
+                  description={
+                    managedBusinesses.length > 0
+                      ? locale === 'zh'
+                        ? '你已經有可管理的商家。'
+                        : 'You have at least one listing connected.'
+                      : locale === 'zh'
+                        ? '完成認領後，管理工具會在這裡出現。'
+                        : 'Approved claims will unlock owner tools here.'
+                  }
+                  active={managedBusinesses.length > 0}
+                />
+                <DashboardChecklistItem
+                  icon={<Camera className="h-4 w-4" />}
+                  title={locale === 'zh' ? '維護圖片與資料' : 'Maintain photos and details'}
+                  description={
+                    managedBusinesses.length > 0
+                      ? locale === 'zh'
+                        ? '在下方商家區塊補充圖片、資料與廣告設定。'
+                        : 'Use the business workspace below for photos, details, and ads.'
+                      : locale === 'zh'
+                        ? '等第一筆商家連結後再補充圖片與資料。'
+                        : 'Add richer details once the first listing is connected.'
+                  }
+                  active={managedBusinesses.length > 0}
+                />
+                <DashboardChecklistItem
+                  icon={<CircleDollarSign className="h-4 w-4" />}
+                  title={locale === 'zh' ? '確認推廣狀態' : 'Check promotion status'}
+                  description={
+                    adsAvailable
+                      ? locale === 'zh'
+                        ? '目錄廣告工具已可使用。'
+                        : 'Directory ad tools are available for eligible listings.'
+                      : locale === 'zh'
+                        ? '廣告工具目前以唯讀模式顯示。'
+                        : 'Ad tools are currently shown in read-only mode.'
+                  }
+                  active={adsAvailable}
+                />
+              </ul>
+            </aside>
+          </section>
+
           {claimableBusinesses.length > 0 ? (
-            <div className="space-y-4">
+            <section className="space-y-5 rounded-[1.6rem] border border-brand-100 bg-brand-50/50 p-5 shadow-[0_20px_50px_rgba(102,33,22,0.06)] sm:p-6">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">
+                    {locale === 'zh' ? '待處理' : 'Needs attention'}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
                     {locale === 'zh' ? '待你認領的商家' : 'Listings ready to claim'}
                   </h2>
                   <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-600">
@@ -3780,18 +4180,18 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
                   );
 
                   return (
-                    <div key={business.id} className="space-y-3 rounded-2xl border border-brand-100 bg-brand-50/50 p-4">
+                    <div key={business.id} className="space-y-4 border-t border-brand-100 pt-4 first:border-t-0 first:pt-0">
                       <BusinessCard business={business} locale={locale} />
                       <div className="flex flex-wrap gap-3">
                         <Link
                           href={businessClaimHref}
-                          className="inline-flex items-center rounded-lg bg-brand-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-800"
+                          className="inline-flex items-center rounded-xl bg-brand-900 px-4 py-2.5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-brand-800 active:translate-y-px"
                         >
                           {locale === 'zh' ? '認領這筆商家' : 'Claim this listing'}
                         </Link>
                         <Link
                           href={withLocale(locale, `/business/${business.slug}`)}
-                          className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                          className="inline-flex items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition duration-300 hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-800 active:translate-y-px"
                         >
                           {locale === 'zh' ? '查看商家頁面' : 'View listing'}
                         </Link>
@@ -3800,41 +4200,53 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
                   );
                 })}
               </div>
-            </div>
+            </section>
           ) : null}
 
           {managedBusinesses.length > 0 ? (
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-slate-900">{locale === 'zh' ? '你的商家' : 'Your businesses'}</h2>
-              <div className="space-y-4">
+            <section id="your-businesses" className="space-y-5 rounded-[1.6rem] border border-slate-200/80 bg-white/75 p-5 shadow-[0_22px_55px_rgba(74,49,27,0.07)] sm:p-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                    {locale === 'zh' ? '管理工作區' : 'Management workspace'}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                    {locale === 'zh' ? '你的商家' : 'Your businesses'}
+                  </h2>
+                </div>
+                <p className="max-w-xl text-sm leading-6 text-slate-600 sm:text-right">
+                  {locale === 'zh'
+                    ? '逐一檢查公開頁面、圖片、推廣設定與必要的帳號操作。'
+                    : 'Review public pages, photos, promotion settings, and account actions from each listing block.'}
+                </p>
+              </div>
+              <div className="space-y-3">
                 {managedBusinesses.map((business) => (
-                  <div key={business.id} className="space-y-4">
-                    <BusinessCard business={business} locale={locale} />
-                    <BusinessPhotoEditor business={business} locale={locale} />
-                    <DirectoryAdCampaignPanel
-                      adsAvailable={adsAvailable}
-                      adsMode={directoryAdsMode}
-                      business={business}
-                      initialCampaign={adCampaignsByBusinessId.get(business.id)}
-                      locale={locale}
-                      readOnlyReason={directoryAdsAvailability.unavailableReason}
-                    />
-                    <OwnedBusinessDeleteButton business={business} locale={locale} />
-                  </div>
+                  <ManagedBusinessWorkspaceRow
+                    key={business.id}
+                    adsAvailable={adsAvailable}
+                    adsMode={directoryAdsMode}
+                    business={business}
+                    campaign={adCampaignsByBusinessId.get(business.id)}
+                    locale={locale}
+                    readOnlyReason={directoryAdsAvailability.unavailableReason}
+                  />
                 ))}
               </div>
-            </div>
+            </section>
           ) : (
-            <EmptyState
-              title={locale === 'zh' ? '目前還沒有可管理的商家' : 'No managed listings yet'}
-              description={
-                locale === 'zh'
-                  ? '當商家認領完成，或有商家連結到這個帳號後，這裡就會顯示可管理的項目。'
-                  : 'Listings connected to this account will appear here once a claim is approved or a business is assigned to you.'
-              }
-              actionLabel={locale === 'zh' ? '認領商家' : 'Claim business'}
-              actionHref={claimBusinessHref}
-            />
+            <section className="rounded-[1.6rem] border border-slate-200/80 bg-white/75 p-5 shadow-[0_22px_55px_rgba(74,49,27,0.07)] sm:p-6">
+              <EmptyState
+                title={locale === 'zh' ? '目前還沒有可管理的商家' : 'No managed listings yet'}
+                description={
+                  locale === 'zh'
+                    ? '當商家認領完成，或有商家連結到這個帳號後，這裡就會顯示可管理的項目。'
+                    : 'Listings connected to this account will appear here once a claim is approved or a business is assigned to you.'
+                }
+                actionLabel={locale === 'zh' ? '認領商家' : 'Claim business'}
+                actionHref={claimBusinessHref}
+              />
+            </section>
           )}
         </>
       ) : null}

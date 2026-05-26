@@ -91,6 +91,9 @@ describe('public chrome', () => {
     expect(footerHtml).not.toContain('/dashboard');
     expect(footerHtml).not.toContain('/admin');
     expect(footerHtml).not.toContain('/shop/sell');
+    expect(footerHtml).toContain('/zh/privacy');
+    expect(footerHtml).toContain('/zh/contact');
+    expect(footerHtml).toContain('/zh/editorial-policy');
   });
 
   it('keeps relocation as the last top-level navbar item', () => {

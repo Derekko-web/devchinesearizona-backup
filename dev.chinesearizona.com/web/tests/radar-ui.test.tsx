@@ -39,9 +39,14 @@ vi.mock('next/image', () => ({
     src: string;
     fill?: boolean;
     [key: string]: unknown;
-  }) => (
-    <img alt={alt} src={src} {...props} />
-  ),
+  }) => {
+    void _fill;
+    return (
+      // The mock intentionally renders a plain img so server-side markup tests stay dependency-light.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img alt={alt} src={src} {...props} />
+    );
+  },
 }));
 
 vi.mock('next/navigation', () => ({
@@ -222,17 +227,20 @@ describe('radar ui', () => {
       await CommunityRadarPageView({ locale: 'en', searchParams: { lane: 'official' } })
     );
 
-    expect(html).toContain('Newest Arizona News');
     expect(html).toContain('Official');
-    expect(html).toContain('Official feed');
+    expect(html).toContain('Official news');
     expect(html).toContain('mesa-radar-housing-pulse');
     expect(html).toContain('Read article');
+    expect(html).not.toContain('Newest Arizona News');
+    expect(html).not.toContain('Showing 1-1 of 1');
+    expect(html).not.toContain('Original source');
+    expect(html).not.toContain('All signals');
     expect(html).not.toContain('AI summary');
     expect(html).not.toContain('Latest public summary');
     expect(html).not.toContain('Monitoring live');
   });
 
-  it('renders radar provenance badges on article detail pages', async () => {
+  it('renders compact source links on article detail pages', async () => {
     writeRadarStore();
     const { ArticleDetailPageView } = await import('@/views/site-pages');
 
@@ -240,11 +248,13 @@ describe('radar ui', () => {
       (await ArticleDetailPageView({ locale: 'en', slug: 'mesa-radar-housing-pulse' }))!
     );
 
-    expect(html).toContain('ChineseArizona rewritten article');
-    expect(html).toContain('Source type');
-    expect(html).toContain('Image policy');
-    expect(html).toContain('Fallback-safe hero only');
-    expect(html).toContain('dateTime="2026-04-18T12:00:30.000Z"');
+    expect(html).toContain('Sources');
+    expect(html).toContain('Phoenix Sky Harbor');
+    expect(html).not.toContain('ChineseArizona rewritten article');
+    expect(html).not.toContain('Source type');
+    expect(html).not.toContain('Image policy');
+    expect(html).not.toContain('Fallback-safe hero only');
+    expect(html).not.toContain('Editorial tags');
   });
 
   it('falls back to translated Chinese copy when Arizona Radar only has English text', async () => {
@@ -259,13 +269,12 @@ describe('radar ui', () => {
       (await ArticleDetailPageView({ locale: 'zh', slug: 'mesa-radar-housing-pulse' }))!
     );
 
-    expect(feedHtml).toContain('亞利桑那新聞');
-    expect(feedHtml).toContain('官方動態');
+    expect(feedHtml).toContain('官方新聞');
     expect(feedHtml).toContain('翻譯：Mesa radar housing pulse');
     expect(feedHtml).toContain('翻譯：A runtime test item for Arizona Radar.');
     expect(detailHtml).toContain('翻譯：Mesa radar housing pulse');
     expect(detailHtml).toContain('翻譯：This article only exists in the radar runtime store.');
-    expect(detailHtml).toContain('來源與使用方式');
+    expect(detailHtml).toContain('來源');
   });
 
   it('renders the community teaser entry point for Arizona Radar', async () => {

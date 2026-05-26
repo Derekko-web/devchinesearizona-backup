@@ -12,13 +12,19 @@ import Link from 'next/link';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedArizonaNewsArticlePath, getLocalizedArizonaNewsPath } from '@/lib/arizona-news';
 import { getBusinessCategories, getBusinesses, getCurrentArticles } from '@/lib/content';
-import { launchCities } from '@/lib/directory';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
+import {
+  defaultSiteProfile,
+  type SiteFeaturedShowcaseCard,
+  type SiteNeighborhoodSpot,
+  type SiteProfile,
+} from '@/lib/site-config';
 import type { BusinessCategory, Locale } from '@/lib/types';
 
 type HomePageViewProps = {
   locale: Locale;
+  site?: SiteProfile;
 };
 
 type HomeStoryCard = {
@@ -29,29 +35,8 @@ type HomeStoryCard = {
   image?: string | null;
 };
 
-type NeighborhoodSpot = {
-  city: string;
-  cityZh: string;
-  regionEn: string;
-  regionZh: string;
-  imageUrl: string;
-};
-
-type FeaturedShowcaseCard = {
-  slug: string;
-  badge: string;
-  categoryEn: string;
-  categoryZh: string;
-  nameEn: string;
-  nameZh: string;
-  imageUrl: string;
-  rating: string;
-  reviewCount: number;
-  line1En: string;
-  line1Zh: string;
-  line2En: string;
-  line2Zh: string;
-};
+type NeighborhoodSpot = SiteNeighborhoodSpot;
+type FeaturedShowcaseCard = SiteFeaturedShowcaseCard;
 
 type TrustedServiceTile = {
   slug?: string;
@@ -70,109 +55,6 @@ function hasCjkCharacters(value: string): boolean {
 
 const popularSearchSlugs = ['dining', 'real-estate', 'local-services', 'education', 'medical'] as const;
 
-const neighborhoodSpots: NeighborhoodSpot[] = [
-  {
-    city: 'Chandler',
-    cityZh: '钱德勒',
-    regionEn: 'East Valley',
-    regionZh: '东谷',
-    imageUrl: '/home-neighborhood/chandler-card.webp',
-  },
-  {
-    city: 'Tempe',
-    cityZh: '坦佩',
-    regionEn: 'ASU corridor',
-    regionZh: '大学走廊',
-    imageUrl: '/home-neighborhood/tempe-card.webp',
-  },
-  {
-    city: 'Phoenix',
-    cityZh: '凤凰城',
-    regionEn: 'Greater Phoenix',
-    regionZh: '都会区',
-    imageUrl: '/home-neighborhood/phoenix-card.webp',
-  },
-  {
-    city: 'Scottsdale',
-    cityZh: '斯科茨代尔',
-    regionEn: 'North East Valley',
-    regionZh: '东北谷',
-    imageUrl: '/home-neighborhood/scottsdale-card.webp',
-  },
-] as const;
-
-const cityNameZh: Record<string, string> = {
-  Phoenix: '凤凰城',
-  Chandler: '钱德勒',
-  Tempe: '坦佩',
-  Mesa: '梅萨',
-  Gilbert: '吉尔伯特',
-  Scottsdale: '斯科茨代尔',
-};
-
-const featuredShowcaseCards: FeaturedShowcaseCard[] = [
-  {
-    slug: 'bido-cafe',
-    badge: 'Verified',
-    categoryEn: 'Dining',
-    categoryZh: '餐厅美食',
-    nameEn: 'Bido Cafe',
-    nameZh: 'Bido Cafe',
-    imageUrl: '/directory-ai-replacements/bido-cafe.webp',
-    rating: '4.8',
-    reviewCount: 24,
-    line1En: '2050 N Alma School Rd #11',
-    line1Zh: '2050 N Alma School Rd #11',
-    line2En: 'Chandler, AZ 85224',
-    line2Zh: 'Chandler, AZ 85224',
-  },
-  {
-    slug: 'hedy-li-phoenix',
-    badge: 'Verified',
-    categoryEn: 'Real Estate',
-    categoryZh: '地产服务',
-    nameEn: 'Hedy Li',
-    nameZh: 'Hedy Li',
-    imageUrl: '/directory-ai-replacements/hedy-li-phoenix.webp',
-    rating: '4.9',
-    reviewCount: 47,
-    line1En: 'Phoenix Metro Area',
-    line1Zh: '凤凰城都会区',
-    line2En: '',
-    line2Zh: '',
-  },
-  {
-    slug: 'old-town-taste-tempe',
-    badge: 'Claimed',
-    categoryEn: 'Beverages',
-    categoryZh: '饮品甜点',
-    nameEn: 'Old Town Taste',
-    nameZh: 'Old Town Taste',
-    imageUrl: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
-    rating: '4.7',
-    reviewCount: 51,
-    line1En: '1845 E Broadway Rd',
-    line1Zh: '1845 E Broadway Rd',
-    line2En: 'Tempe, AZ 85281',
-    line2Zh: 'Tempe, AZ 85281',
-  },
-  {
-    slug: 'china-magic-noodle-house-chandler',
-    badge: 'Verified',
-    categoryEn: 'Dining',
-    categoryZh: '餐厅美食',
-    nameEn: 'China Magic Noodle House',
-    nameZh: 'China Magic Noodle House',
-    imageUrl: '/directory-ai-replacements/china-magic-noodle-house-chandler.webp',
-    rating: '4.7',
-    reviewCount: 46,
-    line1En: '2015 N Dobson Rd Unit 2',
-    line1Zh: '2015 N Dobson Rd Unit 2',
-    line2En: 'Chandler, AZ 85224',
-    line2Zh: 'Chandler, AZ 85224',
-  },
-] as const;
-
 function CactusIcon({ className }: { className?: string }) {
   return (
     <img
@@ -183,6 +65,21 @@ function CactusIcon({ className }: { className?: string }) {
       loading="eager"
       decoding="async"
     />
+  );
+}
+
+function LocalFocusIcon({ site, className }: { site: SiteProfile; className?: string }) {
+  if (site.key === 'arizona') {
+    return <CactusIcon className={className} />;
+  }
+
+  return (
+    <span
+      aria-hidden="true"
+      className={`${className ?? ''} flex items-center justify-center rounded-full bg-[#fff0dd] text-[#d28a35]`}
+    >
+      <MapPin className="h-7 w-7" />
+    </span>
   );
 }
 
@@ -326,9 +223,11 @@ function FeaturedBusinessCard({
   card: FeaturedShowcaseCard;
   locale: Locale;
 }) {
+  const href = card.href ?? `/business/${card.slug}`;
+
   return (
     <Link
-      href={withLocale(locale, `/business/${card.slug}`)}
+      href={withLocale(locale, href)}
       className="homepage-card group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#e7d8ca] bg-[#fffdfa] shadow-[0_20px_44px_-40px_rgba(80,54,29,0.5)]"
     >
       <div className="relative h-[112px] overflow-hidden bg-[#efe3d4] sm:h-[118px]">
@@ -425,7 +324,8 @@ function StoryCard({ story }: { story: HomeStoryCard }) {
   );
 }
 
-export function HomePageView({ locale }: HomePageViewProps) {
+export function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
+  const home = site.home;
   const allBusinesses = getBusinesses(locale, { sort: 'featured' });
   const categories = getBusinessCategories();
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
@@ -521,23 +421,15 @@ export function HomePageView({ locale }: HomePageViewProps) {
                   textShadow: '0.015em 0 0 rgba(44, 32, 25, 0.3)',
                 }}
               >
-                {copy(locale, "Your Guide to Arizona's Chinese Community", '亚利桑那华人社区指南')}
+                {copy(locale, home.headline.en, home.headline.zh)}
               </h1>
 
               <p className="homepage-rise homepage-rise-delay-2 mt-2.5 text-[1.45rem] font-semibold text-brand-600 sm:text-[1.55rem]">
-                {oppositeCopy(
-                  locale,
-                  "Connect with Arizona's Chinese community and discover local highlights",
-                  '连接亚利桑那华人社区，发现本地精彩'
-                )}
+                {oppositeCopy(locale, home.kicker.en, home.kicker.zh)}
               </p>
 
               <p className="homepage-rise homepage-rise-delay-2 mt-2 text-[0.95rem] leading-7 text-[#6c584d] lg:whitespace-nowrap">
-                {copy(
-                  locale,
-                  'Find trusted businesses, local services, and community connections.',
-                  '找到可信商家、在地服务与社区连结。'
-                )}
+                {copy(locale, home.intro.en, home.intro.zh)}
               </p>
 
               <form
@@ -545,7 +437,7 @@ export function HomePageView({ locale }: HomePageViewProps) {
                 className="homepage-rise homepage-rise-delay-2 relative z-30 mt-5 overflow-hidden rounded-[22px] border border-[#e6d7ca] bg-white shadow-[0_28px_55px_-40px_rgba(84,58,31,0.32)] xl:w-[calc(100%+6.25rem)]"
               >
                 <input type="hidden" name="sort" value="featured" />
-                <div className="grid gap-px bg-[#ebddce] md:grid-cols-[minmax(0,1fr)_170px_118px]">
+                <div className="grid gap-px bg-[#ebddce] md:grid-cols-[minmax(0,1fr)_minmax(204px,224px)_118px]">
                   <label className="flex items-center gap-3 bg-white px-5 py-3.5">
                     <Search className="h-5 w-5 text-[#978272]" />
                     <span className="min-w-0 flex-1">
@@ -565,12 +457,16 @@ export function HomePageView({ locale }: HomePageViewProps) {
                     <MapPin className="h-5 w-5 text-[#978272]" />
                     <select
                       name="city"
-                      className="w-full bg-transparent text-sm font-medium text-[#3a2b23] outline-none"
-                      defaultValue="Tempe"
+                      className="w-full bg-transparent pr-7 text-sm font-medium text-[#3a2b23] outline-none"
+                      defaultValue={home.defaultSearchCity}
                     >
-                      {launchCities.map((city) => (
+                      {home.launchCities.map((city) => (
                         <option key={city} value={city}>
-                          {copy(locale, `${city}, AZ`, `${cityNameZh[city] ?? city}, AZ`)}
+                          {copy(
+                            locale,
+                            `${city}, ${home.citySelectSuffix.en}`,
+                            `${home.cityNamesZh[city] ?? city}, ${home.citySelectSuffix.zh}`
+                          )}
                         </option>
                       ))}
                       <option value="">{copy(locale, 'All cities', '全部城市')}</option>
@@ -632,10 +528,10 @@ export function HomePageView({ locale }: HomePageViewProps) {
                 </div>
 
                 <div className="flex items-start gap-3 sm:pl-3">
-                  <CactusIcon className="-mt-2 h-[4.375rem] w-[4.375rem] flex-shrink-0" />
+                  <LocalFocusIcon site={site} className="-mt-2 h-[4.375rem] w-[4.375rem] flex-shrink-0" />
                   <div>
-                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'AZ Focused', '亚省聚焦')}</p>
-                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'Local neighborhoods and services', '在地社区与服务')}</p>
+                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, home.focusTitle.en, home.focusTitle.zh)}</p>
+                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, home.focusBody.en, home.focusBody.zh)}</p>
                   </div>
                 </div>
               </div>
@@ -643,8 +539,8 @@ export function HomePageView({ locale }: HomePageViewProps) {
 
             <div className="homepage-rise homepage-rise-delay-2 relative min-h-[320px] overflow-hidden rounded-tl-[104px] bg-[#b06a35] xl:min-h-[438px]">
               <img
-                src="/directory-ai-replacements/old-town-taste-tempe-v2.webp"
-                alt={copy(locale, 'Featured Arizona Chinese cuisine', '亚利桑那华人美食')}
+                src={home.heroImageUrl}
+                alt={copy(locale, home.heroImageAlt.en, home.heroImageAlt.zh)}
                 className="absolute inset-0 h-full w-full object-cover object-[58%_50%]"
                 loading="eager"
                 decoding="async"
@@ -653,10 +549,13 @@ export function HomePageView({ locale }: HomePageViewProps) {
 
               <div className="absolute -bottom-3 -right-4 z-20 w-[22.8rem] max-w-[52%] sm:w-[23.5rem] xl:w-[24.2rem]">
                 <img
-                  src="/hero/tempe-landscape-transparent-cropped.png"
-                  alt=""
-                  aria-hidden="true"
-                  className="block w-full"
+                  src={home.heroForegroundImageUrl}
+                  alt={copy(locale, home.heroForegroundAlt.en, home.heroForegroundAlt.zh)}
+                  className={
+                    home.heroForegroundTransparent
+                      ? 'block w-full'
+                      : 'block aspect-[1.42] w-full rounded-[28px] border border-[#e8d7c6] object-cover shadow-[0_18px_42px_-26px_rgba(74,48,29,0.42)]'
+                  }
                   loading="eager"
                   decoding="async"
                 />
@@ -667,10 +566,10 @@ export function HomePageView({ locale }: HomePageViewProps) {
                   </span>
                     <span className="flex flex-col leading-none">
                     <span className="text-[10px] font-semibold tracking-[0.18em] text-[#6c4d39]">
-                      {copy(locale, 'TEMPE, ARIZONA', '坦佩，亚利桑那')}
+                      {copy(locale, home.heroBadge.en, home.heroBadge.zh)}
                     </span>
                     <span className="mt-1 text-[11px] font-medium text-[#846653]">
-                      {oppositeCopy(locale, 'City of sunshine · Active community', '阳光之城 · 活力社区')}
+                      {oppositeCopy(locale, home.heroBadgeSubcopy.en, home.heroBadgeSubcopy.zh)}
                     </span>
                   </span>
                 </div>
@@ -688,7 +587,7 @@ export function HomePageView({ locale }: HomePageViewProps) {
               />
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                {featuredShowcaseCards.map((card) => (
+                {home.featuredCards.map((card) => (
                   <FeaturedBusinessCard
                     key={card.slug}
                     card={card}
@@ -707,15 +606,15 @@ export function HomePageView({ locale }: HomePageViewProps) {
               />
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                {neighborhoodSpots.map((spot) => (
+                {home.neighborhoods.map((spot) => (
                   <NeighborhoodCard key={spot.city} spot={spot} locale={locale} />
                 ))}
               </div>
 
               <div className="homepage-card relative mt-4 overflow-hidden rounded-[22px] border border-[#e2d2c1] bg-[#f5eee4] shadow-[0_22px_48px_-42px_rgba(72,49,27,0.45)] xl:mt-auto">
                 <img
-                  src="/home-neighborhood/map-reference.png"
-                  alt={copy(locale, 'Arizona neighborhood map', '亚利桑那社区地图')}
+                  src={home.mapImageUrl}
+                  alt={copy(locale, home.mapImageAlt.en, home.mapImageAlt.zh)}
                   className="h-[142px] w-full scale-[1.18] object-cover object-center"
                   loading="lazy"
                   decoding="async"
@@ -801,8 +700,8 @@ export function HomePageView({ locale }: HomePageViewProps) {
 
             <div className="relative overflow-hidden bg-[#f2dfc8] p-6 sm:p-7">
               <img
-                src="/home-neighborhood/relocation-cactus.webp"
-                alt={copy(locale, 'Arizona desert landscape', '亚利桑那沙漠风景')}
+                src={home.relocationImageUrl}
+                alt={copy(locale, home.relocationImageAlt.en, home.relocationImageAlt.zh)}
                 className="absolute inset-0 h-full w-full object-cover object-[58%_center]"
                 loading="lazy"
                 decoding="async"
@@ -812,17 +711,13 @@ export function HomePageView({ locale }: HomePageViewProps) {
 
               <div className="relative max-w-[18rem]">
                 <h2 className="max-w-[10ch] text-[2.35rem] leading-[0.95] font-black tracking-tight text-[#2c2019] [font-family:var(--font-display)]">
-                  {copy(locale, 'New to Arizona?', '初来亚利桑那？')}
+                  {copy(locale, home.newcomerTitle.en, home.newcomerTitle.zh)}
                 </h2>
                 <p className="mt-2 text-[1.1rem] font-semibold text-[#8d5737]">
-                  {oppositeCopy(locale, 'New to Arizona?', '初来亚利桑那？')}
+                  {oppositeCopy(locale, home.newcomerTitle.en, home.newcomerTitle.zh)}
                 </p>
                 <p className="mt-4 text-sm leading-7 text-[#6d584c]">
-                  {copy(
-                    locale,
-                    'Your guide to settling in, finding services, schools, and more.',
-                    '从学校到服务，把安家路线上需要的信息整理清楚。'
-                  )}
+                  {copy(locale, home.newcomerBody.en, home.newcomerBody.zh)}
                 </p>
 
                 <Link

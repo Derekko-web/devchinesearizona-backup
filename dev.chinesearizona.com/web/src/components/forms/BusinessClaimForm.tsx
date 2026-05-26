@@ -151,29 +151,29 @@ export function BusinessClaimForm({
   }
 
   const fieldClass =
-    'w-full rounded-[15px] border border-[#dfcebd] bg-white px-4 py-3 text-sm font-medium text-[#33251d] outline-none transition-colors placeholder:text-[#a58f7d] focus:border-brand-300 focus:ring-2 focus:ring-brand-100';
-  const labelClass = 'mb-2 block text-sm font-semibold text-[#382a22]';
+    'w-full rounded-md border border-[#d7cabe] bg-[#fffdf8] px-4 py-3 text-sm font-medium text-[#33251d] outline-none transition-colors placeholder:text-[#9d8a7b] focus:border-[#bd2730] focus:ring-2 focus:ring-[#bd2730]/15';
+  const labelClass = 'mb-2 block text-sm font-semibold text-[#3d342e]';
 
   return (
-    <section className="homepage-rise overflow-hidden rounded-[28px] border border-[#dfcebd] bg-[#fffaf3] shadow-[0_28px_65px_-52px_rgba(73,47,27,0.65)]" aria-labelledby="business-claim-form-title">
-      <div className="grid gap-5 border-b border-[#eadac9] p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-start">
+    <section className="homepage-rise border-y border-[#d9cbbd] bg-[#fbf7f0]" aria-labelledby="business-claim-form-title">
+      <div className="grid gap-5 border-b border-[#ded2c5] px-4 py-6 sm:px-6 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
-          <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#9a806c]">
-            <Search className="h-4 w-4 text-brand-600" aria-hidden="true" />
+          <p className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.16em] text-[#8b8176]">
+            <Search className="h-4 w-4 text-[#bd2730]" aria-hidden="true" />
             {locale === 'zh' ? '先查重複，再送出申請' : 'SEARCH FIRST, THEN SUBMIT'}
           </p>
-          <h2 id="business-claim-form-title" className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-[#261b15] [font-family:var(--font-display)]">
+          <h2 id="business-claim-form-title" className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-[#2c2722] [font-family:var(--font-display)]">
             {locale === 'zh' ? '商家申請與重複檢查' : 'Business request intake'}
           </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-[#6f5b4e]">
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-[#6d6258]">
             {locale === 'zh'
               ? '先搜尋是否已存在相似商家。若已有資料，可直接送出認領；若沒有，送出新商家申請後，我們會在核准後直接上架到目錄。'
               : 'Search first for an existing listing. If we already have the business, submit a claim. If not, send a new business request and we will publish it to the directory once approved.'}
           </p>
         </div>
 
-        <div className="flex max-w-sm items-start gap-3 border-l border-[#dfcebd] pl-4 text-sm leading-6 text-[#735f51] lg:justify-self-end">
-          <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-600" aria-hidden="true" />
+        <div className="flex max-w-sm items-start gap-3 border-l border-[#d7cabe] pl-4 text-sm leading-6 text-[#6d6258] lg:justify-self-end">
+          <ShieldCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#bd2730]" aria-hidden="true" />
           <p>
             {locale === 'zh'
               ? `這筆申請將綁定到 ${user.email ?? '你的帳號'}，方便認領審核與後台開通。`
@@ -182,7 +182,7 @@ export function BusinessClaimForm({
         </div>
       </div>
 
-      <form action={handleSubmit} className="space-y-6 p-5 sm:p-6">
+      <form action={handleSubmit} className="space-y-6 px-4 py-6 sm:px-6">
         <div>
           <label htmlFor="businessName" className={labelClass}>
             {locale === 'zh' ? '商家名稱' : 'Business name'}
@@ -199,21 +199,21 @@ export function BusinessClaimForm({
         </div>
 
         {matches.length > 0 ? (
-          <div className="border-l-4 border-brand-500 bg-[#fff2ec] px-4 py-3">
-            <p className="flex items-center gap-2 text-sm font-semibold text-brand-800">
+          <div className="border-l-4 border-[#bd2730] bg-[#f7f1e8] px-4 py-3">
+            <p className="flex items-center gap-2 text-sm font-semibold text-[#8f1c22]">
               <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
               {locale === 'zh' ? '找到可能重複的商家：' : 'Possible duplicate listings:'}
             </p>
-            <ul className="mt-3 grid gap-2 text-sm text-brand-900">
+            <ul className="mt-3 grid gap-2 text-sm text-[#5f554c]">
               {matches.slice(0, 3).map((business) => (
                 <li key={business.id}>
-                  <label className="flex items-center gap-3 rounded-[14px] border border-brand-100 bg-white px-3 py-2.5 transition-colors hover:border-brand-200">
+                  <label className="flex items-center gap-3 rounded-md border border-[#d7cabe] bg-[#fffdf8] px-3 py-2.5 transition-colors hover:border-[#bd2730]/45">
                     <input
                       type="radio"
                       name="businessSlug"
                       value={business.slug}
                       defaultChecked={business.slug === initialBusinessSlug}
-                      className="accent-brand-600"
+                      className="accent-[#bd2730]"
                     />
                     <span>
                       {business.name[locale] ?? business.name.en} · {business.city}
@@ -250,7 +250,7 @@ export function BusinessClaimForm({
               type="email"
               defaultValue={user.email ?? ''}
               readOnly={Boolean(user.email)}
-              className={`${fieldClass} read-only:bg-[#f7efe5]`}
+              className={`${fieldClass} read-only:bg-[#f0e6da]`}
               required
             />
           </div>
@@ -295,16 +295,16 @@ export function BusinessClaimForm({
           />
         </div>
 
-        <div className="border-t border-[#eadac9] pt-6">
+        <div className="border-t border-[#ded2c5] pt-6">
           <div className="mb-4 flex items-start gap-3">
-            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-[15px] bg-[#f4e4d6] text-brand-700">
+            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-[#e7ded2] text-[#bd2730]">
               <Camera className="h-5 w-5" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-sm font-semibold text-[#382a22]">
+              <p className="text-sm font-semibold text-[#3d342e]">
                 {locale === 'zh' ? '照片與封面圖' : 'Photos and cover image'}
               </p>
-              <p className="mt-1 text-xs leading-5 text-[#7b6759]">
+              <p className="mt-1 text-xs leading-5 text-[#6d6258]">
                 {locale === 'zh'
                   ? '可貼上照片網址，也可直接把圖片貼到封面或圖集欄位。若封面留白，系統會自動把第一張圖集照片當成封面。'
                   : 'Paste image URLs, or paste images directly into the cover or gallery fields. If the cover is blank, the first gallery photo becomes the cover.'}
@@ -313,56 +313,56 @@ export function BusinessClaimForm({
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="heroImage" className={labelClass}>
-              {locale === 'zh' ? '封面照片網址' : 'Cover photo URL'}
-            </label>
-            <input
-              id="heroImage"
-              name="heroImage"
-              type="url"
-              value={heroImage}
-              onChange={(event) => setHeroImage(event.target.value)}
-              onPaste={handleHeroPaste}
-              className={fieldClass}
-              placeholder="https://example.com/storefront.jpg"
-            />
-            <p className="mt-2 text-xs leading-5 text-[#7b6759]">
-              {locale === 'zh'
-                ? '封面最好用橫向、較高解析度的照片，也可以直接把圖片貼到這個欄位。'
-                : 'Cover photos work best with wide, higher-resolution images, and you can also paste an image directly into this field.'}
-            </p>
-            {heroImageWarning ? (
-              <p className="mt-2 rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
-                {heroImageWarning}
+            <div>
+              <label htmlFor="heroImage" className={labelClass}>
+                {locale === 'zh' ? '封面照片網址' : 'Cover photo URL'}
+              </label>
+              <input
+                id="heroImage"
+                name="heroImage"
+                type="url"
+                value={heroImage}
+                onChange={(event) => setHeroImage(event.target.value)}
+                onPaste={handleHeroPaste}
+                className={fieldClass}
+                placeholder="https://example.com/storefront.jpg"
+              />
+              <p className="mt-2 text-xs leading-5 text-[#6d6258]">
+                {locale === 'zh'
+                  ? '封面最好用橫向、較高解析度的照片，也可以直接把圖片貼到這個欄位。'
+                  : 'Cover photos work best with wide, higher-resolution images, and you can also paste an image directly into this field.'}
               </p>
-            ) : null}
-          </div>
+              {heroImageWarning ? (
+                <p className="mt-2 rounded-md border border-[#d99633]/35 bg-[#fff8e8] px-3 py-2 text-xs leading-5 text-[#8b5b19]">
+                  {heroImageWarning}
+                </p>
+              ) : null}
+            </div>
 
-          <div>
-            <label htmlFor="gallery" className={labelClass}>
-              {locale === 'zh' ? '其他照片網址' : 'Additional photo URLs'}
-            </label>
-            <textarea
-              id="gallery"
-              name="gallery"
-              value={galleryText}
-              onChange={(event) => setGalleryText(event.target.value)}
-              onPaste={handleGalleryPaste}
-              rows={4}
-              className={fieldClass}
-              placeholder={
-                locale === 'zh'
-                  ? '每行一個網址，例如室內、菜單、團隊或服務照片。'
-                  : 'One URL per line for interior, menu, team, or service photos.'
-              }
-            />
-          </div>
+            <div>
+              <label htmlFor="gallery" className={labelClass}>
+                {locale === 'zh' ? '其他照片網址' : 'Additional photo URLs'}
+              </label>
+              <textarea
+                id="gallery"
+                name="gallery"
+                value={galleryText}
+                onChange={(event) => setGalleryText(event.target.value)}
+                onPaste={handleGalleryPaste}
+                rows={4}
+                className={fieldClass}
+                placeholder={
+                  locale === 'zh'
+                    ? '每行一個網址，例如室內、菜單、團隊或服務照片。'
+                    : 'One URL per line for interior, menu, team, or service photos.'
+                }
+              />
+            </div>
           </div>
         </div>
 
         {uploadStatus ? (
-          <p className="flex items-center gap-2 text-sm font-semibold text-brand-700" aria-live="polite">
+          <p className="flex items-center gap-2 text-sm font-semibold text-[#bd2730]" aria-live="polite">
             <ImageIcon className="h-4 w-4" aria-hidden="true" />
             {uploadStatus}
           </p>
@@ -380,9 +380,9 @@ export function BusinessClaimForm({
           />
         </div>
 
-        <div className="grid gap-4 border-t border-[#eadac9] pt-6 md:grid-cols-[1fr_auto] md:items-center">
-          <p className="flex items-start gap-2 text-xs leading-5 text-[#7b6759]">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-brand-600" aria-hidden="true" />
+        <div className="grid gap-4 border-t border-[#ded2c5] pt-6 md:grid-cols-[1fr_auto] md:items-center">
+          <p className="flex items-start gap-2 text-xs leading-5 text-[#6d6258]">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#bd2730]" aria-hidden="true" />
             <span>
               {locale === 'zh'
                 ? '所有認領與新增申請都會進入人工審核。提交後，我們會以 email 確認並安排後續。'
@@ -393,7 +393,7 @@ export function BusinessClaimForm({
           <button
             type="submit"
             disabled={isSubmitting || uploadingField !== null}
-            className="inline-flex min-h-12 items-center justify-center rounded-[16px] bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_20px_42px_-25px_rgba(187,61,41,0.9)] transition-colors hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex min-h-12 items-center justify-center rounded-md bg-[#bd2730] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(189,39,48,0.22)] transition-colors hover:bg-[#a91f27] disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isSubmitting
               ? locale === 'zh'
@@ -410,7 +410,7 @@ export function BusinessClaimForm({
         </div>
 
         {status ? (
-          <p className="border-l-4 border-brand-500 bg-[#fff2ec] px-4 py-3 text-sm font-semibold text-brand-800" aria-live="polite">
+          <p className="border-l-4 border-[#bd2730] bg-[#f7f1e8] px-4 py-3 text-sm font-semibold text-[#8f1c22]" aria-live="polite">
             {status}
           </p>
         ) : null}

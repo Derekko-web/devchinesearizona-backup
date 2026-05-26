@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 type PageProps = {
   searchParams: Promise<{
     lane?: string;
+    page?: string;
   }>;
 };
 

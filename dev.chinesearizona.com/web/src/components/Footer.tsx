@@ -6,12 +6,13 @@ import { usePathname } from 'next/navigation';
 
 import { localeFromPath, withLocale } from '@/lib/routing';
 import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
 function oppositeCopy(locale: string, en: string, zh: string) {
   return locale === 'zh' ? en : zh;
 }
 
-export default function Footer() {
+export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfile }) {
   const pathname = usePathname();
   const locale = localeFromPath(pathname);
   const shopEnabled = isShopPublicLaunchEnabled();
@@ -37,7 +38,7 @@ export default function Footer() {
     {
       icon: MapPin,
       title: locale === 'zh' ? '本地優先' : 'Local First',
-      subtitle: oppositeCopy(locale, 'Arizona-first coverage', '本地優先'),
+      subtitle: oppositeCopy(locale, site.localCoverageLabel.en, site.localCoverageLabel.zh),
       tone: 'text-[#cf5a6d] bg-[#f9e6eb]',
     },
   ];
@@ -46,6 +47,13 @@ export default function Footer() {
     { href: '/business', label: locale === 'zh' ? '商家' : 'Business' },
     { href: '/community', label: locale === 'zh' ? '社區' : 'Community' },
     ...(shopEnabled ? [{ href: '/shop', label: locale === 'zh' ? '市集' : 'Shop' }] : []),
+  ];
+  const publisherLinks = [
+    { href: '/about', label: locale === 'zh' ? '關於' : 'About' },
+    { href: '/contact', label: locale === 'zh' ? '聯絡' : 'Contact' },
+    { href: '/privacy', label: locale === 'zh' ? '隱私權' : 'Privacy' },
+    { href: '/terms', label: locale === 'zh' ? '條款' : 'Terms' },
+    { href: '/editorial-policy', label: locale === 'zh' ? '編輯政策' : 'Editorial Policy' },
   ];
 
   return (
@@ -113,7 +121,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="mx-auto mt-2 flex max-w-[1480px] flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-[#e5d8ca] pt-2 text-[11px] font-semibold text-[#745f52]">
-          {footerLinks.map((item) => (
+          {[...footerLinks, ...publisherLinks].map((item) => (
             <Link
               key={item.href}
               href={withLocale(locale, item.href)}

@@ -32,22 +32,6 @@ export type ProfileSettingsInitialData = {
   website: string;
 };
 
-function splitName(fullName: string): { firstName: string; lastName: string } {
-  const trimmed = fullName.trim();
-  if (!trimmed) {
-    return {
-      firstName: '',
-      lastName: '',
-    };
-  }
-
-  const parts = trimmed.split(/\s+/);
-  return {
-    firstName: parts[0] ?? '',
-    lastName: parts.slice(1).join(' '),
-  };
-}
-
 function buildDisplayName(firstName: string, lastName: string, username: string): string {
   const joined = `${firstName.trim()} ${lastName.trim()}`.trim();
   return joined || username.trim();
@@ -611,6 +595,8 @@ export function ProfileSettingsPageClient({
                   <div className="flex justify-start lg:justify-end">
                     <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-[#d9ccb8] bg-[#edf3eb] shadow-sm">
                       {avatarUrl ? (
+                        // User-provided remote avatar URLs are not constrained to Next image domains.
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
                       ) : (
                         <span className="text-3xl font-bold text-[#6f8a60]">{avatarInitial}</span>

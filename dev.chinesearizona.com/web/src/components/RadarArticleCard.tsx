@@ -1,10 +1,9 @@
-import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 import { getLocalizedArizonaNewsArticlePath } from '@/lib/arizona-news';
 import { DiscoverArticleImage } from '@/components/DiscoverArticleImage';
 import { LocalDateTime } from '@/components/LocalDateTime';
-import { radarLaneLabel, sourceTypeLabel, t } from '@/lib/i18n';
+import { radarLaneLabel, t } from '@/lib/i18n';
 import type { Article, Locale } from '@/lib/types';
 
 export function RadarArticleCard({
@@ -36,22 +35,14 @@ export function RadarArticleCard({
         />
       </div>
       <div className={`space-y-4 ${cardPadding}`}>
-        <div className="flex flex-wrap gap-2">
-          <span className="inline-flex rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">
+        <div className="space-y-2">
+          <div className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-700">
             {article.radarLane
               ? radarLaneLabel(article.radarLane, locale)
               : locale === 'zh'
                 ? '新聞'
                 : 'News'}
-          </span>
-          {article.sourceType ? (
-            <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-              {sourceTypeLabel(article.sourceType, locale)}
-            </span>
-          ) : null}
-        </div>
-
-        <div className="space-y-2">
+          </div>
           <h3 className={`font-bold tracking-tight text-slate-900 ${titleClass}`}>
             {displayTitle}
           </h3>
@@ -59,14 +50,10 @@ export function RadarArticleCard({
         </div>
 
         <div className="flex flex-wrap gap-2 text-xs font-medium text-slate-500">
-          {article.sourceType ? <span>{sourceTypeLabel(article.sourceType, locale)}</span> : null}
           {article.sourceName ? (
-            <>
-              {article.sourceType ? <span className="text-slate-300">/</span> : null}
-              <span>{article.sourceName}</span>
-            </>
+            <span>{article.sourceName}</span>
           ) : null}
-          {article.sourceType || article.sourceName ? <span className="text-slate-300">/</span> : null}
+          {article.sourceName ? <span className="text-slate-300">/</span> : null}
           <LocalDateTime
             date={article.lastCheckedAt ?? article.updatedAt ?? article.publishedAt}
             locale={locale}
@@ -80,17 +67,6 @@ export function RadarArticleCard({
           >
             {locale === 'zh' ? '閱讀全文' : 'Read article'}
           </Link>
-          {article.sourceUrl ? (
-            <a
-              href={article.sourceUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
-            >
-              {locale === 'zh' ? '原始來源' : 'Original source'}
-              <ExternalLink className="h-4 w-4" />
-            </a>
-          ) : null}
         </div>
       </div>
     </article>

@@ -4,7 +4,8 @@ import './globals.css';
 import { AppShell } from '@/components/AppShell';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { getAdSenseClientId } from '@/lib/adsense';
-import { buildSiteVerification, siteDescription, siteName, siteUrl } from '@/lib/seo';
+import { buildSiteVerification } from '@/lib/seo';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const notoSansTC = Noto_Sans_TC({ weight: ['400', '500', '700'], subsets: ['latin'], variable: '--font-noto-sans-tc' });
@@ -16,28 +17,34 @@ const cormorantGaramond = Cormorant_Garamond({
 const adSenseClientId = getAdSenseClientId();
 const iconVersion = '20260423b';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: siteName,
-  description: siteDescription,
-  verification: buildSiteVerification(),
-  manifest: `/site.webmanifest?v=${iconVersion}`,
-  icons: {
-    icon: [
-      { url: `/favicon-32x32.png?v=${iconVersion}`, type: 'image/png', sizes: '32x32' },
-      { url: `/favicon-16x16.png?v=${iconVersion}`, type: 'image/png', sizes: '16x16' },
-      { url: `/favicon.ico?v=${iconVersion}`, type: 'image/x-icon' },
-    ],
-    apple: [{ url: `/apple-touch-icon.png?v=${iconVersion}`, sizes: '180x180', type: 'image/png' }],
-    shortcut: [{ url: `/favicon.ico?v=${iconVersion}`, type: 'image/x-icon' }],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getCurrentSiteProfile();
 
-export default function RootLayout({
+  return {
+    metadataBase: new URL(site.url),
+    title: site.brandName,
+    description: site.description.en,
+    verification: buildSiteVerification(),
+    manifest: `/site.webmanifest?v=${iconVersion}`,
+    icons: {
+      icon: [
+        { url: `/favicon-32x32.png?v=${iconVersion}`, type: 'image/png', sizes: '32x32' },
+        { url: `/favicon-16x16.png?v=${iconVersion}`, type: 'image/png', sizes: '16x16' },
+        { url: `/favicon.ico?v=${iconVersion}`, type: 'image/x-icon' },
+      ],
+      apple: [{ url: `/apple-touch-icon.png?v=${iconVersion}`, sizes: '180x180', type: 'image/png' }],
+      shortcut: [{ url: `/favicon.ico?v=${iconVersion}`, type: 'image/x-icon' }],
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const site = await getCurrentSiteProfile();
+
   return (
     <html
       lang="en"
@@ -63,7 +70,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <AuthProvider>
-          <AppShell>{children}</AppShell>
+          <AppShell site={site}>{children}</AppShell>
         </AuthProvider>
       </body>
     </html>

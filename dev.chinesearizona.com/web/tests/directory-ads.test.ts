@@ -279,11 +279,12 @@ describe('directory ad helpers', () => {
   });
 
   it('honors paid Stripe directory ad sessions when the ad schema is missing', async () => {
+    const paidSessionCreatedAt = Math.floor(Date.now() / 1000);
     const stripeCheckoutList = vi.fn(async () => ({
       data: [
         {
           id: 'cs_paid_123',
-          created: Math.floor(new Date('2026-04-19T12:00:00.000Z').getTime() / 1000),
+          created: paidSessionCreatedAt,
           metadata: {
             budget_cents: '200000',
             business_id: 'business-1',

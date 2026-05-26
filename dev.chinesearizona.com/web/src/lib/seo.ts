@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
 import { appendSearch, withLocale } from '@/lib/routing';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type { Locale } from '@/lib/types';
 
-export const siteName = 'ChineseArizona';
-export const siteDescription =
-  'A modern bilingual Arizona platform for trusted local businesses, newcomer resources, community events, and local Chinese-language discovery.';
-const defaultSiteUrl = 'https://chinesearizona.com';
+export const siteName = defaultSiteProfile.brandName;
+export const siteDescription = defaultSiteProfile.description.en;
+const defaultSiteUrl = defaultSiteProfile.url;
 
 function isLocalHostname(hostname: string): boolean {
   return (
@@ -37,12 +37,12 @@ function resolveSiteUrl(): string {
 
 export const siteUrl = resolveSiteUrl();
 
-export function absoluteUrl(path: string): string {
+export function absoluteUrl(path: string, site?: SiteProfile): string {
   const normalized = path === '/' ? '' : path;
-  return `${siteUrl}${normalized}`;
+  return `${site?.url ?? siteUrl}${normalized}`;
 }
 
-export function resolveAbsoluteAssetUrl(url?: string | null): string | undefined {
+export function resolveAbsoluteAssetUrl(url?: string | null, site?: SiteProfile): string | undefined {
   if (!url) {
     return undefined;
   }
@@ -52,7 +52,7 @@ export function resolveAbsoluteAssetUrl(url?: string | null): string | undefined
   }
 
   if (url.startsWith('/')) {
-    return absoluteUrl(url);
+    return absoluteUrl(url, site);
   }
 
   return url;
@@ -72,13 +72,13 @@ function normalizeVerificationToken(value?: string): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
-export function buildAlternates(path: string, locale: Locale) {
+export function buildAlternates(path: string, locale: Locale, site?: SiteProfile) {
   return {
-    canonical: absoluteUrl(canonicalPath(locale, path)),
+    canonical: absoluteUrl(canonicalPath(locale, path), site),
     languages: {
-      en: absoluteUrl(path),
-      zh: absoluteUrl(localizedPath('zh', path)),
-      'x-default': absoluteUrl(path),
+      en: absoluteUrl(path, site),
+      zh: absoluteUrl(localizedPath('zh', path), site),
+      'x-default': absoluteUrl(path, site),
     },
   };
 }
@@ -112,6 +112,7 @@ type MetadataInput = {
   locale: Locale;
   noIndex?: boolean;
   image?: string;
+  site?: SiteProfile;
 };
 
 export function buildMetadata({
@@ -121,20 +122,21 @@ export function buildMetadata({
   locale,
   noIndex = false,
   image,
+  site,
 }: MetadataInput): Metadata {
-  const url = absoluteUrl(canonicalPath(locale, path));
-  const resolvedImage = resolveAbsoluteAssetUrl(image);
+  const url = absoluteUrl(canonicalPath(locale, path), site);
+  const resolvedImage = resolveAbsoluteAssetUrl(image, site);
   const ogImage = resolvedImage ? [resolvedImage] : undefined;
 
   return {
     title,
     description,
-    alternates: buildAlternates(path, locale),
+    alternates: buildAlternates(path, locale, site),
     openGraph: {
       title,
       description,
       url,
-      siteName,
+      siteName: site?.brandName ?? siteName,
       locale: locale === 'zh' ? 'zh' : 'en_US',
       type: 'website',
       images: ogImage,

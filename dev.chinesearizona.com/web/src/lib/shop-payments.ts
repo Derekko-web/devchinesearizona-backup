@@ -156,20 +156,6 @@ type OrderRow = {
   seller?: SellerRow[] | SellerRow | null;
 };
 
-type OrderItemRow = {
-  id: string;
-  order_id: string;
-  listing_id?: string | null;
-  seller_id: string;
-  title_en: string;
-  title_zh_tw?: string | null;
-  unit_price_cents: number;
-  quantity: number;
-  variant_label_en?: string | null;
-  variant_label_zh_tw?: string | null;
-  snapshot_condition: ShopOrder['items'][number]['snapshotCondition'];
-};
-
 function unwrapRelation<T>(value?: T | T[] | null): T | undefined {
   if (Array.isArray(value)) {
     return value[0];

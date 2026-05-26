@@ -1,0 +1,62 @@
+name: Dev Content Jobs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 10 * * *'
+    - cron: '45 11 * * *'
+
+jobs:
+  directory-scrape:
+    if: github.event_name != 'schedule' || github.event.schedule == '15 10 * * *'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev.chinesearizona.com/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run directory scraper
+        env:
+          DIRECTORY_STORAGE_BUCKET: ${{ secrets.DIRECTORY_STORAGE_BUCKET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_TRANSLATION_MODEL: ${{ secrets.OPENAI_TRANSLATION_MODEL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run scrape:run
+
+      - name: Verify scraper tests
+        run: npm run scrape:test
+
+  signal-desk:
+    if: github.event_name != 'schedule' || github.event.schedule == '45 11 * * *'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev.chinesearizona.com/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate signal desk content
+        run: npm run scrape:signal-desk
+
+      - name: Verify app tests
+        run: npm test

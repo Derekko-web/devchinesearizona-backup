@@ -1,0 +1,37 @@
+name: Dev CI
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ci.yml'
+      - 'dev.chinesearizona.com/web/**'
+      - 'ops/**'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/ci.yml'
+      - 'dev.chinesearizona.com/web/**'
+      - 'ops/**'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev.chinesearizona.com/web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify
+        run: npm run verify

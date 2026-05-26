@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 const apexHost = 'chinesearizona.com';
 const redirectHosts = new Set(['www.chinesearizona.com']);
+const apexRedirectBypassPaths = new Set(['/ads.txt']);
 
 function normalizeHost(host?: string | null): string | null {
   if (!host) {
@@ -17,10 +18,14 @@ export function shouldRedirectToApex(host?: string | null): boolean {
   return normalizedHost ? redirectHosts.has(normalizedHost) : false;
 }
 
+export function shouldBypassApexRedirect(pathname?: string | null): boolean {
+  return pathname ? apexRedirectBypassPaths.has(pathname) : false;
+}
+
 export function proxy(request: NextRequest) {
   const host = normalizeHost(request.headers.get('host'));
 
-  if (!shouldRedirectToApex(host)) {
+  if (!shouldRedirectToApex(host) || shouldBypassApexRedirect(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
 

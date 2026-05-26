@@ -1,7 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import sitemap from '@/app/sitemap';
-import { directoryMetadata, homeMetadata } from '@/lib/page-metadata';
+import {
+  businessMetadata,
+  cityCategoryMetadata,
+  directoryMetadata,
+  homeMetadata,
+  publisherPageMetadata,
+} from '@/lib/page-metadata';
 import { createModerationReport } from '@/lib/runtime-store';
 
 const originalConvexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -36,19 +42,34 @@ describe('indexing signals', () => {
     expect(metadata.alternates?.languages?.['x-default']).toBe('https://chinesearizona.com/business?page=2');
   });
 
-  it('adds city and category landing pages to the sitemap with locale alternates', async () => {
+  it('keeps city and category filter pages out of the sitemap', async () => {
     const entries = await sitemap();
-    const entry = entries.find(
-      (item) => item.url === 'https://chinesearizona.com/business/phoenix/real-estate'
-    );
+    const urls = entries.map((entry) => entry.url);
+    const metadata = cityCategoryMetadata('en', 'phoenix', 'real-estate');
 
-    expect(entry).toBeDefined();
-    expect(entry?.alternates?.languages?.zh).toBe(
-      'https://chinesearizona.com/zh/business/phoenix/real-estate'
-    );
-    expect(entry?.alternates?.languages?.['x-default']).toBe(
-      'https://chinesearizona.com/business/phoenix/real-estate'
-    );
+    expect(urls).not.toContain('https://chinesearizona.com/business/phoenix/real-estate');
+    expect(metadata?.robots).toEqual({ index: false, follow: false });
+  });
+
+  it('adds publisher trust pages to the sitemap', async () => {
+    const entries = await sitemap();
+    const urls = entries.map((entry) => entry.url);
+    const metadata = publisherPageMetadata('en', 'privacy');
+
+    expect(urls).toContain('https://chinesearizona.com/about');
+    expect(urls).toContain('https://chinesearizona.com/privacy');
+    expect(urls).toContain('https://chinesearizona.com/editorial-policy');
+    expect(metadata.title).toBe('Privacy Policy | ChineseArizona');
+  });
+
+  it('noindexes thin generated directory profiles and omits them from the sitemap', async () => {
+    const entries = await sitemap();
+    const urls = entries.map((entry) => entry.url);
+    const metadata = await businessMetadata('en', 'roll-avenue-ice-cream-rolls-mesa');
+
+    expect(metadata?.robots).toEqual({ index: false, follow: false });
+    expect(urls).not.toContain('https://chinesearizona.com/business/roll-avenue-ice-cream-rolls-mesa');
+    expect(urls).toContain('https://chinesearizona.com/business/happy-bao-s-mesa');
   });
 
   it('keeps noindex community posts out of the sitemap', async () => {

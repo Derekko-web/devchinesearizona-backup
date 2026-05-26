@@ -1,4 +1,4 @@
-import type { SupabaseClient, User } from '@supabase/supabase-js';
+import type { User } from '@supabase/supabase-js';
 
 import { getModerationReportsSnapshot } from '@/lib/directory-moderation';
 import { t } from '@/lib/i18n';
@@ -57,7 +57,6 @@ import { getSupabaseClient, getSupabaseServiceClient } from '@/lib/supabase';
 import type {
   Locale,
   LocalizedText,
-  Profile,
   ProfileRole,
   ShopBrowseSearchParams,
   ShopBrowseSort,
@@ -265,42 +264,6 @@ type ShopOrderRow = {
   shipment?: ShopShipmentRow | null;
 };
 
-type ShopReturnRow = {
-  id: string;
-  order_id: string;
-  status: ShopFeedback['sentiment'] | string;
-  reason: string;
-  requested_at: string;
-  seller_respond_by: string;
-  resolution_notes?: string | null;
-};
-
-type ShopCaseRow = {
-  id: string;
-  order_id: string;
-  opened_by_profile_id: string;
-  seller_id: string;
-  status: ShopCaseStatus;
-  reason: string;
-  opened_at: string;
-  seller_respond_by: string;
-  escalated_at?: string | null;
-  resolution_notes?: string | null;
-};
-
-type ShopFeedbackRow = {
-  id: string;
-  order_id: string;
-  seller_id: string;
-  buyer_profile_id: string;
-  sentiment: ShopFeedbackSentiment;
-  title_en: string;
-  title_zh_tw?: string | null;
-  comment_en: string;
-  comment_zh_tw?: string | null;
-  created_at: string;
-};
-
 type ShopPayoutRow = {
   id: string;
   seller_id: string;
@@ -311,30 +274,6 @@ type ShopPayoutRow = {
   paid_at?: string | null;
   stripe_transfer_id?: string | null;
   stripe_transfer_group?: string | null;
-};
-
-type ShopConversationRow = {
-  id: string;
-  listing_id?: string | null;
-  order_id?: string | null;
-  buyer_profile_id: string;
-  seller_id: string;
-  topic: 'pre_sale' | 'order_support' | 'pickup';
-  created_at: string;
-  updated_at: string;
-  last_message_preview: string;
-  listing?: ShopListingRow | null;
-  seller?: ShopSellerRow | null;
-  buyer_profile?: ProfileRow | null;
-};
-
-type ShopMessageRow = {
-  id: string;
-  conversation_id: string;
-  sender_profile_id: string;
-  body: string;
-  flagged: boolean;
-  created_at: string;
 };
 
 const PROFILE_SELECT =
@@ -486,24 +425,6 @@ function toLocalizedParagraphs(english?: string[] | null, chinese?: string[] | n
     en: enValues[index] ?? '',
     zh: zhValues[index] ?? undefined,
   }));
-}
-
-function mapProfile(row?: ProfileRow | null): Profile | undefined {
-  if (!row) {
-    return undefined;
-  }
-
-  return {
-    slug: row.slug,
-    name: row.name,
-    nameZh: row.name_zh_tw,
-    role: row.role,
-    city: row.city,
-    languages: (row.languages ?? []) as Profile['languages'],
-    bio: localizedText(row.bio_en, row.bio_zh_tw),
-    avatarColor: 'slate',
-    trustLevel: 'trusted',
-  };
 }
 
 function mapCategory(row: ShopCategoryRow): ShopCategory {

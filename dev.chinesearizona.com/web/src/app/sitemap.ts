@@ -13,8 +13,9 @@ import {
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
 import { getPublishedDiscoverArticles, discoveryCategories } from '@/lib/discover-arizona';
-import { getDirectoryBusinesses } from '@/lib/directory';
+import { getDirectoryBusinesses, shouldNoIndexDirectoryBusiness } from '@/lib/directory';
 import { getHiddenArizonaEntries, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
+import { publisherPageSlugs } from '@/lib/publisher-pages';
 import { isShopPublicLaunchReady } from '@/lib/shop-launch-server';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
@@ -33,6 +34,7 @@ const staticRoutes = [
   ARIZONA_NEWS_ARCHIVE_PATH,
   '/community',
   '/add-business',
+  ...publisherPageSlugs.map((slug) => `/${slug}`),
 ] as const;
 const localizedSitemapLocales = locales.filter((locale) => locale !== 'en');
 
@@ -69,18 +71,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const publicShopData = shopReady
     ? await getPublicShopSitemapData()
     : { listings: [], sellers: [] };
-  const businessRoutes = directoryBusinesses.map((business) => `/business/${business.slug}`);
-  const cityCategoryRoutes = Array.from(
-    new Set(
-      directoryBusinesses.map(
-        (business) =>
-          `/business/${encodeURIComponent(business.city.toLowerCase())}/${encodeURIComponent(business.categorySlug)}`
-      )
-    )
-  );
+  const businessRoutes = directoryBusinesses
+    .filter((business) => !shouldNoIndexDirectoryBusiness(business))
+    .map((business) => `/business/${business.slug}`);
   const dynamicRoutes = [
     ...businessRoutes,
-    ...cityCategoryRoutes,
     ...discoveryCategories.map((category) => `/discover-arizona/${category.slug}`),
     ...discoverArticles.map((article) => `/discover-arizona/${article.primaryCategory}/${article.slug}`),
     ...hiddenArizonaEntries.map((entry) => getHiddenArizonaEntryPath(entry)),

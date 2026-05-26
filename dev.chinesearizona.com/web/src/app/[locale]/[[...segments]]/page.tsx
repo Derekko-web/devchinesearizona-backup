@@ -26,13 +26,16 @@ import {
   hiddenArizonaMetadata,
   homeMetadata,
   profileMetadata,
+  publisherPageMetadata,
   relocationMetadata,
 } from '@/lib/page-metadata';
 import { isLocale } from '@/lib/i18n';
+import { isPublisherPageSlug } from '@/lib/publisher-pages';
 import { hiddenArizonaSegmentToKind } from '@/lib/hidden-arizona';
 import { getDiscoveryCategory } from '@/lib/discover-arizona';
 import { requireAuthenticatedPageUser, requireStaffPageContext } from '@/lib/page-auth';
 import { appendSearch, withLocale } from '@/lib/routing';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import {
   AddBusinessPageView,
   AdminPageView,
@@ -56,6 +59,7 @@ import {
 } from '@/views/site-pages';
 import { CommunityPageView } from '@/views/community-page';
 import { HomePageView } from '@/views/home-page';
+import { PublisherPageView } from '@/views/publisher-pages';
 import type { DiscoveryCategory, HiddenArizonaKind } from '@/lib/types';
 
 type PageProps = {
@@ -104,9 +108,10 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     return {};
   }
   const query = await searchParams;
+  const site = await getCurrentSiteProfile();
 
   if (segments.length === 0) {
-    return homeMetadata(locale);
+    return homeMetadata(locale, site);
   }
 
   if (segments[0] === 'business' && segments.length === 1) {
@@ -210,6 +215,10 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     return addBusinessMetadata(locale);
   }
 
+  if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {
+    return publisherPageMetadata(locale, segments[0], site);
+  }
+
   if (segments[0] === 'profile' && segments[1]) {
     return profileMetadata(locale, segments[1]) ?? {};
   }
@@ -230,9 +239,10 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   if (!isLocale(locale)) {
     notFound();
   }
+  const site = await getCurrentSiteProfile();
 
   if (segments.length === 0) {
-    return <HomePageView locale={locale} />;
+    return <HomePageView locale={locale} site={site} />;
   }
 
   if (segments[0] === 'business' && segments.length === 1) {
@@ -367,6 +377,10 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments[0] === 'add-business') {
     return <AddBusinessPageView locale={locale} searchParams={await searchParams} />;
+  }
+
+  if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {
+    return await PublisherPageView({ locale, slug: segments[0] });
   }
 
   if (segments[0] === 'profile' && segments[1]) {

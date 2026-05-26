@@ -2,6 +2,7 @@
 
 import type { User } from '@supabase/supabase-js';
 import { Heart, Menu, Plus, UserRound, X } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
@@ -13,6 +14,7 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { localeLangAttribute } from '@/lib/i18n';
 import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import { appendSearch, localeFromPath, withLocale } from '@/lib/routing';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
 function accountHandle(user: User): string {
   const username =
@@ -64,18 +66,19 @@ function ChineseArizonaLogoMark() {
       aria-hidden="true"
       className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-[12px] shadow-[0_16px_32px_-18px_rgba(199,25,41,0.9)]"
     >
-      <img
+      <Image
         src="/brand/chinesearizona-logo.png"
         alt=""
+        width={40}
+        height={40}
         className="h-full w-full object-cover"
-        loading="eager"
-        decoding="async"
+        priority
       />
     </span>
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfile }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -117,7 +120,7 @@ export default function Navbar() {
     },
     {
       path: ARIZONA_NEWS_PATH,
-      label: locale === 'zh' ? '亞利桑那新聞' : 'News',
+      label: locale === 'zh' ? `${site.regionNameZh}新聞` : 'News',
       subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
     },
     ...(shopEnabled
@@ -160,11 +163,11 @@ export default function Navbar() {
                 <span className="text-[1.05rem] font-bold tracking-tight text-[#2b1f19] sm:text-[1.22rem]">
                   {locale === 'zh' ? (
                     <>
-                      亞利桑那<span className="text-brand-600">華人</span>
+                      {site.brandParts.zhPrefix}<span className="text-brand-600">{site.brandParts.zhAccent}</span>
                     </>
                   ) : (
                     <>
-                      Chinese<span className="text-brand-600">Arizona</span>
+                      {site.brandParts.enPrefix}<span className="text-brand-600">{site.brandParts.enAccent}</span>
                     </>
                   )}
                 </span>
@@ -173,7 +176,7 @@ export default function Navbar() {
                 className="mt-1 block text-[10px] font-medium uppercase tracking-[0.24em] text-[#89766a]"
                 lang={localeLangAttribute(locale)}
               >
-                {locale === 'zh' ? '亞利桑那雙語指南' : 'Arizona bilingual guide'}
+                {locale === 'zh' ? site.guideTagline.zh : site.guideTagline.en}
               </span>
             </div>
           </Link>
@@ -238,17 +241,16 @@ export default function Navbar() {
                   className="h-11 w-11 animate-pulse rounded-full bg-[#eadfd1]"
                 />
               ) : user && signedInHandle && signedInInitial ? (
-                <div className="group relative">
+                <div className="relative">
                   <Link
                     href={dashboardHref}
                     aria-label={locale === 'zh' ? '帳號選單' : 'Account menu'}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c2af] bg-white text-base font-semibold text-[#3a2a22] shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
+                    className="peer inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c2af] bg-white text-base font-semibold text-[#3a2a22] shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
                   >
                     {signedInInitial}
                   </Link>
 
-                  <div aria-hidden="true" className="absolute right-0 top-full h-3 w-56" />
-                  <div className="invisible pointer-events-none absolute right-0 top-full z-10 mt-3 w-56 -translate-y-2 rounded-[28px] border border-[#decdbc] bg-[#fffaf3] p-4 opacity-0 shadow-[0_28px_60px_-34px_rgba(72,54,31,0.38)] transition-all group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                  <div className="invisible pointer-events-none absolute right-0 top-full z-10 w-56 -translate-y-2 rounded-[28px] border border-[#decdbc] bg-[#fffaf3] p-4 opacity-0 shadow-[0_28px_60px_-34px_rgba(72,54,31,0.38)] transition-all peer-hover:pointer-events-auto peer-hover:visible peer-hover:translate-y-0 peer-hover:opacity-100 peer-focus:pointer-events-auto peer-focus:visible peer-focus:translate-y-0 peer-focus:opacity-100 hover:pointer-events-auto hover:visible hover:translate-y-0 hover:opacity-100 focus-within:pointer-events-auto focus-within:visible focus-within:translate-y-0 focus-within:opacity-100">
                     <div>
                       <p className="truncate text-lg font-semibold tracking-tight text-[#2c2019]">
                         {signedInHandle}
@@ -287,17 +289,16 @@ export default function Navbar() {
                   </div>
                 </div>
               ) : (
-                <div className="group relative">
+                <div className="relative">
                   <Link
                     href={loginHref}
                     aria-label={locale === 'zh' ? '登入' : 'Log In'}
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c2af] bg-white text-[#3a2a22] shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
+                    className="peer inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c2af] bg-white text-[#3a2a22] shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
                   >
                     <UserRound className="h-5 w-5" aria-hidden="true" />
                   </Link>
 
-                  <div aria-hidden="true" className="absolute right-0 top-full h-3 w-44" />
-                  <div className="invisible pointer-events-none absolute right-0 top-full z-10 mt-3 w-44 -translate-y-2 rounded-[24px] border border-[#decdbc] bg-[#fffaf3] p-2 opacity-0 shadow-[0_28px_60px_-34px_rgba(72,54,31,0.38)] transition-all group-hover:pointer-events-auto group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                  <div className="invisible pointer-events-none absolute right-0 top-full z-10 w-44 -translate-y-2 rounded-[24px] border border-[#decdbc] bg-[#fffaf3] p-2 opacity-0 shadow-[0_28px_60px_-34px_rgba(72,54,31,0.38)] transition-all peer-hover:pointer-events-auto peer-hover:visible peer-hover:translate-y-0 peer-hover:opacity-100 peer-focus:pointer-events-auto peer-focus:visible peer-focus:translate-y-0 peer-focus:opacity-100 hover:pointer-events-auto hover:visible hover:translate-y-0 hover:opacity-100 focus-within:pointer-events-auto focus-within:visible focus-within:translate-y-0 focus-within:opacity-100">
                     <Link
                       href={loginHref}
                       className="block rounded-2xl px-4 py-3 text-sm font-semibold text-[#362821] transition-colors hover:bg-[#f5ede3] hover:text-brand-600"

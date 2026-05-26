@@ -717,6 +717,32 @@ export function isPublicDirectoryBusiness(business: Business): boolean {
   return business.verificationState === 'editor_verified';
 }
 
+function hasGeneratedDirectoryCopy(business: Business): boolean {
+  const copy = `${business.shortDescription.en} ${business.description.en}`;
+  return /generated from plaza directory sources|direct business contact details may still be incomplete/i.test(copy);
+}
+
+function hasSubstantialDirectoryCopy(business: Business): boolean {
+  const normalizedDescription = business.description.en.replace(/\s+/g, ' ').trim();
+  return normalizedDescription.length >= 180;
+}
+
+export function shouldNoIndexDirectoryBusiness(business: Business): boolean {
+  if (!isPublicDirectoryBusiness(business)) {
+    return true;
+  }
+
+  if (hasGeneratedDirectoryCopy(business)) {
+    return true;
+  }
+
+  if (!hasPublicContactMethod(business)) {
+    return true;
+  }
+
+  return !hasSubstantialDirectoryCopy(business);
+}
+
 export function qualifiesForHomepageFeature(business: Business): boolean {
   return (
     (business.status ?? 'pending_review') === 'live' &&
