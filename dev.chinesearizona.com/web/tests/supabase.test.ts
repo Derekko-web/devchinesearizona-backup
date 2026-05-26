@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
+import {
+  getSupabaseAuthErrorMessage,
+  getSupabaseAuthUnavailableMessage,
+  getSupabasePublicKey,
+  isSupabaseConfigured,
+} from '@/lib/supabase';
 
 const originalUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const originalPublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -52,5 +57,21 @@ describe('supabase config helpers', () => {
     delete process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     expect(isSupabaseConfigured()).toBe(true);
+  });
+
+  it('sanitizes transient Supabase outage responses before they reach users or logs', () => {
+    expect(
+      getSupabaseAuthErrorMessage(
+        new Error('<html><h1>Cloudflare Error 522</h1></html>'),
+        'en',
+        'Fallback'
+      )
+    ).toBe(getSupabaseAuthUnavailableMessage('en'));
+  });
+
+  it('preserves normal Supabase validation errors', () => {
+    expect(
+      getSupabaseAuthErrorMessage(new Error('Invalid login credentials'), 'en', 'Fallback')
+    ).toBe('Invalid login credentials');
   });
 });

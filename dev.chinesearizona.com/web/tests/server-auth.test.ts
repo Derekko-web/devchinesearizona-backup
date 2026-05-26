@@ -100,4 +100,24 @@ describe('server auth token resolution', () => {
       },
     });
   });
+
+  it('treats transient Supabase auth failures as a signed-out request', async () => {
+    const { resolveServerAuthTokens, getUser, refreshSession } =
+      await loadServerAuthModule();
+
+    getUser.mockRejectedValue(new Error('<html>Cloudflare Error 522</html>'));
+    refreshSession.mockRejectedValue(new Error('fetch failed'));
+
+    await expect(
+      resolveServerAuthTokens({
+        accessToken: 'access_stale',
+        refreshToken: 'refresh_stale',
+      })
+    ).resolves.toMatchObject({
+      didRefresh: false,
+      session: null,
+      user: null,
+    });
+    expect(refreshSession).toHaveBeenCalled();
+  });
 });

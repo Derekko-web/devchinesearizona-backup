@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { evaluatePm2Health, pm2ProcessState } from './pm2-health.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_REPO_ROOT = resolve(__dirname, '../..');
@@ -76,6 +78,23 @@ function tail(path, lines = 500) {
   }
 
   return run('tail', ['-n', String(lines), path]);
+}
+
+function readJsonFile(path) {
+  if (!existsSync(path)) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(readFileSync(path, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+function writeJsonFile(path, value) {
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`);
 }
 
 function fileAgeHours(path) {
@@ -182,18 +201,41 @@ function collectPm2Findings() {
     ];
   }
 
-  const restarts = Number(app.pm2_env?.restart_time ?? 0);
   const threshold = Number(process.env.CLOSED_LOOP_PM2_RESTART_THRESHOLD || 10);
-  if (app.pm2_env?.status !== 'online' || restarts > threshold) {
+  const stableWindowMs = Number(process.env.CLOSED_LOOP_PM2_STABLE_WINDOW_MS || 30 * 60 * 1000);
+  const stateFile =
+    process.env.CLOSED_LOOP_PM2_STATE_FILE || resolve(APP_ROOT, 'logs/closed-loop-pm2-state.json');
+  const state = readJsonFile(stateFile) ?? {};
+  const previousState = state[app.name] ?? null;
+  const health = evaluatePm2Health(app, {
+    previousState,
+    stableWindowMs,
+    threshold,
+  });
+
+  try {
+    writeJsonFile(stateFile, {
+      ...state,
+      [app.name]: pm2ProcessState(app),
+    });
+  } catch (error) {
+    process.stderr.write(`PM2 state file ${stateFile}: ${error.message}\n`);
+  }
+
+  if (health.unhealthy) {
     return [
       finding(
         'pm2-restarts',
         'dev-chinesearizona PM2 process needs attention',
         [
-          `Status: ${app.pm2_env?.status ?? 'unknown'}`,
-          `Restarts: ${restarts}`,
+          `Status: ${health.status}`,
+          `Restarts: ${health.restarts}`,
+          `Restart delta: ${health.restartDelta}`,
+          `Delta window minutes: ${health.deltaWindowMinutes ?? 'unknown'}`,
           `Threshold: ${threshold}`,
-          `Uptime: ${app.pm2_env?.pm_uptime ? new Date(app.pm2_env.pm_uptime).toISOString() : 'unknown'}`,
+          `Stable window minutes: ${health.stableWindowMinutes}`,
+          `Unstable restarts: ${health.unstableRestarts}`,
+          `Uptime: ${health.uptimeIso}`,
           `Node: ${app.pm2_env?.node_version ?? 'unknown'}`,
         ].join('\n'),
         ['runtime']

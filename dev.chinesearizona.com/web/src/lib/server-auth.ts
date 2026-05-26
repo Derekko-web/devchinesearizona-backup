@@ -115,12 +115,12 @@ export async function resolveServerAuthTokens(tokens: TokenPair): Promise<Resolv
   }
 
   if (tokens.accessToken) {
-    const { data, error } = await supabase.auth.getUser(tokens.accessToken);
-    if (!error && data.user) {
+    const result = await supabase.auth.getUser(tokens.accessToken).catch(() => null);
+    if (result && !result.error && result.data.user) {
       return {
         didRefresh: false,
         session: null,
-        user: data.user,
+        user: result.data.user,
       };
     }
   }
@@ -133,10 +133,12 @@ export async function resolveServerAuthTokens(tokens: TokenPair): Promise<Resolv
     };
   }
 
-  const { data, error } = await supabase.auth.refreshSession({
-    refresh_token: tokens.refreshToken,
-  });
-  if (error || !data.session) {
+  const result = await supabase.auth
+    .refreshSession({
+      refresh_token: tokens.refreshToken,
+    })
+    .catch(() => null);
+  if (!result || result.error || !result.data.session) {
     return {
       didRefresh: false,
       session: null,
@@ -146,8 +148,8 @@ export async function resolveServerAuthTokens(tokens: TokenPair): Promise<Resolv
 
   return {
     didRefresh: true,
-    session: data.session,
-    user: data.user ?? data.session.user ?? null,
+    session: result.data.session,
+    user: result.data.user ?? result.data.session.user ?? null,
   };
 }
 

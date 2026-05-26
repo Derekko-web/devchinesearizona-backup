@@ -503,7 +503,9 @@ async function writeStoreSnapshot(storePath, store) {
   }
 
   try {
-    return await withSupabaseRetries(() => writeSupabaseStore(store));
+    const persistedStore = await withSupabaseRetries(() => writeSupabaseStore(store));
+    writeStore(storePath, persistedStore);
+    return persistedStore;
   } catch (error) {
     console.error('Falling back to file-backed Arizona Radar store on write.', error);
     writeStore(storePath, store);

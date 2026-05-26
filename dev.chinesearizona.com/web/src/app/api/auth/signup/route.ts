@@ -5,7 +5,7 @@ import { buildJoinPath, buildPostAuthRedirectUrl, sanitizeAuthRedirect } from '@
 import { resolveLocale } from '@/lib/i18n';
 import { getRequestBaseUrl } from '@/lib/request-url';
 import { writeSessionCookies } from '@/lib/server-auth';
-import { getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
+import { getSupabaseAuthErrorMessage, getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
 
 function buildAuthRedirectUrl(
   baseUrl: string,
@@ -94,20 +94,29 @@ export async function POST(request: NextRequest) {
 
   const emailRedirectTo = buildPostAuthRedirectUrl(baseUrl, locale, nextPath);
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: emailRedirectTo.toString(),
-      data: fullName ? { full_name: fullName } : undefined,
-    },
-  });
+  const result = await supabase.auth
+    .signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: emailRedirectTo.toString(),
+        data: fullName ? { full_name: fullName } : undefined,
+      },
+    })
+    .catch((error: unknown) => ({ data: { session: null, user: null }, error }));
+  const { data, error } = result;
 
   if (error) {
     return redirectToAuth(
       buildAuthRedirectUrl(baseUrl, locale, {
         nextPath,
-        message: error.message,
+        message: getSupabaseAuthErrorMessage(
+          error,
+          locale,
+          locale === 'zh'
+            ? '目前無法建立帳號。請稍後再試。'
+            : 'Unable to create an account right now. Please try again shortly.'
+        ),
         tone: 'error',
       })
     );
