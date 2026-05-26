@@ -102,8 +102,15 @@ jobs:
             exit 1
           fi
 
+          git fetch origin main
           git fetch origin "$DEPLOY_SHA"
-          git checkout --force "$DEPLOY_SHA"
+          latest_main_sha="$(git rev-parse origin/main)"
+          if [ "$DEPLOY_SHA" = "$latest_main_sha" ]; then
+            git checkout --force -B main "$DEPLOY_SHA"
+            git branch --set-upstream-to=origin/main main
+          else
+            git checkout --force --detach "$DEPLOY_SHA"
+          fi
 
           cd /var/www/dev.chinesearizona.com/web
           npm ci
