@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { buildResetPasswordPath } from '@/lib/auth';
 import { resolveLocale } from '@/lib/i18n';
 import { getRequestBaseUrl } from '@/lib/request-url';
-import { getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
+import { getSupabaseAuthErrorMessage, getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
 
 function buildResetPasswordRedirectUrl(
   baseUrl: string,
@@ -91,15 +91,23 @@ export async function POST(request: NextRequest) {
     }
   );
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: new URL(buildResetPasswordPath(locale, nextPath), baseUrl).toString(),
-  });
+  const { error } = await supabase.auth
+    .resetPasswordForEmail(email, {
+      redirectTo: new URL(buildResetPasswordPath(locale, nextPath), baseUrl).toString(),
+    })
+    .catch((error: unknown) => ({ error }));
 
   if (error) {
     return redirectToResetPassword(
       buildResetPasswordRedirectUrl(baseUrl, locale, {
         nextPath,
-        message: error.message,
+        message: getSupabaseAuthErrorMessage(
+          error,
+          locale,
+          locale === 'zh'
+            ? '目前無法寄出重設密碼連結。請稍後再試。'
+            : 'Unable to send a reset link right now. Please try again shortly.'
+        ),
         tone: 'error',
       })
     );

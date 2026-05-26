@@ -1,3 +1,10 @@
+const deploymentId =
+  process.env.NEXT_DEPLOYMENT_ID ||
+  process.env.NEXT_PUBLIC_GIT_SHA ||
+  process.env.GIT_SHA ||
+  process.env.NEXT_PUBLIC_BUILD_TIME ||
+  process.env.BUILD_TIME;
+
 module.exports = {
   apps: [
     {
@@ -19,6 +26,7 @@ module.exports = {
         NODE_ENV: 'production',
         NEXT_PUBLIC_BUILD_TIME: process.env.NEXT_PUBLIC_BUILD_TIME || process.env.BUILD_TIME || 'unknown',
         NEXT_PUBLIC_GIT_SHA: process.env.NEXT_PUBLIC_GIT_SHA || process.env.GIT_SHA || 'unknown',
+        ...(deploymentId && deploymentId !== 'unknown' ? { NEXT_DEPLOYMENT_ID: deploymentId } : {}),
         HOSTNAME: '127.0.0.1',
         PORT: '3002',
       },

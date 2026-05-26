@@ -1,12 +1,25 @@
 import { describe, expect, it } from 'vitest';
 
-import { proxy, shouldBypassApexRedirect, shouldRedirectToApex } from '@/proxy';
+import {
+  proxy,
+  shouldBypassApexRedirect,
+  shouldRedirectToApex,
+  shouldRejectServerActionRequest,
+} from '@/proxy';
 
-function buildRequest(url: string, host: string) {
+function buildRequest(
+  url: string,
+  host: string,
+  options: {
+    headers?: Record<string, string>;
+    method?: string;
+  } = {}
+) {
   const nextUrl = new URL(url);
 
   return {
-    headers: new Headers({ host }),
+    headers: new Headers({ host, ...options.headers }),
+    method: options.method ?? 'GET',
     nextUrl: {
       pathname: nextUrl.pathname,
       clone: () => new URL(url),
@@ -45,5 +58,18 @@ describe('proxy host handling', () => {
     expect(shouldBypassApexRedirect('/ads.txt')).toBe(true);
     expect(response.status).toBe(200);
     expect(response.headers.get('location')).toBeNull();
+  });
+
+  it('rejects synthetic server action probes before Next logs missing action errors', () => {
+    const request = buildRequest('https://dev.chinesearizona.com/en', 'dev.chinesearizona.com', {
+      headers: {
+        'next-action': 'x',
+      },
+      method: 'POST',
+    });
+    const response = proxy(request as never);
+
+    expect(shouldRejectServerActionRequest(request as never)).toBe(true);
+    expect(response.status).toBe(400);
   });
 });

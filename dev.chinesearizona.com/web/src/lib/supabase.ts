@@ -2,6 +2,59 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 let browserClient: SupabaseClient | null | undefined;
 
+type SupabaseAuthLocale = 'en' | 'zh';
+
+const transientSupabaseErrorPattern =
+  /cloudflare|error\s*522|timed?\s*out|timeout|failed to fetch|fetch failed|network(?:error| request failed)?|<!doctype|<html/i;
+
+function unknownErrorMessage(error: unknown): string | null {
+  if (!error) {
+    return null;
+  }
+
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  return null;
+}
+
+export function getSupabaseAuthUnavailableMessage(locale: SupabaseAuthLocale): string {
+  return locale === 'zh'
+    ? '登入服務暫時無法使用。請稍後再試。'
+    : 'Authentication is temporarily unavailable. Please try again shortly.';
+}
+
+export function hasSupabaseAuthErrorMessage(error: unknown, expectedMessage: string): boolean {
+  return unknownErrorMessage(error) === expectedMessage;
+}
+
+export function getSupabaseAuthErrorMessage(
+  error: unknown,
+  locale: SupabaseAuthLocale,
+  fallback: string
+): string {
+  const message = unknownErrorMessage(error);
+
+  if (!message) {
+    return fallback;
+  }
+
+  if (message.length > 240 || transientSupabaseErrorPattern.test(message)) {
+    return getSupabaseAuthUnavailableMessage(locale);
+  }
+
+  return message;
+}
+
 export function getSupabasePublicKey(): string | null {
   const key =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
