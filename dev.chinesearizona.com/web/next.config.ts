@@ -47,7 +47,20 @@ const articleImageHosts = [
   'img.atlasobscura.com',
 ];
 
+function configuredDeploymentId(): string | undefined {
+  return [
+    process.env.NEXT_DEPLOYMENT_ID,
+    process.env.NEXT_PUBLIC_GIT_SHA,
+    process.env.GIT_SHA,
+    process.env.NEXT_PUBLIC_BUILD_TIME,
+    process.env.BUILD_TIME,
+  ].find((value) => value && value !== 'unknown');
+}
+
+const deploymentId = configuredDeploymentId();
+
 const nextConfig: NextConfig = {
+  ...(deploymentId ? { deploymentId } : {}),
   images: {
     remotePatterns: articleImageHosts.map((hostname) => ({
       hostname,

@@ -34,7 +34,9 @@ export async function GET(request: NextRequest) {
     }
   );
 
-  const { data, error } = await supabase.auth.exchangeCodeForSession(authCode);
+  const { data, error } = await supabase.auth
+    .exchangeCodeForSession(authCode)
+    .catch((error: unknown) => ({ data: { session: null }, error }));
   if (error || !data.session) {
     return NextResponse.redirect(new URL(redirectTarget), { status: 303 });
   }

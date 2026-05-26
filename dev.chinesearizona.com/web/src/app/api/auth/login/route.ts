@@ -5,7 +5,12 @@ import { buildAuthPath, buildPostAuthRedirectUrl, sanitizeAuthRedirect } from '@
 import { resolveLocale } from '@/lib/i18n';
 import { getRequestBaseUrl } from '@/lib/request-url';
 import { writeSessionCookies } from '@/lib/server-auth';
-import { getSupabasePublicKey, isSupabaseConfigured } from '@/lib/supabase';
+import {
+  getSupabaseAuthErrorMessage,
+  getSupabasePublicKey,
+  hasSupabaseAuthErrorMessage,
+  isSupabaseConfigured,
+} from '@/lib/supabase';
 
 function buildAuthRedirectUrl(
   baseUrl: string,
@@ -91,24 +96,30 @@ export async function POST(request: NextRequest) {
     }
   );
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const result = await supabase.auth
+    .signInWithPassword({
+      email,
+      password,
+    })
+    .catch((error: unknown) => ({ data: { session: null }, error }));
+  const { data, error } = result;
 
   if (error || !data.session) {
     return redirectToAuth(
       buildAuthRedirectUrl(baseUrl, locale, {
         nextPath,
         message:
-          error?.message === 'Invalid login credentials'
+          hasSupabaseAuthErrorMessage(error, 'Invalid login credentials')
             ? locale === 'zh'
               ? '登入資訊不正確。請確認 email 與密碼，或改用 Google 登入。'
               : 'Your login details are incorrect. Check your email and password, or use Google login instead.'
-            : error?.message ??
-              (locale === 'zh'
-                ? '目前無法登入。請稍後再試。'
-                : 'Unable to log in right now. Please try again shortly.'),
+            : getSupabaseAuthErrorMessage(
+                error,
+                locale,
+                locale === 'zh'
+                  ? '目前無法登入。請稍後再試。'
+                  : 'Unable to log in right now. Please try again shortly.'
+              ),
         tone: 'error',
       })
     );
