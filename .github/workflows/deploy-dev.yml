@@ -14,6 +14,10 @@ on:
         description: Exact commit SHA to deploy. Defaults to the selected ref.
         required: false
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
@@ -23,6 +27,7 @@ jobs:
         working-directory: dev.chinesearizona.com/web
     env:
       DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+      CLOSED_LOOP_GITHUB_TOKEN: ${{ github.token }}
       VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
       VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
       VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
@@ -57,7 +62,7 @@ jobs:
 
       - name: Deploy exact SHA to VPS
         run: |
-          ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA bash -s" <<'REMOTE'
+          ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA CLOSED_LOOP_GITHUB_TOKEN=$CLOSED_LOOP_GITHUB_TOKEN bash -s" <<'REMOTE'
           set -euo pipefail
 
           cd /var/www
