@@ -16,9 +16,11 @@ set +a
 args=(
   "--max-items=${RADAR_MAX_ITEMS:-10}"
   "--draft-multiplier=${RADAR_DRAFT_MULTIPLIER:-1}"
+  "--hermes-max-turns=${RADAR_HERMES_MAX_TURNS:-8}"
   "--hermes-timeout-ms=${RADAR_HERMES_TIMEOUT_MS:-240000}"
   "--lookback-hours=${RADAR_LOOKBACK_HOURS:-168}"
-  "--source-batch-size=${RADAR_SOURCE_BATCH_SIZE:-0}"
+  "--retry-empty=${RADAR_RETRY_EMPTY:-0}"
+  "--source-batch-size=${RADAR_SOURCE_BATCH_SIZE:-3}"
 )
 
 if [[ $# -gt 0 ]]; then

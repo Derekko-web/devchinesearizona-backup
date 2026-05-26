@@ -22,9 +22,11 @@ function parseArgs(argv) {
     fixturePath: process.env.RADAR_FIXTURE_PATH || '',
     draftMultiplier: Number(process.env.RADAR_DRAFT_MULTIPLIER || 2),
     hermesBin: process.env.HERMES_BIN || 'hermes',
+    hermesMaxTurns: parsePositiveInteger(process.env.RADAR_HERMES_MAX_TURNS, 0),
     hermesTimeoutMs: Number(process.env.RADAR_HERMES_TIMEOUT_MS || 240000),
     lookbackHours: 24,
     maxItems: 10,
+    retryEmpty: parseBoolean(process.env.RADAR_RETRY_EMPTY, false),
     sourceBatchSize: Number(process.env.RADAR_SOURCE_BATCH_SIZE || 0),
     sourceSlugs: process.env.RADAR_SOURCE_SLUGS || '',
     storePath: process.env.RADAR_STORE_PATH || DEFAULT_STORE_PATH,
@@ -47,6 +49,13 @@ function parseArgs(argv) {
     }
     if (value.startsWith('--hermes-bin=')) {
       args.hermesBin = value.slice('--hermes-bin='.length);
+      continue;
+    }
+    if (value.startsWith('--hermes-max-turns=')) {
+      args.hermesMaxTurns = parsePositiveInteger(
+        value.slice('--hermes-max-turns='.length),
+        args.hermesMaxTurns
+      );
       continue;
     }
     if (value.startsWith('--draft-multiplier=')) {
@@ -77,6 +86,10 @@ function parseArgs(argv) {
       }
       continue;
     }
+    if (value.startsWith('--retry-empty=')) {
+      args.retryEmpty = parseBoolean(value.slice('--retry-empty='.length), args.retryEmpty);
+      continue;
+    }
     if (value.startsWith('--source-batch-size=')) {
       const parsed = Number(value.slice('--source-batch-size='.length));
       if (Number.isFinite(parsed) && parsed >= 0) {
@@ -96,18 +109,40 @@ function parseArgs(argv) {
   return args;
 }
 
+function parseBoolean(value, fallback) {
+  const normalized = String(value ?? '')
+    .trim()
+    .toLowerCase();
+
+  if (['1', 'true', 'yes', 'y', 'on'].includes(normalized)) {
+    return true;
+  }
+  if (['0', 'false', 'no', 'n', 'off'].includes(normalized)) {
+    return false;
+  }
+
+  return fallback;
+}
+
+function parsePositiveInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
+}
+
 function printHelp() {
   process.stdout.write(
     [
       'Arizona Radar worker',
       '',
       'Usage:',
-      '  node scripts/arizona_radar/run.cjs run [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-timeout-ms=240000] [--max-items=10] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
+      '  node scripts/arizona_radar/run.cjs run [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
       '',
       'Environment:',
       '  HERMES_BIN=hermes',
       '  RADAR_DRAFT_MULTIPLIER=2',
       '  RADAR_FIXTURE_PATH=/abs/fixture.json',
+      '  RADAR_HERMES_MAX_TURNS=8',
+      '  RADAR_RETRY_EMPTY=0',
       '  RADAR_STORE_PATH=/abs/store.json',
       '',
     ].join('\n')
@@ -182,22 +217,91 @@ function extractJsonPayload(text) {
 
   const fencedMatch = trimmed.match(/```json\s*([\s\S]*?)```/i);
   if (fencedMatch && fencedMatch[1]) {
-    return fencedMatch[1].trim();
+    const candidate = fencedMatch[1].trim();
+    try {
+      JSON.parse(candidate);
+      return candidate;
+    } catch (_error) {
+      // Fall back to scanning the full output for a complete JSON value.
+    }
   }
 
-  const firstArrayIndex = trimmed.indexOf('[');
-  const lastArrayIndex = trimmed.lastIndexOf(']');
-  if (firstArrayIndex >= 0 && lastArrayIndex > firstArrayIndex) {
-    return trimmed.slice(firstArrayIndex, lastArrayIndex + 1);
-  }
+  for (let index = 0; index < trimmed.length; index += 1) {
+    const char = trimmed[index];
+    if (char !== '[' && char !== '{') {
+      continue;
+    }
 
-  const firstObjectIndex = trimmed.indexOf('{');
-  const lastObjectIndex = trimmed.lastIndexOf('}');
-  if (firstObjectIndex >= 0 && lastObjectIndex > firstObjectIndex) {
-    return trimmed.slice(firstObjectIndex, lastObjectIndex + 1);
+    const endIndex = findJsonPayloadEnd(trimmed, index);
+    if (endIndex < 0) {
+      continue;
+    }
+
+    const candidate = trimmed.slice(index, endIndex + 1);
+    try {
+      JSON.parse(candidate);
+      return candidate;
+    } catch (_error) {
+      // Keep scanning. Hermes can print non-JSON bracketed text before the payload.
+    }
   }
 
   return '[]';
+}
+
+function findJsonPayloadEnd(text, startIndex) {
+  const opener = text[startIndex];
+  const initialCloser = opener === '[' ? ']' : opener === '{' ? '}' : '';
+  if (!initialCloser) {
+    return -1;
+  }
+
+  const stack = [initialCloser];
+  let inString = false;
+  let escaped = false;
+
+  for (let index = startIndex + 1; index < text.length; index += 1) {
+    const char = text[index];
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (char === '\\') {
+        escaped = true;
+        continue;
+      }
+      if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+    if (char === '[') {
+      stack.push(']');
+      continue;
+    }
+    if (char === '{') {
+      stack.push('}');
+      continue;
+    }
+    if (char === ']' || char === '}') {
+      if (stack[stack.length - 1] !== char) {
+        return -1;
+      }
+      stack.pop();
+      if (stack.length === 0) {
+        return index;
+      }
+    }
+  }
+
+  return -1;
 }
 
 function parseHermesOutput(text) {
@@ -210,6 +314,13 @@ function parseHermesOutput(text) {
   }
   if (parsed && Array.isArray(parsed.drafts)) {
     return parsed.drafts;
+  }
+  if (
+    parsed &&
+    typeof parsed === 'object' &&
+    (parsed.sourceUrl || parsed.canonicalUrl || parsed.titleEn)
+  ) {
+    return [parsed];
   }
   return [];
 }
@@ -304,9 +415,9 @@ function collectDraftsWithHermes({
     hermesBin,
     ['chat', '-Q', '--yolo', '--max-turns', String(maxTurns), '-q', prompt],
     {
-    cwd: ROOT,
-    encoding: 'utf8',
-    maxBuffer: 8 * 1024 * 1024,
+      cwd: ROOT,
+      encoding: 'utf8',
+      maxBuffer: 8 * 1024 * 1024,
       timeout: hermesTimeoutMs,
     }
   );
@@ -353,6 +464,7 @@ function collectDraftsWithHermesRetry({
   manifest,
   maxItems,
   lookbackHours,
+  maxTurns,
 }) {
   return dedupeDrafts(
     collectDraftsWithHermes({
@@ -361,7 +473,7 @@ function collectDraftsWithHermesRetry({
       manifest,
       maxItems,
       lookbackHours,
-      maxTurns: manifest.length <= 1 ? 12 : 14,
+      maxTurns: maxTurns || (manifest.length <= 1 ? 12 : 14),
       promptOptions: { retry: true },
     })
   ).slice(0, maxItems);
@@ -449,6 +561,12 @@ async function runWorker(args) {
         (Number.isFinite(args.draftMultiplier) ? Math.max(1, args.draftMultiplier) : 1)
     )
   );
+  const hermesMaxTurns =
+    Number.isFinite(args.hermesMaxTurns) && args.hermesMaxTurns > 0
+      ? args.hermesMaxTurns
+      : activeManifest.length <= 1
+        ? 10
+        : 12;
 
   try {
     const drafts = args.fixturePath
@@ -459,16 +577,17 @@ async function runWorker(args) {
           manifest: activeManifest,
           maxItems: draftTargetCount,
           lookbackHours: args.lookbackHours,
-          maxTurns: activeManifest.length <= 1 ? 10 : 12,
+          maxTurns: hermesMaxTurns,
         });
     const recoveredDrafts =
-      !args.fixturePath && drafts.length === 0
+      !args.fixturePath && drafts.length === 0 && args.retryEmpty
         ? collectDraftsWithHermesRetry({
             hermesBin: args.hermesBin,
             hermesTimeoutMs: args.hermesTimeoutMs,
             manifest: activeManifest,
             maxItems: draftTargetCount,
             lookbackHours: args.lookbackHours,
+            maxTurns: hermesMaxTurns,
           })
         : drafts;
     const filteredDrafts = dedupeDrafts(recoveredDrafts).filter((draft) => draft && typeof draft === 'object');
@@ -534,3 +653,10 @@ if (require.main === module) {
       process.exitCode = 1;
     });
 }
+
+module.exports = {
+  extractJsonPayload,
+  parseArgs,
+  parseHermesOutput,
+  runWorker,
+};
