@@ -441,7 +441,9 @@ async function writeStoreSnapshot(storePath, store) {
   }
 
   try {
-    return await writeSupabaseStore(store);
+    const persistedStore = await writeSupabaseStore(store);
+    writeStore(storePath, persistedStore);
+    return persistedStore;
   } catch (error) {
     console.error('Falling back to file-backed Arizona Radar store on write.', error);
     writeStore(storePath, store);
