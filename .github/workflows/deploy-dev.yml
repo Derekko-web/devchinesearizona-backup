@@ -18,6 +18,10 @@ permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: true
+
 jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
@@ -37,19 +41,44 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
 
+      - name: Check deploy freshness
+        id: freshness
+        working-directory: .
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_SHA: ${{ inputs.sha }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "$INPUT_SHA" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          latest_sha="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          if [ "$DEPLOY_SHA" != "$latest_sha" ]; then
+            echo "Skipping stale deploy for $DEPLOY_SHA; latest main is $latest_sha."
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "deploy=true" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-node@v4
+        if: steps.freshness.outputs.deploy == 'true'
         with:
           node-version: 20.20.2
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
       - name: Install dependencies
+        if: steps.freshness.outputs.deploy == 'true'
         run: npm ci
 
       - name: Verify before deploy
+        if: steps.freshness.outputs.deploy == 'true'
         run: npm run verify
 
       - name: Configure SSH
+        if: steps.freshness.outputs.deploy == 'true'
         run: |
           test -n "$VPS_HOST"
           test -n "$VPS_USER"
@@ -61,6 +90,7 @@ jobs:
           ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy exact SHA to VPS
+        if: steps.freshness.outputs.deploy == 'true'
         run: |
           ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA CLOSED_LOOP_GITHUB_TOKEN=$CLOSED_LOOP_GITHUB_TOKEN bash -s" <<'REMOTE'
           set -euo pipefail
