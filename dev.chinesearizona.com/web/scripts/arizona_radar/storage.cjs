@@ -489,7 +489,13 @@ async function readStoreSnapshot(storePath) {
   }
 
   try {
-    return await withSupabaseRetries(readSupabaseStore);
+    const persistedStore = await withSupabaseRetries(readSupabaseStore);
+    try {
+      writeStore(storePath, persistedStore);
+    } catch (mirrorError) {
+      console.error('Unable to refresh local Arizona Radar store mirror.', mirrorError);
+    }
+    return persistedStore;
   } catch (error) {
     console.error('Falling back to file-backed Arizona Radar store.', error);
     return readStore(storePath);
