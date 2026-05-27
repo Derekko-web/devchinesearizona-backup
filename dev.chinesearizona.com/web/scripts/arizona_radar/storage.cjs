@@ -65,6 +65,68 @@ function getSupabaseClient() {
   );
 }
 
+function parseNonNegativeInteger(value, fallback) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 ? Math.floor(parsed) : fallback;
+}
+
+function getSupabaseAttemptCount() {
+  return parseNonNegativeInteger(process.env.RADAR_SUPABASE_RETRIES, 2) + 1;
+}
+
+function getSupabaseRetryDelayMs() {
+  return parseNonNegativeInteger(process.env.RADAR_SUPABASE_RETRY_DELAY_MS, 750);
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+function stringifyError(error) {
+  if (error instanceof Error) {
+    return `${error.name}: ${error.message}`;
+  }
+
+  if (error && typeof error === 'object') {
+    const parts = ['message', 'details', 'hint', 'code']
+      .map((key) => error[key])
+      .filter(Boolean);
+    return parts.length > 0 ? parts.map(String).join(' ') : JSON.stringify(error);
+  }
+
+  return String(error || '');
+}
+
+function isRetryableSupabaseError(error) {
+  return /fetch failed|und_err|socket|other side closed|timeout|timed out|etimedout|econnreset|econnrefused|eai_again|network/i.test(
+    stringifyError(error)
+  );
+}
+
+async function withSupabaseRetries(operation) {
+  const attempts = getSupabaseAttemptCount();
+  const retryDelayMs = getSupabaseRetryDelayMs();
+  let lastError = null;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (attempt >= attempts || !isRetryableSupabaseError(error)) {
+        throw error;
+      }
+      if (retryDelayMs > 0) {
+        await sleep(retryDelayMs * attempt);
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 function hashValue(value) {
   return createHash('sha256').update(String(value)).digest('hex');
 }
@@ -427,7 +489,7 @@ async function readStoreSnapshot(storePath) {
   }
 
   try {
-    return await readSupabaseStore();
+    return await withSupabaseRetries(readSupabaseStore);
   } catch (error) {
     console.error('Falling back to file-backed Arizona Radar store.', error);
     return readStore(storePath);
@@ -441,7 +503,7 @@ async function writeStoreSnapshot(storePath, store) {
   }
 
   try {
-    const persistedStore = await writeSupabaseStore(store);
+    const persistedStore = await withSupabaseRetries(() => writeSupabaseStore(store));
     writeStore(storePath, persistedStore);
     return persistedStore;
   } catch (error) {
