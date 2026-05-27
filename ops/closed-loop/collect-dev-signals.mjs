@@ -7,6 +7,11 @@ import { fileURLToPath } from 'node:url';
 
 import { recentCronAnomalyLines } from './cron-log-health.mjs';
 import { evaluatePm2Health, pm2ProcessState } from './pm2-health.mjs';
+import {
+  defaultRuntimeLogPatterns,
+  hasRuntimeLogPattern,
+  readRuntimeLogAppend,
+} from './runtime-log.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_REPO_ROOT = resolve(__dirname, '../..');
@@ -282,15 +287,12 @@ function collectAccessLogFindings() {
 function collectRuntimeLogFindings() {
   const pm2ErrorLog =
     process.env.CLOSED_LOOP_PM2_ERROR_LOG || '/home/derek/.pm2/logs/dev-chinesearizona-error.log';
-  const log = tail(pm2ErrorLog, 300);
-  const patterns = [
-    /Failed to find Server Action/i,
-    /Cloudflare[\s\S]*Error/i,
-    /Unhandled|uncaught|fatal/i,
-  ];
+  const stateFile =
+    process.env.CLOSED_LOOP_PM2_ERROR_LOG_STATE_FILE ||
+    resolve(APP_ROOT, 'logs/closed-loop-runtime-log-state.json');
+  const log = readRuntimeLogAppend(pm2ErrorLog, stateFile);
 
-  const matched = patterns.some((pattern) => pattern.test(log));
-  if (!matched) {
+  if (!log || !hasRuntimeLogPattern(log, defaultRuntimeLogPatterns)) {
     return [];
   }
 
@@ -298,9 +300,13 @@ function collectRuntimeLogFindings() {
     finding(
       'runtime-errors',
       'Recent dev runtime errors are present',
-      ['The PM2 error log contains recent runtime error patterns.', '', '```', log.slice(-6000), '```'].join(
-        '\n'
-      ),
+      [
+        'The PM2 error log contains new runtime error patterns since the last closed-loop sample.',
+        '',
+        '```',
+        log.slice(-6000),
+        '```',
+      ].join('\n'),
       ['runtime']
     ),
   ];
