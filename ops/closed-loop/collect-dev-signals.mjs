@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'no
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { recentCronAnomalyLines } from './cron-log-health.mjs';
 import { evaluatePm2Health, pm2ProcessState } from './pm2-health.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -309,27 +310,44 @@ function collectCronFindings() {
   const radarLog = process.env.CLOSED_LOOP_RADAR_LOG || resolve(APP_ROOT, 'logs/arizona-radar-cron.log');
   const articleLog =
     process.env.CLOSED_LOOP_ARTICLE_LOG || resolve(APP_ROOT, 'data/article-ingest-staging/cron-sync.log');
+  const configuredRecentHours = Number(process.env.CLOSED_LOOP_CRON_RECENT_HOURS || 48);
+  const recentHours =
+    Number.isFinite(configuredRecentHours) && configuredRecentHours > 0 ? configuredRecentHours : 48;
   const issues = [];
   const radarTail = tail(radarLog, 200);
+  const radarAnomalies = recentCronAnomalyLines(radarTail, { recentHours });
 
-  if (/ETIMEDOUT|Falling back to file-backed|lock_busy|Traceback|Error:/i.test(radarTail)) {
+  if (radarAnomalies.length > 0) {
     issues.push(
       finding(
         'cron-arizona-radar',
         'Arizona Radar cron has failures or degraded runs',
-        ['Recent Arizona Radar cron output:', '', '```', radarTail.slice(-6000), '```'].join('\n'),
+        [
+          `Arizona Radar cron anomalies in the last ${recentHours} hours:`,
+          '',
+          '```',
+          radarAnomalies.map((entry) => entry.line).join('\n').slice(-6000),
+          '```',
+        ].join('\n'),
         ['cron']
       )
     );
   }
 
   const articleTail = tail(articleLog, 160);
-  if (/Traceback|Error:|failed|ETIMEDOUT/i.test(articleTail)) {
+  const articleAnomalies = recentCronAnomalyLines(articleTail, { recentHours });
+  if (articleAnomalies.length > 0) {
     issues.push(
       finding(
         'cron-sunbird',
         'Sunbird article sync cron has failures',
-        ['Recent Sunbird article cron output:', '', '```', articleTail.slice(-6000), '```'].join('\n'),
+        [
+          `Sunbird article cron anomalies in the last ${recentHours} hours:`,
+          '',
+          '```',
+          articleAnomalies.map((entry) => entry.line).join('\n').slice(-6000),
+          '```',
+        ].join('\n'),
         ['cron']
       )
     );

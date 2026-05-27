@@ -30,5 +30,5 @@ fi
 LOCK_FILE="$ROOT_DIR/data/radar-runtime/arizona-radar.lock"
 
 if ! flock -n "$LOCK_FILE" node scripts/arizona_radar/run.cjs run "${args[@]}"; then
-  printf '%s\n' '{"status":"skipped","reason":"lock_busy"}'
+  printf '{"status":"skipped","reason":"lock_busy","timestamp":"%s"}\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 fi
