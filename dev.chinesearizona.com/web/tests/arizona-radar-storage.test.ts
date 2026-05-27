@@ -102,6 +102,7 @@ function createStorageModuleWithFakeSupabase() {
   try {
     return {
       module: require('../scripts/arizona_radar/storage.cjs') as {
+        readStoreSnapshot: (storePath: string) => Promise<Record<string, unknown>>;
         writeStoreSnapshot: (
           storePath: string,
           store: Record<string, unknown>
@@ -115,6 +116,29 @@ function createStorageModuleWithFakeSupabase() {
 }
 
 describe('Arizona Radar storage', () => {
+  it('refreshes the local runtime store mirror after Supabase reads succeed', async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.NODE_ENV = 'production';
+    process.env.RADAR_STORAGE_MODE = 'supabase';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
+
+    const { module: storage } = createStorageModuleWithFakeSupabase();
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-storage-'));
+    const storePath = path.join(tempDir, 'radar-runtime', 'store.json');
+
+    const persisted = await storage.readStoreSnapshot(storePath);
+    const mirrored = JSON.parse(fs.readFileSync(storePath, 'utf8')) as {
+      jobControl: { publishCap: number; updatedAt: string };
+    };
+
+    expect(persisted.jobControl).toMatchObject({
+      publishCap: 10,
+      updatedAt: '2026-04-18T12:00:00.000Z',
+    });
+    expect(mirrored.jobControl.publishCap).toBe(10);
+    expect(mirrored.jobControl.updatedAt).toBe('2026-04-18T12:00:00.000Z');
+  });
+
   it('refreshes the local runtime store mirror after Supabase writes succeed', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
     process.env.NODE_ENV = 'production';
