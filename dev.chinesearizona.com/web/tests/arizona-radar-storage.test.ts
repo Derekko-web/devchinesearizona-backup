@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const require = createRequire(import.meta.url);
 
@@ -26,11 +26,14 @@ type LoadFunction = (request: string, parent?: unknown, isMain?: boolean) => unk
 const originalEnv = {
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
+  RADAR_STORE_PATH: process.env.RADAR_STORE_PATH,
   RADAR_STORAGE_MODE: process.env.RADAR_STORAGE_MODE,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
 };
 
 afterEach(() => {
+  vi.resetModules();
+  vi.doUnmock('@/lib/supabase');
   for (const [key, value] of Object.entries(originalEnv)) {
     if (value === undefined) {
       delete process.env[key];
@@ -39,6 +42,33 @@ afterEach(() => {
     }
   }
 });
+
+function createAppSupabaseQueryBuilder(table: string): QueryBuilder {
+  const jobControlRow = {
+    paused: false,
+    publish_cap: 6,
+    updated_at: '2026-04-18T13:00:00.000Z',
+  };
+
+  function queryResultForAppTable(): QueryResult {
+    if (table === 'radar_job_controls') {
+      return { data: jobControlRow, error: null };
+    }
+
+    return { data: [], error: null };
+  }
+
+  const builder = {} as QueryBuilder;
+  builder.select = () => builder;
+  builder.eq = () => builder;
+  builder.order = () => builder;
+  builder.limit = () => Promise.resolve(queryResultForAppTable());
+  builder.maybeSingle = () => Promise.resolve(queryResultForAppTable());
+  builder.upsert = () => Promise.resolve({ error: null });
+  builder.then = (resolve, reject) =>
+    Promise.resolve(queryResultForAppTable()).then(resolve, reject);
+  return builder;
+}
 
 function createStorageModuleWithFakeSupabase() {
   const nodeModule = require('node:module') as { _load: LoadFunction };
@@ -116,6 +146,36 @@ function createStorageModuleWithFakeSupabase() {
 }
 
 describe('Arizona Radar storage', () => {
+  it('refreshes the app-side runtime store mirror after Supabase reads succeed', async () => {
+    process.env.NODE_ENV = 'production';
+    process.env.RADAR_STORAGE_MODE = 'supabase';
+
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-storage-app-'));
+    const storePath = path.join(tempDir, 'radar-runtime', 'store.json');
+    process.env.RADAR_STORE_PATH = storePath;
+
+    vi.doMock('@/lib/supabase', () => ({
+      getSupabaseServiceClient: () => ({
+        from: (table: string) => createAppSupabaseQueryBuilder(table),
+      }),
+      isSupabaseServiceConfigured: () => true,
+    }));
+
+    const radar = await import('@/lib/radar');
+
+    const persisted = await radar.readRadarStoreAsync();
+    const mirrored = JSON.parse(fs.readFileSync(storePath, 'utf8')) as {
+      jobControl: { publishCap: number; updatedAt: string };
+    };
+
+    expect(persisted.jobControl).toMatchObject({
+      publishCap: 6,
+      updatedAt: '2026-04-18T13:00:00.000Z',
+    });
+    expect(mirrored.jobControl.publishCap).toBe(6);
+    expect(mirrored.jobControl.updatedAt).toBe('2026-04-18T13:00:00.000Z');
+  });
+
   it('refreshes the local runtime store mirror after Supabase reads succeed', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
     process.env.NODE_ENV = 'production';
