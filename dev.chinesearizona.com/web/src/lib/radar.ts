@@ -512,7 +512,13 @@ export async function readRadarStoreAsync(): Promise<RadarStoreSnapshot> {
   }
 
   try {
-    return await readRadarStoreFromSupabase();
+    const persistedStore = await readRadarStoreFromSupabase();
+    try {
+      writeRadarStore(persistedStore);
+    } catch (mirrorError) {
+      console.error('Unable to refresh local radar store mirror.', mirrorError);
+    }
+    return persistedStore;
   } catch (error) {
     console.error('Falling back to file-backed radar store.', error);
     return readRadarStore();
