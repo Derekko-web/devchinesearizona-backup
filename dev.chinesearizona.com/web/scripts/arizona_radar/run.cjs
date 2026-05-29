@@ -1133,10 +1133,11 @@ async function runWorker(args) {
           now: startedAt,
           timeoutMs: args.feedTimeoutMs,
         });
+    const feedDraftsSatisfiedTarget = feedDrafts.length >= draftTargetCount;
     let hermesError;
     const drafts = args.fixturePath
       ? parseFixturePayload(args.fixturePath)
-      : feedDrafts.length >= draftTargetCount
+      : feedDraftsSatisfiedTarget
         ? []
       : (() => {
           try {
@@ -1154,7 +1155,7 @@ async function runWorker(args) {
           }
         })();
     const recoveredDrafts =
-      !args.fixturePath && drafts.length === 0 && args.retryEmpty
+      !args.fixturePath && !feedDraftsSatisfiedTarget && drafts.length === 0 && args.retryEmpty
         ? collectDraftsWithHermesRetry({
             hermesBin: args.hermesBin,
             hermesTimeoutMs: args.hermesTimeoutMs,
