@@ -253,6 +253,10 @@ function extractImageFromHtml(value) {
   return String($('img').first().attr('src') || '').trim();
 }
 
+function readMetaContent($, selector) {
+  return String($(selector).first().attr('content') || '').trim();
+}
+
 function feedSourceUrl(source) {
   return String(source.feedUrl || '').trim();
 }
@@ -260,37 +264,130 @@ function feedSourceUrl(source) {
 function laneContext(lane) {
   if (lane === 'openings') {
     return {
-      en: 'restaurant, retail, and local-business opening signal',
-      zh: '餐飲、零售或本地商業開店訊號',
+      en: 'an openings story',
+      zh: '開店消息',
       personas: ['local_families', 'business_owners'],
     };
   }
   if (lane === 'housing') {
     return {
-      en: 'housing and relocation signal',
-      zh: '住房與搬遷訊號',
+      en: 'a housing story',
+      zh: '住房消息',
       personas: ['tsmc_newcomers', 'local_families'],
     };
   }
   if (lane === 'official') {
     return {
-      en: 'official Arizona update',
-      zh: '亞利桑那官方更新',
+      en: 'an Arizona update',
+      zh: '亞利桑那更新',
       personas: ['local_families', 'business_owners'],
     };
   }
   if (lane === 'social') {
     return {
-      en: 'public social trend signal',
-      zh: '公開社群趨勢訊號',
+      en: 'a public trend note',
+      zh: '公開趨勢消息',
       personas: ['local_families', 'students'],
     };
   }
 
   return {
-    en: 'community news signal',
-    zh: '社區新聞訊號',
+    en: 'a community story',
+    zh: '社區消息',
     personas: ['local_families', 'students'],
+  };
+}
+
+function ensureSentence(value) {
+  const text = stripHtml(value).replace(/\s+/g, ' ').trim();
+  if (!text) {
+    return '';
+  }
+
+  return /[.!?。！？]$/.test(text) ? text : `${text}.`;
+}
+
+function firstFeedSummarySentence(value) {
+  const text = stripHtml(value).replace(/\s+/g, ' ').trim();
+  if (!text) {
+    return '';
+  }
+
+  const match = text.match(/^(.{1,240}?[.!?。！？])(?:\s|$)/);
+  return ensureSentence(match ? match[1] : text.slice(0, 220));
+}
+
+function normalizePlainText(value) {
+  return stripHtml(value)
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[—–]/g, ',')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function uniqueTexts(values) {
+  const seen = new Set();
+  const output = [];
+
+  for (const value of values) {
+    const text = normalizePlainText(value);
+    const key = text.toLowerCase();
+    if (!text || seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    output.push(text);
+  }
+
+  return output;
+}
+
+function extractArticlePayload(html, fallback = {}) {
+  const $ = cheerio.load(String(html || ''));
+  const title =
+    readMetaContent($, 'meta[property="og:title"]') ||
+    readMetaContent($, 'meta[name="twitter:title"]') ||
+    normalizePlainText($('h1').first().text()) ||
+    fallback.titleEn ||
+    '';
+  const description =
+    readMetaContent($, 'meta[property="og:description"]') ||
+    readMetaContent($, 'meta[name="description"]') ||
+    fallback.feedExcerpt ||
+    '';
+  const publishedAt =
+    normalizeFeedDate(readMetaContent($, 'meta[property="article:published_time"]')) ||
+    fallback.sourcePublishedAt;
+  const heroImage =
+    readMetaContent($, 'meta[property="og:image"]') ||
+    readMetaContent($, 'meta[name="twitter:image"]') ||
+    fallback.heroImage ||
+    '';
+  const selectors = ['.entry-content p', 'article p', 'main p', '[class*=content] p'];
+  const paragraphs = uniqueTexts(
+    selectors.flatMap((selector) =>
+      $(selector)
+        .map((_index, element) => $(element).text())
+        .get()
+    )
+  )
+    .filter((paragraph) => paragraph.length >= 40)
+    .filter(
+      (paragraph) =>
+        !/(subscribe|advertisement|sign up|privacy policy|terms of service|all rights reserved)/i.test(
+          paragraph
+        )
+    )
+    .slice(0, 18);
+
+  return {
+    title,
+    description: normalizePlainText(description),
+    publishedAt,
+    heroImage,
+    paragraphs,
+    text: paragraphs.join('\n\n').slice(0, 9000),
   };
 }
 
@@ -315,14 +412,12 @@ function parseFeedItems(xml, source, options = {}) {
     }
 
     const descriptionHtml = $(item).find('description').first().text();
+    const descriptionText = stripHtml(descriptionHtml);
     const category = readElementText($, item, 'category');
     const heroImage =
       readElementAttr($, item, 'media\\:content', 'url') ||
       readElementAttr($, item, 'enclosure', 'url') ||
       extractImageFromHtml(descriptionHtml);
-    const categorySentence = category
-      ? `The source categorizes the item under ${category}.`
-      : `The item is part of ${source.name}'s Arizona feed.`;
 
     drafts.push({
       sourceSlug: source.slug,
@@ -331,21 +426,11 @@ function parseFeedItems(xml, source, options = {}) {
       canonicalUrl,
       sourcePublishedAt,
       titleEn: title,
-      titleZh: `來源更新：${title}`,
-      excerptEn: `ChineseArizona detected a new ${context.en} from ${source.name}: ${title}.`,
-      excerptZh: `ChineseArizona 偵測到 ${source.name} 的新${context.zh}：「${title}」。`,
-      bodyEn: [
-        `ChineseArizona detected a new ${context.en} from ${source.name}: ${title}.`,
-        `${categorySentence} The linked source includes the full report and original details.`,
-        'This radar item keeps the coverage brief and links readers back to the source instead of republishing the source article.',
-      ],
-      bodyZh: [
-        `ChineseArizona 偵測到 ${source.name} 的新${context.zh}：「${title}」。`,
-        category
-          ? `來源將此項目歸類為 ${category}。請透過原始連結閱讀完整報導與細節。`
-          : `此項目來自 ${source.name} 的亞利桑那更新來源。請透過原始連結閱讀完整報導與細節。`,
-        '這則 Radar 只保留簡短訊號與來源追蹤，不重刊原始文章內容。',
-      ],
+      titleZh: `${source.name}：${title}`,
+      feedExcerpt: firstFeedSummarySentence(descriptionText),
+      feedCategory: category,
+      feedContextEn: context.en,
+      feedContextZh: context.zh,
       heroImage,
       topicFingerprint: `${source.slug}:${title}`,
       personaTargets: context.personas,
@@ -353,6 +438,201 @@ function parseFeedItems(xml, source, options = {}) {
   });
 
   return drafts;
+}
+
+function buildFeedRewritePrompt(items) {
+  const sourcePayload = items.map((item) => ({
+    sourceSlug: item.sourceSlug,
+    sourceName: item.sourceName,
+    sourceUrl: item.sourceUrl,
+    canonicalUrl: item.canonicalUrl,
+    sourcePublishedAt: item.sourcePublishedAt,
+    category: item.feedCategory,
+    title: item.titleEn,
+    rssExcerpt: item.feedExcerpt,
+    articleTitle: item.articlePayload.title,
+    articleDescription: item.articlePayload.description,
+    articlePublishedAt: item.articlePayload.publishedAt,
+    articleText: item.articlePayload.text,
+  }));
+
+  return [
+    'Rewrite these Arizona Radar RSS items into full, original ChineseArizona articles.',
+    '',
+    'Use the provided articleText as source material. Do not browse. Do not invent facts.',
+    'Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
+    'Each item must be a real rewritten article, not a detector note, short summary, or placeholder.',
+    '',
+    'Content rules:',
+    '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.',
+    '- Mention the source by name in the excerpt or first paragraph.',
+    '- Explain what happened, who is involved, where it is, timing, and why an Arizona reader would care when the source supports it.',
+    '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
+    '- Use plain, direct language. Do not inflate significance.',
+    '',
+    'Banned style:',
+    '- Do not use: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright.',
+    '- Do not write: ChineseArizona detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.',
+    '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, or en dashes.',
+    '- Do not use common hyphenated word pairs unless the hyphen is part of a proper name.',
+    '- Do not use vague attribution such as experts believe or industry observers say unless the source names them.',
+    '- Do not add generic conclusions or promotional language.',
+    '',
+    'Return JSON only. Return either [] or an array of objects with this exact schema:',
+    '[',
+    '  {',
+    '    "sourceSlug": "copy exactly from input",',
+    '    "sourceName": "copy exactly from input",',
+    '    "sourceUrl": "copy exactly from input",',
+    '    "canonicalUrl": "copy exactly from input",',
+    '    "sourcePublishedAt": "copy exactly from input",',
+    '    "titleEn": "short English headline",',
+    '    "titleZh": "matching Traditional Chinese headline",',
+    '    "excerptEn": "1-2 direct English sentences",',
+    '    "excerptZh": "matching Traditional Chinese excerpt",',
+    '    "bodyEn": ["3-5 rewritten English paragraphs"],',
+    '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],',
+    '    "heroImage": "optional image URL",',
+    '    "topicFingerprint": "stable short topic description"',
+    '  }',
+    ']',
+    '',
+    JSON.stringify(sourcePayload, null, 2),
+  ].join('\n');
+}
+
+function normalizeGeneratedText(value) {
+  return String(value || '')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[—–]/g, ',')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function normalizeGeneratedTextArray(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map(normalizeGeneratedText).filter(Boolean);
+}
+
+function wordCount(value) {
+  return String(value || '')
+    .trim()
+    .split(/\s+/g)
+    .filter(Boolean).length;
+}
+
+function hasBannedGeneratedStyle(draft) {
+  const text = [
+    draft.titleEn,
+    draft.excerptEn,
+    ...(Array.isArray(draft.bodyEn) ? draft.bodyEn : []),
+  ]
+    .join(' ')
+    .toLowerCase();
+  const bannedPattern =
+    /chinesearizona detected|opening indicator|opening signal|source categorizes|pivotal|testament|showcasing|nestled|boasts|unlock|seamless|vibrant|robust|at its core|future looks bright|here is what you need to know|actually|additionally|transformative|groundbreaking|rapidly evolving|vital role|plays a crucial role|experts believe|industry observers|despite challenges|continues to thrive|in conclusion|let's dive in|i hope this helps|in order to|due to the fact|could potentially|exciting times lie ahead|marking a .*moment|not just .*it'?s/i;
+
+  return bannedPattern.test(text) || /[\u{1f300}-\u{1faff}]/u.test(text);
+}
+
+function containsCopiedSourceSentence(draft, sourceText) {
+  const output = normalizeGeneratedText([
+    draft.excerptEn,
+    ...(Array.isArray(draft.bodyEn) ? draft.bodyEn : []),
+  ].join(' ')).toLowerCase();
+  const sourceSentences = normalizeGeneratedText(sourceText)
+    .split(/(?<=[.!?])\s+/g)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => wordCount(sentence) >= 10);
+
+  return sourceSentences.some((sentence) => output.includes(sentence.toLowerCase()));
+}
+
+function mergeFeedRewriteDraft(seed, draft) {
+  const bodyEn = normalizeGeneratedTextArray(draft.bodyEn);
+  const bodyZh = normalizeGeneratedTextArray(draft.bodyZh);
+  const excerptEn = normalizeGeneratedText(draft.excerptEn);
+  const titleEn = normalizeGeneratedText(draft.titleEn || seed.titleEn);
+
+  if (bodyEn.length < 3 || bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < 120) {
+    return null;
+  }
+  if (bodyZh.length !== bodyEn.length) {
+    return null;
+  }
+
+  const candidate = {
+    sourceSlug: seed.sourceSlug,
+    sourceName: seed.sourceName,
+    sourceUrl: seed.sourceUrl,
+    canonicalUrl: seed.canonicalUrl,
+    sourcePublishedAt: seed.sourcePublishedAt,
+    titleEn,
+    titleZh: normalizeGeneratedText(draft.titleZh || seed.titleZh || titleEn),
+    excerptEn,
+    excerptZh: normalizeGeneratedText(draft.excerptZh || excerptEn),
+    bodyEn,
+    bodyZh,
+    heroImage: normalizeCanonicalUrl(draft.heroImage || seed.articlePayload.heroImage || seed.heroImage),
+    topicFingerprint: normalizeGeneratedText(draft.topicFingerprint || seed.topicFingerprint),
+    personaTargets: seed.personaTargets,
+  };
+
+  if (!candidate.excerptEn || hasBannedGeneratedStyle(candidate)) {
+    return null;
+  }
+  if (containsCopiedSourceSentence(candidate, seed.articlePayload.text)) {
+    return null;
+  }
+
+  return candidate;
+}
+
+function rewriteFeedItemsWithHermes({
+  hermesBin,
+  hermesTimeoutMs,
+  items,
+  maxTurns = 4,
+}) {
+  if (!items.length) {
+    return [];
+  }
+
+  const prompt = buildFeedRewritePrompt(items);
+  const result = spawnSync(
+    hermesBin,
+    ['chat', '-Q', '--yolo', '--max-turns', String(maxTurns), '-q', prompt],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      maxBuffer: 12 * 1024 * 1024,
+      timeout: hermesTimeoutMs,
+    }
+  );
+
+  if (result.error) {
+    throw result.error;
+  }
+  if (result.status !== 0) {
+    throw new Error((result.stderr || result.stdout || 'Hermes feed rewrite failed.').trim());
+  }
+
+  const byUrl = new Map(
+    items.flatMap((item) => [
+      [item.canonicalUrl, item],
+      [item.sourceUrl, item],
+    ])
+  );
+  return parseHermesOutput(result.stdout)
+    .map((draft) => {
+      const seed = byUrl.get(draft.canonicalUrl) || byUrl.get(draft.sourceUrl);
+      return seed ? mergeFeedRewriteDraft(seed, draft) : null;
+    })
+    .filter(Boolean);
 }
 
 async function fetchText(url, timeoutMs) {
@@ -379,7 +659,7 @@ async function fetchText(url, timeoutMs) {
 async function collectDraftsFromFeeds(manifest, options = {}) {
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
   const timeoutMs = Number.isFinite(options.timeoutMs) ? Math.max(1000, Math.floor(options.timeoutMs)) : 15000;
-  const drafts = [];
+  const seeds = [];
 
   for (const source of Array.isArray(manifest) ? manifest : []) {
     const url = feedSourceUrl(source);
@@ -389,7 +669,7 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
 
     try {
       const xml = await fetchText(url, timeoutMs);
-      drafts.push(
+      seeds.push(
         ...parseFeedItems(xml, source, {
           lookbackHours: options.lookbackHours,
           maxItems,
@@ -409,13 +689,65 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
     }
   }
 
-  return drafts
+  const rewriteSeeds = [];
+  for (const seed of seeds
     .sort(
       (left, right) =>
         new Date(right.sourcePublishedAt || 0).getTime() -
         new Date(left.sourcePublishedAt || 0).getTime()
     )
-    .slice(0, maxItems);
+    .slice(0, maxItems)) {
+    try {
+      const html = await fetchText(seed.canonicalUrl, timeoutMs);
+      const articlePayload = extractArticlePayload(html, seed);
+      if (articlePayload.text.length < 300) {
+        process.stderr.write(
+          JSON.stringify({
+            status: 'feed_article_too_thin',
+            sourceSlug: seed.sourceSlug,
+            canonicalUrl: seed.canonicalUrl,
+            textLength: articlePayload.text.length,
+            timestamp: new Date().toISOString(),
+          }) + '\n'
+        );
+        continue;
+      }
+      rewriteSeeds.push({
+        ...seed,
+        articlePayload,
+      });
+    } catch (error) {
+      process.stderr.write(
+        JSON.stringify({
+          status: 'feed_article_failed',
+          sourceSlug: seed.sourceSlug,
+          canonicalUrl: seed.canonicalUrl,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          timestamp: new Date().toISOString(),
+        }) + '\n'
+      );
+    }
+  }
+
+  try {
+    return rewriteFeedItemsWithHermes({
+      hermesBin: options.hermesBin || 'hermes',
+      hermesTimeoutMs: Number.isFinite(options.hermesTimeoutMs)
+        ? Math.max(1000, Math.floor(options.hermesTimeoutMs))
+        : 240000,
+      items: rewriteSeeds,
+      maxTurns: options.hermesMaxTurns || 4,
+    }).slice(0, maxItems);
+  } catch (error) {
+    process.stderr.write(
+      JSON.stringify({
+        status: 'feed_rewrite_failed',
+        errorMessage: error instanceof Error ? error.message : String(error),
+        timestamp: new Date().toISOString(),
+      }) + '\n'
+    );
+    return [];
+  }
 }
 
 function extractJsonPayload(text) {
@@ -600,6 +932,11 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
     '- Reject anything that is not specifically tied to Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott, or another Arizona place.',
     '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.',
     '- When useful, add concise Arizona-specific context or implications, but do not invent facts or unsupported claims.',
+    '- Use plain, direct language. Do not inflate significance or write promotional copy.',
+    '- Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
+    '- Avoid AI-style filler and banned phrasing: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright, here is what you need to know.',
+    '- Do not write detector notes such as ChineseArizona detected, opening indicator, opening signal, or source categorizes.',
+    '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, en dashes, vague attribution, generic conclusions, or not just X but Y framing.',
     '- If the source page exposes a clear article image or OG image and the source is not signal_only, include it in heroImage.',
     '- Public social sources must become signal_only trend summaries. Do not reuse captions, hashtags, quotes, embeds, or any third-party media URLs.',
     '- Do not fabricate filler. If there are fewer than the requested count, return fewer.',
@@ -788,14 +1125,20 @@ async function runWorker(args) {
     const feedDrafts = args.fixturePath
       ? []
       : await collectDraftsFromFeeds(filteredManifest, {
+          hermesBin: args.hermesBin,
+          hermesMaxTurns: Math.min(hermesMaxTurns, 4),
+          hermesTimeoutMs: args.hermesTimeoutMs,
           lookbackHours: args.lookbackHours,
           maxItems: draftTargetCount,
           now: startedAt,
           timeoutMs: args.feedTimeoutMs,
         });
+    const feedDraftsSatisfiedTarget = feedDrafts.length >= draftTargetCount;
     let hermesError;
     const drafts = args.fixturePath
       ? parseFixturePayload(args.fixturePath)
+      : feedDraftsSatisfiedTarget
+        ? []
       : (() => {
           try {
             return collectDraftsWithHermes({
@@ -812,7 +1155,7 @@ async function runWorker(args) {
           }
         })();
     const recoveredDrafts =
-      !args.fixturePath && drafts.length === 0 && args.retryEmpty
+      !args.fixturePath && !feedDraftsSatisfiedTarget && drafts.length === 0 && args.retryEmpty
         ? collectDraftsWithHermesRetry({
             hermesBin: args.hermesBin,
             hermesTimeoutMs: args.hermesTimeoutMs,

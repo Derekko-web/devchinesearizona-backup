@@ -303,13 +303,23 @@ describe('Arizona Radar core', () => {
     expect(second.store.articles.filter((article) => !article.isPublished)).toHaveLength(0);
   });
 
-  it('is idempotent across reruns for already-published items', () => {
+  it('updates copy for already-published items without creating duplicate articles', () => {
     const first = applyDraftsToStore(defaultStoreSnapshot(), [makeWebDraft(1)], {
       manifest: [...manifest],
       publishCap: 10,
       now: '2026-04-18T12:00:00.000Z',
     });
-    const second = applyDraftsToStore(first.store, [makeWebDraft(1)], {
+    const rewrittenDraft = {
+      ...makeWebDraft(1),
+      titleEn: 'Project LeanNation plans Peoria meal prep shop',
+      excerptEn: 'What Now Phoenix reports that Project LeanNation Lake Pleasant is being built in Peoria.',
+      bodyEn: [
+        'What Now Phoenix reports that Project LeanNation Lake Pleasant is being built at 9785 W. Happy Valley Road in Peoria.',
+        'The Peoria shop would sell prepared meals and pair them with nutrition coaching.',
+        'The source says early customers can sign up for a founding membership with a $20 discount on each box.',
+      ],
+    };
+    const second = applyDraftsToStore(first.store, [rewrittenDraft], {
       manifest: [...manifest],
       publishCap: 10,
       now: '2026-04-18T12:05:00.000Z',
@@ -319,5 +329,11 @@ describe('Arizona Radar core', () => {
     expect(second.summary.duplicateCount).toBe(1);
     expect(second.store.candidates).toHaveLength(1);
     expect(second.store.articles).toHaveLength(1);
+    expect(second.store.articles[0]?.title).toMatchObject({
+      en: 'Project LeanNation plans Peoria meal prep shop',
+    });
+    expect((second.store.articles[0]?.body as Array<{ en: string }>).map((paragraph) => paragraph.en)).toEqual(
+      rewrittenDraft.bodyEn
+    );
   });
 });
