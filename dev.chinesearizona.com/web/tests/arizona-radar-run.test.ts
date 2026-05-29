@@ -69,7 +69,7 @@ describe('Arizona Radar worker command parsing', () => {
 });
 
 describe('Arizona Radar feed fallback', () => {
-  it('parses recent WordPress RSS items into summary-link drafts without copying article bodies', () => {
+  it('parses recent WordPress RSS items into rewrite seeds without copying article bodies', () => {
     const fixture = fs.readFileSync(
       path.join(__dirname, 'fixtures', 'whatnow-phoenix-feed.xml'),
       'utf8'
@@ -102,24 +102,71 @@ describe('Arizona Radar feed fallback', () => {
       heroImage: 'https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg',
       sourceUrl:
         'https://whatnow.com/phoenix/restaurants/sample-phoenix-storefront-opening-signal',
+      feedExcerpt: 'A Peoria storefront is planned for summer 2026.',
+      feedCategory: 'Restaurants',
     });
-    expect(String(drafts[0]?.bodyEn)).not.toContain(
+    expect(String(drafts[0]?.feedExcerpt)).not.toContain(
       'Synthetic fixture sentence that must not be copied into generated radar copy.'
     );
+    expect(drafts[0]).not.toHaveProperty('bodyEn');
   });
 
-  it('publishes feed drafts when Hermes returns no candidates', async () => {
+  it('publishes rewritten feed articles when broad Hermes returns no candidates', async () => {
     process.env.NODE_ENV = 'test';
     process.env.RADAR_STORAGE_MODE = 'file';
 
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-feed-fallback-'));
-    const hermesBin = path.join(tempDir, 'hermes-empty');
+    const hermesBin = path.join(tempDir, 'hermes-rewrite');
+    const promptPath = path.join(tempDir, 'prompt.txt');
     const storePath = path.join(tempDir, 'store.json');
-    fs.writeFileSync(hermesBin, '#!/usr/bin/env bash\nprintf "[]\\n"\n', 'utf8');
+    fs.writeFileSync(
+      hermesBin,
+      [
+        '#!/usr/bin/env node',
+        'const fs = require("node:fs");',
+        `const promptPath = ${JSON.stringify(promptPath)};`,
+        'const prompt = process.argv[process.argv.length - 1] || "";',
+        'fs.appendFileSync(promptPath, `${prompt}\\n---CALL---\\n`, "utf8");',
+        'if (prompt.includes("Rewrite these Arizona Radar RSS items")) {',
+        '  console.log(JSON.stringify([{',
+        '    sourceSlug: "what-now-phoenix",',
+        '    sourceName: "What Now Phoenix",',
+        '    sourceUrl: "https://whatnow.com/phoenix/restaurants/sample-phoenix-storefront-opening-signal",',
+        '    canonicalUrl: "https://whatnow.com/phoenix/restaurants/sample-phoenix-storefront-opening-signal",',
+        '    sourcePublishedAt: "2026-05-27T03:39:37.000Z",',
+        '    titleEn: "Project LeanNation plans Peoria meal prep shop",',
+        '    titleZh: "Project LeanNation 計畫在 Peoria 開設備餐門市",',
+        '    excerptEn: "What Now Phoenix reports that Project LeanNation Lake Pleasant is under construction in Peoria, with a summer 2026 opening planned after city approvals.",',
+        '    excerptZh: "What Now Phoenix 報導，Project LeanNation Lake Pleasant 正在 Peoria 施工，待市府核准後計畫於 2026 年夏季開幕。",',
+        '    bodyEn: [',
+        '      "What Now Phoenix reports that Project LeanNation Lake Pleasant is being built at 9785 W. Happy Valley Road in Peoria. Owners Kyle and Courtney Bridges are aiming for a summer 2026 opening, pending city approvals.",',
+        '      "The Peoria shop would sell prepared meals and pair them with nutrition coaching. The source says memberships include InBody body composition scans and individual sessions with nutrition educators.",',
+        '      "The planned meal boxes include 12, 18, 24, or 30 meals for recurring pickup. What Now Phoenix also reports that early customers can sign up for a founding membership with a $20 discount on each box.",',
+        '      "For Arizona readers, the opening would add another health focused prepared food option in the northwest Valley. The source says the store plans rotating meals, breakfast items, protein snacks, juices, shakes, and supplements."',
+        '    ],',
+        '    bodyZh: [',
+        '      "What Now Phoenix 報導，Project LeanNation Lake Pleasant 正在 Peoria 的 9785 W. Happy Valley Road 施工。業主 Kyle 和 Courtney Bridges 目標是在市府核准後於 2026 年夏季開幕。",',
+        '      "這家 Peoria 門市將銷售備餐產品，並搭配營養諮詢。來源指出，會員包含 InBody 身體組成掃描，以及與營養教育人員的一對一諮詢。",',
+        '      "規劃中的餐盒有 12、18、24 或 30 餐，可定期取餐。What Now Phoenix 也報導，早期顧客可加入創始會員方案，每盒折扣 20 美元。",',
+        '      "對亞利桑那讀者來說，這項開店計畫會讓西北谷增加一個健康備餐選擇。來源指出，門市計畫供應輪替餐點、早餐、蛋白點心、果汁、奶昔與補充品。"',
+        '    ],',
+        '    heroImage: "https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg",',
+        '    topicFingerprint: "what-now-phoenix-project-leannation-peoria"',
+        '  }]));',
+        '} else {',
+        '  console.log("[]");',
+        '}',
+      ].join('\n'),
+      'utf8'
+    );
     fs.chmodSync(hermesBin, 0o755);
 
     const fixture = fs.readFileSync(
       path.join(__dirname, 'fixtures', 'whatnow-phoenix-feed.xml'),
+      'utf8'
+    );
+    const articleFixture = fs.readFileSync(
+      path.join(__dirname, 'fixtures', 'whatnow-phoenix-article.html'),
       'utf8'
     );
     globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
@@ -127,6 +174,15 @@ describe('Arizona Radar feed fallback', () => {
         return new Response(fixture, {
           status: 200,
           headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
+        });
+      }
+      if (
+        String(url) ===
+        'https://whatnow.com/phoenix/restaurants/sample-phoenix-storefront-opening-signal'
+      ) {
+        return new Response(articleFixture, {
+          status: 200,
+          headers: { 'content-type': 'text/html; charset=utf-8' },
         });
       }
 
@@ -161,10 +217,24 @@ describe('Arizona Radar feed fallback', () => {
       sourcePolicy: 'summary_link',
       isPublished: true,
     });
+    expect(store.articles[0].body).toHaveLength(4);
+    expect(String(store.articles[0].body)).not.toMatch(
+      /ChineseArizona detected|opening indicator|opening signal|source categorizes|pivotal|showcasing/i
+    );
+    expect(String(store.articles[0].body)).not.toMatch(/meal-prep|health-focused|one-on-one/i);
+    expect(String(store.articles[0].body)).not.toContain(
+      'A health-focused meal-prep concept is preparing to open in Peoria.'
+    );
     expect(store.runs[0]).toMatchObject({
       status: 'completed',
       publishedCount: 1,
     });
+    const capturedPrompt = fs.readFileSync(promptPath, 'utf8');
+    expect(capturedPrompt).toContain('Rewrite these Arizona Radar RSS items');
+    expect(capturedPrompt).toContain('full, original ChineseArizona articles');
+    expect(capturedPrompt).toContain('Do not copy source sentences or make a close paraphrase');
+    expect(capturedPrompt).toContain('Do not use common hyphenated word pairs');
+    expect(capturedPrompt).toContain('Project LeanNation Lake Pleasant is under construction');
   });
 });
 
