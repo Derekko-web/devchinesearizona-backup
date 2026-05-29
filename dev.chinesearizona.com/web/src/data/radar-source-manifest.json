@@ -42,6 +42,7 @@
     "slug": "what-now-phoenix",
     "name": "What Now Phoenix",
     "url": "https://whatnow.com/phoenix/",
+    "feedUrl": "https://whatnow.com/phoenix/feed/",
     "sourceType": "local_media",
     "sourcePolicy": "summary_link",
     "lane": "openings",

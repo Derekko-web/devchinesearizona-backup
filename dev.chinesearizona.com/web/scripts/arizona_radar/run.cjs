@@ -3,9 +3,11 @@
 const { spawnSync } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
+const cheerio = require('cheerio');
 
 const {
   applyDraftsToStore,
+  normalizeCanonicalUrl,
 } = require('./core.cjs');
 const {
   readStoreSnapshot,
@@ -21,6 +23,7 @@ function parseArgs(argv) {
     command: 'run',
     fixturePath: process.env.RADAR_FIXTURE_PATH || '',
     draftMultiplier: Number(process.env.RADAR_DRAFT_MULTIPLIER || 2),
+    feedTimeoutMs: Number(process.env.RADAR_FEED_TIMEOUT_MS || 15000),
     hermesBin: process.env.HERMES_BIN || 'hermes',
     hermesMaxTurns: parsePositiveInteger(process.env.RADAR_HERMES_MAX_TURNS, 0),
     hermesTimeoutMs: Number(process.env.RADAR_HERMES_TIMEOUT_MS || 240000),
@@ -37,6 +40,13 @@ function parseArgs(argv) {
 
     if (value === 'run') {
       args.command = 'run';
+      continue;
+    }
+    if (value.startsWith('--feed-timeout-ms=')) {
+      const parsed = Number(value.slice('--feed-timeout-ms='.length));
+      if (Number.isFinite(parsed) && parsed > 0) {
+        args.feedTimeoutMs = Math.floor(parsed);
+      }
       continue;
     }
     if (value === '--help' || value === '-h') {
@@ -140,6 +150,7 @@ function printHelp() {
       'Environment:',
       '  HERMES_BIN=hermes',
       '  RADAR_DRAFT_MULTIPLIER=2',
+      '  RADAR_FEED_TIMEOUT_MS=15000',
       '  RADAR_FIXTURE_PATH=/abs/fixture.json',
       '  RADAR_HERMES_MAX_TURNS=8',
       '  RADAR_RETRY_EMPTY=0',
@@ -200,6 +211,211 @@ function parseFixturePayload(filePath) {
   }
 
   return [];
+}
+
+function stripHtml(value) {
+  const normalized = String(value || '').trim();
+  if (!normalized) {
+    return '';
+  }
+
+  return cheerio
+    .load(`<article>${normalized}</article>`)('article')
+    .text()
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function readElementText($, element, selector) {
+  return stripHtml($(element).find(selector).first().text());
+}
+
+function readElementAttr($, element, selector, attribute) {
+  return String($(element).find(selector).first().attr(attribute) || '').trim();
+}
+
+function normalizeFeedDate(value) {
+  const parsed = new Date(String(value || ''));
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+}
+
+function isWithinLookback(isoDate, lookbackHours, now) {
+  if (!isoDate) {
+    return false;
+  }
+
+  const ageMs = new Date(now).getTime() - new Date(isoDate).getTime();
+  return ageMs >= 0 && ageMs <= lookbackHours * 60 * 60 * 1000;
+}
+
+function extractImageFromHtml(value) {
+  const $ = cheerio.load(String(value || ''));
+  return String($('img').first().attr('src') || '').trim();
+}
+
+function feedSourceUrl(source) {
+  return String(source.feedUrl || '').trim();
+}
+
+function laneContext(lane) {
+  if (lane === 'openings') {
+    return {
+      en: 'restaurant, retail, and local-business opening signal',
+      zh: '餐飲、零售或本地商業開店訊號',
+      personas: ['local_families', 'business_owners'],
+    };
+  }
+  if (lane === 'housing') {
+    return {
+      en: 'housing and relocation signal',
+      zh: '住房與搬遷訊號',
+      personas: ['tsmc_newcomers', 'local_families'],
+    };
+  }
+  if (lane === 'official') {
+    return {
+      en: 'official Arizona update',
+      zh: '亞利桑那官方更新',
+      personas: ['local_families', 'business_owners'],
+    };
+  }
+  if (lane === 'social') {
+    return {
+      en: 'public social trend signal',
+      zh: '公開社群趨勢訊號',
+      personas: ['local_families', 'students'],
+    };
+  }
+
+  return {
+    en: 'community news signal',
+    zh: '社區新聞訊號',
+    personas: ['local_families', 'students'],
+  };
+}
+
+function parseFeedItems(xml, source, options = {}) {
+  const now = options.now || new Date().toISOString();
+  const lookbackHours = Number.isFinite(options.lookbackHours) ? options.lookbackHours : 168;
+  const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
+  const $ = cheerio.load(xml, { xmlMode: true });
+  const context = laneContext(source.lane);
+  const drafts = [];
+
+  $('item').each((_index, item) => {
+    if (drafts.length >= maxItems) {
+      return false;
+    }
+
+    const title = readElementText($, item, 'title');
+    const canonicalUrl = normalizeCanonicalUrl(readElementText($, item, 'link'));
+    const sourcePublishedAt = normalizeFeedDate(readElementText($, item, 'pubDate'));
+    if (!title || !canonicalUrl || !isWithinLookback(sourcePublishedAt, lookbackHours, now)) {
+      return;
+    }
+
+    const descriptionHtml = $(item).find('description').first().text();
+    const category = readElementText($, item, 'category');
+    const heroImage =
+      readElementAttr($, item, 'media\\:content', 'url') ||
+      readElementAttr($, item, 'enclosure', 'url') ||
+      extractImageFromHtml(descriptionHtml);
+    const categorySentence = category
+      ? `The source categorizes the item under ${category}.`
+      : `The item is part of ${source.name}'s Arizona feed.`;
+
+    drafts.push({
+      sourceSlug: source.slug,
+      sourceName: source.name,
+      sourceUrl: canonicalUrl,
+      canonicalUrl,
+      sourcePublishedAt,
+      titleEn: title,
+      titleZh: `來源更新：${title}`,
+      excerptEn: `ChineseArizona detected a new ${context.en} from ${source.name}: ${title}.`,
+      excerptZh: `ChineseArizona 偵測到 ${source.name} 的新${context.zh}：「${title}」。`,
+      bodyEn: [
+        `ChineseArizona detected a new ${context.en} from ${source.name}: ${title}.`,
+        `${categorySentence} The linked source includes the full report and original details.`,
+        'This radar item keeps the coverage brief and links readers back to the source instead of republishing the source article.',
+      ],
+      bodyZh: [
+        `ChineseArizona 偵測到 ${source.name} 的新${context.zh}：「${title}」。`,
+        category
+          ? `來源將此項目歸類為 ${category}。請透過原始連結閱讀完整報導與細節。`
+          : `此項目來自 ${source.name} 的亞利桑那更新來源。請透過原始連結閱讀完整報導與細節。`,
+        '這則 Radar 只保留簡短訊號與來源追蹤，不重刊原始文章內容。',
+      ],
+      heroImage,
+      topicFingerprint: `${source.slug}:${title}`,
+      personaTargets: context.personas,
+    });
+  });
+
+  return drafts;
+}
+
+async function fetchText(url, timeoutMs) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+        'user-agent': 'ChineseArizonaRadarFeedSync/1.0',
+      },
+      signal: controller.signal,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
+    }
+    return await response.text();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function collectDraftsFromFeeds(manifest, options = {}) {
+  const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
+  const timeoutMs = Number.isFinite(options.timeoutMs) ? Math.max(1000, Math.floor(options.timeoutMs)) : 15000;
+  const drafts = [];
+
+  for (const source of Array.isArray(manifest) ? manifest : []) {
+    const url = feedSourceUrl(source);
+    if (!url) {
+      continue;
+    }
+
+    try {
+      const xml = await fetchText(url, timeoutMs);
+      drafts.push(
+        ...parseFeedItems(xml, source, {
+          lookbackHours: options.lookbackHours,
+          maxItems,
+          now: options.now,
+        })
+      );
+    } catch (error) {
+      process.stderr.write(
+        JSON.stringify({
+          status: 'feed_failed',
+          sourceSlug: source.slug,
+          feedUrl: url,
+          errorMessage: error instanceof Error ? error.message : String(error),
+          timestamp: new Date().toISOString(),
+        }) + '\n'
+      );
+    }
+  }
+
+  return drafts
+    .sort(
+      (left, right) =>
+        new Date(right.sourcePublishedAt || 0).getTime() -
+        new Date(left.sourcePublishedAt || 0).getTime()
+    )
+    .slice(0, maxItems);
 }
 
 function extractJsonPayload(text) {
@@ -569,16 +785,32 @@ async function runWorker(args) {
         : 12;
 
   try {
+    const feedDrafts = args.fixturePath
+      ? []
+      : await collectDraftsFromFeeds(filteredManifest, {
+          lookbackHours: args.lookbackHours,
+          maxItems: draftTargetCount,
+          now: startedAt,
+          timeoutMs: args.feedTimeoutMs,
+        });
+    let hermesError;
     const drafts = args.fixturePath
       ? parseFixturePayload(args.fixturePath)
-        : collectDraftsWithHermes({
-          hermesBin: args.hermesBin,
-          hermesTimeoutMs: args.hermesTimeoutMs,
-          manifest: activeManifest,
-          maxItems: draftTargetCount,
-          lookbackHours: args.lookbackHours,
-          maxTurns: hermesMaxTurns,
-        });
+      : (() => {
+          try {
+            return collectDraftsWithHermes({
+              hermesBin: args.hermesBin,
+              hermesTimeoutMs: args.hermesTimeoutMs,
+              manifest: activeManifest,
+              maxItems: draftTargetCount,
+              lookbackHours: args.lookbackHours,
+              maxTurns: hermesMaxTurns,
+            });
+          } catch (error) {
+            hermesError = error;
+            return [];
+          }
+        })();
     const recoveredDrafts =
       !args.fixturePath && drafts.length === 0 && args.retryEmpty
         ? collectDraftsWithHermesRetry({
@@ -590,7 +822,12 @@ async function runWorker(args) {
             maxTurns: hermesMaxTurns,
           })
         : drafts;
-    const filteredDrafts = dedupeDrafts(recoveredDrafts).filter((draft) => draft && typeof draft === 'object');
+    const filteredDrafts = dedupeDrafts([...feedDrafts, ...recoveredDrafts]).filter(
+      (draft) => draft && typeof draft === 'object'
+    );
+    if (hermesError && filteredDrafts.length === 0) {
+      throw hermesError;
+    }
     const finishedAt = new Date().toISOString();
     const applied = applyDraftsToStore(initialStore, filteredDrafts, {
       manifest,
@@ -661,8 +898,11 @@ if (require.main === module) {
 }
 
 module.exports = {
+  collectDraftsFromFeeds,
   extractJsonPayload,
+  parseFeedItems,
   parseArgs,
   parseHermesOutput,
   runWorker,
+  selectManifestBatch,
 };
