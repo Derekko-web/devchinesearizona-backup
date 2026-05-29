@@ -312,11 +312,11 @@ describe('Arizona Radar core', () => {
     const rewrittenDraft = {
       ...makeWebDraft(1),
       titleEn: 'Project LeanNation plans Peoria meal prep shop',
-      excerptEn: 'What Now Phoenix reports that Project LeanNation Lake Pleasant is being built in Peoria.',
+      excerptEn: 'Project LeanNation Lake Pleasant is being built in Peoria.',
       bodyEn: [
-        'What Now Phoenix reports that Project LeanNation Lake Pleasant is being built at 9785 W. Happy Valley Road in Peoria.',
+        'Project LeanNation Lake Pleasant is being built at 9785 W. Happy Valley Road in Peoria.',
         'The Peoria shop would sell prepared meals and pair them with nutrition coaching.',
-        'The source says early customers can sign up for a founding membership with a $20 discount on each box.',
+        'Early customers can sign up for a founding membership with a $20 discount on each box.',
       ],
     };
     const second = applyDraftsToStore(first.store, [rewrittenDraft], {
@@ -335,5 +335,33 @@ describe('Arizona Radar core', () => {
     expect((second.store.articles[0]?.body as Array<{ en: string }>).map((paragraph) => paragraph.en)).toEqual(
       rewrittenDraft.bodyEn
     );
+  });
+
+  it('blocks generated copy that frames the article as a source report', () => {
+    const result = applyDraftsToStore(
+      defaultStoreSnapshot(),
+      [
+        {
+          ...makeWebDraft(1),
+          excerptEn: 'What Now Phoenix reports that Project LeanNation Lake Pleasant is being built in Peoria.',
+          bodyEn: [
+            'Project LeanNation Lake Pleasant is being built at 9785 W. Happy Valley Road in Peoria.',
+            'The source says early customers can sign up for a founding membership with a $20 discount on each box.',
+          ],
+        },
+      ],
+      {
+        manifest: [...manifest],
+        publishCap: 10,
+        now: '2026-04-18T12:00:00.000Z',
+      }
+    );
+
+    expect(result.summary.publishedCount).toBe(0);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.candidates[0]).toMatchObject({
+      moderationState: 'blocked',
+      blockReason: 'source_provenance_language',
+    });
   });
 });
