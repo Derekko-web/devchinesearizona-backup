@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Posts from Phoenix | WhatNow</title>
+    <link>https://whatnow.com/phoenix/</link>
+    <item>
+      <title>Sample Phoenix storefront opening signal</title>
+      <link>https://whatnow.com/phoenix/restaurants/sample-phoenix-storefront-opening-signal/?utm_source=feed</link>
+      <pubDate>Tue, 26 May 2026 23:39:37 -0400</pubDate>
+      <category><![CDATA[Restaurants]]></category>
+      <description><![CDATA[
+        <img src="https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg" alt="" />
+        Synthetic fixture sentence that must not be copied into generated radar copy.
+      ]]></description>
+      <media:content url="https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg" type="image/jpg" medium="image" />
+    </item>
+    <item>
+      <title>Older Phoenix restaurant update</title>
+      <link>https://whatnow.com/phoenix/restaurants/older-item/</link>
+      <pubDate>Tue, 07 Apr 2026 10:00:00 -0400</pubDate>
+      <category><![CDATA[Restaurants]]></category>
+      <description><![CDATA[Older item outside the freshness window.]]></description>
+    </item>
+  </channel>
+</rss>
