@@ -248,6 +248,52 @@ function localizedBodyFromDraft(draft) {
   }));
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function generatedCopyHasSourceProvenance(title, excerpt, body, sourceName) {
+  const source = String(sourceName || '').trim();
+  const englishText = [
+    title?.en,
+    excerpt?.en,
+    ...body.map((paragraph) => paragraph.en),
+  ]
+    .filter(Boolean)
+    .join('\n');
+  const chineseText = [
+    title?.zh,
+    excerpt?.zh,
+    ...body.map((paragraph) => paragraph.zh),
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  const genericEnglishPattern =
+    /\b(?:the\s+)?(?:source|outlet|publication|article|report)\s+(?:says?|said|reports?|reported|notes?|noted|states?|stated|adds?|added|indicates?|indicated|explains?|explained|shares?|shared)\b/i;
+  const genericChinesePattern = /(?:來源|該來源|該媒體|該報導)(?:指出|表示|稱|說|報導|提到)/u;
+
+  if (genericEnglishPattern.test(englishText) || genericChinesePattern.test(chineseText)) {
+    return true;
+  }
+
+  if (!source) {
+    return false;
+  }
+
+  const escapedSource = escapeRegExp(source);
+  const namedEnglishPatterns = [
+    new RegExp(`\\b${escapedSource}\\b\\s+(?:says?|said|reports?|reported|writes?|wrote|notes?|noted|states?|stated|adds?|added|shares?|shared|cites?|cited)\\b`, 'i'),
+    new RegExp(`\\baccording\\s+to\\s+${escapedSource}\\b`, 'i'),
+  ];
+  const namedChinesePattern = new RegExp(`${escapedSource}(?:報導|指出|表示|稱|說|寫道|提到|引用)`, 'u');
+
+  return (
+    namedEnglishPatterns.some((pattern) => pattern.test(englishText)) ||
+    namedChinesePattern.test(chineseText)
+  );
+}
+
 function normalizeStringArray(value) {
   if (!Array.isArray(value)) {
     return [];
@@ -531,6 +577,10 @@ function normalizeDraft(draft, source, now) {
 
   if (!title || !excerpt || !body || body.length === 0) {
     return { error: 'missing_required_copy' };
+  }
+
+  if (generatedCopyHasSourceProvenance(title, excerpt, body, source.name)) {
+    return { error: 'source_provenance_language' };
   }
 
   if (!sourceUrl || !canonicalUrl) {
@@ -948,6 +998,7 @@ module.exports = {
   defaultStoreSnapshot,
   normalizeCanonicalUrl,
   normalizeDraft,
+  generatedCopyHasSourceProvenance,
   normalizeStore,
   normalizeTopicFingerprint,
   readStore,
