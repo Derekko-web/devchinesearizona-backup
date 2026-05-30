@@ -37,7 +37,7 @@ jobs:
       VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
       VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
 
@@ -62,7 +62,7 @@ jobs:
 
           echo "deploy=true" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         if: steps.freshness.outputs.deploy == 'true'
         with:
           node-version: 20.20.2
