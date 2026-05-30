@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   proxy,
   shouldBypassApexRedirect,
+  shouldEmitNoIndexHeader,
   shouldRedirectToApex,
   shouldRejectServerActionRequest,
 } from '@/proxy';
@@ -58,6 +59,36 @@ describe('proxy host handling', () => {
     expect(shouldBypassApexRedirect('/ads.txt')).toBe(true);
     expect(response.status).toBe(200);
     expect(response.headers.get('location')).toBeNull();
+  });
+
+  it('emits noindex response headers for placeholder city hosts', () => {
+    const response = proxy(
+      buildRequest('https://chineseaustin.com/', 'chineseaustin.com') as never
+    );
+
+    expect(shouldEmitNoIndexHeader('chineseaustin.com')).toBe(true);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
+  });
+
+  it('does not emit noindex response headers for the live dev host', () => {
+    const response = proxy(
+      buildRequest('https://dev.chinesearizona.com/', 'dev.chinesearizona.com') as never
+    );
+
+    expect(shouldEmitNoIndexHeader('dev.chinesearizona.com')).toBe(false);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('X-Robots-Tag')).toBeNull();
+  });
+
+  it('emits noindex response headers for unconfigured city hosts', () => {
+    const response = proxy(
+      buildRequest('https://chineselosangeles.com/', 'chineselosangeles.com') as never
+    );
+
+    expect(shouldEmitNoIndexHeader('chineselosangeles.com')).toBe(true);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
   });
 
   it('rejects synthetic server action probes before Next logs missing action errors', () => {

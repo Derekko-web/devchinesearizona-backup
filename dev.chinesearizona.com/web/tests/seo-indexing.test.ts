@@ -33,6 +33,17 @@ describe('indexing signals', () => {
       'ChineseArizona | Arizona Chinese Community Directory, News, and Resources'
     );
     expect(metadata.alternates?.canonical).toBe('https://chinesearizona.com');
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it('noindexes placeholder city homepage metadata', () => {
+    const metadata = homeMetadata('en', siteProfiles.austin);
+
+    expect(metadata.title).toBe(
+      'ChineseAustin | Austin Chinese Community Directory, News, and Resources'
+    );
+    expect(metadata.alternates?.canonical).toBe('https://chineseaustin.com');
+    expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
   it('self-canonicalizes zh pages and exposes x-default alternates', () => {

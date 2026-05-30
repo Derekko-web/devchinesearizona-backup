@@ -752,6 +752,10 @@ export function hasLiveNewsData(site: SiteProfile): boolean {
   return site.news.articleDataSource.state === 'live' && site.news.sourceManifest.state === 'live';
 }
 
+export function shouldNoIndexSiteProfile(site: SiteProfile): boolean {
+  return site.launchState !== 'live';
+}
+
 export function normalizeHost(value?: string | null): string {
   if (!value) {
     return '';
