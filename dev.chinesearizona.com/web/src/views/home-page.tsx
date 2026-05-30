@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedArizonaNewsArticlePath, getLocalizedArizonaNewsPath } from '@/lib/arizona-news';
+import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getBusinesses, getCurrentArticles } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
@@ -330,6 +331,7 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const home = site.home;
   const directoryIsLive = hasLiveDirectoryData(site);
   const newsIsLive = hasLiveNewsData(site);
+  const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
   const allBusinesses = directoryIsLive ? getBusinesses(locale, { sort: 'featured' }) : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
@@ -728,18 +730,20 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
                   {copy(locale, home.newcomerBody.en, home.newcomerBody.zh)}
                 </p>
 
-                <Link
-                  href={withLocale(locale, '/relocation-guide')}
-                  className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-                >
-                  <span className="flex flex-col items-start leading-none">
-                    <span>{copy(locale, 'Explore Relocation Guide', '查看搬家指南')}</span>
-                    <span className="mt-1 text-[10px] font-medium tracking-[0.06em] text-white/80">
-                      {oppositeCopy(locale, 'Explore Relocation Guide', '查看搬家指南')}
+                {canShowArizonaOnlyLinks ? (
+                  <Link
+                    href={withLocale(locale, '/relocation-guide')}
+                    className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+                  >
+                    <span className="flex flex-col items-start leading-none">
+                      <span>{copy(locale, 'Explore Relocation Guide', '查看搬家指南')}</span>
+                      <span className="mt-1 text-[10px] font-medium tracking-[0.06em] text-white/80">
+                        {oppositeCopy(locale, 'Explore Relocation Guide', '查看搬家指南')}
+                      </span>
                     </span>
-                  </span>
-                  <ArrowRight className="h-4 w-4 flex-shrink-0" />
-                </Link>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0" />
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>

@@ -96,6 +96,20 @@ describe('public chrome', () => {
     expect(footerHtml).toContain('/zh/editorial-policy');
   });
 
+  it('hides Arizona-only nav links for placeholder city profiles', async () => {
+    const [{ siteProfiles }, { default: Navbar }] = await Promise.all([
+      import('@/lib/site-config'),
+      import('@/components/Navbar'),
+    ]);
+
+    const navbarHtml = renderToStaticMarkup(<Navbar site={siteProfiles.austin} />);
+
+    expect(navbarHtml).toContain('/zh/business');
+    expect(navbarHtml).toContain('/zh/community');
+    expect(navbarHtml).not.toContain('/zh/arizona-news');
+    expect(navbarHtml).not.toContain('/zh/relocation-guide');
+  });
+
   it('keeps relocation as the last top-level navbar item', () => {
     const navbarSource = fs.readFileSync(path.join(process.cwd(), 'src', 'components', 'Navbar.tsx'), 'utf-8');
 

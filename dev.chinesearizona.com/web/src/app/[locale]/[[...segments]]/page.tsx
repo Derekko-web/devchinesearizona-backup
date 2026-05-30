@@ -6,11 +6,17 @@ import {
   getLocalizedArizonaNewsPath,
 } from '@/lib/arizona-news';
 import {
+  canServeArizonaOnlyContent,
+  getArizonaOnlyRoutePath,
+  isArizonaOnlyRouteSegments,
+} from '@/lib/arizona-only-routes';
+import {
   addBusinessMetadata,
   adminMetadata,
   articleMetadata,
   businessMetadata,
   cityCategoryMetadata,
+  cityContentUnavailableMetadata,
   communityMetadata,
   communityRadarMetadata,
   communityNewsMetadata,
@@ -112,6 +118,15 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
 
   if (segments.length === 0) {
     return homeMetadata(locale, site);
+  }
+
+  if (isArizonaOnlyRouteSegments(segments) && !canServeArizonaOnlyContent(site)) {
+    return cityContentUnavailableMetadata(
+      locale,
+      site,
+      getArizonaOnlyRoutePath(segments),
+      'Arizona-only content'
+    );
   }
 
   if (segments[0] === 'business' && segments.length === 1) {
@@ -243,6 +258,10 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments.length === 0) {
     return <HomePageView locale={locale} site={site} />;
+  }
+
+  if (isArizonaOnlyRouteSegments(segments) && !canServeArizonaOnlyContent(site)) {
+    notFound();
   }
 
   if (segments[0] === 'business' && segments.length === 1) {

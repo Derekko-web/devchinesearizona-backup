@@ -46,5 +46,6 @@ describe('HomePageView', () => {
     expect(html).not.toContain('Hedy Li');
     expect(html).not.toContain('/directory-ai-replacements/');
     expect(html).not.toContain('/arizona-news/');
+    expect(html).not.toContain('/relocation-guide');
   });
 });

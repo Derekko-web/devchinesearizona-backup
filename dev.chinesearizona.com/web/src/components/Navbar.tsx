@@ -8,6 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
 import { useAuth } from '@/components/auth/AuthProvider';
+import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { buildAuthPath, buildJoinPath } from '@/lib/auth';
 import { ARIZONA_NEWS_PATH } from '@/lib/arizona-news';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
@@ -87,6 +88,7 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
   const currentPath = appendSearch(pathname, currentSearch);
   const { isLoading, signOut, user } = useAuth();
   const shopEnabled = isShopPublicLaunchEnabled();
+  const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
   const loginHref = buildAuthPath(locale, currentPath);
   const joinHref = buildJoinPath(locale, currentPath);
   const dashboardHref = withLocale(locale, '/dashboard');
@@ -136,11 +138,15 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
           },
         ]
       : []),
-    {
-      path: '/relocation-guide',
-      label: locale === 'zh' ? '搬遷' : 'Relocation',
-      subLabel: oppositeCopy(locale, 'Relocation Guide', '搬家指南'),
-    },
+    ...(canShowArizonaOnlyLinks
+      ? [
+          {
+            path: '/relocation-guide',
+            label: locale === 'zh' ? '搬遷' : 'Relocation',
+            subLabel: oppositeCopy(locale, 'Relocation Guide', '搬家指南'),
+          },
+        ]
+      : []),
   ];
 
   async function handleSignOut() {

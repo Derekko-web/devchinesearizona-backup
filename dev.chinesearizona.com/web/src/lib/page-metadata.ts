@@ -84,6 +84,28 @@ export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProf
   });
 }
 
+export function cityContentUnavailableMetadata(
+  locale: Locale,
+  site: SiteProfile,
+  path: string,
+  label = 'City content'
+): Metadata {
+  return buildMetadata({
+    title:
+      locale === 'zh'
+        ? `${site.brandName} ${label} 需要本地內容來源`
+        : `${site.brandName} ${label} Requires Local Content Sources`,
+    description:
+      locale === 'zh'
+        ? `${site.brandName} 尚未接入此頁所需的城市專屬內容，不會回退顯示 ChineseArizona 或 Arizona 內容。`
+        : `${site.brandName} does not have city-specific content connected for this page and will not fall back to ChineseArizona or Arizona content.`,
+    path,
+    locale,
+    site,
+    noIndex: true,
+  });
+}
+
 export function directoryMetadata(
   locale: Locale,
   path = '/business',
