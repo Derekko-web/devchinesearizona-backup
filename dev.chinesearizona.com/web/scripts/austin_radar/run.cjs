@@ -21,4 +21,4 @@ process.env.RADAR_STORE_PATH =
 process.env.RADAR_STORAGE_MODE = process.env.AUSTIN_RADAR_STORAGE_MODE || 'file';
 process.env.RADAR_SUMMARY_ONLY = process.env.RADAR_SUMMARY_ONLY || '1';
 
-require('../arizona_radar/run.cjs');
+require('../arizona_radar/run.cjs').runCli();

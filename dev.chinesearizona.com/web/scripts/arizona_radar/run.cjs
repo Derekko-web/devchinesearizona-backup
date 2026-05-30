@@ -28,7 +28,9 @@ const RADAR_CITY = {
 const DEFAULT_STORE_PATH =
   RADAR_CITY.key === 'austin'
     ? path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json')
-    : path.join(ROOT, 'data', 'radar-runtime', 'store.json');
+    : RADAR_CITY.key === 'sf-bay'
+      ? path.join(ROOT, 'data', 'sf-bay-radar-runtime', 'store.json')
+      : path.join(ROOT, 'data', 'radar-runtime', 'store.json');
 const MANIFEST_PATH = process.env.RADAR_SOURCE_MANIFEST_PATH
   ? path.resolve(process.env.RADAR_SOURCE_MANIFEST_PATH)
   : path.join(ROOT, 'src', 'data', 'radar-source-manifest.json');
@@ -516,8 +518,12 @@ function buildFeedRewritePrompt(items) {
     '    "titleZh": "matching Traditional Chinese headline",',
     '    "excerptEn": "1-2 direct English sentences",',
     '    "excerptZh": "matching Traditional Chinese excerpt",',
-    '    "bodyEn": ["3-5 rewritten English paragraphs"],',
-    '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],',
+    RADAR_CITY.summaryOnly
+      ? '    "bodyEn": ["1-2 concise English paragraphs, 80-160 words total, that summarize and link out rather than fully rewrite"],'
+      : '    "bodyEn": ["3-5 rewritten English paragraphs"],',
+    RADAR_CITY.summaryOnly
+      ? '    "bodyZh": ["1-2 Traditional Chinese paragraphs aligned to bodyEn"],'
+      : '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],',
     '    "heroImage": "optional image URL",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
@@ -559,10 +565,15 @@ function hasBannedGeneratedStyle(draft) {
   ]
     .join(' ')
     .toLowerCase();
+  const brandDetectedPhrase = `${RADAR_CITY.brandName} detected`.toLowerCase();
   const bannedPattern =
     /chinesearizona detected|opening indicator|opening signal|source categorizes|pivotal|testament|showcasing|nestled|boasts|unlock|seamless|vibrant|robust|at its core|future looks bright|here is what you need to know|actually|additionally|transformative|groundbreaking|rapidly evolving|vital role|plays a crucial role|experts believe|industry observers|despite challenges|continues to thrive|in conclusion|let's dive in|i hope this helps|in order to|due to the fact|could potentially|exciting times lie ahead|marking a .*moment|not just .*it'?s/i;
 
-  return bannedPattern.test(text) || /[\u{1f300}-\u{1faff}]/u.test(text);
+  return (
+    text.includes(brandDetectedPhrase) ||
+    bannedPattern.test(text) ||
+    /[\u{1f300}-\u{1faff}]/u.test(text)
+  );
 }
 
 function containsCopiedSourceSentence(draft, sourceText) {
@@ -586,9 +597,14 @@ function mergeFeedRewriteDraft(seed, draft) {
 
   const minimumParagraphs = RADAR_CITY.summaryOnly ? 1 : 3;
   const minimumWords = RADAR_CITY.summaryOnly ? 25 : 120;
+  const maximumParagraphs = RADAR_CITY.summaryOnly ? 2 : Infinity;
+  const maximumWords = RADAR_CITY.summaryOnly ? 220 : Infinity;
+  const bodyWordCount = bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0);
   if (
     bodyEn.length < minimumParagraphs ||
-    bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < minimumWords
+    bodyEn.length > maximumParagraphs ||
+    bodyWordCount < minimumWords ||
+    bodyWordCount > maximumWords
   ) {
     return null;
   }
@@ -1215,6 +1231,7 @@ async function runWorker(args) {
       manifest,
       publishCap,
       now: finishedAt,
+      summaryOnly: RADAR_CITY.summaryOnly,
     });
     const nextStore = appendRun(
       applied.store,
@@ -1265,7 +1282,7 @@ async function main() {
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 }
 
-if (require.main === module) {
+function runCli() {
   main()
     .catch((error) => {
       process.stderr.write(
@@ -1279,12 +1296,19 @@ if (require.main === module) {
     });
 }
 
+if (require.main === module) {
+  runCli();
+}
+
 module.exports = {
+  buildFeedRewritePrompt,
+  buildHermesPrompt,
   collectDraftsFromFeeds,
   extractJsonPayload,
   parseFeedItems,
   parseArgs,
   parseHermesOutput,
+  runCli,
   runWorker,
   selectManifestBatch,
 };

@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
-import { getBusinessCategories, getBusinesses, getCurrentArticles } from '@/lib/content';
+import { getBusinessCategories, getBusinesses, getCurrentArticlesForSite } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
@@ -337,8 +337,8 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
     site.directory.categorySlugs.includes(category.slug)
   );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
-  const storyCards: HomeStoryCard[] = newsIsLive && site.key === defaultSiteProfile.key
-    ? getCurrentArticles()
+  const storyCards: HomeStoryCard[] = newsIsLive
+    ? getCurrentArticlesForSite(site)
         .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
         .filter(
           (article) =>

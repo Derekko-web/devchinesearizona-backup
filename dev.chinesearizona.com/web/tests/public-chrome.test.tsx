@@ -112,6 +112,20 @@ describe('public chrome', () => {
     expect(navbarHtml).not.toContain('/zh/relocation-guide');
   });
 
+  it('uses the SF Bay news route for the SF Bay profile', async () => {
+    const [{ siteProfiles }, { default: Navbar }] = await Promise.all([
+      import('@/lib/site-config'),
+      import('@/components/Navbar'),
+    ]);
+
+    const navbarHtml = renderToStaticMarkup(<Navbar site={siteProfiles['sf-bay']} />);
+
+    expect(navbarHtml).toContain('/zh/news');
+    expect(navbarHtml).toContain('灣區新聞');
+    expect(navbarHtml).not.toContain('/zh/arizona-news');
+    expect(navbarHtml).not.toContain('/zh/relocation-guide');
+  });
+
   it('keeps relocation as the last top-level navbar item', () => {
     const navbarSource = fs.readFileSync(path.join(process.cwd(), 'src', 'components', 'Navbar.tsx'), 'utf-8');
 

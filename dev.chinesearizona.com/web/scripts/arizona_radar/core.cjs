@@ -199,6 +199,30 @@ function splitParagraphs(value) {
     .filter(Boolean);
 }
 
+function wordCount(value) {
+  return String(value || '')
+    .trim()
+    .split(/\s+/g)
+    .filter(Boolean).length;
+}
+
+function validateSummaryOnlyArticle(article) {
+  const body = Array.isArray(article.body) ? article.body : [];
+  const bodyWordCount = body.reduce((count, paragraph) => count + wordCount(paragraph.en), 0);
+
+  if (article.sourcePolicy === 'republish_with_permission') {
+    return 'summary_only_republish_policy';
+  }
+  if (body.length > 2) {
+    return 'summary_only_too_many_paragraphs';
+  }
+  if (bodyWordCount > 220) {
+    return 'summary_only_too_long';
+  }
+
+  return '';
+}
+
 function localizedTextFromDraft(draft, key) {
   const rawValue = draft[key];
   if (rawValue && typeof rawValue === 'object' && !Array.isArray(rawValue)) {
@@ -813,7 +837,16 @@ function applyDraftsToStore(store, drafts, options = {}) {
 
     const source = resolveSource(draft, manifestEntries, manifestBySlug);
 
-    const normalized = normalizeDraft(draft, source, now);
+    let normalized = normalizeDraft(draft, source, now);
+    if (!normalized.error && options.summaryOnly) {
+      const summaryOnlyError = validateSummaryOnlyArticle(normalized.article);
+      if (summaryOnlyError) {
+        normalized = {
+          ...normalized,
+          error: summaryOnlyError,
+        };
+      }
+    }
     const placeholderCandidate = normalized.candidate || {
       slug: slugify(draft.slug || draft.titleEn || source.slug),
       sourceSlug: source.slug,

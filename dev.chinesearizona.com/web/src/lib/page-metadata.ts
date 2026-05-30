@@ -588,7 +588,7 @@ export async function articleMetadata(
     locale,
     site,
     image: article.heroImage,
-    noIndex: isLegacyArticle(article),
+    noIndex: isLegacyArticle(article, site),
   });
 }
 

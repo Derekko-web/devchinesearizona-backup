@@ -13,6 +13,7 @@ import type {
 import { businessReviewOverrides } from '@/data/business-review-overrides';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLocalArticles from '@/data/generated-local-articles.json';
+import generatedSfBayLocalArticles from '@/data/generated-sf-bay-local-articles.json';
 import generatedSignalDeskQueue from '@/data/generated-signal-desk-queue.json';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import monitoredSourcesData from '@/data/monitored-sources.json';
@@ -2206,6 +2207,10 @@ export const guides: Guide[] = [
 ];
 
 export const localArticles: Article[] = (generatedLocalArticles as Article[]).map((article) =>
+  normalizeImportedArticle(article as ImportedArticle)
+);
+
+export const sfBayLocalArticles: Article[] = (generatedSfBayLocalArticles as Article[]).map((article) =>
   normalizeImportedArticle(article as ImportedArticle)
 );
 

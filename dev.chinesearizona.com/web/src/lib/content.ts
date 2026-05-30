@@ -11,6 +11,7 @@ import {
   normalizeImportedArticle,
   profiles,
   reviews,
+  sfBayLocalArticles,
 } from '@/data/platform-data';
 import type { ImportedArticle } from '@/data/platform-data';
 import { t } from '@/lib/i18n';
@@ -122,6 +123,17 @@ function canUseDefaultArticleSources(site: SiteProfile): boolean {
   return site.key === defaultSiteProfile.key;
 }
 
+function getLocalArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
+  if (site.key === 'sf-bay') {
+    return sfBayLocalArticles;
+  }
+  return canUseDefaultArticleSources(site) ? localArticles : [];
+}
+
+function getImportedArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
+  return canUseDefaultArticleSources(site) ? readImportedArticles() : [];
+}
+
 function sortArticlesNewestFirst(articles: Article[]): Article[] {
   return articles
     .slice()
@@ -140,6 +152,7 @@ function isArticleSeries(value: string): value is ArticleSeries {
     value === 'trend-radar' ||
     value === 'arizona-radar' ||
     value === 'austin-radar' ||
+    value === 'sf-bay-radar' ||
     value === 'community-wire'
   );
 }
@@ -335,7 +348,8 @@ export async function getArticlesAsync(
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
   const sortedArticles = sortArticlesNewestFirst([
-    ...(canUseDefaultArticleSources(site) ? getAllArticles() : []),
+    ...getLocalArticlesForSite(site),
+    ...getImportedArticlesForSite(site),
     ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
   ]);
 
@@ -347,12 +361,20 @@ export function getCurrentArticles(limit?: number): Article[] {
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
 }
 
+export function getCurrentArticlesForSite(
+  site: SiteProfile = defaultSiteProfile,
+  limit?: number
+): Article[] {
+  const articles = sortArticlesNewestFirst(getLocalArticlesForSite(site));
+  return typeof limit === 'number' ? articles.slice(0, limit) : articles;
+}
+
 export async function getCurrentArticlesAsync(
   limit?: number,
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
   const articles = sortArticlesNewestFirst([
-    ...(canUseDefaultArticleSources(site) ? getArticlesForArchiveBucket('current') : []),
+    ...getLocalArticlesForSite(site),
     ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
   ]);
 
@@ -519,9 +541,9 @@ export async function getArticleArchivePageAsync(
   const normalizedPageSize = Math.max(1, pageSize);
   const bucketArticles =
     filters.bucket === 'legacy'
-      ? sortArticlesNewestFirst(canUseDefaultArticleSources(site) ? readImportedArticles() : [])
+      ? sortArticlesNewestFirst(getImportedArticlesForSite(site))
       : sortArticlesNewestFirst([
-          ...(canUseDefaultArticleSources(site) ? getArticlesForArchiveBucket('current') : []),
+          ...getLocalArticlesForSite(site),
           ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
         ]);
   const availableYears = Array.from(
@@ -591,12 +613,17 @@ export async function getArticleBySlugAsync(
     return radarArticleToArticle(radarArticle, { site });
   }
 
-  return canUseDefaultArticleSources(site) ? getArticleBySlug(slug) : undefined;
+  return [...getLocalArticlesForSite(site), ...getImportedArticlesForSite(site)].find(
+    (article) => article.slug === slug
+  );
 }
 
-export function isLegacyArticle(articleOrSlug: Article | string): boolean {
+export function isLegacyArticle(
+  articleOrSlug: Article | string,
+  site: SiteProfile = defaultSiteProfile
+): boolean {
   const slug = typeof articleOrSlug === 'string' ? articleOrSlug : articleOrSlug.slug;
-  return readImportedArticles().some((article) => article.slug === slug);
+  return getImportedArticlesForSite(site).some((article) => article.slug === slug);
 }
 
 export function getEvents(): Event[] {
