@@ -1,4 +1,5 @@
 import { directoryMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { DirectoryPageView } from '@/views/site-pages';
 
 type PageProps = {
@@ -13,9 +14,11 @@ type PageProps = {
 };
 
 export async function generateMetadata({ searchParams }: PageProps) {
-  return directoryMetadata('en', '/business', await searchParams);
+  const site = await getCurrentSiteProfile();
+  return directoryMetadata('en', '/business', await searchParams, site);
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  return <DirectoryPageView locale="en" searchParams={await searchParams} />;
+  const site = await getCurrentSiteProfile();
+  return <DirectoryPageView locale="en" searchParams={await searchParams} site={site} />;
 }

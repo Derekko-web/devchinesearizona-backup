@@ -16,6 +16,8 @@ import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
   defaultSiteProfile,
+  hasLiveDirectoryData,
+  hasLiveNewsData,
   type SiteFeaturedShowcaseCard,
   type SiteNeighborhoodSpot,
   type SiteProfile,
@@ -326,34 +328,40 @@ function StoryCard({ story }: { story: HomeStoryCard }) {
 
 export function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
   const home = site.home;
-  const allBusinesses = getBusinesses(locale, { sort: 'featured' });
-  const categories = getBusinessCategories();
+  const directoryIsLive = hasLiveDirectoryData(site);
+  const newsIsLive = hasLiveNewsData(site);
+  const allBusinesses = directoryIsLive ? getBusinesses(locale, { sort: 'featured' }) : [];
+  const categories = getBusinessCategories().filter((category) =>
+    site.directory.categorySlugs.includes(category.slug)
+  );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
-  const storyCards: HomeStoryCard[] = getCurrentArticles()
-    .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
-    .filter(
-      (article) =>
-        hasLatinCharacters(article.title.en) &&
-        !hasCjkCharacters(article.title.en) &&
-        Boolean(article.title.zh) &&
-        article.title.zh !== article.title.en
-    )
-    .sort((left, right) => {
-      const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
-      if (titleLengthDifference !== 0) {
-        return titleLengthDifference;
-      }
+  const storyCards: HomeStoryCard[] = newsIsLive
+    ? getCurrentArticles()
+        .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
+        .filter(
+          (article) =>
+            hasLatinCharacters(article.title.en) &&
+            !hasCjkCharacters(article.title.en) &&
+            Boolean(article.title.zh) &&
+            article.title.zh !== article.title.en
+        )
+        .sort((left, right) => {
+          const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
+          if (titleLengthDifference !== 0) {
+            return titleLengthDifference;
+          }
 
-      return left.title.en.localeCompare(right.title.en);
-    })
-    .slice(0, 3)
-    .map((article) => ({
-      href: getLocalizedArizonaNewsArticlePath(locale, article.slug),
-      title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
-      bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
-      date: formatCardDate(article.publishedAt, locale),
-      image: article.heroImage,
-    }));
+          return left.title.en.localeCompare(right.title.en);
+        })
+        .slice(0, 3)
+        .map((article) => ({
+          href: getLocalizedArizonaNewsArticlePath(locale, article.slug),
+          title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
+          bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
+          date: formatCardDate(article.publishedAt, locale),
+          image: article.heroImage,
+        }))
+    : [];
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
@@ -647,8 +655,8 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
               <HomeSectionHeading
                 title={copy(locale, 'News & Community', '新闻与社区')}
                 subtitle={oppositeCopy(locale, 'News & Community', '新闻与社区')}
-                href={getLocalizedArizonaNewsPath(locale)}
-                hrefLabel={copy(locale, 'View all', '查看全部')}
+                href={newsIsLive ? getLocalizedArizonaNewsPath(locale) : undefined}
+                hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
               />
 
               <div className="mt-5 grid gap-4 md:grid-cols-3">

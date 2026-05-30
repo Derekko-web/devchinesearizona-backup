@@ -1,4 +1,5 @@
 import { communityRadarMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { CommunityRadarPageView } from '@/views/site-pages';
 
 export const dynamic = 'force-dynamic';
@@ -10,8 +11,12 @@ type PageProps = {
   }>;
 };
 
-export const metadata = communityRadarMetadata('en');
+export async function generateMetadata() {
+  const site = await getCurrentSiteProfile();
+  return communityRadarMetadata('en', site);
+}
 
 export default async function Page({ searchParams }: PageProps) {
-  return await CommunityRadarPageView({ locale: 'en', searchParams: await searchParams });
+  const site = await getCurrentSiteProfile();
+  return await CommunityRadarPageView({ locale: 'en', searchParams: await searchParams, site });
 }

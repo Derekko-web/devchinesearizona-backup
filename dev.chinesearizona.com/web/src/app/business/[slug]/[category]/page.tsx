@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { cityCategoryMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { CityCategoryPageView } from '@/views/site-pages';
 
 type PageProps = {
@@ -12,12 +13,14 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug, category } = await params;
-  return cityCategoryMetadata('en', slug, category) ?? {};
+  const site = await getCurrentSiteProfile();
+  return cityCategoryMetadata('en', slug, category, site) ?? {};
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug, category } = await params;
-  const rendered = await CityCategoryPageView({ locale: 'en', city: slug, category });
+  const site = await getCurrentSiteProfile();
+  const rendered = await CityCategoryPageView({ locale: 'en', city: slug, category, site });
   if (!rendered) {
     notFound();
   }

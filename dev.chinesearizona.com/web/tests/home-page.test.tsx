@@ -31,4 +31,20 @@ describe('HomePageView', () => {
     expect(html).toContain('/en/business');
     expect(html).toContain('/en/relocation-guide');
   });
+
+  it('does not reuse Arizona listings or articles for a placeholder city site', async () => {
+    const [{ HomePageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/home-page'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(<HomePageView locale="en" site={siteProfiles.austin} />);
+
+    expect(html).toContain('ChineseAustin Launch Placeholder');
+    expect(html).toContain('This example reuses platform code only');
+    expect(html).not.toContain('Bido Cafe');
+    expect(html).not.toContain('Hedy Li');
+    expect(html).not.toContain('/directory-ai-replacements/');
+    expect(html).not.toContain('/arizona-news/');
+  });
 });

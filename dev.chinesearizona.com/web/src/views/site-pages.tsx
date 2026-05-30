@@ -145,6 +145,7 @@ import { absoluteUrl, resolveAbsoluteAssetUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
 import { withLocale } from '@/lib/routing';
 import { getServerUserFromCookies } from '@/lib/server-auth';
+import { defaultSiteProfile, hasLiveDirectoryData, hasLiveNewsData, type SiteProfile } from '@/lib/site-config';
 import { getMonitoredSources, getSignalDeskQueue, getSignalDeskSummary } from '@/lib/signal-desk';
 import type {
   Article,
@@ -237,6 +238,35 @@ function parseDirectoryMinRating(value?: string): number | undefined {
 
 function sectionContainer(children: React.ReactNode) {
   return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>;
+}
+
+function CityDataUnavailable({
+  locale,
+  title,
+  description,
+}: {
+  locale: Locale;
+  title?: string;
+  description?: string;
+}) {
+  return sectionContainer(
+    <div className="py-12">
+      <EmptyState
+        title={
+          title ??
+          (locale === 'zh'
+            ? '此城市站点需要本地内容来源'
+            : 'This city site needs local content sources')
+        }
+        description={
+          description ??
+          (locale === 'zh'
+            ? '平台不会回退显示 ChineseArizona 的商家、新闻或生成内容。'
+            : 'The platform will not fall back to ChineseArizona listings, news, or generated content.')
+        }
+      />
+    </div>
+  );
 }
 
 function DirectorySponsoredDisclosure({ locale }: { locale: Locale }) {
@@ -484,11 +514,33 @@ export async function DirectoryPageView({
   locale,
   searchParams,
   isHomepage = false,
+  site = defaultSiteProfile,
 }: {
   locale: Locale;
   searchParams: DirectorySearchParams;
   isHomepage?: boolean;
+  site?: SiteProfile;
 }) {
+  if (!hasLiveDirectoryData(site)) {
+    return (
+      <div className="flex-grow overflow-x-hidden bg-transparent text-[#261b15]">
+        <CityDataUnavailable
+          locale={locale}
+          title={
+            locale === 'zh'
+              ? `${site.brandName} 商家目錄尚未接入本地資料`
+              : `${site.brandName} directory data is not connected yet`
+          }
+          description={
+            locale === 'zh'
+              ? '此城市設定必須先接入自己的商家來源；平台不会回退顯示 ChineseArizona 商家。'
+              : 'This city config must connect its own business listing sources first; the platform will not fall back to ChineseArizona listings.'
+          }
+        />
+      </div>
+    );
+  }
+
   const requestedPage = parsePageNumber(searchParams.page);
   const filters = {
     q: searchParams.q,
@@ -764,7 +816,19 @@ export async function DirectoryPageView({
   );
 }
 
-export async function BusinessDetailPageView({ locale, slug }: { locale: Locale; slug: string }) {
+export async function BusinessDetailPageView({
+  locale,
+  slug,
+  site = defaultSiteProfile,
+}: {
+  locale: Locale;
+  slug: string;
+  site?: SiteProfile;
+}) {
+  if (!hasLiveDirectoryData(site)) {
+    return null;
+  }
+
   const business = await getDirectoryBusinessBySlug(slug);
   if (!business) {
     return null;
@@ -1577,11 +1641,17 @@ export async function CityCategoryPageView({
   locale,
   city,
   category,
+  site = defaultSiteProfile,
 }: {
   locale: Locale;
   city: string;
   category: string;
+  site?: SiteProfile;
 }) {
+  if (!hasLiveDirectoryData(site)) {
+    return null;
+  }
+
   const cityCategoryPath = withLocale(locale, `/business/${city}/${category}`);
   const [categories, listings] = await Promise.all([
     getDirectoryCategories(),
@@ -2352,7 +2422,31 @@ export async function GuideDetailPageView({ locale, slug }: { locale: Locale; sl
   );
 }
 
-export async function CommunityPageView({ locale }: { locale: Locale }) {
+export async function CommunityPageView({
+  locale,
+  site = defaultSiteProfile,
+}: {
+  locale: Locale;
+  site?: SiteProfile;
+}) {
+  if (site.key !== defaultSiteProfile.key) {
+    return (
+      <CityDataUnavailable
+        locale={locale}
+        title={
+          locale === 'zh'
+            ? `${site.brandName} 社群內容尚未接入`
+            : `${site.brandName} community content is not connected yet`
+        }
+        description={
+          locale === 'zh'
+            ? '此城市設定必須先接入自己的活動、貼文與內容來源；平台不会回退顯示 ChineseArizona 社群內容。'
+            : 'This city config must connect its own events, posts, and content sources first; the platform will not fall back to ChineseArizona community content.'
+        }
+      />
+    );
+  }
+
   const eventList = getEvents();
   const articleList = await getCommunityTrendingArticlesAsync(4);
   const trendingArticles = articleList;
@@ -2464,10 +2558,30 @@ export async function CommunityPageView({ locale }: { locale: Locale }) {
 export async function CommunityRadarPageView({
   locale,
   searchParams,
+  site = defaultSiteProfile,
 }: {
   locale: Locale;
   searchParams?: RadarSearchParams;
+  site?: SiteProfile;
 }) {
+  if (!hasLiveNewsData(site)) {
+    return (
+      <CityDataUnavailable
+        locale={locale}
+        title={
+          locale === 'zh'
+            ? `${site.brandName} 新聞來源尚未接入`
+            : `${site.brandName} news sources are not connected yet`
+        }
+        description={
+          locale === 'zh'
+            ? '此城市設定必須先接入自己的新聞來源與生成文章資料；平台不会回退顯示 Arizona News。'
+            : 'This city config must connect its own news feeds and generated article data first; the platform will not fall back to Arizona News.'
+        }
+      />
+    );
+  }
+
   const activeLane = parseRadarLane(searchParams?.lane);
   const requestedPage = parsePageNumber(searchParams?.page);
   const allRadarArticles = await getRadarArticlesAsync();
@@ -2656,10 +2770,30 @@ export async function CommunityRadarPageView({
 export async function NewsArchivePageView({
   locale,
   searchParams,
+  site = defaultSiteProfile,
 }: {
   locale: Locale;
   searchParams?: NewsArchiveSearchParams;
+  site?: SiteProfile;
 }) {
+  if (!hasLiveNewsData(site)) {
+    return (
+      <CityDataUnavailable
+        locale={locale}
+        title={
+          locale === 'zh'
+            ? `${site.brandName} 新聞檔案尚未接入`
+            : `${site.brandName} news archive is not connected yet`
+        }
+        description={
+          locale === 'zh'
+            ? '此城市設定必須先產生自己的文章資料；平台不会回退顯示 Arizona News 檔案。'
+            : 'This city config must generate its own article data first; the platform will not fall back to the Arizona News archive.'
+        }
+      />
+    );
+  }
+
   const articlePage = await getArticleArchivePageAsync(
     {
       bucket: searchParams?.bucket,
@@ -3072,7 +3206,19 @@ export async function EventDetailPageView({ locale, slug }: { locale: Locale; sl
   );
 }
 
-export async function ArticleDetailPageView({ locale, slug }: { locale: Locale; slug: string }) {
+export async function ArticleDetailPageView({
+  locale,
+  slug,
+  site = defaultSiteProfile,
+}: {
+  locale: Locale;
+  slug: string;
+  site?: SiteProfile;
+}) {
+  if (!hasLiveNewsData(site)) {
+    return null;
+  }
+
   const article = await getArticleBySlugAsync(slug);
   if (!article) {
     return null;
@@ -3344,14 +3490,16 @@ export function CommunityPostDetailPageView({
 export async function AddBusinessPageView({
   locale,
   searchParams,
+  site = defaultSiteProfile,
 }: {
   locale: Locale;
   searchParams?: {
     businessName?: string;
     businessSlug?: string;
   };
+  site?: SiteProfile;
 }) {
-  const businesses = await getDirectoryBusinesses({}, { limit: 200 });
+  const businesses = hasLiveDirectoryData(site) ? await getDirectoryBusinesses({}, { limit: 200 }) : [];
   const trustFacts = [
     {
       icon: ShieldCheck,

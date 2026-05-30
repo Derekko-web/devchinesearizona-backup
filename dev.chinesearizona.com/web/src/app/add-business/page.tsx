@@ -1,4 +1,5 @@
 import { addBusinessMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { AddBusinessPageView } from '@/views/site-pages';
 
 export const metadata = addBusinessMetadata('en');
@@ -12,5 +13,6 @@ type PageProps = {
 };
 
 export default async function Page({ searchParams }: PageProps) {
-  return <AddBusinessPageView locale="en" searchParams={await searchParams} />;
+  const site = await getCurrentSiteProfile();
+  return <AddBusinessPageView locale="en" searchParams={await searchParams} site={site} />;
 }

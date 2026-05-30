@@ -34,4 +34,18 @@ describe('CommunityPageView', () => {
     expect(html).toContain('Phoenix Wushu Nationals 2026');
     expect(html).toContain('/en/add-business');
   });
+
+  it('does not serve Arizona community resources for placeholder city sites', async () => {
+    const [{ siteProfiles }, { CommunityPageView }] = await Promise.all([
+      import('@/lib/site-config'),
+      import('@/views/community-page'),
+    ]);
+
+    const html = renderToStaticMarkup(<CommunityPageView locale="en" site={siteProfiles.austin} />);
+
+    expect(html).toContain('ChineseAustin community content is not connected yet');
+    expect(html).toContain('will not fall back to ChineseArizona community content');
+    expect(html).not.toContain('Chinese Linguistic School of Phoenix');
+    expect(html).not.toContain('Phoenix Wushu Nationals 2026');
+  });
 });

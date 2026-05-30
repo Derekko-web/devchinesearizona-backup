@@ -115,27 +115,27 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'business' && segments.length === 1) {
-    return directoryMetadata(locale, '/business', query);
+    return directoryMetadata(locale, '/business', query, site);
   }
 
   if (segments[0] === 'business' && segments.length === 2) {
-    return (await businessMetadata(locale, segments[1])) ?? {};
+    return (await businessMetadata(locale, segments[1], site)) ?? {};
   }
 
   if (segments[0] === 'business' && segments[1] && segments[2]) {
-    return cityCategoryMetadata(locale, segments[1], segments[2]) ?? {};
+    return cityCategoryMetadata(locale, segments[1], segments[2], site) ?? {};
   }
 
   if (segments[0] === 'directory' && segments.length === 1) {
-    return directoryMetadata(locale, '/business', query);
+    return directoryMetadata(locale, '/business', query, site);
   }
 
   if (segments[0] === 'directory' && segments[1] === 'business' && segments[2]) {
-    return (await businessMetadata(locale, segments[2])) ?? {};
+    return (await businessMetadata(locale, segments[2], site)) ?? {};
   }
 
   if (segments[0] === 'directory' && segments[1] && segments[2]) {
-    return cityCategoryMetadata(locale, segments[1], segments[2]) ?? {};
+    return cityCategoryMetadata(locale, segments[1], segments[2], site) ?? {};
   }
 
   if (segments[0] === 'relocation-guide' && segments.length === 1) {
@@ -172,27 +172,27 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'community' && segments.length === 1) {
-    return communityMetadata(locale);
+    return communityMetadata(locale, site);
   }
 
   if (segments[0] === 'arizona-news' && segments.length === 1) {
-    return communityRadarMetadata(locale);
+    return communityRadarMetadata(locale, site);
   }
 
   if (segments[0] === 'arizona-news' && segments[1] === 'archive' && segments.length === 2) {
-    return communityNewsMetadata(locale, query);
+    return communityNewsMetadata(locale, query, site);
   }
 
   if (segments[0] === 'arizona-news' && segments[1] && segments.length === 2) {
-    return (await articleMetadata(locale, segments[1])) ?? {};
+    return (await articleMetadata(locale, segments[1], site)) ?? {};
   }
 
   if (segments[0] === 'community' && segments[1] === 'radar' && segments.length === 2) {
-    return communityRadarMetadata(locale);
+    return communityRadarMetadata(locale, site);
   }
 
   if (segments[0] === 'community' && segments[1] === 'news' && segments.length === 2) {
-    return communityNewsMetadata(locale, query);
+    return communityNewsMetadata(locale, query, site);
   }
 
   if (segments[0] === 'community' && segments[1] === 'events' && segments[2]) {
@@ -200,7 +200,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'community' && segments[1] === 'news' && segments[2]) {
-    return (await articleMetadata(locale, segments[2])) ?? {};
+    return (await articleMetadata(locale, segments[2], site)) ?? {};
   }
 
   if (segments[0] === 'community' && segments[1] === 'board' && segments[2]) {
@@ -246,17 +246,17 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   }
 
   if (segments[0] === 'business' && segments.length === 1) {
-    return <DirectoryPageView locale={locale} searchParams={await searchParams} />;
+    return <DirectoryPageView locale={locale} searchParams={await searchParams} site={site} />;
   }
 
   if (segments[0] === 'business' && segments.length === 2) {
-    const rendered = await BusinessDetailPageView({ locale, slug: segments[1] });
+    const rendered = await BusinessDetailPageView({ locale, slug: segments[1], site });
     if (!rendered) notFound();
     return rendered;
   }
 
   if (segments[0] === 'business' && segments[1] && segments[2]) {
-    const rendered = await CityCategoryPageView({ locale, city: segments[1], category: segments[2] });
+    const rendered = await CityCategoryPageView({ locale, city: segments[1], category: segments[2], site });
     if (!rendered) notFound();
     return rendered;
   }
@@ -326,19 +326,19 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   }
 
   if (segments[0] === 'community' && segments.length === 1) {
-    return await CommunityPageView({ locale });
+    return await CommunityPageView({ locale, site });
   }
 
   if (segments[0] === 'arizona-news' && segments.length === 1) {
-    return await CommunityRadarPageView({ locale, searchParams: await searchParams });
+    return await CommunityRadarPageView({ locale, searchParams: await searchParams, site });
   }
 
   if (segments[0] === 'arizona-news' && segments[1] === 'archive' && segments.length === 2) {
-    return await NewsArchivePageView({ locale, searchParams: await searchParams });
+    return await NewsArchivePageView({ locale, searchParams: await searchParams, site });
   }
 
   if (segments[0] === 'arizona-news' && segments[1] && segments.length === 2) {
-    const rendered = await ArticleDetailPageView({ locale, slug: segments[1] });
+    const rendered = await ArticleDetailPageView({ locale, slug: segments[1], site });
     if (!rendered) notFound();
     return rendered;
   }
@@ -376,7 +376,7 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   }
 
   if (segments[0] === 'add-business') {
-    return <AddBusinessPageView locale={locale} searchParams={await searchParams} />;
+    return <AddBusinessPageView locale={locale} searchParams={await searchParams} site={site} />;
   }
 
   if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {

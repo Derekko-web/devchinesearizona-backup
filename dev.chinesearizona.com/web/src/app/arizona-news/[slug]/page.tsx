@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 
 import { articleMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { ArticleDetailPageView } from '@/views/site-pages';
 
 type PageProps = {
@@ -11,14 +12,16 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  return (await articleMetadata('en', slug)) ?? {};
+  const site = await getCurrentSiteProfile();
+  return (await articleMetadata('en', slug, site)) ?? {};
 }
 
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const rendered = await ArticleDetailPageView({ locale: 'en', slug });
+  const site = await getCurrentSiteProfile();
+  const rendered = await ArticleDetailPageView({ locale: 'en', slug, site });
   if (!rendered) {
     notFound();
   }

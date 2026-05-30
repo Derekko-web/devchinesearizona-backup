@@ -1,4 +1,8 @@
-export type SiteKey = 'arizona' | 'austin' | 'los-angeles' | 'sf-bay';
+import type { Locale } from '@/lib/types';
+
+export type SiteKey = 'arizona' | 'austin';
+export type SiteLaunchState = 'live' | 'placeholder' | 'unconfigured';
+export type SiteContentState = 'live' | 'required';
 
 export type LocalizedText = {
   en: string;
@@ -64,11 +68,61 @@ export type SiteHomeProfile = {
   newcomerBody: LocalizedText;
 };
 
+export type SiteContentSource = {
+  state: SiteContentState;
+  label: string;
+  kind: 'static-json' | 'supabase' | 'scraper' | 'rss' | 'runtime-json' | 'manual';
+  path?: string;
+  env?: string[];
+  notes: string;
+};
+
+export type SiteDirectoryConfig = {
+  categorySlugs: string[];
+  citySelectSuffix: LocalizedText;
+  defaultSearchCity: string;
+  launchCities: string[];
+  cityNamesZh: Record<string, string>;
+  listingSource: SiteContentSource;
+  allowDefaultFallback: boolean;
+};
+
+export type SiteNewsConfig = {
+  routePath: string;
+  archivePath: string;
+  articleDataSource: SiteContentSource;
+  sourceManifest: SiteContentSource;
+  allowDefaultFallback: boolean;
+};
+
+export type SiteSeoConfig = {
+  title: LocalizedText;
+  description: LocalizedText;
+  canonicalBaseUrl: string;
+};
+
+export type SitePublisherConfig = {
+  contactEmail: string;
+  updatedLabel: LocalizedText;
+};
+
+export type SiteRuntimeConfig = {
+  rootPath: string;
+  dataPath: string;
+  logsPath: string;
+};
+
 export type SiteProfile = {
-  key: SiteKey;
+  key: SiteKey | 'unconfigured';
+  launchState: SiteLaunchState;
   domains: string[];
   domain: string;
   url: string;
+  cityName: string;
+  stateRegion: string;
+  stateCode: string;
+  countryCode: string;
+  supportedLocales: Locale[];
   brandName: string;
   brandNameZh: string;
   brandParts: SiteBrandParts;
@@ -78,6 +132,11 @@ export type SiteProfile = {
   localCoverageLabel: LocalizedText;
   description: LocalizedText;
   home: SiteHomeProfile;
+  directory: SiteDirectoryConfig;
+  news: SiteNewsConfig;
+  seo: SiteSeoConfig;
+  publisher: SitePublisherConfig;
+  runtime: SiteRuntimeConfig;
 };
 
 const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
@@ -174,51 +233,18 @@ const arizonaNeighborhoods: SiteNeighborhoodSpot[] = [
   },
 ];
 
-function guideCard({
-  slug,
-  href,
-  badge,
-  categoryEn,
-  categoryZh,
-  nameEn,
-  nameZh,
-  imageUrl,
-  line1En,
-  line1Zh,
-  line2En,
-  line2Zh,
-}: Omit<SiteFeaturedShowcaseCard, 'rating' | 'reviewCount'>): SiteFeaturedShowcaseCard {
-  return {
-    slug,
-    href,
-    badge,
-    categoryEn,
-    categoryZh,
-    nameEn,
-    nameZh,
-    imageUrl,
-    rating: '4.8',
-    reviewCount: 36,
-    line1En,
-    line1Zh,
-    line2En,
-    line2Zh,
-  };
-}
-
-const austinImage =
-  'https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=1600&q=80';
-const losAngelesImage =
-  'https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?auto=format&fit=crop&w=1600&q=80';
-const sfBayImage =
-  'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1600&q=80';
-
 export const siteProfiles: Record<SiteKey, SiteProfile> = {
   arizona: {
     key: 'arizona',
+    launchState: 'live',
     domains: ['chinesearizona.com', 'www.chinesearizona.com', 'dev.chinesearizona.com'],
     domain: 'chinesearizona.com',
     url: 'https://chinesearizona.com',
+    cityName: 'Phoenix',
+    stateRegion: 'Arizona',
+    stateCode: 'AZ',
+    countryCode: 'US',
+    supportedLocales: ['en', 'zh'],
     brandName: 'ChineseArizona',
     brandNameZh: '亞利桑那華人',
     brandParts: {
@@ -240,6 +266,82 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
     description: {
       en: 'A modern bilingual Arizona platform for trusted local businesses, newcomer resources, community events, and local Chinese-language discovery.',
       zh: '服務亞利桑那華人與新移民的雙語平台，整合可信商家、生活資源、社群活動與在地發現。',
+    },
+    directory: {
+      categorySlugs: [
+        'dining',
+        'real-estate',
+        'local-services',
+        'education',
+        'medical',
+        'legal-finance',
+        'home-services',
+        'shopping',
+        'moving',
+      ],
+      citySelectSuffix: { en: 'AZ', zh: 'AZ' },
+      defaultSearchCity: 'Tempe',
+      launchCities: ['Phoenix', 'Chandler', 'Tempe', 'Mesa', 'Gilbert', 'Scottsdale'],
+      cityNamesZh: {
+        Phoenix: '凤凰城',
+        Chandler: '钱德勒',
+        Tempe: '坦佩',
+        Mesa: '梅萨',
+        Gilbert: '吉尔伯特',
+        Scottsdale: '斯科茨代尔',
+      },
+      listingSource: {
+        state: 'live',
+        label: 'ChineseArizona business directory',
+        kind: 'supabase',
+        path: 'src/data/generated-directory-businesses.json',
+        env: ['NEXT_PUBLIC_SUPABASE_URL'],
+        notes: 'Arizona-only listings generated from Arizona directory sources and owner submissions.',
+      },
+      allowDefaultFallback: true,
+    },
+    news: {
+      routePath: '/arizona-news',
+      archivePath: '/arizona-news/archive',
+      articleDataSource: {
+        state: 'live',
+        label: 'Arizona Radar and editorial articles',
+        kind: 'runtime-json',
+        path: 'src/data/generated-local-articles.json',
+        env: ['NEXT_PUBLIC_SUPABASE_URL'],
+        notes: 'Arizona-only generated articles, Radar items, and licensed imported articles.',
+      },
+      sourceManifest: {
+        state: 'live',
+        label: 'Arizona Radar monitored sources',
+        kind: 'static-json',
+        path: 'src/data/radar-source-manifest.json',
+        notes: 'Arizona-specific source manifest and scoring rules.',
+      },
+      allowDefaultFallback: true,
+    },
+    seo: {
+      title: {
+        en: 'ChineseArizona | Arizona Chinese Community Directory, News, and Resources',
+        zh: 'ChineseArizona | 亞利桑那華人商家、新聞與生活資源',
+      },
+      description: {
+        en: 'A modern bilingual Arizona platform for trusted local businesses, newcomer resources, community events, and local Chinese-language discovery.',
+        zh: '服務亞利桑那華人與新移民的雙語平台，整合可信商家、生活資源、社群活動與在地發現。',
+      },
+      canonicalBaseUrl: 'https://chinesearizona.com',
+    },
+    publisher: {
+      contactEmail: 'hello@chinesearizona.com',
+      updatedLabel: {
+        en: 'Last updated: May 17, 2026',
+        zh: '最後更新：2026 年 5 月 17 日',
+      },
+    },
+    runtime: {
+      rootPath: '/var/www/dev.chinesearizona.com/web',
+      dataPath: '/var/www/dev.chinesearizona.com/web/src/data',
+      logsPath: '/var/www/dev.chinesearizona.com/logs',
     },
     home: {
       headline: {
@@ -316,9 +418,15 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
   },
   austin: {
     key: 'austin',
+    launchState: 'placeholder',
     domains: ['chineseaustin.com', 'www.chineseaustin.com'],
     domain: 'chineseaustin.com',
     url: 'https://chineseaustin.com',
+    cityName: 'Austin',
+    stateRegion: 'Texas',
+    stateCode: 'TX',
+    countryCode: 'US',
+    supportedLocales: ['en', 'zh'],
     brandName: 'ChineseAustin',
     brandNameZh: '奥斯汀华人',
     brandParts: {
@@ -338,50 +446,110 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       zh: '奥斯汀本地优先',
     },
     description: {
-      en: 'A bilingual Austin guide for Chinese, Taiwanese, Mandarin-speaking, and Asia-connected families, students, professionals, and business owners.',
-      zh: '服务奥斯汀华人、台湾人、中文使用者与亚洲连结家庭的双语在地指南。',
+      en: 'A placeholder Austin configuration for the reusable city-site platform. It is blocked from launch until Austin-specific listings, sources, and article data are connected.',
+      zh: '可重用城市平台的奥斯汀示例配置。必须接入奥斯汀专属商家、来源与文章数据后才可上线。',
     },
-    home: {
-      headline: {
-        en: "Your Guide to Austin's Chinese Community",
-        zh: '奥斯汀华人社区指南',
-      },
-      kicker: {
-        en: "Connect with Austin's Chinese community and discover local highlights",
-        zh: '连接奥斯汀华人社区，发现本地精彩',
-      },
-      intro: {
-        en: 'Find trusted businesses, neighborhood resources, and community connections across the Austin area.',
-        zh: '寻找奥斯汀地区可信商家、社区资源与生活连结。',
-      },
+    directory: {
+      categorySlugs: ['dining', 'real-estate', 'local-services', 'education', 'medical'],
       citySelectSuffix: { en: 'TX', zh: 'TX' },
       defaultSearchCity: 'Austin',
-      launchCities: ['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville', 'Georgetown', 'San Marcos'],
+      launchCities: ['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville'],
       cityNamesZh: {
         Austin: '奥斯汀',
         'Cedar Park': '雪松公园',
         'Round Rock': '朗德罗克',
         Pflugerville: '普弗拉格维尔',
-        Georgetown: '乔治城',
-        'San Marcos': '圣马科斯',
       },
-      heroImageUrl: austinImage,
+      listingSource: {
+        state: 'required',
+        label: 'Austin business listing source',
+        kind: 'static-json',
+        path: 'data/sites/austin/businesses.json',
+        notes: 'Must be populated from Austin-specific listing sources before this site can serve a directory.',
+      },
+      allowDefaultFallback: false,
+    },
+    news: {
+      routePath: '/local-news',
+      archivePath: '/local-news/archive',
+      articleDataSource: {
+        state: 'required',
+        label: 'Austin article data',
+        kind: 'runtime-json',
+        path: 'data/sites/austin/articles.json',
+        notes: 'Must be generated from Austin-specific feeds, source settings, and editorial review.',
+      },
+      sourceManifest: {
+        state: 'required',
+        label: 'Austin monitored source manifest',
+        kind: 'static-json',
+        path: 'config/sites/austin/source-manifest.json',
+        notes: 'Must define Austin-specific RSS, scraper, social, and official-source settings.',
+      },
+      allowDefaultFallback: false,
+    },
+    seo: {
+      title: {
+        en: 'ChineseAustin | Austin Chinese Community Directory, News, and Resources',
+        zh: 'ChineseAustin | 奥斯汀华人商家、新闻与生活资源',
+      },
+      description: {
+        en: 'Austin placeholder SEO copy for the multi-city platform. Replace with city-specific editorial copy before launch.',
+        zh: '多城市平台的奥斯汀示例 SEO 文案。上线前必须替换为城市专属编辑文案。',
+      },
+      canonicalBaseUrl: 'https://chineseaustin.com',
+    },
+    publisher: {
+      contactEmail: 'hello@chineseaustin.com',
+      updatedLabel: {
+        en: 'Launch copy pending Austin review',
+        zh: '上线文案等待奥斯汀审核',
+      },
+    },
+    runtime: {
+      rootPath: '/var/www/chineseaustin.com/web',
+      dataPath: '/var/www/chineseaustin.com/data',
+      logsPath: '/var/www/chineseaustin.com/logs',
+    },
+    home: {
+      headline: {
+        en: 'ChineseAustin Launch Placeholder',
+        zh: 'ChineseAustin 上线占位配置',
+      },
+      kicker: {
+        en: 'Austin-specific content sources are required before launch',
+        zh: '上线前必须接入奥斯汀专属内容来源',
+      },
+      intro: {
+        en: 'This example reuses platform code only. It does not reuse ChineseArizona listings, articles, or generated data.',
+        zh: '此示例只复用平台代码，不复用 ChineseArizona 商家、文章或生成数据。',
+      },
+      citySelectSuffix: { en: 'TX', zh: 'TX' },
+      defaultSearchCity: 'Austin',
+      launchCities: ['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville'],
+      cityNamesZh: {
+        Austin: '奥斯汀',
+        'Cedar Park': '雪松公园',
+        'Round Rock': '朗德罗克',
+        Pflugerville: '普弗拉格维尔',
+      },
+      heroImageUrl: '/window.svg',
       heroImageAlt: {
-        en: 'Austin skyline and local community life',
-        zh: '奥斯汀城市与社区生活',
+        en: 'Placeholder city launch image',
+        zh: '城市上线占位图',
       },
-      heroForegroundImageUrl: austinImage,
+      heroForegroundImageUrl: '/globe.svg',
       heroForegroundAlt: {
-        en: 'Austin city view',
-        zh: '奥斯汀城市风景',
+        en: 'Placeholder city platform mark',
+        zh: '城市平台占位图标',
       },
       heroBadge: {
         en: 'AUSTIN, TEXAS',
         zh: '奥斯汀，德州',
       },
       heroBadgeSubcopy: {
-        en: 'Tech city · Growing community',
-        zh: '科技城市 · 活力社区',
+        en: 'Launch blocked until local data exists',
+        zh: '本地数据完成前禁止上线',
       },
       focusTitle: {
         en: 'Austin Focused',
@@ -391,415 +559,198 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Local neighborhoods and services',
         zh: '在地社区与服务',
       },
-      featuredCards: [
-        guideCard({
-          slug: 'austin-dining-guide',
-          href: '/business?category=dining&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Dining',
-          categoryZh: '餐厅美食',
-          nameEn: 'Austin Dining Guide',
-          nameZh: '奥斯汀美食指南',
-          imageUrl: austinImage,
-          line1En: 'North Austin, Lakeline, and downtown',
-          line1Zh: '北奥斯汀、Lakeline 与市中心',
-          line2En: 'Chinese, Taiwanese, hot pot, and bakery stops',
-          line2Zh: '中餐、台菜、火锅与烘焙推荐',
-        }),
-        guideCard({
-          slug: 'austin-real-estate-guide',
-          href: '/business?category=real-estate&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Real Estate',
-          categoryZh: '地产服务',
-          nameEn: 'Austin Real Estate Guide',
-          nameZh: '奥斯汀地产服务',
-          imageUrl: austinImage,
-          line1En: 'Cedar Park, Round Rock, and Bee Cave',
-          line1Zh: '雪松公园、朗德罗克与 Bee Cave',
-          line2En: 'Neighborhood context for newcomer families',
-          line2Zh: '为新移民家庭整理社区脉络',
-        }),
-        guideCard({
-          slug: 'austin-schools-guide',
-          href: '/business?category=education&sort=featured',
-          badge: 'Claimed',
-          categoryEn: 'Education',
-          categoryZh: '教育培训',
-          nameEn: 'Austin Schools & Enrichment',
-          nameZh: '奥斯汀教育与课外',
-          imageUrl: austinImage,
-          line1En: 'Chinese schools, tutoring, and enrichment',
-          line1Zh: '中文学校、补习与课外活动',
-          line2En: 'For families comparing school corridors',
-          line2Zh: '帮助家庭比较学区与生活圈',
-        }),
-        guideCard({
-          slug: 'austin-services-guide',
-          href: '/business?category=local-services&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Local Services',
-          categoryZh: '生活服务',
-          nameEn: 'Austin Local Services',
-          nameZh: '奥斯汀生活服务',
-          imageUrl: austinImage,
-          line1En: 'Mandarin-friendly providers and shops',
-          line1Zh: '中文友善服务与商家',
-          line2En: 'Useful contacts for everyday life',
-          line2Zh: '整理日常生活常用资讯',
-        }),
-      ],
-      neighborhoods: [
-        { city: 'Austin', cityZh: '奥斯汀', regionEn: 'Central Austin', regionZh: '市中心', imageUrl: austinImage },
-        { city: 'Cedar Park', cityZh: '雪松公园', regionEn: 'Northwest corridor', regionZh: '西北走廊', imageUrl: austinImage },
-        { city: 'Round Rock', cityZh: '朗德罗克', regionEn: 'North suburbs', regionZh: '北部近郊', imageUrl: austinImage },
-        { city: 'Pflugerville', cityZh: '普弗拉格维尔', regionEn: 'Family neighborhoods', regionZh: '家庭社区', imageUrl: austinImage },
-      ],
-      mapImageUrl: austinImage,
+      featuredCards: [],
+      neighborhoods: [],
+      mapImageUrl: '/globe.svg',
       mapImageAlt: {
-        en: 'Austin community areas',
-        zh: '奥斯汀社区范围',
+        en: 'Austin source map placeholder',
+        zh: '奥斯汀来源地图占位',
       },
-      relocationImageUrl: austinImage,
+      relocationImageUrl: '/window.svg',
       relocationImageAlt: {
-        en: 'Austin relocation landscape',
-        zh: '奥斯汀搬迁生活风景',
+        en: 'Austin relocation source placeholder',
+        zh: '奥斯汀搬迁来源占位',
       },
       newcomerTitle: {
-        en: 'New to Austin?',
-        zh: '初来奥斯汀？',
+        en: 'Data Required',
+        zh: '需要本地数据',
       },
       newcomerBody: {
-        en: 'Use the guide to compare neighborhoods, find services, and settle into Austin life.',
-        zh: '用指南比较社区、寻找服务，并更快安顿奥斯汀生活。',
-      },
-    },
-  },
-  'los-angeles': {
-    key: 'los-angeles',
-    domains: ['chineselosangeles.com', 'www.chineselosangeles.com'],
-    domain: 'chineselosangeles.com',
-    url: 'https://chineselosangeles.com',
-    brandName: 'ChineseLosAngeles',
-    brandNameZh: '洛杉矶华人',
-    brandParts: {
-      enPrefix: 'Chinese',
-      enAccent: 'LosAngeles',
-      zhPrefix: '洛杉矶',
-      zhAccent: '华人',
-    },
-    regionName: 'Los Angeles',
-    regionNameZh: '洛杉矶',
-    guideTagline: {
-      en: 'Los Angeles bilingual guide',
-      zh: '洛杉矶双语指南',
-    },
-    localCoverageLabel: {
-      en: 'Los Angeles-first coverage',
-      zh: '洛杉矶本地优先',
-    },
-    description: {
-      en: 'A bilingual Los Angeles guide for Chinese, Taiwanese, Mandarin-speaking, Cantonese-speaking, and Asia-connected communities across Southern California.',
-      zh: '服务洛杉矶与南加州华人、台湾人、中文与粤语使用者的双语在地指南。',
-    },
-    home: {
-      headline: {
-        en: "Your Guide to Los Angeles' Chinese Community",
-        zh: '洛杉矶华人社区指南',
-      },
-      kicker: {
-        en: "Connect with Los Angeles' Chinese community and discover local highlights",
-        zh: '连接洛杉矶华人社区，发现本地精彩',
-      },
-      intro: {
-        en: 'Find trusted businesses, neighborhood resources, and community connections across Greater Los Angeles.',
-        zh: '寻找大洛杉矶地区可信商家、社区资源与生活连结。',
-      },
-      citySelectSuffix: { en: 'CA', zh: 'CA' },
-      defaultSearchCity: 'Los Angeles',
-      launchCities: ['Los Angeles', 'Monterey Park', 'Alhambra', 'San Gabriel', 'Arcadia', 'Irvine'],
-      cityNamesZh: {
-        'Los Angeles': '洛杉矶',
-        'Monterey Park': '蒙特利公园',
-        Alhambra: '阿罕布拉',
-        'San Gabriel': '圣盖博',
-        Arcadia: '亚凯迪亚',
-        Irvine: '尔湾',
-      },
-      heroImageUrl: losAngelesImage,
-      heroImageAlt: {
-        en: 'Los Angeles skyline and Chinese community neighborhoods',
-        zh: '洛杉矶城市与华人社区',
-      },
-      heroForegroundImageUrl: losAngelesImage,
-      heroForegroundAlt: {
-        en: 'Los Angeles city view',
-        zh: '洛杉矶城市风景',
-      },
-      heroBadge: {
-        en: 'LOS ANGELES, CALIFORNIA',
-        zh: '洛杉矶，加州',
-      },
-      heroBadgeSubcopy: {
-        en: 'SGV roots · Southern California reach',
-        zh: '圣盖博谷根基 · 南加州生活圈',
-      },
-      focusTitle: {
-        en: 'LA Focused',
-        zh: '洛杉矶聚焦',
-      },
-      focusBody: {
-        en: 'Local neighborhoods and services',
-        zh: '在地社区与服务',
-      },
-      featuredCards: [
-        guideCard({
-          slug: 'los-angeles-dining-guide',
-          href: '/business?category=dining&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Dining',
-          categoryZh: '餐厅美食',
-          nameEn: 'Los Angeles Dining Guide',
-          nameZh: '洛杉矶美食指南',
-          imageUrl: losAngelesImage,
-          line1En: 'SGV, Koreatown, West LA, and Irvine',
-          line1Zh: '圣盖博谷、韩国城、西洛杉矶与尔湾',
-          line2En: 'Regional Chinese, Taiwanese, dessert, and tea stops',
-          line2Zh: '中餐、台菜、甜品与茶饮推荐',
-        }),
-        guideCard({
-          slug: 'los-angeles-real-estate-guide',
-          href: '/business?category=real-estate&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Real Estate',
-          categoryZh: '地产服务',
-          nameEn: 'LA Real Estate Guide',
-          nameZh: '洛杉矶地产服务',
-          imageUrl: losAngelesImage,
-          line1En: 'SGV, Pasadena, Irvine, and coastal corridors',
-          line1Zh: '圣盖博谷、帕萨迪纳、尔湾与沿海走廊',
-          line2En: 'Neighborhood context for buying and renting',
-          line2Zh: '买房租房与社区比较',
-        }),
-        guideCard({
-          slug: 'los-angeles-schools-guide',
-          href: '/business?category=education&sort=featured',
-          badge: 'Claimed',
-          categoryEn: 'Education',
-          categoryZh: '教育培训',
-          nameEn: 'LA Schools & Enrichment',
-          nameZh: '洛杉矶教育与课外',
-          imageUrl: losAngelesImage,
-          line1En: 'Chinese schools, tutoring, arts, and test prep',
-          line1Zh: '中文学校、补习、艺术与升学',
-          line2En: 'Resources for families across metro LA',
-          line2Zh: '面向大洛杉矶家庭的教育资源',
-        }),
-        guideCard({
-          slug: 'los-angeles-services-guide',
-          href: '/business?category=medical&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Healthcare',
-          categoryZh: '医疗健康',
-          nameEn: 'LA Healthcare & Services',
-          nameZh: '洛杉矶医疗与生活服务',
-          imageUrl: losAngelesImage,
-          line1En: 'Mandarin and Cantonese-friendly providers',
-          line1Zh: '普通话与粤语友善服务',
-          line2En: 'Everyday support across Southern California',
-          line2Zh: '整理南加州日常生活支持',
-        }),
-      ],
-      neighborhoods: [
-        { city: 'Monterey Park', cityZh: '蒙特利公园', regionEn: 'SGV core', regionZh: '圣盖博谷核心', imageUrl: losAngelesImage },
-        { city: 'Alhambra', cityZh: '阿罕布拉', regionEn: 'SGV dining corridor', regionZh: '华人餐饮走廊', imageUrl: losAngelesImage },
-        { city: 'San Gabriel', cityZh: '圣盖博', regionEn: 'Community anchor', regionZh: '社区据点', imageUrl: losAngelesImage },
-        { city: 'Irvine', cityZh: '尔湾', regionEn: 'Orange County', regionZh: '橙县', imageUrl: losAngelesImage },
-      ],
-      mapImageUrl: losAngelesImage,
-      mapImageAlt: {
-        en: 'Los Angeles community areas',
-        zh: '洛杉矶社区范围',
-      },
-      relocationImageUrl: losAngelesImage,
-      relocationImageAlt: {
-        en: 'Los Angeles relocation landscape',
-        zh: '洛杉矶搬迁生活风景',
-      },
-      newcomerTitle: {
-        en: 'New to Los Angeles?',
-        zh: '初来洛杉矶？',
-      },
-      newcomerBody: {
-        en: 'Compare neighborhoods, find services, and understand the local Chinese community map.',
-        zh: '比较社区、寻找服务，并快速理解洛杉矶华人生活圈。',
-      },
-    },
-  },
-  'sf-bay': {
-    key: 'sf-bay',
-    domains: ['chinesesfbay.com', 'www.chinesesfbay.com'],
-    domain: 'chinesesfbay.com',
-    url: 'https://chinesesfbay.com',
-    brandName: 'ChineseSFBay',
-    brandNameZh: '湾区华人',
-    brandParts: {
-      enPrefix: 'Chinese',
-      enAccent: 'SFBay',
-      zhPrefix: '湾区',
-      zhAccent: '华人',
-    },
-    regionName: 'San Francisco Bay Area',
-    regionNameZh: '湾区',
-    guideTagline: {
-      en: 'Bay Area bilingual guide',
-      zh: '湾区双语指南',
-    },
-    localCoverageLabel: {
-      en: 'Bay Area-first coverage',
-      zh: '湾区本地优先',
-    },
-    description: {
-      en: 'A bilingual San Francisco Bay Area guide for Chinese, Taiwanese, Mandarin-speaking, Cantonese-speaking, and Asia-connected communities.',
-      zh: '服务旧金山湾区华人、台湾人、中文与粤语使用者的双语在地指南。',
-    },
-    home: {
-      headline: {
-        en: "Your Guide to the Bay Area's Chinese Community",
-        zh: '湾区华人社区指南',
-      },
-      kicker: {
-        en: "Connect with the Bay Area's Chinese community and discover local highlights",
-        zh: '连接湾区华人社区，发现本地精彩',
-      },
-      intro: {
-        en: 'Find trusted businesses, neighborhood resources, and community connections across the San Francisco Bay Area.',
-        zh: '寻找旧金山湾区可信商家、社区资源与生活连结。',
-      },
-      citySelectSuffix: { en: 'CA', zh: 'CA' },
-      defaultSearchCity: 'Cupertino',
-      launchCities: ['San Francisco', 'Cupertino', 'San Jose', 'Fremont', 'Milpitas', 'Oakland'],
-      cityNamesZh: {
-        'San Francisco': '旧金山',
-        Cupertino: '库比蒂诺',
-        'San Jose': '圣荷西',
-        Fremont: '佛利蒙',
-        Milpitas: '米尔皮塔斯',
-        Oakland: '奥克兰',
-      },
-      heroImageUrl: sfBayImage,
-      heroImageAlt: {
-        en: 'San Francisco Bay Area skyline and community life',
-        zh: '旧金山湾区城市与社区生活',
-      },
-      heroForegroundImageUrl: sfBayImage,
-      heroForegroundAlt: {
-        en: 'Bay Area city view',
-        zh: '湾区城市风景',
-      },
-      heroBadge: {
-        en: 'SAN FRANCISCO BAY AREA',
-        zh: '旧金山湾区',
-      },
-      heroBadgeSubcopy: {
-        en: 'Peninsula, South Bay, East Bay',
-        zh: '半岛、南湾、东湾',
-      },
-      focusTitle: {
-        en: 'Bay Area Focused',
-        zh: '湾区聚焦',
-      },
-      focusBody: {
-        en: 'Local neighborhoods and services',
-        zh: '在地社区与服务',
-      },
-      featuredCards: [
-        guideCard({
-          slug: 'bay-area-dining-guide',
-          href: '/business?category=dining&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Dining',
-          categoryZh: '餐厅美食',
-          nameEn: 'Bay Area Dining Guide',
-          nameZh: '湾区美食指南',
-          imageUrl: sfBayImage,
-          line1En: 'San Francisco, Cupertino, Fremont, and San Jose',
-          line1Zh: '旧金山、库比蒂诺、佛利蒙与圣荷西',
-          line2En: 'Regional Chinese, Taiwanese, tea, and bakery stops',
-          line2Zh: '中餐、台菜、茶饮与烘焙推荐',
-        }),
-        guideCard({
-          slug: 'bay-area-real-estate-guide',
-          href: '/business?category=real-estate&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Real Estate',
-          categoryZh: '地产服务',
-          nameEn: 'Bay Area Housing Guide',
-          nameZh: '湾区住房与地产',
-          imageUrl: sfBayImage,
-          line1En: 'Peninsula, South Bay, and East Bay',
-          line1Zh: '半岛、南湾与东湾',
-          line2En: 'Neighborhood context for buying and renting',
-          line2Zh: '买房租房与社区比较',
-        }),
-        guideCard({
-          slug: 'bay-area-schools-guide',
-          href: '/business?category=education&sort=featured',
-          badge: 'Claimed',
-          categoryEn: 'Education',
-          categoryZh: '教育培训',
-          nameEn: 'Bay Area Schools & Enrichment',
-          nameZh: '湾区教育与课外',
-          imageUrl: sfBayImage,
-          line1En: 'Chinese schools, tutoring, music, and STEM',
-          line1Zh: '中文学校、补习、音乐与 STEM',
-          line2En: 'Resources for family-heavy neighborhoods',
-          line2Zh: '面向家庭社区的教育资源',
-        }),
-        guideCard({
-          slug: 'bay-area-services-guide',
-          href: '/business?category=local-services&sort=featured',
-          badge: 'Verified',
-          categoryEn: 'Local Services',
-          categoryZh: '生活服务',
-          nameEn: 'Bay Area Local Services',
-          nameZh: '湾区生活服务',
-          imageUrl: sfBayImage,
-          line1En: 'Mandarin and Cantonese-friendly providers',
-          line1Zh: '普通话与粤语友善服务',
-          line2En: 'Useful contacts across the Bay',
-          line2Zh: '整理湾区日常生活常用资讯',
-        }),
-      ],
-      neighborhoods: [
-        { city: 'Cupertino', cityZh: '库比蒂诺', regionEn: 'South Bay', regionZh: '南湾', imageUrl: sfBayImage },
-        { city: 'San Jose', cityZh: '圣荷西', regionEn: 'South Bay anchor', regionZh: '南湾据点', imageUrl: sfBayImage },
-        { city: 'Fremont', cityZh: '佛利蒙', regionEn: 'East Bay', regionZh: '东湾', imageUrl: sfBayImage },
-        { city: 'San Francisco', cityZh: '旧金山', regionEn: 'City core', regionZh: '城市核心', imageUrl: sfBayImage },
-      ],
-      mapImageUrl: sfBayImage,
-      mapImageAlt: {
-        en: 'Bay Area community areas',
-        zh: '湾区社区范围',
-      },
-      relocationImageUrl: sfBayImage,
-      relocationImageAlt: {
-        en: 'Bay Area relocation landscape',
-        zh: '湾区搬迁生活风景',
-      },
-      newcomerTitle: {
-        en: 'New to the Bay Area?',
-        zh: '初来湾区？',
-      },
-      newcomerBody: {
-        en: 'Compare neighborhoods, find services, and settle into Bay Area life with local context.',
-        zh: '用在地脉络比较社区、寻找服务，并更快安顿湾区生活。',
+        en: 'Add Austin listing sources, news feeds, SEO copy, runtime paths, and generated article data before enabling this site.',
+        zh: '启用此站前，请先添加奥斯汀商家来源、新闻源、SEO 文案、运行路径与生成文章数据。',
       },
     },
   },
 };
 
 export const defaultSiteProfile = siteProfiles.arizona;
+
+function isLocalHost(host: string): boolean {
+  return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '::1';
+}
+
+function createUnconfiguredSiteProfile(host: string): SiteProfile {
+  const domain = host || 'unconfigured.local';
+  const origin = domain.endsWith('.local') ? `http://${domain}` : `https://${domain}`;
+
+  return {
+    key: 'unconfigured',
+    launchState: 'unconfigured',
+    domains: domain ? [domain] : [],
+    domain,
+    url: origin,
+    cityName: 'Unconfigured',
+    stateRegion: 'Unconfigured',
+    stateCode: '',
+    countryCode: 'US',
+    supportedLocales: ['en', 'zh'],
+    brandName: 'Unconfigured City Site',
+    brandNameZh: '未配置城市站点',
+    brandParts: {
+      enPrefix: 'City',
+      enAccent: 'Site',
+      zhPrefix: '城市',
+      zhAccent: '站点',
+    },
+    regionName: 'Unconfigured',
+    regionNameZh: '未配置',
+    guideTagline: {
+      en: 'City config required',
+      zh: '需要城市配置',
+    },
+    localCoverageLabel: {
+      en: 'No city data connected',
+      zh: '尚未接入城市数据',
+    },
+    description: {
+      en: 'This hostname is not connected to a live city configuration and cannot serve default ChineseArizona content.',
+      zh: '此主机名尚未连接可上线的城市配置，不能提供默认 ChineseArizona 内容。',
+    },
+    directory: {
+      categorySlugs: [],
+      citySelectSuffix: { en: '', zh: '' },
+      defaultSearchCity: '',
+      launchCities: [],
+      cityNamesZh: {},
+      listingSource: {
+        state: 'required',
+        label: 'Unconfigured business listing source',
+        kind: 'manual',
+        notes: 'Create a city-specific listing source before routing this hostname to the platform.',
+      },
+      allowDefaultFallback: false,
+    },
+    news: {
+      routePath: '/local-news',
+      archivePath: '/local-news/archive',
+      articleDataSource: {
+        state: 'required',
+        label: 'Unconfigured article data source',
+        kind: 'manual',
+        notes: 'Create city-specific news feeds and generated article data before routing this hostname to the platform.',
+      },
+      sourceManifest: {
+        state: 'required',
+        label: 'Unconfigured source manifest',
+        kind: 'manual',
+        notes: 'Create city-specific scraper and feed settings before launch.',
+      },
+      allowDefaultFallback: false,
+    },
+    seo: {
+      title: {
+        en: 'Unconfigured City Site',
+        zh: '未配置城市站点',
+      },
+      description: {
+        en: 'City-specific SEO copy is required before this hostname can launch.',
+        zh: '此主机名上线前必须配置城市专属 SEO 文案。',
+      },
+      canonicalBaseUrl: origin,
+    },
+    publisher: {
+      contactEmail: defaultSiteProfile.publisher.contactEmail,
+      updatedLabel: defaultSiteProfile.publisher.updatedLabel,
+    },
+    runtime: {
+      rootPath: `/var/www/${domain}/web`,
+      dataPath: `/var/www/${domain}/data`,
+      logsPath: `/var/www/${domain}/logs`,
+    },
+    home: {
+      headline: {
+        en: 'City Configuration Required',
+        zh: '需要城市配置',
+      },
+      kicker: {
+        en: 'This hostname is intentionally blocked from default content fallback',
+        zh: '此主机名已阻止默认内容回退',
+      },
+      intro: {
+        en: 'Add city-specific business, article, SEO, branding, and runtime settings before launch.',
+        zh: '上线前请添加城市专属商家、文章、SEO、品牌与运行设置。',
+      },
+      citySelectSuffix: { en: '', zh: '' },
+      defaultSearchCity: '',
+      launchCities: [],
+      cityNamesZh: {},
+      heroImageUrl: '/window.svg',
+      heroImageAlt: {
+        en: 'Unconfigured city placeholder',
+        zh: '未配置城市占位',
+      },
+      heroForegroundImageUrl: '/globe.svg',
+      heroForegroundAlt: {
+        en: 'Unconfigured city mark',
+        zh: '未配置城市标记',
+      },
+      heroBadge: {
+        en: 'UNCONFIGURED',
+        zh: '未配置',
+      },
+      heroBadgeSubcopy: {
+        en: 'No default fallback',
+        zh: '无默认回退',
+      },
+      focusTitle: {
+        en: 'Config Required',
+        zh: '需要配置',
+      },
+      focusBody: {
+        en: 'City content sources missing',
+        zh: '缺少城市内容来源',
+      },
+      featuredCards: [],
+      neighborhoods: [],
+      mapImageUrl: '/globe.svg',
+      mapImageAlt: {
+        en: 'Unconfigured map placeholder',
+        zh: '未配置地图占位',
+      },
+      relocationImageUrl: '/window.svg',
+      relocationImageAlt: {
+        en: 'Unconfigured relocation placeholder',
+        zh: '未配置搬迁占位',
+      },
+      newcomerTitle: {
+        en: 'Launch Blocked',
+        zh: '上线已阻止',
+      },
+      newcomerBody: {
+        en: 'This profile exists only to prevent accidental fallback to ChineseArizona content.',
+        zh: '此配置仅用于防止意外回退到 ChineseArizona 内容。',
+      },
+    },
+  };
+}
+
+export function hasLiveDirectoryData(site: SiteProfile): boolean {
+  return site.directory.listingSource.state === 'live';
+}
+
+export function hasLiveNewsData(site: SiteProfile): boolean {
+  return site.news.articleDataSource.state === 'live' && site.news.sourceManifest.state === 'live';
+}
 
 export function normalizeHost(value?: string | null): string {
   if (!value) {
@@ -815,7 +766,7 @@ export function normalizeHost(value?: string | null): string {
 export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
   const normalizedHost = normalizeHost(host);
 
-  if (!normalizedHost) {
+  if (!normalizedHost || isLocalHost(normalizedHost)) {
     return defaultSiteProfile;
   }
 
@@ -825,5 +776,5 @@ export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
     }
   }
 
-  return defaultSiteProfile;
+  return createUnconfiguredSiteProfile(normalizedHost);
 }

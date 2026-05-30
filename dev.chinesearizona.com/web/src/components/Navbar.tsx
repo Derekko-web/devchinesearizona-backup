@@ -14,7 +14,7 @@ import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { localeLangAttribute } from '@/lib/i18n';
 import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import { appendSearch, localeFromPath, withLocale } from '@/lib/routing';
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { defaultSiteProfile, hasLiveNewsData, type SiteProfile } from '@/lib/site-config';
 
 function accountHandle(user: User): string {
   const username =
@@ -118,11 +118,15 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
       label: locale === 'zh' ? '社區' : 'Community',
       subLabel: oppositeCopy(locale, 'Community', '社區'),
     },
-    {
-      path: ARIZONA_NEWS_PATH,
-      label: locale === 'zh' ? `${site.regionNameZh}新聞` : 'News',
-      subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
-    },
+    ...(hasLiveNewsData(site)
+      ? [
+          {
+            path: ARIZONA_NEWS_PATH,
+            label: locale === 'zh' ? `${site.regionNameZh}新聞` : 'News',
+            subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
+          },
+        ]
+      : []),
     ...(shopEnabled
       ? [
           {

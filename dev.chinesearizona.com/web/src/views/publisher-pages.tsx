@@ -83,7 +83,7 @@ export async function PublisherPageView({
             </p>
           </div>
           <Link
-            href={slug === 'contact' ? 'mailto:hello@chinesearizona.com' : withLocale(locale, '/contact')}
+            href={slug === 'contact' ? `mailto:${site.publisher.contactEmail}` : withLocale(locale, '/contact')}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-[8px] bg-brand-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
           >
             <Mail className="h-4 w-4" aria-hidden="true" />
