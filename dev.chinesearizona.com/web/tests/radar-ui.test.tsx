@@ -261,7 +261,7 @@ describe('radar ui', () => {
     expect(html).not.toContain('Phoenix Sky Harbor');
   });
 
-  it('renders compact source links on article detail pages', async () => {
+  it('renders polished source attribution on article detail pages', async () => {
     writeRadarStore();
     const { ArticleDetailPageView } = await import('@/views/site-pages');
 
@@ -269,8 +269,12 @@ describe('radar ui', () => {
       (await ArticleDetailPageView({ locale: 'en', slug: 'mesa-radar-housing-pulse' }))!
     );
 
+    expect(html).toContain('Back to Arizona News');
     expect(html).toContain('Sources');
+    expect(html).toContain('Source links');
+    expect(html).toContain('This page is an editorial summary');
     expect(html).toContain('Phoenix Sky Harbor');
+    expect(html).toContain('Open');
     expect(html).not.toContain('ChineseArizona rewritten article');
     expect(html).not.toContain('Source type');
     expect(html).not.toContain('Image policy');
