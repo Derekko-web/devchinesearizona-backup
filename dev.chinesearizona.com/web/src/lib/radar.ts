@@ -6,6 +6,7 @@ import path from 'node:path';
 import austinRadarSourceManifestData from '@/data/austin-radar-source-manifest.json';
 import losAngelesRadarSourceManifestData from '@/data/los-angeles-radar-source-manifest.json';
 import radarSourceManifestData from '@/data/radar-source-manifest.json';
+import sfBayRadarSourceManifestData from '@/data/sf-bay-radar-source-manifest.json';
 import { defaultSiteProfile, siteProfiles, type SiteKey, type SiteProfile } from '@/lib/site-config';
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase';
 import type {
@@ -59,6 +60,9 @@ function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
   if (key === 'los-angeles') {
     return siteProfiles['los-angeles'];
   }
+  if (key === 'sf-bay') {
+    return siteProfiles['sf-bay'];
+  }
 
   return defaultSiteProfile;
 }
@@ -74,6 +78,9 @@ function radarSeriesForSite(input?: RadarSiteInput): Article['series'] {
   }
   if (site.key === 'los-angeles') {
     return 'local-radar';
+  }
+  if (site.key === 'sf-bay') {
+    return 'sf-bay-radar';
   }
 
   return 'arizona-radar';
@@ -140,7 +147,8 @@ export function getRadarStorePath(siteInput?: RadarSiteInput): string {
   const siteSpecificPath =
     process.env[`RADAR_STORE_PATH_${siteEnvKey(site)}`] ||
     (site.key === 'austin' ? process.env.AUSTIN_RADAR_STORE_PATH : undefined) ||
-    (site.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined);
+    (site.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined) ||
+    (site.key === 'sf-bay' ? process.env.SF_BAY_RADAR_STORE_PATH : undefined);
 
   if (siteSpecificPath) {
     return siteSpecificPath;
@@ -612,13 +620,16 @@ async function getRadarServiceClientOrThrow() {
 
 export function getRadarSourceManifest(site?: RadarSiteInput): RadarSourceManifestEntry[] {
   const resolvedSite = resolveRadarSite(site);
-  return (
-    resolvedSite.key === 'los-angeles'
-      ? losAngelesRadarSourceManifestData
-      : resolvedSite.key === 'austin'
-      ? austinRadarSourceManifestData
-      : radarSourceManifestData
-  ) as RadarSourceManifestEntry[];
+  if (resolvedSite.key === 'los-angeles') {
+    return losAngelesRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  if (resolvedSite.key === 'austin') {
+    return austinRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  if (resolvedSite.key === 'sf-bay') {
+    return sfBayRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  return radarSourceManifestData as RadarSourceManifestEntry[];
 }
 
 export function getRadarJobControl(options: RadarStoreOptions = {}): RadarJobControl {

@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/types';
 
-export type SiteKey = 'arizona' | 'los-angeles' | 'austin';
+export type SiteKey = 'arizona' | 'los-angeles' | 'sf-bay' | 'austin';
 export type SiteLaunchState = 'live' | 'placeholder' | 'unconfigured';
 export type SiteContentState = 'live' | 'required';
 
@@ -580,6 +580,199 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       newcomerBody: {
         en: 'News is generated from Los Angeles-specific feeds and official sources as original summaries with source links.',
         zh: '新聞由洛杉磯專屬 feeds 與官方來源生成為原創摘要，並附來源連結。',
+      },
+    },
+  },
+  'sf-bay': {
+    key: 'sf-bay',
+    launchState: 'live',
+    domains: ['chinesesfbay.com', 'www.chinesesfbay.com'],
+    domain: 'chinesesfbay.com',
+    url: 'https://chinesesfbay.com',
+    cityName: 'San Francisco',
+    stateRegion: 'San Francisco Bay Area',
+    stateCode: 'CA',
+    countryCode: 'US',
+    supportedLocales: ['en', 'zh'],
+    brandName: 'ChineseSFBay',
+    brandNameZh: '舊金山灣區華人',
+    brandParts: {
+      enPrefix: 'Chinese',
+      enAccent: 'SFBay',
+      zhPrefix: '灣區',
+      zhAccent: '華人',
+    },
+    regionName: 'SF Bay',
+    regionNameZh: '灣區',
+    guideTagline: {
+      en: 'SF Bay bilingual guide',
+      zh: '灣區雙語指南',
+    },
+    localCoverageLabel: {
+      en: 'Bay Area-first coverage',
+      zh: '灣區本地優先',
+    },
+    description: {
+      en: 'A bilingual San Francisco Bay Area platform for local Chinese community news, source-linked summaries, and practical city discovery.',
+      zh: '服務舊金山灣區華人社群的雙語平台，聚焦本地新聞、來源連結摘要與實用城市資訊。',
+    },
+    directory: {
+      categorySlugs: [
+        'dining',
+        'real-estate',
+        'local-services',
+        'education',
+        'medical',
+        'legal-finance',
+        'shopping',
+        'travel',
+      ],
+      citySelectSuffix: { en: 'CA', zh: 'CA' },
+      defaultSearchCity: 'San Francisco',
+      launchCities: [
+        'San Francisco',
+        'Oakland',
+        'San Jose',
+        'Fremont',
+        'Sunnyvale',
+        'Santa Clara',
+      ],
+      cityNamesZh: {
+        'San Francisco': '舊金山',
+        Oakland: '奧克蘭',
+        'San Jose': '聖荷西',
+        Fremont: '佛利蒙',
+        Sunnyvale: '桑尼維爾',
+        'Santa Clara': '聖塔克拉拉',
+      },
+      listingSource: {
+        state: 'required',
+        label: 'SF Bay business listing source',
+        kind: 'static-json',
+        path: 'data/sites/sf-bay/businesses.json',
+        notes: 'Must be populated from SF Bay-specific listing sources before this site can serve a directory.',
+      },
+      allowDefaultFallback: false,
+    },
+    news: {
+      routePath: '/news',
+      archivePath: '/news/archive',
+      articleDataSource: {
+        state: 'live',
+        label: 'SF Bay Radar and generated local summaries',
+        kind: 'runtime-json',
+        path: 'data/sf-bay-radar-runtime/store.json',
+        env: ['SF_BAY_RADAR_STORE_PATH'],
+        notes: 'SF Bay-only generated summary/link articles and runtime radar output. This site never reads the Arizona radar store.',
+      },
+      sourceManifest: {
+        state: 'live',
+        label: 'SF Bay Radar monitored sources',
+        kind: 'static-json',
+        path: 'src/data/sf-bay-radar-source-manifest.json',
+        notes: 'San Francisco Bay Area source manifest with local media, official, airport, business, and signal-only sources.',
+      },
+      allowDefaultFallback: false,
+    },
+    seo: {
+      title: {
+        en: 'ChineseSFBay | San Francisco Bay Area Chinese Community News and Resources',
+        zh: 'ChineseSFBay | 舊金山灣區華人新聞與生活資源',
+      },
+      description: {
+        en: 'Source-linked bilingual news summaries and practical local discovery for San Francisco, Oakland, San Jose, Fremont, Sunnyvale, Santa Clara, and the wider Bay Area.',
+        zh: '為舊金山、奧克蘭、聖荷西、佛利蒙、桑尼維爾、聖塔克拉拉與灣區讀者整理有來源連結的雙語新聞摘要與在地資訊。',
+      },
+      canonicalBaseUrl: 'https://chinesesfbay.com',
+    },
+    publisher: {
+      contactEmail: 'hello@chinesesfbay.com',
+      updatedLabel: {
+        en: 'Last updated: May 30, 2026',
+        zh: '最後更新：2026 年 5 月 30 日',
+      },
+    },
+    runtime: {
+      rootPath: '/var/www/chinesesfbay.com/web',
+      dataPath: '/var/www/chinesesfbay.com/data',
+      logsPath: '/var/www/chinesesfbay.com/logs',
+    },
+    home: {
+      headline: {
+        en: 'Your Guide to the SF Bay Chinese Community',
+        zh: '舊金山灣區華人生活指南',
+      },
+      kicker: {
+        en: 'Source-linked Bay Area news and local discovery',
+        zh: '有來源連結的灣區新聞與在地發現',
+      },
+      intro: {
+        en: 'Follow local summaries for San Francisco, Oakland, San Jose, the Peninsula, and South Bay without copying third-party articles.',
+        zh: '追蹤舊金山、奧克蘭、聖荷西、半島與南灣的本地摘要，不轉載第三方全文。',
+      },
+      citySelectSuffix: { en: 'CA', zh: 'CA' },
+      defaultSearchCity: 'San Francisco',
+      launchCities: [
+        'San Francisco',
+        'Oakland',
+        'San Jose',
+        'Fremont',
+        'Sunnyvale',
+        'Santa Clara',
+      ],
+      cityNamesZh: {
+        'San Francisco': '舊金山',
+        Oakland: '奧克蘭',
+        'San Jose': '聖荷西',
+        Fremont: '佛利蒙',
+        Sunnyvale: '桑尼維爾',
+        'Santa Clara': '聖塔克拉拉',
+      },
+      heroImageUrl: '/window.svg',
+      heroImageAlt: {
+        en: 'SF Bay city launch image',
+        zh: '灣區城市首頁圖',
+      },
+      heroForegroundImageUrl: '/globe.svg',
+      heroForegroundAlt: {
+        en: 'SF Bay local platform mark',
+        zh: '灣區平台標記',
+      },
+      heroBadge: {
+        en: 'SF BAY, CALIFORNIA',
+        zh: '舊金山灣區，加州',
+      },
+      heroBadgeSubcopy: {
+        en: 'Local source links only',
+        zh: '僅使用本地來源連結',
+      },
+      focusTitle: {
+        en: 'Bay Area Focused',
+        zh: '灣區聚焦',
+      },
+      focusBody: {
+        en: 'Local news, openings, official updates',
+        zh: '本地新聞、新店與官方更新',
+      },
+      featuredCards: [],
+      neighborhoods: [],
+      mapImageUrl: '/globe.svg',
+      mapImageAlt: {
+        en: 'SF Bay source map placeholder',
+        zh: '灣區來源地圖占位',
+      },
+      relocationImageUrl: '/window.svg',
+      relocationImageAlt: {
+        en: 'SF Bay local discovery placeholder',
+        zh: '灣區在地發現占位',
+      },
+      newcomerTitle: {
+        en: 'SF Bay News',
+        zh: '灣區新聞',
+      },
+      newcomerBody: {
+        en: 'ChineseSFBay publishes short original summaries with source links and fails empty when Bay Area data is missing.',
+        zh: 'ChineseSFBay 發佈附來源連結的原創短摘要；灣區資料缺失時顯示空狀態，不回退到亞利桑那內容。',
       },
     },
   },

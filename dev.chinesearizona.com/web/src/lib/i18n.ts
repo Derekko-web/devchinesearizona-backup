@@ -154,6 +154,7 @@ export function articleSeriesLabel(series: ArticleSeries, locale: Locale): strin
     'arizona-radar': { en: 'Arizona News', zh: '亞利桑那新聞' },
     'local-radar': { en: 'Local News', zh: '本地新聞' },
     'austin-radar': { en: 'Austin News', zh: '奥斯汀新聞' },
+    'sf-bay-radar': { en: 'SF Bay News', zh: '灣區新聞' },
     'community-wire': { en: 'Community Wire', zh: '社群轉載' },
   };
 

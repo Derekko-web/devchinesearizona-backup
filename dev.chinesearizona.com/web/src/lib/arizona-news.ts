@@ -79,3 +79,93 @@ export function getLocalizedArizonaNewsArchivePath(locale: Locale, search?: stri
 export function getLocalizedArizonaNewsArticlePath(locale: Locale, slug: string): string {
   return getLocalizedNewsArticlePath(locale, defaultSiteProfile, slug);
 }
+
+function routeSegments(routePath: string): string[] {
+  return routePath
+    .replace(/^\/+|\/+$/g, '')
+    .split('/')
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+}
+
+export type SiteNewsRouteMatch =
+  | { kind: 'index' }
+  | { kind: 'archive' }
+  | { kind: 'article'; slug: string };
+
+export function getSiteNewsPath(
+  site: SiteProfile = defaultSiteProfile,
+  search?: string
+): string {
+  return appendSearch(site.news.routePath, search);
+}
+
+export function getSiteNewsArchivePath(
+  site: SiteProfile = defaultSiteProfile,
+  search?: string
+): string {
+  return appendSearch(site.news.archivePath, search);
+}
+
+export function getSiteNewsArticlePath(
+  site: SiteProfile = defaultSiteProfile,
+  slug: string
+): string {
+  return `${site.news.routePath}/${slug}`.replace(/\/{2,}/g, '/');
+}
+
+export function getLocalizedSiteNewsPath(
+  locale: Locale,
+  site: SiteProfile = defaultSiteProfile,
+  search?: string
+): string {
+  return appendSearch(withLocale(locale, site.news.routePath), search);
+}
+
+export function getLocalizedSiteNewsArchivePath(
+  locale: Locale,
+  site: SiteProfile = defaultSiteProfile,
+  search?: string
+): string {
+  return appendSearch(withLocale(locale, site.news.archivePath), search);
+}
+
+export function getLocalizedSiteNewsArticlePath(
+  locale: Locale,
+  site: SiteProfile = defaultSiteProfile,
+  slug: string
+): string {
+  return withLocale(locale, getSiteNewsArticlePath(site, slug));
+}
+
+export function matchSiteNewsRouteSegments(
+  site: SiteProfile,
+  segments: string[]
+): SiteNewsRouteMatch | null {
+  const baseSegments = routeSegments(site.news.routePath);
+  const archiveSegments = routeSegments(site.news.archivePath);
+
+  if (
+    segments.length === baseSegments.length &&
+    baseSegments.every((segment, index) => segments[index] === segment)
+  ) {
+    return { kind: 'index' };
+  }
+
+  if (
+    segments.length === archiveSegments.length &&
+    archiveSegments.every((segment, index) => segments[index] === segment)
+  ) {
+    return { kind: 'archive' };
+  }
+
+  if (
+    segments.length === baseSegments.length + 1 &&
+    baseSegments.every((segment, index) => segments[index] === segment)
+  ) {
+    const slug = segments[baseSegments.length];
+    return slug ? { kind: 'article', slug } : null;
+  }
+
+  return null;
+}

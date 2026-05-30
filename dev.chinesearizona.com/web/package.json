@@ -25,6 +25,7 @@
     "scrape:los-angeles-radar": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/arizona_radar/run.cjs run --site=los-angeles",
     "scrape:austin-radar": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/austin_radar/run.cjs run",
     "scrape:arizona-radar:backfill": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/arizona_radar/backfill_to_supabase.cjs",
+    "scrape:sf-bay-radar": "set -a && [ -f ./.env.local ] && . ./.env.local; set +a; node scripts/sf_bay_radar/run.cjs run",
     "scrape:test": "PYTHONPATH=.python-packages python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
     "scrape:articles:sunbird": "PYTHONPATH=.python-packages python3 -m scripts.article_ingest.cli run",
     "scrape:signal-desk": "PYTHONPATH=.python-packages python3 -m scripts.signal_desk.cli run",

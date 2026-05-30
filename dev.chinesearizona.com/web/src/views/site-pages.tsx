@@ -213,6 +213,7 @@ const articleSeriesOptions: ArticleSeries[] = [
   'arizona-radar',
   'local-radar',
   'austin-radar',
+  'sf-bay-radar',
   'community-wire',
 ];
 const articleSourcePolicyOptions: SourcePolicy[] = [
@@ -228,9 +229,12 @@ function articleSeriesOptionsForSite(site: SiteProfile): ArticleSeries[] {
   if (site.key === 'los-angeles') {
     return ['local-radar'];
   }
+  if (site.key === 'sf-bay') {
+    return ['sf-bay-radar'];
+  }
 
   return articleSeriesOptions.filter(
-    (series) => series !== 'austin-radar' && series !== 'local-radar'
+    (series) => series !== 'austin-radar' && series !== 'local-radar' && series !== 'sf-bay-radar'
   );
 }
 
@@ -531,7 +535,8 @@ function isRadarArticle(article: Article): boolean {
   return (
     article.series === 'arizona-radar' ||
     article.series === 'austin-radar' ||
-    article.series === 'local-radar'
+    article.series === 'local-radar' ||
+    article.series === 'sf-bay-radar'
   );
 }
 

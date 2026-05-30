@@ -1,0 +1,153 @@
+[
+  {
+    "slug": "sf-standard",
+    "name": "The San Francisco Standard",
+    "url": "https://sfstandard.com/",
+    "feedUrl": "https://sfstandard.com/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for San Francisco civic, neighborhood, transit, housing, and business signals with source links only.",
+      "zh": "用於舊金山市政、街區、交通、住房與商業訊號；僅做來源連結摘要。"
+    }
+  },
+  {
+    "slug": "sfist",
+    "name": "SFist",
+    "url": "https://sfist.com/",
+    "feedUrl": "https://sfist.com/rss",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for San Francisco and Bay Area neighborhood, food, transit, and civic updates that need concise summaries.",
+      "zh": "用於舊金山與灣區街區、餐飲、交通與市政更新，僅產生精簡摘要。"
+    }
+  },
+  {
+    "slug": "san-jose-spotlight",
+    "name": "San Jose Spotlight",
+    "url": "https://sanjosespotlight.com/",
+    "feedUrl": "https://sanjosespotlight.com/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for South Bay civic, housing, school, and business policy coverage relevant to San Jose and Santa Clara County readers.",
+      "zh": "用於南灣市政、住房、學校與商業政策報導，服務聖荷西與聖塔克拉拉縣讀者。"
+    }
+  },
+  {
+    "slug": "oaklandside",
+    "name": "The Oaklandside",
+    "url": "https://oaklandside.org/",
+    "feedUrl": "https://oaklandside.org/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for Oakland and East Bay community, schools, housing, small business, and public safety updates.",
+      "zh": "用於奧克蘭與東灣社區、學校、住房、小商家與公共安全更新。"
+    }
+  },
+  {
+    "slug": "local-news-matters",
+    "name": "Local News Matters",
+    "url": "https://localnewsmatters.org/",
+    "feedUrl": "https://localnewsmatters.org/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for Bay Area regional public-interest coverage from Bay City News Foundation.",
+      "zh": "用於 Bay City News Foundation 的灣區公共利益與區域新聞。"
+    }
+  },
+  {
+    "slug": "what-now-san-francisco",
+    "name": "What Now San Francisco",
+    "url": "https://whatnow.com/san-francisco/",
+    "feedUrl": "https://whatnow.com/san-francisco/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for restaurant, cafe, retail, and plaza opening signals around San Francisco and the Bay Area.",
+      "zh": "用於舊金山與灣區餐廳、咖啡、零售與商場新店訊號。"
+    }
+  },
+  {
+    "slug": "sfgate-bay-area",
+    "name": "SFGATE Bay Area News",
+    "url": "https://www.sfgate.com/bayarea/",
+    "feedUrl": "https://www.sfgate.com/rss/feed/Bay-Area-News-429.php",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for broad Bay Area news signals, with article pages linked and summarized instead of republished.",
+      "zh": "用於灣區綜合新聞訊號；連回原文，只做摘要不轉載。"
+    }
+  },
+  {
+    "slug": "nbc-bay-area",
+    "name": "NBC Bay Area",
+    "url": "https://www.nbcbayarea.com/",
+    "feedUrl": "https://www.nbcbayarea.com/?rss=y",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for regional breaking, transit, public safety, and official update signals with source attribution only in links.",
+      "zh": "用於灣區突發、交通、公共安全與官方更新訊號；來源歸屬只放在連結區。"
+    }
+  },
+  {
+    "slug": "sfo-press-releases",
+    "name": "San Francisco International Airport",
+    "url": "https://www.flysfo.com/media/press-releases",
+    "sourceType": "airport_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for SFO route, airport operations, passenger logistics, and travel alerts relevant to Bay Area families.",
+      "zh": "用於 SFO 航線、機場營運、旅客動線與影響灣區家庭的旅行提醒。"
+    }
+  },
+  {
+    "slug": "sjc-newsroom",
+    "name": "San Jose Mineta International Airport",
+    "url": "https://www.flysanjose.com/newsroom",
+    "sourceType": "airport_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for South Bay airport route and passenger logistics updates from SJC.",
+      "zh": "用於 SJC 南灣機場航線與旅客動線更新。"
+    }
+  },
+  {
+    "slug": "bay-area-public-social-signals",
+    "name": "Bay Area public social signals",
+    "url": "https://www.instagram.com/explore/locations/212999109/san-francisco-california/",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "social",
+    "cadence": "daily",
+    "notes": {
+      "en": "Signal-only discovery for public Bay Area food, event, and neighborhood chatter. Do not copy captions, embeds, or media.",
+      "zh": "僅作灣區公開餐飲、活動與街區討論的題材發現；不可複製 caption、嵌入或媒體。"
+    }
+  }
+]

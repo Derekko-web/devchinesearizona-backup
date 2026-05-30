@@ -9,6 +9,7 @@ const routerRefreshMock = vi.fn();
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
 const originalLosAngelesRadarStorePath = process.env.RADAR_STORE_PATH_LOS_ANGELES;
 const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
+const originalSfBayRadarStorePath = process.env.SF_BAY_RADAR_STORE_PATH;
 const originalZhTranslationCachePath = process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH;
 const zhTranslationCachePath = path.join(os.tmpdir(), 'radar-ui-zh-cache.json');
 
@@ -85,6 +86,12 @@ afterEach(() => {
     delete process.env.AUSTIN_RADAR_STORE_PATH;
   }
 
+  if (originalSfBayRadarStorePath) {
+    process.env.SF_BAY_RADAR_STORE_PATH = originalSfBayRadarStorePath;
+  } else {
+    delete process.env.SF_BAY_RADAR_STORE_PATH;
+  }
+
   if (originalZhTranslationCachePath) {
     process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH = originalZhTranslationCachePath;
   } else {
@@ -101,7 +108,11 @@ afterEach(() => {
 function writeRadarStore(
   options: {
     mirrorChineseCopy?: boolean;
-    envKey?: 'RADAR_STORE_PATH' | 'AUSTIN_RADAR_STORE_PATH' | 'RADAR_STORE_PATH_LOS_ANGELES';
+    envKey?:
+      | 'RADAR_STORE_PATH'
+      | 'AUSTIN_RADAR_STORE_PATH'
+      | 'RADAR_STORE_PATH_LOS_ANGELES'
+      | 'SF_BAY_RADAR_STORE_PATH';
   } = {}
 ) {
   const mirrorChineseCopy = options.mirrorChineseCopy ?? false;
@@ -418,6 +429,28 @@ describe('radar ui', () => {
     expect(html).not.toContain('Arizona News');
   });
 
+  it('does not reuse the Arizona runtime store for SF Bay news pages', async () => {
+    writeRadarStore();
+    const [{ CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(
+      await CommunityRadarPageView({
+        locale: 'en',
+        searchParams: {},
+        site: siteProfiles['sf-bay'],
+      })
+    );
+
+    expect(html).toContain('All SF Bay News');
+    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).not.toContain('mesa-radar-housing-pulse');
+    expect(html).not.toContain('Phoenix Sky Harbor');
+    expect(html).not.toContain('All Arizona News');
+  });
+
   it('renders Los Angeles labels and source links for Los Angeles article pages', async () => {
     const [{ ArticleDetailPageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),
@@ -487,6 +520,37 @@ describe('radar ui', () => {
     expect(feedHtml).toContain('/en/local-news/austin-transit-summary');
     expect(detailHtml).toContain('Back to Austin News');
     expect(detailHtml).toContain('Austin Monitor');
+    expect(detailHtml).toContain('This page is an editorial summary');
+    expect(detailHtml).not.toContain('Arizona News');
+    expect(detailHtml).not.toContain('Phoenix Sky Harbor');
+  });
+
+  it('renders SF Bay archive and article pages with SF Bay labels and source links only', async () => {
+    writeRadarStore();
+    const [{ ArticleDetailPageView, NewsArchivePageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const archiveHtml = renderToStaticMarkup(
+      await NewsArchivePageView({
+        locale: 'en',
+        searchParams: {},
+        site: siteProfiles['sf-bay'],
+      })
+    );
+    const detailHtml = renderToStaticMarkup(
+      (await ArticleDetailPageView({
+        locale: 'en',
+        slug: 'sf-bay-news-desk-source-linked-launch',
+        site: siteProfiles['sf-bay'],
+      }))!
+    );
+
+    expect(archiveHtml).toContain('The SF Bay News homepage');
+    expect(archiveHtml).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
+    expect(detailHtml).toContain('Back to SF Bay News');
+    expect(detailHtml).toContain('The San Francisco Standard');
     expect(detailHtml).toContain('This page is an editorial summary');
     expect(detailHtml).not.toContain('Arizona News');
     expect(detailHtml).not.toContain('Phoenix Sky Harbor');

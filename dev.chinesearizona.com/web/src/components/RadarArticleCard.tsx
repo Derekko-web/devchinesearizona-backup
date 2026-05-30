@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-import { getLocalizedArizonaNewsArticlePath } from '@/lib/arizona-news';
+import { getLocalizedSiteNewsArticlePath } from '@/lib/arizona-news';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import { DiscoverArticleImage } from '@/components/DiscoverArticleImage';
 import { LocalDateTime } from '@/components/LocalDateTime';
 import { radarLaneLabel, t } from '@/lib/i18n';
@@ -12,12 +13,14 @@ export function RadarArticleCard({
   compact = false,
   localizedTitle,
   localizedExcerpt,
+  site = defaultSiteProfile,
 }: {
   article: Article;
   locale: Locale;
   compact?: boolean;
   localizedTitle?: string;
   localizedExcerpt?: string;
+  site?: SiteProfile;
 }) {
   const cardPadding = compact ? 'p-5' : 'p-6';
   const titleClass = compact ? 'text-xl' : 'text-2xl';
@@ -62,7 +65,7 @@ export function RadarArticleCard({
 
         <div className="flex flex-wrap gap-3">
           <Link
-            href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
+            href={getLocalizedSiteNewsArticlePath(locale, site, article.slug)}
             className="inline-flex items-center rounded-full bg-brand-900 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-800"
           >
             {locale === 'zh' ? '閱讀全文' : 'Read article'}

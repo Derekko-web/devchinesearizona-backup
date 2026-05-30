@@ -42,6 +42,10 @@ const SITE_CONFIGS = {
     regionNameZh: '奥斯汀',
     regionRelevance:
       'Austin, Round Rock, Cedar Park, Pflugerville, Georgetown, Leander, Travis County, Williamson County, Central Texas, or another Austin-area place',
+    summarySearchScope:
+      'Austin and Central Texas news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, and Austin-area sources',
+    summaryRelevanceLabel: 'Austin/Central Texas-relevant',
+    summaryRetryScope: 'Austin/Central Texas',
     runIdPrefix: 'austin-radar',
     storePath: path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'),
     manifestPath: path.join(ROOT, 'src', 'data', 'austin-radar-source-manifest.json'),
@@ -59,9 +63,34 @@ const SITE_CONFIGS = {
     regionName: 'Los Angeles',
     regionRelevance:
       'Los Angeles, San Gabriel Valley, Alhambra, Arcadia, Monterey Park, Pasadena, Rosemead, San Marino, Rowland Heights, Irvine, Orange County, LAX, or another Southern California place that directly affects Los Angeles readers',
+    summarySearchScope:
+      'Los Angeles and Southern California news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, LAX, and San Gabriel Valley sources',
+    summaryRelevanceLabel: 'Los Angeles/Southern California-relevant',
+    summaryRetryScope: 'Los Angeles/Southern California',
     runIdPrefix: 'los-angeles-radar',
     storePath: path.join(ROOT, 'data', 'sites', 'los-angeles', 'radar-runtime', 'store.json'),
     manifestPath: path.join(ROOT, 'src', 'data', 'los-angeles-radar-source-manifest.json'),
+    useSupabase: false,
+    summaryOnly: true,
+  },
+  'sf-bay': {
+    key: 'sf-bay',
+    brandName: 'ChineseSFBay',
+    defaultSourceName: 'SF Bay Source',
+    feedPromptTitle:
+      'Summarize these SF Bay Radar RSS items into original ChineseSFBay summary/link articles.',
+    openWebPromptTitle: 'You are preparing structured SF Bay Radar drafts for ChineseSFBay.',
+    regionName: 'SF Bay',
+    regionNameZh: '灣區',
+    regionRelevance:
+      'San Francisco, Oakland, Berkeley, San Jose, Santa Clara, Sunnyvale, Cupertino, Fremont, Milpitas, Daly City, the Peninsula, South Bay, East Bay, North Bay, or another San Francisco Bay Area place',
+    summarySearchScope:
+      'San Francisco Bay Area news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, SFO, OAK, SJC, Peninsula, South Bay, East Bay, and North Bay sources',
+    summaryRelevanceLabel: 'SF Bay/Bay Area-relevant',
+    summaryRetryScope: 'SF Bay/Bay Area',
+    runIdPrefix: 'sf-bay-radar',
+    storePath: path.join(ROOT, 'data', 'sf-bay-radar-runtime', 'store.json'),
+    manifestPath: path.join(ROOT, 'src', 'data', 'sf-bay-radar-source-manifest.json'),
     useSupabase: false,
     summaryOnly: true,
   },
@@ -74,6 +103,16 @@ function normalizeSiteKey(value) {
   }
   if (normalized === 'atx') {
     return 'austin';
+  }
+  if (
+    normalized === 'sfbay' ||
+    normalized === 'sf_bay' ||
+    normalized === 'bay-area' ||
+    normalized === 'bay_area' ||
+    normalized === 'san-francisco' ||
+    normalized === 'san_francisco'
+  ) {
+    return 'sf-bay';
   }
 
   return SITE_CONFIGS[normalized] ? normalized : 'arizona';
@@ -93,6 +132,20 @@ function getSiteConfig(siteKey) {
     summaryOnly: parseBoolean(process.env.RADAR_SUMMARY_ONLY, baseConfig.summaryOnly),
   };
 }
+
+function resolveStorePath(siteKey) {
+  const siteConfig = getSiteConfig(siteKey);
+  const envKey = siteConfig.key.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
+  return (
+    process.env.RADAR_STORE_PATH ||
+    process.env[`RADAR_STORE_PATH_${envKey}`] ||
+    (siteConfig.key === 'austin' ? process.env.AUSTIN_RADAR_STORE_PATH : undefined) ||
+    (siteConfig.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined) ||
+    (siteConfig.key === 'sf-bay' ? process.env.SF_BAY_RADAR_STORE_PATH : undefined) ||
+    siteConfig.storePath
+  );
+}
+
 const DEFAULT_SITE_KEY = normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY);
 const RADAR_CITY = getSiteConfig(DEFAULT_SITE_KEY);
 
@@ -113,10 +166,7 @@ function parseArgs(argv) {
     sourceSlugs: process.env.RADAR_SOURCE_SLUGS || '',
     storePath: '',
   };
-  args.storePath =
-    process.env.RADAR_STORE_PATH ||
-    process.env[`RADAR_STORE_PATH_${args.site.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`] ||
-    getSiteConfig(args.site).storePath;
+  args.storePath = resolveStorePath(args.site);
 
   for (let index = 2; index < argv.length; index += 1) {
     const value = argv[index];
@@ -127,11 +177,7 @@ function parseArgs(argv) {
     }
     if (value.startsWith('--site=')) {
       args.site = normalizeSiteKey(value.slice('--site='.length));
-      if (!process.env.RADAR_STORE_PATH) {
-        args.storePath =
-          process.env[`RADAR_STORE_PATH_${args.site.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`] ||
-          getSiteConfig(args.site).storePath;
-      }
+      args.storePath = resolveStorePath(args.site);
       continue;
     }
     if (value.startsWith('--feed-timeout-ms=')) {
@@ -279,7 +325,7 @@ function loadEnvFile(filePath) {
   }
 }
 
-function loadManifest(siteConfig = SITE_CONFIGS.arizona) {
+function loadManifest(siteConfig = RADAR_CITY) {
   return JSON.parse(fs.readFileSync(siteConfig.manifestPath, 'utf8'));
 }
 
@@ -564,7 +610,7 @@ function parseFeedItems(xml, source, options = {}) {
   return drafts;
 }
 
-function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
+function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
   const sourcePayload = items.map((item) => ({
     sourceSlug: item.sourceSlug,
     sourceName: item.sourceName,
@@ -580,7 +626,7 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     articleText: item.articlePayload.text,
   }));
   const bodyRule = siteConfig.summaryOnly
-    ? '- Write 1-3 short English body paragraphs per item. Summarize only the most useful facts and link readers to the source for original reporting.'
+    ? '- Write 1-2 short English body paragraphs per item. Summarize only the most useful facts and link readers to the source for original reporting.'
     : '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.';
   const articleRule = siteConfig.summaryOnly
     ? '- Each item must be a source-linked local brief, not a replacement for the source article.'
@@ -592,10 +638,10 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     ? '- Do not write: opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.'
     : '- Do not write: ChineseArizona detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.';
   const schemaBodyEn = siteConfig.summaryOnly
-    ? '    "bodyEn": ["1-3 concise English summary paragraphs"],'
+    ? '    "bodyEn": ["1-2 concise English summary paragraphs"],'
     : '    "bodyEn": ["3-5 rewritten English paragraphs"],';
   const schemaBodyZh = siteConfig.summaryOnly
-    ? '    "bodyZh": ["1-3 Traditional Chinese summary paragraphs aligned to bodyEn"],'
+    ? '    "bodyZh": ["1-2 Traditional Chinese summary paragraphs aligned to bodyEn"],'
     : '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],';
 
   return [
@@ -672,7 +718,7 @@ function wordCount(value) {
     .filter(Boolean).length;
 }
 
-function hasBannedGeneratedStyle(draft) {
+function hasBannedGeneratedStyle(draft, siteConfig = RADAR_CITY) {
   const text = [
     draft.titleEn,
     draft.excerptEn,
@@ -680,10 +726,15 @@ function hasBannedGeneratedStyle(draft) {
   ]
     .join(' ')
     .toLowerCase();
+  const brandDetectedPhrase = `${siteConfig.brandName} detected`.toLowerCase();
   const bannedPattern =
     /chinesearizona detected|opening indicator|opening signal|source categorizes|pivotal|testament|showcasing|nestled|boasts|unlock|seamless|vibrant|robust|at its core|future looks bright|here is what you need to know|actually|additionally|transformative|groundbreaking|rapidly evolving|vital role|plays a crucial role|experts believe|industry observers|despite challenges|continues to thrive|in conclusion|let's dive in|i hope this helps|in order to|due to the fact|could potentially|exciting times lie ahead|marking a .*moment|not just .*it'?s/i;
 
-  return bannedPattern.test(text) || /[\u{1f300}-\u{1faff}]/u.test(text);
+  return (
+    text.includes(brandDetectedPhrase) ||
+    bannedPattern.test(text) ||
+    /[\u{1f300}-\u{1faff}]/u.test(text)
+  );
 }
 
 function containsCopiedSourceSentence(draft, sourceText) {
@@ -706,10 +757,15 @@ function mergeFeedRewriteDraft(seed, draft, options = {}) {
   const titleEn = normalizeGeneratedText(draft.titleEn || seed.titleEn);
 
   const minimumParagraphs = options.summaryOnly ? 1 : 3;
-  const minimumWords = options.summaryOnly ? 40 : 120;
+  const minimumWords = options.summaryOnly ? 25 : 120;
+  const maximumParagraphs = options.summaryOnly ? 2 : Infinity;
+  const maximumWords = options.summaryOnly ? 220 : Infinity;
+  const bodyWordCount = bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0);
   if (
     bodyEn.length < minimumParagraphs ||
-    bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < minimumWords
+    bodyEn.length > maximumParagraphs ||
+    bodyWordCount < minimumWords ||
+    bodyWordCount > maximumWords
   ) {
     return null;
   }
@@ -734,7 +790,7 @@ function mergeFeedRewriteDraft(seed, draft, options = {}) {
     personaTargets: seed.personaTargets,
   };
 
-  if (!candidate.excerptEn || hasBannedGeneratedStyle(candidate)) {
+  if (!candidate.excerptEn || hasBannedGeneratedStyle(candidate, options.siteConfig)) {
     return null;
   }
   if (containsCopiedSourceSentence(candidate, seed.articlePayload.text)) {
@@ -749,7 +805,7 @@ function rewriteFeedItemsWithHermes({
   hermesTimeoutMs,
   items,
   maxTurns = 4,
-  siteConfig = SITE_CONFIGS.arizona,
+  siteConfig = RADAR_CITY,
 }) {
   if (!items.length) {
     return [];
@@ -783,7 +839,9 @@ function rewriteFeedItemsWithHermes({
   return parseHermesOutput(result.stdout)
     .map((draft) => {
       const seed = byUrl.get(draft.canonicalUrl) || byUrl.get(draft.sourceUrl);
-      return seed ? mergeFeedRewriteDraft(seed, draft, { summaryOnly: siteConfig.summaryOnly }) : null;
+      return seed
+        ? mergeFeedRewriteDraft(seed, draft, { summaryOnly: siteConfig.summaryOnly, siteConfig })
+        : null;
     })
     .filter(Boolean);
 }
@@ -1034,7 +1092,7 @@ function buildHermesPrompt(
   maxItems,
   lookbackHours,
   options = {},
-  siteConfig = SITE_CONFIGS.arizona
+  siteConfig = RADAR_CITY
 ) {
   const sourceMode = manifest.length === 0 ? 'open-web' : manifest.length === 1 ? 'seeded' : 'seeded-multi';
   const sourceList = manifest
@@ -1042,23 +1100,29 @@ function buildHermesPrompt(
       return `- ${source.name} | ${source.url}`;
     })
     .join('\n');
+  const summarySearchScope =
+    siteConfig.summarySearchScope ||
+    `${siteConfig.regionName} news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, and local sources`;
+  const summaryRelevanceLabel =
+    siteConfig.summaryRelevanceLabel || `${siteConfig.regionName}-relevant`;
+  const summaryRetryScope = siteConfig.summaryRetryScope || siteConfig.regionName;
   const operatorMode = siteConfig.summaryOnly
     ? 'source discovery and source-linked summary drafting'
     : 'source discovery and article drafting';
   const searchScope = siteConfig.summaryOnly
-    ? `${siteConfig.regionName} and Southern California news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, LAX, and San Gabriel Valley sources`
+    ? summarySearchScope
     : 'Arizona news, blogs, official sites, newsletters, public social platforms, and community posts';
   const relevanceDecision = siteConfig.summaryOnly
-    ? `${siteConfig.regionName}/Southern California-relevant`
+    ? summaryRelevanceLabel
     : 'Arizona-relevant';
   const sourceReadingRule = siteConfig.summaryOnly
     ? '- Read only enough of each source to produce a concise, source-linked summary. Do not generate a replacement article.'
     : '- Read enough of each source to produce a real rewrite, not a thin summary.';
   const schemaBodyEn = siteConfig.summaryOnly
-    ? '    "bodyEn": ["1-3 concise English paragraphs that summarize, not replace, the source in original words"],'
+    ? '    "bodyEn": ["1-2 concise English summary paragraphs that do not replace the source"],'
     : '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],';
   const schemaBodyZh = siteConfig.summaryOnly
-    ? '    "bodyZh": ["1-3 Traditional Chinese paragraphs aligned to the English summary"],'
+    ? '    "bodyZh": ["1-2 Traditional Chinese summary paragraphs aligned to bodyEn"],'
     : '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],';
   const schemaExcerptEn = siteConfig.summaryOnly
     ? '    "excerptEn": "1-2 sentence English deck that captures the useful local angle",'
@@ -1073,7 +1137,7 @@ function buildHermesPrompt(
     ? '- Do not write detector notes such as opening indicator, opening signal, or source categorizes.'
     : '- Do not write detector notes such as ChineseArizona detected, opening indicator, opening signal, or source categorizes.';
   const retryRule = siteConfig.summaryOnly
-    ? `- The previous attempt returned zero items. Widen the ${siteConfig.regionName}/Southern California search beyond any familiar sites before giving up.`
+    ? `- The previous attempt returned zero items. Widen the ${summaryRetryScope} search beyond any familiar sites before giving up.`
     : '- The previous attempt returned zero items. Widen the search and look beyond any familiar sites before giving up.';
   const searchIntro = siteConfig.summaryOnly
     ? `Search the public web for ${siteConfig.regionName}-specific items. Do not limit yourself to any preset source allowlist.`
@@ -1158,7 +1222,7 @@ function collectDraftsWithHermes({
   lookbackHours,
   maxTurns = 8,
   promptOptions = {},
-  siteConfig = SITE_CONFIGS.arizona,
+  siteConfig = RADAR_CITY,
 }) {
   const prompt = buildHermesPrompt(manifest, maxItems, lookbackHours, promptOptions, siteConfig);
   const result = spawnSync(
@@ -1215,7 +1279,7 @@ function collectDraftsWithHermesRetry({
   maxItems,
   lookbackHours,
   maxTurns,
-  siteConfig = SITE_CONFIGS.arizona,
+  siteConfig = RADAR_CITY,
 }) {
   return dedupeDrafts(
     collectDraftsWithHermes({
@@ -1381,6 +1445,7 @@ async function runWorker(args) {
       publishCap,
       now: finishedAt,
       defaultSourceName: siteConfig.defaultSourceName,
+      summaryOnly: siteConfig.summaryOnly,
     });
     const nextStore = appendRun(
       applied.store,
@@ -1432,7 +1497,7 @@ async function main() {
   process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
 }
 
-if (require.main === module) {
+function runCli() {
   main()
     .catch((error) => {
       process.stderr.write(
@@ -1446,6 +1511,10 @@ if (require.main === module) {
     });
 }
 
+if (require.main === module) {
+  runCli();
+}
+
 module.exports = {
   buildFeedRewritePrompt,
   buildHermesPrompt,
@@ -1455,6 +1524,7 @@ module.exports = {
   parseFeedItems,
   parseArgs,
   parseHermesOutput,
+  runCli,
   runWorker,
   selectManifestBatch,
 };

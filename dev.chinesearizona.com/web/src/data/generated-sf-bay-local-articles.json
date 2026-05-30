@@ -1,0 +1,124 @@
+[
+  {
+    "slug": "sf-bay-news-desk-source-linked-launch",
+    "title": {
+      "en": "SF Bay News Desk: How ChineseSFBay Uses Local Sources Without Republishing Them",
+      "zh": "灣區新聞室：ChineseSFBay 如何使用本地來源而不全文轉載"
+    },
+    "excerpt": {
+      "en": "ChineseSFBay starts with Bay Area source links, then writes short bilingual summaries that point readers back to the original reporting, newsroom, or official page.",
+      "zh": "ChineseSFBay 從灣區來源連結出發，撰寫簡短雙語摘要，再把讀者帶回原始報導、新聞室或官方頁面。"
+    },
+    "heroImage": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+    "publishedAt": "2026-05-30T08:00:00.000Z",
+    "updatedAt": "2026-05-30T08:00:00.000Z",
+    "category": "feature",
+    "body": [
+      {
+        "en": "The SF Bay pipeline is designed as a summary and link surface, not a republishing feed. A useful item should tell readers why a San Francisco, Oakland, San Jose, Peninsula, or South Bay update matters, then send them to the original source for full reporting, quotes, photos, maps, and current details.",
+        "zh": "灣區新聞管線的設計是摘要與連結入口，不是全文轉載。真正有用的項目，應該說清楚某則舊金山、奧克蘭、聖荷西、半島或南灣更新為什麼重要，再把讀者帶回原始來源查看完整報導、引述、照片、地圖與最新細節。"
+      },
+      {
+        "en": "That rule matters because Bay Area local news changes quickly. Housing, transit, airport, school, restaurant, and public safety updates often depend on details that belong with the reporting newsroom or official agency. ChineseSFBay keeps the local context concise and keeps the source link visible.",
+        "zh": "這條規則很重要，因為灣區本地新聞變化很快。住房、交通、機場、學校、餐飲與公共安全更新常常依賴新聞室或官方機構掌握的細節。ChineseSFBay 保持本地脈絡精簡，也讓來源連結保持清楚可見。"
+      }
+    ],
+    "series": "sf-bay-radar",
+    "freshnessTier": "evergreen",
+    "sourcePolicy": "summary_link",
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "business_owners"
+    ],
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "The San Francisco Standard feed",
+          "zh": "The San Francisco Standard 來源"
+        },
+        "url": "https://sfstandard.com/feed/",
+        "source": "The San Francisco Standard"
+      },
+      {
+        "label": {
+          "en": "San Jose Spotlight feed",
+          "zh": "San Jose Spotlight 來源"
+        },
+        "url": "https://sanjosespotlight.com/feed/",
+        "source": "San Jose Spotlight"
+      },
+      {
+        "label": {
+          "en": "The Oaklandside feed",
+          "zh": "The Oaklandside 來源"
+        },
+        "url": "https://oaklandside.org/feed/",
+        "source": "The Oaklandside"
+      }
+    ],
+    "sourceName": "ChineseSFBay News Desk",
+    "sourceId": "sf_bay_source_linked_launch_2026_05_30",
+    "republishedWithPermission": false
+  },
+  {
+    "slug": "sf-bay-openings-watch-why-source-links-matter",
+    "title": {
+      "en": "Openings Watch: Bay Area Restaurant and Retail Signals Need Local Links",
+      "zh": "新店觀察：灣區餐飲與零售訊號需要本地來源連結"
+    },
+    "excerpt": {
+      "en": "Restaurant and retail openings can affect weekend routines, commute stops, and family errands, but ChineseSFBay keeps those notes short and points readers to the original listing or newsroom.",
+      "zh": "餐飲與零售新店會影響週末動線、通勤停靠點與家庭 errands；ChineseSFBay 只保留短摘要，並連回原始清單或新聞室。"
+    },
+    "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
+    "publishedAt": "2026-05-30T08:10:00.000Z",
+    "updatedAt": "2026-05-30T08:10:00.000Z",
+    "category": "news",
+    "body": [
+      {
+        "en": "For Bay Area readers, an opening is useful when it changes a real route: after-school pickup in Fremont, a South Bay lunch stop, a late train home from San Francisco, or a weekend grocery loop through Oakland and the Peninsula. The pipeline treats opening coverage as a pointer to those routines, not as a copy of the source article.",
+        "zh": "對灣區讀者來說，新店消息之所以有用，是因為它可能改變真實路線：佛利蒙課後接送、南灣午餐停靠、舊金山晚班車回家，或週末在奧克蘭與半島之間採買。這條管線把新店報導當作生活動線提示，而不是複製來源文章。"
+      },
+      {
+        "en": "When an opening item is generated, ChineseSFBay should identify the neighborhood, business category, and practical reason to care, then link to the source for addresses, owner details, photos, menus, and schedule changes.",
+        "zh": "產生新店項目時，ChineseSFBay 應該指出街區、商家類型與實用關聯，再把地址、業主資訊、照片、菜單與時程變更交給來源頁面。"
+      }
+    ],
+    "series": "sf-bay-radar",
+    "freshnessTier": "evergreen",
+    "sourcePolicy": "summary_link",
+    "relatedCategorySlugs": [
+      "dining",
+      "shopping"
+    ],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "students",
+      "business_owners"
+    ],
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "What Now San Francisco feed",
+          "zh": "What Now San Francisco 來源"
+        },
+        "url": "https://whatnow.com/san-francisco/feed/",
+        "source": "What Now San Francisco"
+      },
+      {
+        "label": {
+          "en": "SFGATE Bay Area News feed",
+          "zh": "SFGATE Bay Area News 來源"
+        },
+        "url": "https://www.sfgate.com/rss/feed/Bay-Area-News-429.php",
+        "source": "SFGATE"
+      }
+    ],
+    "sourceName": "ChineseSFBay News Desk",
+    "sourceId": "sf_bay_openings_watch_2026_05_30",
+    "republishedWithPermission": false
+  }
+]

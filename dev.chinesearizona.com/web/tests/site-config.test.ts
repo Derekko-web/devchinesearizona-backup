@@ -42,6 +42,26 @@ describe('city site configuration', () => {
     expect(JSON.stringify(site)).not.toContain('generated-local-articles.json');
   });
 
+  it('serves SF Bay news from SF Bay-specific sources without default fallback', () => {
+    const site = resolveSiteProfileFromHost('www.chinesesfbay.com');
+
+    expect(site).toBe(siteProfiles['sf-bay']);
+    expect(site.launchState).toBe('live');
+    expect(hasLiveNewsData(site)).toBe(true);
+    expect(hasLiveDirectoryData(site)).toBe(false);
+    expect(shouldNoIndexSiteProfile(site)).toBe(false);
+    expect(site.news.routePath).toBe('/news');
+    expect(site.news.archivePath).toBe('/news/archive');
+    expect(site.news.allowDefaultFallback).toBe(false);
+    expect(site.news.articleDataSource.path).toBe('data/sf-bay-radar-runtime/store.json');
+    expect(site.news.articleDataSource.path).not.toBe('data/radar-runtime/store.json');
+    expect(site.news.sourceManifest.path).toBe('src/data/sf-bay-radar-source-manifest.json');
+    expect(JSON.stringify(site)).not.toContain('generated-local-articles.json');
+    expect(site.seo.title.en).toContain('San Francisco Bay Area');
+    expect(site.seo.description.en).toContain('San Francisco');
+    expect(site.seo.description.en).not.toContain('Arizona');
+  });
+
   it('connects chineselosangeles.com to Los Angeles-only news sources', () => {
     const site = resolveSiteProfileFromHost('chineselosangeles.com');
 

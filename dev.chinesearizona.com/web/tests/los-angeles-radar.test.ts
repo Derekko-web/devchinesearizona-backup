@@ -131,9 +131,9 @@ describe('Los Angeles Radar config', () => {
     );
 
     expect(prompt).toContain('Summarize these Los Angeles Radar RSS items');
-    expect(prompt).toContain('"bodyEn": ["1-3 concise English summary paragraphs"]');
+    expect(prompt).toContain('"bodyEn": ["1-2 concise English summary paragraphs"]');
     expect(prompt).toContain(
-      '"bodyZh": ["1-3 Traditional Chinese summary paragraphs aligned to bodyEn"]'
+      '"bodyZh": ["1-2 Traditional Chinese summary paragraphs aligned to bodyEn"]'
     );
     expect(prompt).toContain('source-linked local brief');
     expect(prompt).not.toMatch(/arizona|phoenix|chinesearizona/i);

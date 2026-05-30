@@ -1,4 +1,6 @@
+import { spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
+import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
@@ -34,6 +36,22 @@ const {
 };
 
 describe('Austin Radar config', () => {
+  it('runs the Austin radar wrapper as a real CLI entrypoint', () => {
+    const result = spawnSync(
+      process.execPath,
+      [path.join(process.cwd(), 'scripts', 'austin_radar', 'run.cjs'), '--help'],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        env: { ...process.env, RADAR_STORE_PATH: '' },
+      }
+    );
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain('Austin Radar worker');
+    expect(result.stdout).toContain('node scripts/arizona_radar/run.cjs run');
+  });
+
   it('uses Austin-local sources and no Arizona source entries', () => {
     const austinSourceText = JSON.stringify(austinManifest).toLowerCase();
     const arizonaSourceSlugs = new Set(arizonaManifest.map((source) => source.slug));

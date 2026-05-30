@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "jobControl": {
+    "paused": false,
+    "publishCap": 10,
+    "updatedAt": "2026-05-30T00:00:00.000Z"
+  },
+  "sourceControls": [],
+  "runs": [],
+  "candidates": [],
+  "articles": []
+}
