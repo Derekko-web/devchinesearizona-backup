@@ -212,6 +212,7 @@ const articleSeriesOptions: ArticleSeries[] = [
   'trend-radar',
   'arizona-radar',
   'austin-radar',
+  'sf-bay-radar',
   'community-wire',
 ];
 const articleSourcePolicyOptions: SourcePolicy[] = [
@@ -225,7 +226,13 @@ function articleSeriesOptionsForSite(site: SiteProfile): ArticleSeries[] {
     return ['austin-radar'];
   }
 
-  return articleSeriesOptions.filter((series) => series !== 'austin-radar');
+  if (site.key === 'sf-bay') {
+    return ['sf-bay-radar'];
+  }
+
+  return articleSeriesOptions.filter(
+    (series) => series !== 'austin-radar' && series !== 'sf-bay-radar'
+  );
 }
 
 function parseDirectorySortOption(value?: string): SortOption {
@@ -514,7 +521,11 @@ function cleanArizonaNewsCopy(value: string): string {
 }
 
 function isRadarArticle(article: Article): boolean {
-  return article.series === 'arizona-radar' || article.series === 'austin-radar';
+  return (
+    article.series === 'arizona-radar' ||
+    article.series === 'austin-radar' ||
+    article.series === 'sf-bay-radar'
+  );
 }
 
 function cleanLocalizedArticleSummary<T extends { localizedText: { title: string; excerpt: string } }>(
@@ -3246,7 +3257,7 @@ export async function ArticleDetailPageView({
   if (!article) {
     return null;
   }
-  const legacyArticle = isLegacyArticle(article);
+  const legacyArticle = isLegacyArticle(article, site);
   const categories = await getDirectoryCategories();
   const localizedArticle = await resolveArticleText(article, locale);
   const displayArticle =

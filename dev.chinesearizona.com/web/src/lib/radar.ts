@@ -5,6 +5,7 @@ import path from 'node:path';
 
 import austinRadarSourceManifestData from '@/data/austin-radar-source-manifest.json';
 import radarSourceManifestData from '@/data/radar-source-manifest.json';
+import sfBayRadarSourceManifestData from '@/data/sf-bay-radar-source-manifest.json';
 import { defaultSiteProfile, siteProfiles, type SiteKey, type SiteProfile } from '@/lib/site-config';
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase';
 import type {
@@ -52,10 +53,22 @@ type RadarStoreOptions = {
 
 function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
   if (input && typeof input === 'object') {
-    return input.key === 'austin' ? siteProfiles.austin : defaultSiteProfile;
+    if (input.key === 'austin') {
+      return siteProfiles.austin;
+    }
+    if (input.key === 'sf-bay') {
+      return siteProfiles['sf-bay'];
+    }
+    return defaultSiteProfile;
   }
 
-  return input === 'austin' ? siteProfiles.austin : defaultSiteProfile;
+  if (input === 'austin') {
+    return siteProfiles.austin;
+  }
+  if (input === 'sf-bay') {
+    return siteProfiles['sf-bay'];
+  }
+  return defaultSiteProfile;
 }
 
 function isDefaultRadarSite(input?: RadarSiteInput): boolean {
@@ -63,7 +76,14 @@ function isDefaultRadarSite(input?: RadarSiteInput): boolean {
 }
 
 function radarSeriesForSite(input?: RadarSiteInput): Article['series'] {
-  return resolveRadarSite(input).key === 'austin' ? 'austin-radar' : 'arizona-radar';
+  const siteKey = resolveRadarSite(input).key;
+  if (siteKey === 'austin') {
+    return 'austin-radar';
+  }
+  if (siteKey === 'sf-bay') {
+    return 'sf-bay-radar';
+  }
+  return 'arizona-radar';
 }
 
 function nowIso(): string {
@@ -108,7 +128,8 @@ function shouldUseSupabaseRadarStore(site?: RadarSiteInput): boolean {
 }
 
 export function getRadarStorePath(site?: RadarSiteInput): string {
-  if (!isDefaultRadarSite(site)) {
+  const radarSite = resolveRadarSite(site);
+  if (radarSite.key === 'austin') {
     return (
       process.env.AUSTIN_RADAR_STORE_PATH ??
       path.join(
@@ -119,6 +140,12 @@ export function getRadarStorePath(site?: RadarSiteInput): string {
         'radar-runtime',
         'store.json'
       )
+    );
+  }
+  if (radarSite.key === 'sf-bay') {
+    return (
+      process.env.SF_BAY_RADAR_STORE_PATH ??
+      path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'sf-bay-radar-runtime', 'store.json')
     );
   }
 
@@ -586,11 +613,14 @@ async function getRadarServiceClientOrThrow() {
 }
 
 export function getRadarSourceManifest(site?: RadarSiteInput): RadarSourceManifestEntry[] {
-  return (
-    resolveRadarSite(site).key === 'austin'
-      ? austinRadarSourceManifestData
-      : radarSourceManifestData
-  ) as RadarSourceManifestEntry[];
+  const radarSite = resolveRadarSite(site);
+  if (radarSite.key === 'austin') {
+    return austinRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  if (radarSite.key === 'sf-bay') {
+    return sfBayRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  return radarSourceManifestData as RadarSourceManifestEntry[];
 }
 
 export function getRadarJobControl(options: RadarStoreOptions = {}): RadarJobControl {

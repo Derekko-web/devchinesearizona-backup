@@ -297,6 +297,7 @@ export type ArticleSeries =
   | 'trend-radar'
   | 'arizona-radar'
   | 'austin-radar'
+  | 'sf-bay-radar'
   | 'community-wire';
 
 export type FreshnessTier = 'breaking' | 'weekly' | 'monthly' | 'evergreen' | 'archive';
