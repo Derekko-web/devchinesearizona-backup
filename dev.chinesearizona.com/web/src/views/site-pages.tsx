@@ -211,6 +211,7 @@ const articleSeriesOptions: ArticleSeries[] = [
   'restaurant-opening-radar',
   'trend-radar',
   'arizona-radar',
+  'local-radar',
   'austin-radar',
   'sf-bay-radar',
   'community-wire',
@@ -225,13 +226,15 @@ function articleSeriesOptionsForSite(site: SiteProfile): ArticleSeries[] {
   if (site.key === 'austin') {
     return ['austin-radar'];
   }
-
+  if (site.key === 'los-angeles') {
+    return ['local-radar'];
+  }
   if (site.key === 'sf-bay') {
     return ['sf-bay-radar'];
   }
 
   return articleSeriesOptions.filter(
-    (series) => series !== 'austin-radar' && series !== 'sf-bay-radar'
+    (series) => series !== 'austin-radar' && series !== 'local-radar' && series !== 'sf-bay-radar'
   );
 }
 
@@ -343,6 +346,14 @@ function parseRadarLane(value?: string): RadarLane | undefined {
   return value && radarLaneOptions.includes(value as RadarLane)
     ? (value as RadarLane)
     : undefined;
+}
+
+function siteNewsLabel(site: SiteProfile, locale: Locale): string {
+  if (site.key === defaultSiteProfile.key) {
+    return locale === 'zh' ? '亞利桑那新聞' : 'Arizona News';
+  }
+
+  return locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`;
 }
 
 function buildRadarHref(
@@ -524,6 +535,7 @@ function isRadarArticle(article: Article): boolean {
   return (
     article.series === 'arizona-radar' ||
     article.series === 'austin-radar' ||
+    article.series === 'local-radar' ||
     article.series === 'sf-bay-radar'
   );
 }
@@ -2712,8 +2724,8 @@ export async function CommunityRadarPageView({
                       ? `${radarLaneLabel(activeLane, locale)}新聞`
                       : `${radarLaneLabel(activeLane, locale)} news`
                     : locale === 'zh'
-                      ? `完整${site.regionNameZh}新聞`
-                      : `All ${site.regionName} News`}
+                      ? `完整${siteNewsLabel(site, locale)}`
+                      : `All ${siteNewsLabel(site, locale)}`}
                 </h2>
               </div>
             </div>
@@ -2925,8 +2937,8 @@ export async function NewsArchivePageView({
               ? '這裡保留歷史社群轉載與舊聞，方便查找來源脈絡與過往資料。這些頁面仍可存取，但不再作為搜尋收錄主入口。'
               : 'This archive keeps historical community-wire imports reachable for reference and source tracing. These pages remain available, but they are no longer primary indexed entry points.'
             : locale === 'zh'
-              ? `${site.regionNameZh}新聞首頁只顯示少量最新內容；這裡集中目前主打的來源摘要、系列觀察與編輯內容。`
-              : `The ${site.regionName} News homepage shows only a small top layer. This archive keeps the current source summaries, recurring series, and current published work together.`}
+              ? `${siteNewsLabel(site, locale)}首頁只顯示少量最新內容；這裡集中目前主打的原創摘要、系列觀察與編輯內容。`
+              : `The ${siteNewsLabel(site, locale)} homepage shows only a small top layer. This archive keeps the current editorial summaries, recurring series, and current published work together.`}
         </p>
       </div>
 
@@ -3324,7 +3336,7 @@ export async function ArticleDetailPageView({
         {
           '@type': 'ListItem',
           position: 2,
-          name: locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`,
+          name: siteNewsLabel(site, locale),
           item: absoluteUrl(getLocalizedNewsPath(locale, site)),
         },
         { '@type': 'ListItem', position: 3, name: displayArticle.title, item: absoluteUrl(getLocalizedNewsArticlePath(locale, site, article.slug)) },
@@ -3342,7 +3354,9 @@ export async function ArticleDetailPageView({
             className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#6f5a4a] transition-colors hover:text-brand-700"
           >
             <ChevronRight className="h-4 w-4 rotate-180 text-brand-600" />
-            {locale === 'zh' ? `返回${site.regionNameZh}新聞` : `Back to ${site.regionName} News`}
+            {locale === 'zh'
+              ? `返回${siteNewsLabel(site, locale)}`
+              : `Back to ${siteNewsLabel(site, locale)}`}
           </Link>
         </div>
 

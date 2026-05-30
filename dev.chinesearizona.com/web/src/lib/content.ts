@@ -115,12 +115,16 @@ function readImportedArticles(): Article[] {
   }
 }
 
-function getAllArticles(): Article[] {
-  return [...localArticles, ...readImportedArticles()];
+function canUseDefaultArticleFallback(site: SiteProfile): boolean {
+  return site.key === defaultSiteProfile.key && site.news.allowDefaultFallback;
 }
 
 function canUseDefaultArticleSources(site: SiteProfile): boolean {
-  return site.key === defaultSiteProfile.key;
+  return canUseDefaultArticleFallback(site);
+}
+
+function getAllArticles(): Article[] {
+  return [...localArticles, ...readImportedArticles()];
 }
 
 function getLocalArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
@@ -151,6 +155,7 @@ function isArticleSeries(value: string): value is ArticleSeries {
     value === 'restaurant-opening-radar' ||
     value === 'trend-radar' ||
     value === 'arizona-radar' ||
+    value === 'local-radar' ||
     value === 'austin-radar' ||
     value === 'sf-bay-radar' ||
     value === 'community-wire'
@@ -406,7 +411,7 @@ export async function getCommunityTrendingArticlesAsync(
   limit = communityTrendingArticleSlugs.length,
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
-  if (!canUseDefaultArticleSources(site)) {
+  if (!canUseDefaultArticleFallback(site)) {
     return (await getCurrentArticlesAsync(limit, site)).slice(0, limit);
   }
 

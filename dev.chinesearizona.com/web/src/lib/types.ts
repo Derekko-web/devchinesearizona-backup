@@ -296,6 +296,7 @@ export type ArticleSeries =
   | 'restaurant-opening-radar'
   | 'trend-radar'
   | 'arizona-radar'
+  | 'local-radar'
   | 'austin-radar'
   | 'sf-bay-radar'
   | 'community-wire';

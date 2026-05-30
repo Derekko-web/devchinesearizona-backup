@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import austinRadarSourceManifestData from '@/data/austin-radar-source-manifest.json';
+import losAngelesRadarSourceManifestData from '@/data/los-angeles-radar-source-manifest.json';
 import radarSourceManifestData from '@/data/radar-source-manifest.json';
 import sfBayRadarSourceManifestData from '@/data/sf-bay-radar-source-manifest.json';
 import { defaultSiteProfile, siteProfiles, type SiteKey, type SiteProfile } from '@/lib/site-config';
@@ -52,22 +53,17 @@ type RadarStoreOptions = {
 };
 
 function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
-  if (input && typeof input === 'object') {
-    if (input.key === 'austin') {
-      return siteProfiles.austin;
-    }
-    if (input.key === 'sf-bay') {
-      return siteProfiles['sf-bay'];
-    }
-    return defaultSiteProfile;
-  }
-
-  if (input === 'austin') {
+  const key = input && typeof input === 'object' ? input.key : input;
+  if (key === 'austin') {
     return siteProfiles.austin;
   }
-  if (input === 'sf-bay') {
+  if (key === 'los-angeles') {
+    return siteProfiles['los-angeles'];
+  }
+  if (key === 'sf-bay') {
     return siteProfiles['sf-bay'];
   }
+
   return defaultSiteProfile;
 }
 
@@ -76,13 +72,17 @@ function isDefaultRadarSite(input?: RadarSiteInput): boolean {
 }
 
 function radarSeriesForSite(input?: RadarSiteInput): Article['series'] {
-  const siteKey = resolveRadarSite(input).key;
-  if (siteKey === 'austin') {
+  const site = resolveRadarSite(input);
+  if (site.key === 'austin') {
     return 'austin-radar';
   }
-  if (siteKey === 'sf-bay') {
+  if (site.key === 'los-angeles') {
+    return 'local-radar';
+  }
+  if (site.key === 'sf-bay') {
     return 'sf-bay-radar';
   }
+
   return 'arizona-radar';
 }
 
@@ -106,6 +106,21 @@ function normalizeMode(value: string | undefined): 'file' | 'supabase' | 'auto' 
   return 'auto';
 }
 
+function siteEnvKey(site: SiteProfile): string {
+  return site.key.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
+}
+
+function resolveRuntimePath(site: SiteProfile): string {
+  const configuredPath = site.news.articleDataSource.path;
+  if (configuredPath) {
+    return path.isAbsolute(configuredPath)
+      ? configuredPath
+      : path.join(/* turbopackIgnore: true */ process.cwd(), configuredPath);
+  }
+
+  return path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'radar-runtime', 'store.json');
+}
+
 function shouldUseSupabaseRadarStore(site?: RadarSiteInput): boolean {
   if (!isDefaultRadarSite(site)) {
     return false;
@@ -127,32 +142,23 @@ function shouldUseSupabaseRadarStore(site?: RadarSiteInput): boolean {
   return process.env.NODE_ENV !== 'test';
 }
 
-export function getRadarStorePath(site?: RadarSiteInput): string {
-  const radarSite = resolveRadarSite(site);
-  if (radarSite.key === 'austin') {
-    return (
-      process.env.AUSTIN_RADAR_STORE_PATH ??
-      path.join(
-        /* turbopackIgnore: true */ process.cwd(),
-        'data',
-        'sites',
-        'austin',
-        'radar-runtime',
-        'store.json'
-      )
-    );
-  }
-  if (radarSite.key === 'sf-bay') {
-    return (
-      process.env.SF_BAY_RADAR_STORE_PATH ??
-      path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'sf-bay-radar-runtime', 'store.json')
-    );
+export function getRadarStorePath(siteInput?: RadarSiteInput): string {
+  const site = resolveRadarSite(siteInput);
+  const siteSpecificPath =
+    process.env[`RADAR_STORE_PATH_${siteEnvKey(site)}`] ||
+    (site.key === 'austin' ? process.env.AUSTIN_RADAR_STORE_PATH : undefined) ||
+    (site.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined) ||
+    (site.key === 'sf-bay' ? process.env.SF_BAY_RADAR_STORE_PATH : undefined);
+
+  if (siteSpecificPath) {
+    return siteSpecificPath;
   }
 
-  return (
-    process.env.RADAR_STORE_PATH ??
-    path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'radar-runtime', 'store.json')
-  );
+  if (site.key === defaultSiteProfile.key && process.env.RADAR_STORE_PATH) {
+    return process.env.RADAR_STORE_PATH;
+  }
+
+  return resolveRuntimePath(site);
 }
 
 function defaultJobControl(): RadarJobControl {
@@ -489,7 +495,7 @@ function buildAdminSnapshotFromStore(
   });
 
   return {
-    overview: buildOverviewFromStore(store),
+    overview: buildOverviewFromStore(store, site),
     sources,
     candidates,
     articles,
@@ -613,11 +619,14 @@ async function getRadarServiceClientOrThrow() {
 }
 
 export function getRadarSourceManifest(site?: RadarSiteInput): RadarSourceManifestEntry[] {
-  const radarSite = resolveRadarSite(site);
-  if (radarSite.key === 'austin') {
+  const resolvedSite = resolveRadarSite(site);
+  if (resolvedSite.key === 'los-angeles') {
+    return losAngelesRadarSourceManifestData as RadarSourceManifestEntry[];
+  }
+  if (resolvedSite.key === 'austin') {
     return austinRadarSourceManifestData as RadarSourceManifestEntry[];
   }
-  if (radarSite.key === 'sf-bay') {
+  if (resolvedSite.key === 'sf-bay') {
     return sfBayRadarSourceManifestData as RadarSourceManifestEntry[];
   }
   return radarSourceManifestData as RadarSourceManifestEntry[];

@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const routerRefreshMock = vi.fn();
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
+const originalLosAngelesRadarStorePath = process.env.RADAR_STORE_PATH_LOS_ANGELES;
 const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
 const originalSfBayRadarStorePath = process.env.SF_BAY_RADAR_STORE_PATH;
 const originalZhTranslationCachePath = process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH;
@@ -73,6 +74,12 @@ afterEach(() => {
     delete process.env.RADAR_STORE_PATH;
   }
 
+  if (originalLosAngelesRadarStorePath) {
+    process.env.RADAR_STORE_PATH_LOS_ANGELES = originalLosAngelesRadarStorePath;
+  } else {
+    delete process.env.RADAR_STORE_PATH_LOS_ANGELES;
+  }
+
   if (originalAustinRadarStorePath) {
     process.env.AUSTIN_RADAR_STORE_PATH = originalAustinRadarStorePath;
   } else {
@@ -101,7 +108,11 @@ afterEach(() => {
 function writeRadarStore(
   options: {
     mirrorChineseCopy?: boolean;
-    envKey?: 'RADAR_STORE_PATH' | 'AUSTIN_RADAR_STORE_PATH' | 'SF_BAY_RADAR_STORE_PATH';
+    envKey?:
+      | 'RADAR_STORE_PATH'
+      | 'AUSTIN_RADAR_STORE_PATH'
+      | 'RADAR_STORE_PATH_LOS_ANGELES'
+      | 'SF_BAY_RADAR_STORE_PATH';
   } = {}
 ) {
   const mirrorChineseCopy = options.mirrorChineseCopy ?? false;
@@ -326,6 +337,32 @@ function mockChineseTranslationFetch() {
   );
 }
 
+function writeEmptyLosAngelesStore() {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-ui-la-'));
+  const storePath = path.join(directory, 'store.json');
+  fs.writeFileSync(
+    storePath,
+    `${JSON.stringify(
+      {
+        version: 1,
+        jobControl: {
+          paused: false,
+          publishCap: 10,
+          updatedAt: '2026-05-29T12:00:00.000Z',
+        },
+        sourceControls: [],
+        runs: [],
+        candidates: [],
+        articles: [],
+      },
+      null,
+      2
+    )}\n`,
+    'utf8'
+  );
+  process.env.RADAR_STORE_PATH_LOS_ANGELES = storePath;
+}
+
 describe('radar ui', () => {
   it('renders the radar hero without exposing operational metrics', async () => {
     writeRadarStore();
@@ -369,6 +406,29 @@ describe('radar ui', () => {
     expect(html).not.toContain('All Arizona News');
   });
 
+  it('does not fall back to Arizona Radar content for Los Angeles when LA runtime data is empty', async () => {
+    writeRadarStore();
+    writeEmptyLosAngelesStore();
+    const [{ CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(
+      await CommunityRadarPageView({
+        locale: 'en',
+        searchParams: { lane: 'official' },
+        site: siteProfiles['los-angeles'],
+      })
+    );
+
+    expect(html).toContain('Official news');
+    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).not.toContain('mesa-radar-housing-pulse');
+    expect(html).not.toContain('Phoenix Sky Harbor');
+    expect(html).not.toContain('Arizona News');
+  });
+
   it('does not reuse the Arizona runtime store for SF Bay news pages', async () => {
     writeRadarStore();
     const [{ CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
@@ -389,6 +449,28 @@ describe('radar ui', () => {
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
+  });
+
+  it('renders Los Angeles labels and source links for Los Angeles article pages', async () => {
+    const [{ ArticleDetailPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(
+      (await ArticleDetailPageView({
+        locale: 'en',
+        slug: 'los-angeles-opening-radar-local-source-watch',
+        site: siteProfiles['los-angeles'],
+      }))!
+    );
+
+    expect(html).toContain('Back to Los Angeles News');
+    expect(html).toContain('What Now Los Angeles');
+    expect(html).toContain('This page is an editorial summary');
+    expect(html).not.toContain('Back to Arizona News');
+    expect(html).not.toContain('Phoenix Sky Harbor');
+    expect(html).not.toContain('ChineseArizona');
   });
 
   it('renders polished source attribution on article detail pages', async () => {

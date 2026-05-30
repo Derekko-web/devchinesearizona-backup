@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/types';
 
-export type SiteKey = 'arizona' | 'sf-bay' | 'austin';
+export type SiteKey = 'arizona' | 'los-angeles' | 'sf-bay' | 'austin';
 export type SiteLaunchState = 'live' | 'placeholder' | 'unconfigured';
 export type SiteContentState = 'live' | 'required';
 
@@ -413,6 +413,173 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       newcomerBody: {
         en: 'Your guide to settling in, finding services, schools, and more.',
         zh: '从学校到服务，把安家路线上需要的信息整理清楚。',
+      },
+    },
+  },
+  'los-angeles': {
+    key: 'los-angeles',
+    launchState: 'live',
+    domains: ['chineselosangeles.com', 'www.chineselosangeles.com'],
+    domain: 'chineselosangeles.com',
+    url: 'https://chineselosangeles.com',
+    cityName: 'Los Angeles',
+    stateRegion: 'California',
+    stateCode: 'CA',
+    countryCode: 'US',
+    supportedLocales: ['en', 'zh'],
+    brandName: 'ChineseLosAngeles',
+    brandNameZh: '洛杉磯華人',
+    brandParts: {
+      enPrefix: 'Chinese',
+      enAccent: 'LosAngeles',
+      zhPrefix: '洛杉磯',
+      zhAccent: '華人',
+    },
+    regionName: 'Los Angeles',
+    regionNameZh: '洛杉磯',
+    guideTagline: {
+      en: 'Los Angeles bilingual guide',
+      zh: '洛杉磯雙語指南',
+    },
+    localCoverageLabel: {
+      en: 'Los Angeles-first coverage',
+      zh: '洛杉磯本地優先',
+    },
+    description: {
+      en: 'A bilingual Los Angeles platform for local news summaries, source links, and Chinese community discovery across LA and the San Gabriel Valley.',
+      zh: '服務洛杉磯與聖蓋博谷華人社群的雙語平台，提供本地新聞摘要、來源連結與生活發現。',
+    },
+    directory: {
+      categorySlugs: ['dining', 'real-estate', 'local-services', 'education', 'medical'],
+      citySelectSuffix: { en: 'CA', zh: 'CA' },
+      defaultSearchCity: 'Los Angeles',
+      launchCities: ['Los Angeles', 'Alhambra', 'Arcadia', 'Monterey Park', 'Pasadena'],
+      cityNamesZh: {
+        'Los Angeles': '洛杉磯',
+        Alhambra: '阿罕布拉',
+        Arcadia: '亞凱迪亞',
+        'Monterey Park': '蒙特利公園',
+        Pasadena: '帕薩迪納',
+      },
+      listingSource: {
+        state: 'required',
+        label: 'Los Angeles business listing source',
+        kind: 'static-json',
+        path: 'data/sites/los-angeles/businesses.json',
+        notes: 'Must be populated from Los Angeles-specific listing sources before this site can serve a directory.',
+      },
+      allowDefaultFallback: false,
+    },
+    news: {
+      routePath: '/los-angeles-news',
+      archivePath: '/los-angeles-news/archive',
+      articleDataSource: {
+        state: 'live',
+        label: 'Los Angeles Radar generated summaries',
+        kind: 'runtime-json',
+        path: 'data/sites/los-angeles/radar-runtime/store.json',
+        notes: 'Los Angeles-only generated summary articles and Radar runtime data. Does not read any other city runtime or generated article files.',
+      },
+      sourceManifest: {
+        state: 'live',
+        label: 'Los Angeles Radar monitored sources',
+        kind: 'static-json',
+        path: 'src/data/los-angeles-radar-source-manifest.json',
+        notes: 'Los Angeles, SGV, Southern California, LAX, and official-source manifest for summary/link-only generation.',
+      },
+      allowDefaultFallback: false,
+    },
+    seo: {
+      title: {
+        en: 'ChineseLosAngeles | Los Angeles Chinese Community News and Resources',
+        zh: 'ChineseLosAngeles | 洛杉磯華人新聞與生活資源',
+      },
+      description: {
+        en: 'Bilingual Los Angeles local news summaries and source links for Chinese families, students, job seekers, and business owners across LA and the SGV.',
+        zh: '面向洛杉磯與聖蓋博谷華人家庭、學生、求職者與商家的雙語本地新聞摘要與來源連結。',
+      },
+      canonicalBaseUrl: 'https://chineselosangeles.com',
+    },
+    publisher: {
+      contactEmail: 'hello@chineselosangeles.com',
+      updatedLabel: {
+        en: 'Last updated: May 29, 2026',
+        zh: '最後更新：2026 年 5 月 29 日',
+      },
+    },
+    runtime: {
+      rootPath: '/var/www/chineselosangeles.com/web',
+      dataPath: '/var/www/chineselosangeles.com/data',
+      logsPath: '/var/www/chineselosangeles.com/logs',
+    },
+    home: {
+      headline: {
+        en: 'Los Angeles Chinese Community Guide',
+        zh: '洛杉磯華人社區指南',
+      },
+      kicker: {
+        en: 'Local summaries and source links for LA and the San Gabriel Valley',
+        zh: '整理洛杉磯與聖蓋博谷的本地摘要與來源連結',
+      },
+      intro: {
+        en: 'Follow Los Angeles openings, housing, transit, official updates, and community signals from LA-specific sources.',
+        zh: '從洛杉磯專屬來源追蹤本地新店、住房、交通、官方更新與社群訊號。',
+      },
+      citySelectSuffix: { en: 'CA', zh: 'CA' },
+      defaultSearchCity: 'Los Angeles',
+      launchCities: ['Los Angeles', 'Alhambra', 'Arcadia', 'Monterey Park', 'Pasadena'],
+      cityNamesZh: {
+        'Los Angeles': '洛杉磯',
+        Alhambra: '阿罕布拉',
+        Arcadia: '亞凱迪亞',
+        'Monterey Park': '蒙特利公園',
+        Pasadena: '帕薩迪納',
+      },
+      heroImageUrl: '/window.svg',
+      heroImageAlt: {
+        en: 'Los Angeles city guide image',
+        zh: '洛杉磯城市指南圖片',
+      },
+      heroForegroundImageUrl: '/globe.svg',
+      heroForegroundAlt: {
+        en: 'Los Angeles platform mark',
+        zh: '洛杉磯平台標記',
+      },
+      heroBadge: {
+        en: 'LOS ANGELES, CALIFORNIA',
+        zh: '洛杉磯，加州',
+      },
+      heroBadgeSubcopy: {
+        en: 'LA and SGV local signals',
+        zh: '洛杉磯與聖蓋博谷本地訊號',
+      },
+      focusTitle: {
+        en: 'LA Focused',
+        zh: '洛杉磯聚焦',
+      },
+      focusBody: {
+        en: 'Local neighborhoods and source-linked summaries',
+        zh: '本地街區與來源連結摘要',
+      },
+      featuredCards: [],
+      neighborhoods: [],
+      mapImageUrl: '/globe.svg',
+      mapImageAlt: {
+        en: 'Los Angeles source map placeholder',
+        zh: '洛杉磯來源地圖占位',
+      },
+      relocationImageUrl: '/window.svg',
+      relocationImageAlt: {
+        en: 'Los Angeles relocation placeholder',
+        zh: '洛杉磯安家占位圖',
+      },
+      newcomerTitle: {
+        en: 'Los Angeles Sources Connected',
+        zh: '洛杉磯來源已接入',
+      },
+      newcomerBody: {
+        en: 'News is generated from Los Angeles-specific feeds and official sources as original summaries with source links.',
+        zh: '新聞由洛杉磯專屬 feeds 與官方來源生成為原創摘要，並附來源連結。',
       },
     },
   },

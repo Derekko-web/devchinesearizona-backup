@@ -81,12 +81,22 @@ describe('proxy host handling', () => {
     expect(response.headers.get('X-Robots-Tag')).toBeNull();
   });
 
-  it('emits noindex response headers for unconfigured city hosts', () => {
+  it('does not emit noindex response headers for the live Los Angeles host', () => {
     const response = proxy(
       buildRequest('https://chineselosangeles.com/', 'chineselosangeles.com') as never
     );
 
-    expect(shouldEmitNoIndexHeader('chineselosangeles.com')).toBe(true);
+    expect(shouldEmitNoIndexHeader('chineselosangeles.com')).toBe(false);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('X-Robots-Tag')).toBeNull();
+  });
+
+  it('emits noindex response headers for unconfigured city hosts', () => {
+    const response = proxy(
+      buildRequest('https://chicago.example/', 'chicago.example') as never
+    );
+
+    expect(shouldEmitNoIndexHeader('chicago.example')).toBe(true);
     expect(response.status).toBe(200);
     expect(response.headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
   });

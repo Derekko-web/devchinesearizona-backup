@@ -4,6 +4,7 @@ import {
   getLocalizedNewsArchivePath,
   getLocalizedNewsArticlePath,
   getLocalizedNewsPath,
+  getNewsRouteSegment,
 } from '@/lib/arizona-news';
 import {
   canServeArizonaOnlyContent,
@@ -108,12 +109,8 @@ function buildSearchString(params: Record<string, string | undefined>): string {
   return search.toString();
 }
 
-function newsRouteRoot(site: { news: { routePath: string } }): string {
-  return site.news.routePath.replace(/^\/+/, '').split('/')[0] ?? '';
-}
-
-function isSiteNewsRoute(segments: string[], site: { news: { routePath: string } }): boolean {
-  return segments[0] === newsRouteRoot(site);
+function isSiteNewsRoute(segments: string[], routeSegment: string): boolean {
+  return segments[0] === routeSegment;
 }
 
 export async function generateMetadata({ params, searchParams }: PageProps) {
@@ -123,6 +120,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
   const query = await searchParams;
   const site = await getCurrentSiteProfile();
+  const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
     return homeMetadata(locale, site);
@@ -198,15 +196,15 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     return communityMetadata(locale, site);
   }
 
-  if (isSiteNewsRoute(segments, site) && segments.length === 1) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments.length === 1) {
     return communityRadarMetadata(locale, site);
   }
 
-  if (isSiteNewsRoute(segments, site) && segments[1] === 'archive' && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] === 'archive' && segments.length === 2) {
     return communityNewsMetadata(locale, query, site);
   }
 
-  if (isSiteNewsRoute(segments, site) && segments[1] && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] && segments.length === 2) {
     return (await articleMetadata(locale, segments[1], site)) ?? {};
   }
 
@@ -263,6 +261,7 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
     notFound();
   }
   const site = await getCurrentSiteProfile();
+  const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
     return <HomePageView locale={locale} site={site} />;
@@ -356,15 +355,15 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
     return await CommunityPageView({ locale, site });
   }
 
-  if (isSiteNewsRoute(segments, site) && segments.length === 1) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments.length === 1) {
     return await CommunityRadarPageView({ locale, searchParams: await searchParams, site });
   }
 
-  if (isSiteNewsRoute(segments, site) && segments[1] === 'archive' && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] === 'archive' && segments.length === 2) {
     return await NewsArchivePageView({ locale, searchParams: await searchParams, site });
   }
 
-  if (isSiteNewsRoute(segments, site) && segments[1] && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] && segments.length === 2) {
     const rendered = await ArticleDetailPageView({ locale, slug: segments[1], site });
     if (!rendered) notFound();
     return rendered;

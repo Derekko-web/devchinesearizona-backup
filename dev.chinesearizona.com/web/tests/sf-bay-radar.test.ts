@@ -129,8 +129,8 @@ describe('SF Bay Radar configuration', () => {
 
     expect(broadPrompt).toContain('San Francisco Bay Area');
     expect(broadPrompt).toContain('1-2 concise English summary paragraphs');
-    expect(feedPrompt).toContain('1-2 English body paragraphs');
-    expect(feedPrompt).toContain('"bodyEn": ["1-2 concise English paragraphs');
+    expect(feedPrompt).toContain('1-2 short English body paragraphs');
+    expect(feedPrompt).toContain('"bodyEn": ["1-2 concise English summary paragraphs"]');
     expect(`${broadPrompt}\n${feedPrompt}`).not.toMatch(
       /Arizona|Phoenix|ChineseArizona|What Now Phoenix|3-5 rewritten English paragraphs/
     );

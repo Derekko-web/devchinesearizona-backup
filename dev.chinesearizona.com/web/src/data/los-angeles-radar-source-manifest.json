@@ -1,0 +1,139 @@
+[
+  {
+    "slug": "what-now-los-angeles",
+    "name": "What Now Los Angeles",
+    "url": "https://whatnow.com/los-angeles/",
+    "feedUrl": "https://whatnow.com/los-angeles/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for Los Angeles restaurant, retail, and commercial opening signals. Summaries must link to the source and avoid copied article text.",
+      "zh": "用於洛杉磯餐飲、零售與商業開店訊號。摘要必須附來源連結，不得複製原文。"
+    }
+  },
+  {
+    "slug": "eater-los-angeles",
+    "name": "Eater LA",
+    "url": "https://la.eater.com/",
+    "feedUrl": "https://la.eater.com/rss/index.xml",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Los Angeles dining, neighborhood restaurant, and food-business signals only as original summaries with source links.",
+      "zh": "用於洛杉磯餐飲、街區餐廳與食品商業訊號；只能寫原創摘要並附來源連結。"
+    }
+  },
+  {
+    "slug": "urbanize-los-angeles",
+    "name": "Urbanize LA",
+    "url": "https://la.urbanize.city/",
+    "feedUrl": "https://la.urbanize.city/rss.xml",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "housing",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Los Angeles housing, development, transit-oriented development, and neighborhood planning signals.",
+      "zh": "用於洛杉磯住房、開發、公共交通導向開發與街區規劃訊號。"
+    }
+  },
+  {
+    "slug": "streetsblog-los-angeles",
+    "name": "Streetsblog Los Angeles",
+    "url": "https://la.streetsblog.org/",
+    "feedUrl": "https://la.streetsblog.org/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for transportation, safety, transit, and street-policy signals affecting Los Angeles families and commuters.",
+      "zh": "用於影響洛杉磯家庭與通勤者的交通、安全、公交與街道政策訊號。"
+    }
+  },
+  {
+    "slug": "we-like-la",
+    "name": "We Like LA",
+    "url": "https://www.welikela.com/",
+    "feedUrl": "https://www.welikela.com/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for public Los Angeles events and local activity roundups when they are useful to bilingual families and students.",
+      "zh": "用於對雙語家庭與學生有用的洛杉磯公共活動與本地生活整理。"
+    }
+  },
+  {
+    "slug": "la-times-california",
+    "name": "Los Angeles Times California",
+    "url": "https://www.latimes.com/california",
+    "feedUrl": "https://www.latimes.com/california/rss2.0.xml",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for broad Southern California civic, housing, transportation, and public-life signals that directly affect Los Angeles readers.",
+      "zh": "用於直接影響洛杉磯讀者的南加州民生、住房、交通與公共生活訊號。"
+    }
+  },
+  {
+    "slug": "los-angeles-mayor-news",
+    "name": "Los Angeles Mayor News",
+    "url": "https://mayor.lacity.gov/news",
+    "sourceType": "official_data",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for official City of Los Angeles announcements that affect city services, business owners, commuters, or neighborhoods.",
+      "zh": "用於影響城市服務、商家、通勤者或街區的洛杉磯市長官方公告。"
+    }
+  },
+  {
+    "slug": "lax-media-center",
+    "name": "LAX Media Center",
+    "url": "https://www.flylax.com/mediacenter",
+    "sourceType": "airport_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for LAX route, terminal, construction, and traveler logistics updates relevant to Los Angeles-area families.",
+      "zh": "用於與洛杉磯家庭相關的 LAX 航線、航站樓、施工與旅運資訊。"
+    }
+  },
+  {
+    "slug": "la-county-jobs",
+    "name": "LA County Human Resources",
+    "url": "https://hr.lacounty.gov/",
+    "feedUrl": "https://hr.lacounty.gov/feed/",
+    "sourceType": "official_data",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Los Angeles County hiring and workforce notices when they are relevant to bilingual job seekers or local families.",
+      "zh": "用於與雙語求職者或在地家庭相關的洛杉磯縣招聘與勞動力公告。"
+    }
+  },
+  {
+    "slug": "tiktok-sgv-food",
+    "name": "TikTok SGV Food",
+    "url": "https://www.tiktok.com/tag/sgvfood",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "social",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use only for repeated public San Gabriel Valley food-trend signals. Do not reuse captions, quotes, embeds, or media.",
+      "zh": "只用於聖蓋博谷公開餐飲趨勢的重複訊號；不得重用 caption、引文、嵌入或素材。"
+    }
+  }
+]

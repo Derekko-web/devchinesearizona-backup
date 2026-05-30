@@ -50,18 +50,19 @@ function parseDirectoryPageNumber(value?: string): number {
   return Number.isFinite(parsed) && parsed > 1 ? Math.floor(parsed) : 1;
 }
 
+function siteNewsLabel(site: SiteProfile, locale: Locale): string {
+  if (site.key === defaultSiteProfile.key) {
+    return locale === 'zh' ? '亞利桑那新聞' : 'Arizona News';
+  }
+
+  return locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`;
+}
+
 function buildNewsArchiveMetadataPath(
-  searchParams?: ArticleArchiveSearchParams,
-  site: SiteProfile = defaultSiteProfile
+  site: SiteProfile,
+  searchParams?: ArticleArchiveSearchParams
 ): string {
-  const normalizedSearchParams =
-    site.key === defaultSiteProfile.key
-      ? searchParams
-      : {
-          ...searchParams,
-          bucket: 'current',
-        };
-  const filters = resolveArticleArchiveFilters(normalizedSearchParams);
+  const filters = resolveArticleArchiveFilters(searchParams);
   const params = new URLSearchParams();
 
   if (filters.bucket === 'legacy') {
@@ -273,15 +274,14 @@ export function communityRadarMetadata(locale: Locale, site: SiteProfile = defau
     });
   }
 
+  const newsLabel = siteNewsLabel(site, locale);
+
   return buildMetadata({
-    title:
-      locale === 'zh'
-        ? `${site.regionNameZh}新聞 | ${site.brandName}`
-        : `${site.regionName} News | ${site.brandName}`,
+    title: `${newsLabel} | ${site.brandName}`,
     description:
       locale === 'zh'
-        ? `整理${site.regionNameZh}住房、官方、社群與新店資訊，提供附來源連結的雙語摘要。`
-        : `Source-linked bilingual summaries for ${site.regionName} housing, official, community, and opening updates.`,
+        ? `每 5 分鐘更新的${newsLabel}首頁，整理住房、官方、社群與新店資訊成可用的雙語摘要與來源連結。`
+        : `A live ${newsLabel} homepage updated every 5 minutes with bilingual summaries and source links for housing, official, community, and opening updates.`,
     path: getNewsPath(site),
     locale,
     site,
@@ -320,13 +320,14 @@ export function communityNewsMetadata(
   const filters = resolveArticleArchiveFilters(archiveSearchParams);
   const isLegacyBucket = filters.bucket === 'legacy';
   const currentPage = filters.page;
+  const newsLabel = siteNewsLabel(site, locale);
   const baseTitle = isLegacyBucket
     ? locale === 'zh'
-      ? `${site.regionNameZh}新聞舊聞檔案 | ${site.brandName}`
-      : `${site.regionName} News Legacy Archive | ${site.brandName}`
+      ? `${newsLabel} 舊聞檔案 | ${site.brandName}`
+      : `${newsLabel} Legacy Archive | ${site.brandName}`
     : locale === 'zh'
-      ? `${site.regionNameZh}新聞檔案 | ${site.brandName}`
-      : `${site.regionName} News Archive | ${site.brandName}`;
+      ? `${newsLabel} 檔案 | ${site.brandName}`
+      : `${newsLabel} Archive | ${site.brandName}`;
   const title =
     currentPage > 1
       ? locale === 'zh'
@@ -344,7 +345,7 @@ export function communityNewsMetadata(
         : locale === 'zh'
           ? `瀏覽${site.regionNameZh}目前主打的來源摘要、系列觀察與最新編輯內容。`
           : `Browse current ${site.regionName} source summaries, recurring series, and published work.`,
-    path: buildNewsArchiveMetadataPath(archiveSearchParams, site),
+    path: buildNewsArchiveMetadataPath(site, archiveSearchParams),
     locale,
     site,
     noIndex: isLegacyBucket,
