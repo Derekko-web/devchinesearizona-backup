@@ -77,6 +77,65 @@ describe('SF Bay Radar configuration', () => {
     expect(result.stdout).toContain('node scripts/arizona_radar/run.cjs run');
   });
 
+  it('builds SF Bay prompts without Arizona copy or full-article schemas', () => {
+    const result = spawnSync(
+      process.execPath,
+      [
+        '-e',
+        `
+          const { buildFeedRewritePrompt, buildHermesPrompt } = require('./scripts/arizona_radar/run.cjs');
+          const item = {
+            sourceSlug: 'sf-standard',
+            sourceName: 'The San Francisco Standard',
+            sourceUrl: 'https://sfstandard.com/2026/05/29/transit-test',
+            canonicalUrl: 'https://sfstandard.com/2026/05/29/transit-test',
+            sourcePublishedAt: '2026-05-29T16:00:00.000Z',
+            feedCategory: 'Transit',
+            titleEn: 'San Francisco transit update',
+            feedExcerpt: 'A fixture summary for San Francisco transit readers.',
+            articlePayload: {
+              title: 'San Francisco transit update',
+              description: 'A fixture description for San Francisco transit readers.',
+              publishedAt: '2026-05-29T16:00:00.000Z',
+              text: 'A source article fixture for San Francisco transit readers with enough local facts to summarize.',
+            },
+          };
+          process.stdout.write(JSON.stringify({
+            broadPrompt: buildHermesPrompt([], 3, 24),
+            feedPrompt: buildFeedRewritePrompt([item]),
+          }));
+        `,
+      ],
+      {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        env: {
+          ...process.env,
+          RADAR_CITY_KEY: 'sf-bay',
+          RADAR_BRAND_NAME: 'ChineseSFBay',
+          RADAR_REGION_NAME: 'San Francisco Bay Area',
+          RADAR_REGION_NAME_ZH: '灣區',
+          RADAR_REGION_PLACES:
+            'San Francisco, Oakland, Berkeley, San Jose, Santa Clara, Sunnyvale, Cupertino, Fremont, Milpitas, Daly City, the Peninsula, South Bay, East Bay, North Bay, or another San Francisco Bay Area place',
+          RADAR_SUMMARY_ONLY: '1',
+        },
+      }
+    );
+    expect(result.status).toBe(0);
+    const { broadPrompt, feedPrompt } = JSON.parse(result.stdout) as {
+      broadPrompt: string;
+      feedPrompt: string;
+    };
+
+    expect(broadPrompt).toContain('San Francisco Bay Area');
+    expect(broadPrompt).toContain('1-2 concise English summary paragraphs');
+    expect(feedPrompt).toContain('1-2 English body paragraphs');
+    expect(feedPrompt).toContain('"bodyEn": ["1-2 concise English paragraphs');
+    expect(`${broadPrompt}\n${feedPrompt}`).not.toMatch(
+      /Arizona|Phoenix|ChineseArizona|What Now Phoenix|3-5 rewritten English paragraphs/
+    );
+  });
+
   it('parses Bay Area RSS seeds without copying article bodies into drafts', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
       <rss version="2.0">
