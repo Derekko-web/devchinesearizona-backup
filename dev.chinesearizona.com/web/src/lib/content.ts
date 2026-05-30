@@ -114,12 +114,12 @@ function readImportedArticles(): Article[] {
   }
 }
 
-function getAllArticles(): Article[] {
-  return [...localArticles, ...readImportedArticles()];
-}
-
 function canUseDefaultArticleFallback(site: SiteProfile): boolean {
   return site.key === defaultSiteProfile.key && site.news.allowDefaultFallback;
+}
+
+function getAllArticles(): Article[] {
+  return [...localArticles, ...readImportedArticles()];
 }
 
 function sortArticlesNewestFirst(articles: Article[]): Article[] {
@@ -140,6 +140,7 @@ function isArticleSeries(value: string): value is ArticleSeries {
     value === 'trend-radar' ||
     value === 'arizona-radar' ||
     value === 'local-radar' ||
+    value === 'austin-radar' ||
     value === 'community-wire'
   );
 }
@@ -336,7 +337,7 @@ export async function getArticlesAsync(
 ): Promise<Article[]> {
   const sortedArticles = sortArticlesNewestFirst([
     ...(canUseDefaultArticleFallback(site) ? getAllArticles() : []),
-    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
+    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
   ]);
 
   return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
@@ -353,7 +354,7 @@ export async function getCurrentArticlesAsync(
 ): Promise<Article[]> {
   const articles = sortArticlesNewestFirst([
     ...(canUseDefaultArticleFallback(site) ? getArticlesForArchiveBucket('current') : []),
-    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
+    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
   ]);
 
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
@@ -381,8 +382,13 @@ export function getCommunityTrendingArticles(limit = communityTrendingArticleSlu
 }
 
 export async function getCommunityTrendingArticlesAsync(
-  limit = communityTrendingArticleSlugs.length
+  limit = communityTrendingArticleSlugs.length,
+  site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
+  if (!canUseDefaultArticleFallback(site)) {
+    return (await getCurrentArticlesAsync(limit, site)).slice(0, limit);
+  }
+
   const prioritized = (
     await Promise.all(communityTrendingArticleSlugs.map((slug) => getArticleBySlugAsync(slug)))
   ).filter((article): article is Article => Boolean(article));
@@ -517,7 +523,7 @@ export async function getArticleArchivePageAsync(
       ? sortArticlesNewestFirst(canUseDefaultArticleFallback(site) ? readImportedArticles() : [])
       : sortArticlesNewestFirst([
           ...(canUseDefaultArticleFallback(site) ? getArticlesForArchiveBucket('current') : []),
-          ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
+          ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
         ]);
   const availableYears = Array.from(
     new Set(bucketArticles.map((article) => articlePublishedParts(article).year))
@@ -581,9 +587,9 @@ export async function getArticleBySlugAsync(
   slug: string,
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article | undefined> {
-  const radarArticle = await getRadarArticleBySlugAsync(slug, site);
+  const radarArticle = await getRadarArticleBySlugAsync(slug, { site });
   if (radarArticle?.isPublished) {
-    return radarArticleToArticle(radarArticle, site);
+    return radarArticleToArticle(radarArticle, { site });
   }
 
   return canUseDefaultArticleFallback(site) ? getArticleBySlug(slug) : undefined;

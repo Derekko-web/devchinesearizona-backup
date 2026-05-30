@@ -1,11 +1,7 @@
 import { resolveArticleText } from '@/lib/article-localization';
 import type { Metadata } from 'next';
 
-import {
-  getNewsArchivePath,
-  getNewsArticlePath,
-  getNewsPath,
-} from '@/lib/arizona-news';
+import { getNewsArchivePath, getNewsArticlePath, getNewsPath } from '@/lib/arizona-news';
 import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
 import {
   getArticleBySlugAsync,
@@ -314,7 +310,14 @@ export function communityNewsMetadata(
     });
   }
 
-  const filters = resolveArticleArchiveFilters(searchParams);
+  const archiveSearchParams =
+    site.key === defaultSiteProfile.key
+      ? searchParams
+      : {
+          ...searchParams,
+          bucket: 'current',
+        };
+  const filters = resolveArticleArchiveFilters(archiveSearchParams);
   const isLegacyBucket = filters.bucket === 'legacy';
   const currentPage = filters.page;
   const newsLabel = siteNewsLabel(site, locale);
@@ -340,9 +343,9 @@ export function communityNewsMetadata(
           ? '瀏覽歷史社群轉載與舊聞檔案。這些頁面仍可存取，但不作為搜尋收錄主入口。'
           : 'Browse the historical community-wire and legacy archive. These pages remain reachable, but they are no longer primary indexed entry points.'
         : locale === 'zh'
-          ? '瀏覽目前主打的原創摘要、系列觀察與最新編輯內容。'
-          : 'Browse current editorial coverage, including original summaries, recurring series, and current published work.',
-    path: buildNewsArchiveMetadataPath(site, searchParams),
+          ? `瀏覽${site.regionNameZh}目前主打的來源摘要、系列觀察與最新編輯內容。`
+          : `Browse current ${site.regionName} source summaries, recurring series, and published work.`,
+    path: buildNewsArchiveMetadataPath(site, archiveSearchParams),
     locale,
     site,
     noIndex: isLegacyBucket,

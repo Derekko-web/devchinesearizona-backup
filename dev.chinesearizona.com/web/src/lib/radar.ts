@@ -3,9 +3,10 @@ import 'server-only';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import austinRadarSourceManifestData from '@/data/austin-radar-source-manifest.json';
 import losAngelesRadarSourceManifestData from '@/data/los-angeles-radar-source-manifest.json';
 import radarSourceManifestData from '@/data/radar-source-manifest.json';
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { defaultSiteProfile, siteProfiles, type SiteKey, type SiteProfile } from '@/lib/site-config';
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase';
 import type {
   Article,
@@ -44,6 +45,40 @@ type RadarAdminSnapshot = {
   runs: RadarRun[];
 };
 
+type RadarSiteInput = SiteProfile | SiteKey | undefined;
+
+type RadarStoreOptions = {
+  site?: RadarSiteInput;
+};
+
+function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
+  const key = input && typeof input === 'object' ? input.key : input;
+  if (key === 'austin') {
+    return siteProfiles.austin;
+  }
+  if (key === 'los-angeles') {
+    return siteProfiles['los-angeles'];
+  }
+
+  return defaultSiteProfile;
+}
+
+function isDefaultRadarSite(input?: RadarSiteInput): boolean {
+  return resolveRadarSite(input).key === defaultSiteProfile.key;
+}
+
+function radarSeriesForSite(input?: RadarSiteInput): Article['series'] {
+  const site = resolveRadarSite(input);
+  if (site.key === 'austin') {
+    return 'austin-radar';
+  }
+  if (site.key === 'los-angeles') {
+    return 'local-radar';
+  }
+
+  return 'arizona-radar';
+}
+
 function nowIso(): string {
   return new Date().toISOString();
 }
@@ -79,8 +114,8 @@ function resolveRuntimePath(site: SiteProfile): string {
   return path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'radar-runtime', 'store.json');
 }
 
-function shouldUseSupabaseRadarStore(site: SiteProfile = defaultSiteProfile): boolean {
-  if (site.key !== defaultSiteProfile.key) {
+function shouldUseSupabaseRadarStore(site?: RadarSiteInput): boolean {
+  if (!isDefaultRadarSite(site)) {
     return false;
   }
 
@@ -100,8 +135,12 @@ function shouldUseSupabaseRadarStore(site: SiteProfile = defaultSiteProfile): bo
   return process.env.NODE_ENV !== 'test';
 }
 
-export function getRadarStorePath(site: SiteProfile = defaultSiteProfile): string {
-  const siteSpecificPath = process.env[`RADAR_STORE_PATH_${siteEnvKey(site)}`];
+export function getRadarStorePath(siteInput?: RadarSiteInput): string {
+  const site = resolveRadarSite(siteInput);
+  const siteSpecificPath =
+    process.env[`RADAR_STORE_PATH_${siteEnvKey(site)}`] ||
+    (site.key === 'austin' ? process.env.AUSTIN_RADAR_STORE_PATH : undefined) ||
+    (site.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined);
 
   if (siteSpecificPath) {
     return siteSpecificPath;
@@ -374,10 +413,7 @@ function mapArticleRow(row: Record<string, unknown>): RadarArticle {
   };
 }
 
-function buildOverviewFromStore(
-  store: RadarStoreSnapshot,
-  site: SiteProfile = defaultSiteProfile
-): RadarOverview {
+function buildOverviewFromStore(store: RadarStoreSnapshot, site?: RadarSiteInput): RadarOverview {
   const manifest = getRadarSourceManifest(site);
   const latestRun = sortRuns(store.runs)[0];
   const pausedSources = new Set(
@@ -430,7 +466,7 @@ function buildOverviewFromStore(
 
 function buildAdminSnapshotFromStore(
   store: RadarStoreSnapshot,
-  site: SiteProfile = defaultSiteProfile
+  site?: RadarSiteInput
 ): RadarAdminSnapshot {
   const manifest = getRadarSourceManifest(site);
   const controlsBySlug = new Map(
@@ -451,7 +487,7 @@ function buildAdminSnapshotFromStore(
   });
 
   return {
-    overview: buildOverviewFromStore(store),
+    overview: buildOverviewFromStore(store, site),
     sources,
     candidates,
     articles,
@@ -459,7 +495,7 @@ function buildAdminSnapshotFromStore(
   };
 }
 
-export function readRadarStore(site: SiteProfile = defaultSiteProfile): RadarStoreSnapshot {
+export function readRadarStore(site?: RadarSiteInput): RadarStoreSnapshot {
   const storePath = getRadarStorePath(site);
 
   try {
@@ -472,7 +508,7 @@ export function readRadarStore(site: SiteProfile = defaultSiteProfile): RadarSto
 
 export function writeRadarStore(
   store: RadarStoreSnapshot,
-  site: SiteProfile = defaultSiteProfile
+  site?: RadarSiteInput
 ): RadarStoreSnapshot {
   const storePath = getRadarStorePath(site);
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
@@ -482,11 +518,11 @@ export function writeRadarStore(
 
 export function mutateRadarStore(
   mutate: (store: RadarStoreSnapshot) => RadarStoreSnapshot,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): RadarStoreSnapshot {
-  const current = readRadarStore(site);
+  const current = readRadarStore(options.site);
   const next = normalizeStore(mutate(current));
-  return writeRadarStore(next, site);
+  return writeRadarStore(next, options.site);
 }
 
 async function readRadarStoreFromSupabase(): Promise<RadarStoreSnapshot> {
@@ -545,23 +581,23 @@ async function readRadarStoreFromSupabase(): Promise<RadarStoreSnapshot> {
 }
 
 export async function readRadarStoreAsync(
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarStoreSnapshot> {
-  if (!shouldUseSupabaseRadarStore(site)) {
-    return readRadarStore(site);
+  if (!shouldUseSupabaseRadarStore(options.site)) {
+    return readRadarStore(options.site);
   }
 
   try {
     const persistedStore = await readRadarStoreFromSupabase();
     try {
-      writeRadarStore(persistedStore, site);
+      writeRadarStore(persistedStore, options.site);
     } catch (mirrorError) {
       console.error('Unable to refresh local radar store mirror.', mirrorError);
     }
     return persistedStore;
   } catch (error) {
     console.error('Falling back to file-backed radar store.', error);
-    return readRadarStore(site);
+    return readRadarStore(options.site);
   }
 }
 
@@ -574,69 +610,62 @@ async function getRadarServiceClientOrThrow() {
   return supabase;
 }
 
-export function getRadarSourceManifest(
-  site: SiteProfile = defaultSiteProfile
-): RadarSourceManifestEntry[] {
+export function getRadarSourceManifest(site?: RadarSiteInput): RadarSourceManifestEntry[] {
+  const resolvedSite = resolveRadarSite(site);
   return (
-    site.key === 'los-angeles'
+    resolvedSite.key === 'los-angeles'
       ? losAngelesRadarSourceManifestData
+      : resolvedSite.key === 'austin'
+      ? austinRadarSourceManifestData
       : radarSourceManifestData
   ) as RadarSourceManifestEntry[];
 }
 
-export function getRadarJobControl(site: SiteProfile = defaultSiteProfile): RadarJobControl {
-  return readRadarStore(site).jobControl;
+export function getRadarJobControl(options: RadarStoreOptions = {}): RadarJobControl {
+  return readRadarStore(options.site).jobControl;
 }
 
 export async function getRadarJobControlAsync(
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarJobControl> {
-  return (await readRadarStoreAsync(site)).jobControl;
+  return (await readRadarStoreAsync(options)).jobControl;
 }
 
-export function getRadarSourceControls(
-  site: SiteProfile = defaultSiteProfile
-): RadarSourceControl[] {
-  return readRadarStore(site).sourceControls;
+export function getRadarSourceControls(options: RadarStoreOptions = {}): RadarSourceControl[] {
+  return readRadarStore(options.site).sourceControls;
 }
 
 export async function getRadarSourceControlsAsync(
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarSourceControl[]> {
-  return (await readRadarStoreAsync(site)).sourceControls;
+  return (await readRadarStoreAsync(options)).sourceControls;
 }
 
-export function isRadarSourcePaused(
-  sourceSlug: string,
-  site: SiteProfile = defaultSiteProfile
-): boolean {
-  return getRadarSourceControls(site).some(
+export function isRadarSourcePaused(sourceSlug: string, options: RadarStoreOptions = {}): boolean {
+  return getRadarSourceControls(options).some(
     (control) => control.sourceSlug === sourceSlug && control.paused
   );
 }
 
 export async function isRadarSourcePausedAsync(
   sourceSlug: string,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<boolean> {
-  return (await getRadarSourceControlsAsync(site)).some(
+  return (await getRadarSourceControlsAsync(options)).some(
     (control) => control.sourceSlug === sourceSlug && control.paused
   );
 }
 
-export function getRadarRuns(
-  limit?: number,
-  site: SiteProfile = defaultSiteProfile
-): RadarRun[] {
-  const runs = sortRuns(readRadarStore(site).runs);
+export function getRadarRuns(limit?: number, options: RadarStoreOptions = {}): RadarRun[] {
+  const runs = sortRuns(readRadarStore(options.site).runs);
   return typeof limit === 'number' ? runs.slice(0, limit) : runs;
 }
 
 export async function getRadarRunsAsync(
   limit?: number,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarRun[]> {
-  const runs = sortRuns((await readRadarStoreAsync(site)).runs);
+  const runs = sortRuns((await readRadarStoreAsync(options)).runs);
   return typeof limit === 'number' ? runs.slice(0, limit) : runs;
 }
 
@@ -644,7 +673,7 @@ export function getRadarCandidates(options?: {
   lane?: RadarLane;
   includePublished?: boolean;
   limit?: number;
-  site?: SiteProfile;
+  site?: RadarSiteInput;
 }): RadarCandidate[] {
   const candidates = sortCandidates(readRadarStore(options?.site).candidates)
     .filter((candidate) =>
@@ -661,9 +690,9 @@ export async function getRadarCandidatesAsync(options?: {
   lane?: RadarLane;
   includePublished?: boolean;
   limit?: number;
-  site?: SiteProfile;
+  site?: RadarSiteInput;
 }): Promise<RadarCandidate[]> {
-  const candidates = sortCandidates((await readRadarStoreAsync(options?.site)).candidates)
+  const candidates = sortCandidates((await readRadarStoreAsync({ site: options?.site })).candidates)
     .filter((candidate) =>
       options?.includePublished ? true : candidate.moderationState !== 'published'
     )
@@ -678,7 +707,7 @@ export function getRadarArticles(options?: {
   lane?: RadarLane;
   includeUnpublished?: boolean;
   limit?: number;
-  site?: SiteProfile;
+  site?: RadarSiteInput;
 }): RadarArticle[] {
   const articles = sortArticles(readRadarStore(options?.site).articles)
     .filter((article) => (options?.includeUnpublished ? true : article.isPublished))
@@ -691,9 +720,9 @@ export async function getRadarArticlesAsync(options?: {
   lane?: RadarLane;
   includeUnpublished?: boolean;
   limit?: number;
-  site?: SiteProfile;
+  site?: RadarSiteInput;
 }): Promise<RadarArticle[]> {
-  const articles = sortArticles((await readRadarStoreAsync(options?.site)).articles)
+  const articles = sortArticles((await readRadarStoreAsync({ site: options?.site })).articles)
     .filter((article) => (options?.includeUnpublished ? true : article.isPublished))
     .filter((article) => (options?.lane ? article.lane === options.lane : true));
 
@@ -702,21 +731,21 @@ export async function getRadarArticlesAsync(options?: {
 
 export function getRadarArticleBySlug(
   slug: string,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): RadarArticle | undefined {
-  return readRadarStore(site).articles.find((article) => article.slug === slug);
+  return readRadarStore(options.site).articles.find((article) => article.slug === slug);
 }
 
 export async function getRadarArticleBySlugAsync(
   slug: string,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarArticle | undefined> {
-  return (await readRadarStoreAsync(site)).articles.find((article) => article.slug === slug);
+  return (await readRadarStoreAsync(options)).articles.find((article) => article.slug === slug);
 }
 
 export function radarArticleToArticle(
   article: RadarArticle,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Article {
   return {
     slug: article.slug,
@@ -727,7 +756,7 @@ export function radarArticleToArticle(
     updatedAt: article.updatedAt,
     category: article.category,
     body: article.body,
-    series: site.key === defaultSiteProfile.key ? 'arizona-radar' : 'local-radar',
+    series: radarSeriesForSite(options.site),
     freshnessTier: article.freshnessTier,
     sourcePolicy: article.sourcePolicy,
     relatedCategorySlugs: article.relatedCategorySlugs,
@@ -748,42 +777,42 @@ export function radarArticleToArticle(
 
 export function getPublishedRadarArticlesAsArticles(
   limit?: number,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Article[] {
-  const articles = getRadarArticles({ site }).map((article) => radarArticleToArticle(article, site));
+  const articles = getRadarArticles({ site: options.site }).map((article) =>
+    radarArticleToArticle(article, options)
+  );
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
 }
 
 export async function getPublishedRadarArticlesAsArticlesAsync(
   limit?: number,
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<Article[]> {
-  const articles = (await getRadarArticlesAsync({ site })).map((article) =>
-    radarArticleToArticle(article, site)
+  const articles = (await getRadarArticlesAsync({ site: options.site })).map((article) =>
+    radarArticleToArticle(article, options)
   );
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
 }
 
-export function getRadarOverview(site: SiteProfile = defaultSiteProfile): RadarOverview {
-  return buildOverviewFromStore(readRadarStore(site), site);
+export function getRadarOverview(options: RadarStoreOptions = {}): RadarOverview {
+  return buildOverviewFromStore(readRadarStore(options.site), options.site);
 }
 
 export async function getRadarOverviewAsync(
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarOverview> {
-  return buildOverviewFromStore(await readRadarStoreAsync(site), site);
+  return buildOverviewFromStore(await readRadarStoreAsync(options), options.site);
 }
 
-export function getRadarAdminSnapshot(
-  site: SiteProfile = defaultSiteProfile
-): RadarAdminSnapshot {
-  return buildAdminSnapshotFromStore(readRadarStore(site), site);
+export function getRadarAdminSnapshot(options: RadarStoreOptions = {}): RadarAdminSnapshot {
+  return buildAdminSnapshotFromStore(readRadarStore(options.site), options.site);
 }
 
 export async function getRadarAdminSnapshotAsync(
-  site: SiteProfile = defaultSiteProfile
+  options: RadarStoreOptions = {}
 ): Promise<RadarAdminSnapshot> {
-  return buildAdminSnapshotFromStore(await readRadarStoreAsync(site), site);
+  return buildAdminSnapshotFromStore(await readRadarStoreAsync(options), options.site);
 }
 
 export function setRadarJobPaused(paused: boolean): RadarJobControl {

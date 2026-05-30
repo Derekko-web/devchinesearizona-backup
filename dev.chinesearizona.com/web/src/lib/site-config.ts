@@ -613,8 +613,8 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       zh: '奥斯汀本地优先',
     },
     description: {
-      en: 'A placeholder Austin configuration for the reusable city-site platform. It is blocked from launch until Austin-specific listings, sources, and article data are connected.',
-      zh: '可重用城市平台的奥斯汀示例配置。必须接入奥斯汀专属商家、来源与文章数据后才可上线。',
+      en: 'A bilingual Austin platform profile with city-specific news sources for Austin, Round Rock, Cedar Park, Pflugerville, and Central Texas.',
+      zh: '奥斯汀双语城市平台配置，使用奥斯汀、朗德罗克、雪松公园、普弗拉格维尔与中德州专属新闻来源。',
     },
     directory: {
       categorySlugs: ['dining', 'real-estate', 'local-services', 'education', 'medical'],
@@ -640,18 +640,18 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       routePath: '/local-news',
       archivePath: '/local-news/archive',
       articleDataSource: {
-        state: 'required',
-        label: 'Austin article data',
+        state: 'live',
+        label: 'Austin Radar article data',
         kind: 'runtime-json',
-        path: 'data/sites/austin/articles.json',
-        notes: 'Must be generated from Austin-specific feeds, source settings, and editorial review.',
+        path: 'data/sites/austin/radar-runtime/store.json',
+        notes: 'Austin-only summary/link articles generated from Austin source settings and editorial review.',
       },
       sourceManifest: {
-        state: 'required',
+        state: 'live',
         label: 'Austin monitored source manifest',
         kind: 'static-json',
-        path: 'config/sites/austin/source-manifest.json',
-        notes: 'Must define Austin-specific RSS, scraper, social, and official-source settings.',
+        path: 'src/data/austin-radar-source-manifest.json',
+        notes: 'Austin-specific RSS, official, local media, and signal-only source settings.',
       },
       allowDefaultFallback: false,
     },
@@ -661,16 +661,16 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         zh: 'ChineseAustin | 奥斯汀华人商家、新闻与生活资源',
       },
       description: {
-        en: 'Austin placeholder SEO copy for the multi-city platform. Replace with city-specific editorial copy before launch.',
-        zh: '多城市平台的奥斯汀示例 SEO 文案。上线前必须替换为城市专属编辑文案。',
+        en: 'Austin Chinese community news, source-linked local summaries, business resources, and bilingual newcomer context for Central Texas.',
+        zh: '奥斯汀华人社区新闻、附来源链接的本地摘要、商家资源与中德州双语生活资讯。',
       },
       canonicalBaseUrl: 'https://chineseaustin.com',
     },
     publisher: {
       contactEmail: 'hello@chineseaustin.com',
       updatedLabel: {
-        en: 'Launch copy pending Austin review',
-        zh: '上线文案等待奥斯汀审核',
+        en: 'Austin news sources connected: May 30, 2026',
+        zh: '奥斯汀新闻来源已接入：2026 年 5 月 30 日',
       },
     },
     runtime: {

@@ -23,18 +23,21 @@ describe('city site configuration', () => {
     );
   });
 
-  it('requires Austin-specific sources before Austin can serve content', () => {
+  it('uses Austin-specific news sources without enabling directory fallback', () => {
     const site = resolveSiteProfileFromHost('www.chineseaustin.com');
 
     expect(site).toBe(siteProfiles.austin);
     expect(site.launchState).toBe('placeholder');
     expect(hasLiveDirectoryData(site)).toBe(false);
-    expect(hasLiveNewsData(site)).toBe(false);
+    expect(hasLiveNewsData(site)).toBe(true);
     expect(shouldNoIndexSiteProfile(site)).toBe(true);
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
     expect(site.directory.listingSource.path).toBe('data/sites/austin/businesses.json');
-    expect(site.news.articleDataSource.path).toBe('data/sites/austin/articles.json');
+    expect(site.news.routePath).toBe('/local-news');
+    expect(site.news.archivePath).toBe('/local-news/archive');
+    expect(site.news.articleDataSource.path).toBe('data/sites/austin/radar-runtime/store.json');
+    expect(site.news.sourceManifest.path).toBe('src/data/austin-radar-source-manifest.json');
     expect(JSON.stringify(site)).not.toContain('generated-directory-businesses.json');
     expect(JSON.stringify(site)).not.toContain('generated-local-articles.json');
   });

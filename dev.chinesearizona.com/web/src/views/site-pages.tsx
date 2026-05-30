@@ -135,9 +135,6 @@ import {
 } from '@/lib/i18n';
 import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import {
-  getLocalizedArizonaNewsArchivePath,
-  getLocalizedArizonaNewsArticlePath,
-  getLocalizedArizonaNewsPath,
   getLocalizedNewsArchivePath,
   getLocalizedNewsArticlePath,
   getLocalizedNewsPath,
@@ -215,6 +212,7 @@ const articleSeriesOptions: ArticleSeries[] = [
   'trend-radar',
   'arizona-radar',
   'local-radar',
+  'austin-radar',
   'community-wire',
 ];
 const articleSourcePolicyOptions: SourcePolicy[] = [
@@ -222,6 +220,19 @@ const articleSourcePolicyOptions: SourcePolicy[] = [
   'signal_only',
   'republish_with_permission',
 ];
+
+function articleSeriesOptionsForSite(site: SiteProfile): ArticleSeries[] {
+  if (site.key === 'austin') {
+    return ['austin-radar'];
+  }
+  if (site.key === 'los-angeles') {
+    return ['local-radar'];
+  }
+
+  return articleSeriesOptions.filter(
+    (series) => series !== 'austin-radar' && series !== 'local-radar'
+  );
+}
 
 function parseDirectorySortOption(value?: string): SortOption {
   if (value && directorySortOptions.includes(value as SortOption)) {
@@ -339,10 +350,6 @@ function siteNewsLabel(site: SiteProfile, locale: Locale): string {
   }
 
   return locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`;
-}
-
-function isRadarArticleSeries(article: Article): boolean {
-  return article.series === 'arizona-radar' || article.series === 'local-radar';
 }
 
 function buildRadarHref(
@@ -518,6 +525,14 @@ function cleanArizonaNewsCopy(value: string): string {
     .replace(/\bSignal\b/g, 'Indicator')
     .replace(/\bsignal\b/g, 'indicator')
     .replace(/訊號/g, '資訊');
+}
+
+function isRadarArticle(article: Article): boolean {
+  return (
+    article.series === 'arizona-radar' ||
+    article.series === 'austin-radar' ||
+    article.series === 'local-radar'
+  );
 }
 
 function cleanLocalizedArticleSummary<T extends { localizedText: { title: string; excerpt: string } }>(
@@ -2125,7 +2140,7 @@ export async function RelocationGuidePageView({ locale }: { locale: Locale }) {
               </h2>
             </div>
             <Link
-              href={getLocalizedArizonaNewsPath(locale)}
+              href={getLocalizedNewsPath(locale, defaultSiteProfile)}
               className="inline-flex items-center gap-2 text-sm font-semibold text-brand-700 hover:text-brand-800"
             >
               {locale === 'zh' ? '查看全部新聞' : 'View all news'}
@@ -2137,7 +2152,7 @@ export async function RelocationGuidePageView({ locale }: { locale: Locale }) {
             {localizedArticles.map(({ article, localizedText }, index) => (
               <Link
                 key={article.slug}
-                href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
+                href={getLocalizedNewsArticlePath(locale, defaultSiteProfile, article.slug)}
                 className="group flex min-h-[260px] flex-col justify-between border-b border-[#e2d2c2] py-6 md:odd:border-r md:odd:pr-6 md:even:pl-6 xl:border-r xl:px-6 xl:first:pl-0 xl:[&:nth-child(3n)]:border-r-0 xl:[&:nth-child(3n)]:pr-0"
               >
                 <span>
@@ -2521,7 +2536,7 @@ export async function CommunityPageView({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-2xl font-bold text-slate-900">{locale === 'zh' ? '在地新聞與內容' : 'Local news and content'}</h2>
           <Link
-            href={getLocalizedArizonaNewsArchivePath(locale)}
+            href={getLocalizedNewsArchivePath(locale, defaultSiteProfile)}
             className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
           >
             {locale === 'zh' ? '查看全部文章' : 'Browse full archive'}
@@ -2529,7 +2544,7 @@ export async function CommunityPageView({
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
           {localizedArticles.map(({ article, localizedText }) => (
-            <Link key={article.slug} href={getLocalizedArizonaNewsArticlePath(locale, article.slug)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+            <Link key={article.slug} href={getLocalizedNewsArticlePath(locale, defaultSiteProfile, article.slug)} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
               <ArticleMetaRow article={article} locale={locale} />
               <h3 className="mt-2 text-xl font-bold text-slate-900">{localizedText.title}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-600">{localizedText.excerpt}</p>
@@ -2609,7 +2624,7 @@ export async function CommunityRadarPageView({
   const allRadarArticles = await getRadarArticlesAsync({ site });
   const allFeedArticles = allRadarArticles
     .filter((article) => (activeLane ? article.lane === activeLane : true))
-    .map((article) => radarArticleToArticle(article, site));
+    .map((article) => radarArticleToArticle(article, { site }));
   const totalFeedArticles = allFeedArticles.length;
   const totalFeedPages = Math.max(1, Math.ceil(totalFeedArticles / RADAR_FEED_PAGE_SIZE));
   const currentFeedPage = Math.min(requestedPage, totalFeedPages);
@@ -2816,9 +2831,10 @@ export async function NewsArchivePageView({
     );
   }
 
+  const allowLegacyArchive = site.key === defaultSiteProfile.key;
   const articlePage = await getArticleArchivePageAsync(
     {
-      bucket: searchParams?.bucket,
+      bucket: allowLegacyArchive ? searchParams?.bucket : 'current',
       series: searchParams?.series,
       sourcePolicy: searchParams?.sourcePolicy,
       year: searchParams?.year,
@@ -2934,16 +2950,18 @@ export async function NewsArchivePageView({
             >
               {locale === 'zh' ? '目前編輯內容' : 'Current editorial'}
             </Link>
-            <Link
-              href={newsArchiveHref(locale, site, { bucket: 'legacy' })}
-              className={
-                isLegacyBucket
-                  ? 'inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800'
-                  : 'inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
-              }
-            >
-              {locale === 'zh' ? '舊聞檔案' : 'Legacy archive'}
-            </Link>
+            {allowLegacyArchive ? (
+              <Link
+                href={newsArchiveHref(locale, site, { bucket: 'legacy' })}
+                className={
+                  isLegacyBucket
+                    ? 'inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800'
+                    : 'inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
+                }
+              >
+                {locale === 'zh' ? '舊聞檔案' : 'Legacy archive'}
+              </Link>
+            ) : null}
           </div>
 
           <form
@@ -2964,7 +2982,7 @@ export async function NewsArchivePageView({
                   className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700"
                 >
                   <option value="">{locale === 'zh' ? '全部系列' : 'All series'}</option>
-                  {articleSeriesOptions.map((series) => (
+                  {articleSeriesOptionsForSite(site).map((series) => (
                     <option key={series} value={series}>
                       {articleSeriesLabel(series, locale)}
                     </option>
@@ -3250,7 +3268,7 @@ export async function ArticleDetailPageView({
   const categories = await getDirectoryCategories();
   const localizedArticle = await resolveArticleText(article, locale);
   const displayArticle =
-    isRadarArticleSeries(article)
+    isRadarArticle(article)
       ? {
           ...localizedArticle,
           title: cleanArizonaNewsCopy(localizedArticle.title),
@@ -3359,7 +3377,7 @@ export async function ArticleDetailPageView({
               <p className="max-w-3xl text-xl leading-8 text-[#5f4d40]">
                 {displayArticle.excerpt}
               </p>
-              {isRadarArticleSeries(article) ? null : (
+              {isRadarArticle(article) ? null : (
                 <ArticleAudienceChips article={article} locale={locale} />
               )}
             </header>

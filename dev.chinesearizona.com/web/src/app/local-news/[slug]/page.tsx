@@ -13,9 +13,10 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.routePath !== '/local-news') {
     return {};
   }
+
   return (await articleMetadata('en', slug, site)) ?? {};
 }
 
@@ -24,9 +25,10 @@ export const dynamic = 'force-dynamic';
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.routePath !== '/local-news') {
     notFound();
   }
+
   const rendered = await ArticleDetailPageView({ locale: 'en', slug, site });
   if (!rendered) {
     notFound();

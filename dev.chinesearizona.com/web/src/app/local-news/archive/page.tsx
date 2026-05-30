@@ -19,16 +19,18 @@ type PageProps = {
 
 export async function generateMetadata({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.archivePath !== '/local-news/archive') {
     return {};
   }
+
   return communityNewsMetadata('en', await searchParams, site);
 }
 
 export default async function Page({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.archivePath !== '/local-news/archive') {
     notFound();
   }
+
   return await NewsArchivePageView({ locale: 'en', searchParams: await searchParams, site });
 }

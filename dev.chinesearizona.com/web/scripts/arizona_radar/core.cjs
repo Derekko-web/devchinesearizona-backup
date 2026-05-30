@@ -67,6 +67,9 @@ const RADAR_FALLBACK_HEROES = {
   social:
     'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
 };
+const DEFAULT_SOURCE_NAME =
+  process.env.RADAR_FALLBACK_SOURCE_NAME ||
+  (process.env.RADAR_REGION_NAME ? `${process.env.RADAR_REGION_NAME} Source` : 'Arizona Source');
 
 function nowIso() {
   return new Date().toISOString();
@@ -358,7 +361,7 @@ function titleCase(value) {
     .join(' ');
 }
 
-function inferSourceNameFromUrl(value, fallbackSourceName = 'Arizona Source') {
+function inferSourceNameFromUrl(value, fallbackSourceName = DEFAULT_SOURCE_NAME) {
   const hostname = hostnameFromUrl(value).replace(/^www\./i, '');
   if (!hostname) {
     return fallbackSourceName;
@@ -472,7 +475,7 @@ function findManifestSource(draft, manifestEntries, manifestBySlug) {
 }
 
 function resolveSource(draft, manifestEntries, manifestBySlug, options = {}) {
-  const fallbackSourceName = options.defaultSourceName || 'Arizona Source';
+  const fallbackSourceName = options.defaultSourceName || DEFAULT_SOURCE_NAME;
   const knownSource = findManifestSource(draft, manifestEntries, manifestBySlug);
   if (knownSource) {
     return knownSource;

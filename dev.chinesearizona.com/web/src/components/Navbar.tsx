@@ -10,7 +10,7 @@ import { Suspense, useState } from 'react';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { buildAuthPath, buildJoinPath } from '@/lib/auth';
-import { ARIZONA_NEWS_PATH } from '@/lib/arizona-news';
+import { getNewsPath } from '@/lib/arizona-news';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { localeLangAttribute } from '@/lib/i18n';
 import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
@@ -123,7 +123,7 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
     ...(hasLiveNewsData(site)
       ? [
           {
-            path: ARIZONA_NEWS_PATH,
+            path: getNewsPath(site),
             label: locale === 'zh' ? `${site.regionNameZh}新聞` : 'News',
             subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
           },

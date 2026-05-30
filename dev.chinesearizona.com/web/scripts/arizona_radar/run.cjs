@@ -31,6 +31,23 @@ const SITE_CONFIGS = {
     useSupabase: true,
     summaryOnly: false,
   },
+  austin: {
+    key: 'austin',
+    brandName: 'ChineseAustin',
+    defaultSourceName: 'Austin Source',
+    feedPromptTitle:
+      'Summarize these Austin Radar RSS items into original ChineseAustin summary/link articles.',
+    openWebPromptTitle: 'You are preparing structured Austin Radar drafts for ChineseAustin.',
+    regionName: 'Austin',
+    regionNameZh: '奥斯汀',
+    regionRelevance:
+      'Austin, Round Rock, Cedar Park, Pflugerville, Georgetown, Leander, Travis County, Williamson County, Central Texas, or another Austin-area place',
+    runIdPrefix: 'austin-radar',
+    storePath: path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'),
+    manifestPath: path.join(ROOT, 'src', 'data', 'austin-radar-source-manifest.json'),
+    useSupabase: false,
+    summaryOnly: true,
+  },
   'los-angeles': {
     key: 'los-angeles',
     brandName: 'ChineseLosAngeles',
@@ -55,13 +72,29 @@ function normalizeSiteKey(value) {
   if (normalized === 'la' || normalized === 'los_angeles') {
     return 'los-angeles';
   }
+  if (normalized === 'atx') {
+    return 'austin';
+  }
 
   return SITE_CONFIGS[normalized] ? normalized : 'arizona';
 }
 
 function getSiteConfig(siteKey) {
-  return SITE_CONFIGS[normalizeSiteKey(siteKey)];
+  const baseConfig = SITE_CONFIGS[normalizeSiteKey(siteKey)];
+  return {
+    ...baseConfig,
+    brandName: process.env.RADAR_BRAND_NAME || baseConfig.brandName,
+    regionName: process.env.RADAR_REGION_NAME || baseConfig.regionName,
+    regionNameZh: process.env.RADAR_REGION_NAME_ZH || baseConfig.regionNameZh,
+    regionRelevance: process.env.RADAR_REGION_PLACES || baseConfig.regionRelevance,
+    manifestPath: process.env.RADAR_SOURCE_MANIFEST_PATH
+      ? path.resolve(process.env.RADAR_SOURCE_MANIFEST_PATH)
+      : baseConfig.manifestPath,
+    summaryOnly: parseBoolean(process.env.RADAR_SUMMARY_ONLY, baseConfig.summaryOnly),
+  };
 }
+const DEFAULT_SITE_KEY = normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY);
+const RADAR_CITY = getSiteConfig(DEFAULT_SITE_KEY);
 
 function parseArgs(argv) {
   const args = {
@@ -75,7 +108,7 @@ function parseArgs(argv) {
     lookbackHours: 24,
     maxItems: 10,
     retryEmpty: parseBoolean(process.env.RADAR_RETRY_EMPTY, false),
-    site: normalizeSiteKey(process.env.RADAR_SITE),
+    site: normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY),
     sourceBatchSize: Number(process.env.RADAR_SOURCE_BATCH_SIZE || 0),
     sourceSlugs: process.env.RADAR_SOURCE_SLUGS || '',
     storePath: '',
@@ -201,10 +234,10 @@ function parsePositiveInteger(value, fallback) {
 function printHelp() {
   process.stdout.write(
     [
-      'Arizona Radar worker',
+      `${RADAR_CITY.regionName} Radar worker`,
       '',
       'Usage:',
-      '  node scripts/arizona_radar/run.cjs run [--site=arizona|los-angeles] [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
+      '  node scripts/arizona_radar/run.cjs run [--site=arizona|austin|los-angeles] [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
       '',
       'Environment:',
       '  HERMES_BIN=hermes',
@@ -326,7 +359,7 @@ function feedSourceUrl(source) {
   return String(source.feedUrl || '').trim();
 }
 
-function laneContext(lane) {
+function laneContext(lane, siteConfig = RADAR_CITY) {
   if (lane === 'openings') {
     return {
       en: 'an openings story',
@@ -343,8 +376,8 @@ function laneContext(lane) {
   }
   if (lane === 'official') {
     return {
-      en: 'an Arizona update',
-      zh: '亞利桑那更新',
+      en: `a ${siteConfig.regionName} update`,
+      zh: `${siteConfig.regionNameZh}更新`,
       personas: ['local_families', 'business_owners'],
     };
   }
@@ -461,7 +494,7 @@ function parseFeedItems(xml, source, options = {}) {
   const lookbackHours = Number.isFinite(options.lookbackHours) ? options.lookbackHours : 168;
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
   const $ = cheerio.load(xml, { xmlMode: true });
-  const context = laneContext(source.lane);
+  const context = laneContext(source.lane, options.siteConfig || RADAR_CITY);
   const drafts = [];
 
   function pushDraft(input) {
@@ -755,7 +788,7 @@ function rewriteFeedItemsWithHermes({
     .filter(Boolean);
 }
 
-async function fetchText(url, timeoutMs) {
+async function fetchText(url, timeoutMs, siteConfig = RADAR_CITY) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -763,7 +796,7 @@ async function fetchText(url, timeoutMs) {
     const response = await fetch(url, {
       headers: {
         accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
-        'user-agent': 'ChineseArizonaRadarFeedSync/1.0',
+        'user-agent': `${siteConfig.brandName}RadarFeedSync/1.0`,
       },
       signal: controller.signal,
     });
@@ -779,6 +812,7 @@ async function fetchText(url, timeoutMs) {
 async function collectDraftsFromFeeds(manifest, options = {}) {
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
   const timeoutMs = Number.isFinite(options.timeoutMs) ? Math.max(1000, Math.floor(options.timeoutMs)) : 15000;
+  const siteConfig = options.siteConfig || RADAR_CITY;
   const seeds = [];
 
   for (const source of Array.isArray(manifest) ? manifest : []) {
@@ -788,12 +822,13 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
     }
 
     try {
-      const xml = await fetchText(url, timeoutMs);
+      const xml = await fetchText(url, timeoutMs, siteConfig);
       seeds.push(
         ...parseFeedItems(xml, source, {
           lookbackHours: options.lookbackHours,
           maxItems,
           now: options.now,
+          siteConfig,
         })
       );
     } catch (error) {
@@ -818,7 +853,7 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
     )
     .slice(0, maxItems)) {
     try {
-      const html = await fetchText(seed.canonicalUrl, timeoutMs);
+      const html = await fetchText(seed.canonicalUrl, timeoutMs, siteConfig);
       const articlePayload = extractArticlePayload(html, seed);
       if (articlePayload.text.length < 300) {
         process.stderr.write(
@@ -857,7 +892,7 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
         : 240000,
       items: rewriteSeeds,
       maxTurns: options.hermesMaxTurns || 4,
-      siteConfig: options.siteConfig || SITE_CONFIGS.arizona,
+      siteConfig,
     }).slice(0, maxItems);
   } catch (error) {
     process.stderr.write(

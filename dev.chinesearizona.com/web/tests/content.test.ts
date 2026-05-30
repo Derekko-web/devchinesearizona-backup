@@ -17,9 +17,11 @@ import {
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
 import { articleMetadata, communityNewsMetadata } from '@/lib/page-metadata';
+import { siteProfiles } from '@/lib/site-config';
 import { createCommunityPost, createModerationReport } from '@/lib/runtime-store';
 
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
+const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
 
 afterEach(() => {
   if (originalRadarStorePath) {
@@ -27,13 +29,19 @@ afterEach(() => {
   } else {
     delete process.env.RADAR_STORE_PATH;
   }
+
+  if (originalAustinRadarStorePath) {
+    process.env.AUSTIN_RADAR_STORE_PATH = originalAustinRadarStorePath;
+  } else {
+    delete process.env.AUSTIN_RADAR_STORE_PATH;
+  }
 });
 
-function writeRadarStore(store: unknown) {
+function writeRadarStore(store: unknown, envKey: 'RADAR_STORE_PATH' | 'AUSTIN_RADAR_STORE_PATH' = 'RADAR_STORE_PATH') {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-store-'));
   const storePath = path.join(directory, 'store.json');
   fs.writeFileSync(storePath, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
-  process.env.RADAR_STORE_PATH = storePath;
+  process.env[envKey] = storePath;
   return storePath;
 }
 
@@ -210,5 +218,119 @@ describe('content selectors', () => {
     expect(archivePage.articles.some((article) => article.slug === 'mesa-radar-housing-pulse')).toBe(true);
     expect(detailArticle?.series).toBe('arizona-radar');
     expect(detailArticle?.aiGeneratedSummary).toBe(true);
+  });
+
+  it('loads Austin radar articles from the Austin store without falling back to Arizona content', async () => {
+    writeRadarStore({
+      version: 1,
+      jobControl: {
+        paused: false,
+        publishCap: 10,
+        updatedAt: '2026-04-18T12:00:00.000Z',
+      },
+      sourceControls: [],
+      runs: [],
+      candidates: [],
+      articles: [
+        {
+          id: 'article-arizona-only',
+          candidateId: 'candidate-arizona-only',
+          slug: 'phoenix-only-radar-item',
+          lane: 'official',
+          title: { en: 'Phoenix only radar item', zh: 'Phoenix only radar item' },
+          excerpt: { en: 'Arizona fallback content.', zh: 'Arizona fallback content.' },
+          body: [{ en: 'Arizona fallback body.', zh: 'Arizona fallback body.' }],
+          heroImage: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
+          heroImagePolicy: 'fallback_only',
+          category: 'news',
+          freshnessTier: 'breaking',
+          sourcePolicy: 'summary_link',
+          sourceType: 'airport_newsroom',
+          sourceName: 'Phoenix Sky Harbor',
+          sourceUrl: 'https://www.skyharbor.com/news/test-item',
+          sourceLinks: [],
+          relatedCategorySlugs: [],
+          ctaBusinessSlugs: [],
+          personaTargets: [],
+          publishedAt: '2026-04-18T12:00:00.000Z',
+          updatedAt: '2026-04-18T12:00:00.000Z',
+          lastCheckedAt: '2026-04-18T12:00:00.000Z',
+          isPublished: true,
+          aiGeneratedSummary: true,
+        },
+      ],
+    });
+    writeRadarStore(
+      {
+        version: 1,
+        jobControl: {
+          paused: false,
+          publishCap: 10,
+          updatedAt: '2026-05-30T12:00:00.000Z',
+        },
+        sourceControls: [],
+        runs: [],
+        candidates: [],
+        articles: [
+          {
+            id: 'article-austin-only',
+            candidateId: 'candidate-austin-only',
+            slug: 'austin-only-radar-item',
+            lane: 'official',
+            title: { en: 'Austin only radar item', zh: 'Austin only radar item' },
+            excerpt: { en: 'Austin source-linked summary.', zh: 'Austin source-linked summary.' },
+            body: [
+              {
+                en: 'This Austin article is a summary that keeps the source link as the path to the original reporting.',
+                zh: 'This Austin article is a summary that keeps the source link as the path to the original reporting.',
+              },
+            ],
+            heroImage: 'https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=1400&q=80',
+            heroImagePolicy: 'fallback_only',
+            category: 'news',
+            freshnessTier: 'weekly',
+            sourcePolicy: 'summary_link',
+            sourceType: 'local_media',
+            sourceName: 'Austin Monitor',
+            sourceUrl: 'https://austinmonitor.com/example/',
+            sourceLinks: [
+              {
+                label: { en: 'Austin Monitor', zh: 'Austin Monitor' },
+                url: 'https://austinmonitor.com/example/',
+                source: 'Austin Monitor',
+              },
+            ],
+            relatedCategorySlugs: [],
+            ctaBusinessSlugs: [],
+            personaTargets: [],
+            publishedAt: '2026-05-30T12:00:00.000Z',
+            updatedAt: '2026-05-30T12:00:00.000Z',
+            lastCheckedAt: '2026-05-30T12:00:00.000Z',
+            isPublished: true,
+            aiGeneratedSummary: true,
+          },
+        ],
+      },
+      'AUSTIN_RADAR_STORE_PATH'
+    );
+
+    const currentArticles = await getCurrentArticlesAsync(undefined, siteProfiles.austin);
+    const archivePage = await getArticleArchivePageAsync(
+      { series: 'austin-radar' },
+      24,
+      siteProfiles.austin
+    );
+    const austinArticle = await getArticleBySlugAsync('austin-only-radar-item', siteProfiles.austin);
+    const arizonaFallbackArticle = await getArticleBySlugAsync(
+      'phoenix-only-radar-item',
+      siteProfiles.austin
+    );
+
+    expect(currentArticles.map((article) => article.slug)).toContain('austin-only-radar-item');
+    expect(currentArticles.map((article) => article.slug)).not.toContain('phoenix-only-radar-item');
+    expect(archivePage.articles.map((article) => article.series)).toEqual(['austin-radar']);
+    expect(austinArticle?.sourceName).toBe('Austin Monitor');
+    expect(austinArticle?.sourceLinks[0]?.url).toBe('https://austinmonitor.com/example/');
+    expect(arizonaFallbackArticle).toBeUndefined();
   });
 });
