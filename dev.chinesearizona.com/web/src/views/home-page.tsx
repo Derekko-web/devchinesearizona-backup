@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 
 import { CategoryIcon } from '@/components/CategoryIcon';
-import { getLocalizedArizonaNewsArticlePath, getLocalizedArizonaNewsPath } from '@/lib/arizona-news';
+import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getBusinesses, getCurrentArticles } from '@/lib/content';
 import { t } from '@/lib/i18n';
@@ -337,7 +337,7 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
     site.directory.categorySlugs.includes(category.slug)
   );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
-  const storyCards: HomeStoryCard[] = newsIsLive
+  const storyCards: HomeStoryCard[] = newsIsLive && site.key === defaultSiteProfile.key
     ? getCurrentArticles()
         .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
         .filter(
@@ -357,7 +357,7 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
         })
         .slice(0, 3)
         .map((article) => ({
-          href: getLocalizedArizonaNewsArticlePath(locale, article.slug),
+          href: getLocalizedNewsArticlePath(locale, site, article.slug),
           title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
           bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
           date: formatCardDate(article.publishedAt, locale),
@@ -657,7 +657,7 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
               <HomeSectionHeading
                 title={copy(locale, 'News & Community', '新闻与社区')}
                 subtitle={oppositeCopy(locale, 'News & Community', '新闻与社区')}
-                href={newsIsLive ? getLocalizedArizonaNewsPath(locale) : undefined}
+                href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
                 hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
               />
 

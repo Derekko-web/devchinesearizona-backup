@@ -1,0 +1,125 @@
+[
+  {
+    "slug": "austin-monitor",
+    "name": "Austin Monitor",
+    "url": "https://austinmonitor.com/",
+    "feedUrl": "https://austinmonitor.com/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin City Council, housing, transit, land use, and civic-service updates that affect local residents.",
+      "zh": "用于奥斯汀市议会、住房、交通、土地使用与市政服务相关本地更新。"
+    }
+  },
+  {
+    "slug": "kut-austin",
+    "name": "KUT Austin",
+    "url": "https://www.kut.org/",
+    "feedUrl": "https://www.kut.org/kut-rss-feed-all-content.rss",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin public radio coverage of civic life, schools, transportation, and community issues across Central Texas.",
+      "zh": "用于奥斯汀公共广播关于市民生活、学校、交通与中德州社区议题的报道。"
+    }
+  },
+  {
+    "slug": "what-now-austin",
+    "name": "What Now Austin",
+    "url": "https://whatnow.com/austin/",
+    "feedUrl": "https://whatnow.com/austin/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use for Austin restaurant, retail, plaza, and small-business opening signals.",
+      "zh": "用于奥斯汀餐厅、零售、商业广场与小企业开店讯号。"
+    }
+  },
+  {
+    "slug": "eater-austin",
+    "name": "Eater Austin",
+    "url": "https://austin.eater.com/",
+    "feedUrl": "https://austin.eater.com/rss/index.xml",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "openings",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin food, restaurant, cafe, bar, and dining-neighborhood updates.",
+      "zh": "用于奥斯汀餐饮、餐厅、咖啡店、酒吧与美食街区更新。"
+    }
+  },
+  {
+    "slug": "austin-towers",
+    "name": "Towers Austin",
+    "url": "https://austin.towers.net/",
+    "feedUrl": "https://austin.towers.net/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "housing",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin real estate, development, zoning, downtown housing, and urban-neighborhood signals.",
+      "zh": "用于奥斯汀房地产、开发、分区、市中心住房与城市社区讯号。"
+    }
+  },
+  {
+    "slug": "ut-austin-news",
+    "name": "UT Austin News",
+    "url": "https://news.utexas.edu/",
+    "feedUrl": "https://news.utexas.edu/feed/",
+    "sourceType": "official_data",
+    "sourcePolicy": "summary_link",
+    "lane": "community",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for University of Texas at Austin campus, research, student, and regional workforce updates.",
+      "zh": "用于德州大学奥斯汀分校校园、研究、学生与区域人才相关更新。"
+    }
+  },
+  {
+    "slug": "city-of-austin-news",
+    "name": "City of Austin News",
+    "url": "https://www.austintexas.gov/news",
+    "sourceType": "official_data",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use as an official Austin city source for public safety, utilities, mobility, permits, and community-program updates.",
+      "zh": "作为奥斯汀市政府官方来源，用于公共安全、公用事业、交通、许可与社区项目更新。"
+    }
+  },
+  {
+    "slug": "aus-newsroom",
+    "name": "AUS Newsroom",
+    "url": "https://www.austintexas.gov/department/aus-newsroom",
+    "sourceType": "airport_newsroom",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin-Bergstrom International Airport route, construction, traveler, and international access updates.",
+      "zh": "用于奥斯汀伯格斯特国际机场航线、施工、旅客与国际出行更新。"
+    }
+  },
+  {
+    "slug": "reddit-austin",
+    "name": "Reddit Austin",
+    "url": "https://www.reddit.com/r/Austin/",
+    "sourceType": "social_signal",
+    "sourcePolicy": "signal_only",
+    "lane": "social",
+    "cadence": "5m",
+    "notes": {
+      "en": "Use only for repeated public Austin trend signals. Do not reuse post text, comments, screenshots, or media.",
+      "zh": "只用于反复出现的奥斯汀公开趋势讯号，不得重用贴文、评论、截图或媒体。"
+    }
+  }
+]

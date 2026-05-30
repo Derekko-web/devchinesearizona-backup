@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const routerRefreshMock = vi.fn();
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
+const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
 const originalZhTranslationCachePath = process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH;
 const zhTranslationCachePath = path.join(os.tmpdir(), 'radar-ui-zh-cache.json');
 
@@ -71,6 +72,12 @@ afterEach(() => {
     delete process.env.RADAR_STORE_PATH;
   }
 
+  if (originalAustinRadarStorePath) {
+    process.env.AUSTIN_RADAR_STORE_PATH = originalAustinRadarStorePath;
+  } else {
+    delete process.env.AUSTIN_RADAR_STORE_PATH;
+  }
+
   if (originalZhTranslationCachePath) {
     process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH = originalZhTranslationCachePath;
   } else {
@@ -84,8 +91,9 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function writeRadarStore(options: { mirrorChineseCopy?: boolean } = {}) {
+function writeRadarStore(options: { mirrorChineseCopy?: boolean; envKey?: 'RADAR_STORE_PATH' | 'AUSTIN_RADAR_STORE_PATH' } = {}) {
   const mirrorChineseCopy = options.mirrorChineseCopy ?? false;
+  const envKey = options.envKey ?? 'RADAR_STORE_PATH';
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-ui-'));
   const storePath = path.join(directory, 'store.json');
   fs.writeFileSync(
@@ -198,7 +206,95 @@ function writeRadarStore(options: { mirrorChineseCopy?: boolean } = {}) {
     )}\n`,
     'utf8'
   );
-  process.env.RADAR_STORE_PATH = storePath;
+  process.env[envKey] = storePath;
+}
+
+function writeAustinRadarStore() {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'austin-radar-ui-'));
+  const storePath = path.join(directory, 'store.json');
+  fs.writeFileSync(
+    storePath,
+    `${JSON.stringify(
+      {
+        version: 1,
+        jobControl: {
+          paused: false,
+          publishCap: 10,
+          updatedAt: '2026-05-30T12:00:00.000Z',
+        },
+        sourceControls: [],
+        runs: [],
+        candidates: [
+          {
+            id: 'candidate-austin-1',
+            slug: 'austin-transit-summary',
+            sourceSlug: 'austin-monitor',
+            sourceName: 'Austin Monitor',
+            sourceUrl: 'https://austinmonitor.com/example-transit-item/',
+            canonicalUrl: 'https://austinmonitor.com/example-transit-item/',
+            sourceType: 'local_media',
+            sourcePolicy: 'summary_link',
+            lane: 'official',
+            title: { en: 'Austin transit summary', zh: '奥斯汀交通摘要' },
+            excerpt: {
+              en: 'A short source-linked Austin summary for local readers.',
+              zh: '面向本地读者的奥斯汀来源摘要。',
+            },
+            topicFingerprint: 'austin transit summary',
+            moderationState: 'published',
+            firstSeenAt: '2026-05-30T12:00:00.000Z',
+            lastSeenAt: '2026-05-30T12:00:00.000Z',
+          },
+        ],
+        articles: [
+          {
+            id: 'article-austin-1',
+            candidateId: 'candidate-austin-1',
+            slug: 'austin-transit-summary',
+            lane: 'official',
+            title: { en: 'Austin transit summary', zh: '奥斯汀交通摘要' },
+            excerpt: {
+              en: 'A short source-linked Austin summary for local readers.',
+              zh: '面向本地读者的奥斯汀来源摘要。',
+            },
+            body: [
+              {
+                en: 'This Austin item is a concise generated summary that points readers back to the original source instead of replacing it.',
+                zh: '这则奥斯汀内容是简短生成摘要，引导读者回到原始来源，而不是替代原文。',
+              },
+            ],
+            heroImage: 'https://images.unsplash.com/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=1400&q=80',
+            heroImagePolicy: 'fallback_only',
+            category: 'news',
+            freshnessTier: 'weekly',
+            sourcePolicy: 'summary_link',
+            sourceType: 'local_media',
+            sourceName: 'Austin Monitor',
+            sourceUrl: 'https://austinmonitor.com/example-transit-item/',
+            sourceLinks: [
+              {
+                label: { en: 'Austin Monitor', zh: 'Austin Monitor' },
+                url: 'https://austinmonitor.com/example-transit-item/',
+                source: 'Austin Monitor',
+              },
+            ],
+            relatedCategorySlugs: [],
+            ctaBusinessSlugs: [],
+            personaTargets: ['local_families'],
+            publishedAt: '2026-05-30T12:00:00.000Z',
+            updatedAt: '2026-05-30T12:00:00.000Z',
+            lastCheckedAt: '2026-05-30T12:00:00.000Z',
+            isPublished: true,
+            aiGeneratedSummary: true,
+          },
+        ],
+      },
+      null,
+      2
+    )}\n`,
+    'utf8'
+  );
+  process.env.AUSTIN_RADAR_STORE_PATH = storePath;
 }
 
 function mockChineseTranslationFetch() {
@@ -240,7 +336,7 @@ describe('radar ui', () => {
     expect(html).not.toContain('Monitoring live');
   });
 
-  it('does not reuse Arizona Radar content for placeholder city sites', async () => {
+  it('does not reuse the Arizona runtime store for Austin news pages', async () => {
     writeRadarStore();
     const [{ CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),
@@ -250,15 +346,15 @@ describe('radar ui', () => {
     const html = renderToStaticMarkup(
       await CommunityRadarPageView({
         locale: 'en',
-        searchParams: { lane: 'official' },
+        searchParams: {},
         site: siteProfiles.austin,
       })
     );
 
-    expect(html).toContain('ChineseAustin news sources are not connected yet');
-    expect(html).toContain('will not fall back to Arizona News');
+    expect(html).toContain('There are no public items for this filter yet');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
+    expect(html).not.toContain('All Arizona News');
   });
 
   it('renders polished source attribution on article detail pages', async () => {
@@ -280,6 +376,37 @@ describe('radar ui', () => {
     expect(html).not.toContain('Image policy');
     expect(html).not.toContain('Fallback-safe hero only');
     expect(html).not.toContain('Editorial tags');
+  });
+
+  it('renders Austin article pages with Austin route labels and source links only', async () => {
+    writeAustinRadarStore();
+    const [{ ArticleDetailPageView, CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const feedHtml = renderToStaticMarkup(
+      await CommunityRadarPageView({
+        locale: 'en',
+        searchParams: {},
+        site: siteProfiles.austin,
+      })
+    );
+    const detailHtml = renderToStaticMarkup(
+      (await ArticleDetailPageView({
+        locale: 'en',
+        slug: 'austin-transit-summary',
+        site: siteProfiles.austin,
+      }))!
+    );
+
+    expect(feedHtml).toContain('All Austin News');
+    expect(feedHtml).toContain('/en/local-news/austin-transit-summary');
+    expect(detailHtml).toContain('Back to Austin News');
+    expect(detailHtml).toContain('Austin Monitor');
+    expect(detailHtml).toContain('This page is an editorial summary');
+    expect(detailHtml).not.toContain('Arizona News');
+    expect(detailHtml).not.toContain('Phoenix Sky Harbor');
   });
 
   it('falls back to translated Chinese copy when Arizona Radar only has English text', async () => {
