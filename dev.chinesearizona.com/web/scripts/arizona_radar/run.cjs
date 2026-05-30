@@ -136,14 +136,21 @@ function getSiteConfig(siteKey) {
 function resolveStorePath(siteKey) {
   const siteConfig = getSiteConfig(siteKey);
   const envKey = siteConfig.key.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
-  return (
-    process.env.RADAR_STORE_PATH ||
+  const siteSpecificPath =
     process.env[`RADAR_STORE_PATH_${envKey}`] ||
     (siteConfig.key === 'austin' ? process.env.AUSTIN_RADAR_STORE_PATH : undefined) ||
     (siteConfig.key === 'los-angeles' ? process.env.LOS_ANGELES_RADAR_STORE_PATH : undefined) ||
-    (siteConfig.key === 'sf-bay' ? process.env.SF_BAY_RADAR_STORE_PATH : undefined) ||
-    siteConfig.storePath
-  );
+    (siteConfig.key === 'sf-bay' ? process.env.SF_BAY_RADAR_STORE_PATH : undefined);
+
+  if (siteSpecificPath) {
+    return siteSpecificPath;
+  }
+
+  if (siteConfig.key === 'arizona' && process.env.RADAR_STORE_PATH) {
+    return process.env.RADAR_STORE_PATH;
+  }
+
+  return siteConfig.storePath;
 }
 
 const DEFAULT_SITE_KEY = normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY);

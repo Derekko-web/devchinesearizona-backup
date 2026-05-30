@@ -93,6 +93,46 @@ describe('Los Angeles Radar config', () => {
     expect(args.storePath).toContain('data/sites/los-angeles/radar-runtime/store.json');
   });
 
+  it('does not let a global Arizona store override the Los Angeles runtime store', () => {
+    const originalRadarStorePath = process.env.RADAR_STORE_PATH;
+    const originalLosAngelesStorePath = process.env.RADAR_STORE_PATH_LOS_ANGELES;
+    const originalLegacyLosAngelesStorePath = process.env.LOS_ANGELES_RADAR_STORE_PATH;
+
+    try {
+      process.env.RADAR_STORE_PATH = '/tmp/shared-arizona-store.json';
+      delete process.env.RADAR_STORE_PATH_LOS_ANGELES;
+      delete process.env.LOS_ANGELES_RADAR_STORE_PATH;
+
+      expect(
+        parseArgs(['node', 'scripts/arizona_radar/run.cjs', 'run', '--site=los-angeles']).storePath
+      ).toContain('data/sites/los-angeles/radar-runtime/store.json');
+
+      process.env.RADAR_STORE_PATH_LOS_ANGELES = '/tmp/los-angeles-store.json';
+
+      expect(
+        parseArgs(['node', 'scripts/arizona_radar/run.cjs', 'run', '--site=los-angeles']).storePath
+      ).toBe('/tmp/los-angeles-store.json');
+    } finally {
+      if (originalRadarStorePath) {
+        process.env.RADAR_STORE_PATH = originalRadarStorePath;
+      } else {
+        delete process.env.RADAR_STORE_PATH;
+      }
+
+      if (originalLosAngelesStorePath) {
+        process.env.RADAR_STORE_PATH_LOS_ANGELES = originalLosAngelesStorePath;
+      } else {
+        delete process.env.RADAR_STORE_PATH_LOS_ANGELES;
+      }
+
+      if (originalLegacyLosAngelesStorePath) {
+        process.env.LOS_ANGELES_RADAR_STORE_PATH = originalLegacyLosAngelesStorePath;
+      } else {
+        delete process.env.LOS_ANGELES_RADAR_STORE_PATH;
+      }
+    }
+  });
+
   it('keeps Los Angeles open-web fallback discovery Los Angeles-specific and summary-only', () => {
     const prompt = buildHermesPrompt([], 3, 24, { retry: true }, getSiteConfig('los-angeles'));
 
