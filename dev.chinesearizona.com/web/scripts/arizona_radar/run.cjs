@@ -15,8 +15,23 @@ const {
 } = require('./storage.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const DEFAULT_STORE_PATH = path.join(ROOT, 'data', 'radar-runtime', 'store.json');
-const MANIFEST_PATH = path.join(ROOT, 'src', 'data', 'radar-source-manifest.json');
+const RADAR_CITY = {
+  key: process.env.RADAR_CITY_KEY || 'arizona',
+  brandName: process.env.RADAR_BRAND_NAME || 'ChineseArizona',
+  regionName: process.env.RADAR_REGION_NAME || 'Arizona',
+  regionNameZh: process.env.RADAR_REGION_NAME_ZH || '亞利桑那',
+  regionPlaces:
+    process.env.RADAR_REGION_PLACES ||
+    'Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott',
+  summaryOnly: parseBoolean(process.env.RADAR_SUMMARY_ONLY, false),
+};
+const DEFAULT_STORE_PATH =
+  RADAR_CITY.key === 'austin'
+    ? path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json')
+    : path.join(ROOT, 'data', 'radar-runtime', 'store.json');
+const MANIFEST_PATH = process.env.RADAR_SOURCE_MANIFEST_PATH
+  ? path.resolve(process.env.RADAR_SOURCE_MANIFEST_PATH)
+  : path.join(ROOT, 'src', 'data', 'radar-source-manifest.json');
 
 function parseArgs(argv) {
   const args = {
@@ -142,7 +157,7 @@ function parsePositiveInteger(value, fallback) {
 function printHelp() {
   process.stdout.write(
     [
-      'Arizona Radar worker',
+      `${RADAR_CITY.regionName} Radar worker`,
       '',
       'Usage:',
       '  node scripts/arizona_radar/run.cjs run [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
@@ -278,8 +293,8 @@ function laneContext(lane) {
   }
   if (lane === 'official') {
     return {
-      en: 'an Arizona update',
-      zh: '亞利桑那更新',
+      en: `a ${RADAR_CITY.regionName} update`,
+      zh: `${RADAR_CITY.regionNameZh}更新`,
       personas: ['local_families', 'business_owners'],
     };
   }
@@ -457,24 +472,32 @@ function buildFeedRewritePrompt(items) {
   }));
 
   return [
-    'Rewrite these Arizona Radar RSS items into full, original ChineseArizona articles.',
+    RADAR_CITY.summaryOnly
+      ? `Summarize these ${RADAR_CITY.regionName} Radar RSS items into original ${RADAR_CITY.brandName} summary/link articles.`
+      : `Rewrite these ${RADAR_CITY.regionName} Radar RSS items into full, original ${RADAR_CITY.brandName} articles.`,
     '',
     'Use the provided articleText as source material. Do not browse. Do not invent facts.',
     'Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
-    'Each item must be a real rewritten article, not a detector note, short summary, or placeholder.',
+    RADAR_CITY.summaryOnly
+      ? 'Each item must be a concise source-linked summary, not a full republished article, detector note, or placeholder.'
+      : 'Each item must be a real rewritten article, not a detector note, short summary, or placeholder.',
     '',
     'Content rules:',
-    '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.',
-    '- Write in the article voice, as a rewrite of the source article itself.',
-    '- Do not frame the rewrite as source attribution. Do not write phrases such as "What Now Phoenix reports", "according to the source", "the source says", or similar provenance language.',
+    RADAR_CITY.summaryOnly
+      ? '- Write 1-2 English body paragraphs per item. Keep the body summary/link-only and send readers to the source for the full reporting.'
+      : '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.',
+    RADAR_CITY.summaryOnly
+      ? '- Write in a summary voice. Explain the public facts, location, timing, and why it matters locally without trying to replace the source article.'
+      : '- Write in the article voice, as a rewrite of the source article itself.',
+    '- Do not frame the rewrite as source attribution. Do not write phrases such as "the outlet reports", "according to the source", "the source says", or similar provenance language.',
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
-    '- Explain what happened, who is involved, where it is, timing, and why an Arizona reader would care when the source supports it.',
+    `- Explain what happened, who is involved, where it is, timing, and why a ${RADAR_CITY.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
     '- Use plain, direct language. Do not inflate significance.',
     '',
     'Banned style:',
     '- Do not use: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright.',
-    '- Do not write: ChineseArizona detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.',
+    `- Do not write: ${RADAR_CITY.brandName} detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.`,
     '- Do not write source attribution scaffolding inside titleEn, excerptEn, bodyEn, titleZh, excerptZh, or bodyZh.',
     '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, or en dashes.',
     '- Do not use common hyphenated word pairs unless the hyphen is part of a proper name.',
@@ -561,7 +584,12 @@ function mergeFeedRewriteDraft(seed, draft) {
   const excerptEn = normalizeGeneratedText(draft.excerptEn);
   const titleEn = normalizeGeneratedText(draft.titleEn || seed.titleEn);
 
-  if (bodyEn.length < 3 || bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < 120) {
+  const minimumParagraphs = RADAR_CITY.summaryOnly ? 1 : 3;
+  const minimumWords = RADAR_CITY.summaryOnly ? 25 : 120;
+  if (
+    bodyEn.length < minimumParagraphs ||
+    bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < minimumWords
+  ) {
     return null;
   }
   if (bodyZh.length !== bodyEn.length) {
@@ -646,7 +674,7 @@ async function fetchText(url, timeoutMs) {
     const response = await fetch(url, {
       headers: {
         accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
-        'user-agent': 'ChineseArizonaRadarFeedSync/1.0',
+        'user-agent': `${RADAR_CITY.brandName}RadarFeedSync/1.0`,
       },
       signal: controller.signal,
     });
@@ -884,12 +912,12 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
     })
     .join('\n');
   const prompt = [
-    'You are preparing structured Arizona Radar drafts for ChineseArizona.',
+    `You are preparing structured ${RADAR_CITY.regionName} Radar drafts for ${RADAR_CITY.brandName}.`,
     `Mode: ${sourceMode}. You are the autonomous operator for source discovery and article drafting.`,
-    `Look back roughly ${lookbackHours} hours from now and return at most ${maxItems} Arizona-relevant items total.`,
+    `Look back roughly ${lookbackHours} hours from now and return at most ${maxItems} ${RADAR_CITY.regionName}-relevant items total.`,
     'Search the public web freely. Do not limit yourself to any preset source allowlist.',
-    'You may use news sites, public social posts, government pages, company blogs, newsletters, event pages, community forums, and local publications, as long as the item is clearly about Arizona.',
-    'Prioritize the newest useful Arizona items first, but if enough material exists in the time window, fill the requested count so the feed can sustain a steady publishing cadence.',
+    `You may use news sites, public social posts, government pages, company blogs, newsletters, event pages, community forums, and local publications, as long as the item is clearly about ${RADAR_CITY.regionName}.`,
+    `Prioritize the newest useful ${RADAR_CITY.regionName} items first, but if enough material exists in the time window, fill the requested count so the feed can sustain a steady publishing cadence.`,
   ];
 
   if (sourceList) {
@@ -903,11 +931,13 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
   prompt.push(
     '',
     'Do the work yourself:',
-    '- Search broadly across Arizona news, blogs, official sites, newsletters, public social platforms, and community posts.',
+    `- Search broadly across ${RADAR_CITY.regionName} news, blogs, official sites, newsletters, public social platforms, and community posts.`,
     '- Open specific article/detail pages when needed.',
     '- Prefer lightweight methods such as RSS feeds, direct HTML fetches, article metadata, and public pages you can read without graphical browser automation.',
-    '- Decide which items are truly Arizona-relevant and recent enough.',
-    '- Read enough of each source to produce a real rewrite, not a thin summary.',
+    `- Decide which items are truly ${RADAR_CITY.regionName}-relevant and recent enough.`,
+    RADAR_CITY.summaryOnly
+      ? '- Read enough of each source to produce a concise summary, not a thin detector note or replacement for the source article.'
+      : '- Read enough of each source to produce a real rewrite, not a thin summary.',
     '- Capture the best specific article URL and article hero image when available.',
     '',
     'Output JSON only. No markdown. No commentary.',
@@ -922,23 +952,29 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
     '    "titleZh": "matching Traditional Chinese headline",',
     '    "excerptEn": "2-3 sentence English deck that captures the full angle of the story",',
     '    "excerptZh": "matching Traditional Chinese deck covering the same angle",',
-    '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],',
-    '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],',
+    RADAR_CITY.summaryOnly
+      ? '    "bodyEn": ["1-2 concise English summary paragraphs"],'
+      : '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],',
+    RADAR_CITY.summaryOnly
+      ? '    "bodyZh": ["1-2 Traditional Chinese summary paragraphs aligned to bodyEn"],'
+      : '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],',
     '    "heroImage": "https://source-image.example/hero.jpg optional for non-social sources",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
     ']',
     '',
     'Rules:',
-    '- Every item must be clearly about Arizona and useful to Arizona residents, movers, or local business owners.',
+    `- Every item must be clearly about ${RADAR_CITY.regionName} and useful to ${RADAR_CITY.regionName} residents, movers, or local business owners.`,
     '- Provide both English and Traditional Chinese copy for the title, excerpt, and body. The Chinese version should faithfully match the English rewrite rather than adding new facts.',
-    '- Reject anything that is not specifically tied to Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott, or another Arizona place.',
-    '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.',
-    '- When useful, add concise Arizona-specific context or implications, but do not invent facts or unsupported claims.',
+    `- Reject anything that is not specifically tied to ${RADAR_CITY.regionPlaces}.`,
+    RADAR_CITY.summaryOnly
+      ? '- Official/news/blog sources must become concise source-linked summaries, not comprehensive rewrites or full article replacements. Include only the key public facts, names, numbers, timeline, and local relevance needed for a reader to decide whether to open the source.'
+      : `- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in ${RADAR_CITY.regionName}.`,
+    `- When useful, add concise ${RADAR_CITY.regionName}-specific context or implications, but do not invent facts or unsupported claims.`,
     '- Use plain, direct language. Do not inflate significance or write promotional copy.',
     '- Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
     '- Avoid AI-style filler and banned phrasing: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright, here is what you need to know.',
-    '- Do not write detector notes such as ChineseArizona detected, opening indicator, opening signal, or source categorizes.',
+    `- Do not write detector notes such as ${RADAR_CITY.brandName} detected, opening indicator, opening signal, or source categorizes.`,
     '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, en dashes, vague attribution, generic conclusions, or not just X but Y framing.',
     '- If the source page exposes a clear article image or OG image and the source is not signal_only, include it in heroImage.',
     '- Public social sources must become signal_only trend summaries. Do not reuse captions, hashtags, quotes, embeds, or any third-party media URLs.',
@@ -1080,7 +1116,7 @@ async function runWorker(args) {
   loadEnvFile(path.join(ROOT, '.env.local'));
   const manifest = loadManifest();
   const startedAt = new Date().toISOString();
-  const runId = `arizona-radar-${startedAt}`;
+  const runId = `${RADAR_CITY.key}-radar-${startedAt}`;
   const initialStore = await readStoreSnapshot(args.storePath);
 
   if (initialStore.jobControl.paused) {

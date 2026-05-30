@@ -15,16 +15,18 @@ type PageProps = {
 
 export async function generateMetadata() {
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.routePath !== '/local-news') {
     return {};
   }
+
   return communityRadarMetadata('en', site);
 }
 
 export default async function Page({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
+  if (site.news.routePath !== '/local-news') {
     notFound();
   }
+
   return await CommunityRadarPageView({ locale: 'en', searchParams: await searchParams, site });
 }

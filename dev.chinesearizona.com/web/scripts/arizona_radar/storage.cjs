@@ -9,6 +9,10 @@ const {
   writeStore,
 } = require('./core.cjs');
 
+const RADAR_LABEL = process.env.RADAR_REGION_NAME
+  ? `${process.env.RADAR_REGION_NAME} Radar`
+  : 'Arizona Radar';
+
 function normalizeMode(value) {
   const normalized = String(value || '')
     .trim()
@@ -493,11 +497,11 @@ async function readStoreSnapshot(storePath) {
     try {
       writeStore(storePath, persistedStore);
     } catch (mirrorError) {
-      console.error('Unable to refresh local Arizona Radar store mirror.', mirrorError);
+      console.error(`Unable to refresh local ${RADAR_LABEL} store mirror.`, mirrorError);
     }
     return persistedStore;
   } catch (error) {
-    console.error('Falling back to file-backed Arizona Radar store.', error);
+    console.error(`Falling back to file-backed ${RADAR_LABEL} store.`, error);
     return readStore(storePath);
   }
 }
@@ -513,7 +517,7 @@ async function writeStoreSnapshot(storePath, store) {
     writeStore(storePath, persistedStore);
     return persistedStore;
   } catch (error) {
-    console.error('Falling back to file-backed Arizona Radar store on write.', error);
+    console.error(`Falling back to file-backed ${RADAR_LABEL} store on write.`, error);
     writeStore(storePath, store);
     return normalizeStore(store);
   }

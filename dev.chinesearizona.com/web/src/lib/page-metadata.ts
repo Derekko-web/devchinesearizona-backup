@@ -1,11 +1,7 @@
 import { resolveArticleText } from '@/lib/article-localization';
 import type { Metadata } from 'next';
 
-import {
-  getArizonaNewsArchivePath,
-  getArizonaNewsArticlePath,
-  getArizonaNewsPath,
-} from '@/lib/arizona-news';
+import { getNewsArchivePath, getNewsArticlePath, getNewsPath } from '@/lib/arizona-news';
 import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
 import {
   getArticleBySlugAsync,
@@ -54,8 +50,18 @@ function parseDirectoryPageNumber(value?: string): number {
   return Number.isFinite(parsed) && parsed > 1 ? Math.floor(parsed) : 1;
 }
 
-function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearchParams): string {
-  const filters = resolveArticleArchiveFilters(searchParams);
+function buildNewsArchiveMetadataPath(
+  searchParams?: ArticleArchiveSearchParams,
+  site: SiteProfile = defaultSiteProfile
+): string {
+  const normalizedSearchParams =
+    site.key === defaultSiteProfile.key
+      ? searchParams
+      : {
+          ...searchParams,
+          bucket: 'current',
+        };
+  const filters = resolveArticleArchiveFilters(normalizedSearchParams);
   const params = new URLSearchParams();
 
   if (filters.bucket === 'legacy') {
@@ -77,7 +83,7 @@ function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearch
     params.set('page', String(filters.page));
   }
 
-  return getArizonaNewsArchivePath(params.toString());
+  return getNewsArchivePath(site, params.toString());
 }
 
 export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
@@ -268,12 +274,15 @@ export function communityRadarMetadata(locale: Locale, site: SiteProfile = defau
   }
 
   return buildMetadata({
-    title: locale === 'zh' ? '亞利桑那新聞 | ChineseArizona' : 'Arizona News | ChineseArizona',
+    title:
+      locale === 'zh'
+        ? `${site.regionNameZh}新聞 | ${site.brandName}`
+        : `${site.regionName} News | ${site.brandName}`,
     description:
       locale === 'zh'
-        ? '每 5 分鐘更新的亞利桑那新聞首頁，整理住房、官方、社群與新店資訊成可用的雙語摘要。'
-        : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening updates.',
-    path: getArizonaNewsPath(),
+        ? `整理${site.regionNameZh}住房、官方、社群與新店資訊，提供附來源連結的雙語摘要。`
+        : `Source-linked bilingual summaries for ${site.regionName} housing, official, community, and opening updates.`,
+    path: getNewsPath(site),
     locale,
     site,
   });
@@ -301,21 +310,28 @@ export function communityNewsMetadata(
     });
   }
 
-  const filters = resolveArticleArchiveFilters(searchParams);
+  const archiveSearchParams =
+    site.key === defaultSiteProfile.key
+      ? searchParams
+      : {
+          ...searchParams,
+          bucket: 'current',
+        };
+  const filters = resolveArticleArchiveFilters(archiveSearchParams);
   const isLegacyBucket = filters.bucket === 'legacy';
   const currentPage = filters.page;
   const baseTitle = isLegacyBucket
     ? locale === 'zh'
-      ? 'Arizona News 舊聞檔案 | ChineseArizona'
-      : 'Arizona News Legacy Archive | ChineseArizona'
+      ? `${site.regionNameZh}新聞舊聞檔案 | ${site.brandName}`
+      : `${site.regionName} News Legacy Archive | ${site.brandName}`
     : locale === 'zh'
-      ? 'Arizona News 檔案 | ChineseArizona'
-      : 'Arizona News Archive | ChineseArizona';
+      ? `${site.regionNameZh}新聞檔案 | ${site.brandName}`
+      : `${site.regionName} News Archive | ${site.brandName}`;
   const title =
     currentPage > 1
       ? locale === 'zh'
-        ? `${baseTitle.replace(' | ChineseArizona', '')}第 ${currentPage} 頁 | ChineseArizona`
-        : `${baseTitle.replace(' | ChineseArizona', '')} Page ${currentPage} | ChineseArizona`
+        ? `${baseTitle.replace(` | ${site.brandName}`, '')}第 ${currentPage} 頁 | ${site.brandName}`
+        : `${baseTitle.replace(` | ${site.brandName}`, '')} Page ${currentPage} | ${site.brandName}`
       : baseTitle;
 
   return buildMetadata({
@@ -326,9 +342,9 @@ export function communityNewsMetadata(
           ? '瀏覽歷史社群轉載與舊聞檔案。這些頁面仍可存取，但不作為搜尋收錄主入口。'
           : 'Browse the historical community-wire and legacy archive. These pages remain reachable, but they are no longer primary indexed entry points.'
         : locale === 'zh'
-          ? '瀏覽目前主打的原創摘要、系列觀察與最新編輯內容。'
-          : 'Browse current editorial coverage, including original summaries, recurring series, and current published work.',
-    path: buildArizonaNewsArchiveMetadataPath(searchParams),
+          ? `瀏覽${site.regionNameZh}目前主打的來源摘要、系列觀察與最新編輯內容。`
+          : `Browse current ${site.regionName} source summaries, recurring series, and published work.`,
+    path: buildNewsArchiveMetadataPath(archiveSearchParams, site),
     locale,
     site,
     noIndex: isLegacyBucket,
@@ -558,7 +574,7 @@ export async function articleMetadata(
     return null;
   }
 
-  const article = await getArticleBySlugAsync(slug);
+  const article = await getArticleBySlugAsync(slug, site);
   if (!article) {
     return null;
   }
@@ -568,7 +584,7 @@ export async function articleMetadata(
   return buildMetadata({
     title: `${localizedArticle.title} | ${site.brandName}`,
     description: localizedArticle.excerpt,
-    path: getArizonaNewsArticlePath(article.slug),
+    path: getNewsArticlePath(site, article.slug),
     locale,
     site,
     image: article.heroImage,
