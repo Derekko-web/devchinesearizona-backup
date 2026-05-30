@@ -3244,6 +3244,21 @@ export async function ArticleDetailPageView({
     article.sourceLinks.map((sourceLink) => sourceLink.label),
     locale
   );
+  const sourceLinks =
+    article.sourceLinks.length > 0
+      ? article.sourceLinks
+      : article.sourceUrl
+        ? [
+            {
+              label: {
+                en: article.sourceName ?? 'Original source',
+                zh: article.sourceName ?? '原始來源',
+              },
+              url: article.sourceUrl,
+              source: article.sourceName ?? article.sourceUrl,
+            },
+          ]
+        : [];
   const showSidebarAd = shouldRenderAdSensePlacement('article_detail_sidebar');
 
   const jsonLd = [
@@ -3284,71 +3299,114 @@ export async function ArticleDetailPageView({
   ];
 
   return sectionContainer(
-    <div className="space-y-10 py-12">
+    <div className="py-8 md:py-12">
       <JsonLd data={jsonLd} />
-      <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="relative h-72 w-full bg-slate-200">
-          <DiscoverArticleImage
-            src={article.heroImage}
-            alt={descriptiveImageAlt(displayArticle.title, 'article', locale)}
-            className="object-cover"
-          />
+      <article className="mx-auto max-w-6xl">
+        <div className="mb-8 border-y border-[#d9c7b6] py-3">
+          <Link
+            href={getLocalizedArizonaNewsPath(locale)}
+            className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#6f5a4a] transition-colors hover:text-brand-700"
+          >
+            <ChevronRight className="h-4 w-4 rotate-180 text-brand-600" />
+            {locale === 'zh' ? '返回亞利桑那新聞' : 'Back to Arizona News'}
+          </Link>
         </div>
-        <div className="space-y-6 p-8">
-          <div className="space-y-3">
-            <ArticleMetaRow article={article} locale={locale} showDate />
-            {legacyArticle ? (
-              <div className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">
-                {locale === 'zh' ? '舊聞檔案／不收錄搜尋' : 'Legacy archive / noindex'}
+
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+          <div className="min-w-0">
+            <header className="max-w-4xl space-y-5">
+              <div className="space-y-3">
+                <ArticleMetaRow article={article} locale={locale} showDate />
+                {legacyArticle ? (
+                  <div className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">
+                    {locale === 'zh' ? '舊聞檔案／不收錄搜尋' : 'Legacy archive / noindex'}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">{displayArticle.title}</h1>
-            {author ? (
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-500">
-                <span className="font-medium text-brand-700">{author.name}</span>
-              </div>
-            ) : null}
-            <p className="max-w-3xl text-base leading-7 text-slate-600">{displayArticle.excerpt}</p>
-            {article.series === 'arizona-radar' ? null : (
-              <ArticleAudienceChips article={article} locale={locale} />
-            )}
-          </div>
-          <div className="space-y-5">
-            {displayArticle.body.map((paragraph, index) => (
-              <p key={`${article.slug}-${index}`} className="text-base leading-8 text-slate-700">
-                {paragraph}
+              <h1 className="text-[2.25rem] font-semibold leading-[1.02] tracking-tight text-[#2b1f18] [font-family:var(--font-display)] [overflow-wrap:anywhere] sm:text-[3.25rem] sm:leading-[0.98] lg:text-[4.15rem]">
+                {displayArticle.title}
+              </h1>
+              {author ? (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[#6f5a4a]">
+                  <span className="font-semibold text-brand-700">{author.name}</span>
+                </div>
+              ) : null}
+              <p className="max-w-3xl text-xl leading-8 text-[#5f4d40]">
+                {displayArticle.excerpt}
               </p>
-            ))}
+              {article.series === 'arizona-radar' ? null : (
+                <ArticleAudienceChips article={article} locale={locale} />
+              )}
+            </header>
+
+            <figure className="mt-8 max-w-3xl">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-[1.25rem] border border-[#dfcfbf] bg-[#eaded0] shadow-[0_24px_70px_-54px_rgba(78,47,20,0.42)]">
+                <DiscoverArticleImage
+                  src={article.heroImage}
+                  alt={descriptiveImageAlt(displayArticle.title, 'article', locale)}
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </figure>
+
+            <div className="mt-10 max-w-3xl space-y-6 border-t border-[#d9c7b6] pt-8">
+              {displayArticle.body.map((paragraph, index) => (
+                <p
+                  key={`${article.slug}-${index}`}
+                  className="text-[1.06rem] leading-8 text-[#3f332c] [font-variant-numeric:oldstyle-nums] sm:text-[1.11rem] sm:leading-9"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1.05fr,0.95fr]">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <h2 className="text-lg font-semibold text-slate-900">
-                {locale === 'zh' ? '來源' : 'Sources'}
-              </h2>
-              {article.sourceLinks.length > 0 ? (
-                <ul className="mt-4 space-y-3">
-                  {article.sourceLinks.map((sourceLink, index) => (
+          <aside className="space-y-4 lg:sticky lg:top-24">
+            <div className="rounded-[1.25rem] border border-[#d9c7b6] bg-[#fffaf2]/85 p-5 shadow-[0_20px_60px_-52px_rgba(78,47,20,0.5)]">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2d3c4] pb-3">
+                <h2 className="text-lg font-semibold text-[#2b1f18] [font-family:var(--font-display)]">
+                  {locale === 'zh' ? '來源' : 'Sources'}
+                </h2>
+                <span className="whitespace-nowrap text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">
+                  {sourcePolicyLabel(article.sourcePolicy, locale)}
+                </span>
+              </div>
+              <p className="mt-4 text-sm leading-6 text-[#6f5a4a]">
+                {article.sourcePolicy === 'republish_with_permission'
+                  ? locale === 'zh'
+                    ? '此頁依授權轉載；來源連結保留原始脈絡。'
+                    : 'This page is republished with permission; source links preserve the original context.'
+                  : locale === 'zh'
+                    ? '此頁是編輯摘要；原始報導與公告仍屬於下列來源。'
+                    : 'This page is an editorial summary; original reporting and notices remain with the sources below.'}
+              </p>
+              {sourceLinks.length > 0 ? (
+                <ul className="mt-4 divide-y divide-[#eadccc] border-y border-[#eadccc]">
+                  {sourceLinks.map((sourceLink, index) => (
                     <li key={`${article.slug}-${sourceLink.url}`}>
                       <a
                         href={sourceLink.url}
                         target="_blank"
-                        rel="noreferrer"
-                        className="group flex items-start justify-between gap-3 rounded-xl bg-white p-3 text-sm text-slate-600 hover:bg-slate-100"
+                        rel="noopener noreferrer"
+                        className="group flex items-start justify-between gap-3 py-3 text-sm text-[#5f4d40] transition-colors duration-200 hover:text-brand-700"
                       >
-                        <span>
-                          <span className="block font-semibold text-slate-900">
+                        <span className="min-w-0">
+                          <span className="block font-semibold text-[#2b1f18]">
                             {localizedSourceLinkLabels[index] ?? t(sourceLink.label, locale)}
                           </span>
-                          <span className="text-xs text-slate-500">{sourceLink.source}</span>
+                          <span className="mt-1 block text-xs leading-5 text-[#7c6657]">{sourceLink.source}</span>
                         </span>
-                        <ExternalLink className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400 group-hover:text-brand-500" />
+                        <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-semibold text-brand-700">
+                          {locale === 'zh' ? '打開' : 'Open'}
+                          <ExternalLink className="h-3.5 w-3.5 text-brand-600 transition-transform duration-200 group-hover:translate-x-0.5" />
+                        </span>
                       </a>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 text-sm leading-6 text-slate-600">
+                <p className="mt-4 text-sm leading-6 text-[#6f5a4a]">
                   {locale === 'zh'
                     ? '這篇文章目前沒有列出的外部來源連結。'
                     : 'No external source links are listed for this article.'}
@@ -3356,10 +3414,9 @@ export async function ArticleDetailPageView({
               )}
             </div>
 
-            <div className="space-y-4">
               {relatedCategories.length > 0 ? (
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <h2 className="text-lg font-semibold text-slate-900">
+                <div className="rounded-[1.25rem] border border-[#d9c7b6] bg-white/75 p-5">
+                  <h2 className="text-lg font-semibold text-[#2b1f18] [font-family:var(--font-display)]">
                     {locale === 'zh' ? '延伸分類' : 'Related directory paths'}
                   </h2>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -3367,7 +3424,7 @@ export async function ArticleDetailPageView({
                       <Link
                         key={`${article.slug}-${category.slug}`}
                         href={withLocale(locale, `/business?category=${category.slug}`)}
-                        className="inline-flex rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-700 hover:bg-brand-100"
+                        className="inline-flex whitespace-nowrap rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
                       >
                         {t(category.name, locale)}
                       </Link>
@@ -3379,14 +3436,13 @@ export async function ArticleDetailPageView({
               {showSidebarAd ? (
                 <AdSidebarRail placement="article_detail_sidebar" locale={locale} sticky={false} />
               ) : null}
-            </div>
-          </div>
+          </aside>
         </div>
       </article>
 
       {relatedBusinesses.length > 0 ? (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900">
+        <div className="mt-12 space-y-4">
+          <h2 className="text-2xl font-semibold text-[#2b1f18] [font-family:var(--font-display)]">
             {locale === 'zh' ? '文章中提到的可信服務' : 'Trusted providers mentioned in this story'}
           </h2>
           <div className="grid gap-4 lg:grid-cols-2">
