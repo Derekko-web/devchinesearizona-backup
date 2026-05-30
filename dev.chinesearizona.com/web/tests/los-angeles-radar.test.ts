@@ -7,10 +7,37 @@ import losAngelesStore from '../data/sites/los-angeles/radar-runtime/store.json'
 
 const require = createRequire(import.meta.url);
 const {
+  buildFeedRewritePrompt,
+  buildHermesPrompt,
   getSiteConfig,
   parseArgs,
   parseFeedItems,
 } = require('../scripts/arizona_radar/run.cjs') as {
+  buildFeedRewritePrompt: (
+    items: Array<Record<string, unknown>>,
+    siteConfig: {
+      key: string;
+      defaultSourceName: string;
+      manifestPath: string;
+      storePath: string;
+      summaryOnly: boolean;
+      useSupabase: boolean;
+    }
+  ) => string;
+  buildHermesPrompt: (
+    manifest: Array<Record<string, unknown>>,
+    maxItems: number,
+    lookbackHours: number,
+    options: Record<string, unknown>,
+    siteConfig: {
+      key: string;
+      defaultSourceName: string;
+      manifestPath: string;
+      storePath: string;
+      summaryOnly: boolean;
+      useSupabase: boolean;
+    }
+  ) => string;
   getSiteConfig: (site: string) => {
     key: string;
     defaultSourceName: string;
@@ -64,6 +91,54 @@ describe('Los Angeles Radar config', () => {
     expect(siteConfig.defaultSourceName).toBe('Los Angeles Source');
     expect(siteConfig.manifestPath).toContain('los-angeles-radar-source-manifest.json');
     expect(args.storePath).toContain('data/sites/los-angeles/radar-runtime/store.json');
+  });
+
+  it('keeps Los Angeles open-web fallback discovery Los Angeles-specific and summary-only', () => {
+    const prompt = buildHermesPrompt([], 3, 24, { retry: true }, getSiteConfig('los-angeles'));
+
+    expect(prompt).toContain('Los Angeles Radar');
+    expect(prompt).toContain('Southern California');
+    expect(prompt).toContain('San Gabriel Valley');
+    expect(prompt).toContain('source-linked summary');
+    expect(prompt).toContain('Los Angeles/Southern California search');
+    expect(prompt).not.toMatch(/arizona|phoenix|chinesearizona/i);
+    expect(prompt).not.toMatch(/rewrite|rewritten|full\b|comprehensive/i);
+    expect(prompt).not.toContain('Arizona news, blogs');
+    expect(prompt).not.toContain('Arizona-relevant');
+  });
+
+  it('keeps Los Angeles feed rewrite schema aligned with summary-only body rules', () => {
+    const prompt = buildFeedRewritePrompt(
+      [
+        {
+          sourceSlug: 'eater-los-angeles',
+          sourceName: 'Eater LA',
+          sourceUrl: 'https://la.eater.com/2026/5/29/sgv-arcadia-opening',
+          canonicalUrl: 'https://la.eater.com/2026/5/29/sgv-arcadia-opening',
+          sourcePublishedAt: '2026-05-29T10:00:00.000Z',
+          feedCategory: 'Restaurants',
+          titleEn: 'New SGV restaurant opens in Arcadia',
+          feedExcerpt: 'A short local food summary for Los Angeles readers.',
+          articlePayload: {
+            title: 'New SGV restaurant opens in Arcadia',
+            description: 'A local restaurant opening in Arcadia.',
+            publishedAt: '2026-05-29T10:00:00.000Z',
+            text: 'A restaurant opened in Arcadia with details relevant to Los Angeles readers.',
+          },
+        },
+      ],
+      getSiteConfig('los-angeles')
+    );
+
+    expect(prompt).toContain('Summarize these Los Angeles Radar RSS items');
+    expect(prompt).toContain('"bodyEn": ["1-3 concise English summary paragraphs"]');
+    expect(prompt).toContain(
+      '"bodyZh": ["1-3 Traditional Chinese summary paragraphs aligned to bodyEn"]'
+    );
+    expect(prompt).toContain('source-linked local brief');
+    expect(prompt).not.toMatch(/arizona|phoenix|chinesearizona/i);
+    expect(prompt).not.toMatch(/rewrite|rewritten|full\b|comprehensive/i);
+    expect(prompt).not.toContain('"bodyEn": ["3-5 rewritten English paragraphs"]');
   });
 
   it('normalizes Atom feeds from LA sources into source-linked draft seeds', () => {

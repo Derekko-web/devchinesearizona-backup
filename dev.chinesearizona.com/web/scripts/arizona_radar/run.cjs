@@ -36,7 +36,7 @@ const SITE_CONFIGS = {
     brandName: 'ChineseLosAngeles',
     defaultSourceName: 'Los Angeles Source',
     feedPromptTitle:
-      'Rewrite these Los Angeles Radar RSS items into short, original ChineseLosAngeles summary articles.',
+      'Summarize these Los Angeles Radar RSS items into short, original ChineseLosAngeles source-linked articles.',
     openWebPromptTitle:
       'You are preparing structured Los Angeles Radar drafts for ChineseLosAngeles.',
     regionName: 'Los Angeles',
@@ -547,11 +547,23 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     articleText: item.articlePayload.text,
   }));
   const bodyRule = siteConfig.summaryOnly
-    ? '- Write 1-3 short English body paragraphs per item. Summarize only the most useful facts and link readers to the source for full reporting.'
+    ? '- Write 1-3 short English body paragraphs per item. Summarize only the most useful facts and link readers to the source for original reporting.'
     : '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.';
   const articleRule = siteConfig.summaryOnly
-    ? '- Each item must be a source-linked local brief, not a full rewrite or replacement for the source article.'
+    ? '- Each item must be a source-linked local brief, not a replacement for the source article.'
     : '- Each item must be a real rewritten article, not a detector note, short summary, or placeholder.';
+  const sourceAttributionRule = siteConfig.summaryOnly
+    ? '- Do not write phrases such as "the outlet reports", "according to the source", "the source says", or similar provenance scaffolding inside the summary copy.'
+    : '- Do not frame the rewrite as source attribution. Do not write phrases such as "the outlet reports", "according to the source", "the source says", or similar provenance language.';
+  const bannedDetectorRule = siteConfig.summaryOnly
+    ? '- Do not write: opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.'
+    : '- Do not write: ChineseArizona detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.';
+  const schemaBodyEn = siteConfig.summaryOnly
+    ? '    "bodyEn": ["1-3 concise English summary paragraphs"],'
+    : '    "bodyEn": ["3-5 rewritten English paragraphs"],';
+  const schemaBodyZh = siteConfig.summaryOnly
+    ? '    "bodyZh": ["1-3 Traditional Chinese summary paragraphs aligned to bodyEn"],'
+    : '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],';
 
   return [
     siteConfig.feedPromptTitle,
@@ -563,9 +575,9 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     'Content rules:',
     bodyRule,
     siteConfig.summaryOnly
-      ? '- Write in a concise local news-summary voice and avoid trying to reproduce the full source article.'
+      ? '- Write in a concise local news-summary voice and avoid trying to reproduce the source article.'
       : '- Write in the article voice, as a rewrite of the source article itself.',
-    '- Do not frame the rewrite as source attribution. Do not write phrases such as "the outlet reports", "according to the source", "the source says", or similar provenance language.',
+    sourceAttributionRule,
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
     `- Explain what happened, who is involved, where it is, timing, and why a ${siteConfig.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
@@ -573,7 +585,7 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     '',
     'Banned style:',
     '- Do not use: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright.',
-    '- Do not write: ChineseArizona detected, opening indicator, opening signal, source categorizes, not just X but Y, here is what you need to know.',
+    bannedDetectorRule,
     '- Do not write source attribution scaffolding inside titleEn, excerptEn, bodyEn, titleZh, excerptZh, or bodyZh.',
     '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, or en dashes.',
     '- Do not use common hyphenated word pairs unless the hyphen is part of a proper name.',
@@ -592,8 +604,8 @@ function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
     '    "titleZh": "matching Traditional Chinese headline",',
     '    "excerptEn": "1-2 direct English sentences",',
     '    "excerptZh": "matching Traditional Chinese excerpt",',
-    '    "bodyEn": ["3-5 rewritten English paragraphs"],',
-    '    "bodyZh": ["3-5 Traditional Chinese paragraphs aligned to bodyEn"],',
+    schemaBodyEn,
+    schemaBodyZh,
     '    "heroImage": "optional image URL",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
@@ -995,11 +1007,47 @@ function buildHermesPrompt(
       return `- ${source.name} | ${source.url}`;
     })
     .join('\n');
+  const operatorMode = siteConfig.summaryOnly
+    ? 'source discovery and source-linked summary drafting'
+    : 'source discovery and article drafting';
+  const searchScope = siteConfig.summaryOnly
+    ? `${siteConfig.regionName} and Southern California news, official sites, newsletters, public social platforms, community posts, local blogs, business openings, transit, housing, LAX, and San Gabriel Valley sources`
+    : 'Arizona news, blogs, official sites, newsletters, public social platforms, and community posts';
+  const relevanceDecision = siteConfig.summaryOnly
+    ? `${siteConfig.regionName}/Southern California-relevant`
+    : 'Arizona-relevant';
+  const sourceReadingRule = siteConfig.summaryOnly
+    ? '- Read only enough of each source to produce a concise, source-linked summary. Do not generate a replacement article.'
+    : '- Read enough of each source to produce a real rewrite, not a thin summary.';
+  const schemaBodyEn = siteConfig.summaryOnly
+    ? '    "bodyEn": ["1-3 concise English paragraphs that summarize, not replace, the source in original words"],'
+    : '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],';
+  const schemaBodyZh = siteConfig.summaryOnly
+    ? '    "bodyZh": ["1-3 Traditional Chinese paragraphs aligned to the English summary"],'
+    : '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],';
+  const schemaExcerptEn = siteConfig.summaryOnly
+    ? '    "excerptEn": "1-2 sentence English deck that captures the useful local angle",'
+    : '    "excerptEn": "2-3 sentence English deck that captures the full angle of the story",';
+  const copyAlignmentRule = siteConfig.summaryOnly
+    ? '- Provide both English and Traditional Chinese copy for the title, excerpt, and body. The Chinese version should closely match the English summary rather than adding new facts.'
+    : '- Provide both English and Traditional Chinese copy for the title, excerpt, and body. The Chinese version should faithfully match the English rewrite rather than adding new facts.';
+  const sourcePolicyRule = siteConfig.summaryOnly
+    ? '- Official/news/blog sources must become concise source-linked summaries. Do not try to cover every detail or replace the source article.'
+    : '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.';
+  const bannedDetectorRule = siteConfig.summaryOnly
+    ? '- Do not write detector notes such as opening indicator, opening signal, or source categorizes.'
+    : '- Do not write detector notes such as ChineseArizona detected, opening indicator, opening signal, or source categorizes.';
+  const retryRule = siteConfig.summaryOnly
+    ? `- The previous attempt returned zero items. Widen the ${siteConfig.regionName}/Southern California search beyond any familiar sites before giving up.`
+    : '- The previous attempt returned zero items. Widen the search and look beyond any familiar sites before giving up.';
+  const searchIntro = siteConfig.summaryOnly
+    ? `Search the public web for ${siteConfig.regionName}-specific items. Do not limit yourself to any preset source allowlist.`
+    : 'Search the public web freely. Do not limit yourself to any preset source allowlist.';
   const prompt = [
     siteConfig.openWebPromptTitle,
-    `Mode: ${sourceMode}. You are the autonomous operator for source discovery and article drafting.`,
+    `Mode: ${sourceMode}. You are the autonomous operator for ${operatorMode}.`,
     `Look back roughly ${lookbackHours} hours from now and return at most ${maxItems} ${siteConfig.regionName}-relevant items total.`,
-    'Search the public web freely. Do not limit yourself to any preset source allowlist.',
+    searchIntro,
     `You may use news sites, public social posts, government pages, company blogs, newsletters, event pages, community forums, and local publications, as long as the item is clearly about ${siteConfig.regionName}.`,
     `Prioritize the newest useful ${siteConfig.regionName} items first, but if enough material exists in the time window, fill the requested count so the feed can sustain a steady publishing cadence.`,
   ];
@@ -1015,11 +1063,11 @@ function buildHermesPrompt(
   prompt.push(
     '',
     'Do the work yourself:',
-    '- Search broadly across Arizona news, blogs, official sites, newsletters, public social platforms, and community posts.',
+    `- Search broadly across ${searchScope}.`,
     '- Open specific article/detail pages when needed.',
     '- Prefer lightweight methods such as RSS feeds, direct HTML fetches, article metadata, and public pages you can read without graphical browser automation.',
-    '- Decide which items are truly Arizona-relevant and recent enough.',
-    '- Read enough of each source to produce a real rewrite, not a thin summary.',
+    `- Decide which items are truly ${relevanceDecision} and recent enough.`,
+    sourceReadingRule,
     '- Capture the best specific article URL and article hero image when available.',
     '',
     'Output JSON only. No markdown. No commentary.',
@@ -1032,14 +1080,10 @@ function buildHermesPrompt(
     '    "sourcePublishedAt": "ISO-8601 optional",',
     '    "titleEn": "short English headline",',
     '    "titleZh": "matching Traditional Chinese headline",',
-    '    "excerptEn": "2-3 sentence English deck that captures the full angle of the story",',
+    schemaExcerptEn,
     '    "excerptZh": "matching Traditional Chinese deck covering the same angle",',
-    siteConfig.summaryOnly
-      ? '    "bodyEn": ["1-3 concise English paragraphs that summarize, not replace, the source in original words"],'
-      : '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],',
-    siteConfig.summaryOnly
-      ? '    "bodyZh": ["1-3 Traditional Chinese paragraphs aligned to the English summary"],'
-      : '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],',
+    schemaBodyEn,
+    schemaBodyZh,
     '    "heroImage": "https://source-image.example/hero.jpg optional for non-social sources",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
@@ -1047,16 +1091,14 @@ function buildHermesPrompt(
     '',
     'Rules:',
     `- Every item must be clearly about ${siteConfig.regionName} and useful to local residents, movers, students, families, or business owners.`,
-    '- Provide both English and Traditional Chinese copy for the title, excerpt, and body. The Chinese version should faithfully match the English rewrite rather than adding new facts.',
+    copyAlignmentRule,
     `- Reject anything that is not specifically tied to ${siteConfig.regionRelevance}.`,
-    siteConfig.summaryOnly
-      ? '- Official/news/blog sources must become concise source-linked summaries. Do not try to cover every detail or replace the source article.'
-      : '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.',
+    sourcePolicyRule,
     `- When useful, add concise ${siteConfig.regionName}-specific context or implications, but do not invent facts or unsupported claims.`,
     '- Use plain, direct language. Do not inflate significance or write promotional copy.',
     '- Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
     '- Avoid AI-style filler and banned phrasing: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright, here is what you need to know.',
-    '- Do not write detector notes such as ChineseArizona detected, opening indicator, opening signal, or source categorizes.',
+    bannedDetectorRule,
     '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, en dashes, vague attribution, generic conclusions, or not just X but Y framing.',
     '- If the source page exposes a clear article image or OG image and the source is not signal_only, include it in heroImage.',
     '- Public social sources must become signal_only trend summaries. Do not reuse captions, hashtags, quotes, embeds, or any third-party media URLs.',
@@ -1067,9 +1109,7 @@ function buildHermesPrompt(
   );
 
   if (options.retry) {
-    prompt.push(
-      '- The previous attempt returned zero items. Widen the search and look beyond any familiar sites before giving up.'
-    );
+    prompt.push(retryRule);
   }
 
   return prompt.join('\n');
@@ -1372,6 +1412,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+  buildFeedRewritePrompt,
   buildHermesPrompt,
   collectDraftsFromFeeds,
   extractJsonPayload,
