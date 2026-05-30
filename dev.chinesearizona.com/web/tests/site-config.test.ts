@@ -5,6 +5,7 @@ import {
   hasLiveDirectoryData,
   hasLiveNewsData,
   resolveSiteProfileFromHost,
+  shouldNoIndexSiteProfile,
   siteProfiles,
 } from '@/lib/site-config';
 
@@ -16,6 +17,7 @@ describe('city site configuration', () => {
     expect(site.launchState).toBe('live');
     expect(hasLiveDirectoryData(site)).toBe(true);
     expect(hasLiveNewsData(site)).toBe(true);
+    expect(shouldNoIndexSiteProfile(site)).toBe(false);
     expect(site.seo.title.en).toBe(
       'ChineseArizona | Arizona Chinese Community Directory, News, and Resources'
     );
@@ -28,6 +30,7 @@ describe('city site configuration', () => {
     expect(site.launchState).toBe('placeholder');
     expect(hasLiveDirectoryData(site)).toBe(false);
     expect(hasLiveNewsData(site)).toBe(false);
+    expect(shouldNoIndexSiteProfile(site)).toBe(true);
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
     expect(site.directory.listingSource.path).toBe('data/sites/austin/businesses.json');
@@ -44,6 +47,7 @@ describe('city site configuration', () => {
     expect(site.brandName).not.toBe('ChineseArizona');
     expect(hasLiveDirectoryData(site)).toBe(false);
     expect(hasLiveNewsData(site)).toBe(false);
+    expect(shouldNoIndexSiteProfile(site)).toBe(true);
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
   });

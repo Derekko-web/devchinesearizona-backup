@@ -26,7 +26,13 @@ import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-l
 import { t } from '@/lib/i18n';
 import { getPublisherPageCopy, type PublisherPageSlug } from '@/lib/publisher-pages';
 import { buildMetadata } from '@/lib/seo';
-import { defaultSiteProfile, hasLiveDirectoryData, hasLiveNewsData, type SiteProfile } from '@/lib/site-config';
+import {
+  defaultSiteProfile,
+  hasLiveDirectoryData,
+  hasLiveNewsData,
+  shouldNoIndexSiteProfile,
+  type SiteProfile,
+} from '@/lib/site-config';
 import { appendSearch } from '@/lib/routing';
 import type { CommunityPostType, DiscoveryCategory, HiddenArizonaKind, Locale } from '@/lib/types';
 
@@ -81,6 +87,7 @@ export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProf
     path: '/',
     locale,
     site,
+    noIndex: shouldNoIndexSiteProfile(site),
   });
 }
 
