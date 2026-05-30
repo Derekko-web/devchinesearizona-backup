@@ -152,6 +152,7 @@ export function articleSeriesLabel(series: ArticleSeries, locale: Locale): strin
     'restaurant-opening-radar': { en: 'Restaurant Opening Radar', zh: '新店雷達' },
     'trend-radar': { en: 'Trend Radar', zh: '趨勢雷達' },
     'arizona-radar': { en: 'Arizona News', zh: '亞利桑那新聞' },
+    'local-radar': { en: 'Local News', zh: '本地新聞' },
     'community-wire': { en: 'Community Wire', zh: '社群轉載' },
   };
 

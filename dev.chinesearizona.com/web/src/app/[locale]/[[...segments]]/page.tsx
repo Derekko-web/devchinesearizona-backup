@@ -1,9 +1,10 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 
 import {
-  getLocalizedArizonaNewsArchivePath,
-  getLocalizedArizonaNewsArticlePath,
-  getLocalizedArizonaNewsPath,
+  getLocalizedNewsArchivePath,
+  getLocalizedNewsArticlePath,
+  getLocalizedNewsPath,
+  getNewsRouteSegment,
 } from '@/lib/arizona-news';
 import {
   canServeArizonaOnlyContent,
@@ -108,6 +109,10 @@ function buildSearchString(params: Record<string, string | undefined>): string {
   return search.toString();
 }
 
+function isSiteNewsRoute(segments: string[], routeSegment: string): boolean {
+  return segments[0] === routeSegment;
+}
+
 export async function generateMetadata({ params, searchParams }: PageProps) {
   const { locale, segments = [] } = await params;
   if (!isLocale(locale)) {
@@ -115,6 +120,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
   const query = await searchParams;
   const site = await getCurrentSiteProfile();
+  const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
     return homeMetadata(locale, site);
@@ -190,15 +196,15 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     return communityMetadata(locale, site);
   }
 
-  if (segments[0] === 'arizona-news' && segments.length === 1) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments.length === 1) {
     return communityRadarMetadata(locale, site);
   }
 
-  if (segments[0] === 'arizona-news' && segments[1] === 'archive' && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] === 'archive' && segments.length === 2) {
     return communityNewsMetadata(locale, query, site);
   }
 
-  if (segments[0] === 'arizona-news' && segments[1] && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] && segments.length === 2) {
     return (await articleMetadata(locale, segments[1], site)) ?? {};
   }
 
@@ -255,6 +261,7 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
     notFound();
   }
   const site = await getCurrentSiteProfile();
+  const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
     return <HomePageView locale={locale} site={site} />;
@@ -348,15 +355,15 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
     return await CommunityPageView({ locale, site });
   }
 
-  if (segments[0] === 'arizona-news' && segments.length === 1) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments.length === 1) {
     return await CommunityRadarPageView({ locale, searchParams: await searchParams, site });
   }
 
-  if (segments[0] === 'arizona-news' && segments[1] === 'archive' && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] === 'archive' && segments.length === 2) {
     return await NewsArchivePageView({ locale, searchParams: await searchParams, site });
   }
 
-  if (segments[0] === 'arizona-news' && segments[1] && segments.length === 2) {
+  if (isSiteNewsRoute(segments, newsRouteSegment) && segments[1] && segments.length === 2) {
     const rendered = await ArticleDetailPageView({ locale, slug: segments[1], site });
     if (!rendered) notFound();
     return rendered;
@@ -364,12 +371,12 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments[0] === 'community' && segments[1] === 'radar' && segments.length === 2) {
     const query = await searchParams;
-    permanentRedirect(getLocalizedArizonaNewsPath(locale, buildSearchString(query)));
+    permanentRedirect(getLocalizedNewsPath(locale, site, buildSearchString(query)));
   }
 
   if (segments[0] === 'community' && segments[1] === 'news' && segments.length === 2) {
     const query = await searchParams;
-    permanentRedirect(getLocalizedArizonaNewsArchivePath(locale, buildSearchString(query)));
+    permanentRedirect(getLocalizedNewsArchivePath(locale, site, buildSearchString(query)));
   }
 
   if (segments[0] === 'community' && segments[1] === 'events' && segments[2]) {
@@ -379,7 +386,7 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   }
 
   if (segments[0] === 'community' && segments[1] === 'news' && segments[2]) {
-    permanentRedirect(getLocalizedArizonaNewsArticlePath(locale, segments[2]));
+    permanentRedirect(getLocalizedNewsArticlePath(locale, site, segments[2]));
   }
 
   if (segments[0] === 'community' && segments[1] === 'board' && segments[2]) {

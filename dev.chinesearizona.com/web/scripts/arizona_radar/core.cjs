@@ -358,10 +358,10 @@ function titleCase(value) {
     .join(' ');
 }
 
-function inferSourceNameFromUrl(value) {
+function inferSourceNameFromUrl(value, fallbackSourceName = 'Arizona Source') {
   const hostname = hostnameFromUrl(value).replace(/^www\./i, '');
   if (!hostname) {
-    return 'Arizona Source';
+    return fallbackSourceName;
   }
 
   const parts = hostname.split('.').filter(Boolean);
@@ -382,6 +382,9 @@ function inferSourceTypeFromUrl(value) {
     return 'social_signal';
   }
   if (hostname.includes('skyharbor.com')) {
+    return 'airport_newsroom';
+  }
+  if (hostname.includes('flylax.com') || hostname.includes('lawa.org')) {
     return 'airport_newsroom';
   }
   if (hostname.endsWith('.gov') || hostname.includes('.gov.')) {
@@ -468,7 +471,8 @@ function findManifestSource(draft, manifestEntries, manifestBySlug) {
   });
 }
 
-function resolveSource(draft, manifestEntries, manifestBySlug) {
+function resolveSource(draft, manifestEntries, manifestBySlug, options = {}) {
+  const fallbackSourceName = options.defaultSourceName || 'Arizona Source';
   const knownSource = findManifestSource(draft, manifestEntries, manifestBySlug);
   if (knownSource) {
     return knownSource;
@@ -479,8 +483,8 @@ function resolveSource(draft, manifestEntries, manifestBySlug) {
   );
   const sourceType = normalizeSourceType(draft.sourceType, requestedSourceUrl);
   const sourceName = String(
-    draft.sourceName || draft.publisher || inferSourceNameFromUrl(requestedSourceUrl)
-  ).trim() || 'Arizona Source';
+    draft.sourceName || draft.publisher || inferSourceNameFromUrl(requestedSourceUrl, fallbackSourceName)
+  ).trim() || fallbackSourceName;
   const sourceSlug = String(draft.sourceSlug || slugify(sourceName)).trim() || slugify(sourceName);
 
   return {
@@ -808,7 +812,9 @@ function applyDraftsToStore(store, drafts, options = {}) {
       continue;
     }
 
-    const source = resolveSource(draft, manifestEntries, manifestBySlug);
+    const source = resolveSource(draft, manifestEntries, manifestBySlug, {
+      defaultSourceName: options.defaultSourceName,
+    });
 
     const normalized = normalizeDraft(draft, source, now);
     const placeholderCandidate = normalized.candidate || {

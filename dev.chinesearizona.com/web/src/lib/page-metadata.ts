@@ -2,9 +2,9 @@ import { resolveArticleText } from '@/lib/article-localization';
 import type { Metadata } from 'next';
 
 import {
-  getArizonaNewsArchivePath,
-  getArizonaNewsArticlePath,
-  getArizonaNewsPath,
+  getNewsArchivePath,
+  getNewsArticlePath,
+  getNewsPath,
 } from '@/lib/arizona-news';
 import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
 import {
@@ -54,7 +54,18 @@ function parseDirectoryPageNumber(value?: string): number {
   return Number.isFinite(parsed) && parsed > 1 ? Math.floor(parsed) : 1;
 }
 
-function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearchParams): string {
+function siteNewsLabel(site: SiteProfile, locale: Locale): string {
+  if (site.key === defaultSiteProfile.key) {
+    return locale === 'zh' ? '亞利桑那新聞' : 'Arizona News';
+  }
+
+  return locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`;
+}
+
+function buildNewsArchiveMetadataPath(
+  site: SiteProfile,
+  searchParams?: ArticleArchiveSearchParams
+): string {
   const filters = resolveArticleArchiveFilters(searchParams);
   const params = new URLSearchParams();
 
@@ -77,7 +88,7 @@ function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearch
     params.set('page', String(filters.page));
   }
 
-  return getArizonaNewsArchivePath(params.toString());
+  return getNewsArchivePath(site, params.toString());
 }
 
 export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
@@ -267,13 +278,15 @@ export function communityRadarMetadata(locale: Locale, site: SiteProfile = defau
     });
   }
 
+  const newsLabel = siteNewsLabel(site, locale);
+
   return buildMetadata({
-    title: locale === 'zh' ? '亞利桑那新聞 | ChineseArizona' : 'Arizona News | ChineseArizona',
+    title: `${newsLabel} | ${site.brandName}`,
     description:
       locale === 'zh'
-        ? '每 5 分鐘更新的亞利桑那新聞首頁，整理住房、官方、社群與新店資訊成可用的雙語摘要。'
-        : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening updates.',
-    path: getArizonaNewsPath(),
+        ? `每 5 分鐘更新的${newsLabel}首頁，整理住房、官方、社群與新店資訊成可用的雙語摘要與來源連結。`
+        : `A live ${newsLabel} homepage updated every 5 minutes with bilingual summaries and source links for housing, official, community, and opening updates.`,
+    path: getNewsPath(site),
     locale,
     site,
   });
@@ -304,18 +317,19 @@ export function communityNewsMetadata(
   const filters = resolveArticleArchiveFilters(searchParams);
   const isLegacyBucket = filters.bucket === 'legacy';
   const currentPage = filters.page;
+  const newsLabel = siteNewsLabel(site, locale);
   const baseTitle = isLegacyBucket
     ? locale === 'zh'
-      ? 'Arizona News 舊聞檔案 | ChineseArizona'
-      : 'Arizona News Legacy Archive | ChineseArizona'
+      ? `${newsLabel} 舊聞檔案 | ${site.brandName}`
+      : `${newsLabel} Legacy Archive | ${site.brandName}`
     : locale === 'zh'
-      ? 'Arizona News 檔案 | ChineseArizona'
-      : 'Arizona News Archive | ChineseArizona';
+      ? `${newsLabel} 檔案 | ${site.brandName}`
+      : `${newsLabel} Archive | ${site.brandName}`;
   const title =
     currentPage > 1
       ? locale === 'zh'
-        ? `${baseTitle.replace(' | ChineseArizona', '')}第 ${currentPage} 頁 | ChineseArizona`
-        : `${baseTitle.replace(' | ChineseArizona', '')} Page ${currentPage} | ChineseArizona`
+        ? `${baseTitle.replace(` | ${site.brandName}`, '')}第 ${currentPage} 頁 | ${site.brandName}`
+        : `${baseTitle.replace(` | ${site.brandName}`, '')} Page ${currentPage} | ${site.brandName}`
       : baseTitle;
 
   return buildMetadata({
@@ -328,7 +342,7 @@ export function communityNewsMetadata(
         : locale === 'zh'
           ? '瀏覽目前主打的原創摘要、系列觀察與最新編輯內容。'
           : 'Browse current editorial coverage, including original summaries, recurring series, and current published work.',
-    path: buildArizonaNewsArchiveMetadataPath(searchParams),
+    path: buildNewsArchiveMetadataPath(site, searchParams),
     locale,
     site,
     noIndex: isLegacyBucket,
@@ -558,7 +572,7 @@ export async function articleMetadata(
     return null;
   }
 
-  const article = await getArticleBySlugAsync(slug);
+  const article = await getArticleBySlugAsync(slug, site);
   if (!article) {
     return null;
   }
@@ -568,11 +582,11 @@ export async function articleMetadata(
   return buildMetadata({
     title: `${localizedArticle.title} | ${site.brandName}`,
     description: localizedArticle.excerpt,
-    path: getArizonaNewsArticlePath(article.slug),
+    path: getNewsArticlePath(site, article.slug),
     locale,
     site,
     image: article.heroImage,
-    noIndex: isLegacyArticle(article),
+    noIndex: isLegacyArticle(article, site),
   });
 }
 

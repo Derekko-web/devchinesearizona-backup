@@ -26,6 +26,7 @@ import {
   radarArticleToArticle,
   getRadarArticleBySlugAsync,
 } from '@/lib/radar';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type {
   Article,
   ArticleArchiveBucket,
@@ -117,6 +118,10 @@ function getAllArticles(): Article[] {
   return [...localArticles, ...readImportedArticles()];
 }
 
+function canUseDefaultArticleFallback(site: SiteProfile): boolean {
+  return site.key === defaultSiteProfile.key && site.news.allowDefaultFallback;
+}
+
 function sortArticlesNewestFirst(articles: Article[]): Article[] {
   return articles
     .slice()
@@ -134,6 +139,7 @@ function isArticleSeries(value: string): value is ArticleSeries {
     value === 'restaurant-opening-radar' ||
     value === 'trend-radar' ||
     value === 'arizona-radar' ||
+    value === 'local-radar' ||
     value === 'community-wire'
   );
 }
@@ -324,10 +330,13 @@ export function getArticles(limit?: number): Article[] {
   return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
 }
 
-export async function getArticlesAsync(limit?: number): Promise<Article[]> {
+export async function getArticlesAsync(
+  limit?: number,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Article[]> {
   const sortedArticles = sortArticlesNewestFirst([
-    ...getAllArticles(),
-    ...(await getPublishedRadarArticlesAsArticlesAsync()),
+    ...(canUseDefaultArticleFallback(site) ? getAllArticles() : []),
+    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
   ]);
 
   return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
@@ -338,10 +347,13 @@ export function getCurrentArticles(limit?: number): Article[] {
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
 }
 
-export async function getCurrentArticlesAsync(limit?: number): Promise<Article[]> {
+export async function getCurrentArticlesAsync(
+  limit?: number,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Article[]> {
   const articles = sortArticlesNewestFirst([
-    ...getArticlesForArchiveBucket('current'),
-    ...(await getPublishedRadarArticlesAsArticlesAsync()),
+    ...(canUseDefaultArticleFallback(site) ? getArticlesForArchiveBucket('current') : []),
+    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
   ]);
 
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
@@ -495,16 +507,17 @@ export function getArticleArchivePage(
 
 export async function getArticleArchivePageAsync(
   searchParams?: ArticleArchiveSearchParams,
-  pageSize = 24
+  pageSize = 24,
+  site: SiteProfile = defaultSiteProfile
 ) {
   const filters = resolveArticleArchiveFilters(searchParams);
   const normalizedPageSize = Math.max(1, pageSize);
   const bucketArticles =
     filters.bucket === 'legacy'
-      ? sortArticlesNewestFirst(readImportedArticles())
+      ? sortArticlesNewestFirst(canUseDefaultArticleFallback(site) ? readImportedArticles() : [])
       : sortArticlesNewestFirst([
-          ...getArticlesForArchiveBucket('current'),
-          ...(await getPublishedRadarArticlesAsArticlesAsync()),
+          ...(canUseDefaultArticleFallback(site) ? getArticlesForArchiveBucket('current') : []),
+          ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, site)),
         ]);
   const availableYears = Array.from(
     new Set(bucketArticles.map((article) => articlePublishedParts(article).year))
@@ -564,16 +577,26 @@ export function getArticleBySlug(slug: string): Article | undefined {
   return getAllArticles().find((article) => article.slug === slug);
 }
 
-export async function getArticleBySlugAsync(slug: string): Promise<Article | undefined> {
-  const radarArticle = await getRadarArticleBySlugAsync(slug);
+export async function getArticleBySlugAsync(
+  slug: string,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Article | undefined> {
+  const radarArticle = await getRadarArticleBySlugAsync(slug, site);
   if (radarArticle?.isPublished) {
-    return radarArticleToArticle(radarArticle);
+    return radarArticleToArticle(radarArticle, site);
   }
 
-  return getArticleBySlug(slug);
+  return canUseDefaultArticleFallback(site) ? getArticleBySlug(slug) : undefined;
 }
 
-export function isLegacyArticle(articleOrSlug: Article | string): boolean {
+export function isLegacyArticle(
+  articleOrSlug: Article | string,
+  site: SiteProfile = defaultSiteProfile
+): boolean {
+  if (!canUseDefaultArticleFallback(site)) {
+    return false;
+  }
+
   const slug = typeof articleOrSlug === 'string' ? articleOrSlug : articleOrSlug.slug;
   return readImportedArticles().some((article) => article.slug === slug);
 }

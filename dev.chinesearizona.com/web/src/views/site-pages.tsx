@@ -138,6 +138,9 @@ import {
   getLocalizedArizonaNewsArchivePath,
   getLocalizedArizonaNewsArticlePath,
   getLocalizedArizonaNewsPath,
+  getLocalizedNewsArchivePath,
+  getLocalizedNewsArticlePath,
+  getLocalizedNewsPath,
 } from '@/lib/arizona-news';
 import { phoneHref } from '@/lib/phone';
 import { ensureProfileForAuthUser } from '@/lib/profile-auth';
@@ -211,6 +214,7 @@ const articleSeriesOptions: ArticleSeries[] = [
   'restaurant-opening-radar',
   'trend-radar',
   'arizona-radar',
+  'local-radar',
   'community-wire',
 ];
 const articleSourcePolicyOptions: SourcePolicy[] = [
@@ -329,7 +333,24 @@ function parseRadarLane(value?: string): RadarLane | undefined {
     : undefined;
 }
 
-function buildRadarHref(locale: Locale, lane?: RadarLane, page?: number): string {
+function siteNewsLabel(site: SiteProfile, locale: Locale): string {
+  if (site.key === defaultSiteProfile.key) {
+    return locale === 'zh' ? '亞利桑那新聞' : 'Arizona News';
+  }
+
+  return locale === 'zh' ? `${site.regionNameZh}新聞` : `${site.regionName} News`;
+}
+
+function isRadarArticleSeries(article: Article): boolean {
+  return article.series === 'arizona-radar' || article.series === 'local-radar';
+}
+
+function buildRadarHref(
+  locale: Locale,
+  site: SiteProfile,
+  lane?: RadarLane,
+  page?: number
+): string {
   const params = new URLSearchParams();
 
   if (lane) {
@@ -340,11 +361,12 @@ function buildRadarHref(locale: Locale, lane?: RadarLane, page?: number): string
     params.set('page', String(page));
   }
 
-  return getLocalizedArizonaNewsPath(locale, params.toString());
+  return getLocalizedNewsPath(locale, site, params.toString());
 }
 
 function newsArchiveHref(
   locale: Locale,
+  site: SiteProfile,
   values: {
     bucket: ArticleArchiveBucket;
     series?: ArticleSeries;
@@ -376,7 +398,7 @@ function newsArchiveHref(
   }
 
   const search = params.toString();
-  return getLocalizedArizonaNewsArchivePath(locale, search);
+  return getLocalizedNewsArchivePath(locale, site, search);
 }
 
 function monthLabel(month: number, locale: Locale): string {
@@ -2584,10 +2606,10 @@ export async function CommunityRadarPageView({
 
   const activeLane = parseRadarLane(searchParams?.lane);
   const requestedPage = parsePageNumber(searchParams?.page);
-  const allRadarArticles = await getRadarArticlesAsync();
+  const allRadarArticles = await getRadarArticlesAsync({ site });
   const allFeedArticles = allRadarArticles
     .filter((article) => (activeLane ? article.lane === activeLane : true))
-    .map(radarArticleToArticle);
+    .map((article) => radarArticleToArticle(article, site));
   const totalFeedArticles = allFeedArticles.length;
   const totalFeedPages = Math.max(1, Math.ceil(totalFeedArticles / RADAR_FEED_PAGE_SIZE));
   const currentFeedPage = Math.min(requestedPage, totalFeedPages);
@@ -2598,9 +2620,9 @@ export async function CommunityRadarPageView({
   const displayFeedArticles = localizedFeedArticles.map(cleanLocalizedArticleSummary);
   const showSidebarAd = shouldRenderAdSensePlacement('community_radar_sidebar');
   const previousFeedHref =
-    currentFeedPage > 1 ? buildRadarHref(locale, activeLane, currentFeedPage - 1) : null;
+    currentFeedPage > 1 ? buildRadarHref(locale, site, activeLane, currentFeedPage - 1) : null;
   const nextFeedHref =
-    currentFeedPage < totalFeedPages ? buildRadarHref(locale, activeLane, currentFeedPage + 1) : null;
+    currentFeedPage < totalFeedPages ? buildRadarHref(locale, site, activeLane, currentFeedPage + 1) : null;
   const feedNavigation = (
     <div className="flex flex-wrap items-center gap-2">
       {previousFeedHref ? (
@@ -2632,13 +2654,13 @@ export async function CommunityRadarPageView({
   const topicFilters = [
     {
       key: 'all',
-      href: buildRadarHref(locale),
+      href: buildRadarHref(locale, site),
       label: locale === 'zh' ? '全部新聞' : 'All news',
       active: !activeLane,
     },
     ...radarLaneOptions.map((lane) => ({
       key: lane,
-      href: buildRadarHref(locale, lane),
+      href: buildRadarHref(locale, site, lane),
       label: radarLaneLabel(lane, locale),
       active: activeLane === lane,
     })),
@@ -2682,8 +2704,8 @@ export async function CommunityRadarPageView({
                       ? `${radarLaneLabel(activeLane, locale)}新聞`
                       : `${radarLaneLabel(activeLane, locale)} news`
                     : locale === 'zh'
-                      ? '完整亞利桑那新聞'
-                      : 'All Arizona News'}
+                      ? `完整${siteNewsLabel(site, locale)}`
+                      : `All ${siteNewsLabel(site, locale)}`}
                 </h2>
               </div>
             </div>
@@ -2707,7 +2729,7 @@ export async function CommunityRadarPageView({
                   {displayFeedArticles.map(({ article, localizedText }) => (
                     <Link
                       key={`radar-feed-${article.slug}`}
-                      href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
+                      href={getLocalizedNewsArticlePath(locale, site, article.slug)}
                       className="group grid gap-4 py-5 transition-colors hover:bg-white/45 md:grid-cols-[112px_minmax(0,1fr)_auto] md:items-center"
                     >
                       <div className="relative h-24 overflow-hidden rounded-2xl bg-[#eaded0] md:h-20">
@@ -2803,7 +2825,8 @@ export async function NewsArchivePageView({
       month: searchParams?.month,
       page: searchParams?.page,
     },
-    24
+    24,
+    site
   );
   const isLegacyBucket = articlePage.filters.bucket === 'legacy';
   const localizedArticleText = await resolveLocalizedTextList(
@@ -2824,14 +2847,14 @@ export async function NewsArchivePageView({
   );
   const previousPageHref =
     articlePage.currentPage > 1
-      ? newsArchiveHref(locale, {
+      ? newsArchiveHref(locale, site, {
           ...articlePage.filters,
           page: articlePage.currentPage - 1,
         })
       : null;
   const nextPageHref =
     articlePage.currentPage < articlePage.totalPages
-      ? newsArchiveHref(locale, {
+      ? newsArchiveHref(locale, site, {
           ...articlePage.filters,
           page: articlePage.currentPage + 1,
         })
@@ -2893,8 +2916,8 @@ export async function NewsArchivePageView({
               ? '這裡保留歷史社群轉載與舊聞，方便查找來源脈絡與過往資料。這些頁面仍可存取，但不再作為搜尋收錄主入口。'
               : 'This archive keeps historical community-wire imports reachable for reference and source tracing. These pages remain available, but they are no longer primary indexed entry points.'
             : locale === 'zh'
-              ? 'Arizona News 首頁只顯示少量最新內容；這裡集中目前主打的原創摘要、系列觀察與編輯內容。'
-              : 'The Arizona News homepage shows only a small top layer. This archive keeps the current editorial summaries, recurring series, and current published work together.'}
+              ? `${siteNewsLabel(site, locale)}首頁只顯示少量最新內容；這裡集中目前主打的原創摘要、系列觀察與編輯內容。`
+              : `The ${siteNewsLabel(site, locale)} homepage shows only a small top layer. This archive keeps the current editorial summaries, recurring series, and current published work together.`}
         </p>
       </div>
 
@@ -2902,7 +2925,7 @@ export async function NewsArchivePageView({
         <div className="space-y-8">
           <div className="flex flex-wrap gap-2">
             <Link
-              href={newsArchiveHref(locale, { bucket: 'current' })}
+              href={newsArchiveHref(locale, site, { bucket: 'current' })}
               className={
                 isLegacyBucket
                   ? 'inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50'
@@ -2912,7 +2935,7 @@ export async function NewsArchivePageView({
               {locale === 'zh' ? '目前編輯內容' : 'Current editorial'}
             </Link>
             <Link
-              href={newsArchiveHref(locale, { bucket: 'legacy' })}
+              href={newsArchiveHref(locale, site, { bucket: 'legacy' })}
               className={
                 isLegacyBucket
                   ? 'inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800'
@@ -2924,7 +2947,7 @@ export async function NewsArchivePageView({
           </div>
 
           <form
-            action={getLocalizedArizonaNewsArchivePath(locale)}
+            action={getLocalizedNewsArchivePath(locale, site)}
             method="get"
             className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
           >
@@ -3016,7 +3039,7 @@ export async function NewsArchivePageView({
                 {locale === 'zh' ? '套用篩選' : 'Apply filters'}
               </button>
               <Link
-                href={newsArchiveHref(locale, { bucket: articlePage.filters.bucket })}
+                href={newsArchiveHref(locale, site, { bucket: articlePage.filters.bucket })}
                 className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100"
               >
                 {locale === 'zh' ? '清除篩選' : 'Clear filters'}
@@ -3053,7 +3076,7 @@ export async function NewsArchivePageView({
               {localizedArticles.map(({ article, localizedText }) => (
                 <Link
                   key={article.slug}
-                  href={getLocalizedArizonaNewsArticlePath(locale, article.slug)}
+                  href={getLocalizedNewsArticlePath(locale, site, article.slug)}
                   className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <ArticleMetaRow article={article} locale={locale} showDate />
@@ -3219,15 +3242,15 @@ export async function ArticleDetailPageView({
     return null;
   }
 
-  const article = await getArticleBySlugAsync(slug);
+  const article = await getArticleBySlugAsync(slug, site);
   if (!article) {
     return null;
   }
-  const legacyArticle = isLegacyArticle(article);
+  const legacyArticle = isLegacyArticle(article, site);
   const categories = await getDirectoryCategories();
   const localizedArticle = await resolveArticleText(article, locale);
   const displayArticle =
-    article.series === 'arizona-radar'
+    isRadarArticleSeries(article)
       ? {
           ...localizedArticle,
           title: cleanArizonaNewsCopy(localizedArticle.title),
@@ -3290,10 +3313,10 @@ export async function ArticleDetailPageView({
         {
           '@type': 'ListItem',
           position: 2,
-          name: locale === 'zh' ? '亞利桑那新聞' : 'Arizona News',
-          item: absoluteUrl(getLocalizedArizonaNewsPath(locale)),
+          name: siteNewsLabel(site, locale),
+          item: absoluteUrl(getLocalizedNewsPath(locale, site)),
         },
-        { '@type': 'ListItem', position: 3, name: displayArticle.title, item: absoluteUrl(getLocalizedArizonaNewsArticlePath(locale, article.slug)) },
+        { '@type': 'ListItem', position: 3, name: displayArticle.title, item: absoluteUrl(getLocalizedNewsArticlePath(locale, site, article.slug)) },
       ],
     },
   ];
@@ -3304,11 +3327,13 @@ export async function ArticleDetailPageView({
       <article className="mx-auto max-w-6xl">
         <div className="mb-8 border-y border-[#d9c7b6] py-3">
           <Link
-            href={getLocalizedArizonaNewsPath(locale)}
+            href={getLocalizedNewsPath(locale, site)}
             className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-semibold text-[#6f5a4a] transition-colors hover:text-brand-700"
           >
             <ChevronRight className="h-4 w-4 rotate-180 text-brand-600" />
-            {locale === 'zh' ? '返回亞利桑那新聞' : 'Back to Arizona News'}
+            {locale === 'zh'
+              ? `返回${siteNewsLabel(site, locale)}`
+              : `Back to ${siteNewsLabel(site, locale)}`}
           </Link>
         </div>
 
@@ -3334,7 +3359,7 @@ export async function ArticleDetailPageView({
               <p className="max-w-3xl text-xl leading-8 text-[#5f4d40]">
                 {displayArticle.excerpt}
               </p>
-              {article.series === 'arizona-radar' ? null : (
+              {isRadarArticleSeries(article) ? null : (
                 <ArticleAudienceChips article={article} locale={locale} />
               )}
             </header>

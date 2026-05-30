@@ -31,7 +31,11 @@ function hasSupabaseConfig() {
   );
 }
 
-function shouldUseSupabaseStore() {
+function shouldUseSupabaseStore(options = {}) {
+  if (options.useSupabase === false) {
+    return false;
+  }
+
   const mode = normalizeMode(process.env.RADAR_STORAGE_MODE);
   if (mode === 'file') {
     return false;
@@ -483,8 +487,8 @@ async function writeSupabaseStore(store) {
   return readSupabaseStore();
 }
 
-async function readStoreSnapshot(storePath) {
-  if (!shouldUseSupabaseStore()) {
+async function readStoreSnapshot(storePath, options = {}) {
+  if (!shouldUseSupabaseStore(options)) {
     return readStore(storePath);
   }
 
@@ -502,8 +506,8 @@ async function readStoreSnapshot(storePath) {
   }
 }
 
-async function writeStoreSnapshot(storePath, store) {
-  if (!shouldUseSupabaseStore()) {
+async function writeStoreSnapshot(storePath, store, options = {}) {
+  if (!shouldUseSupabaseStore(options)) {
     writeStore(storePath, store);
     return normalizeStore(store);
   }

@@ -15,8 +15,53 @@ const {
 } = require('./storage.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const DEFAULT_STORE_PATH = path.join(ROOT, 'data', 'radar-runtime', 'store.json');
-const MANIFEST_PATH = path.join(ROOT, 'src', 'data', 'radar-source-manifest.json');
+const SITE_CONFIGS = {
+  arizona: {
+    key: 'arizona',
+    brandName: 'ChineseArizona',
+    defaultSourceName: 'Arizona Source',
+    feedPromptTitle: 'Rewrite these Arizona Radar RSS items into full, original ChineseArizona articles.',
+    openWebPromptTitle: 'You are preparing structured Arizona Radar drafts for ChineseArizona.',
+    regionName: 'Arizona',
+    regionRelevance:
+      'Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott, or another Arizona place',
+    runIdPrefix: 'arizona-radar',
+    storePath: path.join(ROOT, 'data', 'radar-runtime', 'store.json'),
+    manifestPath: path.join(ROOT, 'src', 'data', 'radar-source-manifest.json'),
+    useSupabase: true,
+    summaryOnly: false,
+  },
+  'los-angeles': {
+    key: 'los-angeles',
+    brandName: 'ChineseLosAngeles',
+    defaultSourceName: 'Los Angeles Source',
+    feedPromptTitle:
+      'Rewrite these Los Angeles Radar RSS items into short, original ChineseLosAngeles summary articles.',
+    openWebPromptTitle:
+      'You are preparing structured Los Angeles Radar drafts for ChineseLosAngeles.',
+    regionName: 'Los Angeles',
+    regionRelevance:
+      'Los Angeles, San Gabriel Valley, Alhambra, Arcadia, Monterey Park, Pasadena, Rosemead, San Marino, Rowland Heights, Irvine, Orange County, LAX, or another Southern California place that directly affects Los Angeles readers',
+    runIdPrefix: 'los-angeles-radar',
+    storePath: path.join(ROOT, 'data', 'sites', 'los-angeles', 'radar-runtime', 'store.json'),
+    manifestPath: path.join(ROOT, 'src', 'data', 'los-angeles-radar-source-manifest.json'),
+    useSupabase: false,
+    summaryOnly: true,
+  },
+};
+
+function normalizeSiteKey(value) {
+  const normalized = String(value || 'arizona').trim().toLowerCase();
+  if (normalized === 'la' || normalized === 'los_angeles') {
+    return 'los-angeles';
+  }
+
+  return SITE_CONFIGS[normalized] ? normalized : 'arizona';
+}
+
+function getSiteConfig(siteKey) {
+  return SITE_CONFIGS[normalizeSiteKey(siteKey)];
+}
 
 function parseArgs(argv) {
   const args = {
@@ -30,16 +75,30 @@ function parseArgs(argv) {
     lookbackHours: 24,
     maxItems: 10,
     retryEmpty: parseBoolean(process.env.RADAR_RETRY_EMPTY, false),
+    site: normalizeSiteKey(process.env.RADAR_SITE),
     sourceBatchSize: Number(process.env.RADAR_SOURCE_BATCH_SIZE || 0),
     sourceSlugs: process.env.RADAR_SOURCE_SLUGS || '',
-    storePath: process.env.RADAR_STORE_PATH || DEFAULT_STORE_PATH,
+    storePath: '',
   };
+  args.storePath =
+    process.env.RADAR_STORE_PATH ||
+    process.env[`RADAR_STORE_PATH_${args.site.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`] ||
+    getSiteConfig(args.site).storePath;
 
   for (let index = 2; index < argv.length; index += 1) {
     const value = argv[index];
 
     if (value === 'run') {
       args.command = 'run';
+      continue;
+    }
+    if (value.startsWith('--site=')) {
+      args.site = normalizeSiteKey(value.slice('--site='.length));
+      if (!process.env.RADAR_STORE_PATH) {
+        args.storePath =
+          process.env[`RADAR_STORE_PATH_${args.site.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}`] ||
+          getSiteConfig(args.site).storePath;
+      }
       continue;
     }
     if (value.startsWith('--feed-timeout-ms=')) {
@@ -145,7 +204,7 @@ function printHelp() {
       'Arizona Radar worker',
       '',
       'Usage:',
-      '  node scripts/arizona_radar/run.cjs run [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
+      '  node scripts/arizona_radar/run.cjs run [--site=arizona|los-angeles] [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
       '',
       'Environment:',
       '  HERMES_BIN=hermes',
@@ -154,6 +213,7 @@ function printHelp() {
       '  RADAR_FIXTURE_PATH=/abs/fixture.json',
       '  RADAR_HERMES_MAX_TURNS=8',
       '  RADAR_RETRY_EMPTY=0',
+      '  RADAR_SITE=arizona',
       '  RADAR_STORE_PATH=/abs/store.json',
       '',
     ].join('\n')
@@ -186,8 +246,8 @@ function loadEnvFile(filePath) {
   }
 }
 
-function loadManifest() {
-  return JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8'));
+function loadManifest(siteConfig = SITE_CONFIGS.arizona) {
+  return JSON.parse(fs.readFileSync(siteConfig.manifestPath, 'utf8'));
 }
 
 function parseSourceSlugFilter(value) {
@@ -232,6 +292,11 @@ function readElementText($, element, selector) {
 
 function readElementAttr($, element, selector, attribute) {
   return String($(element).find(selector).first().attr(attribute) || '').trim();
+}
+
+function readAtomLink($, element) {
+  const alternate = $(element).find('link[rel="alternate"]').first().attr('href');
+  return String(alternate || $(element).find('link').first().attr('href') || '').trim();
 }
 
 function normalizeFeedDate(value) {
@@ -399,25 +464,20 @@ function parseFeedItems(xml, source, options = {}) {
   const context = laneContext(source.lane);
   const drafts = [];
 
-  $('item').each((_index, item) => {
+  function pushDraft(input) {
     if (drafts.length >= maxItems) {
       return false;
     }
 
-    const title = readElementText($, item, 'title');
-    const canonicalUrl = normalizeCanonicalUrl(readElementText($, item, 'link'));
-    const sourcePublishedAt = normalizeFeedDate(readElementText($, item, 'pubDate'));
+    const title = input.title;
+    const canonicalUrl = normalizeCanonicalUrl(input.canonicalUrl);
+    const sourcePublishedAt = normalizeFeedDate(input.sourcePublishedAt);
     if (!title || !canonicalUrl || !isWithinLookback(sourcePublishedAt, lookbackHours, now)) {
       return;
     }
 
-    const descriptionHtml = $(item).find('description').first().text();
+    const descriptionHtml = input.descriptionHtml;
     const descriptionText = stripHtml(descriptionHtml);
-    const category = readElementText($, item, 'category');
-    const heroImage =
-      readElementAttr($, item, 'media\\:content', 'url') ||
-      readElementAttr($, item, 'enclosure', 'url') ||
-      extractImageFromHtml(descriptionHtml);
 
     drafts.push({
       sourceSlug: source.slug,
@@ -428,19 +488,50 @@ function parseFeedItems(xml, source, options = {}) {
       titleEn: title,
       titleZh: `${source.name}：${title}`,
       feedExcerpt: firstFeedSummarySentence(descriptionText),
-      feedCategory: category,
+      feedCategory: input.category,
       feedContextEn: context.en,
       feedContextZh: context.zh,
-      heroImage,
+      heroImage: input.heroImage,
       topicFingerprint: `${source.slug}:${title}`,
       personaTargets: context.personas,
+    });
+
+    return true;
+  }
+
+  $('item').each((_index, item) => {
+    return pushDraft({
+      title: readElementText($, item, 'title'),
+      canonicalUrl: readElementText($, item, 'link'),
+      sourcePublishedAt: readElementText($, item, 'pubDate'),
+      descriptionHtml: $(item).find('description').first().text(),
+      category: readElementText($, item, 'category'),
+      heroImage:
+        readElementAttr($, item, 'media\\:content', 'url') ||
+        readElementAttr($, item, 'enclosure', 'url') ||
+        extractImageFromHtml($(item).find('description').first().text()),
+    });
+  });
+
+  $('entry').each((_index, entry) => {
+    return pushDraft({
+      title: readElementText($, entry, 'title'),
+      canonicalUrl: readAtomLink($, entry),
+      sourcePublishedAt:
+        readElementText($, entry, 'published') || readElementText($, entry, 'updated'),
+      descriptionHtml:
+        $(entry).find('summary').first().text() || $(entry).find('content').first().text(),
+      category: String($(entry).find('category').first().attr('term') || '').trim(),
+      heroImage:
+        readElementAttr($, entry, 'media\\:content', 'url') ||
+        extractImageFromHtml($(entry).find('content').first().text()),
     });
   });
 
   return drafts;
 }
 
-function buildFeedRewritePrompt(items) {
+function buildFeedRewritePrompt(items, siteConfig = SITE_CONFIGS.arizona) {
   const sourcePayload = items.map((item) => ({
     sourceSlug: item.sourceSlug,
     sourceName: item.sourceName,
@@ -455,20 +546,28 @@ function buildFeedRewritePrompt(items) {
     articlePublishedAt: item.articlePayload.publishedAt,
     articleText: item.articlePayload.text,
   }));
+  const bodyRule = siteConfig.summaryOnly
+    ? '- Write 1-3 short English body paragraphs per item. Summarize only the most useful facts and link readers to the source for full reporting.'
+    : '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.';
+  const articleRule = siteConfig.summaryOnly
+    ? '- Each item must be a source-linked local brief, not a full rewrite or replacement for the source article.'
+    : '- Each item must be a real rewritten article, not a detector note, short summary, or placeholder.';
 
   return [
-    'Rewrite these Arizona Radar RSS items into full, original ChineseArizona articles.',
+    siteConfig.feedPromptTitle,
     '',
     'Use the provided articleText as source material. Do not browse. Do not invent facts.',
     'Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
-    'Each item must be a real rewritten article, not a detector note, short summary, or placeholder.',
+    articleRule,
     '',
     'Content rules:',
-    '- Write 3-5 English body paragraphs per item. Each paragraph should contain concrete facts from the source.',
-    '- Write in the article voice, as a rewrite of the source article itself.',
-    '- Do not frame the rewrite as source attribution. Do not write phrases such as "What Now Phoenix reports", "according to the source", "the source says", or similar provenance language.',
+    bodyRule,
+    siteConfig.summaryOnly
+      ? '- Write in a concise local news-summary voice and avoid trying to reproduce the full source article.'
+      : '- Write in the article voice, as a rewrite of the source article itself.',
+    '- Do not frame the rewrite as source attribution. Do not write phrases such as "the outlet reports", "according to the source", "the source says", or similar provenance language.',
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
-    '- Explain what happened, who is involved, where it is, timing, and why an Arizona reader would care when the source supports it.',
+    `- Explain what happened, who is involved, where it is, timing, and why a ${siteConfig.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
     '- Use plain, direct language. Do not inflate significance.',
     '',
@@ -555,13 +654,18 @@ function containsCopiedSourceSentence(draft, sourceText) {
   return sourceSentences.some((sentence) => output.includes(sentence.toLowerCase()));
 }
 
-function mergeFeedRewriteDraft(seed, draft) {
+function mergeFeedRewriteDraft(seed, draft, options = {}) {
   const bodyEn = normalizeGeneratedTextArray(draft.bodyEn);
   const bodyZh = normalizeGeneratedTextArray(draft.bodyZh);
   const excerptEn = normalizeGeneratedText(draft.excerptEn);
   const titleEn = normalizeGeneratedText(draft.titleEn || seed.titleEn);
 
-  if (bodyEn.length < 3 || bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < 120) {
+  const minimumParagraphs = options.summaryOnly ? 1 : 3;
+  const minimumWords = options.summaryOnly ? 40 : 120;
+  if (
+    bodyEn.length < minimumParagraphs ||
+    bodyEn.reduce((count, paragraph) => count + wordCount(paragraph), 0) < minimumWords
+  ) {
     return null;
   }
   if (bodyZh.length !== bodyEn.length) {
@@ -600,12 +704,13 @@ function rewriteFeedItemsWithHermes({
   hermesTimeoutMs,
   items,
   maxTurns = 4,
+  siteConfig = SITE_CONFIGS.arizona,
 }) {
   if (!items.length) {
     return [];
   }
 
-  const prompt = buildFeedRewritePrompt(items);
+  const prompt = buildFeedRewritePrompt(items, siteConfig);
   const result = spawnSync(
     hermesBin,
     ['chat', '-Q', '--yolo', '--max-turns', String(maxTurns), '-q', prompt],
@@ -633,7 +738,7 @@ function rewriteFeedItemsWithHermes({
   return parseHermesOutput(result.stdout)
     .map((draft) => {
       const seed = byUrl.get(draft.canonicalUrl) || byUrl.get(draft.sourceUrl);
-      return seed ? mergeFeedRewriteDraft(seed, draft) : null;
+      return seed ? mergeFeedRewriteDraft(seed, draft, { summaryOnly: siteConfig.summaryOnly }) : null;
     })
     .filter(Boolean);
 }
@@ -740,6 +845,7 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
         : 240000,
       items: rewriteSeeds,
       maxTurns: options.hermesMaxTurns || 4,
+      siteConfig: options.siteConfig || SITE_CONFIGS.arizona,
     }).slice(0, maxItems);
   } catch (error) {
     process.stderr.write(
@@ -876,7 +982,13 @@ function parseHermesOutput(text) {
   return [];
 }
 
-function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
+function buildHermesPrompt(
+  manifest,
+  maxItems,
+  lookbackHours,
+  options = {},
+  siteConfig = SITE_CONFIGS.arizona
+) {
   const sourceMode = manifest.length === 0 ? 'open-web' : manifest.length === 1 ? 'seeded' : 'seeded-multi';
   const sourceList = manifest
     .map((source) => {
@@ -884,12 +996,12 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
     })
     .join('\n');
   const prompt = [
-    'You are preparing structured Arizona Radar drafts for ChineseArizona.',
+    siteConfig.openWebPromptTitle,
     `Mode: ${sourceMode}. You are the autonomous operator for source discovery and article drafting.`,
-    `Look back roughly ${lookbackHours} hours from now and return at most ${maxItems} Arizona-relevant items total.`,
+    `Look back roughly ${lookbackHours} hours from now and return at most ${maxItems} ${siteConfig.regionName}-relevant items total.`,
     'Search the public web freely. Do not limit yourself to any preset source allowlist.',
-    'You may use news sites, public social posts, government pages, company blogs, newsletters, event pages, community forums, and local publications, as long as the item is clearly about Arizona.',
-    'Prioritize the newest useful Arizona items first, but if enough material exists in the time window, fill the requested count so the feed can sustain a steady publishing cadence.',
+    `You may use news sites, public social posts, government pages, company blogs, newsletters, event pages, community forums, and local publications, as long as the item is clearly about ${siteConfig.regionName}.`,
+    `Prioritize the newest useful ${siteConfig.regionName} items first, but if enough material exists in the time window, fill the requested count so the feed can sustain a steady publishing cadence.`,
   ];
 
   if (sourceList) {
@@ -922,19 +1034,25 @@ function buildHermesPrompt(manifest, maxItems, lookbackHours, options = {}) {
     '    "titleZh": "matching Traditional Chinese headline",',
     '    "excerptEn": "2-3 sentence English deck that captures the full angle of the story",',
     '    "excerptZh": "matching Traditional Chinese deck covering the same angle",',
-    '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],',
-    '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],',
+    siteConfig.summaryOnly
+      ? '    "bodyEn": ["1-3 concise English paragraphs that summarize, not replace, the source in original words"],'
+      : '    "bodyEn": ["3-6 substantial English paragraphs that fully rewrite the source in original words"],',
+    siteConfig.summaryOnly
+      ? '    "bodyZh": ["1-3 Traditional Chinese paragraphs aligned to the English summary"],'
+      : '    "bodyZh": ["3-6 Traditional Chinese paragraphs aligned to the English rewrite"],',
     '    "heroImage": "https://source-image.example/hero.jpg optional for non-social sources",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
     ']',
     '',
     'Rules:',
-    '- Every item must be clearly about Arizona and useful to Arizona residents, movers, or local business owners.',
+    `- Every item must be clearly about ${siteConfig.regionName} and useful to local residents, movers, students, families, or business owners.`,
     '- Provide both English and Traditional Chinese copy for the title, excerpt, and body. The Chinese version should faithfully match the English rewrite rather than adding new facts.',
-    '- Reject anything that is not specifically tied to Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott, or another Arizona place.',
-    '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.',
-    '- When useful, add concise Arizona-specific context or implications, but do not invent facts or unsupported claims.',
+    `- Reject anything that is not specifically tied to ${siteConfig.regionRelevance}.`,
+    siteConfig.summaryOnly
+      ? '- Official/news/blog sources must become concise source-linked summaries. Do not try to cover every detail or replace the source article.'
+      : '- Official/news/blog sources must become comprehensive rewrites, not short blurbs. Cover the full article in original words, including key facts, names, numbers, timeline, and why it matters in Arizona.',
+    `- When useful, add concise ${siteConfig.regionName}-specific context or implications, but do not invent facts or unsupported claims.`,
     '- Use plain, direct language. Do not inflate significance or write promotional copy.',
     '- Do not copy source sentences or make a close paraphrase. Extract facts, then write new prose.',
     '- Avoid AI-style filler and banned phrasing: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright, here is what you need to know.',
@@ -965,8 +1083,9 @@ function collectDraftsWithHermes({
   lookbackHours,
   maxTurns = 8,
   promptOptions = {},
+  siteConfig = SITE_CONFIGS.arizona,
 }) {
-  const prompt = buildHermesPrompt(manifest, maxItems, lookbackHours, promptOptions);
+  const prompt = buildHermesPrompt(manifest, maxItems, lookbackHours, promptOptions, siteConfig);
   const result = spawnSync(
     hermesBin,
     ['chat', '-Q', '--yolo', '--max-turns', String(maxTurns), '-q', prompt],
@@ -1021,6 +1140,7 @@ function collectDraftsWithHermesRetry({
   maxItems,
   lookbackHours,
   maxTurns,
+  siteConfig = SITE_CONFIGS.arizona,
 }) {
   return dedupeDrafts(
     collectDraftsWithHermes({
@@ -1031,6 +1151,7 @@ function collectDraftsWithHermesRetry({
       lookbackHours,
       maxTurns: maxTurns || (manifest.length <= 1 ? 12 : 14),
       promptOptions: { retry: true },
+      siteConfig,
     })
   ).slice(0, maxItems);
 }
@@ -1078,10 +1199,12 @@ function buildRunRecord(input) {
 
 async function runWorker(args) {
   loadEnvFile(path.join(ROOT, '.env.local'));
-  const manifest = loadManifest();
+  const siteConfig = getSiteConfig(args.site);
+  const manifest = loadManifest(siteConfig);
   const startedAt = new Date().toISOString();
-  const runId = `arizona-radar-${startedAt}`;
-  const initialStore = await readStoreSnapshot(args.storePath);
+  const runId = `${siteConfig.runIdPrefix}-${startedAt}`;
+  const storageOptions = { useSupabase: siteConfig.useSupabase };
+  const initialStore = await readStoreSnapshot(args.storePath, storageOptions);
 
   if (initialStore.jobControl.paused) {
     const pausedStore = appendRun(
@@ -1093,8 +1216,8 @@ async function runWorker(args) {
         status: 'paused',
       })
     );
-    await writeStoreSnapshot(args.storePath, pausedStore);
-    return { status: 'paused', runId, storePath: args.storePath };
+    await writeStoreSnapshot(args.storePath, pausedStore, storageOptions);
+    return { status: 'paused', runId, site: siteConfig.key, storePath: args.storePath };
   }
 
   const requestedSourceSlugs = parseSourceSlugFilter(args.sourceSlugs);
@@ -1134,6 +1257,7 @@ async function runWorker(args) {
           lookbackHours: args.lookbackHours,
           maxItems: draftTargetCount,
           now: startedAt,
+          siteConfig,
           timeoutMs: args.feedTimeoutMs,
         });
     const feedDraftsSatisfiedTarget = feedDrafts.length >= draftTargetCount;
@@ -1151,6 +1275,7 @@ async function runWorker(args) {
               maxItems: draftTargetCount,
               lookbackHours: args.lookbackHours,
               maxTurns: hermesMaxTurns,
+              siteConfig,
             });
           } catch (error) {
             hermesError = error;
@@ -1166,6 +1291,7 @@ async function runWorker(args) {
             maxItems: draftTargetCount,
             lookbackHours: args.lookbackHours,
             maxTurns: hermesMaxTurns,
+            siteConfig,
           })
         : drafts;
     const filteredDrafts = dedupeDrafts([...feedDrafts, ...recoveredDrafts]).filter(
@@ -1179,6 +1305,7 @@ async function runWorker(args) {
       manifest,
       publishCap,
       now: finishedAt,
+      defaultSourceName: siteConfig.defaultSourceName,
     });
     const nextStore = appendRun(
       applied.store,
@@ -1194,11 +1321,12 @@ async function runWorker(args) {
         latestPublishedAt: applied.summary.latestPublishedAt,
       })
     );
-    await writeStoreSnapshot(args.storePath, nextStore);
+    await writeStoreSnapshot(args.storePath, nextStore, storageOptions);
 
     return {
       status: 'completed',
       runId,
+      site: siteConfig.key,
       storePath: args.storePath,
       ...applied.summary,
     };
@@ -1213,7 +1341,7 @@ async function runWorker(args) {
         errorMessage: error instanceof Error ? error.message : String(error),
       })
     );
-    await writeStoreSnapshot(args.storePath, failedStore);
+    await writeStoreSnapshot(args.storePath, failedStore, storageOptions);
     throw error;
   }
 }
@@ -1244,8 +1372,10 @@ if (require.main === module) {
 }
 
 module.exports = {
+  buildHermesPrompt,
   collectDraftsFromFeeds,
   extractJsonPayload,
+  getSiteConfig,
   parseFeedItems,
   parseArgs,
   parseHermesOutput,
