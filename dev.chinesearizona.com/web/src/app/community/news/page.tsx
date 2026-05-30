@@ -1,6 +1,7 @@
 import { permanentRedirect } from 'next/navigation';
 
 import { getArizonaNewsArchivePath } from '@/lib/arizona-news';
+import { requireArizonaOnlySite } from '@/lib/arizona-only-routes.server';
 
 type PageProps = {
   searchParams: Promise<{
@@ -16,6 +17,7 @@ type PageProps = {
 export const dynamic = 'force-dynamic';
 
 export default async function Page({ searchParams }: PageProps) {
+  await requireArizonaOnlySite();
   const resolvedSearchParams = await searchParams;
   const search = new URLSearchParams();
 

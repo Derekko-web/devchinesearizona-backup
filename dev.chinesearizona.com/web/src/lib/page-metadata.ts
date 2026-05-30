@@ -26,7 +26,7 @@ import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-l
 import { t } from '@/lib/i18n';
 import { getPublisherPageCopy, type PublisherPageSlug } from '@/lib/publisher-pages';
 import { buildMetadata } from '@/lib/seo';
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { defaultSiteProfile, hasLiveDirectoryData, hasLiveNewsData, type SiteProfile } from '@/lib/site-config';
 import { appendSearch } from '@/lib/routing';
 import type { CommunityPostType, DiscoveryCategory, HiddenArizonaKind, Locale } from '@/lib/types';
 
@@ -76,25 +76,59 @@ function buildArizonaNewsArchiveMetadataPath(searchParams?: ArticleArchiveSearch
 
 export function homeMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
   return buildMetadata({
-    title:
-      locale === 'zh'
-        ? `${site.brandName} | ${site.regionNameZh}華人商家、新聞與生活資源`
-        : `${site.brandName} | ${site.regionName} Chinese Community Directory, News, and Resources`,
-    description:
-      locale === 'zh'
-        ? site.description.zh
-        : site.description.en,
+    title: locale === 'zh' ? site.seo.title.zh : site.seo.title.en,
+    description: locale === 'zh' ? site.seo.description.zh : site.seo.description.en,
     path: '/',
     locale,
     site,
   });
 }
 
+export function cityContentUnavailableMetadata(
+  locale: Locale,
+  site: SiteProfile,
+  path: string,
+  label = 'City content'
+): Metadata {
+  return buildMetadata({
+    title:
+      locale === 'zh'
+        ? `${site.brandName} ${label} 需要本地內容來源`
+        : `${site.brandName} ${label} Requires Local Content Sources`,
+    description:
+      locale === 'zh'
+        ? `${site.brandName} 尚未接入此頁所需的城市專屬內容，不會回退顯示 ChineseArizona 或 Arizona 內容。`
+        : `${site.brandName} does not have city-specific content connected for this page and will not fall back to ChineseArizona or Arizona content.`,
+    path,
+    locale,
+    site,
+    noIndex: true,
+  });
+}
+
 export function directoryMetadata(
   locale: Locale,
   path = '/business',
-  searchParams?: DirectoryMetadataSearchParams
+  searchParams?: DirectoryMetadataSearchParams,
+  site: SiteProfile = defaultSiteProfile
 ): Metadata {
+  if (!hasLiveDirectoryData(site)) {
+    return buildMetadata({
+      title:
+        locale === 'zh'
+          ? `${site.brandName} 商家目錄需要本地資料`
+          : `${site.brandName} Business Directory Requires Local Data`,
+      description:
+        locale === 'zh'
+          ? `${site.brandName} 尚未接入城市專屬商家資料，不會回退顯示 ChineseArizona 商家。`
+          : `${site.brandName} does not have city-specific business data connected yet and will not fall back to ChineseArizona listings.`,
+      path,
+      locale,
+      site,
+      noIndex: true,
+    });
+  }
+
   const currentPage = parseDirectoryPageNumber(searchParams?.page);
   const hasFilteredQuery = Boolean(
     searchParams?.q?.trim() ||
@@ -103,12 +137,12 @@ export function directoryMetadata(
       searchParams?.minRating ||
       (searchParams?.sort && searchParams.sort !== 'featured')
   );
-  const baseTitle = locale === 'zh' ? '華人商家 | ChineseArizona' : 'Chinese Businesses | ChineseArizona';
+  const baseTitle = locale === 'zh' ? `華人商家 | ${site.brandName}` : `Chinese Businesses | ${site.brandName}`;
   const title =
     currentPage > 1 && !hasFilteredQuery
       ? locale === 'zh'
-        ? `華人商家第 ${currentPage} 頁 | ChineseArizona`
-        : `Chinese Businesses Page ${currentPage} | ChineseArizona`
+        ? `華人商家第 ${currentPage} 頁 | ${site.brandName}`
+        : `Chinese Businesses Page ${currentPage} | ${site.brandName}`
       : baseTitle;
   const pathWithPage = currentPage > 1 && !hasFilteredQuery ? appendSearch(path, `page=${currentPage}`) : path;
 
@@ -116,10 +150,11 @@ export function directoryMetadata(
     title,
     description:
       locale === 'zh'
-        ? '可依城市、分類與評分篩選的亞利桑那華人商家。'
-        : 'Chinese businesses in Arizona, filterable by city, category, and rating.',
+        ? `可依城市、分類與評分篩選的${site.regionNameZh}華人商家。`
+        : `Chinese businesses in ${site.regionName}, filterable by city, category, and rating.`,
     path: pathWithPage,
     locale,
+    site,
   });
 }
 
@@ -177,7 +212,24 @@ export function resetPasswordMetadata(locale: Locale): Metadata {
   });
 }
 
-export function communityMetadata(locale: Locale): Metadata {
+export function communityMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
+  if (site.key !== defaultSiteProfile.key) {
+    return buildMetadata({
+      title:
+        locale === 'zh'
+          ? `${site.brandName} 社群內容需要本地來源`
+          : `${site.brandName} Community Requires Local Sources`,
+      description:
+        locale === 'zh'
+          ? `${site.brandName} 尚未接入城市專屬社群內容，不會回退顯示 ChineseArizona 社群內容。`
+          : `${site.brandName} does not have city-specific community content connected yet and will not fall back to ChineseArizona community content.`,
+      path: '/community',
+      locale,
+      site,
+      noIndex: true,
+    });
+  }
+
   return buildMetadata({
     title: locale === 'zh' ? '社群資源 | ChineseArizona' : 'Community Resources | ChineseArizona',
     description:
@@ -186,10 +238,28 @@ export function communityMetadata(locale: Locale): Metadata {
         : 'A bilingual guide to Arizona Chinese community schools, churches, ping pong clubs, and events.',
     path: '/community',
     locale,
+    site,
   });
 }
 
-export function communityRadarMetadata(locale: Locale): Metadata {
+export function communityRadarMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
+  if (!hasLiveNewsData(site)) {
+    return buildMetadata({
+      title:
+        locale === 'zh'
+          ? `${site.brandName} 新聞需要本地來源`
+          : `${site.brandName} News Requires Local Sources`,
+      description:
+        locale === 'zh'
+          ? `${site.brandName} 尚未接入城市專屬新聞來源，不會回退顯示 Arizona News。`
+          : `${site.brandName} does not have city-specific news sources connected yet and will not fall back to Arizona News.`,
+      path: site.news.routePath,
+      locale,
+      site,
+      noIndex: true,
+    });
+  }
+
   return buildMetadata({
     title: locale === 'zh' ? '亞利桑那新聞 | ChineseArizona' : 'Arizona News | ChineseArizona',
     description:
@@ -198,13 +268,32 @@ export function communityRadarMetadata(locale: Locale): Metadata {
         : 'A live Arizona News homepage updated every 5 minutes with bilingual summaries for housing, official, community, and opening updates.',
     path: getArizonaNewsPath(),
     locale,
+    site,
   });
 }
 
 export function communityNewsMetadata(
   locale: Locale,
-  searchParams?: ArticleArchiveSearchParams
+  searchParams?: ArticleArchiveSearchParams,
+  site: SiteProfile = defaultSiteProfile
 ): Metadata {
+  if (!hasLiveNewsData(site)) {
+    return buildMetadata({
+      title:
+        locale === 'zh'
+          ? `${site.brandName} 新聞檔案需要本地來源`
+          : `${site.brandName} News Archive Requires Local Sources`,
+      description:
+        locale === 'zh'
+          ? `${site.brandName} 尚未接入城市專屬文章資料，不會回退顯示 Arizona News 檔案。`
+          : `${site.brandName} does not have city-specific article data connected yet and will not fall back to the Arizona News archive.`,
+      path: site.news.archivePath,
+      locale,
+      site,
+      noIndex: true,
+    });
+  }
+
   const filters = resolveArticleArchiveFilters(searchParams);
   const isLegacyBucket = filters.bucket === 'legacy';
   const currentPage = filters.page;
@@ -234,6 +323,7 @@ export function communityNewsMetadata(
           : 'Browse current editorial coverage, including original summaries, recurring series, and current published work.',
     path: buildArizonaNewsArchiveMetadataPath(searchParams),
     locale,
+    site,
     noIndex: isLegacyBucket,
   });
 }
@@ -349,7 +439,15 @@ export function adminMetadata(locale: Locale): Metadata {
   });
 }
 
-export async function businessMetadata(locale: Locale, slug: string): Promise<Metadata | null> {
+export async function businessMetadata(
+  locale: Locale,
+  slug: string,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Metadata | null> {
+  if (!hasLiveDirectoryData(site)) {
+    return null;
+  }
+
   const business = await getDirectoryBusinessBySlug(slug);
   if (!business) {
     return null;
@@ -358,27 +456,38 @@ export async function businessMetadata(locale: Locale, slug: string): Promise<Me
   const localizedBusinessText = await resolveLocalizedBusinessDetailText(business, locale);
 
   return buildMetadata({
-    title: `${t(business.name, locale)} | ChineseArizona`,
+    title: `${t(business.name, locale)} | ${site.brandName}`,
     description: localizedBusinessText.shortDescription,
     path: `/business/${business.slug}`,
     locale,
+    site,
     image: business.heroImage ?? undefined,
     noIndex: shouldNoIndexDirectoryBusiness(business),
   });
 }
 
-export function cityCategoryMetadata(locale: Locale, city: string, categorySlug: string): Metadata | null {
+export function cityCategoryMetadata(
+  locale: Locale,
+  city: string,
+  categorySlug: string,
+  site: SiteProfile = defaultSiteProfile
+): Metadata | null {
+  if (!hasLiveDirectoryData(site)) {
+    return null;
+  }
+
   const category = getBusinessCategories().find((item) => item.slug === categorySlug);
   if (!category) {
     return null;
   }
 
-  const title = `${t(category.name, locale)} ${locale === 'zh' ? `在 ${city}` : `in ${city}`} | ChineseArizona`;
+  const title = `${t(category.name, locale)} ${locale === 'zh' ? `在 ${city}` : `in ${city}`} | ${site.brandName}`;
   return buildMetadata({
     title,
     description: t(category.description, locale),
     path: `/business/${city}/${category.slug}`,
     locale,
+    site,
     noIndex: true,
   });
 }
@@ -433,7 +542,15 @@ export async function hiddenArizonaEntryMetadata(
   });
 }
 
-export async function articleMetadata(locale: Locale, slug: string): Promise<Metadata | null> {
+export async function articleMetadata(
+  locale: Locale,
+  slug: string,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Metadata | null> {
+  if (!hasLiveNewsData(site)) {
+    return null;
+  }
+
   const article = await getArticleBySlugAsync(slug);
   if (!article) {
     return null;
@@ -442,10 +559,11 @@ export async function articleMetadata(locale: Locale, slug: string): Promise<Met
   const localizedArticle = await resolveArticleText(article, locale);
 
   return buildMetadata({
-    title: `${localizedArticle.title} | ChineseArizona`,
+    title: `${localizedArticle.title} | ${site.brandName}`,
     description: localizedArticle.excerpt,
     path: getArizonaNewsArticlePath(article.slug),
     locale,
+    site,
     image: article.heroImage,
     noIndex: isLegacyArticle(article),
   });

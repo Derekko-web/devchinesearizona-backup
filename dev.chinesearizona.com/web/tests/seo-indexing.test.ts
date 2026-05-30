@@ -8,6 +8,7 @@ import {
   homeMetadata,
   publisherPageMetadata,
 } from '@/lib/page-metadata';
+import { siteProfiles } from '@/lib/site-config';
 import { createModerationReport } from '@/lib/runtime-store';
 
 const originalConvexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -40,6 +41,15 @@ describe('indexing signals', () => {
     expect(metadata.alternates?.canonical).toBe('https://chinesearizona.com/zh/business?page=2');
     expect(metadata.alternates?.languages?.en).toBe('https://chinesearizona.com/business?page=2');
     expect(metadata.alternates?.languages?.['x-default']).toBe('https://chinesearizona.com/business?page=2');
+  });
+
+  it('noindexes placeholder city directory metadata instead of falling back to Arizona listings', () => {
+    const metadata = directoryMetadata('en', '/business', undefined, siteProfiles.austin);
+
+    expect(metadata.title).toBe('ChineseAustin Business Directory Requires Local Data');
+    expect(metadata.description).toContain('will not fall back to ChineseArizona listings');
+    expect(metadata.alternates?.canonical).toBe('https://chineseaustin.com/business');
+    expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
   it('keeps city and category filter pages out of the sitemap', async () => {

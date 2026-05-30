@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 
+import { arizonaOnlyMetadata, requireArizonaOnlySite } from '@/lib/arizona-only-routes.server';
 import { hiddenArizonaEntryMetadata } from '@/lib/page-metadata';
 import { HiddenArizonaDetailPageView } from '@/views/hidden-arizona';
 
@@ -10,10 +11,17 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps) {
-  return (await hiddenArizonaEntryMetadata('en', 'list', (await params).slug)) ?? {};
+  const { slug } = await params;
+  return arizonaOnlyMetadata(
+    'en',
+    `/hidden-arizona/lists/${slug}`,
+    async () => (await hiddenArizonaEntryMetadata('en', 'list', slug)) ?? {},
+    'Hidden Arizona'
+  );
 }
 
 export default async function Page({ params }: PageProps) {
+  await requireArizonaOnlySite();
   const { slug } = await params;
   const rendered = await HiddenArizonaDetailPageView({ locale: 'en', kind: 'list', slug });
   if (!rendered) {

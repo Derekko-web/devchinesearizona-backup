@@ -8,13 +8,16 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+import { EmptyState } from '@/components/EmptyState';
 import { getEvents } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type { Event, Locale, LocalizedText } from '@/lib/types';
 
 type CommunityPageViewProps = {
   locale: Locale;
+  site?: SiteProfile;
 };
 
 type ResourceKind = 'school' | 'church' | 'pingpong';
@@ -541,7 +544,26 @@ function PublishedEventLink({ event, locale }: { event: Event; locale: Locale })
   );
 }
 
-export function CommunityPageView({ locale }: CommunityPageViewProps) {
+export function CommunityPageView({ locale, site = defaultSiteProfile }: CommunityPageViewProps) {
+  if (site.key !== defaultSiteProfile.key) {
+    return (
+      <div className="flex-1 overflow-x-hidden bg-transparent px-6 py-12 text-[#261b15] sm:px-8 xl:px-10">
+        <EmptyState
+          title={
+            locale === 'zh'
+              ? `${site.brandName} 社群內容尚未接入`
+              : `${site.brandName} community content is not connected yet`
+          }
+          description={
+            locale === 'zh'
+              ? '此城市設定必須先接入自己的學校、教會、活動與商家資料；平台不会回退顯示 ChineseArizona 社群內容。'
+              : 'This city config must connect its own schools, churches, events, and business data first; the platform will not fall back to ChineseArizona community content.'
+          }
+        />
+      </div>
+    );
+  }
+
   const publishedEvents = getEvents().slice(0, 4);
 
   return (

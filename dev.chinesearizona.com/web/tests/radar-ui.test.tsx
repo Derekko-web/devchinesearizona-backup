@@ -240,6 +240,27 @@ describe('radar ui', () => {
     expect(html).not.toContain('Monitoring live');
   });
 
+  it('does not reuse Arizona Radar content for placeholder city sites', async () => {
+    writeRadarStore();
+    const [{ CommunityRadarPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(
+      await CommunityRadarPageView({
+        locale: 'en',
+        searchParams: { lane: 'official' },
+        site: siteProfiles.austin,
+      })
+    );
+
+    expect(html).toContain('ChineseAustin news sources are not connected yet');
+    expect(html).toContain('will not fall back to Arizona News');
+    expect(html).not.toContain('mesa-radar-housing-pulse');
+    expect(html).not.toContain('Phoenix Sky Harbor');
+  });
+
   it('renders compact source links on article detail pages', async () => {
     writeRadarStore();
     const { ArticleDetailPageView } = await import('@/views/site-pages');

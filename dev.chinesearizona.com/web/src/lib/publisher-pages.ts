@@ -39,11 +39,12 @@ export function getPublisherPageCopy(
   locale: Locale,
   site: SiteProfile = defaultSiteProfile
 ): PublisherPageCopy {
-  const updatedLabel = copy(locale, 'Last updated: May 17, 2026', '最後更新：2026 年 5 月 17 日');
   const brandName = site.brandName;
   const regionName = site.regionName;
   const regionNameZh = site.regionNameZh;
   const domain = site.domain;
+  const contactEmail = site.publisher.contactEmail;
+  const updatedLabel = copy(locale, site.publisher.updatedLabel.en, site.publisher.updatedLabel.zh);
 
   if (slug === 'about') {
     return {
@@ -116,8 +117,8 @@ export function getPublisherPageCopy(
           body: [
             copy(
               locale,
-              'For corrections, owner requests, privacy questions, and advertising inquiries, email hello@chinesearizona.com.',
-              '如需內容修正、商家主理人申請、隱私問題或廣告合作，請寄信至 hello@chinesearizona.com。'
+              `For corrections, owner requests, privacy questions, and advertising inquiries, email ${contactEmail}.`,
+              `如需內容修正、商家主理人申請、隱私問題或廣告合作，請寄信至 ${contactEmail}。`
             ),
           ],
         },
@@ -216,8 +217,8 @@ export function getPublisherPageCopy(
           body: [
             copy(
               locale,
-              'You may request correction or removal of personal information, business listing details, or community submissions by contacting hello@chinesearizona.com. Some records may be retained when needed for security, legal compliance, dispute handling, or abuse prevention.',
-              '你可以寄信至 hello@chinesearizona.com 要求修正或移除個人資訊、商家資料或社群投稿。基於安全、法規遵循、爭議處理或防止濫用，部分紀錄可能會保留。'
+              `You may request correction or removal of personal information, business listing details, or community submissions by contacting ${contactEmail}. Some records may be retained when needed for security, legal compliance, dispute handling, or abuse prevention.`,
+              `你可以寄信至 ${contactEmail} 要求修正或移除個人資訊、商家資料或社群投稿。基於安全、法規遵循、爭議處理或防止濫用，部分紀錄可能會保留。`
             ),
           ],
         },

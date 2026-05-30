@@ -1,4 +1,5 @@
 import { communityNewsMetadata } from '@/lib/page-metadata';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { NewsArchivePageView } from '@/views/site-pages';
 
 export const dynamic = 'force-dynamic';
@@ -15,9 +16,11 @@ type PageProps = {
 };
 
 export async function generateMetadata({ searchParams }: PageProps) {
-  return communityNewsMetadata('en', await searchParams);
+  const site = await getCurrentSiteProfile();
+  return communityNewsMetadata('en', await searchParams, site);
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  return await NewsArchivePageView({ locale: 'en', searchParams: await searchParams });
+  const site = await getCurrentSiteProfile();
+  return await NewsArchivePageView({ locale: 'en', searchParams: await searchParams, site });
 }

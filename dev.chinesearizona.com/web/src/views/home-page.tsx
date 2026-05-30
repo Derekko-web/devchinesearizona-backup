@@ -11,11 +11,14 @@ import Link from 'next/link';
 
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedArizonaNewsArticlePath, getLocalizedArizonaNewsPath } from '@/lib/arizona-news';
+import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getBusinesses, getCurrentArticles } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
   defaultSiteProfile,
+  hasLiveDirectoryData,
+  hasLiveNewsData,
   type SiteFeaturedShowcaseCard,
   type SiteNeighborhoodSpot,
   type SiteProfile,
@@ -326,34 +329,41 @@ function StoryCard({ story }: { story: HomeStoryCard }) {
 
 export function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
   const home = site.home;
-  const allBusinesses = getBusinesses(locale, { sort: 'featured' });
-  const categories = getBusinessCategories();
+  const directoryIsLive = hasLiveDirectoryData(site);
+  const newsIsLive = hasLiveNewsData(site);
+  const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
+  const allBusinesses = directoryIsLive ? getBusinesses(locale, { sort: 'featured' }) : [];
+  const categories = getBusinessCategories().filter((category) =>
+    site.directory.categorySlugs.includes(category.slug)
+  );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
-  const storyCards: HomeStoryCard[] = getCurrentArticles()
-    .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
-    .filter(
-      (article) =>
-        hasLatinCharacters(article.title.en) &&
-        !hasCjkCharacters(article.title.en) &&
-        Boolean(article.title.zh) &&
-        article.title.zh !== article.title.en
-    )
-    .sort((left, right) => {
-      const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
-      if (titleLengthDifference !== 0) {
-        return titleLengthDifference;
-      }
+  const storyCards: HomeStoryCard[] = newsIsLive
+    ? getCurrentArticles()
+        .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
+        .filter(
+          (article) =>
+            hasLatinCharacters(article.title.en) &&
+            !hasCjkCharacters(article.title.en) &&
+            Boolean(article.title.zh) &&
+            article.title.zh !== article.title.en
+        )
+        .sort((left, right) => {
+          const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
+          if (titleLengthDifference !== 0) {
+            return titleLengthDifference;
+          }
 
-      return left.title.en.localeCompare(right.title.en);
-    })
-    .slice(0, 3)
-    .map((article) => ({
-      href: getLocalizedArizonaNewsArticlePath(locale, article.slug),
-      title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
-      bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
-      date: formatCardDate(article.publishedAt, locale),
-      image: article.heroImage,
-    }));
+          return left.title.en.localeCompare(right.title.en);
+        })
+        .slice(0, 3)
+        .map((article) => ({
+          href: getLocalizedArizonaNewsArticlePath(locale, article.slug),
+          title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
+          bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
+          date: formatCardDate(article.publishedAt, locale),
+          image: article.heroImage,
+        }))
+    : [];
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
@@ -647,8 +657,8 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
               <HomeSectionHeading
                 title={copy(locale, 'News & Community', '新闻与社区')}
                 subtitle={oppositeCopy(locale, 'News & Community', '新闻与社区')}
-                href={getLocalizedArizonaNewsPath(locale)}
-                hrefLabel={copy(locale, 'View all', '查看全部')}
+                href={newsIsLive ? getLocalizedArizonaNewsPath(locale) : undefined}
+                hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
               />
 
               <div className="mt-5 grid gap-4 md:grid-cols-3">
@@ -720,18 +730,20 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
                   {copy(locale, home.newcomerBody.en, home.newcomerBody.zh)}
                 </p>
 
-                <Link
-                  href={withLocale(locale, '/relocation-guide')}
-                  className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-                >
-                  <span className="flex flex-col items-start leading-none">
-                    <span>{copy(locale, 'Explore Relocation Guide', '查看搬家指南')}</span>
-                    <span className="mt-1 text-[10px] font-medium tracking-[0.06em] text-white/80">
-                      {oppositeCopy(locale, 'Explore Relocation Guide', '查看搬家指南')}
+                {canShowArizonaOnlyLinks ? (
+                  <Link
+                    href={withLocale(locale, '/relocation-guide')}
+                    className="mt-7 inline-flex items-center gap-2 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+                  >
+                    <span className="flex flex-col items-start leading-none">
+                      <span>{copy(locale, 'Explore Relocation Guide', '查看搬家指南')}</span>
+                      <span className="mt-1 text-[10px] font-medium tracking-[0.06em] text-white/80">
+                        {oppositeCopy(locale, 'Explore Relocation Guide', '查看搬家指南')}
+                      </span>
                     </span>
-                  </span>
-                  <ArrowRight className="h-4 w-4 flex-shrink-0" />
-                </Link>
+                    <ArrowRight className="h-4 w-4 flex-shrink-0" />
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>
