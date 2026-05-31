@@ -1,5 +1,6 @@
 const { createHash, randomUUID } = require('node:crypto');
 const fs = require('node:fs');
+const net = require('node:net');
 const path = require('node:path');
 
 const VALID_PERSONA_TARGETS = new Set([
@@ -137,6 +138,93 @@ function shortHash(value) {
   return hashValue(value).slice(0, 8);
 }
 
+function ipv4ToInteger(value) {
+  const parts = String(value || '')
+    .split('.')
+    .map((part) => Number(part));
+
+  if (
+    parts.length !== 4 ||
+    parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)
+  ) {
+    return null;
+  }
+
+  return parts.reduce((result, part) => ((result << 8) | part) >>> 0, 0);
+}
+
+function ipv4InRange(value, base, prefixLength) {
+  const ip = ipv4ToInteger(value);
+  const baseIp = ipv4ToInteger(base);
+  if (ip === null || baseIp === null) {
+    return false;
+  }
+
+  const mask = prefixLength === 0 ? 0 : (0xffffffff << (32 - prefixLength)) >>> 0;
+  return (ip & mask) === (baseIp & mask);
+}
+
+function isPrivateOrReservedIpv4(value) {
+  return [
+    ['0.0.0.0', 8],
+    ['10.0.0.0', 8],
+    ['100.64.0.0', 10],
+    ['127.0.0.0', 8],
+    ['169.254.0.0', 16],
+    ['172.16.0.0', 12],
+    ['192.0.0.0', 24],
+    ['192.0.2.0', 24],
+    ['192.168.0.0', 16],
+    ['198.18.0.0', 15],
+    ['198.51.100.0', 24],
+    ['203.0.113.0', 24],
+    ['224.0.0.0', 4],
+    ['240.0.0.0', 4],
+  ].some(([base, prefixLength]) => ipv4InRange(value, base, prefixLength));
+}
+
+function isPrivateOrReservedIpv6(value) {
+  const normalized = String(value || '')
+    .replace(/^\[|\]$/g, '')
+    .toLowerCase();
+
+  return (
+    normalized === '::' ||
+    normalized === '::1' ||
+    normalized.startsWith('::ffff:') ||
+    /^f[cd]/.test(normalized) ||
+    /^fe[89ab]/.test(normalized) ||
+    normalized.startsWith('ff')
+  );
+}
+
+function isLocalHostname(value) {
+  const hostname = String(value || '')
+    .replace(/\.$/, '')
+    .toLowerCase();
+
+  return (
+    hostname === 'localhost' ||
+    hostname.endsWith('.localhost') ||
+    hostname.endsWith('.local') ||
+    hostname.endsWith('.internal')
+  );
+}
+
+function isUnsafePublicUrlHost(hostname) {
+  const normalized = String(hostname || '').replace(/^\[|\]$/g, '');
+  const ipVersion = net.isIP(normalized);
+
+  if (ipVersion === 4) {
+    return isPrivateOrReservedIpv4(normalized);
+  }
+  if (ipVersion === 6) {
+    return isPrivateOrReservedIpv6(normalized);
+  }
+
+  return isLocalHostname(normalized);
+}
+
 function normalizeCanonicalUrl(value) {
   if (!value) {
     return '';
@@ -144,6 +232,13 @@ function normalizeCanonicalUrl(value) {
 
   try {
     const url = new URL(String(value).trim());
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return '';
+    }
+    if (!url.hostname || url.username || url.password || isUnsafePublicUrlHost(url.hostname)) {
+      return '';
+    }
+
     const trackingParams = new Set([
       'fbclid',
       'gclid',
