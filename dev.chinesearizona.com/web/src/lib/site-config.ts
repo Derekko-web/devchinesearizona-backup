@@ -1170,7 +1170,7 @@ function isLocalHost(host: string): boolean {
 }
 
 function isRequestInfrastructureHost(host: string): boolean {
-  return isLocalHost(host) || host.endsWith('.local');
+  return isLocalHost(host) || host.endsWith('.local') || host.endsWith('.invalid');
 }
 
 function createUnconfiguredSiteProfile(host: string): SiteProfile {
@@ -1351,14 +1351,31 @@ export function normalizeHost(value?: string | null): string {
   return withoutPort.startsWith('www.') ? withoutPort.slice(4) : withoutPort;
 }
 
-function getConfiguredSiteProfileByHost(normalizedHost: string): SiteProfile | undefined {
-  for (const profile of Object.values(siteProfiles)) {
-    if (profile.domains.some((domain) => normalizeHost(domain) === normalizedHost)) {
-      return profile;
-    }
+function resolveConfiguredSiteProfileFromHost(host?: string | null): SiteProfile | undefined {
+  const normalizedHost = normalizeHost(host);
+
+  if (!normalizedHost || isLocalHost(normalizedHost)) {
+    return undefined;
   }
 
-  return undefined;
+  return Object.values(siteProfiles).find((profile) =>
+    profile.domains.some((domain) => normalizeHost(domain) === normalizedHost)
+  );
+}
+
+export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
+  const normalizedHost = normalizeHost(host);
+
+  if (!normalizedHost || isLocalHost(normalizedHost)) {
+    return defaultSiteProfile;
+  }
+
+  const configuredSite = resolveConfiguredSiteProfileFromHost(normalizedHost);
+  if (configuredSite) {
+    return configuredSite;
+  }
+
+  return createUnconfiguredSiteProfile(normalizedHost);
 }
 
 export function resolveSiteProfileFromHostCandidates(
@@ -1374,7 +1391,7 @@ export function resolveSiteProfileFromHostCandidates(
   }
 
   const firstPublicHost = normalizedHosts[firstPublicHostIndex];
-  const firstPublicProfile = getConfiguredSiteProfileByHost(firstPublicHost);
+  const firstPublicProfile = resolveConfiguredSiteProfileFromHost(firstPublicHost);
   if (firstPublicProfile) {
     return firstPublicProfile;
   }
@@ -1384,7 +1401,7 @@ export function resolveSiteProfileFromHostCandidates(
       continue;
     }
 
-    const profile = getConfiguredSiteProfileByHost(normalizedHost);
+    const profile = resolveConfiguredSiteProfileFromHost(normalizedHost);
     if (profile && profile.key !== defaultSiteProfile.key) {
       return profile;
     }
@@ -1393,16 +1410,48 @@ export function resolveSiteProfileFromHostCandidates(
   return createUnconfiguredSiteProfile(firstPublicHost);
 }
 
-export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
-  return resolveSiteProfileFromHostCandidates([host]);
+function isPublicRequestHost(host: string): boolean {
+  return Boolean(host && !isRequestInfrastructureHost(host));
 }
 
 export function resolveSiteProfileFromRequestHosts({
-  forwardedHost,
   host,
+  forwardedHost,
 }: {
-  forwardedHost?: string | null;
   host?: string | null;
+  forwardedHost?: string | null;
 }): SiteProfile {
-  return resolveSiteProfileFromHostCandidates([forwardedHost, host]);
+  const normalizedHost = normalizeHost(host);
+  const normalizedForwardedHost = normalizeHost(forwardedHost);
+  const hostProfile = resolveConfiguredSiteProfileFromHost(host);
+  if (hostProfile && hostProfile.key !== defaultSiteProfile.key) {
+    return hostProfile;
+  }
+
+  if (isPublicRequestHost(normalizedHost) && !hostProfile) {
+    return createUnconfiguredSiteProfile(normalizedHost);
+  }
+
+  const forwardedHostProfile = resolveConfiguredSiteProfileFromHost(forwardedHost);
+  if (forwardedHostProfile && forwardedHostProfile.key !== defaultSiteProfile.key) {
+    return forwardedHostProfile;
+  }
+
+  if (hostProfile) {
+    if (isPublicRequestHost(normalizedForwardedHost) && !forwardedHostProfile) {
+      return createUnconfiguredSiteProfile(normalizedForwardedHost);
+    }
+
+    return hostProfile;
+  }
+
+  if (forwardedHostProfile) {
+    return forwardedHostProfile;
+  }
+
+  if (isPublicRequestHost(normalizedForwardedHost)) {
+    return createUnconfiguredSiteProfile(normalizedForwardedHost);
+  }
+
+  return defaultSiteProfile;
 }

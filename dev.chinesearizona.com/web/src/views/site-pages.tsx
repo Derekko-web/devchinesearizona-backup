@@ -630,7 +630,7 @@ export async function DirectoryPageView({
           '@context': 'https://schema.org',
           '@type': 'Organization',
           name: site.brandName,
-          alternateName: [site.brandNameZh],
+          alternateName: [site.brandNameZh, site.regionName],
           url: pageUrl,
           description: locale === 'zh' ? site.description.zh : site.description.en,
         },
@@ -920,10 +920,7 @@ export async function BusinessDetailPageView({
   const serviceHighlights = getBusinessServiceHighlights(business, locale);
   const hoursPreview = getBusinessHoursPreview(business.hours, locale);
   const businessDetailPath = withLocale(locale, `/business/${business.slug}`);
-  const businessDetailUrl =
-    site.key === defaultSiteProfile.key
-      ? absoluteUrl(businessDetailPath)
-      : absoluteUrl(businessDetailPath, site);
+  const businessDetailUrl = absoluteUrl(businessDetailPath, site);
   const localBusinessJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -3366,15 +3363,20 @@ export async function ArticleDetailPageView({
           '@type': 'ListItem',
           position: 1,
           name: locale === 'zh' ? '首頁' : 'Home',
-          item: absoluteUrl(withLocale(locale, '/')),
+          item: absoluteUrl(withLocale(locale, '/'), site),
         },
         {
           '@type': 'ListItem',
           position: 2,
           name: siteNewsLabel(site, locale),
-          item: absoluteUrl(getLocalizedNewsPath(locale, site)),
+          item: absoluteUrl(getLocalizedNewsPath(locale, site), site),
         },
-        { '@type': 'ListItem', position: 3, name: displayArticle.title, item: absoluteUrl(getLocalizedNewsArticlePath(locale, site, article.slug)) },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: displayArticle.title,
+          item: absoluteUrl(getLocalizedNewsArticlePath(locale, site, article.slug), site),
+        },
       ],
     },
   ];
