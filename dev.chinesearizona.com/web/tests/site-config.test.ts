@@ -45,6 +45,17 @@ describe('city site configuration', () => {
     expect(site.seo.description.en).not.toContain('Arizona');
   });
 
+  it('uses the public Austin host when the forwarded host is local to the upstream server', () => {
+    const site = resolveSiteProfileFromRequestHosts({
+      forwardedHost: '127.0.0.1:3017',
+      host: 'chineseaustin.com',
+    });
+
+    expect(site).toBe(siteProfiles.austin);
+    expect(site.directory.allowDefaultFallback).toBe(false);
+    expect(hasLiveDirectoryData(site)).toBe(true);
+  });
+
   it('serves SF Bay directory and news from SF Bay-specific sources without default fallback', () => {
     const site = resolveSiteProfileFromHost('www.chinesesfbay.com');
 

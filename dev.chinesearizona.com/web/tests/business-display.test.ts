@@ -83,6 +83,24 @@ describe('business display helpers', () => {
     );
   });
 
+  it('uses the provided state label for service-area directions links', () => {
+    const url = getBusinessDirectionsUrl(
+      businessFixture({
+        name: { en: 'Chinese Society of Austin' },
+        city: 'Austin',
+        address: undefined,
+        serviceAreaText: 'Greater Austin and surrounding Central Texas communities',
+        coordinates: undefined,
+      }),
+      'TX'
+    );
+
+    expect(decodeURIComponent(url ?? '')).toContain(
+      'Chinese Society of Austin Austin TX Greater Austin and surrounding Central Texas communities'
+    );
+    expect(decodeURIComponent(url ?? '')).not.toContain('Arizona');
+  });
+
   it('derives useful service highlights from structured and descriptive content', () => {
     expect(
       getBusinessServiceHighlights(
