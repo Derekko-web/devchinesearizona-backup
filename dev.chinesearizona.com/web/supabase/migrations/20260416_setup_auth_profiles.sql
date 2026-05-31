@@ -25,6 +25,9 @@ create policy "Users can update their own auth profile"
   using ((select auth.uid()) = id)
   with check ((select auth.uid()) = id);
 
+revoke update on public.auth_profiles from anon, authenticated;
+grant update (full_name, avatar_url) on public.auth_profiles to authenticated;
+
 create or replace function public.set_auth_profiles_updated_at()
 returns trigger
 language plpgsql

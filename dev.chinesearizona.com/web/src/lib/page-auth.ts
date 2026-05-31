@@ -9,25 +9,29 @@ import { getServerUserFromCookies } from '@/lib/server-auth';
 import type { Locale, ProfileRole } from '@/lib/types';
 
 const staffRoles = new Set<ProfileRole>(['moderator', 'admin']);
+const elevatedProfileRoles = new Set<ProfileRole>(['editor', 'moderator', 'admin']);
+
+function roleFromAppMetadata(value: unknown): ProfileRole | null {
+  return value === 'member' ||
+    value === 'business_owner' ||
+    value === 'editor' ||
+    value === 'moderator' ||
+    value === 'admin'
+    ? value
+    : null;
+}
 
 function roleFromUser(user: User, profile?: AppProfileRow | null): ProfileRole | null {
-  if (profile?.role) {
-    return profile.role;
-  }
-
-  const appRole =
-    typeof user.app_metadata?.role === 'string' ? user.app_metadata.role : undefined;
-  if (
-    appRole === 'member' ||
-    appRole === 'business_owner' ||
-    appRole === 'editor' ||
-    appRole === 'moderator' ||
-    appRole === 'admin'
-  ) {
+  const appRole = roleFromAppMetadata(user.app_metadata?.role);
+  if (appRole) {
     return appRole;
   }
 
-  return null;
+  if (!profile?.role || elevatedProfileRoles.has(profile.role)) {
+    return null;
+  }
+
+  return profile.role;
 }
 
 export type StaffPageContext = {

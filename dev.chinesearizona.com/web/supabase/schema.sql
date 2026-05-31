@@ -669,6 +669,9 @@ create policy "Users can update their own auth profile"
   using ((select auth.uid()) = id)
   with check ((select auth.uid()) = id);
 
+revoke update on public.auth_profiles from anon, authenticated;
+grant update (full_name, avatar_url) on public.auth_profiles to authenticated;
+
 create or replace function public.set_auth_profiles_updated_at()
 returns trigger
 language plpgsql
@@ -957,6 +960,9 @@ create policy "Users can update their own profile"
   to authenticated
   using (auth_user_id = (select auth.uid()))
   with check (auth_user_id = (select auth.uid()));
+
+revoke update on public.profiles from anon, authenticated;
+grant update (slug, name, name_zh_tw, city, languages, bio_en, bio_zh_tw) on public.profiles to authenticated;
 
 drop policy if exists "Public can view shop categories" on public.shop_categories;
 create policy "Public can view shop categories"

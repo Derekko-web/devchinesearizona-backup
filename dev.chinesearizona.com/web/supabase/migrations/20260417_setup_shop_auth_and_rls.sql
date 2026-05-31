@@ -203,6 +203,9 @@ create policy "Users can update their own profile"
   using (auth_user_id = (select auth.uid()))
   with check (auth_user_id = (select auth.uid()));
 
+revoke update on public.profiles from anon, authenticated;
+grant update (slug, name, name_zh_tw, city, languages, bio_en, bio_zh_tw) on public.profiles to authenticated;
+
 drop policy if exists "Public can view shop categories" on public.shop_categories;
 create policy "Public can view shop categories"
   on public.shop_categories

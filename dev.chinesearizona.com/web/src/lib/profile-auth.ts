@@ -6,8 +6,9 @@ import { getSupabaseServiceClient } from '@/lib/supabase';
 type AuthProfileRow = {
   email: string;
   full_name?: string | null;
-  role?: ProfileRole | null;
 };
+
+const elevatedProfileRoles = new Set<ProfileRole>(['editor', 'moderator', 'admin']);
 
 export type AppProfileRow = {
   id: string;
@@ -54,11 +55,7 @@ function defaultDisplayName(user: User, authProfile?: AuthProfileRow | null): st
   return 'Member';
 }
 
-function defaultRole(user: User, authProfile?: AuthProfileRow | null): ProfileRole {
-  if (authProfile?.role) {
-    return authProfile.role;
-  }
-
+function appMetadataRole(user: User): ProfileRole | null {
   const appRole =
     typeof user.app_metadata?.role === 'string' ? user.app_metadata.role : undefined;
   if (
@@ -71,7 +68,15 @@ function defaultRole(user: User, authProfile?: AuthProfileRow | null): ProfileRo
     return appRole;
   }
 
-  return 'member';
+  return null;
+}
+
+function syncedProfileRole(existingRole: ProfileRole, authoritativeRole: ProfileRole | null) {
+  if (authoritativeRole) {
+    return authoritativeRole;
+  }
+
+  return elevatedProfileRoles.has(existingRole) ? 'member' : existingRole;
 }
 
 async function buildUniqueProfileSlug(baseName: string) {
@@ -106,7 +111,7 @@ async function getAuthProfile(userId: string): Promise<AuthProfileRow | null> {
 
   const { data, error } = await serviceClient
     .from('auth_profiles')
-    .select('email, full_name, role')
+    .select('email, full_name')
     .eq('id', userId)
     .maybeSingle();
 
@@ -145,9 +150,10 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
   const existing = await getProfileByAuthUserId(user.id);
   const authProfile = await getAuthProfile(user.id);
   const displayName = defaultDisplayName(user, authProfile);
-  const role = defaultRole(user, authProfile);
+  const authoritativeRole = appMetadataRole(user);
 
   if (existing) {
+    const role = syncedProfileRole(existing.role, authoritativeRole);
     if (existing.role !== role) {
       const { data, error } = await serviceClient
         .from('profiles')
@@ -162,6 +168,8 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
       if (!error && data) {
         return data;
       }
+
+      return { ...existing, auth_user_id: user.id, role };
     }
 
     return existing;
@@ -175,7 +183,7 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
       slug,
       name: displayName,
       name_zh_tw: displayName,
-      role,
+      role: authoritativeRole ?? 'member',
       city: 'Phoenix',
       languages: ['English'],
       bio_en: 'New member account.',

@@ -167,11 +167,12 @@ describe('page auth guards', () => {
     expect(notFound).toHaveBeenCalled();
   });
 
-  it('allows moderator and admin roles into admin surfaces', async () => {
+  it('returns notFound for stale elevated profile roles without app metadata', async () => {
     const {
       requireStaffPageContext,
       getServerUserFromCookies,
       getProfileByAuthUserId,
+      notFound,
     } = await loadPageAuthModule();
     getServerUserFromCookies.mockResolvedValue({
       id: 'user_3',
@@ -184,6 +185,34 @@ describe('page auth guards', () => {
       name: 'Moderator',
       name_zh_tw: '版主',
       role: 'moderator',
+      city: 'Mesa',
+      languages: ['English', '中文'],
+      bio_en: 'Moderator bio',
+      bio_zh_tw: '版主簡介',
+      auth_user_id: 'user_3',
+    });
+
+    await expect(requireStaffPageContext()).rejects.toThrow('notFound');
+    expect(notFound).toHaveBeenCalled();
+  });
+
+  it('allows moderator and admin app metadata roles into admin surfaces', async () => {
+    const {
+      requireStaffPageContext,
+      getServerUserFromCookies,
+      getProfileByAuthUserId,
+    } = await loadPageAuthModule();
+    getServerUserFromCookies.mockResolvedValue({
+      id: 'user_3',
+      app_metadata: { role: 'moderator' },
+      email: 'moderator@example.com',
+    });
+    getProfileByAuthUserId.mockResolvedValue({
+      id: 'profile_3',
+      slug: 'moderator',
+      name: 'Moderator',
+      name_zh_tw: '版主',
+      role: 'member',
       city: 'Mesa',
       languages: ['English', '中文'],
       bio_en: 'Moderator bio',
