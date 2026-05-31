@@ -1169,6 +1169,10 @@ function isLocalHost(host: string): boolean {
   return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '::1';
 }
 
+function isRequestInfrastructureHost(host: string): boolean {
+  return isLocalHost(host) || host.endsWith('.local');
+}
+
 function createUnconfiguredSiteProfile(host: string): SiteProfile {
   const domain = host || 'unconfigured.local';
   const origin = domain.endsWith('.local') ? `http://${domain}` : `https://${domain}`;
@@ -1361,7 +1365,9 @@ export function resolveSiteProfileFromHostCandidates(
   hosts: Array<string | null | undefined>
 ): SiteProfile {
   const normalizedHosts = hosts.map((host) => normalizeHost(host)).filter(Boolean);
-  const firstPublicHostIndex = normalizedHosts.findIndex((host) => !isLocalHost(host));
+  const firstPublicHostIndex = normalizedHosts.findIndex(
+    (host) => !isRequestInfrastructureHost(host)
+  );
 
   if (firstPublicHostIndex === -1) {
     return defaultSiteProfile;
@@ -1374,7 +1380,7 @@ export function resolveSiteProfileFromHostCandidates(
   }
 
   for (const normalizedHost of normalizedHosts.slice(firstPublicHostIndex + 1)) {
-    if (isLocalHost(normalizedHost)) {
+    if (isRequestInfrastructureHost(normalizedHost)) {
       continue;
     }
 
@@ -1389,4 +1395,14 @@ export function resolveSiteProfileFromHostCandidates(
 
 export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
   return resolveSiteProfileFromHostCandidates([host]);
+}
+
+export function resolveSiteProfileFromRequestHosts({
+  forwardedHost,
+  host,
+}: {
+  forwardedHost?: string | null;
+  host?: string | null;
+}): SiteProfile {
+  return resolveSiteProfileFromHostCandidates([forwardedHost, host]);
 }

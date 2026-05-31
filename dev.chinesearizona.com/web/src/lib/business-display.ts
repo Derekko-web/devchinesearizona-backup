@@ -175,12 +175,13 @@ export function getBusinessHoursPreview(hours: Business['hours'], locale: Locale
 }
 
 export function getBusinessDirectionsUrl(
-  business: Pick<Business, 'address' | 'city' | 'coordinates' | 'name' | 'serviceAreaText'>
+  business: Pick<Business, 'address' | 'city' | 'coordinates' | 'name' | 'serviceAreaText'>,
+  stateLabel = 'Arizona'
 ): string | undefined {
   const destination =
     business.coordinates
       ? `${business.coordinates.lat},${business.coordinates.lng}`
-      : business.address ?? `${business.name.en} ${business.city} Arizona ${business.serviceAreaText ?? ''}`.trim();
+      : business.address ?? `${business.name.en} ${business.city} ${stateLabel} ${business.serviceAreaText ?? ''}`.trim();
 
   return destination
     ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`

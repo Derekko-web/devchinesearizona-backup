@@ -318,6 +318,7 @@ function DirectoryListingCard({
       locale={locale}
       enableSponsoredClickTracking={Boolean(business.activeDirectoryAdCampaign)}
       localizedLocationLabel={business.address ?? business.serviceAreaText ?? `${business.city}, ${stateCode}`}
+      stateLabel={stateCode}
     />
   );
 
@@ -915,7 +916,7 @@ export async function BusinessDetailPageView({
   const websiteHref = business.website && business.website !== menuHref ? business.website : undefined;
   const emailHref = business.email ? `mailto:${business.email}` : undefined;
   const phoneLink = phoneHref(business.phone);
-  const directionsHref = getBusinessDirectionsUrl(business);
+  const directionsHref = getBusinessDirectionsUrl(business, site.stateCode || site.stateRegion);
   const serviceHighlights = getBusinessServiceHighlights(business, locale);
   const hoursPreview = getBusinessHoursPreview(business.hours, locale);
   const businessDetailPath = withLocale(locale, `/business/${business.slug}`);
@@ -1700,6 +1701,7 @@ export async function BusinessDetailPageView({
                   business={item}
                   locale={locale}
                   localizedLocationLabel={item.address ?? item.serviceAreaText ?? `${item.city}, ${site.stateCode}`}
+                  stateLabel={site.stateCode || site.stateRegion}
                 />
               ))}
             </div>
@@ -3528,7 +3530,13 @@ export async function ArticleDetailPageView({
           </h2>
           <div className="grid gap-4 lg:grid-cols-2">
             {relatedBusinesses.map((business) => (
-              <BusinessCard key={business.id} business={business} locale={locale} />
+              <BusinessCard
+                key={business.id}
+                business={business}
+                locale={locale}
+                localizedLocationLabel={business.address ?? business.serviceAreaText ?? `${business.city}, ${site.stateCode}`}
+                stateLabel={site.stateCode || site.stateRegion}
+              />
             ))}
           </div>
         </div>

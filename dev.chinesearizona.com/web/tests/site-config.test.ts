@@ -4,7 +4,7 @@ import {
   defaultSiteProfile,
   hasLiveDirectoryData,
   hasLiveNewsData,
-  resolveSiteProfileFromHostCandidates,
+  resolveSiteProfileFromRequestHosts,
   resolveSiteProfileFromHost,
   shouldNoIndexSiteProfile,
   siteProfiles,
@@ -45,6 +45,17 @@ describe('city site configuration', () => {
     expect(site.seo.description.en).not.toContain('Arizona');
   });
 
+  it('uses the public Austin host when the forwarded host is local to the upstream server', () => {
+    const site = resolveSiteProfileFromRequestHosts({
+      forwardedHost: '127.0.0.1:3017',
+      host: 'chineseaustin.com',
+    });
+
+    expect(site).toBe(siteProfiles.austin);
+    expect(site.directory.allowDefaultFallback).toBe(false);
+    expect(hasLiveDirectoryData(site)).toBe(true);
+  });
+
   it('serves SF Bay directory and news from SF Bay-specific sources without default fallback', () => {
     const site = resolveSiteProfileFromHost('www.chinesesfbay.com');
 
@@ -79,16 +90,34 @@ describe('city site configuration', () => {
   });
 
   it('does not let an internal forwarded host mask the SF Bay request host', () => {
-    expect(resolveSiteProfileFromHostCandidates(['127.0.0.1:3001', 'chinesesfbay.com'])).toBe(
-      siteProfiles['sf-bay']
-    );
-    expect(resolveSiteProfileFromHostCandidates(['internal-router.local', 'www.chinesesfbay.com'])).toBe(
-      siteProfiles['sf-bay']
-    );
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        forwardedHost: '127.0.0.1:3001',
+        host: 'chinesesfbay.com',
+      })
+    ).toBe(siteProfiles['sf-bay']);
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        forwardedHost: 'internal-router.local',
+        host: 'www.chinesesfbay.com',
+      })
+    ).toBe(siteProfiles['sf-bay']);
+  });
+
+  it('keeps ChineseArizona live when a local forwarded host is present', () => {
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        forwardedHost: 'internal-router.local',
+        host: 'chinesearizona.com',
+      })
+    ).toBe(defaultSiteProfile);
   });
 
   it('does not rescue unknown city hosts with the Arizona default domain', () => {
-    const site = resolveSiteProfileFromHostCandidates(['missing-city.example', 'chinesearizona.com']);
+    const site = resolveSiteProfileFromRequestHosts({
+      forwardedHost: 'missing-city.example',
+      host: 'chinesearizona.com',
+    });
 
     expect(site.key).toBe('unconfigured');
     expect(hasLiveDirectoryData(site)).toBe(false);
