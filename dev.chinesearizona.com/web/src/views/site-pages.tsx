@@ -3295,7 +3295,7 @@ export async function ArticleDetailPageView({
     return null;
   }
   const legacyArticle = isLegacyArticle(article, site);
-  const categories = await getDirectoryCategories();
+  const categories = await getDirectoryCategories(site);
   const localizedArticle = await resolveArticleText(article, locale);
   const displayArticle =
     isRadarArticle(article)
@@ -3307,7 +3307,7 @@ export async function ArticleDetailPageView({
         }
       : localizedArticle;
   const author = article.authorProfileSlug ? getProfileBySlug(article.authorProfileSlug) : undefined;
-  const relatedBusinesses = getRelatedBusinesses(article.ctaBusinessSlugs);
+  const relatedBusinesses = getRelatedBusinesses(article.ctaBusinessSlugs, site);
   const relatedCategories = article.relatedCategorySlugs
     .map((categorySlug) => categories.find((category) => category.slug === categorySlug))
     .filter((category): category is BusinessCategory => Boolean(category));

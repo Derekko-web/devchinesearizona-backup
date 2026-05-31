@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import sfBayDirectoryBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 import losAngelesDirectoryBusinesses from '@/data/los-angeles-directory-businesses.json';
 import {
   applyDirectoryQueryFilters,
@@ -519,6 +520,90 @@ describe('directory trust gates', () => {
     expect(metadata.description).toContain('Chinese businesses in Los Angeles');
     expect(metadata.description).not.toContain('Arizona');
     expect(metadata.robots).toBeUndefined();
+  });
+
+  it('serves SF Bay directory listings from SF Bay data without Arizona fixture fallback', async () => {
+    const site = siteProfiles['sf-bay'];
+    const businesses = await getDirectoryBusinesses({}, { site, limit: 100 });
+    const serialized = JSON.stringify(businesses);
+
+    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.map((business) => business.slug)).toEqual(
+      expect.arrayContaining([
+        'r-g-lounge-san-francisco',
+        'asian-health-services-oakland',
+        'asian-law-alliance-san-jose',
+      ])
+    );
+    expect(new Set(businesses.map((business) => business.city))).toEqual(
+      new Set(['Cupertino', 'Oakland', 'San Francisco', 'San Jose', 'Santa Clara', 'Sunnyvale'])
+    );
+    expect(serialized).not.toMatch(
+      /Phoenix|Chandler|Tempe|Mesa|Gilbert|Scottsdale|Arizona|ChineseArizona|亞利桑那|菲尼克斯|鳳凰城/
+    );
+  });
+
+  it('keeps SF Bay seed listings source-backed and California-local', () => {
+    expect(sfBayDirectoryBusinesses.length).toBeGreaterThanOrEqual(10);
+
+    for (const business of sfBayDirectoryBusinesses) {
+      expect(business.address ?? business.serviceAreaText).toMatch(/CA|Bay Area|San Francisco|San Jose|Oakland/);
+      expect(business.sourceUrls.length).toBeGreaterThan(0);
+      expect(business.sourceUrls.every((url) => url.startsWith('http'))).toBe(true);
+      expect(JSON.stringify(business)).not.toMatch(
+        /Phoenix|Chandler|Tempe|Mesa|Scottsdale|AZ 85|Arizona|亞利桑那|菲尼克斯|鳳凰城/
+      );
+    }
+  });
+
+  it('keeps SF Bay filters and details from falling back to Arizona listings', async () => {
+    const site = siteProfiles['sf-bay'];
+
+    const page = await getDirectoryPage({ city: 'San Francisco' }, 1, 20, { site });
+    expect(page.totalCount).toBeGreaterThan(0);
+    expect(page.businesses.every((business) => business.city === 'San Francisco')).toBe(true);
+
+    await expect(getDirectoryBusinessBySlug('bido-cafe', { site })).resolves.toBeUndefined();
+    await expect(getDirectoryBusinessBySlug('r-g-lounge-san-francisco', { site })).resolves.toMatchObject({
+      city: 'San Francisco',
+      region: 'San Francisco Chinatown',
+    });
+  });
+
+  it('uses SF Bay-specific categories, cities, and metadata', async () => {
+    const site = siteProfiles['sf-bay'];
+    const filterOptions = await getDirectoryFilterOptions(site);
+    const metadata = directoryMetadata('en', '/business', undefined, site);
+
+    expect(filterOptions.cities).toEqual([
+      'Cupertino',
+      'Oakland',
+      'San Francisco',
+      'San Jose',
+      'Santa Clara',
+      'Sunnyvale',
+    ]);
+    expect(filterOptions.categories.map((category) => category.slug)).toEqual(
+      expect.arrayContaining(['dining', 'shopping', 'education', 'legal-finance', 'medical'])
+    );
+    expect(metadata.title).toBe('Chinese Businesses | ChineseSFBay');
+    expect(metadata.description).toContain('Chinese businesses in San Francisco Bay Area');
+    expect(metadata.description).not.toContain('Arizona');
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it('returns an empty directory for non-live city configs instead of Arizona fixtures', async () => {
+    const site = siteProfiles.austin;
+    const [businesses, filters] = await Promise.all([
+      getDirectoryBusinesses({}, { site, limit: 1000 }),
+      getDirectoryFilterOptions(site),
+    ]);
+
+    expect(businesses).toEqual([]);
+    expect(filters.cities).toEqual([]);
+    expect(filters.categories.map((category) => category.slug).sort()).toEqual(
+      [...site.directory.categorySlugs].sort()
+    );
   });
 
   it('keeps plain paginated directory pages self-canonical', () => {
