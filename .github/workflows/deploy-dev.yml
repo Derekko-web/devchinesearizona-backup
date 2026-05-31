@@ -97,6 +97,9 @@ jobs:
 
           cd /var/www
           runtime_data_root="/var/www/runtime-data/dev.chinesearizona.com/web"
+          git_exclude_path="$(git rev-parse --git-path info/exclude)"
+          mkdir -p "$(dirname "$git_exclude_path")"
+          grep -qxF '/runtime-data/' "$git_exclude_path" 2>/dev/null || printf '%s\n' '/runtime-data/' >> "$git_exclude_path"
           generated_data_paths=(
             "dev.chinesearizona.com/web/data/sites/austin/radar-runtime/store.json"
             "dev.chinesearizona.com/web/data/sites/los-angeles/radar-runtime/store.json"

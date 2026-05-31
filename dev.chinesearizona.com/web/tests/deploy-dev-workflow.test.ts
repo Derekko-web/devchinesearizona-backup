@@ -11,6 +11,8 @@ describe('Deploy Dev dirty tree guard', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');
 
     expect(workflow).toContain('runtime_data_root="/var/www/runtime-data/dev.chinesearizona.com/web"');
+    expect(workflow).toContain('git_exclude_path="$(git rev-parse --git-path info/exclude)"');
+    expect(workflow).toContain("'/runtime-data/' >> \"$git_exclude_path\"");
     expect(workflow).toContain(
       '"dev.chinesearizona.com/web/data/sites/austin/radar-runtime/store.json"'
     );
