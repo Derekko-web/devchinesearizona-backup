@@ -501,11 +501,9 @@ export function cityCategoryMetadata(
     return null;
   }
 
-  if (!site.directory.categorySlugs.includes(categorySlug)) {
-    return null;
-  }
-
-  const category = getBusinessCategories().find((item) => item.slug === categorySlug);
+  const category = getBusinessCategories().find(
+    (item) => item.slug === categorySlug && site.directory.categorySlugs.includes(item.slug)
+  );
   if (!category) {
     return null;
   }

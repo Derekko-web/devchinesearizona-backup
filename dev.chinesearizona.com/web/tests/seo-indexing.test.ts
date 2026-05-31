@@ -77,11 +77,11 @@ describe('indexing signals', () => {
   });
 
   it('noindexes non-live city directory metadata instead of falling back to Arizona listings', () => {
-    const metadata = directoryMetadata('en', '/business', undefined, siteProfiles['los-angeles']);
+    const metadata = directoryMetadata('en', '/business', undefined, siteProfiles['sf-bay']);
 
-    expect(metadata.title).toBe('ChineseLosAngeles Business Directory Requires Local Data');
+    expect(metadata.title).toBe('ChineseSFBay Business Directory Requires Local Data');
     expect(metadata.description).toContain('will not fall back to ChineseArizona listings');
-    expect(metadata.alternates?.canonical).toBe('https://chineselosangeles.com/business');
+    expect(metadata.alternates?.canonical).toBe('https://chinesesfbay.com/business');
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 

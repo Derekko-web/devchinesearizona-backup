@@ -64,17 +64,24 @@ describe('city site configuration', () => {
     expect(site.seo.description.en).not.toContain('Arizona');
   });
 
-  it('connects chineselosangeles.com to Los Angeles-only news sources', () => {
+  it('connects chineselosangeles.com to Los Angeles-only directory and news sources', () => {
     const site = resolveSiteProfileFromHost('chineselosangeles.com');
 
     expect(site).toBe(siteProfiles['los-angeles']);
     expect(site.launchState).toBe('live');
     expect(site.brandName).toBe('ChineseLosAngeles');
-    expect(hasLiveDirectoryData(site)).toBe(false);
+    expect(hasLiveDirectoryData(site)).toBe(true);
     expect(hasLiveNewsData(site)).toBe(true);
     expect(shouldNoIndexSiteProfile(site)).toBe(false);
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
+    expect(site.directory.listingSource.path).toBe('src/data/los-angeles-directory-businesses.json');
+    expect(site.directory.launchCities).toEqual(
+      expect.arrayContaining(['Los Angeles', 'Alhambra', 'Arcadia', 'Monterey Park', 'San Gabriel'])
+    );
+    expect(site.directory.categorySlugs).toEqual(
+      expect.arrayContaining(['dining', 'shopping', 'real-estate', 'legal-finance', 'medical'])
+    );
     expect(site.news.routePath).toBe('/los-angeles-news');
     expect(site.news.articleDataSource.path).toBe(
       'data/sites/los-angeles/radar-runtime/store.json'
@@ -84,6 +91,10 @@ describe('city site configuration', () => {
     );
     expect(JSON.stringify(site.news)).not.toContain('generated-local-articles.json');
     expect(site.news.articleDataSource.path).not.toBe('data/radar-runtime/store.json');
+    expect(JSON.stringify(site.directory)).not.toContain('generated-directory-businesses.json');
+    expect(site.seo.title.en).toContain('Directory');
+    expect(site.seo.description.en).toContain('Los Angeles');
+    expect(site.seo.description.en).not.toContain('Arizona');
   });
 
   it('does not resolve unknown city hosts to ChineseArizona', () => {

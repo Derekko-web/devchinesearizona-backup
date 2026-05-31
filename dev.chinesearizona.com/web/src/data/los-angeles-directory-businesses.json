@@ -1,0 +1,829 @@
+[
+  {
+    "id": "la_lunasia_dim_sum_house_alhambra",
+    "slug": "lunasia-dim-sum-house-alhambra",
+    "name": {
+      "en": "Lunasia Dim Sum House",
+      "zh": "Lunasia 點心坊"
+    },
+    "categorySlug": "dining",
+    "city": "Alhambra",
+    "region": "San Gabriel Valley",
+    "address": "500 W Main St, Alhambra, CA 91801",
+    "phone": "(626) 308-3222",
+    "website": "https://www.lunasiadimsum.com/pages/locations",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Alhambra dim sum restaurant with Pasadena, Cerritos, and Torrance sister locations.",
+      "zh": "位於 Alhambra 的點心餐廳，另有 Pasadena、Cerritos 與 Torrance 分店。"
+    },
+    "description": {
+      "en": "Lunasia is a San Gabriel Valley dim sum anchor for family meals, visiting relatives, and weekend gatherings. The Alhambra location sits near Main Street civic and commercial corridors, making it useful for LA Chinese community members planning a meal around errands, school visits, or SGV appointments.",
+      "zh": "Lunasia 是聖蓋博谷家庭聚餐、親友來訪與週末聚會常用的點心據點。Alhambra 分店靠近 Main Street 的市政與商業走廊，適合洛杉磯華人社群在辦事、看學校或安排 SGV 行程時順路用餐。"
+    },
+    "services": [
+      {
+        "en": "Dim sum dining",
+        "zh": "點心內用"
+      },
+      {
+        "en": "Family meals",
+        "zh": "家庭聚餐"
+      },
+      {
+        "en": "Private dining inquiries",
+        "zh": "包廂與聚會諮詢"
+      }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["dim sum", "Alhambra", "SGV", "點心", "早茶"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Mon-Fri",
+        "value": "10:30 AM - 8:30 PM"
+      },
+      {
+        "label": "Sat-Sun",
+        "value": "9:30 AM - 8:30 PM"
+      }
+    ],
+    "sourceUrls": [
+      "https://www.lunasiadimsum.com/pages/locations",
+      "https://guide.michelin.com/us/en/california/alhambra/restaurant/lunasia-dim-sum-house"
+    ]
+  },
+  {
+    "id": "la_din_tai_fung_arcadia",
+    "slug": "din-tai-fung-arcadia",
+    "name": {
+      "en": "Din Tai Fung Arcadia",
+      "zh": "鼎泰豐 Arcadia"
+    },
+    "categorySlug": "dining",
+    "city": "Arcadia",
+    "region": "San Gabriel Valley",
+    "address": "400 S Baldwin Ave #M5, Arcadia, CA 91007",
+    "phone": "(626) 446-8588",
+    "website": "https://dtf.com/us/locations/arcadia.html",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Taiwanese dumpling and noodle restaurant at The Shops at Santa Anita.",
+      "zh": "位於 The Shops at Santa Anita 的台式小籠包與麵點餐廳。"
+    },
+    "description": {
+      "en": "Din Tai Fung's Arcadia restaurant is a recognizable Taiwanese dining stop for SGV families, students, and visitors meeting near The Shops at Santa Anita. It works well for planned meals, group reservations, and a familiar menu for newcomers who want a reliable Chinese-language community dining landmark.",
+      "zh": "鼎泰豐 Arcadia 分店是 SGV 家庭、學生與來訪親友在 The Shops at Santa Anita 附近碰面時熟悉的台式餐飲據點。它適合預約聚餐、家庭用餐，以及想找穩定菜單的新移民與訪客。"
+    },
+    "services": [
+      {
+        "en": "Dine-in reservations",
+        "zh": "內用訂位"
+      },
+      {
+        "en": "Pickup ordering",
+        "zh": "外帶點餐"
+      },
+      {
+        "en": "Private dining inquiries",
+        "zh": "私人聚餐諮詢"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Arcadia", "Santa Anita", "xiao long bao", "小籠包", "台式"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Mon-Thu",
+        "value": "11:00 AM - 9:30 PM"
+      },
+      {
+        "label": "Fri",
+        "value": "11:00 AM - 10:00 PM"
+      },
+      {
+        "label": "Sat",
+        "value": "10:00 AM - 10:00 PM"
+      },
+      {
+        "label": "Sun",
+        "value": "10:00 AM - 9:30 PM"
+      }
+    ],
+    "sourceUrls": ["https://dtf.com/us/locations/arcadia.html"]
+  },
+  {
+    "id": "la_mama_lus_dumpling_house_monterey_park",
+    "slug": "mama-lus-dumpling-house-monterey-park",
+    "name": {
+      "en": "Mama Lu's Dumpling House",
+      "zh": "一口福 Mama Lu's Dumpling House"
+    },
+    "categorySlug": "dining",
+    "city": "Monterey Park",
+    "region": "San Gabriel Valley",
+    "address": "501 W Garvey Ave #101, Monterey Park, CA 91755",
+    "phone": "(626) 282-2256",
+    "website": "https://mamaludumpling.com/about",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Monterey Park dumpling restaurant known for family-style Chinese and Taiwanese comfort food.",
+      "zh": "Monterey Park 餃子餐廳，供應中式與台式家常料理。"
+    },
+    "description": {
+      "en": "Mama Lu's Dumpling House is a Monterey Park stop for dumplings, beef wraps, wontons, and casual SGV meals. It belongs in the LA directory because it serves the everyday dining pattern many Chinese families rely on: quick takeout, shared plates, and a central Garvey Avenue location.",
+      "zh": "Mama Lu's Dumpling House 是 Monterey Park 的餃子、牛肉捲、餛飩與 SGV 日常聚餐據點。它適合收錄在洛杉磯目錄中，因為它服務許多華人家庭熟悉的用餐需求：快速外帶、共享餐點，以及 Garvey Avenue 便利位置。"
+    },
+    "services": [
+      {
+        "en": "Dine-in meals",
+        "zh": "內用"
+      },
+      {
+        "en": "Takeout orders",
+        "zh": "外帶"
+      },
+      {
+        "en": "Frozen dumplings",
+        "zh": "冷凍餃子"
+      }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["Monterey Park", "dumplings", "Garvey", "餃子", "一口福"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Mon-Thu",
+        "value": "10:00 AM - 9:30 PM"
+      },
+      {
+        "label": "Fri-Sun",
+        "value": "10:00 AM - 10:00 PM"
+      }
+    ],
+    "sourceUrls": ["https://mamaludumpling.com/about"]
+  },
+  {
+    "id": "la_newport_seafood_san_gabriel",
+    "slug": "newport-seafood-san-gabriel",
+    "name": {
+      "en": "Newport Seafood Restaurant",
+      "zh": "避風塘 Newport Seafood"
+    },
+    "categorySlug": "dining",
+    "city": "San Gabriel",
+    "region": "San Gabriel Valley",
+    "address": "518 W Las Tunas Dr, San Gabriel, CA 91776",
+    "phone": "(626) 289-5998",
+    "website": "https://newportseafoodrestaurant.com/contact/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "San Gabriel Chinese seafood restaurant for group meals, reservations, and catering inquiries.",
+      "zh": "San Gabriel 中式海鮮餐廳，適合聚餐、訂位與外燴諮詢。"
+    },
+    "description": {
+      "en": "Newport Seafood Restaurant is a San Gabriel Valley seafood and banquet-style dining option for birthdays, family visits, and larger tables. The listing gives LA-area readers a practical source for reservations, takeout questions, and group meal planning around Las Tunas Drive.",
+      "zh": "Newport Seafood Restaurant 是聖蓋博谷常見的海鮮與大桌聚餐選擇，適合生日、親友來訪與家庭聚會。此收錄方便洛杉磯讀者查找訂位、外帶與 Las Tunas Drive 附近聚餐安排。"
+    },
+    "services": [
+      {
+        "en": "Seafood dining",
+        "zh": "海鮮餐飲"
+      },
+      {
+        "en": "Group reservations",
+        "zh": "團體訂位"
+      },
+      {
+        "en": "Catering questions",
+        "zh": "外燴諮詢"
+      }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["San Gabriel", "seafood", "banquet", "海鮮", "聚餐"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Mon",
+        "value": "11:00 AM - 9:00 PM"
+      },
+      {
+        "label": "Tue",
+        "value": "Closed"
+      },
+      {
+        "label": "Wed-Thu",
+        "value": "11:00 AM - 9:00 PM"
+      },
+      {
+        "label": "Fri-Sat",
+        "value": "11:00 AM - 9:30 PM"
+      },
+      {
+        "label": "Sun",
+        "value": "11:00 AM - 9:00 PM"
+      }
+    ],
+    "sourceUrls": ["https://newportseafoodrestaurant.com/contact/"]
+  },
+  {
+    "id": "la_99_ranch_market_san_gabriel",
+    "slug": "99-ranch-market-san-gabriel",
+    "name": {
+      "en": "99 Ranch Market San Gabriel",
+      "zh": "大華超級市場 San Gabriel"
+    },
+    "categorySlug": "shopping",
+    "city": "San Gabriel",
+    "region": "San Gabriel Valley",
+    "address": "140 W Valley Blvd #150, San Gabriel, CA 91776",
+    "phone": "(626) 307-8899",
+    "website": "https://www.99ranch.com/stores-search",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian supermarket location on Valley Boulevard serving SGV grocery and prepared-food needs.",
+      "zh": "位於 Valley Boulevard 的亞洲超市，服務 SGV 採買與熟食需求。"
+    },
+    "description": {
+      "en": "The San Gabriel 99 Ranch Market location is a practical directory anchor for groceries, seafood, pantry staples, gifts, and weekly errands. It is included as an LA-area community listing because Asian grocery trips often shape where families plan meals, pharmacy stops, banking errands, and weekend SGV visits.",
+      "zh": "San Gabriel 大華超市是日常採買、海鮮、乾貨、禮品與週末 errands 的實用據點。它收錄在洛杉磯華人目錄中，因為亞洲超市常影響家庭安排用餐、藥局、銀行與 SGV 週末行程的路線。"
+    },
+    "services": [
+      {
+        "en": "Asian groceries",
+        "zh": "亞洲食品雜貨"
+      },
+      {
+        "en": "Seafood counter",
+        "zh": "海鮮櫃台"
+      },
+      {
+        "en": "Prepared foods",
+        "zh": "熟食採買"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["San Gabriel", "Asian grocery", "supermarket", "大華", "超市"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Mon-Sun",
+        "value": "8:00 AM - 10:00 PM"
+      }
+    ],
+    "sourceUrls": [
+      "https://www.99ranch.com/stores-search",
+      "https://www.chamberofcommerce.com/business-directory/california/san-gabriel/asian-grocery-store/2005570209-99-ranch-market"
+    ]
+  },
+  {
+    "id": "la_wing_hop_fung_arcadia",
+    "slug": "wing-hop-fung-arcadia",
+    "name": {
+      "en": "Wing Hop Fung Arcadia",
+      "zh": "永合豐 Arcadia"
+    },
+    "categorySlug": "shopping",
+    "city": "Arcadia",
+    "region": "San Gabriel Valley",
+    "address": "400 S Baldwin Ave #2185, Arcadia, CA 91007",
+    "phone": "(626) 508-8888",
+    "website": "https://winghopfung.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Arcadia retailer for tea, Chinese herbs, gifts, and specialty pantry items.",
+      "zh": "Arcadia 茶葉、中草藥、禮品與特色食品零售店。"
+    },
+    "description": {
+      "en": "Wing Hop Fung is useful for readers looking for tea, herbal products, gift boxes, and specialty pantry items inside the Arcadia mall corridor. The listing is aimed at LA Chinese families planning holiday gifts, wellness shopping, or practical stops around Santa Anita.",
+      "zh": "永合豐適合尋找茶葉、中草藥、禮盒與特色乾貨的讀者，位置在 Arcadia 商場生活圈。此收錄服務洛杉磯華人家庭安排節慶送禮、養生採買或 Santa Anita 周邊 errands。"
+    },
+    "services": [
+      {
+        "en": "Tea and gifts",
+        "zh": "茶葉與禮品"
+      },
+      {
+        "en": "Chinese herbs",
+        "zh": "中草藥"
+      },
+      {
+        "en": "Specialty grocery",
+        "zh": "特色食品"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Arcadia", "tea", "herbs", "永合豐", "茶葉", "中藥"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Sun-Thu",
+        "value": "11:00 AM - 6:00 PM"
+      },
+      {
+        "label": "Fri-Sat",
+        "value": "11:00 AM - 7:00 PM"
+      }
+    ],
+    "sourceUrls": [
+      "https://winghopfung.com/",
+      "https://www.businessyab.com/explore/united_states/california/los_angeles_county/arcadia/south_baldwin_avenue/400/wing-hop-fung-626-508-8888.html"
+    ]
+  },
+  {
+    "id": "la_irn_realty_arcadia",
+    "slug": "irn-realty-arcadia",
+    "name": {
+      "en": "IRN Realty Arcadia",
+      "zh": "IRN Realty Arcadia 房地產"
+    },
+    "categorySlug": "real-estate",
+    "city": "Arcadia",
+    "region": "San Gabriel Valley",
+    "address": "556 Las Tunas Dr #101, Arcadia, CA 91007",
+    "phone": "(626) 447-5100",
+    "website": "https://www.irnrealty.com/our-offices/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Arcadia real estate office serving buyers, sellers, and property questions across the SGV.",
+      "zh": "Arcadia 房地產辦公室，服務 SGV 買屋、賣屋與房產諮詢。"
+    },
+    "description": {
+      "en": "IRN Realty's Arcadia office is included for families comparing San Gabriel Valley neighborhoods, school boundaries, commute patterns, and home ownership options. The listing keeps the LA directory grounded in a real local office with public contact information.",
+      "zh": "IRN Realty Arcadia 辦公室適合正在比較聖蓋博谷社區、學區、通勤與購屋選項的家庭。此收錄讓洛杉磯目錄使用具有公開聯絡資訊的真實在地房產辦公室。"
+    },
+    "services": [
+      {
+        "en": "Buyer consultations",
+        "zh": "買方諮詢"
+      },
+      {
+        "en": "Seller consultations",
+        "zh": "賣方諮詢"
+      },
+      {
+        "en": "Neighborhood planning",
+        "zh": "社區規劃"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Arcadia realtor", "SGV real estate", "房仲", "買屋", "賣屋"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": ["https://www.irnrealty.com/our-offices/"]
+  },
+  {
+    "id": "la_east_west_bank_pasadena",
+    "slug": "east-west-bank-pasadena",
+    "name": {
+      "en": "East West Bank Pasadena",
+      "zh": "華美銀行 Pasadena"
+    },
+    "categorySlug": "legal-finance",
+    "city": "Pasadena",
+    "region": "San Gabriel Valley",
+    "address": "135 N Los Robles Ave, Pasadena, CA 91101",
+    "phone": "(626) 768-6000",
+    "website": "https://www.eastwestbank.com/en/contact-us",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Pasadena headquarters branch for banking questions, branch routing, and cross-border account support.",
+      "zh": "Pasadena 總部據點，提供銀行、分行導引與跨境帳戶相關諮詢。"
+    },
+    "description": {
+      "en": "East West Bank is a major Southern California bank with roots in Asian American community banking. The Pasadena listing is useful for LA-area readers who need a recognizable financial institution for deposits, small-business banking, branch referrals, and questions tied to US-Asia financial needs.",
+      "zh": "華美銀行是南加州重要銀行，與亞裔社群金融服務有深厚關聯。Pasadena 收錄方便洛杉磯讀者查找存款、小企業銀行、分行導引，以及美亞往來金融需求相關諮詢。"
+    },
+    "services": [
+      {
+        "en": "Personal banking",
+        "zh": "個人銀行"
+      },
+      {
+        "en": "Business banking",
+        "zh": "企業銀行"
+      },
+      {
+        "en": "Branch support",
+        "zh": "分行服務"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Pasadena", "bank", "finance", "華美銀行", "銀行"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.eastwestbank.com/en/contact-us",
+      "https://www.bankbranchlocator.com/east-west-bank-corporate-headquarters-pasadena-branch.html"
+    ]
+  },
+  {
+    "id": "la_ajsocal_los_angeles",
+    "slug": "asian-americans-advancing-justice-southern-california",
+    "name": {
+      "en": "Asian Americans Advancing Justice Southern California",
+      "zh": "南加州亞美公義促進中心"
+    },
+    "categorySlug": "legal-finance",
+    "city": "Los Angeles",
+    "region": "Downtown Los Angeles",
+    "address": "1145 Wilshire Blvd, Los Angeles, CA 90017",
+    "phone": "(213) 241-8850",
+    "website": "https://ajsocal.org/contact/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Legal and civil-rights nonprofit serving Asian American, Native Hawaiian, and Pacific Islander communities.",
+      "zh": "服務亞裔、夏威夷原住民與太平洋島民社群的法律與民權非營利機構。"
+    },
+    "description": {
+      "en": "AJSOCAL belongs in the LA directory as a practical legal-services and civic-rights resource for immigrants, workers, families, and community organizations. It is a Los Angeles-based service provider with Southern California programs and language-access resources.",
+      "zh": "AJSOCAL 適合收錄為洛杉磯移民、工作者、家庭與社群組織可查找的法律與民權資源。這是位於洛杉磯、服務南加州並提供語言可及資源的機構。"
+    },
+    "services": [
+      {
+        "en": "Legal information",
+        "zh": "法律資訊"
+      },
+      {
+        "en": "Civil-rights support",
+        "zh": "民權支援"
+      },
+      {
+        "en": "Language-access referrals",
+        "zh": "語言服務轉介"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["legal aid", "immigration", "civil rights", "法律援助", "移民"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": [
+      "https://ajsocal.org/contact/",
+      "https://apps.calbar.ca.gov/members/cert_detail.aspx?PID=464&SpecCode="
+    ]
+  },
+  {
+    "id": "la_herald_christian_health_center_san_gabriel",
+    "slug": "herald-christian-health-center-san-gabriel",
+    "name": {
+      "en": "Herald Christian Health Center",
+      "zh": "基督教角聲醫療中心"
+    },
+    "categorySlug": "medical",
+    "city": "San Gabriel",
+    "region": "San Gabriel Valley",
+    "address": "923 S San Gabriel Blvd, San Gabriel, CA 91776",
+    "phone": "(626) 286-8700",
+    "website": "http://www.cchc.org",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "San Gabriel Valley clinic resource for low-income and underinsured families.",
+      "zh": "服務聖蓋博谷低收入與保險不足家庭的診所資源。"
+    },
+    "description": {
+      "en": "Herald Christian Health Center is included as a local health-care resource for families trying to establish care, ask about insurance gaps, or find clinic services in the San Gabriel Valley. Its LA County listing identifies the San Gabriel site and public intake phone, making it suitable for a community directory.",
+      "zh": "基督教角聲醫療中心收錄為聖蓋博谷家庭尋找基礎醫療、保險不足協助或診所服務的在地資源。洛杉磯縣資料列出 San Gabriel 站點與公開服務電話，適合納入社群目錄。"
+    },
+    "services": [
+      {
+        "en": "Clinic intake",
+        "zh": "診所初診"
+      },
+      {
+        "en": "Family health services",
+        "zh": "家庭健康服務"
+      },
+      {
+        "en": "Immunization questions",
+        "zh": "疫苗諮詢"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["clinic", "San Gabriel", "health center", "診所", "角聲"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Tue-Fri",
+        "value": "10:00 AM - 6:30 PM"
+      },
+      {
+        "label": "Sat",
+        "value": "9:00 AM - 5:30 PM"
+      }
+    ],
+    "sourceUrls": [
+      "https://locator.lacounty.gov/lac/Location/3178294/herald-christian-health-center",
+      "http://www.cchc.org"
+    ]
+  },
+  {
+    "id": "la_chinatown_service_center_los_angeles",
+    "slug": "chinatown-service-center-los-angeles",
+    "name": {
+      "en": "Chinatown Service Center",
+      "zh": "華埠服務中心"
+    },
+    "categorySlug": "local-services",
+    "city": "Los Angeles",
+    "region": "Chinatown",
+    "address": "767 N Hill St, Los Angeles, CA 90012",
+    "phone": "(213) 808-1700",
+    "website": "https://www.cscla.org/locations",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinatown nonprofit service hub for health, social services, youth, behavioral health, and workforce programs.",
+      "zh": "洛杉磯華埠非營利服務據點，涵蓋醫療、社會服務、青少年、心理健康與就業項目。"
+    },
+    "description": {
+      "en": "Chinatown Service Center is a core LA Chinese community resource with offices and programs around Chinatown and the San Gabriel Valley. This directory entry helps readers find appointment information for health, dental, behavioral health, social-service, and workforce-development questions.",
+      "zh": "華埠服務中心是洛杉磯華人社群的重要資源，在華埠與聖蓋博谷周邊提供服務。此目錄項目協助讀者查找醫療、牙科、心理健康、社會服務與就業發展等預約資訊。"
+    },
+    "services": [
+      {
+        "en": "Health center appointments",
+        "zh": "醫療預約"
+      },
+      {
+        "en": "Social services",
+        "zh": "社會服務"
+      },
+      {
+        "en": "Workforce development",
+        "zh": "就業發展"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Chinatown", "social services", "health center", "華埠", "服務中心"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": ["https://www.cscla.org/locations"]
+  },
+  {
+    "id": "la_chinese_american_museum_los_angeles",
+    "slug": "chinese-american-museum-los-angeles",
+    "name": {
+      "en": "Chinese American Museum",
+      "zh": "洛杉磯華美博物館"
+    },
+    "categorySlug": "education",
+    "city": "Los Angeles",
+    "region": "El Pueblo / Chinatown",
+    "address": "425 N Los Angeles St, Los Angeles, CA 90012",
+    "phone": "(213) 485-8567",
+    "email": "info@camla.org",
+    "website": "https://camla.org/visit/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Museum at El Pueblo preserving and presenting Chinese American history in Los Angeles.",
+      "zh": "位於 El Pueblo 的博物館，保存並呈現洛杉磯華美歷史。"
+    },
+    "description": {
+      "en": "The Chinese American Museum is a Los Angeles education and culture listing for families, students, visitors, and community groups. It gives the directory a real local anchor for Chinese American history near Union Station and El Pueblo.",
+      "zh": "洛杉磯華美博物館適合家庭、學生、訪客與社群團體查找華美歷史與文化資源。它為目錄提供 Union Station 與 El Pueblo 附近真實的洛杉磯文化據點。"
+    },
+    "services": [
+      {
+        "en": "Museum visits",
+        "zh": "博物館參觀"
+      },
+      {
+        "en": "Tours",
+        "zh": "導覽"
+      },
+      {
+        "en": "Cultural education",
+        "zh": "文化教育"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["museum", "Chinatown", "El Pueblo", "華美博物館", "歷史"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [
+      {
+        "label": "Tue-Sun",
+        "value": "10:00 AM - 3:00 PM"
+      },
+      {
+        "label": "Mon",
+        "value": "Closed"
+      }
+    ],
+    "sourceUrls": [
+      "https://camla.org/visit/",
+      "https://camla.org/contact-us/"
+    ]
+  },
+  {
+    "id": "la_arcadia_chinese_school",
+    "slug": "arcadia-chinese-school",
+    "name": {
+      "en": "Arcadia Chinese School",
+      "zh": "亞凱迪亞中文學校"
+    },
+    "categorySlug": "education",
+    "city": "Arcadia",
+    "region": "San Gabriel Valley",
+    "address": "823 S 1st Ave, Arcadia, CA 91006",
+    "phone": "(626) 242-0322",
+    "website": "http://www.arcadiachineseschool.org",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Arcadia Chinese language school serving families looking for heritage-language instruction.",
+      "zh": "服務尋找中文傳承語言教育家庭的 Arcadia 中文學校。"
+    },
+    "description": {
+      "en": "Arcadia Chinese School is listed as an education resource for SGV families comparing weekend, after-school, and heritage-language options. The entry keeps the LA directory focused on real local Chinese-language education needs and public enrollment contacts.",
+      "zh": "亞凱迪亞中文學校收錄為 SGV 家庭比較週末、課後與傳承語言教育選項的資源。此項目讓洛杉磯目錄聚焦真實在地中文教育需求與公開報名聯絡資訊。"
+    },
+    "services": [
+      {
+        "en": "Chinese language classes",
+        "zh": "中文課程"
+      },
+      {
+        "en": "Heritage education",
+        "zh": "傳承教育"
+      },
+      {
+        "en": "Family enrollment questions",
+        "zh": "家庭報名諮詢"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Arcadia", "Chinese school", "heritage language", "中文學校", "中文課"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.chinesedaily.com/business/intro-273.html",
+      "https://www.privateschoolreview.com/arcadia-chinese-school-profile"
+    ]
+  },
+  {
+    "id": "la_fcbc_sgv_temple_city",
+    "slug": "first-chinese-baptist-church-sgv",
+    "name": {
+      "en": "First Chinese Baptist Church of San Gabriel Valley",
+      "zh": "聖蓋博谷第一華人浸信會"
+    },
+    "categorySlug": "faith-community",
+    "city": "Temple City",
+    "region": "San Gabriel Valley",
+    "address": "4856 Golden West Ave, Temple City, CA 91780",
+    "phone": "(626) 782-7428",
+    "website": "https://chinese.fcbcsgv.org/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Temple City Chinese church and community gathering point in the San Gabriel Valley.",
+      "zh": "位於 Temple City 的華人教會與聖蓋博谷社群聚會據點。"
+    },
+    "description": {
+      "en": "First Chinese Baptist Church of San Gabriel Valley is included as a faith and community listing for families seeking Chinese-language fellowship, church contacts, and local community ties. Its Temple City location helps broaden the directory beyond restaurants into the civic and family networks residents actually use.",
+      "zh": "聖蓋博谷第一華人浸信會收錄為尋找華語團契、教會聯絡與本地社群連結家庭的信仰與社群資源。Temple City 位置讓目錄不只停留在餐飲，也涵蓋居民實際使用的家庭與社群網絡。"
+    },
+    "services": [
+      {
+        "en": "Church contact",
+        "zh": "教會聯絡"
+      },
+      {
+        "en": "Chinese fellowship",
+        "zh": "華語團契"
+      },
+      {
+        "en": "Community connection",
+        "zh": "社群連結"
+      }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["Temple City", "church", "fellowship", "華人教會", "團契"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "priceRange": "$",
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "hours": [],
+    "sourceUrls": ["https://chinese.fcbcsgv.org/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/"]
+  }
+]

@@ -375,7 +375,10 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
-  const verifiedCount = allBusinesses.filter((business) => business.verified).length;
+  const verifiedCount =
+    site.key === defaultSiteProfile.key
+      ? allBusinesses.filter((business) => business.verified).length
+      : home.featuredCards.length;
   const trustedServiceTiles: TrustedServiceTile[] = [
     {
       slug: 'real-estate',

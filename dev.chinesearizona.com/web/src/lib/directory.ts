@@ -1,17 +1,15 @@
-import { businessCategories, businesses as fixtureBusinesses } from '@/data/platform-data';
+import {
+  businessCategories,
+  businesses as fixtureBusinesses,
+  losAngelesBusinesses,
+} from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import {
   compareMostPopularDirectoryBusinesses,
   MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS,
 } from '@/lib/directory-highlights';
-import {
-  getSiteDirectoryCategorySlugs,
-  getStaticDirectoryBusinessesForSite,
-  isDefaultDirectorySite,
-  shouldUseStaticDirectoryData,
-} from '@/lib/site-directory-data';
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { getStaticDirectoryBusinessesForSite } from '@/lib/site-directory-data';
 import type {
   Business,
   BusinessCategory,
@@ -22,6 +20,7 @@ import type {
 } from '@/lib/types';
 import { formatPhoneNumber } from '@/lib/phone';
 import { getDirectoryAiReplacementImage } from '@/lib/directory-ai-replacements';
+import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import { getSupabaseClient, getSupabaseServiceClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export type DirectoryFilters = {
@@ -1086,10 +1085,14 @@ async function querySupabaseBusinesses(
   );
 }
 
-function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQueryOptions = {}): Business[] {
+function queryStaticBusinesses(
+  sourceBusinesses: Business[],
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Business[] {
   const sort = filters.sort ?? 'featured';
   const search = normalize(filters.q);
-  const mapped = fixtureBusinesses.map(mapFixtureBusiness);
+  const mapped = sourceBusinesses.map(mapFixtureBusiness);
   const referencePoint = getDistanceReferencePoint(mapped, filters);
   const filtered = mapped.filter((business) => {
     if (options.excludeSlug && business.slug === options.excludeSlug) {
@@ -1160,35 +1163,42 @@ function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQue
     .slice(0, options.limit);
 }
 
-function directorySiteFromOptions(options: DirectoryQueryOptions = {}): SiteProfile {
-  return options.site ?? defaultSiteProfile;
+function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQueryOptions = {}): Business[] {
+  return queryStaticBusinesses(fixtureBusinesses, filters, options);
 }
 
-function queryStaticSiteBusinesses(
+function querySiteStaticBusinesses(
   site: SiteProfile,
   filters: DirectoryFilters,
   options: DirectoryQueryOptions = {}
 ): Business[] {
-  const businesses = getStaticDirectoryBusinessesForSite(site);
-  if (!businesses) {
-    return [];
+  if (site.key === 'los-angeles') {
+    return queryStaticBusinesses(losAngelesBusinesses, filters, options);
   }
 
-  return applyClientFilters(businesses, filters, options);
+  const businesses = getStaticDirectoryBusinessesForSite(site);
+  if (businesses) {
+    return queryStaticBusinesses(businesses, filters, options);
+  }
+
+  return [];
+}
+
+function shouldUseDefaultDirectorySource(site: SiteProfile): boolean {
+  return site.key === defaultSiteProfile.key && site.directory.allowDefaultFallback;
 }
 
 export async function getDirectoryBusinesses(
   filters: DirectoryFilters = {},
   options: DirectoryQueryOptions = {}
 ): Promise<Business[]> {
-  const site = directorySiteFromOptions(options);
-
-  if (shouldUseStaticDirectoryData(site)) {
-    return queryStaticSiteBusinesses(site, filters, options);
+  const site = options.site ?? defaultSiteProfile;
+  if (!hasLiveDirectoryData(site)) {
+    return [];
   }
 
-  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
-    return [];
+  if (!shouldUseDefaultDirectorySource(site)) {
+    return querySiteStaticBusinesses(site, filters, options);
   }
 
   if (fixtureBusinessesEnabled()) {
@@ -1231,10 +1241,13 @@ export async function getDirectoryPage(
 }
 
 export async function getDirectoryBusinessBySlug(slug: string, options: DirectoryQueryOptions = {}): Promise<Business | undefined> {
-  const site = directorySiteFromOptions(options);
+  const site = options.site ?? defaultSiteProfile;
+  if (!hasLiveDirectoryData(site)) {
+    return undefined;
+  }
 
-  if (shouldUseStaticDirectoryData(site)) {
-    const business = queryStaticSiteBusinesses(site, {}, { ...options, includeNonPublic: true }).find(
+  if (!shouldUseDefaultDirectorySource(site)) {
+    const business = querySiteStaticBusinesses(site, {}, { ...options, includeNonPublic: true }).find(
       (item) => item.slug === slug
     );
     if (!business) {
@@ -1242,10 +1255,6 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
     }
 
     return options.includeNonPublic || isPublicDirectoryBusiness(business) ? business : undefined;
-  }
-
-  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
-    return undefined;
   }
 
   if (fixtureBusinessesEnabled()) {
@@ -1295,14 +1304,14 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
   return options.includeNonPublic || isPublicDirectoryBusiness(business) ? business : undefined;
 }
 
-export async function getDirectoryCategories(
-  options: Pick<DirectoryQueryOptions, 'site'> = {}
-): Promise<BusinessCategory[]> {
-  const site = options.site ?? defaultSiteProfile;
-  const siteCategorySlugs = getSiteDirectoryCategorySlugs(site);
-  if (siteCategorySlugs) {
-    const allowed = new Set(siteCategorySlugs);
-    return businessCategories.filter((category) => allowed.has(category.slug));
+export async function getDirectoryCategories(site: SiteProfile = defaultSiteProfile): Promise<BusinessCategory[]> {
+  if (!hasLiveDirectoryData(site)) {
+    return [];
+  }
+
+  if (!shouldUseDefaultDirectorySource(site)) {
+    const allowedSlugs = new Set(site.directory.categorySlugs);
+    return businessCategories.filter((category) => allowedSlugs.has(category.slug));
   }
 
   if (fixtureBusinessesEnabled()) {
@@ -1325,19 +1334,19 @@ export async function getDirectoryCategories(
 }
 
 export async function getDirectoryBusinessCategoriesBySlug(
-  options: Pick<DirectoryQueryOptions, 'site'> = {}
+  site: SiteProfile = defaultSiteProfile
 ): Promise<Record<string, BusinessCategory>> {
-  const categories = await getDirectoryCategories(options);
+  const categories = await getDirectoryCategories(site);
   return categories.reduce<Record<string, BusinessCategory>>((accumulator, category) => {
     accumulator[category.slug] = category;
     return accumulator;
   }, {});
 }
 
-export async function getDirectoryFilterOptions(options: Pick<DirectoryQueryOptions, 'site'> = {}) {
+export async function getDirectoryFilterOptions(site: SiteProfile = defaultSiteProfile) {
   const [categories, businesses] = await Promise.all([
-    getDirectoryCategories(options),
-    getDirectoryBusinesses({}, { ...options, limit: 500 }),
+    getDirectoryCategories(site),
+    getDirectoryBusinesses({}, { limit: 500, site }),
   ]);
 
   const cities = Array.from(new Set(businesses.map((business) => business.city))).sort((left, right) =>
@@ -1356,14 +1365,14 @@ export async function getDirectoryFilterOptions(options: Pick<DirectoryQueryOpti
   };
 }
 
-export async function getHomepageFeaturedBusinesses(): Promise<Business[]> {
-  const businesses = await getDirectoryBusinesses({ sort: 'featured' }, { limit: 24 });
+export async function getHomepageFeaturedBusinesses(site: SiteProfile = defaultSiteProfile): Promise<Business[]> {
+  const businesses = await getDirectoryBusinesses({ sort: 'featured' }, { limit: 24, site });
   const featured = businesses.filter(qualifiesForHomepageFeature).slice(0, FEATURED_HOME_THRESHOLD);
   return featured.length >= FEATURED_HOME_THRESHOLD ? featured : [];
 }
 
-export async function getDirectoryCoverageSummary() {
-  const businesses = await getDirectoryBusinesses({}, { limit: 1000 });
+export async function getDirectoryCoverageSummary(site: SiteProfile = defaultSiteProfile) {
+  const businesses = await getDirectoryBusinesses({}, { limit: 1000, site });
   const counts = businesses.reduce<Record<string, number>>((accumulator, business) => {
     accumulator[business.categorySlug] = (accumulator[business.categorySlug] ?? 0) + 1;
     return accumulator;
@@ -1380,17 +1389,13 @@ export async function getDirectoryCoverageSummary() {
   };
 }
 
-export async function getDirectoryBusinessSlugs(
-  options: Pick<DirectoryQueryOptions, 'site'> = {}
-): Promise<string[]> {
-  const site = options.site ?? defaultSiteProfile;
-
-  if (shouldUseStaticDirectoryData(site)) {
-    return queryStaticSiteBusinesses(site, {}, {}).map((business) => business.slug);
+export async function getDirectoryBusinessSlugs(site: SiteProfile = defaultSiteProfile): Promise<string[]> {
+  if (!hasLiveDirectoryData(site)) {
+    return [];
   }
 
-  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
-    return [];
+  if (!shouldUseDefaultDirectorySource(site)) {
+    return querySiteStaticBusinesses(site, {}, {}).map((business) => business.slug);
   }
 
   if (fixtureBusinessesEnabled()) {

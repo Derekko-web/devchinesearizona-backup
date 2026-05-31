@@ -1,12 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import losAngelesDirectoryBusinesses from '@/data/los-angeles-directory-businesses.json';
 import {
   applyDirectoryQueryFilters,
   compareFeaturedSignals,
   countActiveDirectoryFilters,
   getDirectoryBusinessBySlug,
-  getDirectoryFilterOptions,
   getDirectoryBusinesses,
+  getDirectoryFilterOptions,
   getDirectoryPage,
   getBusinessHoursState,
   hasPlaceholderDomain,
@@ -420,8 +421,8 @@ describe('directory trust gates', () => {
       address: expect.stringContaining('Austin, TX'),
     });
 
-    await expect(getDirectoryBusinesses({}, { site: siteProfiles['los-angeles'], limit: 50 })).resolves.toEqual([]);
-    await expect(getDirectoryPage({}, 1, 10, { site: siteProfiles['los-angeles'] })).resolves.toMatchObject({
+    await expect(getDirectoryBusinesses({}, { site: siteProfiles['sf-bay'], limit: 50 })).resolves.toEqual([]);
+    await expect(getDirectoryPage({}, 1, 10, { site: siteProfiles['sf-bay'] })).resolves.toMatchObject({
       businesses: [],
       totalCount: 0,
       totalPages: 1,
@@ -429,7 +430,7 @@ describe('directory trust gates', () => {
   });
 
   it('exposes Austin-specific directory filters', async () => {
-    const options = await getDirectoryFilterOptions({ site: siteProfiles.austin });
+    const options = await getDirectoryFilterOptions(siteProfiles.austin);
 
     expect(options.cities).toEqual(['Austin', 'Cedar Park', 'Pflugerville', 'Round Rock']);
     expect(options.categories.map((category) => category.slug)).toEqual([
@@ -497,6 +498,85 @@ describe('directory trust gates', () => {
     const businesses = await getReloadedDirectoryBusinesses();
 
     expect(businesses.length).toBeGreaterThan(200);
+  });
+
+  it('serves Los Angeles directory listings from LA data without Arizona fixture fallback', async () => {
+    const site = siteProfiles['los-angeles'];
+    const businesses = await getDirectoryBusinesses({}, { site, limit: 100 });
+    const serialized = JSON.stringify(businesses);
+
+    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.map((business) => business.slug)).toEqual(
+      expect.arrayContaining([
+        'lunasia-dim-sum-house-alhambra',
+        'irn-realty-arcadia',
+        'chinatown-service-center-los-angeles',
+      ])
+    );
+    expect(new Set(businesses.map((business) => business.city))).toEqual(
+      new Set([
+        'Alhambra',
+        'Arcadia',
+        'Monterey Park',
+        'San Gabriel',
+        'Pasadena',
+        'Los Angeles',
+        'Temple City',
+      ])
+    );
+    expect(serialized).not.toMatch(
+      /Phoenix|Chandler|Tempe|Mesa|Gilbert|Scottsdale|Arizona|ChineseArizona|亞利桑那|菲尼克斯|鳳凰城/
+    );
+  });
+
+  it('keeps Los Angeles seed listings source-backed and California-local', () => {
+    expect(losAngelesDirectoryBusinesses.length).toBeGreaterThanOrEqual(10);
+
+    for (const business of losAngelesDirectoryBusinesses) {
+      expect(business.address).toContain('CA');
+      expect(business.sourceUrls.length).toBeGreaterThan(0);
+      expect(business.sourceUrls.every((url) => url.startsWith('http'))).toBe(true);
+      expect(JSON.stringify(business)).not.toMatch(
+        /Phoenix|Chandler|Tempe|Mesa|Scottsdale|AZ 85|Arizona|亞利桑那|菲尼克斯|鳳凰城/
+      );
+    }
+  });
+
+  it('does not resolve Arizona business slugs or filter misses for Los Angeles', async () => {
+    const site = siteProfiles['los-angeles'];
+
+    await expect(getDirectoryBusinessBySlug('bido-cafe', { site })).resolves.toBeUndefined();
+    await expect(getDirectoryBusinessBySlug('lunasia-dim-sum-house-alhambra', { site })).resolves.toMatchObject({
+      city: 'Alhambra',
+      region: 'San Gabriel Valley',
+    });
+
+    const phoenixPage = await getDirectoryPage({ city: 'Phoenix' }, 1, 24, { site });
+    expect(phoenixPage.totalCount).toBe(0);
+    expect(phoenixPage.businesses).toEqual([]);
+  });
+
+  it('uses Los Angeles-specific categories, cities, and metadata', async () => {
+    const site = siteProfiles['los-angeles'];
+    const filterOptions = await getDirectoryFilterOptions(site);
+    const metadata = directoryMetadata('en', '/business', undefined, site);
+
+    expect(filterOptions.cities).toEqual([
+      'Alhambra',
+      'Arcadia',
+      'Los Angeles',
+      'Monterey Park',
+      'Pasadena',
+      'San Gabriel',
+      'Temple City',
+    ]);
+    expect(filterOptions.categories.map((category) => category.slug)).toEqual(
+      expect.arrayContaining(['dining', 'shopping', 'real-estate', 'legal-finance', 'medical'])
+    );
+    expect(metadata.title).toBe('Chinese Businesses | ChineseLosAngeles');
+    expect(metadata.description).toContain('Chinese businesses in Los Angeles');
+    expect(metadata.description).not.toContain('Arizona');
+    expect(metadata.robots).toBeUndefined();
   });
 
   it('keeps plain paginated directory pages self-canonical', () => {
