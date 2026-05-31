@@ -6,7 +6,6 @@ import { getSupabaseServiceClient } from '@/lib/supabase';
 type AuthProfileRow = {
   email: string;
   full_name?: string | null;
-  role?: ProfileRole | null;
 };
 
 export type AppProfileRow = {
@@ -54,11 +53,7 @@ function defaultDisplayName(user: User, authProfile?: AuthProfileRow | null): st
   return 'Member';
 }
 
-function defaultRole(user: User, authProfile?: AuthProfileRow | null): ProfileRole {
-  if (authProfile?.role) {
-    return authProfile.role;
-  }
-
+function appMetadataRole(user: User): ProfileRole | null {
   const appRole =
     typeof user.app_metadata?.role === 'string' ? user.app_metadata.role : undefined;
   if (
@@ -71,7 +66,7 @@ function defaultRole(user: User, authProfile?: AuthProfileRow | null): ProfileRo
     return appRole;
   }
 
-  return 'member';
+  return null;
 }
 
 async function buildUniqueProfileSlug(baseName: string) {
@@ -106,7 +101,7 @@ async function getAuthProfile(userId: string): Promise<AuthProfileRow | null> {
 
   const { data, error } = await serviceClient
     .from('auth_profiles')
-    .select('email, full_name, role')
+    .select('email, full_name')
     .eq('id', userId)
     .maybeSingle();
 
@@ -145,14 +140,14 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
   const existing = await getProfileByAuthUserId(user.id);
   const authProfile = await getAuthProfile(user.id);
   const displayName = defaultDisplayName(user, authProfile);
-  const role = defaultRole(user, authProfile);
+  const authoritativeRole = appMetadataRole(user);
 
   if (existing) {
-    if (existing.role !== role) {
+    if (authoritativeRole && existing.role !== authoritativeRole) {
       const { data, error } = await serviceClient
         .from('profiles')
         .update({
-          role,
+          role: authoritativeRole,
           auth_user_id: user.id,
         })
         .eq('id', existing.id)
@@ -175,7 +170,7 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
       slug,
       name: displayName,
       name_zh_tw: displayName,
-      role,
+      role: authoritativeRole ?? 'member',
       city: 'Phoenix',
       languages: ['English'],
       bio_en: 'New member account.',
