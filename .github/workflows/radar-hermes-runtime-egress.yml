@@ -1,0 +1,69 @@
+name: Radar Hermes Runtime Egress
+
+on:
+  workflow_run:
+    workflows:
+      - Deploy Dev
+    branches:
+      - main
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Exact commit SHA already deployed to the VPS. Defaults to the selected ref.
+        required: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: radar-hermes-runtime-egress
+  cancel-in-progress: true
+
+jobs:
+  apply-runtime-egress:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+      VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
+      VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
+      VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
+      VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
+    steps:
+      - name: Configure SSH
+        run: |
+          test -n "$VPS_HOST"
+          test -n "$VPS_USER"
+          test -n "$VPS_SSH_KEY"
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
+          chmod 600 ~/.ssh/dev_key
+          ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+      - name: Apply radar Hermes runtime egress
+        run: |
+          ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA bash -s" <<'REMOTE'
+          set -euo pipefail
+
+          web_root=/var/www/dev.chinesearizona.com/web
+          cd "$web_root"
+
+          current_sha="$(git rev-parse HEAD)"
+          if [ "$current_sha" != "$DEPLOY_SHA" ]; then
+            echo "Refusing to apply radar/Hermes runtime egress to stale checkout." >&2
+            echo "Expected deployed SHA: $DEPLOY_SHA" >&2
+            echo "Current VPS SHA: $current_sha" >&2
+            exit 1
+          fi
+
+          if ! bash ../../ops/radar-hermes-egress/apply-runtime.sh; then
+            npm run loop:collect || true
+            exit 1
+          fi
+
+          npm run loop:collect || true
+          REMOTE
