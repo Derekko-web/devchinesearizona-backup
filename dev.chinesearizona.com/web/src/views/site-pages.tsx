@@ -555,6 +555,15 @@ function cleanLocalizedArticleSummary<T extends { localizedText: { title: string
   };
 }
 
+function formatCityStateLabel(city: string, site: SiteProfile): string {
+  return site.stateCode ? `${city}, ${site.stateCode}` : city;
+}
+
+function formatCityRegionLabel(city: string, site: SiteProfile): string {
+  const region = site.stateCode || site.stateRegion;
+  return region ? `${city.toUpperCase()}, ${region.toUpperCase()}` : city.toUpperCase();
+}
+
 export async function DirectoryPageView({
   locale,
   searchParams,
@@ -940,7 +949,7 @@ export async function BusinessDetailPageView({
       '@type': 'PostalAddress',
       streetAddress: business.address,
       addressLocality: business.city,
-      addressRegion: site.stateCode,
+      addressRegion: site.stateCode || undefined,
       addressCountry: 'US',
     };
   } else if (business.serviceAreaText) {
@@ -969,7 +978,9 @@ export async function BusinessDetailPageView({
       ? business.name.en
       : undefined;
   const categoryLabel = category ? t(category.name, locale) : locale === 'zh' ? '本地商家' : 'Local business';
-  const addressLabel = business.address ?? business.serviceAreaText ?? `${business.city}, ${site.stateCode}`;
+  const cityStateLabel = formatCityStateLabel(business.city, site);
+  const addressLabel = business.address ?? business.serviceAreaText ?? cityStateLabel;
+  const cityRegionLabel = formatCityRegionLabel(business.city, site);
   const verificationBrandLabel =
     site.key === defaultSiteProfile.key ? 'ChineseArizona' : site.brandName;
   const verificationBrandLabelZh =
@@ -1134,7 +1145,7 @@ export async function BusinessDetailPageView({
                 </span>
                 <span>{reviewCountLabel}</span>
                 <span className="h-1 w-1 rounded-full bg-[#b9aa99]" aria-hidden="true" />
-                <span>{business.city}, {site.stateCode}</span>
+                <span>{cityStateLabel}</span>
               </div>
 
               <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
@@ -1178,7 +1189,7 @@ export async function BusinessDetailPageView({
               <div className="absolute bottom-6 left-6 flex items-center gap-3 rounded-lg border border-white/55 bg-[#fbf7f0]/90 px-4 py-3 shadow-[0_16px_40px_rgba(42,30,22,0.16)] backdrop-blur">
                 <Navigation className="h-5 w-5 text-[#d9972d]" aria-hidden="true" />
                 <div>
-                  <p className="text-xs font-bold text-[#5c5148]">{business.city.toUpperCase()}, ARIZONA</p>
+                  <p className="text-xs font-bold text-[#5c5148]">{cityRegionLabel}</p>
                   <p className="text-sm font-semibold text-[#3b332d]">{locale === 'zh' ? '在地商家檔案' : 'Local business profile'}</p>
                 </div>
               </div>

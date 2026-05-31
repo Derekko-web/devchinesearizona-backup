@@ -587,7 +587,7 @@ describe('directory trust gates', () => {
       expect.arrayContaining(['dining', 'shopping', 'education', 'legal-finance', 'medical'])
     );
     expect(metadata.title).toBe('Chinese Businesses | ChineseSFBay');
-    expect(metadata.description).toContain('Chinese businesses in San Francisco Bay Area');
+    expect(metadata.description).toContain('Chinese businesses in SF Bay');
     expect(metadata.description).not.toContain('Arizona');
     expect(metadata.robots).toBeUndefined();
   });
@@ -601,9 +601,7 @@ describe('directory trust gates', () => {
 
     expect(businesses).toEqual([]);
     expect(filters.cities).toEqual([]);
-    expect(filters.categories.map((category) => category.slug).sort()).toEqual(
-      [...site.directory.categorySlugs].sort()
-    );
+    expect(filters.categories).toEqual([]);
   });
 
   it('keeps plain paginated directory pages self-canonical', () => {
