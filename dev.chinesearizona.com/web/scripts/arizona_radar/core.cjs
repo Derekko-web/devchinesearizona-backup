@@ -1,5 +1,6 @@
 const { createHash, randomUUID } = require('node:crypto');
 const fs = require('node:fs');
+const net = require('node:net');
 const path = require('node:path');
 
 const VALID_PERSONA_TARGETS = new Set([
@@ -137,6 +138,172 @@ function shortHash(value) {
   return hashValue(value).slice(0, 8);
 }
 
+function ipv4ToInteger(value) {
+  const parts = String(value || '')
+    .split('.')
+    .map((part) => Number(part));
+
+  if (
+    parts.length !== 4 ||
+    parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)
+  ) {
+    return null;
+  }
+
+  return parts.reduce((result, part) => ((result << 8) | part) >>> 0, 0);
+}
+
+function ipv4InRange(value, base, prefixLength) {
+  const ip = ipv4ToInteger(value);
+  const baseIp = ipv4ToInteger(base);
+  if (ip === null || baseIp === null) {
+    return false;
+  }
+
+  const mask = prefixLength === 0 ? 0 : (0xffffffff << (32 - prefixLength)) >>> 0;
+  return (ip & mask) === (baseIp & mask);
+}
+
+function isPrivateOrReservedIpv4(value) {
+  return [
+    ['0.0.0.0', 8],
+    ['10.0.0.0', 8],
+    ['100.64.0.0', 10],
+    ['127.0.0.0', 8],
+    ['169.254.0.0', 16],
+    ['172.16.0.0', 12],
+    ['192.0.0.0', 24],
+    ['192.0.2.0', 24],
+    ['192.168.0.0', 16],
+    ['198.18.0.0', 15],
+    ['198.51.100.0', 24],
+    ['203.0.113.0', 24],
+    ['224.0.0.0', 4],
+    ['240.0.0.0', 4],
+  ].some(([base, prefixLength]) => ipv4InRange(value, base, prefixLength));
+}
+
+function normalizeIpv4EmbeddedIpv6(value) {
+  const lastColon = value.lastIndexOf(':');
+  const ipv4Part = value.slice(lastColon + 1);
+  if (!ipv4Part.includes('.')) {
+    return value;
+  }
+
+  const ipv4 = ipv4ToInteger(ipv4Part);
+  if (ipv4 === null) {
+    return null;
+  }
+
+  const high = ((ipv4 >>> 16) & 0xffff).toString(16);
+  const low = (ipv4 & 0xffff).toString(16);
+  return `${value.slice(0, lastColon)}:${high}:${low}`;
+}
+
+function ipv6ToBigInt(value) {
+  const withoutBrackets = String(value || '')
+    .replace(/^\[|\]$/g, '')
+    .toLowerCase();
+
+  if (!withoutBrackets || withoutBrackets.includes('%')) {
+    return null;
+  }
+
+  const normalized = normalizeIpv4EmbeddedIpv6(withoutBrackets);
+  if (!normalized) {
+    return null;
+  }
+
+  const halves = normalized.split('::');
+  if (halves.length > 2) {
+    return null;
+  }
+
+  const head = halves[0] ? halves[0].split(':') : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(':') : [];
+  const missing = 8 - head.length - tail.length;
+  if ((halves.length === 1 && missing !== 0) || missing < 0) {
+    return null;
+  }
+
+  const hextets = [...head, ...Array(missing).fill('0'), ...tail];
+  if (
+    hextets.length !== 8 ||
+    hextets.some((hextet) => !/^[0-9a-f]{1,4}$/.test(hextet))
+  ) {
+    return null;
+  }
+
+  return hextets.reduce((result, hextet) => {
+    return (result << 16n) | BigInt(parseInt(hextet, 16));
+  }, 0n);
+}
+
+function ipv6InRange(value, base, prefixLength) {
+  const ip = ipv6ToBigInt(value);
+  const baseIp = ipv6ToBigInt(base);
+  if (ip === null || baseIp === null) {
+    return false;
+  }
+
+  const fullMask = (1n << 128n) - 1n;
+  const mask = prefixLength === 0
+    ? 0n
+    : (fullMask << BigInt(128 - prefixLength)) & fullMask;
+  return (ip & mask) === (baseIp & mask);
+}
+
+function isPrivateOrReservedIpv6(value) {
+  const normalized = String(value || '')
+    .replace(/^\[|\]$/g, '')
+    .toLowerCase();
+
+  if (ipv6ToBigInt(normalized) === null) {
+    return true;
+  }
+
+  if (!ipv6InRange(normalized, '2000::', 3)) {
+    return true;
+  }
+
+  return [
+    ['2001::', 32],
+    ['2001:2::', 48],
+    ['2001:10::', 28],
+    ['2001:20::', 28],
+    ['2001:db8::', 32],
+    ['2002::', 16],
+    ['3fff::', 20],
+  ].some(([base, prefixLength]) => ipv6InRange(normalized, base, prefixLength));
+}
+
+function isLocalHostname(value) {
+  const hostname = String(value || '')
+    .replace(/\.$/, '')
+    .toLowerCase();
+
+  return (
+    hostname === 'localhost' ||
+    hostname.endsWith('.localhost') ||
+    hostname.endsWith('.local') ||
+    hostname.endsWith('.internal')
+  );
+}
+
+function isUnsafePublicUrlHost(hostname) {
+  const normalized = String(hostname || '').replace(/^\[|\]$/g, '');
+  const ipVersion = net.isIP(normalized);
+
+  if (ipVersion === 4) {
+    return isPrivateOrReservedIpv4(normalized);
+  }
+  if (ipVersion === 6) {
+    return isPrivateOrReservedIpv6(normalized);
+  }
+
+  return isLocalHostname(normalized);
+}
+
 function normalizeCanonicalUrl(value) {
   if (!value) {
     return '';
@@ -144,6 +311,13 @@ function normalizeCanonicalUrl(value) {
 
   try {
     const url = new URL(String(value).trim());
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return '';
+    }
+    if (!url.hostname || url.username || url.password || isUnsafePublicUrlHost(url.hostname)) {
+      return '';
+    }
+
     const trackingParams = new Set([
       'fbclid',
       'gclid',

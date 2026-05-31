@@ -1,4 +1,5 @@
 import { createRequire } from 'node:module';
+import dns from 'node:dns';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -10,11 +11,16 @@ const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const {
   parseFeedItems,
+  collectDraftsFromFeeds,
   extractJsonPayload,
   parseArgs,
   parseHermesOutput,
   runWorker,
 } = require('../scripts/arizona_radar/run.cjs') as {
+  collectDraftsFromFeeds: (
+    manifest: Array<Record<string, unknown>>,
+    options: Record<string, unknown>
+  ) => Promise<Array<Record<string, unknown>>>;
   extractJsonPayload: (text: string) => string;
   parseFeedItems: (
     xml: string,
@@ -36,6 +42,12 @@ const originalEnv = {
   RADAR_STORAGE_MODE: process.env.RADAR_STORAGE_MODE,
 };
 const originalFetch = globalThis.fetch;
+
+function mockPublicDnsResolution() {
+  vi.spyOn(dns.promises, 'lookup').mockResolvedValue([
+    { address: '93.184.216.34', family: 4 },
+  ] as never);
+}
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -111,9 +123,143 @@ describe('Arizona Radar feed fallback', () => {
     expect(drafts[0]).not.toHaveProperty('bodyEn');
   });
 
+  it('ignores feed items whose article links point at unsafe URLs', () => {
+    const drafts = parseFeedItems(
+      `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <item>
+            <title>Private endpoint should not be fetched</title>
+            <link>http://127.0.0.1:3000/admin</link>
+            <pubDate>Fri, 29 May 2026 10:00:00 GMT</pubDate>
+            <description>A forged item that should not become a rewrite seed.</description>
+          </item>
+          <item>
+            <title>Phoenix public news item remains eligible</title>
+            <link>https://whatnow.com/phoenix/restaurants/public-item/?utm_source=test</link>
+            <pubDate>Fri, 29 May 2026 10:00:00 GMT</pubDate>
+            <description>A public item that can still become a city news seed.</description>
+          </item>
+        </channel>
+      </rss>`,
+      {
+        slug: 'what-now-phoenix',
+        name: 'What Now Phoenix',
+        url: 'https://whatnow.com/phoenix/',
+        feedUrl: 'https://whatnow.com/phoenix/feed/',
+        sourceType: 'local_media',
+        sourcePolicy: 'summary_link',
+        lane: 'openings',
+      },
+      {
+        lookbackHours: 48,
+        maxItems: 10,
+        now: '2026-05-30T10:00:00.000Z',
+      }
+    );
+
+    expect(drafts).toHaveLength(1);
+    expect(drafts[0]).toMatchObject({
+      titleEn: 'Phoenix public news item remains eligible',
+      canonicalUrl: 'https://whatnow.com/phoenix/restaurants/public-item',
+    });
+  });
+
+  it('does not fetch feed URLs that resolve to private addresses', async () => {
+    vi.spyOn(dns.promises, 'lookup').mockResolvedValue([
+      { address: '10.0.0.5', family: 4 },
+    ] as never);
+    globalThis.fetch = vi.fn() as typeof fetch;
+
+    const drafts = await collectDraftsFromFeeds(
+      [
+        {
+          slug: 'private-feed',
+          name: 'Private Feed',
+          url: 'https://private.example/',
+          feedUrl: 'https://private.example/feed/',
+          sourceType: 'local_media',
+          sourcePolicy: 'summary_link',
+          lane: 'openings',
+        },
+      ],
+      {
+        lookbackHours: 48,
+        maxItems: 10,
+        now: '2026-05-30T10:00:00.000Z',
+        timeoutMs: 1000,
+      }
+    );
+
+    expect(drafts).toEqual([]);
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not fetch feed article URLs that resolve to private addresses', async () => {
+    vi.spyOn(dns.promises, 'lookup').mockImplementation(async (hostname: string) => {
+      if (hostname === 'private.example') {
+        return [{ address: '127.0.0.1', family: 4 }] as never;
+      }
+
+      return [{ address: '93.184.216.34', family: 4 }] as never;
+    });
+
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://whatnow.com/phoenix/feed/') {
+        return new Response(
+          `<?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <item>
+                <title>Private hostname should not be fetched</title>
+                <link>https://private.example/admin</link>
+                <pubDate>Fri, 29 May 2026 10:00:00 GMT</pubDate>
+                <description>A forged item that should not be fetched.</description>
+              </item>
+            </channel>
+          </rss>`,
+          {
+            status: 200,
+            headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
+          }
+        );
+      }
+
+      throw new Error(`Unexpected fetch: ${String(url)}`);
+    }) as typeof fetch;
+
+    const drafts = await collectDraftsFromFeeds(
+      [
+        {
+          slug: 'what-now-phoenix',
+          name: 'What Now Phoenix',
+          url: 'https://whatnow.com/phoenix/',
+          feedUrl: 'https://whatnow.com/phoenix/feed/',
+          sourceType: 'local_media',
+          sourcePolicy: 'summary_link',
+          lane: 'openings',
+        },
+      ],
+      {
+        lookbackHours: 48,
+        maxItems: 10,
+        now: '2026-05-30T10:00:00.000Z',
+        timeoutMs: 1000,
+      }
+    );
+
+    expect(drafts).toEqual([]);
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'https://whatnow.com/phoenix/feed/',
+      expect.any(Object)
+    );
+  });
+
   it('publishes rewritten feed articles when broad Hermes returns no candidates', async () => {
     process.env.NODE_ENV = 'test';
     process.env.RADAR_STORAGE_MODE = 'file';
+    mockPublicDnsResolution();
 
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-feed-fallback-'));
     const hermesBin = path.join(tempDir, 'hermes-rewrite');
@@ -241,6 +387,7 @@ describe('Arizona Radar feed fallback', () => {
   it('does not run broad Hermes retry when rewritten feed articles fill the target', async () => {
     process.env.NODE_ENV = 'test';
     process.env.RADAR_STORAGE_MODE = 'file';
+    mockPublicDnsResolution();
 
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-feed-target-'));
     const hermesBin = path.join(tempDir, 'hermes-rewrite-target');

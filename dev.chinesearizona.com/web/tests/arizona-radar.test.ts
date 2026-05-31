@@ -6,6 +6,7 @@ const require = createRequire(import.meta.url);
 const {
   applyDraftsToStore,
   defaultStoreSnapshot,
+  normalizeCanonicalUrl,
 } = require('../scripts/arizona_radar/core.cjs') as {
   applyDraftsToStore: (
     store: Record<string, unknown>,
@@ -23,6 +24,7 @@ const {
     };
   };
   defaultStoreSnapshot: () => Record<string, unknown>;
+  normalizeCanonicalUrl: (value: string) => string;
 };
 
 const manifest = [
@@ -76,6 +78,29 @@ function makeWebDraft(index: number) {
 }
 
 describe('Arizona Radar core', () => {
+  it('normalizes only public http and https URLs for generated radar links', () => {
+    expect(normalizeCanonicalUrl('https://example.com/a?utm_source=test#section')).toBe(
+      'https://example.com/a'
+    );
+    expect(normalizeCanonicalUrl('https://[2606:4700:4700::1111]/dns?utm_source=test')).toBe(
+      'https://[2606:4700:4700::1111]/dns'
+    );
+    expect(normalizeCanonicalUrl('javascript:alert(1)')).toBe('');
+    expect(normalizeCanonicalUrl('data:text/html,hi')).toBe('');
+    expect(normalizeCanonicalUrl('file:///etc/passwd')).toBe('');
+    expect(normalizeCanonicalUrl('https://user:pass@example.com/admin')).toBe('');
+    expect(normalizeCanonicalUrl('https://localhost/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://10.0.0.5/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://127.0.0.1:3000/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://169.254.169.254/latest/meta-data/')).toBe('');
+    expect(normalizeCanonicalUrl('http://172.16.0.5/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://192.168.1.10/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://198.51.100.5/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://[::1]/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://[2001:db8::1]/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://[3fff::1]/admin')).toBe('');
+  });
+
   it('blocks social drafts that try to reuse captions or media fields', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
@@ -184,6 +209,82 @@ describe('Arizona Radar core', () => {
     expect(result.store.articles[0]?.sourceName).toBe('ABC15 Arizona');
     expect(result.store.articles[0]?.sourcePolicy).toBe('summary_link');
     expect(result.store.articles[0]?.heroImagePolicy).toBe('source_allowed');
+  });
+
+  it('blocks generated drafts whose primary source URL is unsafe', () => {
+    const result = applyDraftsToStore(
+      defaultStoreSnapshot(),
+      [
+        {
+          sourceName: 'Injected Local Endpoint',
+          sourceUrl: 'http://127.0.0.1:3000/admin',
+          canonicalUrl: 'javascript:alert(1)',
+          sourcePublishedAt: '2026-04-18T10:00:00.000Z',
+          titleEn: 'Phoenix local update should not publish',
+          titleZh: 'Phoenix 本地更新不應發布',
+          excerptEn: 'A generated item must not publish unsafe source links.',
+          excerptZh: '生成內容不得發布不安全來源連結。',
+          bodyEn: ['This looks like city news, but the source URL points at an unsafe location.'],
+          bodyZh: ['這看起來像城市新聞，但來源連結指向不安全位置。'],
+          topicFingerprint: 'unsafe source url injection',
+        },
+      ],
+      {
+        manifest: [...manifest],
+        publishCap: 10,
+        now: '2026-04-18T12:00:00.000Z',
+      }
+    );
+
+    expect(result.summary.publishedCount).toBe(0);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.articles).toHaveLength(0);
+    expect(result.store.candidates[0]).toMatchObject({
+      moderationState: 'blocked',
+      blockReason: 'missing_source_url',
+    });
+  });
+
+  it('drops unsafe optional source and hero URLs without weakening valid source-linked articles', () => {
+    const result = applyDraftsToStore(
+      defaultStoreSnapshot(),
+      [
+        {
+          sourceName: 'Austin Public News',
+          sourceUrl: 'https://news.example/austin/transit-update?utm_source=test',
+          canonicalUrl: 'https://news.example/austin/transit-update?utm_source=test',
+          additionalSourceUrls: [
+            'file:///etc/passwd',
+            'https://city.example/austin/transit-doc?utm_campaign=radar',
+            'http://127.0.0.1:8080/private',
+          ],
+          sourcePublishedAt: '2026-04-18T10:00:00.000Z',
+          titleEn: 'Austin transit update stays source linked',
+          titleZh: 'Austin 交通更新保留來源連結',
+          excerptEn: 'A concise city news summary keeps safe source links.',
+          excerptZh: '精簡城市新聞摘要保留安全來源連結。',
+          bodyEn: ['Austin readers get a brief summary with safe links back to public sources.'],
+          bodyZh: ['Austin 讀者可閱讀簡短摘要，並透過安全連結回到公開來源。'],
+          heroImage: 'http://127.0.0.1:8080/private-image.jpg',
+          topicFingerprint: 'austin transit source link safety',
+        },
+      ],
+      {
+        manifest: [...manifest],
+        publishCap: 10,
+        now: '2026-04-18T12:00:00.000Z',
+      }
+    );
+
+    expect(result.summary.publishedCount).toBe(1);
+    expect(result.summary.blockedCount).toBe(0);
+    expect(result.store.articles[0]?.sourcePolicy).toBe('summary_link');
+    expect(result.store.articles[0]?.sourceLinks).toEqual([
+      expect.objectContaining({ url: 'https://news.example/austin/transit-update' }),
+      expect.objectContaining({ url: 'https://city.example/austin/transit-doc' }),
+    ]);
+    expect(result.store.articles[0]?.heroImagePolicy).toBe('source_allowed');
+    expect(String(result.store.articles[0]?.heroImage)).toContain('images.unsplash.com');
   });
 
   it('infers signal_only handling for Arizona social sources outside the manifest', () => {

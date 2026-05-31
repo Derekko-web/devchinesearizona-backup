@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require('node:child_process');
+const dns = require('node:dns').promises;
 const fs = require('node:fs');
+const net = require('node:net');
 const path = require('node:path');
 const cheerio = require('cheerio');
 
@@ -871,12 +873,45 @@ function rewriteFeedItemsWithHermes({
     .filter(Boolean);
 }
 
+function formatDnsAddressAsHost(address, family) {
+  return family === 6 || String(address).includes(':') ? `[${address}]` : address;
+}
+
+function resolvedAddressIsUnsafe(address, family) {
+  return !normalizeCanonicalUrl(`https://${formatDnsAddressAsHost(address, family)}/`);
+}
+
+async function resolveFetchablePublicUrl(value) {
+  const rawUrl = String(value || '').trim();
+  const normalizedUrl = normalizeCanonicalUrl(rawUrl);
+  if (!normalizedUrl) {
+    throw new Error('Unsafe fetch URL.');
+  }
+
+  const url = new URL(rawUrl);
+  const hostname = url.hostname.replace(/^\[|\]$/g, '');
+  if (net.isIP(hostname)) {
+    return url.toString();
+  }
+
+  const records = await dns.lookup(hostname, { all: true, verbatim: true });
+  if (
+    records.length === 0 ||
+    records.some((record) => resolvedAddressIsUnsafe(record.address, record.family))
+  ) {
+    throw new Error('Unsafe fetch URL.');
+  }
+
+  return url.toString();
+}
+
 async function fetchText(url, timeoutMs, siteConfig = RADAR_CITY) {
+  const fetchUrl = await resolveFetchablePublicUrl(url);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(fetchUrl, {
       headers: {
         accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
         'user-agent': `${siteConfig.brandName}RadarFeedSync/1.0`,
