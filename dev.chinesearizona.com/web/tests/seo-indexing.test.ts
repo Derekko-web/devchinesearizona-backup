@@ -159,6 +159,18 @@ describe('indexing signals', () => {
     expect(JSON.stringify(entries)).not.toContain('chinesearizona.com/business');
   });
 
+  it('builds SF Bay sitemap and robots URLs from SF Bay directory listings only', async () => {
+    const entries = await buildSitemap(siteProfiles['sf-bay']);
+    const urls = entries.map((entry) => entry.url);
+    const robots = buildRobots(siteProfiles['sf-bay']);
+
+    expect(robots.sitemap).toBe('https://chinesesfbay.com/sitemap.xml');
+    expect(urls).toContain('https://chinesesfbay.com/business/r-g-lounge-san-francisco');
+    expect(urls).toContain('https://chinesesfbay.com/business/asian-health-services-oakland');
+    expect(urls).not.toContain('https://chinesesfbay.com/business/bido-cafe');
+    expect(JSON.stringify(entries)).not.toContain('chinesearizona.com/business');
+  });
+
   it('uses Austin-specific add-business and business detail metadata', async () => {
     const addMetadata = addBusinessMetadata('en', siteProfiles.austin);
     const business = await businessMetadata('en', 'house-of-three-gorges-austin', siteProfiles.austin);
@@ -171,6 +183,29 @@ describe('indexing signals', () => {
     expect(business?.title).toBe('House of Three Gorges | ChineseAustin');
     expect(business?.alternates?.canonical).toBe(
       'https://chineseaustin.com/business/house-of-three-gorges-austin'
+    );
+    expect(JSON.stringify(business)).not.toContain('Arizona');
+  });
+
+  it('uses SF Bay-specific directory, add-business, and business detail metadata', async () => {
+    const site = siteProfiles['sf-bay'];
+    const directory = directoryMetadata('en', '/business', undefined, site);
+    const addMetadata = addBusinessMetadata('en', site);
+    const business = await businessMetadata('en', 'r-g-lounge-san-francisco', site);
+
+    expect(directory.title).toBe('Chinese Businesses | ChineseSFBay');
+    expect(directory.description).toContain('Chinese businesses in SF Bay');
+    expect(directory.alternates?.canonical).toBe('https://chinesesfbay.com/business');
+    expect(directory.robots).toBeUndefined();
+
+    expect(addMetadata.title).toBe('Add or Claim a Business | ChineseSFBay');
+    expect(addMetadata.description).toContain('SF Bay business claim');
+    expect(addMetadata.alternates?.canonical).toBe('https://chinesesfbay.com/add-business');
+    expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
+
+    expect(business?.title).toBe('R&G Lounge | ChineseSFBay');
+    expect(business?.alternates?.canonical).toBe(
+      'https://chinesesfbay.com/business/r-g-lounge-san-francisco'
     );
     expect(JSON.stringify(business)).not.toContain('Arizona');
   });

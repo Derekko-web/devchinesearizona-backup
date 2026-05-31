@@ -1347,18 +1347,46 @@ export function normalizeHost(value?: string | null): string {
   return withoutPort.startsWith('www.') ? withoutPort.slice(4) : withoutPort;
 }
 
-export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
-  const normalizedHost = normalizeHost(host);
-
-  if (!normalizedHost || isLocalHost(normalizedHost)) {
-    return defaultSiteProfile;
-  }
-
+function getConfiguredSiteProfileByHost(normalizedHost: string): SiteProfile | undefined {
   for (const profile of Object.values(siteProfiles)) {
     if (profile.domains.some((domain) => normalizeHost(domain) === normalizedHost)) {
       return profile;
     }
   }
 
-  return createUnconfiguredSiteProfile(normalizedHost);
+  return undefined;
+}
+
+export function resolveSiteProfileFromHostCandidates(
+  hosts: Array<string | null | undefined>
+): SiteProfile {
+  const normalizedHosts = hosts.map((host) => normalizeHost(host)).filter(Boolean);
+  const firstPublicHostIndex = normalizedHosts.findIndex((host) => !isLocalHost(host));
+
+  if (firstPublicHostIndex === -1) {
+    return defaultSiteProfile;
+  }
+
+  const firstPublicHost = normalizedHosts[firstPublicHostIndex];
+  const firstPublicProfile = getConfiguredSiteProfileByHost(firstPublicHost);
+  if (firstPublicProfile) {
+    return firstPublicProfile;
+  }
+
+  for (const normalizedHost of normalizedHosts.slice(firstPublicHostIndex + 1)) {
+    if (isLocalHost(normalizedHost)) {
+      continue;
+    }
+
+    const profile = getConfiguredSiteProfileByHost(normalizedHost);
+    if (profile && profile.key !== defaultSiteProfile.key) {
+      return profile;
+    }
+  }
+
+  return createUnconfiguredSiteProfile(firstPublicHost);
+}
+
+export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
+  return resolveSiteProfileFromHostCandidates([host]);
 }

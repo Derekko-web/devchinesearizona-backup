@@ -4,6 +4,7 @@ import {
   defaultSiteProfile,
   hasLiveDirectoryData,
   hasLiveNewsData,
+  resolveSiteProfileFromHostCandidates,
   resolveSiteProfileFromHost,
   shouldNoIndexSiteProfile,
   siteProfiles,
@@ -75,6 +76,23 @@ describe('city site configuration', () => {
     expect(site.seo.title.en).toContain('San Francisco Bay Area');
     expect(site.seo.description.en).toContain('San Francisco');
     expect(site.seo.description.en).not.toContain('Arizona');
+  });
+
+  it('does not let an internal forwarded host mask the SF Bay request host', () => {
+    expect(resolveSiteProfileFromHostCandidates(['127.0.0.1:3001', 'chinesesfbay.com'])).toBe(
+      siteProfiles['sf-bay']
+    );
+    expect(resolveSiteProfileFromHostCandidates(['internal-router.local', 'www.chinesesfbay.com'])).toBe(
+      siteProfiles['sf-bay']
+    );
+  });
+
+  it('does not rescue unknown city hosts with the Arizona default domain', () => {
+    const site = resolveSiteProfileFromHostCandidates(['missing-city.example', 'chinesearizona.com']);
+
+    expect(site.key).toBe('unconfigured');
+    expect(hasLiveDirectoryData(site)).toBe(false);
+    expect(site.directory.allowDefaultFallback).toBe(false);
   });
 
   it('connects chineselosangeles.com to Los Angeles-only directory and news sources', () => {
