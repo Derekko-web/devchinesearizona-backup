@@ -14,12 +14,13 @@ import { businessReviewOverrides } from '@/data/business-review-overrides';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLocalArticles from '@/data/generated-local-articles.json';
 import generatedSfBayLocalArticles from '@/data/generated-sf-bay-local-articles.json';
+import losAngelesDirectoryBusinessesData from '@/data/los-angeles-directory-businesses.json';
 import generatedSignalDeskQueue from '@/data/generated-signal-desk-queue.json';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import monitoredSourcesData from '@/data/monitored-sources.json';
 import { formatPhoneNumber } from '@/lib/phone';
 
-type ImportedBusiness = Omit<
+export type ImportedBusiness = Omit<
   Business,
   'address' | 'serviceAreaText' | 'phone' | 'email' | 'website' | 'menuUrl' | 'priceRange' | 'coordinates'
 > & {
@@ -31,6 +32,7 @@ type ImportedBusiness = Omit<
   menuUrl?: string | null;
   priceRange?: string | null;
   coordinates?: Business['coordinates'] | null;
+  sourceUrls?: string[];
 };
 
 export type ImportedArticle = Omit<
@@ -62,11 +64,13 @@ export type ImportedArticle = Omit<
   sourceLinks?: Article['sourceLinks'] | null;
 };
 
-function normalizeImportedBusiness(business: ImportedBusiness): Business {
+export function normalizeImportedBusiness(business: ImportedBusiness): Business {
   const reviewOverride = businessReviewOverrides[business.slug];
+  const businessFields = { ...business };
+  delete businessFields.sourceUrls;
 
   return applyBusinessDirectoryOverride({
-    ...business,
+    ...businessFields,
     address: business.address ?? undefined,
     serviceAreaText: business.serviceAreaText ?? undefined,
     phone: formatPhoneNumber(business.phone),
@@ -76,7 +80,7 @@ function normalizeImportedBusiness(business: ImportedBusiness): Business {
     priceRange: business.priceRange ?? undefined,
     coordinates: business.coordinates ?? undefined,
     verified: true,
-    newcomerFriendly: false,
+    newcomerFriendly: business.newcomerFriendly ?? false,
     verificationState: 'editor_verified',
     rating: reviewOverride?.rating ?? business.rating,
     reviewCount: reviewOverride?.reviewCount ?? business.reviewCount,
@@ -84,6 +88,9 @@ function normalizeImportedBusiness(business: ImportedBusiness): Business {
 }
 
 const scrapedBusinesses = (generatedDirectoryBusinesses as ImportedBusiness[])
+  .map(normalizeImportedBusiness);
+
+export const losAngelesBusinesses: Business[] = (losAngelesDirectoryBusinessesData as ImportedBusiness[])
   .map(normalizeImportedBusiness);
 
 export function normalizeImportedArticle(article: ImportedArticle): Article {

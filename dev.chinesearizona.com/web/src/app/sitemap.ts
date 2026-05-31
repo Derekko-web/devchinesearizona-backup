@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...publisherPageSlugs.map((slug) => `/${slug}`),
   ];
   const [directoryBusinesses, articles, discoverArticles] = await Promise.all([
-    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { limit: 1000 }) : Promise.resolve([]),
+    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { limit: 1000, site }) : Promise.resolve([]),
     getCurrentArticlesAsync(undefined, site),
     canShowArizonaOnlyContent ? getPublishedDiscoverArticles() : Promise.resolve([]),
   ]);

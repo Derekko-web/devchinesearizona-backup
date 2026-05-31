@@ -48,4 +48,23 @@ describe('HomePageView', () => {
     expect(html).not.toContain('/arizona-news/');
     expect(html).not.toContain('/relocation-guide');
   });
+
+  it('renders Los Angeles directory signals without Arizona listing fallback', async () => {
+    const [{ HomePageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/home-page'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(<HomePageView locale="en" site={siteProfiles['los-angeles']} />);
+
+    expect(html).toContain('Los Angeles Chinese Community Guide');
+    expect(html).toContain('Lunasia Dim Sum House');
+    expect(html).toContain('Chinatown Service Center');
+    expect(html).toContain('San Gabriel');
+    expect(html).not.toContain('Bido Cafe');
+    expect(html).not.toContain('Hedy Li');
+    expect(html).not.toContain('/directory-ai-replacements/');
+    expect(html).not.toContain('/arizona-news/');
+    expect(html).not.toContain('/relocation-guide');
+  });
 });

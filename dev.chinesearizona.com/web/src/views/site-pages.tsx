@@ -303,11 +303,13 @@ function DirectoryListingCard({
   category,
   locale,
   pagePath,
+  stateCode = defaultSiteProfile.stateCode,
 }: {
   business: Business;
   category?: BusinessCategory;
   locale: Locale;
   pagePath: string;
+  stateCode?: string;
 }) {
   const content = (
     <BusinessCard
@@ -315,6 +317,7 @@ function DirectoryListingCard({
       category={category}
       locale={locale}
       enableSponsoredClickTracking={Boolean(business.activeDirectoryAdCampaign)}
+      localizedLocationLabel={business.address ?? business.serviceAreaText ?? `${business.city}, ${stateCode}`}
     />
   );
 
@@ -593,8 +596,8 @@ export async function DirectoryPageView({
   };
   const directoryPagePath = withLocale(locale, '/business');
   const [{ categories, cities }, directoryPage] = await Promise.all([
-    getDirectoryFilterOptions(),
-    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { usePaidPromotion: true }),
+    getDirectoryFilterOptions(site),
+    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { site, usePaidPromotion: true }),
   ]);
   const listings = directoryPage.businesses;
   const activeFilterCount = countActiveDirectoryFilters(filters);
@@ -844,6 +847,7 @@ export async function DirectoryPageView({
                     category={categoryBySlug[business.categorySlug]}
                     locale={locale}
                     pagePath={directoryPagePath}
+                    stateCode={site.stateCode}
                   />
                 ))
               )}
@@ -871,13 +875,13 @@ export async function BusinessDetailPageView({
     return null;
   }
 
-  const business = await getDirectoryBusinessBySlug(slug);
+  const business = await getDirectoryBusinessBySlug(slug, { site });
   if (!business) {
     return null;
   }
 
   const [categories, relatedCategoryBusinesses] = await Promise.all([
-    getDirectoryCategories(),
+    getDirectoryCategories(site),
     getDirectoryBusinesses(
       {
         category: business.categorySlug,
@@ -887,6 +891,7 @@ export async function BusinessDetailPageView({
       {
         excludeSlug: business.slug,
         limit: 2,
+        site,
       }
     ),
   ]);
@@ -907,13 +912,18 @@ export async function BusinessDetailPageView({
   const directionsHref = getBusinessDirectionsUrl(business);
   const serviceHighlights = getBusinessServiceHighlights(business, locale);
   const hoursPreview = getBusinessHoursPreview(business.hours, locale);
+  const businessDetailPath = withLocale(locale, `/business/${business.slug}`);
+  const businessDetailUrl =
+    site.key === defaultSiteProfile.key
+      ? absoluteUrl(businessDetailPath)
+      : absoluteUrl(businessDetailPath, site);
   const localBusinessJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     name: business.name.en,
     alternateName: business.name.zh,
     description: business.description.en,
-    url: absoluteUrl(withLocale(locale, `/business/${business.slug}`)),
+    url: businessDetailUrl,
   };
 
   if (imageSet.length > 0) {
@@ -930,7 +940,7 @@ export async function BusinessDetailPageView({
       '@type': 'PostalAddress',
       streetAddress: business.address,
       addressLocality: business.city,
-      addressRegion: 'AZ',
+      addressRegion: site.stateCode,
       addressCountry: 'US',
     };
   } else if (business.serviceAreaText) {
@@ -956,10 +966,14 @@ export async function BusinessDetailPageView({
     business.name.zh && business.name.zh !== business.name.en
       ? business.name.zh
       : locale === 'zh' && business.name.en !== displayName
-        ? business.name.en
-        : undefined;
+      ? business.name.en
+      : undefined;
   const categoryLabel = category ? t(category.name, locale) : locale === 'zh' ? '本地商家' : 'Local business';
-  const addressLabel = business.address ?? business.serviceAreaText ?? `${business.city}, AZ`;
+  const addressLabel = business.address ?? business.serviceAreaText ?? `${business.city}, ${site.stateCode}`;
+  const verificationBrandLabel =
+    site.key === defaultSiteProfile.key ? 'ChineseArizona' : site.brandName;
+  const verificationBrandLabelZh =
+    site.key === defaultSiteProfile.key ? 'ChineseArizona' : site.brandNameZh;
   const ratingLabel =
     business.reviewCount > 0
       ? business.rating > 0
@@ -1120,7 +1134,7 @@ export async function BusinessDetailPageView({
                 </span>
                 <span>{reviewCountLabel}</span>
                 <span className="h-1 w-1 rounded-full bg-[#b9aa99]" aria-hidden="true" />
-                <span>{business.city}, AZ</span>
+                <span>{business.city}, {site.stateCode}</span>
               </div>
 
               <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
@@ -1629,7 +1643,11 @@ export async function BusinessDetailPageView({
                   <ShieldCheck className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-[#2c2722]">{locale === 'zh' ? 'ChineseArizona 認證' : 'Verified by ChineseArizona'}</h2>
+                  <h2 className="font-semibold text-[#2c2722]">
+                    {locale === 'zh'
+                      ? `${verificationBrandLabelZh} 認證`
+                      : `Verified by ${verificationBrandLabel}`}
+                  </h2>
                   <p className="mt-1 text-sm leading-6 text-[#6d6258]">
                     {locale === 'zh'
                       ? '此頁使用商家來源、社區線索與人工審核資料整理。'
@@ -1669,7 +1687,12 @@ export async function BusinessDetailPageView({
             </div>
             <div className="grid gap-4 lg:grid-cols-2">
               {relatedCategoryBusinesses.map((item) => (
-                <BusinessCard key={item.id} business={item} locale={locale} />
+                <BusinessCard
+                  key={item.id}
+                  business={item}
+                  locale={locale}
+                  localizedLocationLabel={item.address ?? item.serviceAreaText ?? `${item.city}, ${site.stateCode}`}
+                />
               ))}
             </div>
           </section>
@@ -1696,7 +1719,7 @@ export async function CityCategoryPageView({
 
   const cityCategoryPath = withLocale(locale, `/business/${city}/${category}`);
   const [categories, listings] = await Promise.all([
-    getDirectoryCategories(),
+    getDirectoryCategories(site),
     getDirectoryBusinesses(
       {
         city,
@@ -1705,6 +1728,7 @@ export async function CityCategoryPageView({
       },
       {
         limit: 100,
+        site,
         usePaidPromotion: true,
       }
     ),
@@ -1753,6 +1777,7 @@ export async function CityCategoryPageView({
               category={categoryRecord}
               locale={locale}
               pagePath={cityCategoryPath}
+              stateCode={site.stateCode}
             />
           ))}
         </div>
@@ -3603,7 +3628,7 @@ export async function AddBusinessPageView({
   };
   site?: SiteProfile;
 }) {
-  const businesses = hasLiveDirectoryData(site) ? await getDirectoryBusinesses({}, { limit: 200 }) : [];
+  const businesses = hasLiveDirectoryData(site) ? await getDirectoryBusinesses({}, { limit: 200, site }) : [];
   const trustFacts = [
     {
       icon: ShieldCheck,

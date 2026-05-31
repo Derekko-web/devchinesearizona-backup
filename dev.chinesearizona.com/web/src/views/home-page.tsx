@@ -258,7 +258,7 @@ function FeaturedBusinessCard({
         <div className="flex items-center gap-2 text-sm text-[#6f5b50]">
           <Star className="h-4 w-4 fill-[#f2af4b] text-[#f2af4b]" />
           <span className="font-semibold text-[#372922]">{card.rating}</span>
-          <span>({card.reviewCount})</span>
+          {card.reviewCount > 0 ? <span>({card.reviewCount})</span> : null}
         </div>
 
         <div className="mt-auto text-[13px] leading-5 text-[#726055]">
@@ -332,7 +332,10 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const directoryIsLive = hasLiveDirectoryData(site);
   const newsIsLive = hasLiveNewsData(site);
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
-  const allBusinesses = directoryIsLive ? getBusinesses(locale, { sort: 'featured' }) : [];
+  const allBusinesses =
+    directoryIsLive && site.key === defaultSiteProfile.key
+      ? getBusinesses(locale, { sort: 'featured' })
+      : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
   );
@@ -367,7 +370,10 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
-  const verifiedCount = allBusinesses.filter((business) => business.verified).length;
+  const verifiedCount =
+    site.key === defaultSiteProfile.key
+      ? allBusinesses.filter((business) => business.verified).length
+      : home.featuredCards.length;
   const trustedServiceTiles: TrustedServiceTile[] = [
     {
       slug: 'real-estate',
