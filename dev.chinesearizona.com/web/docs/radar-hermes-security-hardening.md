@@ -37,7 +37,7 @@ Issue #59 implementation plan:
 - First layer: run each city radar job through
   `radar-hermes-worker@.service`, which applies `IPAddressDeny` to metadata,
   loopback, RFC1918, private, reserved, documentation, benchmark, link-local,
-  multicast, and unique-local ranges for both Node and Hermes.
+  multicast, unique-local, and non-global IPv6 ranges for both Node and Hermes.
 - Optional stricter layer: after the owner confirms DNS behavior, apply the
   nftables template for a dedicated worker identity so only public DNS and
   HTTP(S) destination ports remain available.

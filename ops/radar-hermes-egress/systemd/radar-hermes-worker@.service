@@ -41,9 +41,9 @@ IPAddressDeny=203.0.113.0/24
 IPAddressDeny=224.0.0.0/4
 IPAddressDeny=240.0.0.0/4
 
-# IPv6 unspecified, loopback, mapped IPv4, NAT64 special-use, discard-only,
-# documentation, benchmarking, 6to4, unique-local, link-local, multicast, and
-# other reserved ranges.
+# IPv6 ranges outside 2000::/3 are non-global-unicast/reserved. Explicit
+# entries below keep common special-use ranges visible during review.
+IPAddressDeny=::/3
 IPAddressDeny=::/128
 IPAddressDeny=::1/128
 IPAddressDeny=::ffff:0:0/96
@@ -57,6 +57,8 @@ IPAddressDeny=2001:20::/28
 IPAddressDeny=2001:db8::/32
 IPAddressDeny=2002::/16
 IPAddressDeny=3fff::/20
+IPAddressDeny=4000::/2
+IPAddressDeny=8000::/1
 IPAddressDeny=fc00::/7
 IPAddressDeny=fe80::/10
 IPAddressDeny=ff00::/8

@@ -33,6 +33,7 @@ table inet radar_hermes_egress {
     flags interval
     auto-merge
     elements = {
+      ::/3,
       ::/128,
       ::1/128,
       ::ffff:0:0/96,
@@ -46,6 +47,8 @@ table inet radar_hermes_egress {
       2001:db8::/32,
       2002::/16,
       3fff::/20,
+      4000::/2,
+      8000::/1,
       fc00::/7,
       fe80::/10,
       ff00::/8
@@ -63,4 +66,3 @@ table inet radar_hermes_egress {
     meta skuid $radar_worker_uid reject with icmpx admin-prohibited
   }
 }
-

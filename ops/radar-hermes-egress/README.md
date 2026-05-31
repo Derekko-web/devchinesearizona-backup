@@ -31,8 +31,8 @@ normalization code.
    `radar-hermes-worker@.service`.
 3. Enable the systemd `IPAddressDeny` policy in the service template first. This
    blocks metadata, loopback, RFC1918, carrier-grade NAT, link-local, multicast,
-   documentation, benchmark, unique-local, and other reserved ranges for the
-   Node worker and the Hermes child process.
+   documentation, benchmark, unique-local, non-global IPv6, and other reserved
+   ranges for the Node worker and the Hermes child process.
 4. After the owner confirms DNS behavior, optionally add the nftables per-user
    policy to limit the dedicated worker identity to public DNS and HTTP(S)
    destination ports. If the host resolver is loopback-only, choose a public
