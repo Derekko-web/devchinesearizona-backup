@@ -2,6 +2,7 @@ import {
   businessCategories,
   businesses as fixtureBusinesses,
   losAngelesBusinesses,
+  sfBayBusinesses,
 } from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
@@ -1173,6 +1174,10 @@ function querySiteStaticBusinesses(
 ): Business[] {
   if (site.key === 'los-angeles') {
     return queryStaticBusinesses(losAngelesBusinesses, filters, options);
+  }
+
+  if (site.key === 'sf-bay') {
+    return queryStaticBusinesses(sfBayBusinesses, filters, options);
   }
 
   return [];

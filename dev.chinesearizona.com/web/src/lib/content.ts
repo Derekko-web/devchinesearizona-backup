@@ -11,6 +11,7 @@ import {
   normalizeImportedArticle,
   profiles,
   reviews,
+  sfBayBusinesses,
   sfBayLocalArticles,
 } from '@/data/platform-data';
 import type { ImportedArticle } from '@/data/platform-data';
@@ -239,7 +240,19 @@ export function getBusinessCategories(): BusinessCategory[] {
   return businessCategories;
 }
 
-export function getBusinesses(locale: Locale, filters: BusinessFilters = {}): Business[] {
+function getContentBusinessesForSite(site: SiteProfile = defaultSiteProfile): Business[] {
+  if (site.key === 'sf-bay' && site.directory.listingSource.state === 'live') {
+    return sfBayBusinesses;
+  }
+
+  return site.key === defaultSiteProfile.key && site.directory.allowDefaultFallback ? businesses : [];
+}
+
+export function getBusinesses(
+  locale: Locale,
+  filters: BusinessFilters = {},
+  site: SiteProfile = defaultSiteProfile
+): Business[] {
   const {
     q,
     city,
@@ -250,7 +263,8 @@ export function getBusinesses(locale: Locale, filters: BusinessFilters = {}): Bu
     sort = 'featured',
   } = filters;
 
-  const filtered = businesses.filter((business) => {
+  const sourceBusinesses = getContentBusinessesForSite(site);
+  const filtered = sourceBusinesses.filter((business) => {
     if (!matchesSearch(business, locale, q)) {
       return false;
     }
@@ -310,8 +324,11 @@ export function getFeaturedBusinesses(locale: Locale): Business[] {
   return getBusinesses(locale, { sort: 'featured' }).slice(0, 4);
 }
 
-export function getBusinessBySlug(slug: string): Business | undefined {
-  return businesses.find((business) => business.slug === slug);
+export function getBusinessBySlug(
+  slug: string,
+  site: SiteProfile = defaultSiteProfile
+): Business | undefined {
+  return getContentBusinessesForSite(site).find((business) => business.slug === slug);
 }
 
 export function getBusinessReviews(slug: string): Review[] {
@@ -684,9 +701,12 @@ export function getPostsByAuthor(authorSlug: string): CommunityPost[] {
   return [...communityPosts, ...getCommunitySubmissions()].filter((post) => post.authorSlug === authorSlug);
 }
 
-export function getRelatedBusinesses(slugs: string[]): Business[] {
+export function getRelatedBusinesses(
+  slugs: string[],
+  site: SiteProfile = defaultSiteProfile
+): Business[] {
   return slugs
-    .map((slug) => getBusinessBySlug(slug))
+    .map((slug) => getBusinessBySlug(slug, site))
     .filter((business): business is Business => Boolean(business));
 }
 

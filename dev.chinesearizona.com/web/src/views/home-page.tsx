@@ -333,8 +333,8 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const newsIsLive = hasLiveNewsData(site);
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
   const allBusinesses =
-    directoryIsLive && site.key === defaultSiteProfile.key
-      ? getBusinesses(locale, { sort: 'featured' })
+    directoryIsLive && (site.key === defaultSiteProfile.key || site.key === 'sf-bay')
+      ? getBusinesses(locale, { sort: 'featured' }, site)
       : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
