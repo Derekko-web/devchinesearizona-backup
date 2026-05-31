@@ -165,6 +165,36 @@ describe('Arizona Radar feed fallback', () => {
     });
   });
 
+  it('does not fetch feed URLs that resolve to private addresses', async () => {
+    vi.spyOn(dns.promises, 'lookup').mockResolvedValue([
+      { address: '10.0.0.5', family: 4 },
+    ] as never);
+    globalThis.fetch = vi.fn() as typeof fetch;
+
+    const drafts = await collectDraftsFromFeeds(
+      [
+        {
+          slug: 'private-feed',
+          name: 'Private Feed',
+          url: 'https://private.example/',
+          feedUrl: 'https://private.example/feed/',
+          sourceType: 'local_media',
+          sourcePolicy: 'summary_link',
+          lane: 'openings',
+        },
+      ],
+      {
+        lookbackHours: 48,
+        maxItems: 10,
+        now: '2026-05-30T10:00:00.000Z',
+        timeoutMs: 1000,
+      }
+    );
+
+    expect(drafts).toEqual([]);
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
+
   it('does not fetch feed article URLs that resolve to private addresses', async () => {
     vi.spyOn(dns.promises, 'lookup').mockImplementation(async (hostname: string) => {
       if (hostname === 'private.example') {

@@ -85,9 +85,14 @@ describe('Arizona Radar core', () => {
     expect(normalizeCanonicalUrl('javascript:alert(1)')).toBe('');
     expect(normalizeCanonicalUrl('data:text/html,hi')).toBe('');
     expect(normalizeCanonicalUrl('file:///etc/passwd')).toBe('');
+    expect(normalizeCanonicalUrl('https://user:pass@example.com/admin')).toBe('');
     expect(normalizeCanonicalUrl('https://localhost/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://10.0.0.5/admin')).toBe('');
     expect(normalizeCanonicalUrl('http://127.0.0.1:3000/admin')).toBe('');
     expect(normalizeCanonicalUrl('http://169.254.169.254/latest/meta-data/')).toBe('');
+    expect(normalizeCanonicalUrl('http://172.16.0.5/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://192.168.1.10/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://198.51.100.5/admin')).toBe('');
     expect(normalizeCanonicalUrl('http://[::1]/admin')).toBe('');
   });
 
