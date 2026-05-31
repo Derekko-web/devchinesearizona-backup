@@ -122,6 +122,40 @@ describe('city site configuration', () => {
     expect(site.seo.description.en).not.toContain('Arizona');
   });
 
+  it('keeps the Los Angeles profile when forwarded host headers are stale or internal', () => {
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        host: 'chineselosangeles.com',
+        forwardedHost: 'internal-router.invalid',
+      })
+    ).toBe(siteProfiles['los-angeles']);
+
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        host: 'chineselosangeles.com',
+        forwardedHost: 'chinesearizona.com',
+      })
+    ).toBe(siteProfiles['los-angeles']);
+
+    expect(
+      resolveSiteProfileFromRequestHosts({
+        host: '127.0.0.1:3001',
+        forwardedHost: 'www.chineselosangeles.com',
+      })
+    ).toBe(siteProfiles['los-angeles']);
+  });
+
+  it('keeps unknown request hosts unconfigured instead of falling back to Arizona', () => {
+    const site = resolveSiteProfileFromRequestHosts({
+      host: 'missing-city.example',
+      forwardedHost: 'internal-router.invalid',
+    });
+
+    expect(site.key).toBe('unconfigured');
+    expect(site.domain).toBe('missing-city.example');
+    expect(hasLiveDirectoryData(site)).toBe(false);
+  });
+
   it('does not resolve unknown city hosts to ChineseArizona', () => {
     const site = resolveSiteProfileFromHost('chicagoguide.example');
 
