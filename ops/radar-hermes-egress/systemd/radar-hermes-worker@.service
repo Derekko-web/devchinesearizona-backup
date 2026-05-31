@@ -1,0 +1,64 @@
+[Unit]
+Description=Radar/Hermes worker for %i with egress denylist
+Documentation=https://github.com/Derekko-web/devchinesearizona-backup/tree/main/ops/radar-hermes-egress
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=radar-hermes
+Group=radar-hermes
+WorkingDirectory=/srv/chinesearizona/web
+Environment=NODE_ENV=production
+EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env
+ExecStart=/usr/bin/node scripts/arizona_radar/run.cjs run --site=%i
+
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/chinesearizona/runtime-data
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+# IPv4 unspecified, private, loopback, link-local, carrier-grade NAT,
+# documentation, benchmarking, multicast, and reserved ranges.
+IPAddressDeny=0.0.0.0/8
+IPAddressDeny=10.0.0.0/8
+IPAddressDeny=100.64.0.0/10
+IPAddressDeny=127.0.0.0/8
+IPAddressDeny=169.254.0.0/16
+IPAddressDeny=172.16.0.0/12
+IPAddressDeny=192.0.0.0/24
+IPAddressDeny=192.0.2.0/24
+IPAddressDeny=192.88.99.0/24
+IPAddressDeny=192.168.0.0/16
+IPAddressDeny=198.18.0.0/15
+IPAddressDeny=198.51.100.0/24
+IPAddressDeny=203.0.113.0/24
+IPAddressDeny=224.0.0.0/4
+IPAddressDeny=240.0.0.0/4
+
+# IPv6 ranges outside 2000::/3 are non-global-unicast/reserved. Explicit
+# entries below keep common special-use ranges visible during review.
+IPAddressDeny=::/3
+IPAddressDeny=::/128
+IPAddressDeny=::1/128
+IPAddressDeny=::ffff:0:0/96
+IPAddressDeny=64:ff9b::/96
+IPAddressDeny=64:ff9b:1::/48
+IPAddressDeny=100::/64
+IPAddressDeny=2001::/32
+IPAddressDeny=2001:2::/48
+IPAddressDeny=2001:10::/28
+IPAddressDeny=2001:20::/28
+IPAddressDeny=2001:db8::/32
+IPAddressDeny=2002::/16
+IPAddressDeny=3fff::/20
+IPAddressDeny=4000::/2
+IPAddressDeny=8000::/1
+IPAddressDeny=fc00::/7
+IPAddressDeny=fe80::/10
+IPAddressDeny=ff00::/8
