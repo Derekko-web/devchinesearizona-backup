@@ -1,10 +1,23 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_VPS_RUNTIME_ROOT = Path("/var/www/runtime-data/dev.chinesearizona.com/web")
+
+
+def _default_runtime_path(relative_path: str) -> Path:
+    configured_root = os.environ.get("CHINESEARIZONA_RUNTIME_DATA_ROOT")
+    if configured_root:
+        return Path(configured_root) / relative_path
+
+    if ROOT == Path("/var/www/dev.chinesearizona.com/web"):
+        return DEFAULT_VPS_RUNTIME_ROOT / relative_path
+
+    return ROOT / relative_path
 
 ALLOWED_DESTINATION_SURFACES = {"community_news", "relocation_guide", "directory_followup", "mixed"}
 ALLOWED_REVIEW_STATUSES = {"queued", "review_ready", "approved", "published"}
@@ -21,15 +34,27 @@ def default_source_manifest_path() -> Path:
 
 
 def default_generated_article_path() -> Path:
-    return ROOT / "src" / "data" / "generated-local-articles.json"
+    configured_path = os.environ.get("GENERATED_LOCAL_ARTICLES_PATH")
+    if configured_path:
+        return Path(configured_path)
+
+    return _default_runtime_path("src/data/generated-local-articles.json")
 
 
 def default_generated_queue_path() -> Path:
-    return ROOT / "src" / "data" / "generated-signal-desk-queue.json"
+    configured_path = os.environ.get("GENERATED_SIGNAL_DESK_QUEUE_PATH")
+    if configured_path:
+        return Path(configured_path)
+
+    return _default_runtime_path("src/data/generated-signal-desk-queue.json")
 
 
 def default_output_dir() -> Path:
-    return ROOT / "data" / "signal-desk-staging"
+    configured_path = os.environ.get("SIGNAL_DESK_OUTPUT_DIR")
+    if configured_path:
+        return Path(configured_path)
+
+    return _default_runtime_path("data/signal-desk-staging")
 
 
 def _read_json(path: Path) -> Any:

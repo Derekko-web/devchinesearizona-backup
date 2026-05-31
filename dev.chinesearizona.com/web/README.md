@@ -15,6 +15,19 @@ The worker combines two source paths:
 
 The RSS path is intentionally summary/link-only and avoids republishing source article text. To verify freshness after deploy, run the cron wrapper or wait for the host schedule, then check that `data/radar-runtime/store.json` has a recent run and that `/arizona-news` shows a new published radar item.
 
+## Runtime generated data
+
+Tracked generated JSON files are repository fixtures. The dev VPS must keep mutable runtime/generated copies outside the Git checkout, under `/var/www/runtime-data/dev.chinesearizona.com/web`, so deploys can continue to require a clean `/var/www` working tree.
+
+Deploy Dev migrates only these known generated files out of the checkout before deployment:
+
+- `data/sites/austin/radar-runtime/store.json`
+- `data/sites/los-angeles/radar-runtime/store.json`
+- `data/sf-bay-radar-runtime/store.json`
+- `src/data/generated-local-articles.json`
+
+The PM2 process receives the corresponding external paths through `RADAR_STORE_PATH_AUSTIN`, `RADAR_STORE_PATH_LOS_ANGELES`, `SF_BAY_RADAR_STORE_PATH`, and `GENERATED_LOCAL_ARTICLES_PATH`. Host cron jobs that generate these files should use the same environment variables instead of writing into `/var/www/dev.chinesearizona.com/web`.
+
 ## Getting Started
 
 First, run the development server:

@@ -79,6 +79,7 @@ export type ResolvedArticleArchiveFilters = {
 };
 
 const GENERATED_IMPORTED_ARTICLES_PATH = path.join(process.cwd(), 'src', 'data', 'generated-imported-articles.json');
+const GENERATED_LOCAL_ARTICLES_PATH = path.join(process.cwd(), 'src', 'data', 'generated-local-articles.json');
 const communityTrendingArticleSlugs = [
   'tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure',
   'phoenix-route-watch-asia-connector-playbook',
@@ -88,35 +89,94 @@ const communityTrendingArticleSlugs = [
 
 let importedArticlesCache:
   | {
+      path: string;
       mtimeMs: number;
       articles: Article[];
     }
   | null = null;
 
-function readImportedArticles(): Article[] {
+let localArticlesCache:
+  | {
+      path: string;
+      mtimeMs: number;
+      articles: Article[];
+    }
+  | null = null;
+
+function readGeneratedArticles(
+  filePath: string,
+  cache:
+    | {
+        path: string;
+        mtimeMs: number;
+        articles: Article[];
+      }
+    | null
+): { cache: typeof cache; articles: Article[] | null } {
   try {
-    const stats = fs.statSync(GENERATED_IMPORTED_ARTICLES_PATH);
-    if (importedArticlesCache?.mtimeMs === stats.mtimeMs) {
-      return importedArticlesCache.articles;
+    const stats = fs.statSync(filePath);
+    if (cache?.path === filePath && cache.mtimeMs === stats.mtimeMs) {
+      return { cache, articles: cache.articles };
     }
 
-    const payload = fs.readFileSync(GENERATED_IMPORTED_ARTICLES_PATH, 'utf-8');
-    const importedArticles = (JSON.parse(payload) as ImportedArticle[]).map(normalizeImportedArticle);
+    const payload = fs.readFileSync(filePath, 'utf-8');
+    const articles = (JSON.parse(payload) as ImportedArticle[]).map(normalizeImportedArticle);
 
-    importedArticlesCache = {
-      mtimeMs: stats.mtimeMs,
-      articles: importedArticles,
+    return {
+      cache: {
+        path: filePath,
+        mtimeMs: stats.mtimeMs,
+        articles,
+      },
+      articles,
     };
-
-    return importedArticles;
-  } catch (error) {
-    if (importedArticlesCache) {
-      return importedArticlesCache.articles;
-    }
-
-    console.error('Unable to load generated imported articles.', error);
-    return [];
+  } catch {
+    return { cache, articles: null };
   }
+}
+
+function resolveLocalArticlesPath(): string {
+  return process.env.GENERATED_LOCAL_ARTICLES_PATH || GENERATED_LOCAL_ARTICLES_PATH;
+}
+
+function readLocalArticles(): Article[] {
+  const filePath = resolveLocalArticlesPath();
+  const result = readGeneratedArticles(filePath, localArticlesCache);
+  localArticlesCache = result.cache;
+
+  if (result.articles) {
+    return result.articles;
+  }
+
+  if (localArticlesCache?.articles) {
+    return localArticlesCache.articles;
+  }
+
+  if (filePath !== GENERATED_LOCAL_ARTICLES_PATH) {
+    const fallbackResult = readGeneratedArticles(GENERATED_LOCAL_ARTICLES_PATH, localArticlesCache);
+    localArticlesCache = fallbackResult.cache;
+    if (fallbackResult.articles) {
+      return fallbackResult.articles;
+    }
+  }
+
+  console.error(`Unable to load generated local articles from ${filePath}.`);
+  return localArticles;
+}
+
+function readImportedArticles(): Article[] {
+  const result = readGeneratedArticles(GENERATED_IMPORTED_ARTICLES_PATH, importedArticlesCache);
+  importedArticlesCache = result.cache;
+  if (result.articles) {
+    return result.articles;
+  }
+
+  if (importedArticlesCache?.articles) {
+    return importedArticlesCache.articles;
+  }
+
+  console.error('Unable to load generated imported articles.');
+  return [];
 }
 
 function canUseDefaultArticleFallback(site: SiteProfile): boolean {
@@ -128,14 +188,14 @@ function canUseDefaultArticleSources(site: SiteProfile): boolean {
 }
 
 function getAllArticles(): Article[] {
-  return [...localArticles, ...readImportedArticles()];
+  return [...readLocalArticles(), ...readImportedArticles()];
 }
 
 function getLocalArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
   if (site.key === 'sf-bay') {
     return sfBayLocalArticles;
   }
-  return canUseDefaultArticleSources(site) ? localArticles : [];
+  return canUseDefaultArticleSources(site) ? readLocalArticles() : [];
 }
 
 function getImportedArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
@@ -213,7 +273,7 @@ function articlePublishedParts(article: Article) {
 function getArticlesForArchiveBucket(bucket: ArticleArchiveBucket): Article[] {
   return bucket === 'legacy'
     ? sortArticlesNewestFirst(readImportedArticles())
-    : sortArticlesNewestFirst(localArticles);
+    : sortArticlesNewestFirst(readLocalArticles());
 }
 
 function normalize(value: string): string {

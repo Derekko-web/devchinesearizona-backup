@@ -96,7 +96,52 @@ jobs:
           set -euo pipefail
 
           cd /var/www
-          if [ -n "$(git status --porcelain)" ]; then
+          runtime_data_root="/var/www/runtime-data/dev.chinesearizona.com/web"
+          generated_data_paths=(
+            "dev.chinesearizona.com/web/data/sites/austin/radar-runtime/store.json"
+            "dev.chinesearizona.com/web/data/sites/los-angeles/radar-runtime/store.json"
+            "dev.chinesearizona.com/web/data/sf-bay-radar-runtime/store.json"
+            "dev.chinesearizona.com/web/src/data/generated-local-articles.json"
+          )
+
+          dirty_status="$(git status --porcelain --untracked-files=all)"
+          if [ -n "$dirty_status" ]; then
+            unsafe_dirty=""
+            while IFS= read -r status_line; do
+              [ -z "$status_line" ] && continue
+              dirty_path="${status_line:3}"
+              allowed=false
+              for generated_path in "${generated_data_paths[@]}"; do
+                if [ "$dirty_path" = "$generated_path" ]; then
+                  allowed=true
+                  break
+                fi
+              done
+
+              if [ "$allowed" != true ]; then
+                unsafe_dirty="${unsafe_dirty}${status_line}"$'\n'
+              fi
+            done <<< "$dirty_status"
+
+            if [ -n "$unsafe_dirty" ]; then
+              printf '%s\n' "$dirty_status"
+              echo "Refusing to deploy over a dirty VPS working tree. Commit or stash direct edits first." >&2
+              exit 1
+            fi
+
+            echo "Migrating generated runtime data out of the Git checkout before deploy:"
+            for generated_path in "${generated_data_paths[@]}"; do
+              if [ -f "$generated_path" ]; then
+                external_path="$runtime_data_root/${generated_path#dev.chinesearizona.com/web/}"
+                mkdir -p "$(dirname "$external_path")"
+                cp "$generated_path" "$external_path"
+                echo "  $generated_path -> $external_path"
+              fi
+            done
+            git checkout -- "${generated_data_paths[@]}"
+          fi
+
+          if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
             git status --short
             echo "Refusing to deploy over a dirty VPS working tree. Commit or stash direct edits first." >&2
             exit 1
@@ -112,7 +157,21 @@ jobs:
             git checkout --force --detach "$DEPLOY_SHA"
           fi
 
+          for generated_path in "${generated_data_paths[@]}"; do
+            external_path="$runtime_data_root/${generated_path#dev.chinesearizona.com/web/}"
+            if [ ! -f "$external_path" ] && [ -f "$generated_path" ]; then
+              mkdir -p "$(dirname "$external_path")"
+              cp "$generated_path" "$external_path"
+              echo "Seeded runtime data fixture $external_path"
+            fi
+          done
+
           cd /var/www/dev.chinesearizona.com/web
+          export CHINESEARIZONA_RUNTIME_DATA_ROOT="$runtime_data_root"
+          export RADAR_STORE_PATH_AUSTIN="$runtime_data_root/data/sites/austin/radar-runtime/store.json"
+          export RADAR_STORE_PATH_LOS_ANGELES="$runtime_data_root/data/sites/los-angeles/radar-runtime/store.json"
+          export SF_BAY_RADAR_STORE_PATH="$runtime_data_root/data/sf-bay-radar-runtime/store.json"
+          export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"
           npm ci
           npm run build
 
