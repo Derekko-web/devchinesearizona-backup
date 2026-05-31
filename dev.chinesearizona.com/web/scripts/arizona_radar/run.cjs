@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
 const cheerio = require('cheerio');
+const { Agent } = require('undici');
 
 const {
   applyDraftsToStore,
@@ -175,6 +176,8 @@ function resolveStorePath(siteKey) {
 
 const DEFAULT_SITE_KEY = normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY);
 const RADAR_CITY = getSiteConfig(DEFAULT_SITE_KEY);
+const SAFE_FETCH_MAX_REDIRECTS = 5;
+const SAFE_FETCH_REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 function parseArgs(argv) {
   const args = {
@@ -881,47 +884,141 @@ function resolvedAddressIsUnsafe(address, family) {
   return !normalizeCanonicalUrl(`https://${formatDnsAddressAsHost(address, family)}/`);
 }
 
-async function resolveFetchablePublicUrl(value) {
+function buildUnsafeFetchUrlError() {
+  const error = new Error('Unsafe fetch URL.');
+  error.code = 'ERR_RADAR_UNSAFE_FETCH_URL';
+  return error;
+}
+
+function assertFetchablePublicUrl(value) {
   const rawUrl = String(value || '').trim();
   const normalizedUrl = normalizeCanonicalUrl(rawUrl);
   if (!normalizedUrl) {
-    throw new Error('Unsafe fetch URL.');
+    throw buildUnsafeFetchUrlError();
   }
 
-  const url = new URL(rawUrl);
+  return new URL(rawUrl);
+}
+
+async function resolvePublicAddressRecords(hostname, options = {}) {
+  const normalizedHostname = String(hostname || '').replace(/^\[|\]$/g, '');
+  const ipVersion = net.isIP(normalizedHostname);
+  if (ipVersion) {
+    if (resolvedAddressIsUnsafe(normalizedHostname, ipVersion)) {
+      throw buildUnsafeFetchUrlError();
+    }
+    return [{ address: normalizedHostname, family: ipVersion }];
+  }
+
+  const lookupOptions = {
+    all: true,
+    verbatim: true,
+  };
+  if (options.family === 4 || options.family === 6) {
+    lookupOptions.family = options.family;
+  }
+  if (Number.isInteger(options.hints)) {
+    lookupOptions.hints = options.hints;
+  }
+
+  const records = await dns.lookup(normalizedHostname, lookupOptions);
+  if (
+    records.length === 0 ||
+    records.some((record) => resolvedAddressIsUnsafe(record.address, record.family))
+  ) {
+    throw buildUnsafeFetchUrlError();
+  }
+
+  return records.map((record) => ({
+    address: record.address,
+    family: record.family,
+  }));
+}
+
+function lookupPublicFetchAddress(hostname, options, callback) {
+  resolvePublicAddressRecords(hostname, options)
+    .then((records) => {
+      if (options && options.all) {
+        callback(null, records);
+        return;
+      }
+
+      callback(null, records[0].address, records[0].family);
+    })
+    .catch((error) => callback(error));
+}
+
+const SAFE_FETCH_DISPATCHER = new Agent({
+  connect: {
+    lookup: lookupPublicFetchAddress,
+  },
+});
+
+async function resolveFetchablePublicUrl(value) {
+  const url = assertFetchablePublicUrl(value);
   const hostname = url.hostname.replace(/^\[|\]$/g, '');
   if (net.isIP(hostname)) {
     return url.toString();
   }
 
-  const records = await dns.lookup(hostname, { all: true, verbatim: true });
-  if (
-    records.length === 0 ||
-    records.some((record) => resolvedAddressIsUnsafe(record.address, record.family))
-  ) {
-    throw new Error('Unsafe fetch URL.');
-  }
+  await resolvePublicAddressRecords(hostname);
 
   return url.toString();
 }
 
-async function fetchText(url, timeoutMs, siteConfig = RADAR_CITY) {
+function resolveFetchRedirectUrl(location, baseUrl) {
+  if (!location) {
+    throw new Error('Unsafe feed redirect.');
+  }
+
+  try {
+    return assertFetchablePublicUrl(new URL(String(location), baseUrl).toString()).toString();
+  } catch (_error) {
+    throw new Error('Unsafe feed redirect.');
+  }
+}
+
+async function fetchTextWithRedirects(url, options) {
+  const redirectCount = Number.isFinite(options.redirectCount) ? options.redirectCount : 0;
+  if (redirectCount > SAFE_FETCH_MAX_REDIRECTS) {
+    throw new Error('Too many feed redirects.');
+  }
+
   const fetchUrl = await resolveFetchablePublicUrl(url);
+  const response = await fetch(fetchUrl, {
+    dispatcher: SAFE_FETCH_DISPATCHER,
+    headers: {
+      accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      'user-agent': `${options.siteConfig.brandName}RadarFeedSync/1.0`,
+    },
+    redirect: 'manual',
+    signal: options.signal,
+  });
+
+  if (SAFE_FETCH_REDIRECT_STATUSES.has(response.status)) {
+    const redirectUrl = resolveFetchRedirectUrl(response.headers.get('location'), fetchUrl);
+    return fetchTextWithRedirects(redirectUrl, {
+      ...options,
+      redirectCount: redirectCount + 1,
+    });
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  return response.text();
+}
+
+async function fetchText(url, timeoutMs, siteConfig = RADAR_CITY) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const response = await fetch(fetchUrl, {
-      headers: {
-        accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
-        'user-agent': `${siteConfig.brandName}RadarFeedSync/1.0`,
-      },
+    return await fetchTextWithRedirects(url, {
+      redirectCount: 0,
+      siteConfig,
       signal: controller.signal,
     });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
-    }
-    return await response.text();
   } finally {
     clearTimeout(timeout);
   }
@@ -1580,10 +1677,13 @@ module.exports = {
   buildHermesPrompt,
   collectDraftsFromFeeds,
   extractJsonPayload,
+  fetchText,
   getSiteConfig,
+  lookupPublicFetchAddress,
   parseFeedItems,
   parseArgs,
   parseHermesOutput,
+  resolveFetchablePublicUrl,
   runCli,
   runWorker,
   selectManifestBatch,
