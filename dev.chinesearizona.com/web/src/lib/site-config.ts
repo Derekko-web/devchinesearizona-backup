@@ -1347,6 +1347,18 @@ export function normalizeHost(value?: string | null): string {
   return withoutPort.startsWith('www.') ? withoutPort.slice(4) : withoutPort;
 }
 
+function resolveConfiguredSiteProfileFromHost(host?: string | null): SiteProfile | undefined {
+  const normalizedHost = normalizeHost(host);
+
+  if (!normalizedHost || isLocalHost(normalizedHost)) {
+    return undefined;
+  }
+
+  return Object.values(siteProfiles).find((profile) =>
+    profile.domains.some((domain) => normalizeHost(domain) === normalizedHost)
+  );
+}
+
 export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
   const normalizedHost = normalizeHost(host);
 
@@ -1354,11 +1366,35 @@ export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
     return defaultSiteProfile;
   }
 
-  for (const profile of Object.values(siteProfiles)) {
-    if (profile.domains.some((domain) => normalizeHost(domain) === normalizedHost)) {
-      return profile;
-    }
+  const configuredSite = resolveConfiguredSiteProfileFromHost(normalizedHost);
+  if (configuredSite) {
+    return configuredSite;
   }
 
   return createUnconfiguredSiteProfile(normalizedHost);
+}
+
+export function resolveSiteProfileFromRequestHosts({
+  host,
+  forwardedHost,
+}: {
+  host?: string | null;
+  forwardedHost?: string | null;
+}): SiteProfile {
+  const hostProfile = resolveConfiguredSiteProfileFromHost(host);
+  if (hostProfile) {
+    return hostProfile;
+  }
+
+  const forwardedHostProfile = resolveConfiguredSiteProfileFromHost(forwardedHost);
+  if (forwardedHostProfile) {
+    return forwardedHostProfile;
+  }
+
+  const normalizedHost = normalizeHost(host);
+  if (normalizedHost && !isLocalHost(normalizedHost)) {
+    return resolveSiteProfileFromHost(host);
+  }
+
+  return resolveSiteProfileFromHost(forwardedHost ?? host);
 }
