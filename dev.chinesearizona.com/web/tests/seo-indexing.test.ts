@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import sitemap from '@/app/sitemap';
+import { buildSitemap } from '@/app/sitemap';
+import { buildRobots } from '@/app/robots';
 import {
+  addBusinessMetadata,
   businessMetadata,
   cityCategoryMetadata,
   directoryMetadata,
@@ -84,7 +86,7 @@ describe('indexing signals', () => {
   });
 
   it('keeps city and category filter pages out of the sitemap', async () => {
-    const entries = await sitemap();
+    const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
     const metadata = cityCategoryMetadata('en', 'phoenix', 'real-estate');
 
@@ -93,7 +95,7 @@ describe('indexing signals', () => {
   });
 
   it('adds publisher trust pages to the sitemap', async () => {
-    const entries = await sitemap();
+    const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
     const metadata = publisherPageMetadata('en', 'privacy');
 
@@ -104,7 +106,7 @@ describe('indexing signals', () => {
   });
 
   it('noindexes thin generated directory profiles and omits them from the sitemap', async () => {
-    const entries = await sitemap();
+    const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
     const metadata = await businessMetadata('en', 'roll-avenue-ice-cream-rolls-mesa');
 
@@ -116,7 +118,7 @@ describe('indexing signals', () => {
   it('keeps noindex community posts out of the sitemap', async () => {
     createModerationReport('used-minivan-east-valley', 'spam');
 
-    const entries = await sitemap();
+    const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
 
     expect(urls).not.toContain(
@@ -142,5 +144,33 @@ describe('indexing signals', () => {
     const { siteUrl } = await import('@/lib/seo');
 
     expect(siteUrl).toBe('https://chinesearizona.com');
+  });
+
+  it('builds Austin sitemap and robots URLs without default Arizona directory routes', async () => {
+    const entries = await buildSitemap(siteProfiles.austin);
+    const urls = entries.map((entry) => entry.url);
+    const robots = buildRobots(siteProfiles.austin);
+
+    expect(robots.sitemap).toBe('https://chineseaustin.com/sitemap.xml');
+    expect(urls).toContain('https://chineseaustin.com/business/house-of-three-gorges-austin');
+    expect(urls).toContain('https://chineseaustin.com/business/h-mart-austin');
+    expect(urls).not.toContain('https://chineseaustin.com/business/bido-cafe');
+    expect(JSON.stringify(entries)).not.toContain('chinesearizona.com/business');
+  });
+
+  it('uses Austin-specific add-business and business detail metadata', async () => {
+    const addMetadata = addBusinessMetadata('en', siteProfiles.austin);
+    const business = await businessMetadata('en', 'house-of-three-gorges-austin', siteProfiles.austin);
+
+    expect(addMetadata.title).toBe('Add or Claim a Business | ChineseAustin');
+    expect(addMetadata.description).toContain('Austin business claim');
+    expect(addMetadata.alternates?.canonical).toBe('https://chineseaustin.com/add-business');
+    expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
+
+    expect(business?.title).toBe('House of Three Gorges | ChineseAustin');
+    expect(business?.alternates?.canonical).toBe(
+      'https://chineseaustin.com/business/house-of-three-gorges-austin'
+    );
+    expect(JSON.stringify(business)).not.toContain('Arizona');
   });
 });

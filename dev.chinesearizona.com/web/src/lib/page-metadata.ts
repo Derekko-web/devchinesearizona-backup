@@ -172,15 +172,16 @@ export function directoryMetadata(
   });
 }
 
-export function addBusinessMetadata(locale: Locale): Metadata {
+export function addBusinessMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
   return buildMetadata({
-    title: locale === 'zh' ? '新增或認領商家 | ChineseArizona' : 'Add or Claim a Business | ChineseArizona',
+    title: locale === 'zh' ? `新增或認領商家 | ${site.brandName}` : `Add or Claim a Business | ${site.brandName}`,
     description:
       locale === 'zh'
-        ? '用商家主理人帳號送出商家認領或新商家申請，並進入人工審核流程。'
-        : 'Use an owner account to submit a business claim or new listing request for manual review.',
+        ? `用商家主理人帳號送出${site.regionNameZh}商家認領或新商家申請，並進入人工審核流程。`
+        : `Use an owner account to submit a ${site.regionName} business claim or new listing request for manual review.`,
     path: '/add-business',
     locale,
+    site,
   });
 }
 

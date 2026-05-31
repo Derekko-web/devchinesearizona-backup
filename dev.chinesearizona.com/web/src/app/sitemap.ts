@@ -17,6 +17,7 @@ import { isShopPublicLaunchReady } from '@/lib/shop-launch-server';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
+import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { getPublicShopSitemapData } from '@/lib/shop-service';
 import { locales } from '@/lib/types';
 
@@ -43,8 +44,7 @@ function buildSitemapEntry(
   };
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const site = defaultSiteProfile;
+export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Promise<MetadataRoute.Sitemap> {
   const canShowArizonaOnlyContent = canServeArizonaOnlyContent(site);
   const staticRoutes = [
     '/',
@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...publisherPageSlugs.map((slug) => `/${slug}`),
   ];
   const [directoryBusinesses, articles, discoverArticles] = await Promise.all([
-    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { limit: 1000 }) : Promise.resolve([]),
+    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { limit: 1000, site }) : Promise.resolve([]),
     getCurrentArticlesAsync(undefined, site),
     canShowArizonaOnlyContent ? getPublishedDiscoverArticles() : Promise.resolve([]),
   ]);
@@ -119,4 +119,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   return [...xDefaultEntries, ...localizedEntries];
+}
+
+async function getSitemapSiteProfile(): Promise<SiteProfile> {
+  try {
+    return await getCurrentSiteProfile();
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('outside a request scope')) {
+      return defaultSiteProfile;
+    }
+
+    throw error;
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  return buildSitemap(await getSitemapSiteProfile());
 }

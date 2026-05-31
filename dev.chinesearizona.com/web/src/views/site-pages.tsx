@@ -895,7 +895,7 @@ export async function BusinessDetailPageView({
   const owner = business.ownerProfileSlug ? getProfileBySlug(business.ownerProfileSlug) : undefined;
   const businessReviews = getBusinessReviews(slug);
   const imageSet = [business.heroImage, ...business.gallery]
-    .map((value) => resolveAbsoluteAssetUrl(value))
+    .map((value) => resolveAbsoluteAssetUrl(value, site))
     .filter((value): value is string => Boolean(value));
   const claimHref = withLocale(
     locale,
@@ -914,7 +914,7 @@ export async function BusinessDetailPageView({
     name: business.name.en,
     alternateName: business.name.zh,
     description: business.description.en,
-    url: absoluteUrl(withLocale(locale, `/business/${business.slug}`)),
+    url: absoluteUrl(withLocale(locale, `/business/${business.slug}`), site),
   };
 
   if (imageSet.length > 0) {
@@ -931,7 +931,7 @@ export async function BusinessDetailPageView({
       '@type': 'PostalAddress',
       streetAddress: business.address,
       addressLocality: business.city,
-      addressRegion: 'AZ',
+      addressRegion: site.stateCode,
       addressCountry: 'US',
     };
   } else if (business.serviceAreaText) {
@@ -960,7 +960,7 @@ export async function BusinessDetailPageView({
         ? business.name.en
         : undefined;
   const categoryLabel = category ? t(category.name, locale) : locale === 'zh' ? '本地商家' : 'Local business';
-  const addressLabel = business.address ?? business.serviceAreaText ?? `${business.city}, AZ`;
+  const addressLabel = business.address ?? business.serviceAreaText ?? `${business.city}, ${site.stateCode}`;
   const ratingLabel =
     business.reviewCount > 0
       ? business.rating > 0
@@ -1121,7 +1121,7 @@ export async function BusinessDetailPageView({
                 </span>
                 <span>{reviewCountLabel}</span>
                 <span className="h-1 w-1 rounded-full bg-[#b9aa99]" aria-hidden="true" />
-                <span>{business.city}, AZ</span>
+                <span>{business.city}, {site.stateCode}</span>
               </div>
 
               <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
@@ -1165,7 +1165,9 @@ export async function BusinessDetailPageView({
               <div className="absolute bottom-6 left-6 flex items-center gap-3 rounded-lg border border-white/55 bg-[#fbf7f0]/90 px-4 py-3 shadow-[0_16px_40px_rgba(42,30,22,0.16)] backdrop-blur">
                 <Navigation className="h-5 w-5 text-[#d9972d]" aria-hidden="true" />
                 <div>
-                  <p className="text-xs font-bold text-[#5c5148]">{business.city.toUpperCase()}, ARIZONA</p>
+                  <p className="text-xs font-bold text-[#5c5148]">
+                    {business.city.toUpperCase()}, {site.stateRegion.toUpperCase()}
+                  </p>
                   <p className="text-sm font-semibold text-[#3b332d]">{locale === 'zh' ? '在地商家檔案' : 'Local business profile'}</p>
                 </div>
               </div>
@@ -1630,7 +1632,9 @@ export async function BusinessDetailPageView({
                   <ShieldCheck className="h-5 w-5" aria-hidden="true" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-[#2c2722]">{locale === 'zh' ? 'ChineseArizona 認證' : 'Verified by ChineseArizona'}</h2>
+                  <h2 className="font-semibold text-[#2c2722]">
+                    {locale === 'zh' ? `${site.brandName} 認證` : `Verified by ${site.brandName}`}
+                  </h2>
                   <p className="mt-1 text-sm leading-6 text-[#6d6258]">
                     {locale === 'zh'
                       ? '此頁使用商家來源、社區線索與人工審核資料整理。'
@@ -3677,6 +3681,29 @@ export async function AddBusinessPageView({
       ? '自助贊助只提升目錄列表排序，不會改變商家的驗證或編輯狀態。'
       : 'Self-serve sponsorship only affects directory browse ranking and does not change verification or editorial status.',
   ];
+  const isDefaultSite = site.key === defaultSiteProfile.key;
+  const directoryLabel = isDefaultSite
+    ? locale === 'zh'
+      ? '華人商家目錄'
+      : 'ChineseArizona business directory'
+    : locale === 'zh'
+      ? `${site.brandName} 商家目錄`
+      : `${site.brandName} business directory`;
+  const heroLead = isDefaultSite
+    ? locale === 'zh'
+      ? '讓可信的亞利桑那華人商家被找到、被維護、被驗證。'
+      : 'Help trusted Arizona Chinese businesses get found, maintained, and verified.'
+    : locale === 'zh'
+      ? `讓可信的${site.regionNameZh}華人商家被找到、被維護、被驗證。`
+      : `Help trusted ${site.regionName} Chinese businesses get found, maintained, and verified.`;
+  const heroImageSrc = isDefaultSite
+    ? '/directory-ai-replacements/lee-lee-oriental-supermarket-chandler.webp'
+    : site.home.heroImageUrl;
+  const heroImageAlt = isDefaultSite
+    ? locale === 'zh'
+      ? '亞利桑那華人商家店面'
+      : 'Arizona Chinese business storefront'
+    : t(site.home.heroImageAlt, locale);
 
   return (
     <div className="flex-grow overflow-x-hidden bg-[#f7f1e8] text-[#2c2722]">
@@ -3689,7 +3716,7 @@ export async function AddBusinessPageView({
                 className="inline-flex w-fit items-center gap-2 rounded-md bg-[#efe7dc] px-3.5 py-2 text-xs font-semibold text-[#5b5047] transition-colors hover:bg-[#e7d9ca] hover:text-[#bd2730]"
               >
                 <Store className="h-4 w-4" aria-hidden="true" />
-                {locale === 'zh' ? '華人商家目錄' : 'ChineseArizona business directory'}
+                {directoryLabel}
               </Link>
 
               <h1
@@ -3702,9 +3729,7 @@ export async function AddBusinessPageView({
               </h1>
 
               <p className="mt-5 max-w-2xl text-lg font-semibold leading-7 text-[#bd2730]">
-                {locale === 'zh'
-                  ? '讓可信的亞利桑那華人商家被找到、被維護、被驗證。'
-                  : 'Help trusted Arizona Chinese businesses get found, maintained, and verified.'}
+                {heroLead}
               </p>
               <p className="mt-3 max-w-2xl text-base leading-7 text-[#6d6258]">
                 {locale === 'zh'
@@ -3729,8 +3754,8 @@ export async function AddBusinessPageView({
 
             <div className="homepage-rise homepage-rise-delay-1 relative min-h-[330px] overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#d8c7b5] shadow-[0_24px_70px_rgba(85,58,28,0.12)] sm:min-h-[420px]">
               <Image
-                src="/directory-ai-replacements/lee-lee-oriental-supermarket-chandler.webp"
-                alt={locale === 'zh' ? '亞利桑那華人商家店面' : 'Arizona Chinese business storefront'}
+                src={heroImageSrc}
+                alt={heroImageAlt}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
