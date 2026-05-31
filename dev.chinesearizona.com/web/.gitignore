@@ -28,6 +28,7 @@ __pycache__/
 .pytest_cache/
 .python-packages/
 data/atlas-obscura-staging/
+data/sites/*/directory-import-staging/
 
 # debug
 npm-debug.log*

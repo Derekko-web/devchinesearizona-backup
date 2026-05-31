@@ -1,0 +1,317 @@
+{
+  "version": 1,
+  "sourcePolicy": "Only fetch editor-configured city-specific public URLs. Do not use search-result scraping, protected content, credentials, or cross-city fallback sources.",
+  "sourceCategories": {
+    "restaurants": {
+      "categorySlug": "dining",
+      "label": "Restaurants"
+    },
+    "grocery_markets": {
+      "categorySlug": "shopping",
+      "label": "Grocery and markets"
+    },
+    "real_estate": {
+      "categorySlug": "real-estate",
+      "label": "Real estate"
+    },
+    "legal_accounting_insurance": {
+      "categorySlug": "legal-finance",
+      "label": "Legal, accounting, and insurance"
+    },
+    "healthcare": {
+      "categorySlug": "medical",
+      "label": "Healthcare"
+    },
+    "beauty_wellness": {
+      "categorySlug": "beauty-wellness",
+      "label": "Beauty and wellness"
+    },
+    "education_language_schools": {
+      "categorySlug": "education",
+      "label": "Education and language schools"
+    },
+    "chinese_churches_religious_groups": {
+      "categorySlug": "faith-community",
+      "label": "Chinese churches and religious groups"
+    },
+    "cultural_community_organizations": {
+      "categorySlug": "local-services",
+      "label": "Cultural and community organizations"
+    },
+    "ping_pong_table_tennis": {
+      "categorySlug": "local-services",
+      "label": "Ping pong and table tennis clubs"
+    },
+    "events_venues": {
+      "categorySlug": "local-services",
+      "label": "Events and venues"
+    },
+    "service_providers": {
+      "categorySlug": "local-services",
+      "label": "Service providers"
+    }
+  },
+  "sites": {
+    "arizona": {
+      "domain": "chinesearizona.com",
+      "stateCode": "AZ",
+      "regionName": "Arizona",
+      "allowedCities": ["Phoenix", "Chandler", "Tempe", "Mesa", "Gilbert", "Scottsdale", "Glendale", "Peoria", "Tucson"],
+      "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
+      "existingListingsPath": "src/data/generated-directory-businesses.json",
+      "stagingDir": "data/sites/arizona/directory-import-staging",
+      "approvedListingsPath": "data/sites/arizona/directory-import-staging/approved-businesses.json",
+      "sources": []
+    },
+    "austin": {
+      "domain": "chineseaustin.com",
+      "stateCode": "TX",
+      "regionName": "Austin metro",
+      "allowedCities": ["Austin", "Cedar Park", "Round Rock", "Pflugerville"],
+      "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
+      "existingListingsPath": "src/data/sites/austin/businesses.json",
+      "stagingDir": "data/sites/austin/directory-import-staging",
+      "approvedListingsPath": "data/sites/austin/directory-import-staging/approved-businesses.json",
+      "sources": [
+        {
+          "id": "austin-house-of-three-gorges",
+          "url": "https://www.houseofthreegorges.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "House of Three Gorges",
+          "notes": "Known Austin restaurant source used to verify dedupe against existing live listing."
+        },
+        {
+          "id": "austin-din-ho-chinese-bbq",
+          "url": "https://www.dinhochinesebbq.com/contact.php",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Din Ho Chinese BBQ"
+        },
+        {
+          "id": "austin-julies-noodles",
+          "url": "https://juliesnoodlesaustin.com/location",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Julie's Noodles"
+        },
+        {
+          "id": "austin-noodle-alley",
+          "url": "https://www.noodlealleycp.com/",
+          "sourceCategory": "restaurants",
+          "city": "Cedar Park",
+          "nameHint": "Noodle Alley"
+        },
+        {
+          "id": "austin-asia-market",
+          "url": "https://asiamarketeatery.com/",
+          "sourceCategory": "grocery_markets",
+          "city": "Austin",
+          "nameHint": "Asia Market"
+        },
+        {
+          "id": "austin-h-mart",
+          "url": "https://www.austinchamber.com/directory/h-mart",
+          "sourceCategory": "grocery_markets",
+          "city": "Austin",
+          "nameHint": "H Mart Austin"
+        },
+        {
+          "id": "austin-chinese-school",
+          "url": "https://www.austinchineseschool.org/",
+          "sourceCategory": "education_language_schools",
+          "city": "Austin",
+          "nameHint": "Austin Chinese School"
+        },
+        {
+          "id": "austin-great-wall-chinese-school",
+          "url": "https://agwcs.org/",
+          "sourceCategory": "education_language_schools",
+          "city": "Austin",
+          "nameHint": "Austin Great Wall Chinese School"
+        },
+        {
+          "id": "austin-quan-yin",
+          "url": "https://www.austinquanyin.com/",
+          "sourceCategory": "healthcare",
+          "city": "Austin",
+          "nameHint": "Austin Quan Yin"
+        },
+        {
+          "id": "austin-cheng-wooster-real-estate",
+          "url": "https://www.chengwooster.com/",
+          "sourceCategory": "real_estate",
+          "city": "Austin",
+          "nameHint": "Cheng Wooster Real Estate",
+          "serviceAreaText": "Austin metro"
+        },
+        {
+          "id": "austin-yz-cpa",
+          "url": "https://yz-cpa.com/",
+          "sourceCategory": "legal_accounting_insurance",
+          "city": "Austin",
+          "nameHint": "YZ CPA LLC"
+        },
+        {
+          "id": "austin-asian-american-resource-center",
+          "url": "https://www.austintexas.gov/aarc/contact-asian-american-resource-center",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Austin",
+          "nameHint": "Asian American Resource Center"
+        },
+        {
+          "id": "austin-chinese-society",
+          "url": "https://www.texascsa.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Austin",
+          "nameHint": "Chinese Society of Austin"
+        }
+      ]
+    },
+    "los-angeles": {
+      "domain": "chineselosangeles.com",
+      "stateCode": "CA",
+      "regionName": "Greater Los Angeles",
+      "allowedCities": ["Los Angeles", "Alhambra", "Arcadia", "Monterey Park", "San Gabriel", "Pasadena", "Temple City"],
+      "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
+      "existingListingsPath": "src/data/los-angeles-directory-businesses.json",
+      "stagingDir": "data/sites/los-angeles/directory-import-staging",
+      "approvedListingsPath": "data/sites/los-angeles/directory-import-staging/approved-businesses.json",
+      "sources": [
+        {
+          "id": "la-lunasia-alhambra",
+          "url": "https://www.lunasiadimsum.com/pages/locations",
+          "sourceCategory": "restaurants",
+          "city": "Alhambra",
+          "nameHint": "Lunasia Dim Sum House"
+        },
+        {
+          "id": "la-99-ranch-san-gabriel",
+          "url": "https://www.99ranch.com/stores-search",
+          "sourceCategory": "grocery_markets",
+          "city": "San Gabriel",
+          "nameHint": "99 Ranch Market San Gabriel"
+        },
+        {
+          "id": "la-irn-realty-arcadia",
+          "url": "https://www.irnrealty.com/our-offices/",
+          "sourceCategory": "real_estate",
+          "city": "Arcadia",
+          "nameHint": "IRN Realty Arcadia",
+          "serviceAreaText": "San Gabriel Valley"
+        },
+        {
+          "id": "la-east-west-bank-pasadena",
+          "url": "https://www.eastwestbank.com/en/contact-us",
+          "sourceCategory": "legal_accounting_insurance",
+          "city": "Pasadena",
+          "nameHint": "East West Bank Pasadena"
+        },
+        {
+          "id": "la-herald-christian-health-center",
+          "url": "https://locator.lacounty.gov/lac/Location/3178294/herald-christian-health-center",
+          "sourceCategory": "healthcare",
+          "city": "San Gabriel",
+          "nameHint": "Herald Christian Health Center"
+        },
+        {
+          "id": "la-chinatown-service-center",
+          "url": "https://www.cscla.org/locations",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Los Angeles",
+          "nameHint": "Chinatown Service Center"
+        },
+        {
+          "id": "la-chinese-american-museum",
+          "url": "https://camla.org/visit/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Los Angeles",
+          "nameHint": "Chinese American Museum"
+        },
+        {
+          "id": "la-arcadia-chinese-school",
+          "url": "https://www.chinesedaily.com/business/intro-273.html",
+          "sourceCategory": "education_language_schools",
+          "city": "Arcadia",
+          "nameHint": "Arcadia Chinese School"
+        },
+        {
+          "id": "la-first-chinese-baptist-sgv",
+          "url": "https://chinese.fcbcsgv.org/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/",
+          "sourceCategory": "chinese_churches_religious_groups",
+          "city": "Temple City",
+          "nameHint": "First Chinese Baptist Church of San Gabriel Valley"
+        }
+      ]
+    },
+    "sf-bay": {
+      "domain": "chinesesfbay.com",
+      "stateCode": "CA",
+      "regionName": "San Francisco Bay Area",
+      "allowedCities": ["San Francisco", "Oakland", "San Jose", "Cupertino", "Sunnyvale", "Santa Clara"],
+      "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
+      "existingListingsPath": "src/data/generated-sf-bay-directory-businesses.json",
+      "stagingDir": "data/sites/sf-bay/directory-import-staging",
+      "approvedListingsPath": "data/sites/sf-bay/directory-import-staging/approved-businesses.json",
+      "sources": [
+        {
+          "id": "sf-rg-lounge",
+          "url": "https://www.rnglounge.com/",
+          "sourceCategory": "restaurants",
+          "city": "San Francisco",
+          "nameHint": "R&G Lounge"
+        },
+        {
+          "id": "sf-99-ranch-cupertino",
+          "url": "https://www.99ranch.com/about/mission",
+          "sourceCategory": "grocery_markets",
+          "city": "Cupertino",
+          "nameHint": "99 Ranch Market Cupertino"
+        },
+        {
+          "id": "sf-cais",
+          "url": "https://www.cais.org/about/board-of-trustees/",
+          "sourceCategory": "education_language_schools",
+          "city": "San Francisco",
+          "nameHint": "Chinese American International School"
+        },
+        {
+          "id": "sf-chinese-culture-center",
+          "url": "https://www.cccsf.us/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Francisco",
+          "nameHint": "Chinese Culture Center of San Francisco"
+        },
+        {
+          "id": "sf-nems-stockton",
+          "url": "https://www.nems.org/",
+          "sourceCategory": "healthcare",
+          "city": "San Francisco",
+          "nameHint": "North East Medical Services - 1520 Stockton Clinic"
+        },
+        {
+          "id": "sf-api-legal-outreach",
+          "url": "https://www.apilegaloutreach.org/contact/",
+          "sourceCategory": "legal_accounting_insurance",
+          "city": "San Francisco",
+          "nameHint": "API Legal Outreach - San Francisco"
+        },
+        {
+          "id": "sf-maxreal-sunnyvale",
+          "url": "https://www.maxrealusa.com/locations/",
+          "sourceCategory": "real_estate",
+          "city": "Sunnyvale",
+          "nameHint": "MaxReal",
+          "serviceAreaText": "South Bay"
+        },
+        {
+          "id": "sf-golden-express",
+          "url": "https://gedelivers.com/",
+          "sourceCategory": "service_providers",
+          "city": "San Jose",
+          "nameHint": "Golden Express"
+        }
+      ]
+    }
+  }
+}
