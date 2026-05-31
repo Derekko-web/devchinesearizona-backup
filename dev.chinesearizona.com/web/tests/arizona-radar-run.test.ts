@@ -13,6 +13,8 @@ const {
   parseFeedItems,
   collectDraftsFromFeeds,
   extractJsonPayload,
+  fetchText,
+  lookupPublicFetchAddress,
   parseArgs,
   parseHermesOutput,
   runWorker,
@@ -22,6 +24,16 @@ const {
     options: Record<string, unknown>
   ) => Promise<Array<Record<string, unknown>>>;
   extractJsonPayload: (text: string) => string;
+  fetchText: (url: string, timeoutMs: number, siteConfig?: { brandName: string }) => Promise<string>;
+  lookupPublicFetchAddress: (
+    hostname: string,
+    options: { all?: boolean; family?: number; hints?: number },
+    callback: (
+      error: Error | null,
+      address?: string | Array<{ address: string; family: number }>,
+      family?: number
+    ) => void
+  ) => void;
   parseFeedItems: (
     xml: string,
     source: Record<string, unknown>,
@@ -47,6 +59,25 @@ function mockPublicDnsResolution() {
   vi.spyOn(dns.promises, 'lookup').mockResolvedValue([
     { address: '93.184.216.34', family: 4 },
   ] as never);
+}
+
+function lookupFetchAddress(
+  hostname: string,
+  options: { all?: boolean; family?: number; hints?: number } = {}
+) {
+  return new Promise<{
+    address?: string | Array<{ address: string; family: number }>;
+    family?: number;
+  }>((resolve, reject) => {
+    lookupPublicFetchAddress(hostname, options, (error, address, family) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve({ address, family });
+    });
+  });
 }
 
 afterEach(() => {
@@ -81,6 +112,129 @@ describe('Arizona Radar worker command parsing', () => {
 });
 
 describe('Arizona Radar feed fallback', () => {
+  it('follows only manually validated public feed redirects', async () => {
+    mockPublicDnsResolution();
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://example.com/feed.xml') {
+        return new Response('', {
+          status: 302,
+          headers: { location: 'https://example.com/final.xml?utm_source=test' },
+        });
+      }
+      if (String(url) === 'https://example.com/final.xml?utm_source=test') {
+        return new Response('<rss version="2.0"><channel /></rss>', {
+          status: 200,
+          headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
+        });
+      }
+
+      throw new Error(`Unexpected fetch: ${String(url)}`);
+    }) as typeof fetch;
+
+    await expect(
+      fetchText('https://example.com/feed.xml', 1000, { brandName: 'TestRadar' })
+    ).resolves.toContain('<rss');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      1,
+      'https://example.com/feed.xml',
+      expect.objectContaining({
+        dispatcher: expect.any(Object),
+        redirect: 'manual',
+      })
+    );
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://example.com/final.xml?utm_source=test',
+      expect.objectContaining({
+        dispatcher: expect.any(Object),
+        redirect: 'manual',
+      })
+    );
+  });
+
+  it.each([
+    ['localhost redirect', 'http://localhost/admin'],
+    ['credentialed redirect', 'https://user:pass@example.com/admin'],
+    ['non-http redirect', 'file:///etc/passwd'],
+    ['metadata literal redirect', 'http://169.254.169.254/latest/meta-data/'],
+  ])('blocks unsafe feed redirects to %s', async (_label, location) => {
+    mockPublicDnsResolution();
+    globalThis.fetch = vi.fn(async () => {
+      return new Response('', {
+        status: 302,
+        headers: { location },
+      });
+    }) as typeof fetch;
+
+    await expect(
+      fetchText('https://example.com/feed.xml', 1000, { brandName: 'TestRadar' })
+    ).rejects.toThrow('Unsafe feed redirect.');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('blocks redirects whose target resolves to a private address', async () => {
+    vi.spyOn(dns.promises, 'lookup').mockImplementation(async (hostname: string) => {
+      if (hostname === 'private.example') {
+        return [{ address: '10.0.0.7', family: 4 }] as never;
+      }
+
+      return [{ address: '93.184.216.34', family: 4 }] as never;
+    });
+    globalThis.fetch = vi.fn(async () => {
+      return new Response('', {
+        status: 302,
+        headers: { location: 'https://private.example/feed.xml' },
+      });
+    }) as typeof fetch;
+
+    await expect(
+      fetchText('https://example.com/feed.xml', 1000, { brandName: 'TestRadar' })
+    ).rejects.toThrow('Unsafe fetch URL.');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('stops following feed redirects after a low maximum', async () => {
+    mockPublicDnsResolution();
+    globalThis.fetch = vi.fn(async () => {
+      return new Response('', {
+        status: 302,
+        headers: { location: 'https://example.com/next.xml' },
+      });
+    }) as typeof fetch;
+
+    await expect(
+      fetchText('https://example.com/feed.xml', 1000, { brandName: 'TestRadar' })
+    ).rejects.toThrow('Too many feed redirects.');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(6);
+  });
+
+  it('rejects unsafe addresses from the connection-time lookup path', async () => {
+    vi.spyOn(dns.promises, 'lookup').mockResolvedValue([
+      { address: '93.184.216.34', family: 4 },
+      { address: '169.254.169.254', family: 4 },
+    ] as never);
+
+    await expect(lookupFetchAddress('metadata.example')).rejects.toThrow('Unsafe fetch URL.');
+  });
+
+  it('returns only validated public addresses from the connection-time lookup path', async () => {
+    mockPublicDnsResolution();
+
+    await expect(lookupFetchAddress('example.com')).resolves.toEqual({
+      address: '93.184.216.34',
+      family: 4,
+    });
+    await expect(lookupFetchAddress('example.com', { all: true })).resolves.toEqual({
+      address: [{ address: '93.184.216.34', family: 4 }],
+      family: undefined,
+    });
+  });
+
   it('parses recent WordPress RSS items into rewrite seeds without copying article bodies', () => {
     const fixture = fs.readFileSync(
       path.join(__dirname, 'fixtures', 'whatnow-phoenix-feed.xml'),
