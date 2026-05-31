@@ -3,6 +3,19 @@
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const DEFAULT_VPS_RUNTIME_ROOT = '/var/www/runtime-data/dev.chinesearizona.com/web';
+
+function resolveDefaultRuntimePath(relativePath) {
+  if (process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT) {
+    return path.join(process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT, relativePath);
+  }
+
+  if (ROOT === '/var/www/dev.chinesearizona.com/web') {
+    return path.join(DEFAULT_VPS_RUNTIME_ROOT, relativePath);
+  }
+
+  return path.join(ROOT, relativePath);
+}
 
 process.env.RADAR_CITY_KEY = process.env.RADAR_CITY_KEY || 'austin';
 process.env.RADAR_BRAND_NAME = process.env.RADAR_BRAND_NAME || 'ChineseAustin';
@@ -17,7 +30,7 @@ process.env.RADAR_SOURCE_MANIFEST_PATH =
 process.env.RADAR_STORE_PATH =
   process.env.AUSTIN_RADAR_STORE_PATH ||
   process.env.RADAR_STORE_PATH ||
-  path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json');
+  resolveDefaultRuntimePath(path.join('data', 'sites', 'austin', 'radar-runtime', 'store.json'));
 process.env.RADAR_STORAGE_MODE = process.env.AUSTIN_RADAR_STORAGE_MODE || 'file';
 process.env.RADAR_SUMMARY_ONLY = process.env.RADAR_SUMMARY_ONLY || '1';
 

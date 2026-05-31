@@ -15,6 +15,20 @@ const {
 } = require('./storage.cjs');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const DEFAULT_VPS_RUNTIME_ROOT = '/var/www/runtime-data/dev.chinesearizona.com/web';
+
+function resolveDefaultRuntimePath(relativePath) {
+  if (process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT) {
+    return path.join(process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT, relativePath);
+  }
+
+  if (ROOT === '/var/www/dev.chinesearizona.com/web') {
+    return path.join(DEFAULT_VPS_RUNTIME_ROOT, relativePath);
+  }
+
+  return path.join(ROOT, relativePath);
+}
+
 const SITE_CONFIGS = {
   arizona: {
     key: 'arizona',
@@ -26,7 +40,7 @@ const SITE_CONFIGS = {
     regionRelevance:
       'Arizona, Phoenix metro, Tucson, Mesa, Scottsdale, Tempe, Glendale, Chandler, Gilbert, Peoria, Surprise, Goodyear, Flagstaff, Yuma, Prescott, or another Arizona place',
     runIdPrefix: 'arizona-radar',
-    storePath: path.join(ROOT, 'data', 'radar-runtime', 'store.json'),
+    storePath: resolveDefaultRuntimePath(path.join('data', 'radar-runtime', 'store.json')),
     manifestPath: path.join(ROOT, 'src', 'data', 'radar-source-manifest.json'),
     useSupabase: true,
     summaryOnly: false,
@@ -47,7 +61,9 @@ const SITE_CONFIGS = {
     summaryRelevanceLabel: 'Austin/Central Texas-relevant',
     summaryRetryScope: 'Austin/Central Texas',
     runIdPrefix: 'austin-radar',
-    storePath: path.join(ROOT, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'),
+    storePath: resolveDefaultRuntimePath(
+      path.join('data', 'sites', 'austin', 'radar-runtime', 'store.json')
+    ),
     manifestPath: path.join(ROOT, 'src', 'data', 'austin-radar-source-manifest.json'),
     useSupabase: false,
     summaryOnly: true,
@@ -68,7 +84,9 @@ const SITE_CONFIGS = {
     summaryRelevanceLabel: 'Los Angeles/Southern California-relevant',
     summaryRetryScope: 'Los Angeles/Southern California',
     runIdPrefix: 'los-angeles-radar',
-    storePath: path.join(ROOT, 'data', 'sites', 'los-angeles', 'radar-runtime', 'store.json'),
+    storePath: resolveDefaultRuntimePath(
+      path.join('data', 'sites', 'los-angeles', 'radar-runtime', 'store.json')
+    ),
     manifestPath: path.join(ROOT, 'src', 'data', 'los-angeles-radar-source-manifest.json'),
     useSupabase: false,
     summaryOnly: true,
@@ -89,7 +107,7 @@ const SITE_CONFIGS = {
     summaryRelevanceLabel: 'SF Bay/Bay Area-relevant',
     summaryRetryScope: 'SF Bay/Bay Area',
     runIdPrefix: 'sf-bay-radar',
-    storePath: path.join(ROOT, 'data', 'sf-bay-radar-runtime', 'store.json'),
+    storePath: resolveDefaultRuntimePath(path.join('data', 'sf-bay-radar-runtime', 'store.json')),
     manifestPath: path.join(ROOT, 'src', 'data', 'sf-bay-radar-source-manifest.json'),
     useSupabase: false,
     summaryOnly: true,

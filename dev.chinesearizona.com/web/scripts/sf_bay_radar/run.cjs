@@ -3,6 +3,19 @@
 const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..', '..');
+const DEFAULT_VPS_RUNTIME_ROOT = '/var/www/runtime-data/dev.chinesearizona.com/web';
+
+function resolveDefaultRuntimePath(relativePath) {
+  if (process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT) {
+    return path.join(process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT, relativePath);
+  }
+
+  if (ROOT === '/var/www/dev.chinesearizona.com/web') {
+    return path.join(DEFAULT_VPS_RUNTIME_ROOT, relativePath);
+  }
+
+  return path.join(ROOT, relativePath);
+}
 
 process.env.RADAR_CITY_KEY = process.env.RADAR_CITY_KEY || 'sf-bay';
 process.env.RADAR_BRAND_NAME = process.env.RADAR_BRAND_NAME || 'ChineseSFBay';
@@ -17,7 +30,7 @@ process.env.RADAR_SOURCE_MANIFEST_PATH =
 process.env.RADAR_STORE_PATH =
   process.env.SF_BAY_RADAR_STORE_PATH ||
   process.env.RADAR_STORE_PATH ||
-  path.join(ROOT, 'data', 'sf-bay-radar-runtime', 'store.json');
+  resolveDefaultRuntimePath(path.join('data', 'sf-bay-radar-runtime', 'store.json'));
 process.env.RADAR_STORAGE_MODE = process.env.SF_BAY_RADAR_STORAGE_MODE || 'file';
 process.env.RADAR_SUMMARY_ONLY = process.env.RADAR_SUMMARY_ONLY || '1';
 

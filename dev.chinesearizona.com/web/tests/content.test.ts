@@ -22,6 +22,7 @@ import { createCommunityPost, createModerationReport } from '@/lib/runtime-store
 
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
 const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
+const originalGeneratedLocalArticlesPath = process.env.GENERATED_LOCAL_ARTICLES_PATH;
 
 afterEach(() => {
   if (originalRadarStorePath) {
@@ -35,6 +36,12 @@ afterEach(() => {
   } else {
     delete process.env.AUSTIN_RADAR_STORE_PATH;
   }
+
+  if (originalGeneratedLocalArticlesPath) {
+    process.env.GENERATED_LOCAL_ARTICLES_PATH = originalGeneratedLocalArticlesPath;
+  } else {
+    delete process.env.GENERATED_LOCAL_ARTICLES_PATH;
+  }
 });
 
 function writeRadarStore(store: unknown, envKey: 'RADAR_STORE_PATH' | 'AUSTIN_RADAR_STORE_PATH' = 'RADAR_STORE_PATH') {
@@ -43,6 +50,14 @@ function writeRadarStore(store: unknown, envKey: 'RADAR_STORE_PATH' | 'AUSTIN_RA
   fs.writeFileSync(storePath, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
   process.env[envKey] = storePath;
   return storePath;
+}
+
+function writeGeneratedLocalArticles(articles: unknown[]) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'generated-local-articles-'));
+  const articlePath = path.join(directory, 'generated-local-articles.json');
+  fs.writeFileSync(articlePath, `${JSON.stringify(articles, null, 2)}\n`, 'utf8');
+  process.env.GENERATED_LOCAL_ARTICLES_PATH = articlePath;
+  return articlePath;
 }
 
 describe('content selectors', () => {
@@ -99,6 +114,44 @@ describe('content selectors', () => {
     expect(page.filters.bucket).toBe('current');
     expect(page.articles.length).toBeGreaterThan(0);
     expect(page.articles.every((article) => !isLegacyArticle(article))).toBe(true);
+  });
+
+  it('can load generated local articles from an external runtime path', () => {
+    writeGeneratedLocalArticles([
+      {
+        slug: 'runtime-generated-local-article',
+        title: {
+          en: 'Runtime generated local article',
+          zh: '即時產生本地文章',
+        },
+        excerpt: {
+          en: 'Loaded from the host runtime data directory.',
+          zh: '從主機即時資料目錄載入。',
+        },
+        heroImage: '/images/arizona-housing.svg',
+        publishedAt: '2026-05-30T12:00:00.000Z',
+        category: 'community',
+        body: [
+          {
+            en: 'This article proves generated local articles do not need to be written inside the Git checkout.',
+            zh: '這篇文章驗證產生的本地文章不需要寫進 Git checkout。',
+          },
+        ],
+        series: 'community-wire',
+        freshnessTier: 'weekly',
+        sourcePolicy: 'summary_link',
+        relatedCategorySlugs: [],
+        ctaBusinessSlugs: [],
+        personaTargets: ['local_families'],
+        sourceLinks: [],
+      },
+    ]);
+
+    const page = getArticleArchivePage(undefined, 20);
+
+    expect(page.articles.map((article) => article.slug)).toContain(
+      'runtime-generated-local-article'
+    );
   });
 
   it('returns legacy archive results with the expected filters and pagination metadata', () => {
