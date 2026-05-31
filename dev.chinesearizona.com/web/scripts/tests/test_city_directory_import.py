@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 
 from scripts.city_directory_import.config import load_site_config
 from scripts.city_directory_import.models import CityDirectoryCandidate
-from scripts.city_directory_import.pipeline import FetchedPage, discover, export_approved, review_queue_path
+from scripts.city_directory_import.pipeline import FetchedPage, discover, export_approved, promote_approved_to_live, review_queue_path
 
 
 SOURCE_CATEGORIES = {
@@ -88,6 +88,7 @@ def read_queue(path: Path) -> list[CityDirectoryCandidate]:
 
 
 def write_queue(path: Path, records: list[CityDirectoryCandidate]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
         "".join(json.dumps(record.to_dict(), ensure_ascii=False, sort_keys=True) + "\n" for record in records),
         encoding="utf-8",
@@ -280,6 +281,72 @@ class CityDirectoryImportTests(unittest.TestCase):
             self.assertEqual(queue[0].confidenceLevel, "medium")
             self.assertLess(queue[0].confidenceScore, 70)
             self.assertEqual(exported, [])
+
+    def test_approved_candidate_with_wrong_state_is_not_exported(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "wrong-state-source",
+                                "url": "https://wrong-state-source.test/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Noodle",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({"https://wrong-state-source.test/": business_page_html(state="MN")}))
+            queue = read_queue(review_queue_path(site))
+            self.assertEqual(queue[0].reviewStatus, "blocked_city_mismatch")
+            queue[0].reviewStatus = "approved"
+            write_queue(review_queue_path(site), queue)
+
+            exported = export_approved(site)
+
+            self.assertEqual(exported, [])
+
+    def test_promote_approved_is_idempotent_against_current_live_listings(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "example-noodle",
+                                "url": "https://example-noodle.test/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Noodle",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({"https://example-noodle.test/": business_page_html()}))
+            queue = read_queue(review_queue_path(site))
+            queue[0].reviewStatus = "approved"
+            write_queue(review_queue_path(site), queue)
+
+            first_promotion = promote_approved_to_live(site, write_live=True)
+            second_promotion = promote_approved_to_live(site, write_live=True)
+            live_listings = json.loads(Path(site.existingListingsPath).read_text(encoding="utf-8"))
+
+            self.assertEqual(len(first_promotion), 1)
+            self.assertEqual(second_promotion, [])
+            self.assertEqual(len(live_listings), 1)
+            self.assertEqual(live_listings[0]["name"]["en"], "Example Noodle")
 
 
 if __name__ == "__main__":

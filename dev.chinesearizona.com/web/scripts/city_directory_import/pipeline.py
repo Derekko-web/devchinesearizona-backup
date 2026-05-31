@@ -127,6 +127,16 @@ def _business_dedupe_keys(business: dict) -> list[str]:
     return unique_strings(keys)
 
 
+def _state_from_address(address: str | None) -> str | None:
+    if not address:
+        return None
+    match = re.search(r"\b([A-Z]{2}),?\s+\d{5}(?:-\d{4})?\b", address)
+    if match:
+        return match.group(1)
+    match = re.search(r"(?:,\s*|\s)([A-Z]{2})(?:,\s*|$)", address)
+    return match.group(1) if match else None
+
+
 def _existing_listing_key_map(site: CityDirectorySiteConfig) -> dict[str, str]:
     existing_path = resolve_web_path(site.existingListingsPath)
     existing = _read_json_array(existing_path)
@@ -191,6 +201,23 @@ def _apply_existing_listing_dedupe(site: CityDirectorySiteConfig, records: list[
             record.confidenceNotes = unique_strings(record.confidenceNotes + [f"matches existing listing '{match}'"])
         output.append(record)
     return output
+
+
+def _candidate_matches_site(site: CityDirectorySiteConfig, candidate: CityDirectoryCandidate) -> bool:
+    if candidate.siteKey != site.siteKey:
+        return False
+    if candidate.city not in site.allowedCities:
+        return False
+    if candidate.categorySlug not in site.allowedCategorySlugs:
+        return False
+    address_state = _state_from_address(candidate.address)
+    if address_state and address_state != site.stateCode:
+        return False
+    return True
+
+
+def _candidate_matches_existing_keys(candidate: CityDirectoryCandidate, existing_keys: set[str]) -> bool:
+    return any(key in existing_keys for key in candidate.dedupeKeys)
 
 
 def _previous_review_map(site: CityDirectorySiteConfig) -> dict[str, CityDirectoryCandidate]:
@@ -315,6 +342,7 @@ def approved_candidates(site: CityDirectorySiteConfig, min_confidence: int = 70)
         if candidate.reviewStatus == APPROVABLE_REVIEW_STATUS
         and candidate.confidenceScore >= min_confidence
         and not candidate.matchedExistingSlug
+        and _candidate_matches_site(site, candidate)
     ]
 
 
@@ -326,9 +354,14 @@ def export_approved(
     destination = destination or approved_export_path(site)
     existing = _read_json_array(resolve_web_path(site.existingListingsPath))
     seen_slugs = {business.get("slug") for business in existing if business.get("slug")}
+    existing_keys = {key for business in existing for key in _business_dedupe_keys(business)}
     exported = [
         candidate_to_business(candidate, index, seen_slugs)
-        for index, candidate in enumerate(approved_candidates(site, min_confidence=min_confidence))
+        for index, candidate in enumerate(
+            candidate
+            for candidate in approved_candidates(site, min_confidence=min_confidence)
+            if not _candidate_matches_existing_keys(candidate, existing_keys)
+        )
     ]
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(exported, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -345,10 +378,14 @@ def promote_approved_to_live(
     live_path = resolve_web_path(site.existingListingsPath)
     existing = _read_json_array(live_path)
     seen_slugs = {business.get("slug") for business in existing if business.get("slug")}
-    additions = [
-        candidate_to_business(candidate, len(existing) + index, seen_slugs)
-        for index, candidate in enumerate(approved_candidates(site, min_confidence=min_confidence))
-    ]
+    existing_keys = {key for business in existing for key in _business_dedupe_keys(business)}
+    additions: list[dict] = []
+    for candidate in approved_candidates(site, min_confidence=min_confidence):
+        if _candidate_matches_existing_keys(candidate, existing_keys):
+            continue
+        addition = candidate_to_business(candidate, len(existing) + len(additions), seen_slugs)
+        additions.append(addition)
+        existing_keys.update(_business_dedupe_keys(addition))
     if additions:
         live_path.write_text(json.dumps(existing + additions, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return additions

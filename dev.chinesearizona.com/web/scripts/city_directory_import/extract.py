@@ -129,7 +129,10 @@ def _best_description(soup: BeautifulSoup, entity: dict[str, Any] | None) -> tup
 def _state_from_address(address: str | None) -> str | None:
     if not address:
         return None
-    match = re.search(r"\b([A-Z]{2})\s+\d{5}(?:-\d{4})?\b", address)
+    match = re.search(r"\b([A-Z]{2}),?\s+\d{5}(?:-\d{4})?\b", address)
+    if match:
+        return match.group(1)
+    match = re.search(r"(?:,\s*|\s)([A-Z]{2})(?:,\s*|$)", address)
     return match.group(1) if match else None
 
 
