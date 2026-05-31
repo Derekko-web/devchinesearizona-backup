@@ -183,19 +183,98 @@ function isPrivateOrReservedIpv4(value) {
   ].some(([base, prefixLength]) => ipv4InRange(value, base, prefixLength));
 }
 
+function normalizeIpv4EmbeddedIpv6(value) {
+  const lastColon = value.lastIndexOf(':');
+  const ipv4Part = value.slice(lastColon + 1);
+  if (!ipv4Part.includes('.')) {
+    return value;
+  }
+
+  const ipv4 = ipv4ToInteger(ipv4Part);
+  if (ipv4 === null) {
+    return null;
+  }
+
+  const high = ((ipv4 >>> 16) & 0xffff).toString(16);
+  const low = (ipv4 & 0xffff).toString(16);
+  return `${value.slice(0, lastColon)}:${high}:${low}`;
+}
+
+function ipv6ToBigInt(value) {
+  const withoutBrackets = String(value || '')
+    .replace(/^\[|\]$/g, '')
+    .toLowerCase();
+
+  if (!withoutBrackets || withoutBrackets.includes('%')) {
+    return null;
+  }
+
+  const normalized = normalizeIpv4EmbeddedIpv6(withoutBrackets);
+  if (!normalized) {
+    return null;
+  }
+
+  const halves = normalized.split('::');
+  if (halves.length > 2) {
+    return null;
+  }
+
+  const head = halves[0] ? halves[0].split(':') : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(':') : [];
+  const missing = 8 - head.length - tail.length;
+  if ((halves.length === 1 && missing !== 0) || missing < 0) {
+    return null;
+  }
+
+  const hextets = [...head, ...Array(missing).fill('0'), ...tail];
+  if (
+    hextets.length !== 8 ||
+    hextets.some((hextet) => !/^[0-9a-f]{1,4}$/.test(hextet))
+  ) {
+    return null;
+  }
+
+  return hextets.reduce((result, hextet) => {
+    return (result << 16n) | BigInt(parseInt(hextet, 16));
+  }, 0n);
+}
+
+function ipv6InRange(value, base, prefixLength) {
+  const ip = ipv6ToBigInt(value);
+  const baseIp = ipv6ToBigInt(base);
+  if (ip === null || baseIp === null) {
+    return false;
+  }
+
+  const fullMask = (1n << 128n) - 1n;
+  const mask = prefixLength === 0
+    ? 0n
+    : (fullMask << BigInt(128 - prefixLength)) & fullMask;
+  return (ip & mask) === (baseIp & mask);
+}
+
 function isPrivateOrReservedIpv6(value) {
   const normalized = String(value || '')
     .replace(/^\[|\]$/g, '')
     .toLowerCase();
 
-  return (
-    normalized === '::' ||
-    normalized === '::1' ||
-    normalized.startsWith('::ffff:') ||
-    /^f[cd]/.test(normalized) ||
-    /^fe[89ab]/.test(normalized) ||
-    normalized.startsWith('ff')
-  );
+  if (ipv6ToBigInt(normalized) === null) {
+    return true;
+  }
+
+  if (!ipv6InRange(normalized, '2000::', 3)) {
+    return true;
+  }
+
+  return [
+    ['2001::', 32],
+    ['2001:2::', 48],
+    ['2001:10::', 28],
+    ['2001:20::', 28],
+    ['2001:db8::', 32],
+    ['2002::', 16],
+    ['3fff::', 20],
+  ].some(([base, prefixLength]) => ipv6InRange(normalized, base, prefixLength));
 }
 
 function isLocalHostname(value) {

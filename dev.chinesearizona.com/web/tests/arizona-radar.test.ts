@@ -82,6 +82,9 @@ describe('Arizona Radar core', () => {
     expect(normalizeCanonicalUrl('https://example.com/a?utm_source=test#section')).toBe(
       'https://example.com/a'
     );
+    expect(normalizeCanonicalUrl('https://[2606:4700:4700::1111]/dns?utm_source=test')).toBe(
+      'https://[2606:4700:4700::1111]/dns'
+    );
     expect(normalizeCanonicalUrl('javascript:alert(1)')).toBe('');
     expect(normalizeCanonicalUrl('data:text/html,hi')).toBe('');
     expect(normalizeCanonicalUrl('file:///etc/passwd')).toBe('');
@@ -94,6 +97,8 @@ describe('Arizona Radar core', () => {
     expect(normalizeCanonicalUrl('http://192.168.1.10/admin')).toBe('');
     expect(normalizeCanonicalUrl('http://198.51.100.5/admin')).toBe('');
     expect(normalizeCanonicalUrl('http://[::1]/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://[2001:db8::1]/admin')).toBe('');
+    expect(normalizeCanonicalUrl('http://[3fff::1]/admin')).toBe('');
   });
 
   it('blocks social drafts that try to reuse captions or media fields', () => {
