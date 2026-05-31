@@ -472,7 +472,7 @@ export async function businessMetadata(
     return null;
   }
 
-  const business = await getDirectoryBusinessBySlug(slug);
+  const business = await getDirectoryBusinessBySlug(slug, { site });
   if (!business) {
     return null;
   }
@@ -497,6 +497,10 @@ export function cityCategoryMetadata(
   site: SiteProfile = defaultSiteProfile
 ): Metadata | null {
   if (!hasLiveDirectoryData(site)) {
+    return null;
+  }
+
+  if (!site.directory.categorySlugs.includes(categorySlug)) {
     return null;
   }
 

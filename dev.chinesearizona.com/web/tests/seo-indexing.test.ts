@@ -8,7 +8,7 @@ import {
   homeMetadata,
   publisherPageMetadata,
 } from '@/lib/page-metadata';
-import { siteProfiles } from '@/lib/site-config';
+import { resolveSiteProfileFromHost, siteProfiles } from '@/lib/site-config';
 import { createModerationReport } from '@/lib/runtime-store';
 
 const originalConvexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -36,13 +36,23 @@ describe('indexing signals', () => {
     expect(metadata.robots).toBeUndefined();
   });
 
-  it('noindexes placeholder city homepage metadata', () => {
+  it('keeps Austin homepage metadata live and Austin-specific', () => {
     const metadata = homeMetadata('en', siteProfiles.austin);
 
     expect(metadata.title).toBe(
       'ChineseAustin | Austin Chinese Community Directory, News, and Resources'
     );
     expect(metadata.alternates?.canonical).toBe('https://chineseaustin.com');
+    expect(metadata.description).toContain('Austin Chinese community');
+    expect(metadata.description).not.toContain('Arizona');
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it('noindexes unconfigured city homepage metadata', () => {
+    const site = resolveSiteProfileFromHost('missing-city.example');
+    const metadata = homeMetadata('en', site);
+
+    expect(metadata.alternates?.canonical).toBe('https://missing-city.example');
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
@@ -54,12 +64,22 @@ describe('indexing signals', () => {
     expect(metadata.alternates?.languages?.['x-default']).toBe('https://chinesearizona.com/business?page=2');
   });
 
-  it('noindexes placeholder city directory metadata instead of falling back to Arizona listings', () => {
+  it('indexes Austin directory metadata with Austin-specific copy', () => {
     const metadata = directoryMetadata('en', '/business', undefined, siteProfiles.austin);
 
-    expect(metadata.title).toBe('ChineseAustin Business Directory Requires Local Data');
-    expect(metadata.description).toContain('will not fall back to ChineseArizona listings');
+    expect(metadata.title).toBe('Chinese Businesses | ChineseAustin');
+    expect(metadata.description).toContain('Chinese businesses in Austin');
+    expect(metadata.description).not.toContain('Arizona');
     expect(metadata.alternates?.canonical).toBe('https://chineseaustin.com/business');
+    expect(metadata.robots).toBeUndefined();
+  });
+
+  it('noindexes non-live city directory metadata instead of falling back to Arizona listings', () => {
+    const metadata = directoryMetadata('en', '/business', undefined, siteProfiles['los-angeles']);
+
+    expect(metadata.title).toBe('ChineseLosAngeles Business Directory Requires Local Data');
+    expect(metadata.description).toContain('will not fall back to ChineseArizona listings');
+    expect(metadata.alternates?.canonical).toBe('https://chineselosangeles.com/business');
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 

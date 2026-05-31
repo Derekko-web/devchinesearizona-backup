@@ -4,6 +4,9 @@ import {
   applyDirectoryQueryFilters,
   compareFeaturedSignals,
   countActiveDirectoryFilters,
+  getDirectoryBusinessBySlug,
+  getDirectoryFilterOptions,
+  getDirectoryBusinesses,
   getDirectoryPage,
   getBusinessHoursState,
   hasPlaceholderDomain,
@@ -12,6 +15,7 @@ import {
   qualifiesForHomepageFeature,
 } from '@/lib/directory';
 import { directoryMetadata } from '@/lib/page-metadata';
+import { siteProfiles } from '@/lib/site-config';
 import type { Business } from '@/lib/types';
 
 function businessFixture(overrides: Partial<Business> = {}): Business {
@@ -380,6 +384,64 @@ describe('directory trust gates', () => {
     expect(page.pageSize).toBe(5);
     expect(page.totalCount).toBeGreaterThan(5);
     expect(page.businesses.length).toBe(Math.min(5, page.totalCount - 5));
+  });
+
+  it('serves Austin-only static directory businesses for chineseaustin.com', async () => {
+    const businesses = await getDirectoryBusinesses({}, { site: siteProfiles.austin, limit: 100 });
+    const text = JSON.stringify(businesses);
+
+    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.map((business) => business.slug)).toEqual(
+      expect.arrayContaining([
+        'house-of-three-gorges-austin',
+        'h-mart-austin',
+        'austin-chinese-school',
+        'cheng-wooster-real-estate-austin',
+      ])
+    );
+    expect(new Set(businesses.map((business) => business.city))).toEqual(
+      new Set(['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville'])
+    );
+    expect(text).toContain('Austin, TX');
+    expect(text).not.toContain('Phoenix');
+    expect(text).not.toContain('Chandler');
+    expect(text).not.toContain('Tempe');
+    expect(text).not.toContain('ChineseArizona');
+    expect(text).not.toContain('generated-directory-businesses.json');
+  });
+
+  it('does not fall back to Arizona fixtures for Austin or non-live city lookups', async () => {
+    await expect(getDirectoryBusinessBySlug('bido-cafe', { site: siteProfiles.austin })).resolves.toBeUndefined();
+    await expect(
+      getDirectoryBusinessBySlug('house-of-three-gorges-austin', { site: siteProfiles.austin })
+    ).resolves.toMatchObject({
+      city: 'Austin',
+      region: 'North Austin',
+      address: expect.stringContaining('Austin, TX'),
+    });
+
+    await expect(getDirectoryBusinesses({}, { site: siteProfiles['los-angeles'], limit: 50 })).resolves.toEqual([]);
+    await expect(getDirectoryPage({}, 1, 10, { site: siteProfiles['los-angeles'] })).resolves.toMatchObject({
+      businesses: [],
+      totalCount: 0,
+      totalPages: 1,
+    });
+  });
+
+  it('exposes Austin-specific directory filters', async () => {
+    const options = await getDirectoryFilterOptions({ site: siteProfiles.austin });
+
+    expect(options.cities).toEqual(['Austin', 'Cedar Park', 'Pflugerville', 'Round Rock']);
+    expect(options.categories.map((category) => category.slug)).toEqual([
+      'real-estate',
+      'medical',
+      'legal-finance',
+      'dining',
+      'shopping',
+      'local-services',
+      'education',
+    ]);
+    expect(options.languages).toEqual(['English', 'Mandarin', 'Traditional Chinese']);
   });
 
   it('falls back to fixture businesses when the Supabase query errors', async () => {

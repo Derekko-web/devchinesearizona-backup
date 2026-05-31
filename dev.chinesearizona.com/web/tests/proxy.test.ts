@@ -61,14 +61,14 @@ describe('proxy host handling', () => {
     expect(response.headers.get('location')).toBeNull();
   });
 
-  it('emits noindex response headers for placeholder city hosts', () => {
+  it('does not emit noindex response headers for the live Austin host', () => {
     const response = proxy(
       buildRequest('https://chineseaustin.com/', 'chineseaustin.com') as never
     );
 
-    expect(shouldEmitNoIndexHeader('chineseaustin.com')).toBe(true);
+    expect(shouldEmitNoIndexHeader('chineseaustin.com')).toBe(false);
     expect(response.status).toBe(200);
-    expect(response.headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
+    expect(response.headers.get('X-Robots-Tag')).toBeNull();
   });
 
   it('does not emit noindex response headers for the live dev host', () => {

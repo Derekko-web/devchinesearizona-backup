@@ -23,23 +23,25 @@ describe('city site configuration', () => {
     );
   });
 
-  it('uses Austin-specific news sources without enabling directory fallback', () => {
+  it('uses Austin-specific directory and news sources without enabling default fallback', () => {
     const site = resolveSiteProfileFromHost('www.chineseaustin.com');
 
     expect(site).toBe(siteProfiles.austin);
-    expect(site.launchState).toBe('placeholder');
-    expect(hasLiveDirectoryData(site)).toBe(false);
+    expect(site.launchState).toBe('live');
+    expect(hasLiveDirectoryData(site)).toBe(true);
     expect(hasLiveNewsData(site)).toBe(true);
-    expect(shouldNoIndexSiteProfile(site)).toBe(true);
+    expect(shouldNoIndexSiteProfile(site)).toBe(false);
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
-    expect(site.directory.listingSource.path).toBe('data/sites/austin/businesses.json');
+    expect(site.directory.listingSource.path).toBe('src/data/sites/austin/businesses.json');
     expect(site.news.routePath).toBe('/local-news');
     expect(site.news.archivePath).toBe('/local-news/archive');
     expect(site.news.articleDataSource.path).toBe('data/sites/austin/radar-runtime/store.json');
     expect(site.news.sourceManifest.path).toBe('src/data/austin-radar-source-manifest.json');
     expect(JSON.stringify(site)).not.toContain('generated-directory-businesses.json');
     expect(JSON.stringify(site)).not.toContain('generated-local-articles.json');
+    expect(site.seo.description.en).toContain('Austin');
+    expect(site.seo.description.en).not.toContain('Arizona');
   });
 
   it('serves SF Bay news from SF Bay-specific sources without default fallback', () => {

@@ -593,8 +593,8 @@ export async function DirectoryPageView({
   };
   const directoryPagePath = withLocale(locale, '/business');
   const [{ categories, cities }, directoryPage] = await Promise.all([
-    getDirectoryFilterOptions(),
-    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { usePaidPromotion: true }),
+    getDirectoryFilterOptions({ site }),
+    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { site, usePaidPromotion: true }),
   ]);
   const listings = directoryPage.businesses;
   const activeFilterCount = countActiveDirectoryFilters(filters);
@@ -871,13 +871,13 @@ export async function BusinessDetailPageView({
     return null;
   }
 
-  const business = await getDirectoryBusinessBySlug(slug);
+  const business = await getDirectoryBusinessBySlug(slug, { site });
   if (!business) {
     return null;
   }
 
   const [categories, relatedCategoryBusinesses] = await Promise.all([
-    getDirectoryCategories(),
+    getDirectoryCategories({ site }),
     getDirectoryBusinesses(
       {
         category: business.categorySlug,
@@ -887,6 +887,7 @@ export async function BusinessDetailPageView({
       {
         excludeSlug: business.slug,
         limit: 2,
+        site,
       }
     ),
   ]);
@@ -1696,7 +1697,7 @@ export async function CityCategoryPageView({
 
   const cityCategoryPath = withLocale(locale, `/business/${city}/${category}`);
   const [categories, listings] = await Promise.all([
-    getDirectoryCategories(),
+    getDirectoryCategories({ site }),
     getDirectoryBusinesses(
       {
         city,
@@ -1705,6 +1706,7 @@ export async function CityCategoryPageView({
       },
       {
         limit: 100,
+        site,
         usePaidPromotion: true,
       }
     ),
@@ -3603,7 +3605,7 @@ export async function AddBusinessPageView({
   };
   site?: SiteProfile;
 }) {
-  const businesses = hasLiveDirectoryData(site) ? await getDirectoryBusinesses({}, { limit: 200 }) : [];
+  const businesses = hasLiveDirectoryData(site) ? await getDirectoryBusinesses({}, { limit: 200, site }) : [];
   const trustFacts = [
     {
       icon: ShieldCheck,

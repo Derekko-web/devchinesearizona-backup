@@ -5,6 +5,13 @@ import {
   compareMostPopularDirectoryBusinesses,
   MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS,
 } from '@/lib/directory-highlights';
+import {
+  getSiteDirectoryCategorySlugs,
+  getStaticDirectoryBusinessesForSite,
+  isDefaultDirectorySite,
+  shouldUseStaticDirectoryData,
+} from '@/lib/site-directory-data';
+import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type {
   Business,
   BusinessCategory,
@@ -33,6 +40,7 @@ type DirectoryQueryOptions = {
   excludeSlug?: string;
   includeNonPublic?: boolean;
   limit?: number;
+  site?: SiteProfile;
   usePaidPromotion?: boolean;
 };
 
@@ -1152,10 +1160,37 @@ function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQue
     .slice(0, options.limit);
 }
 
+function directorySiteFromOptions(options: DirectoryQueryOptions = {}): SiteProfile {
+  return options.site ?? defaultSiteProfile;
+}
+
+function queryStaticSiteBusinesses(
+  site: SiteProfile,
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Business[] {
+  const businesses = getStaticDirectoryBusinessesForSite(site);
+  if (!businesses) {
+    return [];
+  }
+
+  return applyClientFilters(businesses, filters, options);
+}
+
 export async function getDirectoryBusinesses(
   filters: DirectoryFilters = {},
   options: DirectoryQueryOptions = {}
 ): Promise<Business[]> {
+  const site = directorySiteFromOptions(options);
+
+  if (shouldUseStaticDirectoryData(site)) {
+    return queryStaticSiteBusinesses(site, filters, options);
+  }
+
+  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
+    return [];
+  }
+
   if (fixtureBusinessesEnabled()) {
     return queryFixtureBusinesses(filters, options);
   }
@@ -1196,6 +1231,23 @@ export async function getDirectoryPage(
 }
 
 export async function getDirectoryBusinessBySlug(slug: string, options: DirectoryQueryOptions = {}): Promise<Business | undefined> {
+  const site = directorySiteFromOptions(options);
+
+  if (shouldUseStaticDirectoryData(site)) {
+    const business = queryStaticSiteBusinesses(site, {}, { ...options, includeNonPublic: true }).find(
+      (item) => item.slug === slug
+    );
+    if (!business) {
+      return undefined;
+    }
+
+    return options.includeNonPublic || isPublicDirectoryBusiness(business) ? business : undefined;
+  }
+
+  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
+    return undefined;
+  }
+
   if (fixtureBusinessesEnabled()) {
     const business = queryFixtureBusinesses({}, { includeNonPublic: true }).find((item) => item.slug === slug);
     if (!business) {
@@ -1243,7 +1295,16 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
   return options.includeNonPublic || isPublicDirectoryBusiness(business) ? business : undefined;
 }
 
-export async function getDirectoryCategories(): Promise<BusinessCategory[]> {
+export async function getDirectoryCategories(
+  options: Pick<DirectoryQueryOptions, 'site'> = {}
+): Promise<BusinessCategory[]> {
+  const site = options.site ?? defaultSiteProfile;
+  const siteCategorySlugs = getSiteDirectoryCategorySlugs(site);
+  if (siteCategorySlugs) {
+    const allowed = new Set(siteCategorySlugs);
+    return businessCategories.filter((category) => allowed.has(category.slug));
+  }
+
   if (fixtureBusinessesEnabled()) {
     return businessCategories;
   }
@@ -1263,18 +1324,20 @@ export async function getDirectoryCategories(): Promise<BusinessCategory[]> {
   return businessCategories;
 }
 
-export async function getDirectoryBusinessCategoriesBySlug(): Promise<Record<string, BusinessCategory>> {
-  const categories = await getDirectoryCategories();
+export async function getDirectoryBusinessCategoriesBySlug(
+  options: Pick<DirectoryQueryOptions, 'site'> = {}
+): Promise<Record<string, BusinessCategory>> {
+  const categories = await getDirectoryCategories(options);
   return categories.reduce<Record<string, BusinessCategory>>((accumulator, category) => {
     accumulator[category.slug] = category;
     return accumulator;
   }, {});
 }
 
-export async function getDirectoryFilterOptions() {
+export async function getDirectoryFilterOptions(options: Pick<DirectoryQueryOptions, 'site'> = {}) {
   const [categories, businesses] = await Promise.all([
-    getDirectoryCategories(),
-    getDirectoryBusinesses({}, { limit: 500 }),
+    getDirectoryCategories(options),
+    getDirectoryBusinesses({}, { ...options, limit: 500 }),
   ]);
 
   const cities = Array.from(new Set(businesses.map((business) => business.city))).sort((left, right) =>
@@ -1317,7 +1380,19 @@ export async function getDirectoryCoverageSummary() {
   };
 }
 
-export async function getDirectoryBusinessSlugs(): Promise<string[]> {
+export async function getDirectoryBusinessSlugs(
+  options: Pick<DirectoryQueryOptions, 'site'> = {}
+): Promise<string[]> {
+  const site = options.site ?? defaultSiteProfile;
+
+  if (shouldUseStaticDirectoryData(site)) {
+    return queryStaticSiteBusinesses(site, {}, {}).map((business) => business.slug);
+  }
+
+  if (!isDefaultDirectorySite(site) && !site.directory.allowDefaultFallback) {
+    return [];
+  }
+
   if (fixtureBusinessesEnabled()) {
     return queryFixtureBusinesses({}, {}).map((business) => business.slug);
   }
