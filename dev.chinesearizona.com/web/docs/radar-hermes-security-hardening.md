@@ -25,10 +25,34 @@ perform its own network activity outside the feed fetch wrapper. A regression in
 URL validation or a tool behavior change should not be enough to reach metadata,
 loopback, RFC1918, private, reserved, or internal network targets.
 
-Recommended follow-up: #59 should add a host, container, firewall, or network
-policy boundary around the radar/Hermes worker runtime. The policy should deny
-internal and reserved destinations by default while allowing only the public DNS
-and HTTP(S) egress needed for public source collection.
+Issue #59 implementation plan:
+
+- Runtime boundary: PM2 runs the Next.js app, while host cron/scheduler wrappers
+  start the radar worker. The worker launches Hermes as a child process with
+  `spawnSync`, so the infrastructure boundary must wrap the scheduler-launched
+  worker process tree.
+- Safest practical repo change: add owner-reviewed templates under
+  `ops/radar-hermes-egress/` for a systemd service/timer boundary and an
+  optional nftables per-worker policy.
+- First layer: run each city radar job through
+  `radar-hermes-worker@.service`, which applies `IPAddressDeny` to metadata,
+  loopback, RFC1918, private, reserved, documentation, benchmark, link-local,
+  multicast, and unique-local ranges for both Node and Hermes.
+- Optional stricter layer: after the owner confirms DNS behavior, apply the
+  nftables template for a dedicated worker identity so only public DNS and
+  HTTP(S) destination ports remain available.
+- Preservation: the city generation command remains
+  `node scripts/arizona_radar/run.cjs run --site=<city>`. Keep existing cron
+  active until a dry-run and one scheduled run succeed for each city, then
+  disable the old cron entry to avoid duplicates.
+- Owner/VPS decision: the repository can provide templates and checks, but the
+  VPS owner or delegated operator must choose the worker identity, runtime data
+  write path, timer cadence, DNS path, and whether to enable the nftables
+  allowlist. Follow-up #64 tracks that owner-managed rollout.
+
+Do not put credentials, live internal endpoints, host-specific secret paths,
+runtime logs, or private VPS details in the implementation issue, PR body,
+fixtures, or docs.
 
 ## DNS pinning and dispatcher assessment
 

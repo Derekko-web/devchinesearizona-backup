@@ -1,0 +1,14 @@
+[Unit]
+Description=Radar/Hermes worker timer for %i
+Documentation=https://github.com/Derekko-web/devchinesearizona-backup/tree/main/ops/radar-hermes-egress
+
+[Timer]
+# Example cadence. The operations owner should override this with the approved
+# city-specific schedule before enabling the timer.
+OnCalendar=*-*-* *:17:00
+RandomizedDelaySec=5m
+Persistent=true
+Unit=radar-hermes-worker@%i.service
+
+[Install]
+WantedBy=timers.target
