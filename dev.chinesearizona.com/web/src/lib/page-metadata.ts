@@ -472,7 +472,7 @@ export async function businessMetadata(
     return null;
   }
 
-  const business = await getDirectoryBusinessBySlug(slug);
+  const business = await getDirectoryBusinessBySlug(slug, { site });
   if (!business) {
     return null;
   }
@@ -500,7 +500,9 @@ export function cityCategoryMetadata(
     return null;
   }
 
-  const category = getBusinessCategories().find((item) => item.slug === categorySlug);
+  const category = getBusinessCategories().find(
+    (item) => item.slug === categorySlug && site.directory.categorySlugs.includes(item.slug)
+  );
   if (!category) {
     return null;
   }
