@@ -60,7 +60,7 @@ jobs:
             exit 1
           fi
 
-          if ! bash ../../ops/radar-hermes-egress/apply-runtime.sh; then
+          if ! bash ../../ops/radar-hermes-egress/apply-runtime-deploy.sh; then
             npm run loop:collect || true
             exit 1
           fi
