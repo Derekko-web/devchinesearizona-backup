@@ -1,8 +1,6 @@
 import {
   businessCategories,
   businesses as fixtureBusinesses,
-  losAngelesBusinesses,
-  sfBayBusinesses,
 } from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
@@ -10,6 +8,7 @@ import {
   compareMostPopularDirectoryBusinesses,
   MOST_POPULAR_DIRECTORY_BUSINESS_SLUGS,
 } from '@/lib/directory-highlights';
+import { getStaticDirectoryBusinessesForSite } from '@/lib/site-directory-data';
 import type {
   Business,
   BusinessCategory,
@@ -1172,12 +1171,9 @@ function querySiteStaticBusinesses(
   filters: DirectoryFilters,
   options: DirectoryQueryOptions = {}
 ): Business[] {
-  if (site.key === 'los-angeles') {
-    return queryStaticBusinesses(losAngelesBusinesses, filters, options);
-  }
-
-  if (site.key === 'sf-bay') {
-    return queryStaticBusinesses(sfBayBusinesses, filters, options);
+  const businesses = getStaticDirectoryBusinessesForSite(site);
+  if (businesses) {
+    return queryStaticBusinesses(businesses, filters, options);
   }
 
   return [];

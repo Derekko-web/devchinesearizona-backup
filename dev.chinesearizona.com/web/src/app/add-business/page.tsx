@@ -2,8 +2,12 @@ import { addBusinessMetadata } from '@/lib/page-metadata';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { AddBusinessPageView } from '@/views/site-pages';
 
-export const metadata = addBusinessMetadata('en');
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata() {
+  const site = await getCurrentSiteProfile();
+  return addBusinessMetadata('en', site);
+}
 
 type PageProps = {
   searchParams: Promise<{

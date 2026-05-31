@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
-import { getBusinessCategories, getBusinesses, getCurrentArticlesForSite } from '@/lib/content';
+import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesForSite } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
@@ -227,6 +227,7 @@ function FeaturedBusinessCard({
   locale: Locale;
 }) {
   const href = card.href ?? `/business/${card.slug}`;
+  const hasReviewSignal = card.reviewCount > 0 && /^\d/.test(card.rating);
 
   return (
     <Link
@@ -255,11 +256,18 @@ function FeaturedBusinessCard({
           </h3>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-[#6f5b50]">
-          <Star className="h-4 w-4 fill-[#f2af4b] text-[#f2af4b]" />
-          <span className="font-semibold text-[#372922]">{card.rating}</span>
-          {card.reviewCount > 0 ? <span>({card.reviewCount})</span> : null}
-        </div>
+        {hasReviewSignal ? (
+          <div className="flex items-center gap-2 text-sm text-[#6f5b50]">
+            <Star className="h-4 w-4 fill-[#f2af4b] text-[#f2af4b]" />
+            <span className="font-semibold text-[#372922]">{card.rating}</span>
+            <span>({card.reviewCount})</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#6f5b50]">
+            <MapPin className="h-4 w-4 text-brand-600" />
+            <span>{copy(locale, 'Local source', '本地来源')}</span>
+          </div>
+        )}
 
         <div className="mt-auto text-[13px] leading-5 text-[#726055]">
           <p>{copy(locale, card.line1En, card.line1Zh)}</p>
@@ -332,10 +340,7 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
   const directoryIsLive = hasLiveDirectoryData(site);
   const newsIsLive = hasLiveNewsData(site);
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
-  const allBusinesses =
-    directoryIsLive && (site.key === defaultSiteProfile.key || site.key === 'sf-bay')
-      ? getBusinesses(locale, { sort: 'featured' }, site)
-      : [];
+  const allBusinesses = directoryIsLive ? getBusinessesForSite(locale, site, { sort: 'featured' }) : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
   );

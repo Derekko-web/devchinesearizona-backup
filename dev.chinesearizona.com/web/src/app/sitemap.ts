@@ -44,16 +44,7 @@ function buildSitemapEntry(
   };
 }
 
-async function getSitemapSiteProfile(): Promise<SiteProfile> {
-  try {
-    return await getCurrentSiteProfile();
-  } catch {
-    return defaultSiteProfile;
-  }
-}
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const site = await getSitemapSiteProfile();
+export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Promise<MetadataRoute.Sitemap> {
   const canShowArizonaOnlyContent = canServeArizonaOnlyContent(site);
   const staticRoutes = [
     '/',
@@ -128,4 +119,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   return [...xDefaultEntries, ...localizedEntries];
+}
+
+async function getSitemapSiteProfile(): Promise<SiteProfile> {
+  try {
+    return await getCurrentSiteProfile();
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('outside a request scope')) {
+      return defaultSiteProfile;
+    }
+
+    throw error;
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  return buildSitemap(await getSitemapSiteProfile());
 }

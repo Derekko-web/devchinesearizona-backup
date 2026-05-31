@@ -1,0 +1,831 @@
+[
+  {
+    "id": "austin-house-of-three-gorges",
+    "slug": "house-of-three-gorges-austin",
+    "name": {
+      "en": "House of Three Gorges",
+      "zh": "三峡人家"
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "North Austin",
+    "address": "8557 Research Blvd Ste 144, Austin, TX 78758",
+    "phone": "(512) 953-8666",
+    "website": "https://www.houseofthreegorges.com/",
+    "menuUrl": "https://www.houseofthreegorges.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Sichuan restaurant on Research Boulevard with dine-in, menu, and ordering links published by the business.",
+      "zh": "位于 Research Boulevard 的川菜馆，商家网站提供菜单、堂食与点餐链接。"
+    },
+    "description": {
+      "en": "House of Three Gorges gives North Austin diners a Sichuan-focused option in the Research Boulevard Chinese dining corridor. The listing is built from the restaurant's public site, which publishes its address, phone number, menu access, ordering links, and service hours.",
+      "zh": "三峡人家位于北奥斯汀 Research Boulevard 华人餐饮走廊，为本地居民提供川菜选择。本条目依据餐厅公开网站整理，包含地址、电话、菜单、点餐链接与营业时间等信息。"
+    },
+    "services": [
+      { "en": "Sichuan dine-in", "zh": "川菜堂食" },
+      { "en": "Menu and online ordering links", "zh": "菜单与线上点餐链接" },
+      { "en": "North Austin restaurant corridor", "zh": "北奥斯汀餐饮商圈" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["sichuan austin", "川菜", "三峡人家", "research boulevard chinese food"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon", "value": "Closed" },
+      { "label": "Tue-Thu", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM" },
+      { "label": "Fri-Sat", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:30 PM" },
+      { "label": "Sun", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM" }
+    ],
+    "coordinates": { "lat": 30.3664, "lng": -97.7192 },
+    "sourceUrls": ["https://www.houseofthreegorges.com/"]
+  },
+  {
+    "id": "austin-din-ho-chinese-bbq",
+    "slug": "din-ho-chinese-bbq-austin",
+    "name": {
+      "en": "Din Ho Chinese BBQ",
+      "zh": "Din Ho 中式烧腊"
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "North Austin",
+    "address": "8557 Research Blvd Ste 116, Austin, TX 78758",
+    "phone": "(512) 832-8788",
+    "email": "dinho@dinhochinesebbq.com",
+    "website": "https://www.dinhochinesebbq.com/",
+    "menuUrl": "https://www.dinhochinesebbq.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Long-running Cantonese barbecue and Chinese restaurant in the same Research Boulevard dining center.",
+      "zh": "Research Boulevard 餐饮中心内经营多年的粤式烧腊与中餐馆。"
+    },
+    "description": {
+      "en": "Din Ho Chinese BBQ is a North Austin Chinese barbecue restaurant whose public contact page lists the Research Boulevard address, phone number, email, and weekly hours. It is useful for families looking for Cantonese-style roasted meats, shared dishes, and a familiar Chinese restaurant setting.",
+      "zh": "Din Ho Chinese BBQ 是北奥斯汀中式烧腊餐馆，公开联系页面列出 Research Boulevard 地址、电话、邮箱与每周营业时间。适合寻找粤式烧腊、家庭合菜与传统中餐馆体验的社区居民。"
+    },
+    "services": [
+      { "en": "Chinese barbecue", "zh": "中式烧腊" },
+      { "en": "Family-style dining", "zh": "家庭合菜" },
+      { "en": "Takeout support", "zh": "外带服务" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["din ho", "chinese bbq austin", "烧腊", "cantonese austin"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon", "value": "11:00 AM - 9:00 PM" },
+      { "label": "Tue", "value": "Closed" },
+      { "label": "Wed-Sun", "value": "11:00 AM - 9:00 PM" }
+    ],
+    "coordinates": { "lat": 30.3665, "lng": -97.719 },
+    "sourceUrls": ["https://www.dinhochinesebbq.com/contact.php"]
+  },
+  {
+    "id": "austin-julies-noodles",
+    "slug": "julies-noodles-austin",
+    "name": {
+      "en": "Julie's Noodles",
+      "zh": "Julie 手工面"
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "North Austin",
+    "address": "8557 Research Blvd #110, Austin, TX 78758",
+    "phone": "(512) 394-6967",
+    "email": "juliesnoodles8557@gmail.com",
+    "website": "https://juliesnoodlesaustin.com/location",
+    "menuUrl": "https://juliesnoodlesaustin.com/location",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Handmade noodle and dumpling restaurant listed by its own site at the North Austin Research Boulevard location.",
+      "zh": "北奥斯汀 Research Boulevard 的手工面与饺子餐馆，地址与联系方式来自商家网站。"
+    },
+    "description": {
+      "en": "Julie's Noodles is an Austin noodle shop near several other Chinese dining anchors on Research Boulevard. The restaurant's public location page lists the address, contact email, phone number, and posted hours, making it a concrete Austin listing rather than a fallback fixture.",
+      "zh": "Julie 手工面位于 Research Boulevard，多家中餐商户集中在这一带。餐厅公开地点页面列出地址、邮箱、电话与营业时间，因此本条目使用明确的奥斯汀本地信息，而不是复用其他城市数据。"
+    },
+    "services": [
+      { "en": "Handmade noodles", "zh": "手工面" },
+      { "en": "Dumplings", "zh": "饺子" },
+      { "en": "Dine-in and online ordering", "zh": "堂食与线上点餐" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["julie's noodles", "handmade noodles", "手工面", "dumplings austin"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon", "value": "11:00 AM - 8:30 PM" },
+      { "label": "Tue", "value": "Closed" },
+      { "label": "Wed-Sun", "value": "11:00 AM - 8:30 PM" }
+    ],
+    "coordinates": { "lat": 30.3662, "lng": -97.7191 },
+    "sourceUrls": ["https://juliesnoodlesaustin.com/location"]
+  },
+  {
+    "id": "austin-chens-noodle-house",
+    "slug": "chens-noodle-house-austin",
+    "name": {
+      "en": "Chen's Noodle House",
+      "zh": "陈记面馆"
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Northwest Austin",
+    "address": "8650 Spicewood Springs Rd, Austin, TX 78759",
+    "phone": "(512) 336-8889",
+    "website": "https://chensnoodles.com/",
+    "menuUrl": "https://chensnoodles.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Northwest Austin noodle shop with its location and phone published on the restaurant's own site.",
+      "zh": "西北奥斯汀面馆，餐厅网站公开列出地点与电话。"
+    },
+    "description": {
+      "en": "Chen's Noodle House is included as an Austin-specific restaurant listing because its public site identifies the Austin location on Spicewood Springs Road and the business phone number. It gives ChineseAustin a real Northwest Austin dining entry without importing another city's directory copy.",
+      "zh": "陈记面馆被收录为奥斯汀本地餐饮条目，因为其公开网站列出 Spicewood Springs Road 的奥斯汀地点与联系电话。该条目为 ChineseAustin 提供真实的西北奥斯汀餐饮信息，不导入其他城市目录文案。"
+    },
+    "services": [
+      { "en": "Noodle dishes", "zh": "面食" },
+      { "en": "Restaurant ordering", "zh": "餐厅点餐" },
+      { "en": "Northwest Austin dining", "zh": "西北奥斯汀餐饮" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["chen's noodle house", "陈记面馆", "spicewood springs", "northwest austin noodles"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.4308, "lng": -97.7734 },
+    "sourceUrls": ["https://chensnoodles.com/"]
+  },
+  {
+    "id": "austin-noodle-alley",
+    "slug": "noodle-alley-cedar-park",
+    "name": {
+      "en": "Noodle Alley",
+      "zh": "Noodle Alley"
+    },
+    "categorySlug": "dining",
+    "city": "Cedar Park",
+    "region": "Northwest Austin",
+    "address": "1201 N Bell Blvd Ste 100, Cedar Park, TX 78613",
+    "phone": "(512) 528-5127",
+    "email": "noodlealley@gmail.com",
+    "website": "https://www.noodlealleycp.com/",
+    "menuUrl": "https://www.noodlealleycp.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Cedar Park noodle and dumpling restaurant with address, phone, and email listed by the business.",
+      "zh": "雪松公园面食与饺子餐厅，商家公开列出地址、电话与邮箱。"
+    },
+    "description": {
+      "en": "Noodle Alley adds Cedar Park coverage to the Austin directory. Its official site lists the North Bell Boulevard address, phone number, email, noodle and dumpling focus, and weekly hours for the Cedar Park and Leander area.",
+      "zh": "Noodle Alley 为奥斯汀目录补充雪松公园覆盖。其官方网站列出 North Bell Boulevard 地址、电话、邮箱，并说明面食与饺子等服务，覆盖 Cedar Park 与 Leander 一带。"
+    },
+    "services": [
+      { "en": "Noodles", "zh": "面食" },
+      { "en": "Dumplings", "zh": "饺子" },
+      { "en": "Cedar Park dine-in", "zh": "雪松公园堂食" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["cedar park noodles", "noodle alley", "dumplings cedar park", "雪松公园中餐"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Sun-Thu", "value": "11:00 AM - 9:00 PM" },
+      { "label": "Fri-Sat", "value": "11:00 AM - 10:00 PM" }
+    ],
+    "coordinates": { "lat": 30.5215, "lng": -97.8293 },
+    "sourceUrls": ["https://www.noodlealleycp.com/"]
+  },
+  {
+    "id": "austin-hunan-lion-round-rock",
+    "slug": "hunan-lion-round-rock",
+    "name": {
+      "en": "Hunan Lion Chinese Restaurant",
+      "zh": "Hunan Lion 湘菜馆"
+    },
+    "categorySlug": "dining",
+    "city": "Round Rock",
+    "region": "Round Rock",
+    "address": "1208 N IH 35 Ste 500, Round Rock, TX 78681",
+    "phone": "(512) 244-0117",
+    "website": "https://www.hunanlionrr.com/",
+    "menuUrl": "https://www.hunanlionrr.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Round Rock Chinese restaurant whose site lists local ownership, address, phone, and ordering links.",
+      "zh": "朗德罗克中餐馆，网站列出本地经营信息、地址、电话与点餐链接。"
+    },
+    "description": {
+      "en": "Hunan Lion gives ChineseAustin a real Round Rock directory entry. The restaurant's own site identifies the Round Rock address, phone number, online ordering, and a long local operating history serving the Round Rock community.",
+      "zh": "Hunan Lion 为 ChineseAustin 提供真实的朗德罗克目录条目。餐厅官方网站列出 Round Rock 地址、电话、线上点餐，并说明其长期服务朗德罗克社区。"
+    },
+    "services": [
+      { "en": "Chinese restaurant", "zh": "中餐馆" },
+      { "en": "Online ordering", "zh": "线上点餐" },
+      { "en": "Round Rock dining", "zh": "朗德罗克餐饮" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["hunan lion", "round rock chinese", "湘菜", "朗德罗克中餐"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "11:00 AM - 3:00 PM; 4:30 PM - 9:30 PM" },
+      { "label": "Sat-Sun", "value": "11:30 AM - 9:30 PM" }
+    ],
+    "coordinates": { "lat": 30.5218, "lng": -97.6899 },
+    "sourceUrls": ["https://www.hunanlionrr.com/"]
+  },
+  {
+    "id": "austin-bamboo-bistro-pflugerville",
+    "slug": "bamboo-bistro-pflugerville",
+    "name": {
+      "en": "Bamboo Bistro",
+      "zh": "Bamboo Bistro"
+    },
+    "categorySlug": "dining",
+    "city": "Pflugerville",
+    "region": "Pflugerville",
+    "address": "2324 FM 685 Ste 500, Pflugerville, TX 78660",
+    "phone": "(512) 821-0022",
+    "website": "https://www.bamboobistroonline.com/",
+    "menuUrl": "https://www.bamboobistroonline.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Pflugerville Asian and Chinese takeout listing from the restaurant's public location page.",
+      "zh": "普弗拉格维尔亚洲与中式外带餐厅，信息来自餐厅公开地点页面。"
+    },
+    "description": {
+      "en": "Bamboo Bistro adds Pflugerville coverage for families north of Austin. The business site lists the FM 685 Pflugerville location, phone number, ordering path, and a menu centered on Chinese, Thai, noodle, wing, and vegetarian dishes.",
+      "zh": "Bamboo Bistro 为奥斯汀北部家庭补充普弗拉格维尔覆盖。商家网站列出 FM 685 普弗拉格维尔地点、电话、点餐入口，以及中式、泰式、面食、鸡翅与素食等菜单方向。"
+    },
+    "services": [
+      { "en": "Chinese takeout", "zh": "中式外带" },
+      { "en": "Delivery and pickup", "zh": "外送与自取" },
+      { "en": "Pflugerville location", "zh": "普弗拉格维尔地点" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["bamboo bistro", "pflugerville chinese", "pflugerville takeout", "普弗拉格维尔中餐"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.4549, "lng": -97.6055 },
+    "sourceUrls": ["https://www.bamboobistroonline.com/"]
+  },
+  {
+    "id": "austin-asia-market",
+    "slug": "asia-market-austin",
+    "name": {
+      "en": "Asia Market",
+      "zh": "Asia Market 亚洲市场"
+    },
+    "categorySlug": "shopping",
+    "city": "Austin",
+    "region": "Northwest Austin",
+    "address": "8650 Spicewood Springs Rd Ste 115, Austin, TX 78759",
+    "phone": "(512) 383-5009",
+    "website": "https://asiamarketeatery.com/",
+    "menuUrl": "https://asiamarketeatery.com/menu",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian grocery and eatery on Spicewood Springs Road with contact details on its own site.",
+      "zh": "Spicewood Springs Road 的亚洲市场与熟食店，联系方式来自商家网站。"
+    },
+    "description": {
+      "en": "Asia Market is listed as a practical grocery and prepared-food anchor for Northwest Austin residents. The business site lists the Spicewood Springs Road suite, phone number, eatery location notes, and current public updates.",
+      "zh": "Asia Market 是西北奥斯汀居民常用的亚洲食品与熟食据点。商家网站列出 Spicewood Springs Road 套房地址、电话、熟食店位置说明与公开更新。"
+    },
+    "services": [
+      { "en": "Asian groceries", "zh": "亚洲食品杂货" },
+      { "en": "Prepared foods", "zh": "熟食" },
+      { "en": "Northwest Austin market", "zh": "西北奥斯汀市场" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["asia market", "spicewood springs asian grocery", "asian market austin", "亚洲超市"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Thu-Sun", "value": "12:00 PM - 5:00 PM" }
+    ],
+    "coordinates": { "lat": 30.4307, "lng": -97.7736 },
+    "sourceUrls": ["https://asiamarketeatery.com/"]
+  },
+  {
+    "id": "austin-h-mart-austin",
+    "slug": "h-mart-austin",
+    "name": {
+      "en": "H Mart Austin",
+      "zh": "H Mart 奥斯汀"
+    },
+    "categorySlug": "shopping",
+    "city": "Austin",
+    "region": "Lakeline",
+    "address": "11301 Lakeline Blvd, Austin, TX 78717",
+    "phone": "(737) 717-6900",
+    "website": "https://www.hmart.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Lakeline Asian supermarket listing verified against the Austin Chamber directory.",
+      "zh": "Lakeline 亚洲超市条目，地点与电话依据奥斯汀商会目录核对。"
+    },
+    "description": {
+      "en": "H Mart Austin is a major Asian supermarket and food-hall anchor for Austin, Cedar Park, and Leander households. The Austin Chamber directory lists the Lakeline Boulevard address, website, phone number, and grocery-store category.",
+      "zh": "H Mart Austin 是服务奥斯汀、雪松公园与 Leander 家庭的重要亚洲超市和美食广场据点。奥斯汀商会目录列出 Lakeline Boulevard 地址、网站、电话与 grocery store 分类。"
+    },
+    "services": [
+      { "en": "Asian supermarket", "zh": "亚洲超市" },
+      { "en": "Food hall", "zh": "美食广场" },
+      { "en": "Lakeline grocery anchor", "zh": "Lakeline 生活采购据点" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["hmart", "h mart austin", "lakeline asian grocery", "韩国超市", "亚洲超市"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.4787, "lng": -97.8006 },
+    "sourceUrls": ["https://www.austinchamber.com/directory/h-mart"]
+  },
+  {
+    "id": "austin-99-ranch-market",
+    "slug": "99-ranch-market-austin",
+    "name": {
+      "en": "99 Ranch Market Austin",
+      "zh": "大华超市奥斯汀"
+    },
+    "categorySlug": "shopping",
+    "city": "Austin",
+    "region": "Crescent / Highland",
+    "address": "6929 Airport Blvd Ste 110, Austin, TX 78752",
+    "phone": "(512) 381-8899",
+    "website": "https://www.99ranch.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian supermarket at The Crescent on Airport Boulevard, included from public Austin store listings.",
+      "zh": "位于 Airport Boulevard The Crescent 的亚洲超市，依据公开奥斯汀门店信息收录。"
+    },
+    "description": {
+      "en": "99 Ranch Market Austin is a grocery anchor for central and north Austin shoppers looking for Chinese and broader Asian ingredients. Public store listings identify the Airport Boulevard suite, phone number, and 99 Ranch website, so the directory can show Austin-specific grocery coverage without fallback data.",
+      "zh": "大华超市奥斯汀店是中北奥斯汀居民采购华人及亚洲食材的重要超市。公开门店信息列出 Airport Boulevard 套房、电话与 99 Ranch 网站，因此目录可展示奥斯汀本地采购资源，而不回退到其他城市数据。"
+    },
+    "services": [
+      { "en": "Asian groceries", "zh": "亚洲食品杂货" },
+      { "en": "Seafood and produce", "zh": "海鲜与生鲜" },
+      { "en": "Central Austin shopping", "zh": "中奥斯汀采购" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["99 ranch", "ranch 99", "大华超市", "airport boulevard asian grocery"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.3329, "lng": -97.7153 },
+    "sourceUrls": ["https://www.loc8nearme.com/texas/austin/99-ranch-market/2470722/"]
+  },
+  {
+    "id": "austin-austin-chinese-school",
+    "slug": "austin-chinese-school",
+    "name": {
+      "en": "Austin Chinese School",
+      "zh": "奥斯汀中文学校"
+    },
+    "categorySlug": "education",
+    "city": "Austin",
+    "region": "North Central Austin",
+    "address": "7944 Great Northern Blvd, Austin, TX 78757",
+    "email": "acs@austinchineseschool.org",
+    "website": "https://www.austinchineseschool.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Long-running nonprofit Chinese language and culture school for children and adults in Austin.",
+      "zh": "服务奥斯汀儿童与成人的非营利中文与文化学校。"
+    },
+    "description": {
+      "en": "Austin Chinese School is a Texas-registered nonprofit focused on Chinese language and culture education. Its public school page lists the Great Northern Boulevard school address, Sunday class hours, email contact, and mission serving children and adults in the Austin community.",
+      "zh": "奥斯汀中文学校是德州注册非营利组织，专注中文与中华文化教育。学校公开页面列出 Great Northern Boulevard 校址、周日上课时间、联系邮箱，并说明服务奥斯汀儿童与成人社区的宗旨。"
+    },
+    "services": [
+      { "en": "Chinese language classes", "zh": "中文课程" },
+      { "en": "Culture education", "zh": "文化教育" },
+      { "en": "Sunday school program", "zh": "周日学校课程" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["austin chinese school", "中文学校", "mandarin class austin", "austinchineseschool"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Sun", "value": "2:00 PM - 4:00 PM" }
+    ],
+    "coordinates": { "lat": 30.3647, "lng": -97.7392 },
+    "sourceUrls": ["https://www.austinchineseschool.org/"]
+  },
+  {
+    "id": "austin-great-wall-chinese-school",
+    "slug": "austin-great-wall-chinese-school",
+    "name": {
+      "en": "Austin Great Wall Chinese School",
+      "zh": "奥斯汀长城中文学校"
+    },
+    "categorySlug": "education",
+    "city": "Austin",
+    "region": "North Austin",
+    "address": "601 E St Johns Ave, Austin, TX 78752",
+    "phone": "(512) 436-3739",
+    "email": "board@agwcs.org",
+    "website": "https://agwcs.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Central Texas Chinese school offering Chinese, math, STEM, arts, and adult enrichment classes.",
+      "zh": "中德州中文学校，提供中文、数学、STEM、艺术与成人兴趣课程。"
+    },
+    "description": {
+      "en": "Austin Great Wall Chinese School publishes its in-person classroom location at Webb Middle School, phone number, email contact, and course scope for children and adults. It expands the directory beyond restaurants into the education resources Austin Chinese families often need first.",
+      "zh": "奥斯汀长城中文学校公开列出 Webb Middle School 实体上课地点、电话、邮箱与儿童及成人课程范围。该条目让目录不只包含餐饮，也覆盖奥斯汀华人家庭常用的教育资源。"
+    },
+    "services": [
+      { "en": "Chinese courses", "zh": "中文课程" },
+      { "en": "STEM and enrichment", "zh": "STEM 与兴趣课程" },
+      { "en": "Adult classes", "zh": "成人课程" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["agwcs", "great wall chinese school", "长城中文学校", "austin mandarin class"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.3322, "lng": -97.707 },
+    "sourceUrls": ["https://agwcs.org/"]
+  },
+  {
+    "id": "austin-austin-quan-yin",
+    "slug": "austin-quan-yin",
+    "name": {
+      "en": "Austin Quan Yin",
+      "zh": "Austin Quan Yin 针灸与中医"
+    },
+    "categorySlug": "medical",
+    "city": "Austin",
+    "region": "Central Austin",
+    "address": "3810 Medical Pkwy Ste 249/251, Austin, TX 78756",
+    "phone": "(512) 374-9800",
+    "website": "https://www.austinquanyin.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Integrative medicine center offering acupuncture and Chinese medicine in Austin.",
+      "zh": "奥斯汀整合医学中心，提供针灸与中医服务。"
+    },
+    "description": {
+      "en": "Austin Quan Yin is included under medical because its public site describes acupuncture, Chinese medicine, functional medicine, nutrition, and massage services in Austin. The site lists the Medical Parkway address and phone number, making it a real local health resource for residents looking for traditional Chinese medicine options.",
+      "zh": "Austin Quan Yin 归入医疗保健分类，因为其公开网站说明提供针灸、中医、功能医学、营养与按摩等服务。网站列出 Medical Parkway 地址和电话，是寻求传统中医与针灸服务居民的真实本地资源。"
+    },
+    "services": [
+      { "en": "Acupuncture", "zh": "针灸" },
+      { "en": "Chinese medicine", "zh": "中医" },
+      { "en": "Integrative wellness", "zh": "整合健康" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["austin acupuncture", "chinese medicine austin", "针灸", "中医"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.3064, "lng": -97.7424 },
+    "sourceUrls": ["https://www.austinquanyin.com/"]
+  },
+  {
+    "id": "austin-kung-acupuncture",
+    "slug": "kung-acupuncture-austin",
+    "name": {
+      "en": "Kung Acupuncture",
+      "zh": "Kung Acupuncture 中医针灸"
+    },
+    "categorySlug": "medical",
+    "city": "Austin",
+    "region": "Downtown Austin",
+    "address": "805 W 10th St Ste 400, Austin, TX 78701",
+    "phone": "(512) 900-1932",
+    "website": "https://www.kungacu.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Traditional Chinese medicine clinic in Austin offering acupuncture, gua sha, cupping, herbs, and telemedicine.",
+      "zh": "奥斯汀传统中医诊所，提供针灸、刮痧、拔罐、草药与远程咨询。"
+    },
+    "description": {
+      "en": "Kung Acupuncture identifies itself as a Traditional Chinese Medicine clinic serving Austin and lists an Austin office address, phone number, and service mix including acupuncture, cupping, gua sha, herbal remedies, and telemedicine. It gives the directory a second Austin health option without borrowing another city's medical listings.",
+      "zh": "Kung Acupuncture 自述为服务奥斯汀的传统中医诊所，并公开列出奥斯汀办公室地址、电话，以及针灸、拔罐、刮痧、草药和远程咨询等服务。该条目为目录补充第二个奥斯汀健康资源，而不是借用其他城市医疗条目。"
+    },
+    "services": [
+      { "en": "Acupuncture", "zh": "针灸" },
+      { "en": "Cupping and gua sha", "zh": "拔罐与刮痧" },
+      { "en": "Herbal remedies", "zh": "草药调理" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["kung acupuncture", "traditional chinese medicine", "cupping austin", "刮痧"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.2751, "lng": -97.7502 },
+    "sourceUrls": ["https://www.kungacu.com/"]
+  },
+  {
+    "id": "austin-cheng-wooster-real-estate",
+    "slug": "cheng-wooster-real-estate-austin",
+    "name": {
+      "en": "Cheng Wooster Real Estate",
+      "zh": "Cheng Wooster 奥斯汀房产"
+    },
+    "categorySlug": "real-estate",
+    "city": "Austin",
+    "region": "Northwest Austin",
+    "address": "13284 Pond Springs Rd Ste 405, Austin, TX 78729",
+    "phone": "(512) 203-4603",
+    "email": "chengwooster@gmail.com",
+    "website": "https://www.chengwooster.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin broker associate who publicly lists Chinese language ability and Austin real estate contact details.",
+      "zh": "奥斯汀房产经纪人，公开列出中文能力与奥斯汀房产联系方式。"
+    },
+    "description": {
+      "en": "Cheng Wooster Real Estate is a locally relevant real estate resource because the public site lists an Austin office, phone, email, Texas broker experience, and Chinese language ability. It supports newcomer search needs around housing without relying on another city's realtor profiles.",
+      "zh": "Cheng Wooster Real Estate 是本地相关的房产资源，因为其公开网站列出奥斯汀办公室、电话、邮箱、德州经纪经验与中文能力。该条目服务新居民找房需求，不依赖其他城市房产经纪资料。"
+    },
+    "services": [
+      { "en": "Buyer consultation", "zh": "买方咨询" },
+      { "en": "Listing strategy", "zh": "卖房策略" },
+      { "en": "Chinese-language real estate support", "zh": "中文房产支持" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["austin chinese realtor", "cheng wooster", "奥斯汀房产", "mandarin realtor austin"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": { "lat": 30.4484, "lng": -97.7755 },
+    "sourceUrls": ["https://www.chengwooster.com/"]
+  },
+  {
+    "id": "austin-yz-cpa",
+    "slug": "yz-cpa-austin",
+    "name": {
+      "en": "YZ CPA LLC",
+      "zh": "YZ CPA 奥斯汀中文会计"
+    },
+    "categorySlug": "legal-finance",
+    "city": "Austin",
+    "region": "Austin Metro",
+    "serviceAreaText": "Austin, Central Texas, and remote Chinese-language tax clients",
+    "website": "https://yz-cpa.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin-based Chinese CPA and tax preparation service for households, individuals, and small businesses.",
+      "zh": "位于奥斯汀的中文会计与报税服务，面向家庭、个人与小企业。"
+    },
+    "description": {
+      "en": "YZ CPA LLC is listed because its public site specifically describes Chinese accounting and tax preparation in Austin, Texas, including W-2, 1099, small-business, and remote tax support. The listing uses the firm's own Austin-focused copy and avoids importing another city's CPA profiles.",
+      "zh": "YZ CPA LLC 被收录是因为其公开网站明确说明提供 Austin, Texas 中文会计与报税服务，覆盖 W-2、1099、小企业与远程报税支持。本条目使用该事务所自身的奥斯汀业务信息，不导入其他城市 CPA 条目。"
+    },
+    "services": [
+      { "en": "Chinese tax preparation", "zh": "中文报税" },
+      { "en": "1099 and W-2 support", "zh": "1099 与 W-2 支持" },
+      { "en": "Small-business tax consulting", "zh": "小企业税务咨询" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["chinese cpa austin", "yz cpa", "中文报税", "奥斯汀会计"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": ["https://yz-cpa.com/"]
+  },
+  {
+    "id": "austin-asian-american-resource-center",
+    "slug": "asian-american-resource-center-austin",
+    "name": {
+      "en": "Asian American Resource Center",
+      "zh": "奥斯汀亚裔资源中心"
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Northeast Austin",
+    "address": "8401 Cameron Rd, Austin, TX 78754",
+    "phone": "(512) 974-1700",
+    "website": "https://www.austintexas.gov/aarc",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "City of Austin community resource center for Asian American programs, events, rental space, and wellness support.",
+      "zh": "奥斯汀市亚裔社区资源中心，提供活动、空间、文化教育与健康支持。"
+    },
+    "description": {
+      "en": "The Asian American Resource Center is a civic community listing rather than a private business, but it is essential local infrastructure for Austin's Chinese and broader Asian communities. The City of Austin lists the Cameron Road address, phone number, hours, and mission creating space for Asian American communities.",
+      "zh": "奥斯汀亚裔资源中心属于公共社区资源，而非私营商家，但它是奥斯汀华人与更广泛亚裔社区的重要本地基础设施。奥斯汀市官网列出 Cameron Road 地址、电话、开放时间，以及服务亚裔社区的使命。"
+    },
+    "services": [
+      { "en": "Community programs", "zh": "社区活动" },
+      { "en": "Cultural education", "zh": "文化教育" },
+      { "en": "Rental space and exhibitions", "zh": "场地与展览" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": ["aarc", "asian american resource center", "亚裔资源中心", "austin asian community"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "10:00 AM - 6:00 PM" },
+      { "label": "Sat", "value": "10:00 AM - 4:00 PM" }
+    ],
+    "coordinates": { "lat": 30.3361, "lng": -97.684 },
+    "sourceUrls": ["https://www.austintexas.gov/aarc/contact-asian-american-resource-center"]
+  },
+  {
+    "id": "austin-chinese-society-of-austin",
+    "slug": "chinese-society-of-austin",
+    "name": {
+      "en": "Chinese Society of Austin",
+      "zh": "奥斯汀华人协会"
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Austin Metro",
+    "serviceAreaText": "Greater Austin and surrounding Central Texas communities",
+    "phone": "(512) 571-3303",
+    "email": "info@texascsa.org",
+    "website": "https://www.texascsa.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Greater Austin Chinese American community organization with public membership, events, and contact channels.",
+      "zh": "服务大奥斯汀华人社区的组织，公开提供会员、活动与联系渠道。"
+    },
+    "description": {
+      "en": "Chinese Society of Austin is a community listing for residents looking for Chinese American events, cultural celebrations, membership, and local connection. Its public site states a mission serving Chinese American communities in Greater Austin and lists phone, mailing address, and email contact details.",
+      "zh": "奥斯汀华人协会是面向居民的社区资源条目，帮助查找华人活动、文化节庆、会员与本地联结。其公开网站说明服务大奥斯汀华人社区的使命，并列出电话、邮寄地址和邮箱。"
+    },
+    "services": [
+      { "en": "Community events", "zh": "社区活动" },
+      { "en": "Cultural celebrations", "zh": "文化节庆" },
+      { "en": "Membership and local connection", "zh": "会员与本地联结" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": ["chinese society of austin", "csa austin", "奥斯汀华人协会", "texas csa"],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": ["https://www.texascsa.org/"]
+  }
+]

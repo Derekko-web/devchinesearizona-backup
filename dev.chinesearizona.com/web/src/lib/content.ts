@@ -11,7 +11,6 @@ import {
   normalizeImportedArticle,
   profiles,
   reviews,
-  sfBayBusinesses,
   sfBayLocalArticles,
 } from '@/data/platform-data';
 import type { ImportedArticle } from '@/data/platform-data';
@@ -28,7 +27,11 @@ import {
   radarArticleToArticle,
   getRadarArticleBySlugAsync,
 } from '@/lib/radar';
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
+import {
+  getStaticDirectoryBusinessesForSite,
+  isDefaultDirectorySite,
+} from '@/lib/site-directory-data';
 import type {
   Article,
   ArticleArchiveBucket,
@@ -241,17 +244,30 @@ export function getBusinessCategories(): BusinessCategory[] {
 }
 
 function getContentBusinessesForSite(site: SiteProfile = defaultSiteProfile): Business[] {
-  if (site.key === 'sf-bay' && site.directory.listingSource.state === 'live') {
-    return sfBayBusinesses;
+  if (isDefaultDirectorySite(site)) {
+    return businesses;
   }
 
-  return site.key === defaultSiteProfile.key && site.directory.allowDefaultFallback ? businesses : [];
+  const staticBusinesses = getStaticDirectoryBusinessesForSite(site);
+  if (staticBusinesses) {
+    return staticBusinesses;
+  }
+
+  return site.directory.allowDefaultFallback ? businesses : [];
 }
 
 export function getBusinesses(
   locale: Locale,
   filters: BusinessFilters = {},
   site: SiteProfile = defaultSiteProfile
+): Business[] {
+  return filterBusinesses(getContentBusinessesForSite(site), locale, filters);
+}
+
+function filterBusinesses(
+  sourceBusinesses: Business[],
+  locale: Locale,
+  filters: BusinessFilters = {}
 ): Business[] {
   const {
     q,
@@ -263,7 +279,6 @@ export function getBusinesses(
     sort = 'featured',
   } = filters;
 
-  const sourceBusinesses = getContentBusinessesForSite(site);
   const filtered = sourceBusinesses.filter((business) => {
     if (!matchesSearch(business, locale, q)) {
       return false;
@@ -318,6 +333,27 @@ export function getBusinesses(
 
     return right.rating - left.rating;
   });
+}
+
+export function getBusinessesForSite(
+  locale: Locale,
+  site: SiteProfile = defaultSiteProfile,
+  filters: BusinessFilters = {}
+): Business[] {
+  if (isDefaultDirectorySite(site)) {
+    return getBusinesses(locale, filters);
+  }
+
+  if (!hasLiveDirectoryData(site)) {
+    return [];
+  }
+
+  const staticBusinesses = getStaticDirectoryBusinessesForSite(site);
+  if (staticBusinesses) {
+    return filterBusinesses(staticBusinesses, locale, filters);
+  }
+
+  return site.directory.allowDefaultFallback ? getBusinesses(locale, filters) : [];
 }
 
 export function getFeaturedBusinesses(locale: Locale): Business[] {

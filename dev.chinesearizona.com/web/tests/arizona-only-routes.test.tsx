@@ -83,7 +83,7 @@ describe('Arizona-only route guards', () => {
     expect(isArizonaOnlyRouteSegments(['community'])).toBe(false);
   });
 
-  it('blocks localized Arizona-only routes for Austin placeholder hosts', async () => {
+  it('blocks localized Arizona-only routes for Austin hosts', async () => {
     vi.resetModules();
     mockRequestHost('www.chineseaustin.com');
 
@@ -113,7 +113,7 @@ describe('Arizona-only route guards', () => {
     }
   });
 
-  it('blocks unlocalized Arizona-only route files for Austin placeholder hosts', async () => {
+  it('blocks unlocalized Arizona-only route files for Austin hosts', async () => {
     vi.resetModules();
     mockRequestHost('www.chineseaustin.com');
 

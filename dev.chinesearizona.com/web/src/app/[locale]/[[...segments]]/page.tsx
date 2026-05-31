@@ -233,7 +233,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'add-business') {
-    return addBusinessMetadata(locale);
+    return addBusinessMetadata(locale, site);
   }
 
   if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {
