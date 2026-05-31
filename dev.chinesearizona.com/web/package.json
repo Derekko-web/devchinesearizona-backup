@@ -36,7 +36,7 @@
     "cheerio": "^1.2.0",
     "convex": "^1.35.1",
     "lucide-react": "^1.8.0",
-    "next": "16.2.3",
+    "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "stripe": "^22.0.2"
@@ -47,10 +47,18 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.3",
+    "eslint-config-next": "16.2.6",
     "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^3.2.4"
+  },
+  "overrides": {
+    "convex": {
+      "ws": "8.20.1"
+    },
+    "next": {
+      "postcss": "8.5.10"
+    }
   }
 }
