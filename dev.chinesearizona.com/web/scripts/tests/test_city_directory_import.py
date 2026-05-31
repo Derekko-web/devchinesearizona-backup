@@ -155,6 +155,30 @@ class CityDirectoryImportTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not in the allowed city list"):
                 load_site_config("austin", manifest)
 
+    def test_unknown_source_category_fails_closed(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "bad-category-source",
+                                "url": "https://example.test/",
+                                "sourceCategory": "restaurants_typo",
+                                "city": "Austin",
+                                "nameHint": "Example Source",
+                            }
+                        ],
+                    )
+                },
+            )
+
+            with self.assertRaisesRegex(ValueError, "unsupported sourceCategory"):
+                load_site_config("austin", manifest)
+
     def test_discovery_dedupes_same_run_candidates_against_existing_city_listings(self) -> None:
         with TemporaryDirectory() as directory:
             tmp = Path(directory)
@@ -305,6 +329,43 @@ class CityDirectoryImportTests(unittest.TestCase):
             site = load_site_config("austin", manifest)
             discover(site, fetcher=fake_fetcher({"https://wrong-state-source.test/": business_page_html(state="MN")}))
             queue = read_queue(review_queue_path(site))
+            self.assertEqual(queue[0].reviewStatus, "blocked_city_mismatch")
+            queue[0].reviewStatus = "approved"
+            write_queue(review_queue_path(site), queue)
+
+            exported = export_approved(site)
+
+            self.assertEqual(exported, [])
+
+    def test_page_address_locality_outside_allowed_city_is_blocked_even_same_state(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "same-state-wrong-city-source",
+                                "url": "https://same-state-wrong-city-source.test/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Noodle",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(
+                site,
+                fetcher=fake_fetcher(
+                    {"https://same-state-wrong-city-source.test/": business_page_html(city="Dallas", state="TX")}
+                ),
+            )
+            queue = read_queue(review_queue_path(site))
+            self.assertEqual(queue[0].city, "Dallas")
             self.assertEqual(queue[0].reviewStatus, "blocked_city_mismatch")
             queue[0].reviewStatus = "approved"
             write_queue(review_queue_path(site), queue)
