@@ -1362,3 +1362,19 @@ export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
 
   return createUnconfiguredSiteProfile(normalizedHost);
 }
+
+export function resolveSiteProfileFromRequestHosts({
+  forwardedHost,
+  host,
+}: {
+  forwardedHost?: string | null;
+  host?: string | null;
+}): SiteProfile {
+  const normalizedForwardedHost = normalizeHost(forwardedHost);
+  const hostToResolve =
+    normalizedForwardedHost && !isLocalHost(normalizedForwardedHost)
+      ? forwardedHost
+      : host ?? forwardedHost;
+
+  return resolveSiteProfileFromHost(hostToResolve);
+}

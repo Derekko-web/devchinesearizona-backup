@@ -26,6 +26,7 @@ type BusinessCardProps = {
   localizedShortDescription?: string;
   localizedLocationLabel?: string;
   localizedServiceHighlights?: string[];
+  stateLabel?: string;
 };
 
 export function BusinessCard({
@@ -36,6 +37,7 @@ export function BusinessCard({
   localizedShortDescription,
   localizedLocationLabel,
   localizedServiceHighlights,
+  stateLabel = 'Arizona',
 }: BusinessCardProps) {
   const category = providedCategory ?? getBusinessCategories().find((item) => item.slug === business.categorySlug);
   const detailHref = withLocale(locale, `/business/${business.slug}`);
@@ -51,7 +53,7 @@ export function BusinessCard({
   const hasRating = business.rating > 0;
   const phoneLink = phoneHref(business.phone);
   const emailHref = business.email ? `mailto:${business.email}` : undefined;
-  const directionsHref = getBusinessDirectionsUrl(business);
+  const directionsHref = getBusinessDirectionsUrl(business, stateLabel);
   const menuHref = getBusinessMenuUrl(business);
   const websiteHref = business.website && business.website !== menuHref ? business.website : undefined;
   const serviceHighlights = localizedServiceHighlights ?? getBusinessServiceHighlights(business, locale);
