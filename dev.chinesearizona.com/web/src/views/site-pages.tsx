@@ -650,14 +650,14 @@ export async function DirectoryPageView({
       ]
     : null;
   const headingTitle = isHomepage
-    ? 'ChineseArizona'
+    ? site.brandName
     : locale === 'zh'
       ? '華人商家'
       : 'Chinese Businesses';
   const headingDescription = isHomepage
     ? locale === 'zh'
-      ? '亞利桑那雙語平台，整合可信商家目錄、在地新聞、搬遷指南與社群資源。'
-      : 'A bilingual Arizona platform for trusted local businesses, local news, newcomer resources, and community discovery.'
+      ? site.description.zh
+      : site.description.en
     : null;
   const quickCategories = directoryQuickCategorySlugs
     .map((slug) => categoryBySlug[slug])

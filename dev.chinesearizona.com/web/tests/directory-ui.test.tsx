@@ -58,6 +58,49 @@ vi.mock('@/components/auth/AuthProvider', () => ({
 }));
 
 describe('directory UI', () => {
+  it('renders the connected SF Bay directory instead of the missing-data placeholder', async () => {
+    const [{ DirectoryPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const element = await DirectoryPageView({
+      locale: 'en',
+      searchParams: {},
+      site: siteProfiles['sf-bay'],
+    });
+    const html = renderToStaticMarkup(element);
+
+    expect(html).toContain('R&amp;G Lounge');
+    expect(html).toContain('Asian Health Services');
+    expect(html).toContain('/en/add-business');
+    expect(html).not.toContain('directory data is not connected yet');
+    expect(html).not.toContain('Bido Cafe');
+    expect(html).not.toContain('ChineseArizona listings');
+    expect(html).not.toContain('Phoenix');
+    expect(html).not.toContain('Chandler');
+  });
+
+  it('uses SF Bay values in directory homepage JSON-LD when rendered as a homepage section', async () => {
+    const [{ DirectoryPageView }, { siteProfiles }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+    ]);
+
+    const element = await DirectoryPageView({
+      locale: 'en',
+      searchParams: {},
+      isHomepage: true,
+      site: siteProfiles['sf-bay'],
+    });
+    const html = renderToStaticMarkup(element);
+
+    expect(html).toContain('ChineseSFBay');
+    expect(html).toContain('https://chinesesfbay.com/en/business?q={search_term_string}');
+    expect(html).not.toContain('ChineseArizona');
+    expect(html).not.toContain('https://chinesearizona.com');
+  });
+
   it('uses the SF Bay site region on SF Bay business detail pages', async () => {
     const [{ BusinessDetailPageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),

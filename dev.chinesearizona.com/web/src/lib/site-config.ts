@@ -1169,6 +1169,10 @@ function isLocalHost(host: string): boolean {
   return host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0' || host === '::1';
 }
 
+function isRequestInfrastructureHost(host: string): boolean {
+  return isLocalHost(host) || host.endsWith('.local') || host.endsWith('.invalid');
+}
+
 function createUnconfiguredSiteProfile(host: string): SiteProfile {
   const domain = host || 'unconfigured.local';
   const origin = domain.endsWith('.local') ? `http://${domain}` : `https://${domain}`;
@@ -1374,6 +1378,42 @@ export function resolveSiteProfileFromHost(host?: string | null): SiteProfile {
   return createUnconfiguredSiteProfile(normalizedHost);
 }
 
+export function resolveSiteProfileFromHostCandidates(
+  hosts: Array<string | null | undefined>
+): SiteProfile {
+  const normalizedHosts = hosts.map((host) => normalizeHost(host)).filter(Boolean);
+  const firstPublicHostIndex = normalizedHosts.findIndex(
+    (host) => !isRequestInfrastructureHost(host)
+  );
+
+  if (firstPublicHostIndex === -1) {
+    return defaultSiteProfile;
+  }
+
+  const firstPublicHost = normalizedHosts[firstPublicHostIndex];
+  const firstPublicProfile = resolveConfiguredSiteProfileFromHost(firstPublicHost);
+  if (firstPublicProfile) {
+    return firstPublicProfile;
+  }
+
+  for (const normalizedHost of normalizedHosts.slice(firstPublicHostIndex + 1)) {
+    if (isRequestInfrastructureHost(normalizedHost)) {
+      continue;
+    }
+
+    const profile = resolveConfiguredSiteProfileFromHost(normalizedHost);
+    if (profile && profile.key !== defaultSiteProfile.key) {
+      return profile;
+    }
+  }
+
+  return createUnconfiguredSiteProfile(firstPublicHost);
+}
+
+function isPublicRequestHost(host: string): boolean {
+  return Boolean(host && !isRequestInfrastructureHost(host));
+}
+
 export function resolveSiteProfileFromRequestHosts({
   host,
   forwardedHost,
@@ -1381,20 +1421,37 @@ export function resolveSiteProfileFromRequestHosts({
   host?: string | null;
   forwardedHost?: string | null;
 }): SiteProfile {
+  const normalizedHost = normalizeHost(host);
+  const normalizedForwardedHost = normalizeHost(forwardedHost);
   const hostProfile = resolveConfiguredSiteProfileFromHost(host);
-  if (hostProfile) {
+  if (hostProfile && hostProfile.key !== defaultSiteProfile.key) {
     return hostProfile;
   }
 
+  if (isPublicRequestHost(normalizedHost) && !hostProfile) {
+    return createUnconfiguredSiteProfile(normalizedHost);
+  }
+
   const forwardedHostProfile = resolveConfiguredSiteProfileFromHost(forwardedHost);
+  if (forwardedHostProfile && forwardedHostProfile.key !== defaultSiteProfile.key) {
+    return forwardedHostProfile;
+  }
+
+  if (hostProfile) {
+    if (isPublicRequestHost(normalizedForwardedHost) && !forwardedHostProfile) {
+      return createUnconfiguredSiteProfile(normalizedForwardedHost);
+    }
+
+    return hostProfile;
+  }
+
   if (forwardedHostProfile) {
     return forwardedHostProfile;
   }
 
-  const normalizedHost = normalizeHost(host);
-  if (normalizedHost && !isLocalHost(normalizedHost)) {
-    return resolveSiteProfileFromHost(host);
+  if (isPublicRequestHost(normalizedForwardedHost)) {
+    return createUnconfiguredSiteProfile(normalizedForwardedHost);
   }
 
-  return resolveSiteProfileFromHost(forwardedHost ?? host);
+  return defaultSiteProfile;
 }
