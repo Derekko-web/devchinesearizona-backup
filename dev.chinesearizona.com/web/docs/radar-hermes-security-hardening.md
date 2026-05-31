@@ -49,6 +49,10 @@ Issue #59 implementation plan:
   VPS owner or delegated operator must choose the worker identity, runtime data
   write path, timer cadence, DNS path, and whether to enable the nftables
   allowlist. Follow-up #64 tracks that owner-managed rollout.
+- Rollout decision for #64: apply no VPS changes from an agent session. Use the
+  owner-approved checklist in `ops/radar-hermes-egress/rollout-plan.md`, enable
+  the systemd `IPAddressDeny` layer city by city first, and defer the optional
+  nftables DNS/HTTP(S) allowlist until DNS behavior is confirmed.
 
 Do not put credentials, live internal endpoints, host-specific secret paths,
 runtime logs, or private VPS details in the implementation issue, PR body,

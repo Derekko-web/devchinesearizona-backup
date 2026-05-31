@@ -8,6 +8,9 @@ radar/Hermes worker process tree behind an infrastructure egress boundary.
 They are templates only. Do not apply them directly to a live host without an
 owner-approved rollout.
 
+Use `rollout-plan.md` for the owner-approved Hostinger VPS command plan, city
+matrix, verification gates, and rollback checklist.
+
 ## Runtime boundary
 
 The current application boundary is not enough for open-web Hermes runs:
@@ -41,13 +44,19 @@ normalization code.
    succeed for each city. Then disable the old cron entry to avoid duplicate
    publishing.
 
-This path preserves existing city news generation because the command remains:
+This path preserves existing city news generation because each systemd instance
+still runs the same worker entrypoint with only the city site key changing:
 
 ```bash
 node scripts/arizona_radar/run.cjs run --site=<city>
 ```
 
 The service/timer layer changes only the runtime boundary around that command.
+For the Hostinger VPS runtime, the template expects the web checkout at
+`/var/www/dev.chinesearizona.com/web` and mutable radar data under
+`/var/www/runtime-data/dev.chinesearizona.com/web`, matching the existing deploy
+workflow. If the owner changes those runtime paths, update the owner-approved
+host copy before enabling any timer.
 
 ## Files
 
