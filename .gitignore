@@ -57,5 +57,6 @@ ops/generated/
 chinesearizona.com/app/
 
 # Local runtime/generated state.
+/runtime-data/
 dev.chinesearizona.com/skills-lock.json
 dev.chinesearizona.com/web/data/radar-runtime/
