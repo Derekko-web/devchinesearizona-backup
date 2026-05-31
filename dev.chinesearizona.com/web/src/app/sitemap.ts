@@ -16,8 +16,8 @@ import { publisherPageSlugs } from '@/lib/publisher-pages';
 import { isShopPublicLaunchReady } from '@/lib/shop-launch-server';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
-import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
+import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import { getPublicShopSitemapData } from '@/lib/shop-service';
 import { locales } from '@/lib/types';
 
@@ -59,7 +59,7 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
     ...publisherPageSlugs.map((slug) => `/${slug}`),
   ];
   const [directoryBusinesses, articles, discoverArticles] = await Promise.all([
-    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { limit: 1000, site }) : Promise.resolve([]),
+    hasLiveDirectoryData(site) ? getDirectoryBusinesses({}, { site, limit: 1000 }) : Promise.resolve([]),
     getCurrentArticlesAsync(undefined, site),
     canShowArizonaOnlyContent ? getPublishedDiscoverArticles() : Promise.resolve([]),
   ]);

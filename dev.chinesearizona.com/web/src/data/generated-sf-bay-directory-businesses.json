@@ -1,0 +1,673 @@
+[
+  {
+    "id": "sf_bay_0001",
+    "slug": "r-g-lounge-san-francisco",
+    "name": {
+      "en": "R&G Lounge",
+      "zh": "嶺南小館"
+    },
+    "categorySlug": "dining",
+    "city": "San Francisco",
+    "region": "San Francisco Chinatown",
+    "address": "631 Kearny St, San Francisco, CA 94108",
+    "serviceAreaText": null,
+    "phone": "(415) 982-7877",
+    "email": null,
+    "website": "https://www.rnglounge.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Long-running Cantonese restaurant in San Francisco Chinatown with banquet, lunch, private dining, and takeout options.",
+      "zh": "位於舊金山華埠的粵菜老店，提供宴席、午餐、私人包廂與外帶。"
+    },
+    "description": {
+      "en": "R&G Lounge is a San Francisco Chinatown Cantonese restaurant serving locals, families, visitors, and business groups near Kearny Street. The listing is useful for ChineseSFBay readers looking for seafood, banquet menus, private dining, delivery, and a familiar downtown Chinatown gathering place.",
+      "zh": "嶺南小館是舊金山華埠 Kearny Street 一帶的粵菜餐廳，適合家庭聚餐、商務宴請、海鮮與宴席需求。ChineseSFBay 讀者可用此筆資訊查找華埠聚餐、外帶與私人包廂選項。"
+    },
+    "services": [
+      { "en": "Cantonese dining", "zh": "粵菜餐廳" },
+      { "en": "Seafood and banquet menus", "zh": "海鮮與宴席菜單" },
+      { "en": "Private dining and catering", "zh": "私人包廂與到會服務" }
+    ],
+    "languages": ["English", "Traditional Chinese"],
+    "searchAliases": [
+      "R&G Lounge",
+      "R and G Lounge",
+      "San Francisco Chinatown dining",
+      "Cantonese seafood",
+      "嶺南小館",
+      "舊金山華埠餐廳"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Sun-Thu", "value": "11:00 AM - 9:00 PM" },
+      { "label": "Fri-Sat", "value": "11:00 AM - 9:30 PM" }
+    ],
+    "sourceUrls": [
+      "https://www.rnglounge.com/",
+      "https://sf.eater.com/venue/74/r-g-lounge"
+    ]
+  },
+  {
+    "id": "sf_bay_0002",
+    "slug": "china-live-san-francisco",
+    "name": {
+      "en": "China Live",
+      "zh": "China Live"
+    },
+    "categorySlug": "dining",
+    "city": "San Francisco",
+    "region": "San Francisco Chinatown",
+    "address": "644 Broadway St, San Francisco, CA 94133",
+    "serviceAreaText": null,
+    "phone": "(415) 788-8188",
+    "email": null,
+    "website": "https://www.chinalivesf.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinatown culinary destination with a market restaurant, retail marketplace, bars, and Chinese gastronomy programming.",
+      "zh": "華埠大型中華餐飲空間，結合餐廳、市集、酒吧與中華飲食文化體驗。"
+    },
+    "description": {
+      "en": "China Live is a Broadway Street restaurant and marketplace in the heart of San Francisco Chinatown. The listing helps Bay Area Chinese and local readers find a polished group dining option with restaurant service, retail food browsing, private-event potential, and a central Chinatown location.",
+      "zh": "China Live 位於舊金山華埠 Broadway Street，是結合餐廳、市集與活動空間的中華餐飲目的地。此筆資訊方便灣區華人與本地讀者查找華埠聚餐、伴手禮、活動與市中心餐飲選擇。"
+    },
+    "services": [
+      { "en": "Market restaurant and bar", "zh": "市集餐廳與酒吧" },
+      { "en": "Retail marketplace", "zh": "中華食品與禮品市集" },
+      { "en": "Group dining", "zh": "團體聚餐" }
+    ],
+    "languages": ["English"],
+    "searchAliases": [
+      "China Live",
+      "San Francisco Chinatown restaurant",
+      "Chinese marketplace",
+      "Broadway Chinatown dining",
+      "華埠聚餐"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Thu", "value": "11:30 AM - 10:00 PM" },
+      { "label": "Fri", "value": "11:30 AM - 11:00 PM" },
+      { "label": "Sat", "value": "10:30 AM - 11:00 PM" },
+      { "label": "Sun", "value": "10:30 AM - 10:00 PM" }
+    ],
+    "sourceUrls": [
+      "https://business.sfchamber.com/list/member/china-live-113483",
+      "https://www.chinalivesf.com/"
+    ]
+  },
+  {
+    "id": "sf_bay_0003",
+    "slug": "din-tai-fung-santa-clara",
+    "name": {
+      "en": "Din Tai Fung Santa Clara",
+      "zh": "鼎泰豐聖塔克拉拉店"
+    },
+    "categorySlug": "dining",
+    "city": "Santa Clara",
+    "region": "South Bay",
+    "address": "2855 Stevens Creek Blvd #1259, Santa Clara, CA 95050",
+    "serviceAreaText": null,
+    "phone": "(408) 248-1688",
+    "email": null,
+    "website": "https://dtf.com/en-us/locations/santa-clara",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Westfield Valley Fair location of the Taiwan-founded dumpling and noodle restaurant group.",
+      "zh": "位於 Westfield Valley Fair 的台灣起家小籠包與麵點餐廳。"
+    },
+    "description": {
+      "en": "Din Tai Fung Santa Clara gives South Bay families and visitors a known xiao long bao, dumpling, noodle, and reservation option inside Westfield Valley Fair. The listing is included for readers searching for Mandarin-friendly Chinese dining near Santa Clara, San Jose, and Cupertino shopping corridors.",
+      "zh": "鼎泰豐聖塔克拉拉店位於 Westfield Valley Fair，提供小籠包、麵點、餃類與訂位服務。此筆資訊適合查找聖塔克拉拉、聖荷西、庫比蒂諾購物圈附近中式餐飲的灣區讀者。"
+    },
+    "services": [
+      { "en": "Xiao long bao and dumplings", "zh": "小籠包與餃類" },
+      { "en": "Noodles and family dining", "zh": "麵點與家庭聚餐" },
+      { "en": "Reservations and pickup", "zh": "訂位與外帶" }
+    ],
+    "languages": ["English", "Traditional Chinese"],
+    "searchAliases": [
+      "Din Tai Fung",
+      "DTF Santa Clara",
+      "Valley Fair Chinese restaurant",
+      "xiao long bao",
+      "鼎泰豐",
+      "聖塔克拉拉小籠包"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Thu", "value": "10:30 AM - 9:30 PM" },
+      { "label": "Fri", "value": "10:30 AM - 10:00 PM" },
+      { "label": "Sat", "value": "9:30 AM - 10:00 PM" },
+      { "label": "Sun", "value": "9:30 AM - 9:00 PM" }
+    ],
+    "sourceUrls": ["https://dtf.com/en-us/locations/santa-clara"]
+  },
+  {
+    "id": "sf_bay_0004",
+    "slug": "99-ranch-market-cupertino",
+    "name": {
+      "en": "99 Ranch Market Cupertino",
+      "zh": "大華超級市場庫比蒂諾店"
+    },
+    "categorySlug": "shopping",
+    "city": "Cupertino",
+    "region": "South Bay",
+    "address": "10983 N Wolfe Rd, Cupertino, CA 95014",
+    "serviceAreaText": null,
+    "phone": "(408) 532-8899",
+    "email": null,
+    "website": "https://www.99ranch.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian supermarket chain location serving Cupertino and nearby South Bay households.",
+      "zh": "服務庫比蒂諾與南灣家庭的亞洲超市連鎖門市。"
+    },
+    "description": {
+      "en": "99 Ranch Market Cupertino is a practical grocery anchor for Chinese and Asian households around Cupertino, Sunnyvale, Santa Clara, and West San Jose. The listing supports searches for produce, seafood, pantry staples, ready foods, and Chinese-language grocery shopping near the South Bay tech corridor.",
+      "zh": "大華超級市場庫比蒂諾店是庫比蒂諾、桑尼維爾、聖塔克拉拉與西聖荷西家庭常用的亞洲超市據點。此筆資訊方便查找生鮮、海鮮、乾貨、熟食與南灣華語家庭日常採買。"
+    },
+    "services": [
+      { "en": "Asian groceries", "zh": "亞洲食品雜貨" },
+      { "en": "Produce, seafood, and meat", "zh": "蔬果、海鮮與肉品" },
+      { "en": "Chinese pantry staples", "zh": "華人家庭乾貨與調味品" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "99 Ranch",
+      "Ranch 99 Cupertino",
+      "Asian grocery Cupertino",
+      "Chinese supermarket South Bay",
+      "大華超市",
+      "庫比蒂諾亞洲超市"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Sun-Sat", "value": "9:00 AM - 9:00 PM" }
+    ],
+    "sourceUrls": [
+      "https://www.99ranch.com/about/mission",
+      "https://www.sfstation.com/99-ranch-market-cupertino-b156906"
+    ]
+  },
+  {
+    "id": "sf_bay_0005",
+    "slug": "chinese-american-international-school-san-francisco",
+    "name": {
+      "en": "Chinese American International School",
+      "zh": "舊金山中美國際學校"
+    },
+    "categorySlug": "education",
+    "city": "San Francisco",
+    "region": "San Francisco",
+    "address": "3250 19th Avenue, San Francisco, CA 94132",
+    "serviceAreaText": null,
+    "phone": "(415) 865-6000",
+    "email": null,
+    "website": "https://www.cais.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Independent Chinese-English dual language immersion school serving preschool through grade 8.",
+      "zh": "提供幼兒至八年級中英文雙語沉浸教育的私立學校。"
+    },
+    "description": {
+      "en": "Chinese American International School is included as an education anchor for families comparing Mandarin immersion and bilingual school options in San Francisco. Its 19th Avenue campus and preschool through grade 8 structure make it relevant to newcomer families, local parents, and relocation planning.",
+      "zh": "舊金山中美國際學校是家庭查找普通話沉浸與中英文雙語教育時的重要教育據點。19th Avenue 校區與幼兒至八年級架構，適合新移民家庭、本地家長與搬遷規劃使用。"
+    },
+    "services": [
+      { "en": "Mandarin immersion education", "zh": "普通話沉浸教育" },
+      { "en": "Preschool through grade 8", "zh": "幼兒至八年級" },
+      { "en": "Admissions and campus tours", "zh": "招生與校園參觀" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": [
+      "CAIS",
+      "Chinese American International School",
+      "San Francisco Mandarin immersion",
+      "Chinese English school",
+      "舊金山中文學校",
+      "中英文雙語學校"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.cais.org/about/board-of-trustees/",
+      "https://explore.cais.org/go-further"
+    ]
+  },
+  {
+    "id": "sf_bay_0006",
+    "slug": "chinese-culture-center-san-francisco",
+    "name": {
+      "en": "Chinese Culture Center of San Francisco",
+      "zh": "舊金山中華文化中心"
+    },
+    "categorySlug": "education",
+    "city": "San Francisco",
+    "region": "San Francisco Chinatown",
+    "address": "750 Kearny St, 3rd Fl, San Francisco, CA 94108",
+    "serviceAreaText": null,
+    "phone": "(415) 986-1822",
+    "email": "info@cccsf.us",
+    "website": "https://www.cccsf.us/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinatown arts and culture organization offering exhibitions, events, tours, and community programming.",
+      "zh": "華埠藝術文化機構，提供展覽、活動、導覽與社區文化項目。"
+    },
+    "description": {
+      "en": "Chinese Culture Center of San Francisco is a community and arts resource for readers looking for Chinatown exhibitions, cultural programs, tours, and local creative work. It belongs in the SF Bay directory because it connects visitors, families, artists, and Chinese American community history in one accessible downtown location.",
+      "zh": "舊金山中華文化中心是查找華埠展覽、文化活動、導覽與本地創作的重要資源。此筆資訊協助灣區讀者、家庭、藝術工作者與訪客連結華人社區歷史與當代文化。"
+    },
+    "services": [
+      { "en": "Art exhibitions", "zh": "藝術展覽" },
+      { "en": "Cultural tours and events", "zh": "文化導覽與活動" },
+      { "en": "Design store and community programs", "zh": "設計商店與社區項目" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "Chinese Culture Center",
+      "CCCSF",
+      "San Francisco Chinatown culture",
+      "Chinese art exhibits",
+      "中華文化中心",
+      "華埠文化活動"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": ["https://www.cccsf.us/"]
+  },
+  {
+    "id": "sf_bay_0007",
+    "slug": "north-east-medical-services-stockton-clinic",
+    "name": {
+      "en": "North East Medical Services - 1520 Stockton Clinic",
+      "zh": "東北醫療中心 Stockton 診所"
+    },
+    "categorySlug": "medical",
+    "city": "San Francisco",
+    "region": "San Francisco Chinatown",
+    "address": "1520 Stockton Street, San Francisco, CA 94133",
+    "serviceAreaText": null,
+    "phone": "(415) 391-9686",
+    "email": null,
+    "website": "https://www.nems.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Community health center clinic in Chinatown with medical, dental, behavioral health, optometry, and support services.",
+      "zh": "位於華埠的社區醫療中心診所，提供醫療、牙科、心理健康、驗光與支援服務。"
+    },
+    "description": {
+      "en": "North East Medical Services is a Bay Area community health provider with multiple San Francisco clinics and Chinese-language access. The Stockton Clinic listing helps families find a Chinatown health care entry point for primary care, dental, behavioral health, optometry, ancillary services, and enrollment support.",
+      "zh": "東北醫療中心是灣區社區醫療機構，在舊金山多個街區設有診所並提供華語服務。Stockton 診所資訊方便家庭查找華埠基層醫療、牙科、心理健康、驗光、輔助服務與保險申請支援。"
+    },
+    "services": [
+      { "en": "Primary and specialty medical care", "zh": "基層與專科醫療" },
+      { "en": "Dental, behavioral health, and optometry", "zh": "牙科、心理健康與驗光" },
+      { "en": "Medi-Cal and patient support", "zh": "Medi-Cal 與患者支援" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "NEMS",
+      "North East Medical Services",
+      "Chinatown clinic",
+      "Chinese doctor San Francisco",
+      "東北醫療中心",
+      "華埠診所"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": true,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "8:00 AM - 6:00 PM" },
+      { "label": "Sat-Sun", "value": "8:00 AM - 12:00 PM" },
+      { "label": "Sat-Sun", "value": "1:00 PM - 5:00 PM" }
+    ],
+    "sourceUrls": ["https://www.nems.org/"]
+  },
+  {
+    "id": "sf_bay_0008",
+    "slug": "asian-health-services-oakland",
+    "name": {
+      "en": "Asian Health Services",
+      "zh": "亞裔健康服務"
+    },
+    "categorySlug": "medical",
+    "city": "Oakland",
+    "region": "Oakland Chinatown",
+    "address": "818 Webster St, Oakland, CA 94607",
+    "serviceAreaText": null,
+    "phone": "(510) 986-6800",
+    "email": null,
+    "website": "https://asianhealthservices.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Oakland community health organization with medical, dental, behavioral health, patient navigation, and Chinese-language resources.",
+      "zh": "奧克蘭社區醫療機構，提供醫療、牙科、心理健康、患者導覽與中文資源。"
+    },
+    "description": {
+      "en": "Asian Health Services is an Oakland-based health care and advocacy organization serving Asian and immigrant communities in Alameda County. The listing is useful for East Bay readers who need clinic access, membership help, dental care, behavioral health, language access, and community health programs near Oakland Chinatown.",
+      "zh": "亞裔健康服務是奧克蘭的醫療與倡議機構，服務 Alameda County 的亞裔與移民社群。此筆資訊適合東灣讀者查找華埠附近診所、會員申請、牙科、心理健康、語言協助與社區健康項目。"
+    },
+    "services": [
+      { "en": "Medical and dental care", "zh": "醫療與牙科" },
+      { "en": "Behavioral health", "zh": "心理健康" },
+      { "en": "Patient navigation and community programs", "zh": "患者導覽與社區項目" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "Asian Health Services",
+      "AHS Oakland",
+      "Oakland Chinatown clinic",
+      "Asian community health",
+      "亞裔健康服務",
+      "奧克蘭華埠診所"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "9:00 AM - 5:00 PM" },
+      { "label": "Sat", "value": "8:30 AM - 1:00 PM" }
+    ],
+    "sourceUrls": [
+      "https://asianhealthservices.org/",
+      "https://npin.cdc.gov/organization/asian-health-services"
+    ]
+  },
+  {
+    "id": "sf_bay_0009",
+    "slug": "api-legal-outreach-san-francisco",
+    "name": {
+      "en": "API Legal Outreach - San Francisco",
+      "zh": "亞太島民法律外展舊金山辦公室"
+    },
+    "categorySlug": "legal-finance",
+    "city": "San Francisco",
+    "region": "SoMa",
+    "address": "1121 Mission Street, San Francisco, CA 94103",
+    "serviceAreaText": "San Francisco, Oakland, and Greater Bay Area low-income immigrant communities",
+    "phone": "(415) 567-6255",
+    "email": null,
+    "website": "https://www.apilegaloutreach.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Culturally competent legal services organization with bilingual intake and Bay Area offices.",
+      "zh": "提供文化與語言相應法律服務的機構，在灣區設有辦公室並提供雙語 intake。"
+    },
+    "description": {
+      "en": "API Legal Outreach provides legal representation, social services, and advocacy for low-income Asian Pacific Islander, immigrant, senior, youth, and survivor communities. This directory entry helps ChineseSFBay readers find multilingual help for immigration, family, housing, elder, trafficking, and public benefits questions.",
+      "zh": "亞太島民法律外展為低收入亞太裔、移民、長者、青少年與倖存者社群提供法律代理、社會服務與倡議。此筆資訊協助 ChineseSFBay 讀者查找移民、家庭、住房、長者、人口販運與公共福利等多語法律協助。"
+    },
+    "services": [
+      { "en": "Immigration and family law support", "zh": "移民與家庭法律協助" },
+      { "en": "Housing, elder, and survivor services", "zh": "住房、長者與倖存者服務" },
+      { "en": "Bilingual legal intake", "zh": "雙語法律 intake" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "API Legal Outreach",
+      "APILO",
+      "Asian Pacific Islander Legal Outreach",
+      "Chinese immigration legal help",
+      "亞太島民法律外展",
+      "舊金山移民法律"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "9:00 AM - 5:00 PM" }
+    ],
+    "sourceUrls": [
+      "https://www.apilegaloutreach.org/contact/",
+      "https://immigrants.sf.gov/node/5"
+    ]
+  },
+  {
+    "id": "sf_bay_0010",
+    "slug": "asian-law-alliance-san-jose",
+    "name": {
+      "en": "Asian Law Alliance",
+      "zh": "亞洲法律聯盟"
+    },
+    "categorySlug": "legal-finance",
+    "city": "San Jose",
+    "region": "Silicon Valley",
+    "address": "991 West Hedding Street, Suite 202, San Jose, CA 95126",
+    "serviceAreaText": "Silicon Valley and surrounding Bay Area communities",
+    "phone": "(408) 287-9710",
+    "email": null,
+    "website": "https://asianlawalliance.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Silicon Valley legal services nonprofit serving Asian Pacific Islander and low-income communities.",
+      "zh": "服務矽谷亞太裔與低收入社群的法律服務非營利機構。"
+    },
+    "description": {
+      "en": "Asian Law Alliance is a San Jose legal services organization focused on access to justice for Asian Pacific Islander and low-income residents. It is relevant for South Bay ChineseSFBay readers looking for Mandarin, Cantonese, Vietnamese, Spanish, Tagalog, Korean, and other language support by appointment or intake schedule.",
+      "zh": "亞洲法律聯盟位於聖荷西，致力於協助亞太裔與低收入居民取得法律服務。此筆資訊適合南灣 ChineseSFBay 讀者查找普通話、粵語、越南語、西班牙語、塔加洛語、韓語等語言支援與 intake 時段。"
+    },
+    "services": [
+      { "en": "Legal counseling", "zh": "法律諮詢" },
+      { "en": "Community education", "zh": "社區教育" },
+      { "en": "Multilingual intake", "zh": "多語 intake" }
+    ],
+    "languages": ["English", "Mandarin", "Traditional Chinese"],
+    "searchAliases": [
+      "Asian Law Alliance",
+      "San Jose Asian legal aid",
+      "Silicon Valley immigration legal help",
+      "Mandarin legal services San Jose",
+      "亞洲法律聯盟",
+      "聖荷西法律援助"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "9:00 AM - 5:00 PM" }
+    ],
+    "sourceUrls": ["https://asianlawalliance.org/home/"]
+  },
+  {
+    "id": "sf_bay_0011",
+    "slug": "maxreal-sunnyvale",
+    "name": {
+      "en": "MaxReal",
+      "zh": "MaxReal"
+    },
+    "categorySlug": "real-estate",
+    "city": "Sunnyvale",
+    "region": "Silicon Valley",
+    "address": "1288 Kifer Road, Suite 208, Sunnyvale, CA 94086",
+    "serviceAreaText": "Sunnyvale, Cupertino, Fremont, Burlingame, Pleasanton, and Bay Area home markets",
+    "phone": "(408) 212-8800",
+    "email": "contact@maxrealusa.com",
+    "website": "https://www.maxrealusa.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Bay Area real estate brokerage with Sunnyvale headquarters and offices across Silicon Valley and the Peninsula.",
+      "zh": "灣區房地產經紀公司，總部位於桑尼維爾，並在矽谷與半島多地設點。"
+    },
+    "description": {
+      "en": "MaxReal is listed for ChineseSFBay readers who need Bay Area home search, selling, valuation, relocation, and local market navigation. Its office network covers Sunnyvale, Cupertino, Fremont, Burlingame, and Pleasanton, making it a practical real estate resource across several Chinese and Asian household corridors.",
+      "zh": "MaxReal 適合 ChineseSFBay 讀者查找灣區買房、賣房、估價、搬遷與本地市場資訊。其辦公室涵蓋桑尼維爾、庫比蒂諾、佛利蒙、伯靈格姆與普萊森頓，是多個華人與亞裔家庭走廊的房地產資源。"
+    },
+    "services": [
+      { "en": "Home buying and selling", "zh": "房屋買賣" },
+      { "en": "Property valuation", "zh": "房屋估價" },
+      { "en": "Bay Area market reports", "zh": "灣區市場報告" }
+    ],
+    "languages": ["English", "Mandarin"],
+    "searchAliases": [
+      "MaxReal",
+      "Sunnyvale real estate",
+      "Cupertino real estate",
+      "Bay Area realtor",
+      "灣區房地產",
+      "桑尼維爾買房"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Mon-Fri", "value": "9:00 AM - 5:00 PM" }
+    ],
+    "sourceUrls": ["https://www.maxrealusa.com/locations/"]
+  },
+  {
+    "id": "sf_bay_0012",
+    "slug": "golden-express-bay-area-courier",
+    "name": {
+      "en": "Golden Express",
+      "zh": "Golden Express 灣區快遞"
+    },
+    "categorySlug": "local-services",
+    "city": "San Jose",
+    "region": "San Francisco Bay Area",
+    "address": null,
+    "serviceAreaText": "Palo Alto, Mountain View, Redwood City, Morgan Hill, Santa Clara, San Jose, San Carlos, San Francisco, Fremont, Oakland, and surrounding Bay Area cities",
+    "phone": "(800) 540-8255",
+    "email": null,
+    "website": "https://gedelivers.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Bay Area courier, freight, and truck delivery service with 24x7 time-sensitive delivery support.",
+      "zh": "灣區快遞、貨運與卡車配送服務，提供 24x7 時效配送支援。"
+    },
+    "description": {
+      "en": "Golden Express is included as a local service option for ChineseSFBay readers who need Bay Area courier, same-day delivery, freight, custom transport, legal courier, or hospital and medical delivery support. Its service area spans San Francisco, Oakland, Fremont, Santa Clara, San Jose, and nearby cities.",
+      "zh": "Golden Express 是灣區本地服務選項，適合需要快遞、當日配送、貨運、客製運輸、法律文件快遞或醫療配送支援的 ChineseSFBay 讀者。服務範圍涵蓋舊金山、奧克蘭、佛利蒙、聖塔克拉拉、聖荷西及周邊城市。"
+    },
+    "services": [
+      { "en": "Courier and same-day delivery", "zh": "快遞與當日配送" },
+      { "en": "Freight and truck delivery", "zh": "貨運與卡車配送" },
+      { "en": "Legal and medical courier service", "zh": "法律文件與醫療快遞" }
+    ],
+    "languages": ["English"],
+    "searchAliases": [
+      "Golden Express",
+      "Bay Area courier",
+      "San Jose delivery service",
+      "same day delivery",
+      "灣區快遞",
+      "聖荷西配送"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": true,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-05-30T00:00:00.000Z",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [
+      { "label": "Sun-Sat", "value": "00:00 - 00:00" }
+    ],
+    "sourceUrls": ["https://gedelivers.com/"]
+  }
+]

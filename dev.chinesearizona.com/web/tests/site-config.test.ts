@@ -44,14 +44,26 @@ describe('city site configuration', () => {
     expect(site.seo.description.en).not.toContain('Arizona');
   });
 
-  it('serves SF Bay news from SF Bay-specific sources without default fallback', () => {
+  it('serves SF Bay directory and news from SF Bay-specific sources without default fallback', () => {
     const site = resolveSiteProfileFromHost('www.chinesesfbay.com');
 
     expect(site).toBe(siteProfiles['sf-bay']);
     expect(site.launchState).toBe('live');
     expect(hasLiveNewsData(site)).toBe(true);
-    expect(hasLiveDirectoryData(site)).toBe(false);
+    expect(hasLiveDirectoryData(site)).toBe(true);
     expect(shouldNoIndexSiteProfile(site)).toBe(false);
+    expect(site.directory.allowDefaultFallback).toBe(false);
+    expect(site.directory.listingSource.path).toBe(
+      'src/data/generated-sf-bay-directory-businesses.json'
+    );
+    expect(site.directory.launchCities).toEqual([
+      'San Francisco',
+      'Oakland',
+      'San Jose',
+      'Cupertino',
+      'Sunnyvale',
+      'Santa Clara',
+    ]);
     expect(site.news.routePath).toBe('/news');
     expect(site.news.archivePath).toBe('/news/archive');
     expect(site.news.allowDefaultFallback).toBe(false);
@@ -59,6 +71,7 @@ describe('city site configuration', () => {
     expect(site.news.articleDataSource.path).not.toBe('data/radar-runtime/store.json');
     expect(site.news.sourceManifest.path).toBe('src/data/sf-bay-radar-source-manifest.json');
     expect(JSON.stringify(site)).not.toContain('generated-local-articles.json');
+    expect(JSON.stringify(site)).not.toContain('generated-directory-businesses.json');
     expect(site.seo.title.en).toContain('San Francisco Bay Area');
     expect(site.seo.description.en).toContain('San Francisco');
     expect(site.seo.description.en).not.toContain('Arizona');

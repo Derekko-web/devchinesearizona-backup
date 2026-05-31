@@ -1,7 +1,6 @@
 import {
   businessCategories,
   businesses as fixtureBusinesses,
-  losAngelesBusinesses,
 } from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
@@ -1172,10 +1171,6 @@ function querySiteStaticBusinesses(
   filters: DirectoryFilters,
   options: DirectoryQueryOptions = {}
 ): Business[] {
-  if (site.key === 'los-angeles') {
-    return queryStaticBusinesses(losAngelesBusinesses, filters, options);
-  }
-
   const businesses = getStaticDirectoryBusinessesForSite(site);
   if (businesses) {
     return queryStaticBusinesses(businesses, filters, options);

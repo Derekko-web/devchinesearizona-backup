@@ -1,4 +1,5 @@
 import austinDirectoryBusinesses from '@/data/sites/austin/businesses.json';
+import { losAngelesBusinesses, sfBayBusinesses } from '@/data/platform-data';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import { formatPhoneNumber } from '@/lib/phone';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteKey, type SiteProfile } from '@/lib/site-config';
@@ -48,6 +49,8 @@ function normalizeStaticBusiness(business: ImportedStaticBusiness): Business {
 
 const staticBusinessesBySiteKey: Partial<Record<SiteKey, Business[]>> = {
   austin: (austinDirectoryBusinesses as ImportedStaticBusiness[]).map(normalizeStaticBusiness),
+  'los-angeles': losAngelesBusinesses,
+  'sf-bay': sfBayBusinesses,
 };
 
 export function isDefaultDirectorySite(site: SiteProfile): boolean {

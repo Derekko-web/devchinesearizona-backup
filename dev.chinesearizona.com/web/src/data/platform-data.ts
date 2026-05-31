@@ -13,6 +13,7 @@ import type {
 import { businessReviewOverrides } from '@/data/business-review-overrides';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLocalArticles from '@/data/generated-local-articles.json';
+import generatedSfBayDirectoryBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 import generatedSfBayLocalArticles from '@/data/generated-sf-bay-local-articles.json';
 import losAngelesDirectoryBusinessesData from '@/data/los-angeles-directory-businesses.json';
 import generatedSignalDeskQueue from '@/data/generated-signal-desk-queue.json';
@@ -91,6 +92,9 @@ const scrapedBusinesses = (generatedDirectoryBusinesses as ImportedBusiness[])
   .map(normalizeImportedBusiness);
 
 export const losAngelesBusinesses: Business[] = (losAngelesDirectoryBusinessesData as ImportedBusiness[])
+  .map(normalizeImportedBusiness);
+
+export const sfBayBusinesses: Business[] = (generatedSfBayDirectoryBusinesses as ImportedBusiness[])
   .map(normalizeImportedBusiness);
 
 export function normalizeImportedArticle(article: ImportedArticle): Article {
