@@ -105,6 +105,41 @@ describe('ensureProfileForAuthUser role handling', () => {
     expect(updates).toEqual([]);
   });
 
+  it('demotes stale elevated profile roles when app_metadata.role is absent', async () => {
+    const { updates } = mockSupabaseService(createProfile('admin'), 'admin');
+    const { ensureProfileForAuthUser } = await import('@/lib/profile-auth');
+
+    const profile = await ensureProfileForAuthUser({
+      id: 'user-1',
+      email: 'member@example.com',
+      app_metadata: {},
+      user_metadata: {},
+    } as never);
+
+    expect(profile?.role).toBe('member');
+    expect(updates).toEqual([
+      {
+        table: 'profiles',
+        values: { role: 'member', auth_user_id: 'user-1' },
+      },
+    ]);
+  });
+
+  it('preserves business owner profiles that are managed by claim approval flows', async () => {
+    const { updates } = mockSupabaseService(createProfile('business_owner'), 'admin');
+    const { ensureProfileForAuthUser } = await import('@/lib/profile-auth');
+
+    const profile = await ensureProfileForAuthUser({
+      id: 'user-1',
+      email: 'owner@example.com',
+      app_metadata: {},
+      user_metadata: {},
+    } as never);
+
+    expect(profile?.role).toBe('business_owner');
+    expect(updates).toEqual([]);
+  });
+
   it('still honors app_metadata.role as the authoritative server-managed role', async () => {
     const { updates } = mockSupabaseService(createProfile('member'), 'member');
     const { ensureProfileForAuthUser } = await import('@/lib/profile-auth');

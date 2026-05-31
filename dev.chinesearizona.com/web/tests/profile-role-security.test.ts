@@ -17,6 +17,9 @@ describe('profile role security migrations', () => {
     expect(migration).toContain(
       'grant update (slug, name, name_zh_tw, city, languages, bio_en, bio_zh_tw) on public.profiles to authenticated;'
     );
+    expect(migration).toContain("users.raw_app_meta_data ->> 'role'");
+    expect(migration).toContain("public.auth_profiles.role in ('editor', 'moderator', 'admin')");
+    expect(migration).toContain("public.profiles.role in ('editor', 'moderator', 'admin')");
     expect(migration).not.toMatch(/grant update \([^)]*role/i);
   });
 });

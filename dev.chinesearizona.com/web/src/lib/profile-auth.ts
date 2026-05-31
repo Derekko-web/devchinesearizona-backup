@@ -8,6 +8,8 @@ type AuthProfileRow = {
   full_name?: string | null;
 };
 
+const elevatedProfileRoles = new Set<ProfileRole>(['editor', 'moderator', 'admin']);
+
 export type AppProfileRow = {
   id: string;
   slug: string;
@@ -67,6 +69,14 @@ function appMetadataRole(user: User): ProfileRole | null {
   }
 
   return null;
+}
+
+function syncedProfileRole(existingRole: ProfileRole, authoritativeRole: ProfileRole | null) {
+  if (authoritativeRole) {
+    return authoritativeRole;
+  }
+
+  return elevatedProfileRoles.has(existingRole) ? 'member' : existingRole;
 }
 
 async function buildUniqueProfileSlug(baseName: string) {
@@ -143,11 +153,12 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
   const authoritativeRole = appMetadataRole(user);
 
   if (existing) {
-    if (authoritativeRole && existing.role !== authoritativeRole) {
+    const role = syncedProfileRole(existing.role, authoritativeRole);
+    if (existing.role !== role) {
       const { data, error } = await serviceClient
         .from('profiles')
         .update({
-          role: authoritativeRole,
+          role,
           auth_user_id: user.id,
         })
         .eq('id', existing.id)
@@ -157,6 +168,8 @@ export async function ensureProfileForAuthUser(user: User): Promise<AppProfileRo
       if (!error && data) {
         return data;
       }
+
+      return { ...existing, auth_user_id: user.id, role };
     }
 
     return existing;
