@@ -19,6 +19,11 @@ import type {
 } from '@/lib/types';
 import { formatPhoneNumber } from '@/lib/phone';
 import { getDirectoryAiReplacementImage } from '@/lib/directory-ai-replacements';
+import {
+  canUseCitySiteBusinessImageFallback,
+  getCitySiteBusinessSpecificImage,
+  getCitySiteContextImage,
+} from '@/lib/city-site-business-images';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import { getSupabaseClient, getSupabaseServiceClient, isSupabaseConfigured } from '@/lib/supabase';
 
@@ -125,23 +130,6 @@ const SEARCH_DOMINANT_TOTAL_THRESHOLD = 100;
 const SEARCH_DOMINANT_CATEGORY_THRESHOLD = 5;
 type Coordinates = NonNullable<Business['coordinates']>;
 type BusinessHoursState = 'open' | 'closed' | 'unknown';
-
-const nonArizonaDirectoryImageFallbacks: Partial<Record<SiteProfile['key'], string>> = {
-  austin: '/city-site-images/austin-community-hero.webp',
-  'los-angeles': '/city-site-images/los-angeles-community-hero.webp',
-  'sf-bay': '/city-site-images/sf-bay-community-hero.webp',
-};
-
-const nonArizonaDirectorySlugImages: Record<string, string> = {
-  'austin-chinese-school': '/city-site-images/austin-chinese-school.webp',
-  'cheng-wooster-real-estate-austin': '/city-site-images/cheng-wooster-real-estate-austin.webp',
-  'chinatown-service-center-los-angeles': '/city-site-images/chinatown-service-center-los-angeles.webp',
-  'chinese-american-museum-los-angeles': '/city-site-images/chinese-american-museum-los-angeles.webp',
-  'h-mart-austin': '/city-site-images/h-mart-austin.webp',
-  'house-of-three-gorges-austin': '/city-site-images/house-of-three-gorges-austin.webp',
-  'irn-realty-arcadia': '/city-site-images/irn-realty-arcadia.webp',
-  'lunasia-dim-sum-house-alhambra': '/city-site-images/lunasia-dim-sum-house-alhambra.webp',
-};
 
 const searchDominantCategories = [
   'real-estate',
@@ -608,11 +596,11 @@ function fixtureBusinessesEnabled(): boolean {
 }
 
 function getNonArizonaDirectoryImageFallback(business: Business, site?: SiteProfile): string | undefined {
-  if (!site || site.key === defaultSiteProfile.key) {
+  if (!canUseCitySiteBusinessImageFallback(site)) {
     return undefined;
   }
 
-  return nonArizonaDirectorySlugImages[business.slug] ?? nonArizonaDirectoryImageFallbacks[site.key];
+  return getCitySiteBusinessSpecificImage(business.slug) ?? getCitySiteContextImage(site);
 }
 
 function mapFixtureBusiness(business: Business, site?: SiteProfile): Business {
