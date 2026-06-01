@@ -34,20 +34,6 @@
     }
   },
   {
-    "slug": "austin-current",
-    "name": "Austin Current",
-    "url": "https://austincurrent.org/",
-    "feedUrl": "https://austincurrent.org/feed/",
-    "sourceType": "local_media",
-    "sourcePolicy": "summary_link",
-    "lane": "official",
-    "cadence": "hourly",
-    "notes": {
-      "en": "Use for Austin school district, City Council, budget, mobility, and civic-accountability reporting.",
-      "zh": "用于奥斯汀学区、市议会、预算、交通与市政监督报道。"
-    }
-  },
-  {
     "slug": "what-now-austin",
     "name": "What Now Austin",
     "url": "https://whatnow.com/austin/",

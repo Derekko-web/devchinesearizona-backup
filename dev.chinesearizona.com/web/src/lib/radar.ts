@@ -52,6 +52,23 @@ type RadarStoreOptions = {
   site?: RadarSiteInput;
 };
 
+const RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
+  housing:
+    'https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1400&q=80',
+  openings:
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80',
+  community:
+    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
+  official:
+    'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
+  social:
+    'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
+};
+
+function radarFallbackHero(lane: RadarLane): string {
+  return RADAR_FALLBACK_HEROES[lane] ?? RADAR_FALLBACK_HEROES.community;
+}
+
 function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
   const key = input && typeof input === 'object' ? input.key : input;
   if (key === 'austin') {
@@ -189,6 +206,18 @@ function defaultStore(): RadarStoreSnapshot {
   };
 }
 
+function normalizeStoredArticle(article: RadarArticle): RadarArticle {
+  const lane = (article.lane || 'community') as RadarLane;
+  const heroImage = String(article.heroImage || '').trim();
+
+  return {
+    ...article,
+    lane,
+    heroImage: heroImage || radarFallbackHero(lane),
+    heroImagePolicy: heroImage ? article.heroImagePolicy : 'fallback_only',
+  };
+}
+
 function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): RadarStoreSnapshot {
   const fallback = defaultStore();
 
@@ -201,7 +230,7 @@ function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): 
     sourceControls: Array.isArray(input?.sourceControls) ? input.sourceControls : [],
     runs: Array.isArray(input?.runs) ? input.runs : [],
     candidates: Array.isArray(input?.candidates) ? input.candidates : [],
-    articles: Array.isArray(input?.articles) ? input.articles : [],
+    articles: Array.isArray(input?.articles) ? input.articles.map(normalizeStoredArticle) : [],
   };
 }
 
@@ -385,12 +414,14 @@ function mapCandidateRow(row: Record<string, unknown>): RadarCandidate {
 
 function mapArticleRow(row: Record<string, unknown>): RadarArticle {
   const sourceName = String(row.source_name ?? row.sourceName ?? '');
+  const lane = String(row.lane || 'community') as RadarLane;
+  const rawHeroImage = String(row.hero_image ?? row.heroImage ?? '').trim();
 
   return {
     id: String(row.id),
     candidateId: String(row.candidate_id ?? row.candidateId ?? ''),
     slug: String(row.slug),
-    lane: String(row.lane || 'community') as RadarLane,
+    lane,
     title: {
       en: String(row.title_en ?? row.titleEn ?? ''),
       zh: String(row.title_zh ?? row.titleZh ?? row.title_en ?? row.titleEn ?? ''),
@@ -400,10 +431,10 @@ function mapArticleRow(row: Record<string, unknown>): RadarArticle {
       zh: String(row.excerpt_zh ?? row.excerptZh ?? row.excerpt_en ?? row.excerptEn ?? ''),
     },
     body: normalizeBodyParagraphs(row.body_en, row.body_zh),
-    heroImage: String(row.hero_image ?? row.heroImage ?? ''),
-    heroImagePolicy: String(
-      row.hero_image_policy ?? row.heroImagePolicy ?? 'fallback_only'
-    ) as RadarHeroImagePolicy,
+    heroImage: rawHeroImage || radarFallbackHero(lane),
+    heroImagePolicy: (rawHeroImage
+      ? String(row.hero_image_policy ?? row.heroImagePolicy ?? 'fallback_only')
+      : 'fallback_only') as RadarHeroImagePolicy,
     category: String(row.category || 'news') as Article['category'],
     freshnessTier: String(row.freshness_tier ?? row.freshnessTier ?? 'weekly') as Article['freshnessTier'],
     sourcePolicy: String(row.source_policy ?? row.sourcePolicy ?? 'summary_link') as SourcePolicy,

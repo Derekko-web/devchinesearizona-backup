@@ -73,11 +73,6 @@ describe('Austin Radar config', () => {
     ).toBe(true);
     expect(
       austinManifest.some(
-        (source) => source.slug === 'austin-current' && source.feedUrl === 'https://austincurrent.org/feed/'
-      )
-    ).toBe(true);
-    expect(
-      austinManifest.some(
         (source) => 'feedUrl' in source && source.feedUrl?.includes('austinmonitor.com/feed')
       )
     ).toBe(true);

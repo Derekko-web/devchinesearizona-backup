@@ -68,10 +68,10 @@ runtime_writer_group() {
 
 timer_calendar_for_city() {
   case "$1" in
-    arizona) printf '%s\n' '*-*-* 00,06,12,18:17:00' ;;
-    austin) printf '%s\n' '*-*-* 01,07,13,19:23:00' ;;
-    los-angeles) printf '%s\n' '*-*-* 02,08,14,20:29:00' ;;
-    sf-bay) printf '%s\n' '*-*-* 03,09,15,21:35:00' ;;
+    arizona) printf '%s\n' 'Mon *-*-* 00:17:00' ;;
+    austin) printf '%s\n' 'Tue *-*-* 01:23:00' ;;
+    los-angeles) printf '%s\n' 'Wed *-*-* 02:29:00' ;;
+    sf-bay) printf '%s\n' 'Thu *-*-* 03:35:00' ;;
     *) return 1 ;;
   esac
 }

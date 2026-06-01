@@ -44,8 +44,11 @@ const {
   parseArgs: (argv: string[]) => {
     feedTimeoutMs: number;
     hermesMaxTurns: number;
+    lookbackHours: number;
+    maxItems: number;
     retryEmpty: boolean;
     sourceBatchSize: number;
+    sourceDiscovery: boolean;
   };
   parseHermesOutput: (text: string) => Array<Record<string, unknown>>;
   runWorker: (args: Record<string, unknown>) => Promise<Record<string, unknown>>;
@@ -53,6 +56,10 @@ const {
 
 const originalEnv = {
   NODE_ENV: process.env.NODE_ENV,
+  RADAR_LOOKBACK_HOURS: process.env.RADAR_LOOKBACK_HOURS,
+  RADAR_MAX_ITEMS: process.env.RADAR_MAX_ITEMS,
+  RADAR_SOURCE_BATCH_SIZE: process.env.RADAR_SOURCE_BATCH_SIZE,
+  RADAR_SOURCE_DISCOVERY: process.env.RADAR_SOURCE_DISCOVERY,
   RADAR_STORAGE_MODE: process.env.RADAR_STORAGE_MODE,
 };
 const originalFetch = globalThis.fetch;
@@ -112,6 +119,20 @@ describe('Arizona Radar worker command parsing', () => {
     expect(args.sourceBatchSize).toBe(3);
   });
 
+  it('honors runtime defaults for weekly capped feed-only runs', () => {
+    process.env.RADAR_LOOKBACK_HOURS = '168';
+    process.env.RADAR_MAX_ITEMS = '5';
+    process.env.RADAR_SOURCE_BATCH_SIZE = '0';
+    process.env.RADAR_SOURCE_DISCOVERY = '0';
+
+    const args = parseArgs(['node', 'scripts/arizona_radar/run.cjs', 'run']);
+
+    expect(args.lookbackHours).toBe(168);
+    expect(args.maxItems).toBe(5);
+    expect(args.sourceBatchSize).toBe(0);
+    expect(args.sourceDiscovery).toBe(false);
+  });
+
   it('uses the active source batch for feed rewriting', () => {
     const worker = fs.readFileSync(
       path.join(__dirname, '..', 'scripts', 'arizona_radar', 'run.cjs'),
@@ -124,6 +145,46 @@ describe('Arizona Radar worker command parsing', () => {
 });
 
 describe('Arizona Radar feed fallback', () => {
+  it('keeps concrete RSS image URLs, including media thumbnails and relative inline images', () => {
+    const drafts = parseFeedItems(
+      `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+        <channel>
+          <item>
+            <title>Austin council approves transit bond planning</title>
+            <link>https://example.com/news/austin-transit-bond</link>
+            <pubDate>Mon, 01 Jun 2026 15:00:00 GMT</pubDate>
+            <description>Austin council moved a transit item forward.</description>
+            <media:thumbnail url="https://cdn.example.com/photos/transit-board.jpg" />
+          </item>
+          <item>
+            <title>Austin ISD opens summer meal sites</title>
+            <link>https://example.com/schools/summer-meals</link>
+            <pubDate>Mon, 01 Jun 2026 14:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Families can use new meal sites.</p><img src="/images/summer-meals.jpg" />]]></description>
+          </item>
+        </channel>
+      </rss>`,
+      {
+        slug: 'austin-civic-feed',
+        name: 'Austin Civic Feed',
+        sourceType: 'local_media',
+        sourcePolicy: 'summary_link',
+        lane: 'official',
+      },
+      {
+        lookbackHours: 48,
+        maxItems: 5,
+        now: '2026-06-01T18:00:00.000Z',
+      }
+    );
+
+    expect(drafts.map((draft) => draft.heroImage)).toEqual([
+      'https://cdn.example.com/photos/transit-board.jpg',
+      'https://example.com/images/summer-meals.jpg',
+    ]);
+  });
+
   it('follows only manually validated public feed redirects', async () => {
     mockPublicDnsResolution();
     globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
@@ -615,7 +676,6 @@ describe('Arizona Radar feed fallback', () => {
         '  excerptZh: "奥斯汀学区在先前保证后，将部分校区改为共享图书馆员配置。",',
         '  bodyEn: ["Austin ISD told some smaller campuses they will share librarians next school year, reversing earlier assurances that library roles would be protected during budget planning. The change matters for families because it could reduce daily library access and student programming."],',
         '  bodyZh: ["奥斯汀学区通知部分较小校区，下一学年将共享图书馆员，推翻了先前在预算规划中保护图书馆职位的说法。这个变化与家庭有关，因为它可能减少学生日常使用图书馆和参加相关活动的机会。"],',
-        '  heroImage: "https://npr.brightspotcdn.com/austin-library.jpg",',
         '  topicFingerprint: "austin-isd-shared-librarians-budget"',
         '}]))',
       ].join('\n'),
@@ -650,7 +710,7 @@ describe('Arizona Radar feed fallback', () => {
         return new Response(
           `<html>
             <head>
-              <meta property="og:image" content="https://npr.brightspotcdn.com/austin-library.jpg" />
+              <meta property="og:image:secure_url" content="https://npr.brightspotcdn.com/austin-library.jpg" />
             </head>
             <body>
               <article class="ArtP-mainContent">
@@ -700,6 +760,7 @@ describe('Arizona Radar feed fallback', () => {
     expect(drafts[0]).toMatchObject({
       sourceName: 'KUT Austin',
       titleEn: 'Austin ISD librarian cuts draw backlash',
+      heroImage: 'https://npr.brightspotcdn.com/austin-library.jpg',
     });
     expect(fs.readFileSync(promptPath, 'utf8')).toContain(
       'Weeks after Austin ISD assured families and staff'

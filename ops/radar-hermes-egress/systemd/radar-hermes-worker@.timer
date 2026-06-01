@@ -3,9 +3,8 @@ Description=Radar/Hermes worker timer for %i
 Documentation=https://github.com/Derekko-web/devchinesearizona-backup/tree/main/ops/radar-hermes-egress
 
 [Timer]
-# Example cadence. The operations owner should override this with the approved
-# city-specific schedule before enabling the timer.
-OnCalendar=*-*-* *:17:00
+# Fallback cadence. The install script writes city-specific weekly overrides.
+OnCalendar=Mon *-*-* 00:17:00
 RandomizedDelaySec=5m
 Persistent=true
 Unit=radar-hermes-worker@%i.service

@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest';
 const repoRoot = path.join(process.cwd(), '..', '..');
 const egressRoot = path.join(repoRoot, 'ops', 'radar-hermes-egress');
 const servicePath = path.join(egressRoot, 'systemd', 'radar-hermes-worker@.service');
+const timerPath = path.join(egressRoot, 'systemd', 'radar-hermes-worker@.timer');
 const nftablesPath = path.join(egressRoot, 'nftables', 'radar-hermes-worker.nft');
 const readmePath = path.join(egressRoot, 'README.md');
 const rolloutPlanPath = path.join(egressRoot, 'rollout-plan.md');
@@ -47,7 +48,9 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(service).toContain('Environment=XDG_CACHE_HOME=/var/lib/chinesearizona/radar-hermes-egress/cache');
     expect(service).toContain('Environment=RADAR_DRAFT_MULTIPLIER=1');
     expect(service).toContain('Environment=RADAR_LOOKBACK_HOURS=168');
-    expect(service).toContain('Environment=RADAR_SOURCE_BATCH_SIZE=3');
+    expect(service).toContain('Environment=RADAR_MAX_ITEMS=5');
+    expect(service).toContain('Environment=RADAR_SOURCE_BATCH_SIZE=0');
+    expect(service).toContain('Environment=RADAR_SOURCE_DISCOVERY=0');
     expect(service).toContain('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
     expect(service).toContain('RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX');
     expect(service).not.toContain('MemoryDenyWriteExecute=true');
@@ -73,6 +76,7 @@ describe('Radar/Hermes egress policy templates', () => {
 
   it('applies the runtime egress layer after the normal deploy workflow succeeds', () => {
     const applyRuntime = fs.readFileSync(applyRuntimePath, 'utf8');
+    const timer = fs.readFileSync(timerPath, 'utf8');
     const runtimeWorkflow = fs.readFileSync(runtimeWorkflowPath, 'utf8');
 
     expect(runtimeWorkflow).toContain('workflows:');
@@ -102,6 +106,12 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(applyRuntime).toContain('systemctl enable --now "radar-hermes-worker@$city.timer"');
     expect(applyRuntime).toContain('disable_legacy_cron_entries');
     expect(applyRuntime).toContain('operator=github-actions-deploy');
+    expect(timer).toContain('OnCalendar=Mon *-*-* 00:17:00');
+    expect(applyRuntime).toContain("arizona) printf '%s\\n' 'Mon *-*-* 00:17:00'");
+    expect(applyRuntime).toContain("austin) printf '%s\\n' 'Tue *-*-* 01:23:00'");
+    expect(applyRuntime).toContain("los-angeles) printf '%s\\n' 'Wed *-*-* 02:29:00'");
+    expect(applyRuntime).toContain("sf-bay) printf '%s\\n' 'Thu *-*-* 03:35:00'");
+    expect(applyRuntime).not.toContain('00,06,12,18');
   });
 
   it('keeps a launcher for manual npm invocations without bypassing systemd when installed', () => {
