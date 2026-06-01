@@ -236,8 +236,8 @@ describe('content selectors', () => {
               zh: '這篇文章只存在於 Arizona Radar 的即時資料儲存。',
             },
           ],
-          heroImage: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
-          heroImagePolicy: 'fallback_only',
+          heroImage: '',
+          heroImagePolicy: 'source_allowed',
           category: 'news',
           freshnessTier: 'breaking',
           sourcePolicy: 'summary_link',
@@ -271,6 +271,8 @@ describe('content selectors', () => {
     expect(archivePage.articles.some((article) => article.slug === 'mesa-radar-housing-pulse')).toBe(true);
     expect(detailArticle?.series).toBe('arizona-radar');
     expect(detailArticle?.aiGeneratedSummary).toBe(true);
+    expect(detailArticle?.heroImage).toContain('images.unsplash.com/photo-1520607162513-77705c0f0d4a');
+    expect(detailArticle?.heroImagePolicy).toBe('fallback_only');
   });
 
   it('loads Austin radar articles from the Austin store without falling back to Arizona content', async () => {

@@ -14,7 +14,10 @@ Environment=PATH=/usr/local/bin:/usr/bin:/bin
 Environment=HOME=/var/lib/chinesearizona/radar-hermes-egress/home
 Environment=XDG_CACHE_HOME=/var/lib/chinesearizona/radar-hermes-egress/cache
 Environment=RADAR_DRAFT_MULTIPLIER=1
-Environment=RADAR_SOURCE_BATCH_SIZE=3
+Environment=RADAR_LOOKBACK_HOURS=168
+Environment=RADAR_MAX_ITEMS=5
+Environment=RADAR_SOURCE_BATCH_SIZE=0
+Environment=RADAR_SOURCE_DISCOVERY=0
 EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env
 ExecStart=/usr/bin/node scripts/arizona_radar/run.cjs run --site=%i
 

@@ -431,6 +431,8 @@ export type RadarSourceManifestEntry = {
   name: string;
   url: string;
   feedUrl?: string;
+  excludeUrlPatterns?: string[];
+  excludeTitlePatterns?: string[];
   sourceType: SourceType;
   sourcePolicy: SourcePolicy;
   lane: RadarLane;

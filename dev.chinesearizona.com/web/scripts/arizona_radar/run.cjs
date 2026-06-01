@@ -188,11 +188,12 @@ function parseArgs(argv) {
     hermesBin: process.env.HERMES_BIN || 'hermes',
     hermesMaxTurns: parsePositiveInteger(process.env.RADAR_HERMES_MAX_TURNS, 0),
     hermesTimeoutMs: Number(process.env.RADAR_HERMES_TIMEOUT_MS || 240000),
-    lookbackHours: 24,
-    maxItems: 10,
+    lookbackHours: parsePositiveInteger(process.env.RADAR_LOOKBACK_HOURS, 24),
+    maxItems: parsePositiveInteger(process.env.RADAR_MAX_ITEMS, 5),
     retryEmpty: parseBoolean(process.env.RADAR_RETRY_EMPTY, false),
     site: normalizeSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY),
     sourceBatchSize: Number(process.env.RADAR_SOURCE_BATCH_SIZE || 0),
+    sourceDiscovery: parseBoolean(process.env.RADAR_SOURCE_DISCOVERY, true),
     sourceSlugs: process.env.RADAR_SOURCE_SLUGS || '',
     storePath: '',
   };
@@ -275,6 +276,13 @@ function parseArgs(argv) {
       }
       continue;
     }
+    if (value.startsWith('--source-discovery=')) {
+      args.sourceDiscovery = parseBoolean(
+        value.slice('--source-discovery='.length),
+        args.sourceDiscovery
+      );
+      continue;
+    }
     if (value.startsWith('--source-slugs=')) {
       args.sourceSlugs = value.slice('--source-slugs='.length);
       continue;
@@ -313,7 +321,7 @@ function printHelp() {
       `${RADAR_CITY.regionName} Radar worker`,
       '',
       'Usage:',
-      '  node scripts/arizona_radar/run.cjs run [--site=arizona|austin|los-angeles] [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=10] [--retry-empty=0] [--source-batch-size=0] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
+      '  node scripts/arizona_radar/run.cjs run [--site=arizona|austin|los-angeles] [--fixture=/abs/path.json] [--draft-multiplier=2] [--lookback-hours=24] [--hermes-max-turns=8] [--hermes-timeout-ms=240000] [--max-items=5] [--retry-empty=0] [--source-batch-size=0] [--source-discovery=1] [--source-slugs=slug-a,slug-b] [--store-path=/abs/store.json]',
       '',
       'Environment:',
       '  HERMES_BIN=hermes',
@@ -321,8 +329,10 @@ function printHelp() {
       '  RADAR_FEED_TIMEOUT_MS=15000',
       '  RADAR_FIXTURE_PATH=/abs/fixture.json',
       '  RADAR_HERMES_MAX_TURNS=8',
+      '  RADAR_MAX_ITEMS=5',
       '  RADAR_RETRY_EMPTY=0',
       '  RADAR_SITE=arizona',
+      '  RADAR_SOURCE_DISCOVERY=1',
       '  RADAR_STORE_PATH=/abs/store.json',
       '',
     ].join('\n')
@@ -422,9 +432,111 @@ function isWithinLookback(isoDate, lookbackHours, now) {
   return ageMs >= 0 && ageMs <= lookbackHours * 60 * 60 * 1000;
 }
 
-function extractImageFromHtml(value) {
+function normalizeImageUrl(value, baseUrl = '') {
+  const raw = String(value || '').trim();
+  if (!raw || /^data:/i.test(raw)) {
+    return '';
+  }
+
+  try {
+    const resolved = baseUrl ? new URL(raw, baseUrl).toString() : raw;
+    return normalizeCanonicalUrl(resolved);
+  } catch (_error) {
+    return normalizeCanonicalUrl(raw);
+  }
+}
+
+function srcsetCandidates(value) {
+  return String(value || '')
+    .split(',')
+    .map((candidate) => candidate.trim().split(/\s+/g)[0])
+    .filter(Boolean);
+}
+
+function imageCandidateLooksUsable(value) {
+  const text = String(value || '').toLowerCase();
+  return Boolean(text) && !/(favicon|logo|sprite|spacer|tracking|pixel|blank|1x1)/i.test(text);
+}
+
+function firstNormalizedImageUrl(values, baseUrl = '') {
+  for (const value of values.flat(Infinity)) {
+    if (!imageCandidateLooksUsable(value)) {
+      continue;
+    }
+    const normalized = normalizeImageUrl(value, baseUrl);
+    if (normalized) {
+      return normalized;
+    }
+  }
+
+  return '';
+}
+
+function collectJsonLdImageCandidates(value, output, imageContext = false) {
+  if (!value || output.length >= 40) {
+    return;
+  }
+  if (typeof value === 'string') {
+    if (imageContext) {
+      output.push(value);
+    }
+    return;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      collectJsonLdImageCandidates(item, output, imageContext);
+    }
+    return;
+  }
+  if (typeof value !== 'object') {
+    return;
+  }
+
+  if (imageContext) {
+    for (const key of ['url', 'contentUrl', 'thumbnailUrl']) {
+      if (typeof value[key] === 'string') {
+        output.push(value[key]);
+      }
+    }
+  } else if (typeof value.thumbnailUrl === 'string') {
+    output.push(value.thumbnailUrl);
+  }
+
+  for (const key of ['image', 'thumbnail']) {
+    collectJsonLdImageCandidates(value[key], output, true);
+  }
+  collectJsonLdImageCandidates(value['@graph'], output, false);
+}
+
+function readJsonLdImageCandidates($) {
+  const candidates = [];
+  $('script[type="application/ld+json"]').each((_index, element) => {
+    const text = $(element).contents().text() || $(element).text();
+    try {
+      collectJsonLdImageCandidates(JSON.parse(text), candidates, false);
+    } catch (_error) {
+      // Ignore invalid publisher JSON-LD; metadata and inline images still apply.
+    }
+  });
+  return candidates;
+}
+
+function extractImageFromHtml(value, baseUrl = '') {
   const $ = cheerio.load(String(value || ''));
-  return String($('img').first().attr('src') || '').trim();
+  const candidates = [
+    ...$('img, source')
+      .map((_index, element) => [
+        $(element).attr('src'),
+        $(element).attr('data-src'),
+        $(element).attr('data-original'),
+        $(element).attr('data-lazy-src'),
+        srcsetCandidates($(element).attr('srcset')),
+        srcsetCandidates($(element).attr('data-srcset')),
+      ])
+      .get(),
+  ];
+
+  return firstNormalizedImageUrl(candidates, baseUrl);
 }
 
 function readMetaContent($, selector) {
@@ -519,6 +631,7 @@ function uniqueTexts(values) {
 
 function extractArticlePayload(html, fallback = {}) {
   const $ = cheerio.load(String(html || ''));
+  const baseUrl = fallback.canonicalUrl || fallback.sourceUrl || '';
   const title =
     readMetaContent($, 'meta[property="og:title"]') ||
     readMetaContent($, 'meta[name="twitter:title"]') ||
@@ -533,7 +646,20 @@ function extractArticlePayload(html, fallback = {}) {
   const publishedAt =
     normalizeFeedDate(readMetaContent($, 'meta[property="article:published_time"]')) ||
     fallback.sourcePublishedAt;
-  const heroImage =
+  const heroImage = firstNormalizedImageUrl(
+    [
+      readMetaContent($, 'meta[property="og:image"]'),
+      readMetaContent($, 'meta[property="og:image:secure_url"]'),
+      readMetaContent($, 'meta[name="twitter:image"]'),
+      readMetaContent($, 'meta[name="twitter:image:src"]'),
+      $('link[rel="image_src"]').first().attr('href'),
+      readJsonLdImageCandidates($),
+      extractImageFromHtml($('article, main').first().html() || $('body').html(), baseUrl),
+      fallback.heroImage,
+    ],
+    baseUrl
+  );
+  const legacyHeroImage =
     readMetaContent($, 'meta[property="og:image"]') ||
     readMetaContent($, 'meta[name="twitter:image"]') ||
     fallback.heroImage ||
@@ -559,10 +685,43 @@ function extractArticlePayload(html, fallback = {}) {
     title,
     description: normalizePlainText(description),
     publishedAt,
-    heroImage,
+    heroImage: heroImage || normalizeImageUrl(legacyHeroImage, baseUrl),
     paragraphs,
     text: paragraphs.join('\n\n').slice(0, 9000),
   };
+}
+
+function readPatternList(source, key) {
+  const value = source && source[key];
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map((pattern) => String(pattern || '').trim()).filter(Boolean);
+}
+
+function configuredPatternMatches(value, pattern) {
+  const text = String(value || '');
+  if (!text) {
+    return false;
+  }
+
+  try {
+    return new RegExp(pattern, 'i').test(text);
+  } catch (_error) {
+    return text.toLowerCase().includes(pattern.toLowerCase());
+  }
+}
+
+function sourceExcludesFeedItem(source, input) {
+  return (
+    readPatternList(source, 'excludeUrlPatterns').some((pattern) =>
+      configuredPatternMatches(input.canonicalUrl, pattern)
+    ) ||
+    readPatternList(source, 'excludeTitlePatterns').some((pattern) =>
+      configuredPatternMatches(input.title, pattern)
+    )
+  );
 }
 
 function parseFeedItems(xml, source, options = {}) {
@@ -584,9 +743,13 @@ function parseFeedItems(xml, source, options = {}) {
     if (!title || !canonicalUrl || !isWithinLookback(sourcePublishedAt, lookbackHours, now)) {
       return;
     }
+    if (sourceExcludesFeedItem(source, { canonicalUrl, title })) {
+      return;
+    }
 
     const descriptionHtml = input.descriptionHtml;
     const descriptionText = stripHtml(descriptionHtml);
+    const heroImage = firstNormalizedImageUrl([input.heroImage], canonicalUrl);
 
     drafts.push({
       sourceSlug: source.slug,
@@ -600,7 +763,7 @@ function parseFeedItems(xml, source, options = {}) {
       feedCategory: input.category,
       feedContextEn: context.en,
       feedContextZh: context.zh,
-      heroImage: input.heroImage,
+      heroImage,
       topicFingerprint: `${source.slug}:${title}`,
       personaTargets: context.personas,
     });
@@ -609,31 +772,43 @@ function parseFeedItems(xml, source, options = {}) {
   }
 
   $('item').each((_index, item) => {
+    const canonicalUrl = readElementText($, item, 'link');
+    const descriptionHtml =
+      $(item).find('description').first().text() ||
+      $(item).find('content\\:encoded').first().text();
     return pushDraft({
       title: readElementText($, item, 'title'),
-      canonicalUrl: readElementText($, item, 'link'),
+      canonicalUrl,
       sourcePublishedAt: readElementText($, item, 'pubDate'),
-      descriptionHtml: $(item).find('description').first().text(),
+      descriptionHtml,
       category: readElementText($, item, 'category'),
-      heroImage:
+      heroImage: [
         readElementAttr($, item, 'media\\:content', 'url') ||
-        readElementAttr($, item, 'enclosure', 'url') ||
-        extractImageFromHtml($(item).find('description').first().text()),
+          readElementAttr($, item, 'media\\:thumbnail', 'url'),
+        readElementAttr($, item, 'enclosure', 'url'),
+        readElementAttr($, item, 'itunes\\:image', 'href'),
+        extractImageFromHtml(descriptionHtml, canonicalUrl),
+      ],
     });
   });
 
   $('entry').each((_index, entry) => {
+    const canonicalUrl = readAtomLink($, entry);
+    const descriptionHtml =
+      $(entry).find('summary').first().text() || $(entry).find('content').first().text();
     return pushDraft({
       title: readElementText($, entry, 'title'),
-      canonicalUrl: readAtomLink($, entry),
+      canonicalUrl,
       sourcePublishedAt:
         readElementText($, entry, 'published') || readElementText($, entry, 'updated'),
-      descriptionHtml:
-        $(entry).find('summary').first().text() || $(entry).find('content').first().text(),
+      descriptionHtml,
       category: String($(entry).find('category').first().attr('term') || '').trim(),
-      heroImage:
+      heroImage: [
         readElementAttr($, entry, 'media\\:content', 'url') ||
-        extractImageFromHtml($(entry).find('content').first().text()),
+          readElementAttr($, entry, 'media\\:thumbnail', 'url'),
+        String($(entry).find('link[rel="enclosure"][type^="image/"]').first().attr('href') || '').trim(),
+        extractImageFromHtml(descriptionHtml, canonicalUrl),
+      ],
     });
   });
 
@@ -653,6 +828,7 @@ function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
     articleTitle: item.articlePayload.title,
     articleDescription: item.articlePayload.description,
     articlePublishedAt: item.articlePayload.publishedAt,
+    articleImage: item.articlePayload.heroImage || item.heroImage,
     articleText: item.articlePayload.text,
   }));
   const bodyRule = siteConfig.summaryOnly
@@ -690,6 +866,7 @@ function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
     `- Explain what happened, who is involved, where it is, timing, and why a ${siteConfig.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
+    '- If articleImage is present, copy it into heroImage. Do not invent image URLs.',
     '- Use plain, direct language. Do not inflate significance.',
     '',
     'Banned style:',
@@ -968,6 +1145,11 @@ async function resolveFetchablePublicUrl(value) {
 
 function resolveFetchRedirectUrl(location, baseUrl) {
   if (!location) {
+    const base = assertFetchablePublicUrl(baseUrl);
+    if (base.pathname && !base.pathname.endsWith('/')) {
+      base.pathname = `${base.pathname}/`;
+      return assertFetchablePublicUrl(base.toString()).toString();
+    }
     throw new Error('Unsafe feed redirect.');
   }
 
@@ -988,7 +1170,8 @@ async function fetchTextWithRedirects(url, options) {
   const response = await fetch(fetchUrl, {
     dispatcher: SAFE_FETCH_DISPATCHER,
     headers: {
-      accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      accept: 'text/html, application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      'accept-encoding': 'identity',
       'user-agent': `${options.siteConfig.brandName}RadarFeedSync/1.0`,
     },
     redirect: 'manual',
@@ -1528,6 +1711,7 @@ async function runWorker(args) {
     requestedSourceSlugs.length > 0
       ? filteredManifest
       : selectManifestBatch(filteredManifest, args.sourceBatchSize, startedAt);
+  const sourceDiscoveryEnabled = args.sourceDiscovery !== false;
   const publishCap = Math.min(initialStore.jobControl.publishCap || 10, args.maxItems);
   const draftTargetCount = Math.max(
     publishCap,
@@ -1562,24 +1746,30 @@ async function runWorker(args) {
       ? parseFixturePayload(args.fixturePath)
       : feedDraftsSatisfiedTarget
         ? []
-      : (() => {
-          try {
-            return collectDraftsWithHermes({
-              hermesBin: args.hermesBin,
-              hermesTimeoutMs: args.hermesTimeoutMs,
-              manifest: activeManifest,
-              maxItems: draftTargetCount,
-              lookbackHours: args.lookbackHours,
-              maxTurns: hermesMaxTurns,
-              siteConfig,
-            });
-          } catch (error) {
-            hermesError = error;
-            return [];
-          }
-        })();
+        : sourceDiscoveryEnabled
+          ? (() => {
+              try {
+                return collectDraftsWithHermes({
+                  hermesBin: args.hermesBin,
+                  hermesTimeoutMs: args.hermesTimeoutMs,
+                  manifest: activeManifest,
+                  maxItems: draftTargetCount,
+                  lookbackHours: args.lookbackHours,
+                  maxTurns: hermesMaxTurns,
+                  siteConfig,
+                });
+              } catch (error) {
+                hermesError = error;
+                return [];
+              }
+            })()
+          : [];
     const recoveredDrafts =
-      !args.fixturePath && !feedDraftsSatisfiedTarget && drafts.length === 0 && args.retryEmpty
+      !args.fixturePath &&
+      sourceDiscoveryEnabled &&
+      !feedDraftsSatisfiedTarget &&
+      drafts.length === 0 &&
+      args.retryEmpty
         ? collectDraftsWithHermesRetry({
             hermesBin: args.hermesBin,
             hermesTimeoutMs: args.hermesTimeoutMs,

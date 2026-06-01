@@ -18,6 +18,12 @@
     "name": "KUT Austin",
     "url": "https://www.kut.org/",
     "feedUrl": "https://www.kut.org/kut-rss-feed-all-content.rss",
+    "excludeUrlPatterns": [
+      "/station-information/"
+    ],
+    "excludeTitlePatterns": [
+      "^Get involved spotlight:"
+    ],
     "sourceType": "local_media",
     "sourcePolicy": "summary_link",
     "lane": "community",

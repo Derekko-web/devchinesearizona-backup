@@ -14,6 +14,7 @@ const {
   collectDraftsFromFeeds,
   extractJsonPayload,
   fetchText,
+  getSiteConfig,
   lookupPublicFetchAddress,
   parseArgs,
   parseHermesOutput,
@@ -25,6 +26,7 @@ const {
   ) => Promise<Array<Record<string, unknown>>>;
   extractJsonPayload: (text: string) => string;
   fetchText: (url: string, timeoutMs: number, siteConfig?: { brandName: string }) => Promise<string>;
+  getSiteConfig: (siteKey: string) => Record<string, unknown>;
   lookupPublicFetchAddress: (
     hostname: string,
     options: { all?: boolean; family?: number; hints?: number },
@@ -42,8 +44,11 @@ const {
   parseArgs: (argv: string[]) => {
     feedTimeoutMs: number;
     hermesMaxTurns: number;
+    lookbackHours: number;
+    maxItems: number;
     retryEmpty: boolean;
     sourceBatchSize: number;
+    sourceDiscovery: boolean;
   };
   parseHermesOutput: (text: string) => Array<Record<string, unknown>>;
   runWorker: (args: Record<string, unknown>) => Promise<Record<string, unknown>>;
@@ -51,6 +56,10 @@ const {
 
 const originalEnv = {
   NODE_ENV: process.env.NODE_ENV,
+  RADAR_LOOKBACK_HOURS: process.env.RADAR_LOOKBACK_HOURS,
+  RADAR_MAX_ITEMS: process.env.RADAR_MAX_ITEMS,
+  RADAR_SOURCE_BATCH_SIZE: process.env.RADAR_SOURCE_BATCH_SIZE,
+  RADAR_SOURCE_DISCOVERY: process.env.RADAR_SOURCE_DISCOVERY,
   RADAR_STORAGE_MODE: process.env.RADAR_STORAGE_MODE,
 };
 const originalFetch = globalThis.fetch;
@@ -110,6 +119,20 @@ describe('Arizona Radar worker command parsing', () => {
     expect(args.sourceBatchSize).toBe(3);
   });
 
+  it('honors runtime defaults for weekly capped feed-only runs', () => {
+    process.env.RADAR_LOOKBACK_HOURS = '168';
+    process.env.RADAR_MAX_ITEMS = '5';
+    process.env.RADAR_SOURCE_BATCH_SIZE = '0';
+    process.env.RADAR_SOURCE_DISCOVERY = '0';
+
+    const args = parseArgs(['node', 'scripts/arizona_radar/run.cjs', 'run']);
+
+    expect(args.lookbackHours).toBe(168);
+    expect(args.maxItems).toBe(5);
+    expect(args.sourceBatchSize).toBe(0);
+    expect(args.sourceDiscovery).toBe(false);
+  });
+
   it('uses the active source batch for feed rewriting', () => {
     const worker = fs.readFileSync(
       path.join(__dirname, '..', 'scripts', 'arizona_radar', 'run.cjs'),
@@ -122,6 +145,46 @@ describe('Arizona Radar worker command parsing', () => {
 });
 
 describe('Arizona Radar feed fallback', () => {
+  it('keeps concrete RSS image URLs, including media thumbnails and relative inline images', () => {
+    const drafts = parseFeedItems(
+      `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+        <channel>
+          <item>
+            <title>Austin council approves transit bond planning</title>
+            <link>https://example.com/news/austin-transit-bond</link>
+            <pubDate>Mon, 01 Jun 2026 15:00:00 GMT</pubDate>
+            <description>Austin council moved a transit item forward.</description>
+            <media:thumbnail url="https://cdn.example.com/photos/transit-board.jpg" />
+          </item>
+          <item>
+            <title>Austin ISD opens summer meal sites</title>
+            <link>https://example.com/schools/summer-meals</link>
+            <pubDate>Mon, 01 Jun 2026 14:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Families can use new meal sites.</p><img src="/images/summer-meals.jpg" />]]></description>
+          </item>
+        </channel>
+      </rss>`,
+      {
+        slug: 'austin-civic-feed',
+        name: 'Austin Civic Feed',
+        sourceType: 'local_media',
+        sourcePolicy: 'summary_link',
+        lane: 'official',
+      },
+      {
+        lookbackHours: 48,
+        maxItems: 5,
+        now: '2026-06-01T18:00:00.000Z',
+      }
+    );
+
+    expect(drafts.map((draft) => draft.heroImage)).toEqual([
+      'https://cdn.example.com/photos/transit-board.jpg',
+      'https://example.com/images/summer-meals.jpg',
+    ]);
+  });
+
   it('follows only manually validated public feed redirects', async () => {
     mockPublicDnsResolution();
     globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
@@ -151,6 +214,9 @@ describe('Arizona Radar feed fallback', () => {
       'https://example.com/feed.xml',
       expect.objectContaining({
         dispatcher: expect.any(Object),
+        headers: expect.objectContaining({
+          'accept-encoding': 'identity',
+        }),
         redirect: 'manual',
       })
     );
@@ -159,6 +225,40 @@ describe('Arizona Radar feed fallback', () => {
       'https://example.com/final.xml?utm_source=test',
       expect.objectContaining({
         dispatcher: expect.any(Object),
+        redirect: 'manual',
+      })
+    );
+  });
+
+  it('infers a same-URL trailing slash when the safe dispatcher hides redirect location', async () => {
+    mockPublicDnsResolution();
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://whatnow.com/austin/restaurants/sample-austin-opening') {
+        return new Response('', {
+          status: 301,
+        });
+      }
+      if (String(url) === 'https://whatnow.com/austin/restaurants/sample-austin-opening/') {
+        return new Response('<html><article><p>Austin opening update.</p></article></html>', {
+          status: 200,
+          headers: { 'content-type': 'text/html; charset=utf-8' },
+        });
+      }
+
+      throw new Error(`Unexpected fetch: ${String(url)}`);
+    }) as typeof fetch;
+
+    await expect(
+      fetchText('https://whatnow.com/austin/restaurants/sample-austin-opening', 1000, {
+        brandName: 'ChineseAustin',
+      })
+    ).resolves.toContain('Austin opening update');
+
+    expect(globalThis.fetch).toHaveBeenCalledTimes(2);
+    expect(globalThis.fetch).toHaveBeenNthCalledWith(
+      2,
+      'https://whatnow.com/austin/restaurants/sample-austin-opening/',
+      expect.objectContaining({
         redirect: 'manual',
       })
     );
@@ -546,6 +646,125 @@ describe('Arizona Radar feed fallback', () => {
     expect(capturedPrompt).toContain('Do not use common hyphenated word pairs');
     expect(capturedPrompt).toContain('Do not frame the rewrite as source attribution');
     expect(capturedPrompt).toContain('Project LeanNation Lake Pleasant is under construction');
+  });
+
+  it('passes Brightspot article body text into Austin feed rewrite prompts', async () => {
+    process.env.NODE_ENV = 'test';
+    process.env.RADAR_STORAGE_MODE = 'file';
+    mockPublicDnsResolution();
+
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'austin-brightspot-feed-'));
+    const hermesBin = path.join(tempDir, 'hermes-austin-rewrite');
+    const promptPath = path.join(tempDir, 'prompt.txt');
+    fs.writeFileSync(
+      hermesBin,
+      [
+        '#!/usr/bin/env node',
+        'const fs = require("node:fs");',
+        `const promptPath = ${JSON.stringify(promptPath)};`,
+        'const prompt = process.argv[process.argv.length - 1] || "";',
+        'fs.writeFileSync(promptPath, prompt, "utf8");',
+        'console.log(JSON.stringify([{',
+        '  sourceSlug: "kut-austin",',
+        '  sourceName: "KUT Austin",',
+        '  sourceUrl: "https://www.kut.org/education/2026-06-01/austin-isd-librarian-cuts-spark-backlash-after-district-reverses-course",',
+        '  canonicalUrl: "https://www.kut.org/education/2026-06-01/austin-isd-librarian-cuts-spark-backlash-after-district-reverses-course",',
+        '  sourcePublishedAt: "2026-06-01T15:00:11.000Z",',
+        '  titleEn: "Austin ISD librarian cuts draw backlash",',
+        '  titleZh: "奥斯汀学区图书馆员调整引发反弹",',
+        '  excerptEn: "Austin ISD is moving some campuses to shared librarian coverage after earlier budget-cut assurances.",',
+        '  excerptZh: "奥斯汀学区在先前保证后，将部分校区改为共享图书馆员配置。",',
+        '  bodyEn: ["Austin ISD told some smaller campuses they will share librarians next school year, reversing earlier assurances that library roles would be protected during budget planning. The change matters for families because it could reduce daily library access and student programming."],',
+        '  bodyZh: ["奥斯汀学区通知部分较小校区，下一学年将共享图书馆员，推翻了先前在预算规划中保护图书馆职位的说法。这个变化与家庭有关，因为它可能减少学生日常使用图书馆和参加相关活动的机会。"],',
+        '  topicFingerprint: "austin-isd-shared-librarians-budget"',
+        '}]))',
+      ].join('\n'),
+      'utf8'
+    );
+    fs.chmodSync(hermesBin, 0o755);
+
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://www.kut.org/kut-rss-feed-all-content.rss') {
+        return new Response(
+          `<?xml version="1.0" encoding="UTF-8"?>
+          <rss version="2.0">
+            <channel>
+              <item>
+                <title>Austin ISD librarian cuts spark backlash after district reverses course</title>
+                <link>https://www.kut.org/education/2026-06-01/austin-isd-librarian-cuts-spark-backlash-after-district-reverses-course</link>
+                <pubDate>Mon, 01 Jun 2026 15:00:11 GMT</pubDate>
+                <description>The Austin Independent School District will split librarians across some campuses.</description>
+              </item>
+            </channel>
+          </rss>`,
+          {
+            status: 200,
+            headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
+          }
+        );
+      }
+      if (
+        String(url) ===
+        'https://www.kut.org/education/2026-06-01/austin-isd-librarian-cuts-spark-backlash-after-district-reverses-course'
+      ) {
+        return new Response(
+          `<html>
+            <head>
+              <meta property="og:image:secure_url" content="https://npr.brightspotcdn.com/austin-library.jpg" />
+            </head>
+            <body>
+              <article class="ArtP-mainContent">
+                <div class="ArtP-articleBody">
+                  <p>Weeks after Austin ISD assured families and staff that librarian positions would be protected from budget cuts, the district informed employees that some schools will only have a librarian part-time.</p>
+                  <p>Emails reviewed by Austin Current show principals were told schools with fewer than 400 students and no state improvement plans will share one librarian between two campuses.</p>
+                  <p>The move comes as Austin ISD works through a budget shortfall that could reach $181 million if no action is taken before trustees adopt a budget.</p>
+                </div>
+              </article>
+            </body>
+          </html>`,
+          {
+            status: 200,
+            headers: { 'content-type': 'text/html; charset=utf-8' },
+          }
+        );
+      }
+
+      throw new Error(`Unexpected fetch: ${String(url)}`);
+    }) as typeof fetch;
+
+    const drafts = await collectDraftsFromFeeds(
+      [
+        {
+          slug: 'kut-austin',
+          name: 'KUT Austin',
+          url: 'https://www.kut.org/',
+          feedUrl: 'https://www.kut.org/kut-rss-feed-all-content.rss',
+          sourceType: 'local_media',
+          sourcePolicy: 'summary_link',
+          lane: 'community',
+        },
+      ],
+      {
+        hermesBin,
+        hermesMaxTurns: 1,
+        hermesTimeoutMs: 1000,
+        lookbackHours: 48,
+        maxItems: 5,
+        now: '2026-06-01T18:00:00.000Z',
+        siteConfig: getSiteConfig('austin'),
+        timeoutMs: 1000,
+      }
+    );
+
+    expect(drafts).toHaveLength(1);
+    expect(drafts[0]).toMatchObject({
+      sourceName: 'KUT Austin',
+      titleEn: 'Austin ISD librarian cuts draw backlash',
+      heroImage: 'https://npr.brightspotcdn.com/austin-library.jpg',
+    });
+    expect(fs.readFileSync(promptPath, 'utf8')).toContain(
+      'Weeks after Austin ISD assured families and staff'
+    );
   });
 
   it('does not run broad Hermes retry when rewritten feed articles fill the target', async () => {
