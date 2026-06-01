@@ -91,7 +91,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(launcher).toContain('RADAR_HERMES_DIRECT');
   });
 
-  it('documents owner decisions and rollback without embedding live private endpoints', () => {
+  it('documents owner decisions and rollback without embedding secrets or live private endpoints', () => {
     const readme = fs.readFileSync(readmePath, 'utf8');
     const rolloutPlan = fs.readFileSync(rolloutPlanPath, 'utf8');
 
@@ -103,6 +103,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(rolloutPlan).toContain('Backup');
     expect(rolloutPlan).toContain('Dry-run');
     expect(rolloutPlan).toContain('Rollback');
+    expect(`${readme}\n${rolloutPlan}`).not.toMatch(/(?:password|secret|token)\s*=/i);
     expect(`${readme}\n${rolloutPlan}`).not.toMatch(
       /https?:\/\/(?:10\.|127\.|192\.168\.|172\.(?:1[6-9]|2\d|3[0-1])\.)/
     );
