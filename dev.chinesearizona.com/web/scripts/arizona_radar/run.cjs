@@ -1546,7 +1546,7 @@ async function runWorker(args) {
   try {
     const feedDrafts = args.fixturePath
       ? []
-      : await collectDraftsFromFeeds(filteredManifest, {
+      : await collectDraftsFromFeeds(activeManifest, {
           hermesBin: args.hermesBin,
           hermesMaxTurns: Math.min(hermesMaxTurns, 4),
           hermesTimeoutMs: args.hermesTimeoutMs,
