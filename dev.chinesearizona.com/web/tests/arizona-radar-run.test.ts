@@ -109,6 +109,16 @@ describe('Arizona Radar worker command parsing', () => {
     expect(args.retryEmpty).toBe(false);
     expect(args.sourceBatchSize).toBe(3);
   });
+
+  it('uses the active source batch for feed rewriting', () => {
+    const worker = fs.readFileSync(
+      path.join(__dirname, '..', 'scripts', 'arizona_radar', 'run.cjs'),
+      'utf8'
+    );
+
+    expect(worker).toContain('await collectDraftsFromFeeds(activeManifest, {');
+    expect(worker).not.toContain('await collectDraftsFromFeeds(filteredManifest, {');
+  });
 });
 
 describe('Arizona Radar feed fallback', () => {
@@ -500,7 +510,7 @@ describe('Arizona Radar feed fallback', () => {
       lookbackHours: 168,
       maxItems: 10,
       retryEmpty: false,
-      sourceBatchSize: 3,
+      sourceBatchSize: 0,
       sourceSlugs: '',
       storePath,
     });
@@ -628,7 +638,7 @@ describe('Arizona Radar feed fallback', () => {
       lookbackHours: 168,
       maxItems: 1,
       retryEmpty: true,
-      sourceBatchSize: 3,
+      sourceBatchSize: 0,
       sourceSlugs: '',
       storePath,
     });
