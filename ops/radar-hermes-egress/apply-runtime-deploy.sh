@@ -42,6 +42,16 @@ write_root_file() {
   rm -f "$tmp"
 }
 
+backup_crontab_to_file() {
+  local path="$1"
+  shift
+  local tmp
+  tmp="$(mktemp)"
+  run_root "$@" >"$tmp" 2>/dev/null || true
+  run_root install -m 0600 "$tmp" "$path"
+  rm -f "$tmp"
+}
+
 timer_calendar_for_city() {
   case "$1" in
     arizona) printf '%s\n' '*-*-* 00,06,12,18:17:00' ;;
@@ -84,12 +94,12 @@ backup_existing_runtime_state() {
   run_root cp -a /etc/systemd/system/radar-hermes-worker@.service "$backup_dir/" 2>/dev/null || true
   run_root cp -a /etc/systemd/system/radar-hermes-worker@.timer "$backup_dir/" 2>/dev/null || true
   run_root cp -a /etc/nftables.d/radar-hermes-worker.nft "$backup_dir/" 2>/dev/null || true
-  run_root sh -c 'crontab -l > "$1/root.cron" 2>/dev/null || true' sh "$backup_dir"
+  backup_crontab_to_file "$backup_dir/root.cron" crontab -l
 
   if [[ -n "${SUDO_USER:-}" && "${SUDO_USER:-}" != "root" ]]; then
-    run_root sh -c 'crontab -u "$1" -l > "$2/$1.cron" 2>/dev/null || true' sh "$SUDO_USER" "$backup_dir"
+    backup_crontab_to_file "$backup_dir/$SUDO_USER.cron" crontab -u "$SUDO_USER" -l
   elif [[ -n "${USER:-}" && "${USER:-}" != "root" ]]; then
-    run_root sh -c 'crontab -u "$1" -l > "$2/$1.cron" 2>/dev/null || true' sh "$USER" "$backup_dir"
+    backup_crontab_to_file "$backup_dir/$USER.cron" crontab -u "$USER" -l
   fi
 
   if [[ -d "$runtime_root" ]]; then
@@ -223,8 +233,24 @@ disable_legacy_cron_entries() {
     return 0
   fi
 
+  local current
+  local crontab_error
   local filtered
+  current="$(mktemp)"
+  crontab_error="$(mktemp)"
   filtered="$(mktemp)"
+
+  if ! run_root crontab -u "$owner" -l >"$current" 2>"$crontab_error"; then
+    if grep -qi 'no crontab' "$crontab_error"; then
+      rm -f "$current" "$crontab_error" "$filtered"
+      return 0
+    fi
+    rm -f "$current" "$crontab_error" "$filtered"
+    printf 'Unable to read legacy radar/Hermes cron entries for %s.\n' "$owner" >&2
+    return 1
+  fi
+  rm -f "$crontab_error"
+
   awk '
     /scrape:arizona-radar|scrape:austin-radar|scrape:los-angeles-radar|scrape:sf-bay-radar|scripts\/arizona_radar\/cron_sync\.sh/ {
       if ($0 !~ /^# radar-hermes-egress disabled legacy cron:/) {
@@ -233,9 +259,9 @@ disable_legacy_cron_entries() {
       }
     }
     { print }
-  ' "$last_backup_dir/$owner.cron" >"$filtered"
+  ' "$current" >"$filtered"
   run_root crontab -u "$owner" "$filtered"
-  rm -f "$filtered"
+  rm -f "$current" "$filtered"
   printf 'Disabled matching legacy radar/Hermes cron entries after backup.\n'
 }
 

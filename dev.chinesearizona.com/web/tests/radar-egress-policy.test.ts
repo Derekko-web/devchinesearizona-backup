@@ -69,9 +69,16 @@ describe('Radar/Hermes egress policy templates', () => {
 
     expect(runtimeWorkflow).toContain('workflows:');
     expect(runtimeWorkflow).toContain('- Deploy Dev');
+    expect(runtimeWorkflow).toContain('DEV_VPS_RUNTIME_EGRESS_USER');
+    expect(runtimeWorkflow).toContain('DEV_VPS_RUNTIME_EGRESS_SSH_KEY');
+    expect(runtimeWorkflow).toContain('approved runtime operator');
+    expect(runtimeWorkflow).toContain('runtime_egress_key');
     expect(runtimeWorkflow).toContain('apply-runtime-deploy.sh');
     expect(runtimeWorkflow).toContain('current_sha="$(git rev-parse HEAD)"');
     expect(applyRuntime).toContain('backup_existing_runtime_state');
+    expect(applyRuntime).toContain('backup_crontab_to_file');
+    expect(applyRuntime).not.toContain("run_root sh -c 'crontab");
+    expect(applyRuntime).toContain('run_root crontab -u "$owner" -l');
     expect(applyRuntime).toContain('install_runtime_env_files');
     expect(applyRuntime).toContain('systemd-analyze verify');
     expect(applyRuntime).toContain('systemctl daemon-reload');
