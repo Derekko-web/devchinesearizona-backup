@@ -235,8 +235,34 @@ run_worker_once_if_needed() {
   fi
 
   for city in "${cities[@]}"; do
+    local unit="radar-hermes-worker@$city.service"
+    local elapsed=0
+    local active_state
+    local jobs
+    local result
+
     printf 'Starting protected radar/Hermes worker once for %s.\n' "$city"
-    run_root systemctl start "radar-hermes-worker@$city.service"
+    run_root systemctl start --no-block "$unit"
+
+    while true; do
+      jobs="$(run_root systemctl list-jobs --no-legend "$unit" 2>/dev/null || true)"
+      active_state="$(run_root systemctl is-active "$unit" 2>/dev/null || true)"
+      result="$(run_root systemctl show "$unit" --property=Result --value 2>/dev/null || true)"
+
+      if [[ "$active_state" == "failed" || "$result" == "failed" ]]; then
+        run_root systemctl status --no-pager -l "$unit" || true
+        return 1
+      fi
+
+      if [[ -z "$jobs" && "$active_state" == "inactive" && "$result" == "success" ]]; then
+        printf 'Protected radar/Hermes worker completed for %s.\n' "$city"
+        break
+      fi
+
+      sleep 15
+      elapsed=$((elapsed + 15))
+      printf 'Still waiting for protected radar/Hermes worker for %s after %ss.\n' "$city" "$elapsed"
+    done
   done
 }
 
