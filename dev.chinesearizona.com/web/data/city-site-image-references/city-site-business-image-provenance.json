@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-06-01T19:07:01.565Z",
-  "method": "Business-specific public web references were captured from official websites or existing vetted source URLs and processed into distinct 1200x800 WebP assets with sharp. The pipeline preserves page/business visual identity and does not add invented readable signage, logos, or text.",
+  "generatedAt": "2026-06-01T20:35:00.000Z",
+  "method": "Business-specific public web references were captured from official websites, official source media, vetted source pages, or source-grounded non-text generated context when official media could not be retrieved. Assets were cropped and encoded as distinct 1200x800 WebP derivatives with sharp. No invented readable signage, logos, or text was added.",
   "businesses": [
     {
       "site": "austin",
@@ -227,11 +227,11 @@
       "slug": "hunan-bistro-austin",
       "name": "Hunan Bistro",
       "assetPath": "/city-site-images/hunan-bistro-austin.webp",
-      "referencePageUrl": "https://www.hunanbistroonline.com/contact-us/",
+      "referencePageUrl": "https://www.hunanbistrotx.com/",
       "referenceImageUrl": null,
-      "referenceKind": "official-page-search-capture-fallback",
-      "referenceTitle": "Hunan Bistro",
-      "transform": "Fallback derivative from the official page content available to search crawlers because the live official site timed out or DNS failed in this environment; no synthetic business photo, signage, or logo was invented."
+      "referenceKind": "official-ordering-page-browser-capture",
+      "referenceTitle": "Order Authentic Chinese Online | Hunan Bistro - Pickup or Delivery Available",
+      "transform": "Browser capture of the live Hunan Bistro Austin ordering page with official business copy and food imagery, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
     },
     {
       "site": "austin",
@@ -359,11 +359,11 @@
       "slug": "tso-chinese-takeout-delivery-round-rock",
       "name": "Tso Chinese Takeout & Delivery",
       "assetPath": "/city-site-images/tso-chinese-takeout-delivery-round-rock.webp",
-      "referencePageUrl": "https://tsochinese.com/",
-      "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "Attention Required! | Cloudflare",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referencePageUrl": "https://tsochinese.com/locations/Round%20Rock",
+      "referenceImageUrl": "https://tsoimages.tsochinese.com/product/PR_sjOmVolBjvnt6nl7NaomRE18rkDqMVZxfnksrgPP.jpg",
+      "referenceKind": "official-location-page-source-image",
+      "referenceTitle": "Tso Chinese Takeout & Delivery | Round Rock 78664",
+      "transform": "Official Round Rock location image from the Tso location page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
     },
     {
       "site": "austin",
@@ -383,9 +383,9 @@
       "assetPath": "/city-site-images/yz-cpa-austin.webp",
       "referencePageUrl": "https://yz-cpa.com/",
       "referenceImageUrl": null,
-      "referenceKind": "official-page-search-capture-fallback",
+      "referenceKind": "official-page-source-grounded-generated-context",
       "referenceTitle": "YZ CPA LLC",
-      "transform": "Fallback derivative from the official page content available to search crawlers because the live official site timed out or DNS failed in this environment; no synthetic business photo, signage, or logo was invented."
+      "transform": "Source-grounded non-text CPA/tax-office scene generated from the official YZ CPA Austin business context after the live site and official media URLs timed out in this environment; cropped and encoded as 1200x800 WebP with no readable invented signage, logo, or text."
     },
     {
       "site": "los-angeles",
@@ -458,11 +458,11 @@
       "slug": "chicha-san-chen-san-gabriel-san-gabriel",
       "name": "CHICHA San Chen San Gabriel",
       "assetPath": "/city-site-images/chicha-san-chen-san-gabriel-san-gabriel.webp",
-      "referencePageUrl": "https://chichasanchensocal.com/index.php",
+      "referencePageUrl": "https://www.chichasanchen.com/en/store/USA/SoCal/",
       "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "404 Not Found",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referenceKind": "official-store-location-page-browser-capture",
+      "referenceTitle": "USA-全球據點-CHI CHA SAN CHEN",
+      "transform": "Browser capture of the official CHI CHA SAN CHEN SoCal store-location page including the San Gabriel store row, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
     },
     {
       "site": "los-angeles",
@@ -524,11 +524,11 @@
       "slug": "chinese-evangelical-free-church-of-los-angeles-monterey-park",
       "name": "Chinese Evangelical Free Church of Los Angeles",
       "assetPath": "/city-site-images/chinese-evangelical-free-church-of-los-angeles-monterey-park.webp",
-      "referencePageUrl": "https://cefcla.org/en/",
-      "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "Just a moment...",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referencePageUrl": "https://m1.hhlink.com/link/www.cefc.org/Chinese-Evangelical-Free-Church-of-Los-Angeles_2",
+      "referenceImageUrl": "https://m1.hhlink.com/img/C/www.cefc.org.Jpeg",
+      "referenceKind": "vetted-directory-official-site-thumbnail-capture",
+      "referenceTitle": "Chinese Evangelical Free Church of Los Angeles www.cefc.org",
+      "transform": "Browser capture of a vetted Chinese website directory entry containing the church identity, official-site URL, organization description, and cached official-site thumbnail after the live CEFCLA site showed a security interstitial; cropped and encoded as a 1200x800 WebP derivative."
     },
     {
       "site": "los-angeles",
@@ -590,11 +590,11 @@
       "slug": "happy-lemon-alhambra-alhambra",
       "name": "Happy Lemon Alhambra",
       "assetPath": "/city-site-images/happy-lemon-alhambra-alhambra.webp",
-      "referencePageUrl": "https://happylemonusa.com/location/",
-      "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "Error page",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referencePageUrl": "https://happylemonusa.com/",
+      "referenceImageUrl": "https://32221013.s21i.faiusr.com/4/8/ABUIABAEGAAg8KamzwYous62_Qcwvw047AU.png.webp",
+      "referenceKind": "official-brand-page-source-image",
+      "referenceTitle": "HappyLemon USA",
+      "transform": "Official HappyLemon USA brand-page interior image used after the old locations URL returned 404, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
     },
     {
       "site": "los-angeles",
@@ -909,22 +909,22 @@
       "slug": "happy-lemon-cupertino-cupertino",
       "name": "Happy Lemon Cupertino",
       "assetPath": "/city-site-images/happy-lemon-cupertino-cupertino.webp",
-      "referencePageUrl": "https://happylemonusa.com/location/",
-      "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "Error page",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referencePageUrl": "https://happylemonusa.com/",
+      "referenceImageUrl": "https://32221013.s21i.faiusr.com/4/8/ABUIABAEGAAg-dSnzwYo04SCrQMwlwM4iAQ.png.webp",
+      "referenceKind": "official-brand-page-source-image",
+      "referenceTitle": "HappyLemon USA",
+      "transform": "Official HappyLemon USA brand-page drink image used after the old locations URL returned 404, cropped and encoded as a 1200x800 WebP derivative distinct from the Alhambra asset; no synthetic text, logo, or signage added."
     },
     {
       "site": "sf-bay",
       "slug": "house-of-nanking-san-francisco",
       "name": "House of Nanking",
       "assetPath": "/city-site-images/house-of-nanking-san-francisco.webp",
-      "referencePageUrl": "https://www.houseofnanking.net/",
-      "referenceImageUrl": null,
-      "referenceKind": "official-page-browser-capture",
-      "referenceTitle": "houseofnanking.net | 522: Connection timed out",
-      "transform": "Browser capture of the official/source page, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
+      "referencePageUrl": "https://www.houseofnankingsf.com/",
+      "referenceImageUrl": "https://images.getbento.com/accounts/eecc446dc5ab4d2b8eaef51b57551588/media/images/46820signage.jpg?w=1800&fit=max&auto=compress,format&cs=origin",
+      "referenceKind": "official-website-source-image",
+      "referenceTitle": "House of Nanking | Chinese Restaurant in San Francisco, CA",
+      "transform": "Official House of Nanking website storefront/signage image from the current Bento-hosted site, cropped and encoded as a 1200x800 WebP derivative; no synthetic text, logo, or signage added."
     },
     {
       "site": "sf-bay",
@@ -1010,9 +1010,9 @@
       "assetPath": "/city-site-images/wai-lau-dds-san-francisco.webp",
       "referencePageUrl": "https://www.wailaudds.com/",
       "referenceImageUrl": null,
-      "referenceKind": "official-page-search-capture-fallback",
+      "referenceKind": "official-page-source-grounded-generated-context",
       "referenceTitle": "Wai Lau DDS",
-      "transform": "Fallback derivative from the official page content available to search crawlers because the live official site timed out or DNS failed in this environment; no synthetic business photo, signage, or logo was invented."
+      "transform": "Source-grounded non-text dental-office scene generated from the indexed official Wai Lau DDS Chinatown dental-office context after the live domain failed DNS resolution in this environment; cropped and encoded as 1200x800 WebP with no readable invented signage, logo, or text."
     },
     {
       "site": "sf-bay",
