@@ -565,6 +565,39 @@ function extractArticlePayload(html, fallback = {}) {
   };
 }
 
+function readPatternList(source, key) {
+  const value = source && source[key];
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.map((pattern) => String(pattern || '').trim()).filter(Boolean);
+}
+
+function configuredPatternMatches(value, pattern) {
+  const text = String(value || '');
+  if (!text) {
+    return false;
+  }
+
+  try {
+    return new RegExp(pattern, 'i').test(text);
+  } catch (_error) {
+    return text.toLowerCase().includes(pattern.toLowerCase());
+  }
+}
+
+function sourceExcludesFeedItem(source, input) {
+  return (
+    readPatternList(source, 'excludeUrlPatterns').some((pattern) =>
+      configuredPatternMatches(input.canonicalUrl, pattern)
+    ) ||
+    readPatternList(source, 'excludeTitlePatterns').some((pattern) =>
+      configuredPatternMatches(input.title, pattern)
+    )
+  );
+}
+
 function parseFeedItems(xml, source, options = {}) {
   const now = options.now || new Date().toISOString();
   const lookbackHours = Number.isFinite(options.lookbackHours) ? options.lookbackHours : 168;
@@ -582,6 +615,9 @@ function parseFeedItems(xml, source, options = {}) {
     const canonicalUrl = normalizeCanonicalUrl(input.canonicalUrl);
     const sourcePublishedAt = normalizeFeedDate(input.sourcePublishedAt);
     if (!title || !canonicalUrl || !isWithinLookback(sourcePublishedAt, lookbackHours, now)) {
+      return;
+    }
+    if (sourceExcludesFeedItem(source, { canonicalUrl, title })) {
       return;
     }
 
@@ -968,6 +1004,11 @@ async function resolveFetchablePublicUrl(value) {
 
 function resolveFetchRedirectUrl(location, baseUrl) {
   if (!location) {
+    const base = assertFetchablePublicUrl(baseUrl);
+    if (base.pathname && !base.pathname.endsWith('/')) {
+      base.pathname = `${base.pathname}/`;
+      return assertFetchablePublicUrl(base.toString()).toString();
+    }
     throw new Error('Unsafe feed redirect.');
   }
 
@@ -988,7 +1029,8 @@ async function fetchTextWithRedirects(url, options) {
   const response = await fetch(fetchUrl, {
     dispatcher: SAFE_FETCH_DISPATCHER,
     headers: {
-      accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      accept: 'text/html, application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+      'accept-encoding': 'identity',
       'user-agent': `${options.siteConfig.brandName}RadarFeedSync/1.0`,
     },
     redirect: 'manual',

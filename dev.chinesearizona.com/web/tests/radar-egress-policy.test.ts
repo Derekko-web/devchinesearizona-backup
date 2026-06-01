@@ -46,6 +46,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(service).toContain('Environment=HOME=/var/lib/chinesearizona/radar-hermes-egress/home');
     expect(service).toContain('Environment=XDG_CACHE_HOME=/var/lib/chinesearizona/radar-hermes-egress/cache');
     expect(service).toContain('Environment=RADAR_DRAFT_MULTIPLIER=1');
+    expect(service).toContain('Environment=RADAR_LOOKBACK_HOURS=168');
     expect(service).toContain('Environment=RADAR_SOURCE_BATCH_SIZE=3');
     expect(service).toContain('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
     expect(service).toContain('RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX');

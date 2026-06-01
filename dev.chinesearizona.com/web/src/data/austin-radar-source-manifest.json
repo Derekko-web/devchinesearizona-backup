@@ -18,6 +18,12 @@
     "name": "KUT Austin",
     "url": "https://www.kut.org/",
     "feedUrl": "https://www.kut.org/kut-rss-feed-all-content.rss",
+    "excludeUrlPatterns": [
+      "/station-information/"
+    ],
+    "excludeTitlePatterns": [
+      "^Get involved spotlight:"
+    ],
     "sourceType": "local_media",
     "sourcePolicy": "summary_link",
     "lane": "community",
@@ -25,6 +31,20 @@
     "notes": {
       "en": "Use for Austin public radio coverage of civic life, schools, transportation, and community issues across Central Texas.",
       "zh": "用于奥斯汀公共广播关于市民生活、学校、交通与中德州社区议题的报道。"
+    }
+  },
+  {
+    "slug": "austin-current",
+    "name": "Austin Current",
+    "url": "https://austincurrent.org/",
+    "feedUrl": "https://austincurrent.org/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "official",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin school district, City Council, budget, mobility, and civic-accountability reporting.",
+      "zh": "用于奥斯汀学区、市议会、预算、交通与市政监督报道。"
     }
   },
   {

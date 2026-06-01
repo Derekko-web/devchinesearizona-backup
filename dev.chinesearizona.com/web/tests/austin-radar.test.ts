@@ -36,6 +36,13 @@ const {
   };
   defaultStoreSnapshot: () => Record<string, unknown>;
 };
+const { parseFeedItems } = require('../scripts/arizona_radar/run.cjs') as {
+  parseFeedItems: (
+    xml: string,
+    source: Record<string, unknown>,
+    options: { lookbackHours: number; maxItems: number; now: string }
+  ) => Array<Record<string, unknown>>;
+};
 
 describe('Austin Radar config', () => {
   it('runs the Austin radar wrapper as a real CLI entrypoint', () => {
@@ -66,6 +73,11 @@ describe('Austin Radar config', () => {
     ).toBe(true);
     expect(
       austinManifest.some(
+        (source) => source.slug === 'austin-current' && source.feedUrl === 'https://austincurrent.org/feed/'
+      )
+    ).toBe(true);
+    expect(
+      austinManifest.some(
         (source) => 'feedUrl' in source && source.feedUrl?.includes('austinmonitor.com/feed')
       )
     ).toBe(true);
@@ -74,6 +86,50 @@ describe('Austin Radar config', () => {
     expect(austinSourceText).not.toContain('phoenix');
     expect(austinSourceText).not.toContain('arizona');
     expect(austinSourceText).not.toContain('skyharbor');
+    expect(
+      (austinManifest.find((source) => source.slug === 'kut-austin') as Record<string, unknown>)
+        .excludeUrlPatterns
+    ).toContain('/station-information/');
+  });
+
+  it('filters KUT station and promotional feed items before Austin rewrites', () => {
+    const kutSource = austinManifest.find((source) => source.slug === 'kut-austin');
+    const drafts = parseFeedItems(
+      `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0">
+        <channel>
+          <item>
+            <title>Our next coffee meetup is at Epoch Coffee - Far West, June 26</title>
+            <link>https://www.kut.org/station-information/2026-05-31/our-next-coffee-meetup-is-at-epoch-coffee-far-west-june-26</link>
+            <pubDate>Sun, 31 May 2026 20:44:54 GMT</pubDate>
+            <description>A station meetup should not become a news item.</description>
+          </item>
+          <item>
+            <title>Get involved spotlight: Urban Roots</title>
+            <link>https://www.kut.org/community/2026-06-01/get-involved-spotlight-urban-roots</link>
+            <pubDate>Mon, 01 Jun 2026 08:00:00 GMT</pubDate>
+            <description>A promotional spotlight should not become a news item.</description>
+          </item>
+          <item>
+            <title>Austin ISD librarian cuts spark backlash after district reverses course</title>
+            <link>https://www.kut.org/education/2026-06-01/austin-isd-librarian-cuts-spark-backlash-after-district-reverses-course</link>
+            <pubDate>Mon, 01 Jun 2026 15:00:11 GMT</pubDate>
+            <description>Austin ISD will split librarians across some campuses.</description>
+          </item>
+        </channel>
+      </rss>`,
+      kutSource as Record<string, unknown>,
+      {
+        lookbackHours: 48,
+        maxItems: 10,
+        now: '2026-06-01T18:00:00.000Z',
+      }
+    );
+
+    expect(drafts).toHaveLength(1);
+    expect(drafts[0]).toMatchObject({
+      titleEn: 'Austin ISD librarian cuts spark backlash after district reverses course',
+    });
   });
 
   it('resolves Austin runtime stores under the migrated runtime data root', () => {
