@@ -140,6 +140,10 @@ ensure_runtime_paths() {
     run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$runtime_root/$store_dir"
     run_root chown -R "$worker_user:$writer_group" "$runtime_root/$store_dir" 2>/dev/null || true
   done
+  run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$state_dir"
+  run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$state_dir/home"
+  run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$state_dir/home/.hermes"
+  run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$state_dir/cache"
   run_root install -d -m 0750 /etc/chinesearizona/radar-hermes
 }
 
@@ -166,7 +170,9 @@ verify_loaded_policy() {
     'IPAddressDeny=10.0.0.0/8' \
     'IPAddressDeny=127.0.0.0/8' \
     'IPAddressDeny=fc00::/7' \
-    'ReadWritePaths=/var/www/runtime-data/dev.chinesearizona.com/web'
+    'ReadWritePaths=/var/www/runtime-data/dev.chinesearizona.com/web' \
+    'ReadWritePaths=/var/lib/chinesearizona/radar-hermes-egress' \
+    'BindReadOnlyPaths=/run/systemd/resolve/resolv.conf:/etc/resolv.conf'
   do
     if ! grep -qF "$required" <<<"$unit_text"; then
       printf 'Missing required runtime egress setting for %s: %s\n' "$unit" "$required" >&2
@@ -224,7 +230,7 @@ apply_optional_nftables() {
 }
 
 write_state_marker() {
-  run_root install -d -m 0755 "$state_dir"
+  run_root install -d -m 0770 "$state_dir"
   write_root_file "$state_dir/systemd-layer.enabled" 0644 <<EOF
 enabled_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 operator=github-actions-deploy
