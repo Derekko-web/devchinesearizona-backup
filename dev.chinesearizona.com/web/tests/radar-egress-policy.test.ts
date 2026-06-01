@@ -40,7 +40,11 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(service).toContain('User=radar-hermes');
     expect(service).toContain('WorkingDirectory=/var/www/dev.chinesearizona.com/web');
     expect(service).toContain('ReadWritePaths=/var/www/runtime-data/dev.chinesearizona.com/web');
+    expect(service).toContain('ReadWritePaths=/var/lib/chinesearizona/radar-hermes-egress');
+    expect(service).toContain('BindReadOnlyPaths=/run/systemd/resolve/resolv.conf:/etc/resolv.conf');
     expect(service).toContain('Environment=PATH=/usr/local/bin:/usr/bin:/bin');
+    expect(service).toContain('Environment=HOME=/var/lib/chinesearizona/radar-hermes-egress/home');
+    expect(service).toContain('Environment=XDG_CACHE_HOME=/var/lib/chinesearizona/radar-hermes-egress/cache');
     expect(service).toContain('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
     expect(service).toContain('RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX');
     expect(service).not.toContain('MemoryDenyWriteExecute=true');
@@ -83,6 +87,8 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(applyRuntime).toContain('runtime_writer_group');
     expect(applyRuntime).toContain('RADAR_HERMES_RUNTIME_WRITER_GROUP');
     expect(applyRuntime).toContain('install -d -o "$worker_user" -g "$writer_group" -m 0770 "$runtime_root"');
+    expect(applyRuntime).toContain('install -d -o "$worker_user" -g "$writer_group" -m 0770 "$state_dir/home/.hermes"');
+    expect(applyRuntime).toContain('BindReadOnlyPaths=/run/systemd/resolve/resolv.conf:/etc/resolv.conf');
     expect(applyRuntime).toContain('install_runtime_env_files');
     expect(applyRuntime).toContain('systemd-analyze verify');
     expect(applyRuntime).toContain('systemctl daemon-reload');
