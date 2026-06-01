@@ -26,6 +26,61 @@ from scripts.directory_scrape.utils import (
 from .models import CityDirectoryCandidate, CityDirectorySiteConfig, CityDirectorySource
 
 
+US_STATE_CODES = {
+    "alabama": "AL",
+    "alaska": "AK",
+    "arizona": "AZ",
+    "arkansas": "AR",
+    "california": "CA",
+    "colorado": "CO",
+    "connecticut": "CT",
+    "delaware": "DE",
+    "district of columbia": "DC",
+    "florida": "FL",
+    "georgia": "GA",
+    "hawaii": "HI",
+    "idaho": "ID",
+    "illinois": "IL",
+    "indiana": "IN",
+    "iowa": "IA",
+    "kansas": "KS",
+    "kentucky": "KY",
+    "louisiana": "LA",
+    "maine": "ME",
+    "maryland": "MD",
+    "massachusetts": "MA",
+    "michigan": "MI",
+    "minnesota": "MN",
+    "mississippi": "MS",
+    "missouri": "MO",
+    "montana": "MT",
+    "nebraska": "NE",
+    "nevada": "NV",
+    "new hampshire": "NH",
+    "new jersey": "NJ",
+    "new mexico": "NM",
+    "new york": "NY",
+    "north carolina": "NC",
+    "north dakota": "ND",
+    "ohio": "OH",
+    "oklahoma": "OK",
+    "oregon": "OR",
+    "pennsylvania": "PA",
+    "rhode island": "RI",
+    "south carolina": "SC",
+    "south dakota": "SD",
+    "tennessee": "TN",
+    "texas": "TX",
+    "utah": "UT",
+    "vermont": "VT",
+    "virginia": "VA",
+    "washington": "WA",
+    "west virginia": "WV",
+    "wisconsin": "WI",
+    "wyoming": "WY",
+}
+
+
 def _meta_content(soup: BeautifulSoup, key: str) -> str:
     for attrs in ({"property": key}, {"name": key}):
         tag = soup.find("meta", attrs=attrs)
@@ -38,19 +93,32 @@ def _visible_text(soup: BeautifulSoup) -> str:
     return normalize_whitespace(soup.get_text(" ", strip=True))
 
 
-def _jsonld_address(entity: dict[str, Any] | None) -> str | None:
+def _jsonld_address_value(address: dict[str, Any], key: str) -> str | None:
+    value = address.get(key)
+    if isinstance(value, list):
+        value = next((item for item in value if item), None)
+    if value is None:
+        return None
+    return maybe_none(str(value))
+
+
+def _jsonld_address_parts(entity: dict[str, Any] | None) -> tuple[str | None, str | None, str | None]:
     if not entity:
-        return None
+        return None, None, None
     address = entity.get("address")
+    if isinstance(address, list):
+        address = next((item for item in address if isinstance(item, dict)), None)
     if not isinstance(address, dict):
-        return None
+        return None, None, None
+    city = _jsonld_address_value(address, "addressLocality")
+    state = _jsonld_address_value(address, "addressRegion")
     parts = [
-        address.get("streetAddress"),
-        address.get("addressLocality"),
-        address.get("addressRegion"),
-        address.get("postalCode"),
+        _jsonld_address_value(address, "streetAddress"),
+        city,
+        state,
+        _jsonld_address_value(address, "postalCode"),
     ]
-    return maybe_none(", ".join(str(part) for part in parts if part))
+    return maybe_none(", ".join(str(part) for part in parts if part)), city, state
 
 
 def _jsonld_website(entity: dict[str, Any] | None, page_url: str) -> str | None:
@@ -136,6 +204,15 @@ def _state_from_address(address: str | None) -> str | None:
     return match.group(1) if match else None
 
 
+def _state_code_from_region(region: str | None) -> str | None:
+    region = normalize_whitespace(region)
+    if not region:
+        return None
+    if re.fullmatch(r"[A-Za-z]{2}", region):
+        return region.upper()
+    return US_STATE_CODES.get(region.casefold())
+
+
 def _city_from_text(text: str | None, allowed_cities: list[str]) -> str | None:
     if not text:
         return None
@@ -143,6 +220,16 @@ def _city_from_text(text: str | None, allowed_cities: list[str]) -> str | None:
         if re.search(rf"\b{re.escape(city)}\b", text, re.IGNORECASE):
             return city
     return None
+
+
+def _canonical_allowed_city(city: str | None, allowed_cities: list[str]) -> str | None:
+    city = normalize_whitespace(city)
+    if not city:
+        return None
+    for allowed_city in allowed_cities:
+        if city.casefold() == allowed_city.casefold():
+            return allowed_city
+    return city
 
 
 def _candidate_dedupe_keys(name: str, city: str, phone: str | None, website: str | None) -> list[str]:
@@ -269,9 +356,14 @@ def candidate_from_source_html(
     entity = best_json_ld_entity(extract_json_ld_entities(soup))
     name, name_note = _best_name(soup, entity, source)
     short_description, description = _best_description(soup, entity)
-    address = _jsonld_address(entity)
-    city = _city_from_text(address, site.allowedCities) or _city_from_text(text[:3000], site.allowedCities) or source.city
-    state_code = _state_from_address(address)
+    address, address_city, address_state = _jsonld_address_parts(entity)
+    city = (
+        _canonical_allowed_city(address_city, site.allowedCities)
+        or _city_from_text(address, site.allowedCities)
+        or _city_from_text(text[:3000], site.allowedCities)
+        or source.city
+    )
+    state_code = _state_from_address(address) or _state_code_from_region(address_state)
     website = _jsonld_website(entity, page_url)
     phone = _best_phone(soup, text, entity)
     email = _best_email(soup, text, website)

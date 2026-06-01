@@ -38,6 +38,12 @@ def load_site_config(site_key: str, manifest_path: Path | None = None) -> CityDi
 
     for source_payload in site_payload.get("sources", []):
         source_category = source_payload["sourceCategory"]
+        if source_category not in source_categories:
+            supported = ", ".join(sorted(source_categories)) or "none"
+            raise ValueError(
+                f"Source {source_payload.get('id', '<unknown>')} uses unsupported sourceCategory "
+                f"'{source_category}'. Supported source categories: {supported}"
+            )
         category_slug = source_payload.get("categorySlug") or source_categories.get(source_category, {}).get("categorySlug")
         if not category_slug:
             raise ValueError(f"Source {source_payload.get('id', '<unknown>')} is missing a categorySlug")

@@ -49,6 +49,11 @@ Recommended source fields:
 - `serviceAreaText`: use only when the source is service-area based.
 - `notes`: short source note for reviewers.
 
+If a fetched page exposes structured address data, that address locality is
+treated as authoritative. A source row configured for Austin will still be
+blocked if the page itself says the business is in Dallas, Phoenix, or any
+other city outside the selected site's `allowedCities` list.
+
 ## Run Discovery
 
 From `dev.chinesearizona.com/web`:
