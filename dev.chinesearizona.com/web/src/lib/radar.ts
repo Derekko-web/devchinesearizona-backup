@@ -113,9 +113,18 @@ function siteEnvKey(site: SiteProfile): string {
 function resolveRuntimePath(site: SiteProfile): string {
   const configuredPath = site.news.articleDataSource.path;
   if (configuredPath) {
-    return path.isAbsolute(configuredPath)
-      ? configuredPath
-      : path.join(/* turbopackIgnore: true */ process.cwd(), configuredPath);
+    if (path.isAbsolute(configuredPath)) {
+      return configuredPath;
+    }
+
+    if (process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT) {
+      return path.join(
+        /* turbopackIgnore: true */ process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT,
+        configuredPath
+      );
+    }
+
+    return path.join(/* turbopackIgnore: true */ process.cwd(), configuredPath);
   }
 
   return path.join(/* turbopackIgnore: true */ process.cwd(), 'data', 'radar-runtime', 'store.json');

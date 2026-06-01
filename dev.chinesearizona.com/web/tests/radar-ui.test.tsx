@@ -10,6 +10,7 @@ const originalRadarStorePath = process.env.RADAR_STORE_PATH;
 const originalLosAngelesRadarStorePath = process.env.RADAR_STORE_PATH_LOS_ANGELES;
 const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
 const originalSfBayRadarStorePath = process.env.SF_BAY_RADAR_STORE_PATH;
+const originalRuntimeDataRoot = process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
 const originalZhTranslationCachePath = process.env.ARTICLE_ZH_TRANSLATION_CACHE_PATH;
 const zhTranslationCachePath = path.join(os.tmpdir(), 'radar-ui-zh-cache.json');
 
@@ -90,6 +91,12 @@ afterEach(() => {
     process.env.SF_BAY_RADAR_STORE_PATH = originalSfBayRadarStorePath;
   } else {
     delete process.env.SF_BAY_RADAR_STORE_PATH;
+  }
+
+  if (originalRuntimeDataRoot) {
+    process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT = originalRuntimeDataRoot;
+  } else {
+    delete process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
   }
 
   if (originalZhTranslationCachePath) {
@@ -445,7 +452,7 @@ describe('radar ui', () => {
     );
 
     expect(html).toContain('All SF Bay News');
-    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
@@ -525,13 +532,20 @@ describe('radar ui', () => {
     expect(detailHtml).not.toContain('Phoenix Sky Harbor');
   });
 
-  it('renders SF Bay archive and article pages with SF Bay labels and source links only', async () => {
+  it('renders SF Bay feed, archive, and article pages with SF Bay labels and source links only', async () => {
     writeRadarStore();
-    const [{ ArticleDetailPageView, NewsArchivePageView }, { siteProfiles }] = await Promise.all([
+    const [{ ArticleDetailPageView, CommunityRadarPageView, NewsArchivePageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),
       import('@/lib/site-config'),
     ]);
 
+    const feedHtml = renderToStaticMarkup(
+      await CommunityRadarPageView({
+        locale: 'en',
+        searchParams: {},
+        site: siteProfiles['sf-bay'],
+      })
+    );
     const archiveHtml = renderToStaticMarkup(
       await NewsArchivePageView({
         locale: 'en',
@@ -547,6 +561,12 @@ describe('radar ui', () => {
       }))!
     );
 
+    expect(feedHtml).toContain('All SF Bay News');
+    expect(feedHtml).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
+    expect(feedHtml).not.toContain('There are no public items for this filter yet');
+    expect(feedHtml).not.toContain('mesa-radar-housing-pulse');
+    expect(feedHtml).not.toContain('Phoenix Sky Harbor');
+    expect(feedHtml).not.toContain('Arizona News');
     expect(archiveHtml).toContain('The SF Bay News homepage');
     expect(archiveHtml).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
     expect(detailHtml).toContain('Back to SF Bay News');
