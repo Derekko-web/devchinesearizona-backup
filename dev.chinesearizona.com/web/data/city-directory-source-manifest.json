@@ -165,6 +165,134 @@
           "sourceCategory": "cultural_community_organizations",
           "city": "Austin",
           "nameHint": "Chinese Society of Austin"
+        },
+        {
+          "id": "austin-soupleaf-hot-pot",
+          "url": "https://www.soupleafhotpot.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Soupleaf Hot Pot"
+        },
+        {
+          "id": "austin-rice-bowl-cafe",
+          "url": "https://www.ricebowlcafeaustin.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Rice Bowl Cafe"
+        },
+        {
+          "id": "austin-hunan-bistro",
+          "url": "https://www.hunanbistroonline.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Hunan Bistro",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-shan-china-bistro",
+          "url": "https://www.shanchinabistro.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Shan China Bistro and Bar"
+        },
+        {
+          "id": "austin-wu-chow-downtown",
+          "url": "https://www.wuchowaustin.com/locations-menus",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Wu Chow Downtown"
+        },
+        {
+          "id": "austin-lotus-chinese",
+          "url": "https://www.lotuschineseatx.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Lotus Chinese",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-red-lotus-asian-grille",
+          "url": "https://www.redlotusasiangrille.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Red Lotus Asian Grille"
+        },
+        {
+          "id": "austin-tso-chinese",
+          "url": "https://tsochinese.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Tso Chinese Takeout & Delivery",
+          "serviceAreaText": "Austin and Round Rock"
+        },
+        {
+          "id": "austin-steamies-dumplings",
+          "url": "https://www.steamiesdumplings.com/",
+          "sourceCategory": "restaurants",
+          "city": "Austin",
+          "nameHint": "Steamies Dumplings"
+        },
+        {
+          "id": "austin-austin-chinese-church",
+          "url": "https://austinchinesechurch.org/",
+          "sourceCategory": "chinese_churches_religious_groups",
+          "city": "Austin",
+          "nameHint": "Austin Chinese Church",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-austin-christian-assembly",
+          "url": "https://www.acafamily.org/",
+          "sourceCategory": "chinese_churches_religious_groups",
+          "city": "Austin",
+          "nameHint": "Austin Christian Assembly",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-taiwanese-presbyterian-church",
+          "url": "https://atpcweb.org/",
+          "sourceCategory": "chinese_churches_religious_groups",
+          "city": "Austin",
+          "nameHint": "Austin Taiwanese Presbyterian Church",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-tcml-at-austin",
+          "url": "https://atpcweb.org/gma/tcml/about/",
+          "sourceCategory": "education_language_schools",
+          "city": "Austin",
+          "nameHint": "Taiwan Center for Mandarin Learning at Austin",
+          "serviceAreaText": "Austin"
+        },
+        {
+          "id": "austin-table-tennis-club",
+          "url": "https://www.austintabletennis.net/",
+          "sourceCategory": "ping_pong_table_tennis",
+          "city": "Austin",
+          "nameHint": "Austin Table Tennis Club"
+        },
+        {
+          "id": "austin-ct3-table-tennis",
+          "url": "https://playct3.com/",
+          "sourceCategory": "ping_pong_table_tennis",
+          "city": "Austin",
+          "nameHint": "CT3 Table Tennis Club"
+        },
+        {
+          "id": "austin-greater-austin-asian-chamber",
+          "url": "https://www.austinasianchamber.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Austin",
+          "nameHint": "Greater Austin Asian Chamber of Commerce",
+          "serviceAreaText": "Austin metro"
+        },
+        {
+          "id": "austin-asian-family-support-services",
+          "url": "https://www.afssaustin.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Austin",
+          "nameHint": "Asian Family Support Services of Austin",
+          "serviceAreaText": "Austin metro"
         }
       ]
     },
@@ -241,6 +369,123 @@
           "sourceCategory": "chinese_churches_religious_groups",
           "city": "Temple City",
           "nameHint": "First Chinese Baptist Church of San Gabriel Valley"
+        },
+        {
+          "id": "la-bistro-nas-temple-city",
+          "url": "https://www.bistronas.com/",
+          "sourceCategory": "restaurants",
+          "city": "Temple City",
+          "nameHint": "Bistro Na's"
+        },
+        {
+          "id": "la-chicha-san-chen-san-gabriel",
+          "url": "https://chichasanchensocal.com/index.php",
+          "sourceCategory": "grocery_markets",
+          "city": "San Gabriel",
+          "nameHint": "CHICHA San Chen San Gabriel",
+          "serviceAreaText": "San Gabriel"
+        },
+        {
+          "id": "la-happy-lemon-alhambra",
+          "url": "https://happylemonusa.com/location/",
+          "sourceCategory": "grocery_markets",
+          "city": "Alhambra",
+          "nameHint": "Happy Lemon Alhambra",
+          "serviceAreaText": "Alhambra"
+        },
+        {
+          "id": "la-tzu-chi-medical-alhambra",
+          "url": "https://tzuchimedical.us/contact",
+          "sourceCategory": "healthcare",
+          "city": "Alhambra",
+          "nameHint": "Buddhist Tzu Chi Medical Foundation - Alhambra Health Center"
+        },
+        {
+          "id": "la-henry-chen-dds-san-gabriel",
+          "url": "https://www.4ursmile.com/",
+          "sourceCategory": "healthcare",
+          "city": "San Gabriel",
+          "nameHint": "Henry S.W. Chen DDS Dental Office"
+        },
+        {
+          "id": "la-sgv-dentistry-san-gabriel",
+          "url": "https://sgvdentistry.com/",
+          "sourceCategory": "healthcare",
+          "city": "San Gabriel",
+          "nameHint": "SGV Dentistry"
+        },
+        {
+          "id": "la-kit-leung-cpa-alhambra",
+          "url": "https://taxesandaccountingsvcs.com/",
+          "sourceCategory": "legal_accounting_insurance",
+          "city": "Alhambra",
+          "nameHint": "Kit Leung CPA"
+        },
+        {
+          "id": "la-southern-california-chinese-lawyers",
+          "url": "https://www.sccla.org/",
+          "sourceCategory": "legal_accounting_insurance",
+          "city": "Los Angeles",
+          "nameHint": "Southern California Chinese Lawyers Association",
+          "serviceAreaText": "Los Angeles County"
+        },
+        {
+          "id": "la-chinese-academy-los-angeles",
+          "url": "https://www.chineseacademyla.com/",
+          "sourceCategory": "education_language_schools",
+          "city": "Los Angeles",
+          "nameHint": "Chinese Academy of Los Angeles"
+        },
+        {
+          "id": "la-chinatown-confucius-school",
+          "url": "https://chinatownchineseschool.weebly.com/",
+          "sourceCategory": "education_language_schools",
+          "city": "Los Angeles",
+          "nameHint": "Chinese Confucius Temple School"
+        },
+        {
+          "id": "la-first-ave-education-arcadia",
+          "url": "https://www.firstaveeducation.com/",
+          "sourceCategory": "education_language_schools",
+          "city": "Arcadia",
+          "nameHint": "First Ave Education"
+        },
+        {
+          "id": "la-chinese-evangelical-free-church",
+          "url": "https://cefcla.org/en/",
+          "sourceCategory": "chinese_churches_religious_groups",
+          "city": "Monterey Park",
+          "nameHint": "Chinese Evangelical Free Church of Los Angeles",
+          "serviceAreaText": "Monterey Park"
+        },
+        {
+          "id": "la-chinese-christian-herald-san-gabriel",
+          "url": "https://www.cchcla.org/sangabriel/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Gabriel",
+          "nameHint": "Chinese Christian Herald Crusades - San Gabriel Center"
+        },
+        {
+          "id": "la-asian-youth-center-san-gabriel",
+          "url": "https://www.asianyouthcenter.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Gabriel",
+          "nameHint": "Asian Youth Center",
+          "serviceAreaText": "San Gabriel"
+        },
+        {
+          "id": "la-usc-pacific-asia-museum",
+          "url": "https://pacificasiamuseum.usc.edu/visit/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Pasadena",
+          "nameHint": "USC Pacific Asia Museum"
+        },
+        {
+          "id": "la-chinese-historical-society-southern-california",
+          "url": "https://chssc.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "Los Angeles",
+          "nameHint": "Chinese Historical Society of Southern California"
         }
       ]
     },
@@ -310,6 +555,135 @@
           "sourceCategory": "service_providers",
           "city": "San Jose",
           "nameHint": "Golden Express"
+        },
+        {
+          "id": "sf-mister-jius",
+          "url": "https://www.misterjius.com/",
+          "sourceCategory": "restaurants",
+          "city": "San Francisco",
+          "nameHint": "Mister Jiu's"
+        },
+        {
+          "id": "sf-z-and-y-restaurant",
+          "url": "https://www.zandyrestaurant.com/",
+          "sourceCategory": "restaurants",
+          "city": "San Francisco",
+          "nameHint": "Z & Y Restaurant"
+        },
+        {
+          "id": "sf-house-of-nanking",
+          "url": "https://www.houseofnanking.net/",
+          "sourceCategory": "restaurants",
+          "city": "San Francisco",
+          "nameHint": "House of Nanking",
+          "serviceAreaText": "San Francisco Chinatown"
+        },
+        {
+          "id": "sf-happy-lemon-cupertino",
+          "url": "https://happylemonusa.com/location/",
+          "sourceCategory": "grocery_markets",
+          "city": "Cupertino",
+          "nameHint": "Happy Lemon Cupertino",
+          "serviceAreaText": "Cupertino"
+        },
+        {
+          "id": "sf-chung-chou-city-san-francisco",
+          "url": "https://chungchoucity.com/en/pages/%E6%9C%89%E9%97%9C%E8%9F%B2%E8%8D%89%E5%9F%8E",
+          "sourceCategory": "grocery_markets",
+          "city": "San Francisco",
+          "nameHint": "Chung Chou City",
+          "serviceAreaText": "San Francisco Chinatown"
+        },
+        {
+          "id": "sf-chinese-hospital",
+          "url": "https://chinesehospital-sf.org/locations-map/",
+          "sourceCategory": "healthcare",
+          "city": "San Francisco",
+          "nameHint": "Chinese Hospital"
+        },
+        {
+          "id": "sf-tong-de-health-center",
+          "url": "https://www.tdacu.com/",
+          "sourceCategory": "healthcare",
+          "city": "San Francisco",
+          "nameHint": "Tong De Health Center",
+          "serviceAreaText": "San Francisco"
+        },
+        {
+          "id": "sf-wai-lau-dds",
+          "url": "https://www.wailaudds.com/",
+          "sourceCategory": "healthcare",
+          "city": "San Francisco",
+          "nameHint": "Wai Lau DDS",
+          "serviceAreaText": "San Francisco Chinatown"
+        },
+        {
+          "id": "sf-chinese-medicine-clinic-education-center",
+          "url": "https://drdaveliu.com/",
+          "sourceCategory": "healthcare",
+          "city": "San Francisco",
+          "nameHint": "Chinese Medicine Clinic & Education Center",
+          "serviceAreaText": "San Francisco"
+        },
+        {
+          "id": "sf-berryessa-chinese-school",
+          "url": "https://www.bcs-usa.org/",
+          "sourceCategory": "education_language_schools",
+          "city": "San Jose",
+          "nameHint": "Berryessa Chinese School",
+          "serviceAreaText": "San Jose"
+        },
+        {
+          "id": "sf-cupertino-chinese-school",
+          "url": "https://www.cupertinochineseschool.org/",
+          "sourceCategory": "education_language_schools",
+          "city": "Cupertino",
+          "nameHint": "Cupertino Chinese School",
+          "serviceAreaText": "Cupertino"
+        },
+        {
+          "id": "sf-west-valley-chinese-language-school",
+          "url": "https://www.wvcls.org/",
+          "sourceCategory": "education_language_schools",
+          "city": "Cupertino",
+          "nameHint": "West Valley Chinese Language School"
+        },
+        {
+          "id": "sf-chinese-historical-society-america",
+          "url": "https://chsa.org/visit/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Francisco",
+          "nameHint": "Chinese Historical Society of America"
+        },
+        {
+          "id": "sf-self-help-for-elderly",
+          "url": "https://www.selfhelpelderly.org/locations",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Francisco",
+          "nameHint": "Self-Help for the Elderly"
+        },
+        {
+          "id": "sf-chinese-for-affirmative-action",
+          "url": "https://caasf.org/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Francisco",
+          "nameHint": "Chinese for Affirmative Action",
+          "serviceAreaText": "San Francisco"
+        },
+        {
+          "id": "sf-donaldina-cameron-house",
+          "url": "https://cameronhouse.org/contact/",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Francisco",
+          "nameHint": "Donaldina Cameron House",
+          "serviceAreaText": "San Francisco Chinatown"
+        },
+        {
+          "id": "sf-tzu-chi-northwest-san-jose",
+          "url": "https://www.tzuchioakland.org/contact",
+          "sourceCategory": "cultural_community_organizations",
+          "city": "San Jose",
+          "nameHint": "Tzu Chi Northwest Region - San Jose"
         }
       ]
     }

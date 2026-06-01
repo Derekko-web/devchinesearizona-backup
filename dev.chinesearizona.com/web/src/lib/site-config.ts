@@ -940,6 +940,7 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         'real-estate',
         'legal-finance',
         'local-services',
+        'faith-community',
       ],
       citySelectSuffix: { en: 'TX', zh: 'TX' },
       defaultSearchCity: 'Austin',

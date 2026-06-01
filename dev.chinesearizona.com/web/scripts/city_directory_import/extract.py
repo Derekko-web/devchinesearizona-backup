@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import re
 from typing import Any
+from urllib.parse import unquote, urlparse
 
 from bs4 import BeautifulSoup
 
@@ -126,6 +127,9 @@ def _jsonld_website(entity: dict[str, Any] | None, page_url: str) -> str | None:
         return normalize_url(page_url)
     raw_url = entity.get("url")
     if isinstance(raw_url, str):
+        parsed = urlparse(raw_url)
+        if not parsed.scheme and "." in raw_url.split("/", 1)[0]:
+            return normalize_url(raw_url)
         return normalize_url(raw_url, page_url)
     return normalize_url(page_url)
 
@@ -156,7 +160,7 @@ def _best_phone(soup: BeautifulSoup, text: str, entity: dict[str, Any] | None) -
         if isinstance(telephone, str) and normalize_phone(telephone):
             return telephone
     for link in soup.select("a[href^='tel:']"):
-        phone = maybe_none(link.get("href", "").replace("tel:", ""))
+        phone = maybe_none(unquote(link.get("href", "").replace("tel:", "")))
         if phone and normalize_phone(phone):
             return phone
     phones = extract_phones(text)
@@ -213,6 +217,12 @@ def _state_code_from_region(region: str | None) -> str | None:
     return US_STATE_CODES.get(region.casefold())
 
 
+def _state_aliases(state_code: str) -> list[str]:
+    aliases = [state_code]
+    aliases.extend(name for name, code in US_STATE_CODES.items() if code == state_code)
+    return aliases
+
+
 def _city_from_text(text: str | None, allowed_cities: list[str]) -> str | None:
     if not text:
         return None
@@ -230,6 +240,39 @@ def _canonical_allowed_city(city: str | None, allowed_cities: list[str]) -> str 
         if city.casefold() == allowed_city.casefold():
             return allowed_city
     return city
+
+
+def _text_address_parts(
+    text: str | None,
+    allowed_cities: list[str],
+    state_code: str,
+) -> tuple[str | None, str | None, str | None]:
+    if not text or not allowed_cities:
+        return None, None, None
+    city_pattern = "|".join(re.escape(city) for city in sorted(allowed_cities, key=len, reverse=True))
+    state_pattern = "|".join(re.escape(alias) for alias in _state_aliases(state_code))
+    street_suffixes = (
+        "Ave|Avenue|Blvd|Boulevard|Broadway|Cir|Circle|Ct|Court|Dr|Drive|Hwy|Highway|Ln|Lane|"
+        "Pkwy|Parkway|Pl|Place|Rd|Road|St|Street|Way"
+    )
+    address_pattern = re.compile(
+        rf"(?<![-\d])\b(?P<street>\d{{1,6}}\s+"
+        rf"(?:[A-Za-z0-9.#&'’/-]+\s+){{0,8}}"
+        rf"(?:{street_suffixes})\.?"
+        rf"(?:\s*,?\s*(?:#|Ste|Suite|Unit)\s*[A-Za-z0-9-]+)?)"
+        rf"\s*,?\s+(?P<city>{city_pattern})"
+        rf"\s*,?\s+(?P<state>{state_pattern})"
+        rf"\s+(?P<postal>\d{{5}}(?:-\d{{4}})?)\b",
+        re.IGNORECASE,
+    )
+    match = address_pattern.search(text)
+    if not match:
+        return None, None, None
+    city = _canonical_allowed_city(match.group("city"), allowed_cities)
+    state = _state_code_from_region(match.group("state"))
+    street = normalize_whitespace(match.group("street").replace(" ,", ","))
+    postal_code = match.group("postal")
+    return f"{street}, {city}, {state} {postal_code}", city, state
 
 
 def _candidate_dedupe_keys(name: str, city: str, phone: str | None, website: str | None) -> list[str]:
@@ -357,6 +400,8 @@ def candidate_from_source_html(
     name, name_note = _best_name(soup, entity, source)
     short_description, description = _best_description(soup, entity)
     address, address_city, address_state = _jsonld_address_parts(entity)
+    if not address:
+        address, address_city, address_state = _text_address_parts(text, site.allowedCities, site.stateCode)
     city = (
         _canonical_allowed_city(address_city, site.allowedCities)
         or _city_from_text(address, site.allowedCities)

@@ -7,6 +7,10 @@ import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
+from urllib import robotparser
+from urllib.error import HTTPError, URLError
+from urllib.parse import urljoin, urlparse
+from urllib.request import Request, urlopen
 
 from scripts.directory_scrape.utils import (
     format_phone_display,
@@ -33,6 +37,11 @@ Fetcher = Callable[[list[str]], dict[str, FetchedPage]]
 
 PRESERVED_REVIEW_STATUSES = {"approved", "rejected"}
 APPROVABLE_REVIEW_STATUS = "approved"
+FETCH_USER_AGENT = "ChineseArizonaCityDirectoryImporter/1.0 (+https://chinesearizona.com/)"
+MAX_HTML_BYTES = 2_000_000
+ROBOTS_TIMEOUT_SECONDS = 5
+FETCH_TIMEOUT_SECONDS = 8
+ROBOTS_CACHE: dict[str, robotparser.RobotFileParser | bool] = {}
 
 
 def staging_dir(site: CityDirectorySiteConfig) -> Path:
@@ -253,7 +262,12 @@ def _preserve_review_decisions(
 
 
 def _fetch_pages(urls: list[str]) -> dict[str, FetchedPage]:
-    from scripts.directory_scrape.client import Crawl4AIHTTPClient
+    try:
+        from scripts.directory_scrape.client import Crawl4AIHTTPClient
+    except ModuleNotFoundError as error:
+        if error.name != "crawl4ai":
+            raise
+        return _fetch_pages_with_stdlib(urls)
 
     async def run() -> dict[str, FetchedPage]:
         client = Crawl4AIHTTPClient()
@@ -270,6 +284,82 @@ def _fetch_pages(urls: list[str]) -> dict[str, FetchedPage]:
     import asyncio
 
     return asyncio.run(run())
+
+
+def _robots_url(url: str) -> str | None:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return None
+    return urljoin(f"{parsed.scheme}://{parsed.netloc}", "/robots.txt")
+
+
+def _robots_allows(url: str, user_agent: str) -> bool:
+    robots_url = _robots_url(url)
+    if not robots_url:
+        return False
+    cached = ROBOTS_CACHE.get(robots_url)
+    if isinstance(cached, bool):
+        return cached
+    if cached:
+        return cached.can_fetch(user_agent, url)
+    request = Request(robots_url, headers={"User-Agent": user_agent})
+    parser = robotparser.RobotFileParser(robots_url)
+    try:
+        with urlopen(request, timeout=ROBOTS_TIMEOUT_SECONDS) as response:
+            body = response.read(MAX_HTML_BYTES)
+            robots_text = _decode_response_body(body, response.headers.get("content-type", ""))
+    except HTTPError as error:
+        if error.code in {404, 410}:
+            ROBOTS_CACHE[robots_url] = True
+            return True
+        ROBOTS_CACHE[robots_url] = False
+        return False
+    except (URLError, OSError, TimeoutError, ValueError):
+        ROBOTS_CACHE[robots_url] = False
+        return False
+    parser.parse(robots_text.splitlines())
+    ROBOTS_CACHE[robots_url] = parser
+    return parser.can_fetch(user_agent, url)
+
+
+def _decode_response_body(body: bytes, content_type: str) -> str:
+    charset_match = re.search(r"charset=([A-Za-z0-9._-]+)", content_type, re.IGNORECASE)
+    charset = charset_match.group(1) if charset_match else "utf-8"
+    try:
+        return body.decode(charset, errors="replace")
+    except LookupError:
+        return body.decode("utf-8", errors="replace")
+
+
+def _fetch_pages_with_stdlib(urls: list[str]) -> dict[str, FetchedPage]:
+    snapshots: dict[str, FetchedPage] = {}
+    for requested_url in dict.fromkeys(urls):
+        if not _robots_allows(requested_url, FETCH_USER_AGENT):
+            continue
+        request = Request(
+            requested_url,
+            headers={
+                "User-Agent": FETCH_USER_AGENT,
+                "Accept": "text/html,application/xhtml+xml",
+            },
+        )
+        try:
+            with urlopen(request, timeout=FETCH_TIMEOUT_SECONDS) as response:
+                content_type = response.headers.get("content-type", "")
+                if "html" not in content_type.lower():
+                    continue
+                body = response.read(MAX_HTML_BYTES + 1)
+                if len(body) > MAX_HTML_BYTES:
+                    body = body[:MAX_HTML_BYTES]
+                html = _decode_response_body(body, content_type)
+                snapshots[requested_url] = FetchedPage(
+                    requested_url=requested_url,
+                    url=response.geturl(),
+                    html=html,
+                )
+        except (HTTPError, URLError, OSError, TimeoutError, ValueError):
+            continue
+    return snapshots
 
 
 def discover(site: CityDirectorySiteConfig, fetcher: Fetcher | None = None) -> list[CityDirectoryCandidate]:
