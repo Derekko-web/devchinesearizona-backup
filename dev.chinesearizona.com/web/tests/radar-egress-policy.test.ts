@@ -80,6 +80,9 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(applyRuntime).toContain('backup_crontab_to_file');
     expect(applyRuntime).not.toContain("run_root sh -c 'crontab");
     expect(applyRuntime).toContain('run_root crontab -u "$owner" -l');
+    expect(applyRuntime).toContain('runtime_writer_group');
+    expect(applyRuntime).toContain('RADAR_HERMES_RUNTIME_WRITER_GROUP');
+    expect(applyRuntime).toContain('install -d -o "$worker_user" -g "$writer_group" -m 0770 "$runtime_root"');
     expect(applyRuntime).toContain('install_runtime_env_files');
     expect(applyRuntime).toContain('systemd-analyze verify');
     expect(applyRuntime).toContain('systemctl daemon-reload');

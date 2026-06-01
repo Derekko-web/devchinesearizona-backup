@@ -52,6 +52,21 @@ backup_crontab_to_file() {
   rm -f "$tmp"
 }
 
+runtime_writer_group() {
+  if [[ -n "${RADAR_HERMES_RUNTIME_WRITER_GROUP:-}" ]]; then
+    printf '%s\n' "$RADAR_HERMES_RUNTIME_WRITER_GROUP"
+    return 0
+  fi
+
+  local owner="${SUDO_USER:-${USER:-}}"
+  if [[ -n "$owner" && "$owner" != "root" ]]; then
+    id -gn "$owner" 2>/dev/null || printf '%s\n' "$worker_group"
+    return 0
+  fi
+
+  printf '%s\n' "$worker_group"
+}
+
 timer_calendar_for_city() {
   case "$1" in
     arizona) printf '%s\n' '*-*-* 00,06,12,18:17:00' ;;
@@ -123,16 +138,19 @@ ensure_worker_identity() {
 }
 
 ensure_runtime_paths() {
+  local writer_group
+  writer_group="$(runtime_writer_group)"
+
   run_root test -d "$web_root"
-  run_root install -d -o "$worker_user" -g "$worker_group" -m 0750 "$runtime_root"
+  run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$runtime_root"
   for store_dir in \
     data/radar-runtime \
     data/sites/austin/radar-runtime \
     data/sites/los-angeles/radar-runtime \
     data/sf-bay-radar-runtime
   do
-    run_root install -d -o "$worker_user" -g "$worker_group" -m 0750 "$runtime_root/$store_dir"
-    run_root chown -R "$worker_user:$worker_group" "$runtime_root/$store_dir" 2>/dev/null || true
+    run_root install -d -o "$worker_user" -g "$writer_group" -m 0770 "$runtime_root/$store_dir"
+    run_root chown -R "$worker_user:$writer_group" "$runtime_root/$store_dir" 2>/dev/null || true
   done
   run_root install -d -m 0750 /etc/chinesearizona/radar-hermes
 }
