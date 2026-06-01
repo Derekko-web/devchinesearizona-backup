@@ -29,6 +29,9 @@ describe('Deploy Dev dirty tree guard', () => {
       '"dev.chinesearizona.com/web/data/article-ingest-staging/chinese-translation-cache.json"'
     );
     expect(workflow).toContain(
+      '"dev.chinesearizona.com/web/data/article-ingest-staging/sync-manifest.json"'
+    );
+    expect(workflow).toContain(
       '"dev.chinesearizona.com/web/src/data/generated-local-articles.json"'
     );
     expect(workflow).toContain(
