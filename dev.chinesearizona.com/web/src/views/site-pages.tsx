@@ -59,6 +59,7 @@ import {
   getBusinessMenuUrl,
   getBusinessServiceHighlights,
 } from '@/lib/business-display';
+import { resolveCitySiteBusinessImages } from '@/lib/city-site-business-images';
 import {
   getAdminSnapshot,
   getArticleArchivePageAsync,
@@ -299,19 +300,24 @@ function DirectoryListingCard({
   category,
   locale,
   pagePath,
+  site = defaultSiteProfile,
   stateCode = defaultSiteProfile.stateCode,
 }: {
   business: Business;
   category?: BusinessCategory;
   locale: Locale;
   pagePath: string;
+  site?: SiteProfile;
   stateCode?: string;
 }) {
+  const images = resolveCitySiteBusinessImages(business, site, { category, locale });
   const content = (
     <BusinessCard
       business={business}
       category={category}
       locale={locale}
+      imageUrlOverride={images.heroImage}
+      imageAltOverride={images.usesContextualFallback ? images.altLabel : undefined}
       enableSponsoredClickTracking={Boolean(business.activeDirectoryAdCampaign)}
       localizedLocationLabel={business.address ?? business.serviceAreaText ?? `${business.city}, ${stateCode}`}
       stateLabel={stateCode}
@@ -850,6 +856,7 @@ export async function DirectoryPageView({
                     category={categoryBySlug[business.categorySlug]}
                     locale={locale}
                     pagePath={directoryPagePath}
+                    site={site}
                     stateCode={site.stateCode}
                   />
                 ))
@@ -1001,11 +1008,16 @@ export async function BusinessDetailPageView({
     : locale === 'zh'
       ? '網站待補充'
       : 'Website not listed';
-  const businessImageCandidates = [business.heroImage, ...business.gallery].filter(
+  const resolvedImages = resolveCitySiteBusinessImages(business, site, {
+    category,
+    locale,
+    minimumGalleryImages: 4,
+  });
+  const businessImageCandidates = [resolvedImages.heroImage, ...resolvedImages.gallery].filter(
     (value): value is string => Boolean(value)
   );
   const photoSlots = Array.from({ length: 4 }, (_, index) => businessImageCandidates[index]);
-  const aboutImage = business.gallery[0] ?? business.heroImage;
+  const aboutImage = resolvedImages.gallery[0] ?? resolvedImages.heroImage;
   const primaryActionLabel = locale === 'zh' ? '撥打電話' : 'Call';
   const languageSummary =
     business.languages.length > 0
@@ -1030,25 +1042,25 @@ export async function BusinessDetailPageView({
             title: locale === 'zh' ? '招牌飲品' : 'Signature drink',
             subtitle: generatedImageSubtitle,
             price: '$5.75',
-            imageUrl: business.gallery[0] ?? business.heroImage,
+            imageUrl: resolvedImages.gallery[0] ?? resolvedImages.heroImage,
           },
           {
             title: locale === 'zh' ? '手作點心' : 'House dessert',
             subtitle: generatedImageSubtitle,
             price: '$3.95',
-            imageUrl: business.gallery[1],
+            imageUrl: resolvedImages.gallery[1],
           },
           {
             title: locale === 'zh' ? '人氣主食' : 'Popular entree',
             subtitle: generatedImageSubtitle,
             price: '$10.95',
-            imageUrl: business.gallery[2],
+            imageUrl: resolvedImages.gallery[2],
           },
           {
             title: locale === 'zh' ? '季節推薦' : 'Seasonal pick',
             subtitle: generatedImageSubtitle,
             price: '$8.50',
-            imageUrl: business.gallery[3],
+            imageUrl: resolvedImages.gallery[3],
           },
         ]
       : [
@@ -1056,25 +1068,25 @@ export async function BusinessDetailPageView({
             title: locale === 'zh' ? '核心服務' : 'Primary service',
             subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: business.gallery[0] ?? business.heroImage,
+            imageUrl: resolvedImages.gallery[0] ?? resolvedImages.heroImage,
           },
           {
             title: locale === 'zh' ? '雙語協助' : 'Bilingual help',
             subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: business.gallery[1],
+            imageUrl: resolvedImages.gallery[1],
           },
           {
             title: locale === 'zh' ? '在地經驗' : 'Local guidance',
             subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: business.gallery[2],
+            imageUrl: resolvedImages.gallery[2],
           },
           {
             title: locale === 'zh' ? '預約諮詢' : 'Consultation',
             subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '預約' : 'Book',
-            imageUrl: business.gallery[3],
+            imageUrl: resolvedImages.gallery[3],
           },
         ];
 
@@ -1171,8 +1183,8 @@ export async function BusinessDetailPageView({
 
             <div className="relative min-h-[19rem] overflow-hidden bg-[#d8c7b5] lg:min-h-[25rem]">
               <BusinessImage
-                imageUrl={business.heroImage}
-                label={descriptiveImageAlt(displayName, 'business', locale)}
+                imageUrl={resolvedImages.heroImage}
+                label={resolvedImages.usesContextualFallback ? resolvedImages.altLabel : descriptiveImageAlt(displayName, 'business', locale)}
                 locale={locale}
                 category={category}
                 priority
@@ -1345,7 +1357,7 @@ export async function BusinessDetailPageView({
               <div className="relative min-h-60 overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#eadfce]">
                 <BusinessImage
                   imageUrl={aboutImage}
-                  label={descriptiveImageAlt(displayName, 'business', locale)}
+                  label={resolvedImages.usesContextualFallback ? resolvedImages.altLabel : descriptiveImageAlt(displayName, 'business', locale)}
                   locale={locale}
                   category={category}
                   className="object-cover"
@@ -1798,6 +1810,7 @@ export async function CityCategoryPageView({
               category={categoryRecord}
               locale={locale}
               pagePath={cityCategoryPath}
+              site={site}
               stateCode={site.stateCode}
             />
           ))}

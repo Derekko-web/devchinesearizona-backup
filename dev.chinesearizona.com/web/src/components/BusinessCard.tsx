@@ -22,6 +22,8 @@ type BusinessCardProps = {
   business: Business;
   locale: Locale;
   category?: BusinessCategory;
+  imageUrlOverride?: string | null;
+  imageAltOverride?: string;
   enableSponsoredClickTracking?: boolean;
   localizedShortDescription?: string;
   localizedLocationLabel?: string;
@@ -33,6 +35,8 @@ export function BusinessCard({
   business,
   locale,
   category: providedCategory,
+  imageUrlOverride,
+  imageAltOverride,
   enableSponsoredClickTracking = false,
   localizedShortDescription,
   localizedLocationLabel,
@@ -67,8 +71,8 @@ export function BusinessCard({
     <article className="homepage-card group grid overflow-hidden rounded-[22px] border border-[#e3d3c2] bg-[#fffdfa] shadow-[0_24px_58px_-48px_rgba(74,49,27,0.54)] sm:grid-cols-[190px_minmax(0,1fr)]">
       <div className="relative min-h-[190px] w-full overflow-hidden bg-[#eadccb] sm:h-full">
         <BusinessImage
-          imageUrl={business.heroImage}
-          label={descriptiveImageAlt(t(business.name, locale), 'business', locale)}
+          imageUrl={imageUrlOverride ?? business.heroImage}
+          label={imageAltOverride ?? descriptiveImageAlt(t(business.name, locale), 'business', locale)}
           locale={locale}
           category={category}
           sizes="(max-width: 640px) 100vw, 176px"
