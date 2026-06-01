@@ -1,6 +1,12 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
+
+import austinBusinesses from '@/data/sites/austin/businesses.json';
+import losAngelesBusinesses from '@/data/los-angeles-directory-businesses.json';
+import sfBayBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 
 vi.mock('next/link', () => ({
   default: ({
@@ -46,6 +52,16 @@ vi.mock('@/components/forms/BusinessClaimForm', () => ({
 vi.mock('@/components/forms/ReportIssueForm', () => ({
   ReportIssueForm: () => <form data-testid="report-issue-form" />,
 }));
+
+const cityBusinessGroups = [
+  { businesses: austinBusinesses },
+  { businesses: losAngelesBusinesses },
+  { businesses: sfBayBusinesses },
+];
+
+function pathWithoutQueryString(value: string): string {
+  return value.split('?')[0] ?? value;
+}
 
 describe('city-site business images', () => {
   it('keeps Arizona image behavior unchanged when a business has no image', async () => {
@@ -101,7 +117,36 @@ describe('city-site business images', () => {
 
     expect(images.heroImage).toBe('/city-site-images/house-of-three-gorges-austin.webp');
     expect(images.gallery).toHaveLength(4);
+    expect(images.gallery.map(pathWithoutQueryString)).toEqual([
+      '/city-site-images/house-of-three-gorges-austin.webp',
+      '/city-site-images/house-of-three-gorges-austin.webp',
+      '/city-site-images/house-of-three-gorges-austin.webp',
+      '/city-site-images/house-of-three-gorges-austin.webp',
+    ]);
     expect(images.usesContextualFallback).toBe(false);
+  });
+
+  it('maps every Austin, Los Angeles, and SF Bay business to an existing unique static image', async () => {
+    const { getCitySiteBusinessSpecificImage } = await import('@/lib/city-site-business-images');
+    const mappedImages = new Map<string, string[]>();
+
+    for (const { businesses } of cityBusinessGroups) {
+      for (const business of businesses) {
+        const imagePath = getCitySiteBusinessSpecificImage(business.slug);
+        expect(imagePath, `${business.slug} is missing a city-site image mapping`).toBeDefined();
+        expect(imagePath, `${business.slug} should use a city-site asset`).toMatch(
+          /^\/city-site-images\/[a-z0-9-]+\.webp$/
+        );
+
+        const assetPath = path.join(process.cwd(), 'public', imagePath!);
+        expect(existsSync(assetPath), `${business.slug} mapped image does not exist: ${imagePath}`).toBe(true);
+
+        mappedImages.set(imagePath!, [...(mappedImages.get(imagePath!) ?? []), business.slug]);
+      }
+    }
+
+    const duplicatedImages = [...mappedImages.entries()].filter(([, slugs]) => slugs.length > 1);
+    expect(duplicatedImages).toEqual([]);
   });
 
   it('renders city-site directory and detail pages without generic image placeholders', async () => {
@@ -120,6 +165,13 @@ describe('city-site business images', () => {
         slug: 'kit-leung-cpa-alhambra',
       })
     );
+    const austinDetail = renderToStaticMarkup(
+      await BusinessDetailPageView({
+        locale: 'en',
+        site: siteProfiles.austin,
+        slug: 'house-of-three-gorges-austin',
+      })
+    );
     const sfBayDetail = renderToStaticMarkup(
       await BusinessDetailPageView({
         locale: 'en',
@@ -130,10 +182,14 @@ describe('city-site business images', () => {
 
     expect(austinDirectory).toContain('/city-site-images/house-of-three-gorges-austin.webp');
     expect(austinDirectory).not.toContain('Placeholder');
-    expect(laDetail).toContain('/city-site-images/los-angeles-community-hero.webp');
-    expect(laDetail).toContain('Los Angeles Legal &amp; Finance guide image for Kit Leung CPA');
+    expect(austinDetail).toContain('/city-site-images/house-of-three-gorges-austin.webp');
+    expect(austinDetail).not.toContain('/city-site-images/austin-community-hero.webp');
+    expect(laDetail).toContain('/city-site-images/kit-leung-cpa-alhambra.webp');
+    expect(laDetail).not.toContain('/city-site-images/los-angeles-community-hero.webp');
+    expect(laDetail).not.toContain('Los Angeles Legal &amp; Finance guide image for Kit Leung CPA');
     expect(laDetail).not.toContain('Temporary image');
-    expect(sfBayDetail).toContain('/city-site-images/sf-bay-community-hero.webp');
+    expect(sfBayDetail).toContain('/city-site-images/api-legal-outreach-san-francisco.webp');
+    expect(sfBayDetail).not.toContain('/city-site-images/sf-bay-community-hero.webp');
     expect(sfBayDetail).not.toContain('Temporary image');
   });
 });

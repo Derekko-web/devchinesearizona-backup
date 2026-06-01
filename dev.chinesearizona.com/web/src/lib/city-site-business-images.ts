@@ -11,14 +11,100 @@ type ResolvedBusinessImages = {
 const CITY_IMAGE_SITE_KEYS = new Set(['austin', 'los-angeles', 'sf-bay']);
 
 const businessSpecificCityImages: Record<string, string> = {
+  '99-ranch-market-austin': '/city-site-images/99-ranch-market-austin.webp',
+  '99-ranch-market-cupertino': '/city-site-images/99-ranch-market-cupertino.webp',
+  '99-ranch-market-san-gabriel': '/city-site-images/99-ranch-market-san-gabriel.webp',
+  'api-legal-outreach-san-francisco': '/city-site-images/api-legal-outreach-san-francisco.webp',
+  'arcadia-chinese-school': '/city-site-images/arcadia-chinese-school.webp',
+  'asia-market-austin': '/city-site-images/asia-market-austin.webp',
+  'asian-american-resource-center-austin': '/city-site-images/asian-american-resource-center-austin.webp',
+  'asian-americans-advancing-justice-southern-california': '/city-site-images/asian-americans-advancing-justice-southern-california.webp',
+  'asian-family-support-services-of-austin-austin': '/city-site-images/asian-family-support-services-of-austin-austin.webp',
+  'asian-health-services-oakland': '/city-site-images/asian-health-services-oakland.webp',
+  'asian-law-alliance-san-jose': '/city-site-images/asian-law-alliance-san-jose.webp',
+  'asian-youth-center-san-gabriel': '/city-site-images/asian-youth-center-san-gabriel.webp',
+  'austin-chinese-church-austin': '/city-site-images/austin-chinese-church-austin.webp',
   'austin-chinese-school': '/city-site-images/austin-chinese-school.webp',
+  'austin-christian-assembly-austin': '/city-site-images/austin-christian-assembly-austin.webp',
+  'austin-great-wall-chinese-school': '/city-site-images/austin-great-wall-chinese-school.webp',
+  'austin-quan-yin': '/city-site-images/austin-quan-yin.webp',
+  'austin-table-tennis-club-austin': '/city-site-images/austin-table-tennis-club-austin.webp',
+  'austin-taiwanese-presbyterian-church-austin': '/city-site-images/austin-taiwanese-presbyterian-church-austin.webp',
+  'bamboo-bistro-pflugerville': '/city-site-images/bamboo-bistro-pflugerville.webp',
+  'berryessa-chinese-school-san-jose': '/city-site-images/berryessa-chinese-school-san-jose.webp',
+  'bistro-na-s-temple-city': '/city-site-images/bistro-na-s-temple-city.webp',
+  'buddhist-tzu-chi-medical-foundation-alhambra-health-center-alhambra': '/city-site-images/buddhist-tzu-chi-medical-foundation-alhambra-health-center-alhambra.webp',
   'cheng-wooster-real-estate-austin': '/city-site-images/cheng-wooster-real-estate-austin.webp',
+  'chens-noodle-house-austin': '/city-site-images/chens-noodle-house-austin.webp',
+  'chicha-san-chen-san-gabriel-san-gabriel': '/city-site-images/chicha-san-chen-san-gabriel-san-gabriel.webp',
+  'china-live-san-francisco': '/city-site-images/china-live-san-francisco.webp',
   'chinatown-service-center-los-angeles': '/city-site-images/chinatown-service-center-los-angeles.webp',
+  'chinese-academy-of-los-angeles-los-angeles': '/city-site-images/chinese-academy-of-los-angeles-los-angeles.webp',
+  'chinese-american-international-school-san-francisco': '/city-site-images/chinese-american-international-school-san-francisco.webp',
   'chinese-american-museum-los-angeles': '/city-site-images/chinese-american-museum-los-angeles.webp',
+  'chinese-christian-herald-crusades-san-gabriel-center-san-gabriel': '/city-site-images/chinese-christian-herald-crusades-san-gabriel-center-san-gabriel.webp',
+  'chinese-confucius-temple-school-los-angeles': '/city-site-images/chinese-confucius-temple-school-los-angeles.webp',
+  'chinese-culture-center-san-francisco': '/city-site-images/chinese-culture-center-san-francisco.webp',
+  'chinese-evangelical-free-church-of-los-angeles-monterey-park': '/city-site-images/chinese-evangelical-free-church-of-los-angeles-monterey-park.webp',
+  'chinese-for-affirmative-action-san-francisco': '/city-site-images/chinese-for-affirmative-action-san-francisco.webp',
+  'chinese-historical-society-of-america-san-francisco': '/city-site-images/chinese-historical-society-of-america-san-francisco.webp',
+  'chinese-historical-society-of-southern-california-los-angeles': '/city-site-images/chinese-historical-society-of-southern-california-los-angeles.webp',
+  'chinese-hospital-san-francisco': '/city-site-images/chinese-hospital-san-francisco.webp',
+  'chinese-medicine-clinic-education-center-san-francisco': '/city-site-images/chinese-medicine-clinic-education-center-san-francisco.webp',
+  'chinese-society-of-austin': '/city-site-images/chinese-society-of-austin.webp',
+  'chung-chou-city-san-francisco': '/city-site-images/chung-chou-city-san-francisco.webp',
+  'ct3-table-tennis-club-austin': '/city-site-images/ct3-table-tennis-club-austin.webp',
+  'cupertino-chinese-school-cupertino': '/city-site-images/cupertino-chinese-school-cupertino.webp',
+  'din-ho-chinese-bbq-austin': '/city-site-images/din-ho-chinese-bbq-austin.webp',
+  'din-tai-fung-arcadia': '/city-site-images/din-tai-fung-arcadia.webp',
+  'din-tai-fung-santa-clara': '/city-site-images/din-tai-fung-santa-clara.webp',
+  'donaldina-cameron-house-san-francisco': '/city-site-images/donaldina-cameron-house-san-francisco.webp',
+  'east-west-bank-pasadena': '/city-site-images/east-west-bank-pasadena.webp',
+  'first-ave-education-arcadia': '/city-site-images/first-ave-education-arcadia.webp',
+  'first-chinese-baptist-church-sgv': '/city-site-images/first-chinese-baptist-church-sgv.webp',
+  'golden-express-bay-area-courier': '/city-site-images/golden-express-bay-area-courier.webp',
+  'greater-austin-asian-chamber-of-commerce-austin': '/city-site-images/greater-austin-asian-chamber-of-commerce-austin.webp',
   'h-mart-austin': '/city-site-images/h-mart-austin.webp',
+  'happy-lemon-alhambra-alhambra': '/city-site-images/happy-lemon-alhambra-alhambra.webp',
+  'happy-lemon-cupertino-cupertino': '/city-site-images/happy-lemon-cupertino-cupertino.webp',
+  'henry-s-w-chen-dds-dental-office-san-gabriel': '/city-site-images/henry-s-w-chen-dds-dental-office-san-gabriel.webp',
+  'herald-christian-health-center-san-gabriel': '/city-site-images/herald-christian-health-center-san-gabriel.webp',
+  'house-of-nanking-san-francisco': '/city-site-images/house-of-nanking-san-francisco.webp',
   'house-of-three-gorges-austin': '/city-site-images/house-of-three-gorges-austin.webp',
+  'hunan-bistro-austin': '/city-site-images/hunan-bistro-austin.webp',
+  'hunan-lion-round-rock': '/city-site-images/hunan-lion-round-rock.webp',
   'irn-realty-arcadia': '/city-site-images/irn-realty-arcadia.webp',
+  'julies-noodles-austin': '/city-site-images/julies-noodles-austin.webp',
+  'kit-leung-cpa-alhambra': '/city-site-images/kit-leung-cpa-alhambra.webp',
+  'kung-acupuncture-austin': '/city-site-images/kung-acupuncture-austin.webp',
+  'lotus-chinese-austin': '/city-site-images/lotus-chinese-austin.webp',
   'lunasia-dim-sum-house-alhambra': '/city-site-images/lunasia-dim-sum-house-alhambra.webp',
+  'mama-lus-dumpling-house-monterey-park': '/city-site-images/mama-lus-dumpling-house-monterey-park.webp',
+  'maxreal-sunnyvale': '/city-site-images/maxreal-sunnyvale.webp',
+  'mister-jiu-s-san-francisco': '/city-site-images/mister-jiu-s-san-francisco.webp',
+  'newport-seafood-san-gabriel': '/city-site-images/newport-seafood-san-gabriel.webp',
+  'noodle-alley-cedar-park': '/city-site-images/noodle-alley-cedar-park.webp',
+  'north-east-medical-services-stockton-clinic': '/city-site-images/north-east-medical-services-stockton-clinic.webp',
+  'r-g-lounge-san-francisco': '/city-site-images/r-g-lounge-san-francisco.webp',
+  'red-lotus-asian-grille-austin': '/city-site-images/red-lotus-asian-grille-austin.webp',
+  'rice-bowl-cafe-austin': '/city-site-images/rice-bowl-cafe-austin.webp',
+  'self-help-for-the-elderly-san-francisco': '/city-site-images/self-help-for-the-elderly-san-francisco.webp',
+  'sgv-dentistry-san-gabriel': '/city-site-images/sgv-dentistry-san-gabriel.webp',
+  'shan-china-bistro-and-bar-austin': '/city-site-images/shan-china-bistro-and-bar-austin.webp',
+  'soupleaf-hot-pot-austin': '/city-site-images/soupleaf-hot-pot-austin.webp',
+  'southern-california-chinese-lawyers-association-los-angeles': '/city-site-images/southern-california-chinese-lawyers-association-los-angeles.webp',
+  'steamies-dumplings-austin': '/city-site-images/steamies-dumplings-austin.webp',
+  'taiwan-center-for-mandarin-learning-at-austin-austin': '/city-site-images/taiwan-center-for-mandarin-learning-at-austin-austin.webp',
+  'tong-de-health-center-san-francisco': '/city-site-images/tong-de-health-center-san-francisco.webp',
+  'tso-chinese-takeout-delivery-round-rock': '/city-site-images/tso-chinese-takeout-delivery-round-rock.webp',
+  'tzu-chi-northwest-region-san-jose-san-jose': '/city-site-images/tzu-chi-northwest-region-san-jose-san-jose.webp',
+  'usc-pacific-asia-museum-pasadena': '/city-site-images/usc-pacific-asia-museum-pasadena.webp',
+  'wai-lau-dds-san-francisco': '/city-site-images/wai-lau-dds-san-francisco.webp',
+  'west-valley-chinese-language-school-cupertino': '/city-site-images/west-valley-chinese-language-school-cupertino.webp',
+  'wing-hop-fung-arcadia': '/city-site-images/wing-hop-fung-arcadia.webp',
+  'wu-chow-downtown-austin': '/city-site-images/wu-chow-downtown-austin.webp',
+  'yz-cpa-austin': '/city-site-images/yz-cpa-austin.webp',
+  'z-y-restaurant-san-francisco': '/city-site-images/z-y-restaurant-san-francisco.webp',
 };
 
 export function canUseCitySiteBusinessImageFallback(site?: SiteProfile): site is SiteProfile {
@@ -63,6 +149,16 @@ function contextualImageVariants(site: SiteProfile): string[] {
   );
 }
 
+function businessSpecificImageVariants(image: string, minimumImages: number): string[] {
+  if (minimumImages <= 1) {
+    return [image];
+  }
+
+  return Array.from({ length: minimumImages }, (_, index) =>
+    index === 0 ? image : `${image}?business-view=${index + 1}`
+  );
+}
+
 function contextualAltLabel(
   business: Business,
   site: SiteProfile,
@@ -100,11 +196,10 @@ export function resolveCitySiteBusinessImages(
   const fallbackImages = contextualImageVariants(site);
   const heroImage = business.heroImage ?? specificImage ?? fallbackImages[0];
   const minimumGalleryImages = options.minimumGalleryImages ?? 0;
-  const gallery = uniqueImages([
-    ...business.gallery,
-    ...(specificImage && specificImage !== heroImage ? [specificImage] : []),
-    ...fallbackImages,
-  ]).slice(0, Math.max(minimumGalleryImages, business.gallery.length));
+  const gallerySeedImages = specificImage
+    ? [...business.gallery, ...businessSpecificImageVariants(specificImage, minimumGalleryImages)]
+    : [...business.gallery, ...fallbackImages];
+  const gallery = uniqueImages(gallerySeedImages).slice(0, Math.max(minimumGalleryImages, business.gallery.length));
   const contextualFallbackPaths = new Set(fallbackImages.map(withoutQueryString));
   const usesContextualFallback =
     !heroImage || contextualFallbackPaths.has(withoutQueryString(heroImage));
