@@ -54,6 +54,8 @@ the nftables UID definition together.
 Before rollout, the owner or delegated VPS operator must approve:
 
 - the operator responsible for each production command
+- the GitHub Actions runtime-egress SSH principal, configured through
+  `DEV_VPS_RUNTIME_EGRESS_USER` and `DEV_VPS_RUNTIME_EGRESS_SSH_KEY`
 - the dedicated worker username/group and file ownership model
 - whether the worker reads the existing app `.env.local`, per-city
   `/etc/chinesearizona/radar-hermes/<city>.env` files, or a split where only
@@ -115,6 +117,10 @@ cron_user=approved-cron-user
 
 Replace `approved-cron-user` with the owner-approved account that currently
 owns the radar cron entries.
+
+For the GitHub Actions path, configure only the secret names above. Do not put
+secret values, private key bodies, sudo passwords, or host-private details in
+the rollout issue or pull request.
 
 ### Backup
 

@@ -41,6 +41,16 @@ write_root_file() {
   rm -f "$tmp"
 }
 
+backup_crontab_to_file() {
+  local path="$1"
+  shift
+  local tmp
+  tmp="$(mktemp)"
+  run_root "$@" >"$tmp" 2>/dev/null || true
+  run_root install -m 0600 "$tmp" "$path"
+  rm -f "$tmp"
+}
+
 timer_calendar_for_city() {
   case "$1" in
     arizona) printf '%s\n' '*-*-* 00,06,12,18:17:00' ;;
@@ -72,12 +82,12 @@ backup_existing_runtime_state() {
   run_root cp -a /etc/systemd/system/radar-hermes-worker@.service "$backup_dir/" 2>/dev/null || true
   run_root cp -a /etc/systemd/system/radar-hermes-worker@.timer "$backup_dir/" 2>/dev/null || true
   run_root cp -a /etc/nftables.d/radar-hermes-worker.nft "$backup_dir/" 2>/dev/null || true
-  run_root sh -c 'crontab -l > "$1/root.cron" 2>/dev/null || true' sh "$backup_dir"
+  backup_crontab_to_file "$backup_dir/root.cron" crontab -l
 
   if [[ -n "${SUDO_USER:-}" && "${SUDO_USER:-}" != "root" ]]; then
-    run_root sh -c 'crontab -u "$1" -l > "$2/$1.cron" 2>/dev/null || true' sh "$SUDO_USER" "$backup_dir"
+    backup_crontab_to_file "$backup_dir/$SUDO_USER.cron" crontab -u "$SUDO_USER" -l
   elif [[ -n "${USER:-}" && "${USER:-}" != "root" ]]; then
-    run_root sh -c 'crontab -u "$1" -l > "$2/$1.cron" 2>/dev/null || true' sh "$USER" "$backup_dir"
+    backup_crontab_to_file "$backup_dir/$USER.cron" crontab -u "$USER" -l
   fi
 
   if [[ -d "$runtime_root" ]]; then

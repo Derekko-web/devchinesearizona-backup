@@ -44,6 +44,22 @@ normalization code.
    succeed for each city. Then disable the old cron entry to avoid duplicate
    publishing.
 
+## GitHub Actions runtime operator
+
+The `Radar Hermes Runtime Egress` workflow uses the existing `DEV_VPS_HOST` and
+`DEV_VPS_PORT` connection target, but it must authenticate with an
+owner-approved runtime operator through these dedicated repository secrets:
+
+- `DEV_VPS_RUNTIME_EGRESS_USER`
+- `DEV_VPS_RUNTIME_EGRESS_SSH_KEY`
+
+Set those to a privileged operator account, or to a dedicated account that has
+owner-approved passwordless sudo only for the runtime egress installer,
+systemd, crontab, nftables, backup, ownership, and user-management commands
+used by `install-app-env-override.sh` and `apply-runtime-deploy.sh`. Do not set
+them to an account that requires interactive sudo, and do not store sudo
+passwords in GitHub Actions.
+
 This path preserves existing city news generation because each systemd instance
 still runs the same worker entrypoint with only the city site key changing:
 
