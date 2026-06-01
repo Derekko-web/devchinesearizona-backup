@@ -9,6 +9,9 @@ const servicePath = path.join(egressRoot, 'systemd', 'radar-hermes-worker@.servi
 const nftablesPath = path.join(egressRoot, 'nftables', 'radar-hermes-worker.nft');
 const readmePath = path.join(egressRoot, 'README.md');
 const rolloutPlanPath = path.join(egressRoot, 'rollout-plan.md');
+const applyRuntimePath = path.join(egressRoot, 'apply-runtime-deploy.sh');
+const runtimeWorkflowPath = path.join(repoRoot, '.github', 'workflows', 'radar-hermes-runtime-egress.yml');
+const launcherPath = path.join(process.cwd(), 'scripts', 'radar_hermes', 'run_or_start_systemd.cjs');
 
 const deniedRanges = [
   '10.0.0.0/8',
@@ -38,6 +41,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(service).toContain('WorkingDirectory=/var/www/dev.chinesearizona.com/web');
     expect(service).toContain('ReadWritePaths=/var/www/runtime-data/dev.chinesearizona.com/web');
     expect(service).toContain('Environment=PATH=/usr/local/bin:/usr/bin:/bin');
+    expect(service).toContain('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
     expect(service).toContain('RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX');
 
     for (const range of deniedRanges) {
@@ -57,6 +61,34 @@ describe('Radar/Hermes egress policy templates', () => {
     for (const range of deniedRanges) {
       expect(policy).toContain(range);
     }
+  });
+
+  it('applies the runtime egress layer after the normal deploy workflow succeeds', () => {
+    const applyRuntime = fs.readFileSync(applyRuntimePath, 'utf8');
+    const runtimeWorkflow = fs.readFileSync(runtimeWorkflowPath, 'utf8');
+
+    expect(runtimeWorkflow).toContain('workflows:');
+    expect(runtimeWorkflow).toContain('- Deploy Dev');
+    expect(runtimeWorkflow).toContain('apply-runtime-deploy.sh');
+    expect(runtimeWorkflow).toContain('current_sha="$(git rev-parse HEAD)"');
+    expect(applyRuntime).toContain('backup_existing_runtime_state');
+    expect(applyRuntime).toContain('install_runtime_env_files');
+    expect(applyRuntime).toContain('systemd-analyze verify');
+    expect(applyRuntime).toContain('systemctl daemon-reload');
+    expect(applyRuntime).toContain('systemctl start "radar-hermes-worker@$city.service"');
+    expect(applyRuntime).toContain('systemctl enable --now "radar-hermes-worker@$city.timer"');
+    expect(applyRuntime).toContain('disable_legacy_cron_entries');
+    expect(applyRuntime).toContain('operator=github-actions-deploy');
+  });
+
+  it('keeps a launcher for manual npm invocations without bypassing systemd when installed', () => {
+    const launcher = fs.readFileSync(launcherPath, 'utf8');
+
+    expect(launcher).toContain('systemctl');
+    expect(launcher).toContain('sudo');
+    expect(launcher).toContain("['-n', 'systemctl']");
+    expect(launcher).toContain('scripts/arizona_radar/run.cjs');
+    expect(launcher).toContain('RADAR_HERMES_DIRECT');
   });
 
   it('documents owner decisions and rollback without embedding secrets or live private endpoints', () => {
