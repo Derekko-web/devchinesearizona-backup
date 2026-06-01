@@ -62,9 +62,11 @@ describe('Austin directory pages', () => {
       })
     );
 
-    expect(html).toContain('Showing 1-18 of 18');
+    expect(html).toContain('Showing 1-24 of 35');
     expect(html).toContain('House of Three Gorges');
     expect(html).toContain('H Mart Austin');
+    expect(html).toContain('Soupleaf Hot Pot');
+    expect(html).toContain('Austin Table Tennis Club');
     expect(html).toContain('Austin, TX');
     expect(html).toContain('Cedar Park');
     expect(html).toContain('/en/add-business');

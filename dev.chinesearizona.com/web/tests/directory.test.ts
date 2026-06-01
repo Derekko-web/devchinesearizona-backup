@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import sfBayDirectoryBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 import losAngelesDirectoryBusinesses from '@/data/los-angeles-directory-businesses.json';
+import austinDirectoryBusinesses from '@/data/sites/austin/businesses.json';
 import {
   applyDirectoryQueryFilters,
   compareFeaturedSignals,
@@ -392,13 +393,16 @@ describe('directory trust gates', () => {
     const businesses = await getDirectoryBusinesses({}, { site: siteProfiles.austin, limit: 100 });
     const text = JSON.stringify(businesses);
 
-    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.length).toBeGreaterThanOrEqual(30);
     expect(businesses.map((business) => business.slug)).toEqual(
       expect.arrayContaining([
         'house-of-three-gorges-austin',
         'h-mart-austin',
         'austin-chinese-school',
         'cheng-wooster-real-estate-austin',
+        'soupleaf-hot-pot-austin',
+        'austin-table-tennis-club-austin',
+        'austin-chinese-church-austin',
       ])
     );
     expect(new Set(businesses.map((business) => business.city))).toEqual(
@@ -444,8 +448,9 @@ describe('directory trust gates', () => {
       'shopping',
       'local-services',
       'education',
+      'faith-community',
     ]);
-    expect(options.languages).toEqual(['English', 'Mandarin', 'Traditional Chinese']);
+    expect(options.languages).toEqual(['English', 'Mandarin', 'Taiwanese', 'Traditional Chinese']);
   });
 
   it('falls back to fixture businesses when the Supabase query errors', async () => {
@@ -508,12 +513,15 @@ describe('directory trust gates', () => {
     const businesses = await getDirectoryBusinesses({}, { site, limit: 100 });
     const serialized = JSON.stringify(businesses);
 
-    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.length).toBeGreaterThanOrEqual(30);
     expect(businesses.map((business) => business.slug)).toEqual(
       expect.arrayContaining([
         'lunasia-dim-sum-house-alhambra',
         'irn-realty-arcadia',
         'chinatown-service-center-los-angeles',
+        'bistro-na-s-temple-city',
+        'chicha-san-chen-san-gabriel-san-gabriel',
+        'buddhist-tzu-chi-medical-foundation-alhambra-health-center-alhambra',
       ])
     );
     expect(new Set(businesses.map((business) => business.city))).toEqual(
@@ -533,10 +541,11 @@ describe('directory trust gates', () => {
   });
 
   it('keeps Los Angeles seed listings source-backed and California-local', () => {
-    expect(losAngelesDirectoryBusinesses.length).toBeGreaterThanOrEqual(10);
+    expect(losAngelesDirectoryBusinesses.length).toBeGreaterThanOrEqual(30);
 
     for (const business of losAngelesDirectoryBusinesses) {
-      expect(business.address).toContain('CA');
+      const locationText = [business.address, business.serviceAreaText, business.city].filter(Boolean).join(' ');
+      expect(locationText).toMatch(/CA|Los Angeles|Alhambra|Arcadia|Monterey Park|San Gabriel|Pasadena|Temple City/);
       expect(business.sourceUrls.length).toBeGreaterThan(0);
       expect(business.sourceUrls.every((url) => url.startsWith('http'))).toBe(true);
       expect(JSON.stringify(business)).not.toMatch(
@@ -587,12 +596,15 @@ describe('directory trust gates', () => {
     const businesses = await getDirectoryBusinesses({}, { site, limit: 100 });
     const serialized = JSON.stringify(businesses);
 
-    expect(businesses.length).toBeGreaterThanOrEqual(10);
+    expect(businesses.length).toBeGreaterThanOrEqual(25);
     expect(businesses.map((business) => business.slug)).toEqual(
       expect.arrayContaining([
         'r-g-lounge-san-francisco',
         'asian-health-services-oakland',
         'asian-law-alliance-san-jose',
+        'chinese-hospital-san-francisco',
+        'mister-jiu-s-san-francisco',
+        'chinese-historical-society-of-america-san-francisco',
       ])
     );
     expect(new Set(businesses.map((business) => business.city))).toEqual(
@@ -604,15 +616,38 @@ describe('directory trust gates', () => {
   });
 
   it('keeps SF Bay seed listings source-backed and California-local', () => {
-    expect(sfBayDirectoryBusinesses.length).toBeGreaterThanOrEqual(10);
+    expect(sfBayDirectoryBusinesses.length).toBeGreaterThanOrEqual(25);
 
     for (const business of sfBayDirectoryBusinesses) {
-      expect(business.address ?? business.serviceAreaText).toMatch(/CA|Bay Area|San Francisco|San Jose|Oakland/);
+      expect(business.address ?? business.serviceAreaText).toMatch(
+        /CA|Bay Area|San Francisco|San Jose|Oakland|Cupertino|Sunnyvale|Santa Clara/
+      );
       expect(business.sourceUrls.length).toBeGreaterThan(0);
       expect(business.sourceUrls.every((url) => url.startsWith('http'))).toBe(true);
       expect(JSON.stringify(business)).not.toMatch(
         /Phoenix|Chandler|Tempe|Mesa|Scottsdale|AZ 85|Arizona|亞利桑那|菲尼克斯|鳳凰城/
       );
+    }
+  });
+
+  it('keeps expanded non-Arizona city fixtures deduped and source-backed', () => {
+    const cityFixtures = [
+      { label: 'Austin', businesses: austinDirectoryBusinesses, minimumCount: 30 },
+      { label: 'Los Angeles', businesses: losAngelesDirectoryBusinesses, minimumCount: 30 },
+      { label: 'SF Bay', businesses: sfBayDirectoryBusinesses, minimumCount: 25 },
+    ];
+
+    for (const fixture of cityFixtures) {
+      const slugs = fixture.businesses.map((business) => business.slug);
+      expect(fixture.businesses.length, fixture.label).toBeGreaterThanOrEqual(fixture.minimumCount);
+      expect(new Set(slugs).size, fixture.label).toBe(slugs.length);
+
+      for (const business of fixture.businesses) {
+        expect(business.sourceUrls.length, `${fixture.label}:${business.slug}`).toBeGreaterThan(0);
+        expect(JSON.stringify(business), `${fixture.label}:${business.slug}`).not.toMatch(
+          /ChineseArizona|Phoenix|Chandler|Tempe|Mesa|Gilbert|Scottsdale|AZ 85/
+        );
+      }
     }
   });
 

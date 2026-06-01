@@ -36,8 +36,17 @@
         "zh": "包廂與聚會諮詢"
       }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["dim sum", "Alhambra", "SGV", "點心", "早茶"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "dim sum",
+      "Alhambra",
+      "SGV",
+      "點心",
+      "早茶"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -99,8 +108,18 @@
         "zh": "私人聚餐諮詢"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Arcadia", "Santa Anita", "xiao long bao", "小籠包", "台式"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Arcadia",
+      "Santa Anita",
+      "xiao long bao",
+      "小籠包",
+      "台式"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -128,7 +147,9 @@
         "value": "10:00 AM - 9:30 PM"
       }
     ],
-    "sourceUrls": ["https://dtf.com/us/locations/arcadia.html"]
+    "sourceUrls": [
+      "https://dtf.com/us/locations/arcadia.html"
+    ]
   },
   {
     "id": "la_mama_lus_dumpling_house_monterey_park",
@@ -167,8 +188,17 @@
         "zh": "冷凍餃子"
       }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["Monterey Park", "dumplings", "Garvey", "餃子", "一口福"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Monterey Park",
+      "dumplings",
+      "Garvey",
+      "餃子",
+      "一口福"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -188,7 +218,9 @@
         "value": "10:00 AM - 10:00 PM"
       }
     ],
-    "sourceUrls": ["https://mamaludumpling.com/about"]
+    "sourceUrls": [
+      "https://mamaludumpling.com/about"
+    ]
   },
   {
     "id": "la_newport_seafood_san_gabriel",
@@ -227,8 +259,17 @@
         "zh": "外燴諮詢"
       }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["San Gabriel", "seafood", "banquet", "海鮮", "聚餐"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "San Gabriel",
+      "seafood",
+      "banquet",
+      "海鮮",
+      "聚餐"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -260,7 +301,9 @@
         "value": "11:00 AM - 9:00 PM"
       }
     ],
-    "sourceUrls": ["https://newportseafoodrestaurant.com/contact/"]
+    "sourceUrls": [
+      "https://newportseafoodrestaurant.com/contact/"
+    ]
   },
   {
     "id": "la_99_ranch_market_san_gabriel",
@@ -299,8 +342,18 @@
         "zh": "熟食採買"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["San Gabriel", "Asian grocery", "supermarket", "大華", "超市"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "San Gabriel",
+      "Asian grocery",
+      "supermarket",
+      "大華",
+      "超市"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -358,8 +411,19 @@
         "zh": "特色食品"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Arcadia", "tea", "herbs", "永合豐", "茶葉", "中藥"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Arcadia",
+      "tea",
+      "herbs",
+      "永合豐",
+      "茶葉",
+      "中藥"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -421,8 +485,18 @@
         "zh": "社區規劃"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Arcadia realtor", "SGV real estate", "房仲", "買屋", "賣屋"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Arcadia realtor",
+      "SGV real estate",
+      "房仲",
+      "買屋",
+      "賣屋"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -433,7 +507,9 @@
     "priceRange": "$$$",
     "lastUpdated": "2026-05-30T00:00:00.000Z",
     "hours": [],
-    "sourceUrls": ["https://www.irnrealty.com/our-offices/"]
+    "sourceUrls": [
+      "https://www.irnrealty.com/our-offices/"
+    ]
   },
   {
     "id": "la_east_west_bank_pasadena",
@@ -472,8 +548,18 @@
         "zh": "分行服務"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Pasadena", "bank", "finance", "華美銀行", "銀行"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Pasadena",
+      "bank",
+      "finance",
+      "華美銀行",
+      "銀行"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -526,8 +612,18 @@
         "zh": "語言服務轉介"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["legal aid", "immigration", "civil rights", "法律援助", "移民"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "legal aid",
+      "immigration",
+      "civil rights",
+      "法律援助",
+      "移民"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -580,8 +676,18 @@
         "zh": "疫苗諮詢"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["clinic", "San Gabriel", "health center", "診所", "角聲"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "clinic",
+      "San Gabriel",
+      "health center",
+      "診所",
+      "角聲"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -643,8 +749,18 @@
         "zh": "就業發展"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Chinatown", "social services", "health center", "華埠", "服務中心"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Chinatown",
+      "social services",
+      "health center",
+      "華埠",
+      "服務中心"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -655,7 +771,9 @@
     "priceRange": "$",
     "lastUpdated": "2026-05-30T00:00:00.000Z",
     "hours": [],
-    "sourceUrls": ["https://www.cscla.org/locations"]
+    "sourceUrls": [
+      "https://www.cscla.org/locations"
+    ]
   },
   {
     "id": "la_chinese_american_museum_los_angeles",
@@ -695,8 +813,18 @@
         "zh": "文化教育"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["museum", "Chinatown", "El Pueblo", "華美博物館", "歷史"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "museum",
+      "Chinatown",
+      "El Pueblo",
+      "華美博物館",
+      "歷史"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -758,8 +886,18 @@
         "zh": "家庭報名諮詢"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Arcadia", "Chinese school", "heritage language", "中文學校", "中文課"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Arcadia",
+      "Chinese school",
+      "heritage language",
+      "中文學校",
+      "中文課"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -812,8 +950,18 @@
         "zh": "社群連結"
       }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["Temple City", "church", "fellowship", "華人教會", "團契"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "Temple City",
+      "church",
+      "fellowship",
+      "華人教會",
+      "團契"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -824,6 +972,802 @@
     "priceRange": "$",
     "lastUpdated": "2026-05-30T00:00:00.000Z",
     "hours": [],
-    "sourceUrls": ["https://chinese.fcbcsgv.org/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/"]
+    "sourceUrls": [
+      "https://chinese.fcbcsgv.org/%E8%81%AF%E7%B5%A1%E6%88%91%E5%80%91/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0015",
+    "slug": "bistro-na-s-temple-city",
+    "name": {
+      "en": "Bistro Na's",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Temple City",
+    "region": "Greater Los Angeles",
+    "address": "9055 Las Tunas Drive, Temple City, CA, 91780",
+    "serviceAreaText": null,
+    "phone": "(626) 286-1999",
+    "email": "reservations@bistronas.com",
+    "website": "https://www.bistronas.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Bistro na's is a chinese restaurant serving Manchurian dishes in a relaxed space with traditional decor.",
+      "zh": null
+    },
+    "description": {
+      "en": "Bistro na's is a chinese restaurant serving Manchurian dishes in a relaxed space with traditional decor.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Bistro Na's",
+      "Temple City",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.bistronas.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0016",
+    "slug": "first-ave-education-arcadia",
+    "name": {
+      "en": "First Ave Education",
+      "zh": null
+    },
+    "categorySlug": "education",
+    "city": "Arcadia",
+    "region": "Greater Los Angeles",
+    "address": "222 South 1st Avenue, Arcadia, CA, 91006",
+    "serviceAreaText": null,
+    "phone": "(626) 821-1025",
+    "email": "office@firstaveeducation.com",
+    "website": "https://www.firstaveeducation.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "First Ave.",
+      "zh": null
+    },
+    "description": {
+      "en": "First Ave. Chinese School provides afterschool programs and English-Math enrichment courses tailored for students from K-8. We offer a Chinese summer camp featuring STEM-related activities alongside various fun activities. Our curriculum encompasses both traditional and simplified Chinese, fostering proficiency in language skills and readiness for Chinese speech and writing competitions. 我們教繁體、简体、注音及拼音！",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "First Ave Education",
+      "Arcadia",
+      "education language schools"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.firstaveeducation.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0017",
+    "slug": "chinese-academy-of-los-angeles-los-angeles",
+    "name": {
+      "en": "Chinese Academy of Los Angeles",
+      "zh": null
+    },
+    "categorySlug": "education",
+    "city": "Los Angeles",
+    "region": "Greater Los Angeles",
+    "address": "11150 W Olympic Blvd #1120, Los Angeles, CA, 90064",
+    "serviceAreaText": null,
+    "phone": "(424) 281-0125",
+    "email": "info@chineseacademyla.com",
+    "website": "https://www.chineseacademyla.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "The Chinese Language Academy of Los Angeles provides Mandarin Chinese classes to children, adults, and companies.",
+      "zh": null
+    },
+    "description": {
+      "en": "The Chinese Language Academy of Los Angeles provides Mandarin Chinese classes to children, adults, and companies. Learn Mandarin Chinese today!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Chinese Academy of Los Angeles",
+      "Los Angeles",
+      "education language schools"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.chineseacademyla.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0018",
+    "slug": "chinese-confucius-temple-school-los-angeles",
+    "name": {
+      "en": "Chinese Confucius Temple School",
+      "zh": null
+    },
+    "categorySlug": "education",
+    "city": "Los Angeles",
+    "region": "Greater Los Angeles",
+    "address": "816 YALE STREET., Los Angeles, CA 90012",
+    "serviceAreaText": null,
+    "phone": "(213) 625-8343",
+    "email": null,
+    "website": "https://chinatownchineseschool.weebly.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinatown Chinese School in Los Angeles offers many types of classes and courses, programs include Chinese classes, After School Tutoring Program, English and Math Tutoring Progra…",
+      "zh": null
+    },
+    "description": {
+      "en": "Chinatown Chinese School in Los Angeles offers many types of classes and courses, programs include Chinese classes, After School Tutoring Program, English and Math Tutoring Program, Chinese Cultural Arts, and Day Camp Programs such as Summer Camp and Wint",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Chinese Confucius Temple School",
+      "Los Angeles",
+      "education language schools"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://chinatownchineseschool.weebly.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0019",
+    "slug": "kit-leung-cpa-alhambra",
+    "name": {
+      "en": "Kit Leung CPA",
+      "zh": null
+    },
+    "categorySlug": "legal-finance",
+    "city": "Alhambra",
+    "region": "Greater Los Angeles",
+    "address": "228 W Valley Blvd # 205B, Alhambra, CA, 91801",
+    "serviceAreaText": null,
+    "phone": "(626) 570-4529",
+    "email": "kitcpa6@gmail.com",
+    "website": "https://taxesandaccountingsvcs.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "KIT LEUNG CPA offers expert tax services and accounting solutions to help you succeed financially.",
+      "zh": null
+    },
+    "description": {
+      "en": "KIT LEUNG CPA offers expert tax services and accounting solutions to help you succeed financially. Contact us today!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Kit Leung CPA",
+      "Alhambra",
+      "legal accounting insurance"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://taxesandaccountingsvcs.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0020",
+    "slug": "chinese-historical-society-of-southern-california-los-angeles",
+    "name": {
+      "en": "Chinese Historical Society of Southern California",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Los Angeles",
+    "region": "Greater Los Angeles",
+    "address": "411 Bernard St, Los Angeles, CA 90012",
+    "serviceAreaText": null,
+    "phone": "(323) 352-8824",
+    "email": "info@chssc.org",
+    "website": "https://chssc.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Celebrating 50 Years (1975-2025) Digital Archives Membership Donate CHSSC Library Subscribe June Program Current Newsletter",
+      "zh": null
+    },
+    "description": {
+      "en": "Celebrating 50 Years (1975-2025) Digital Archives Membership Donate CHSSC Library Subscribe June Program Current Newsletter",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Chinese Historical Society of Southern California",
+      "Los Angeles",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://chssc.org/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0021",
+    "slug": "buddhist-tzu-chi-medical-foundation-alhambra-health-center-alhambra",
+    "name": {
+      "en": "Buddhist Tzu Chi Medical Foundation - Alhambra Health Center",
+      "zh": null
+    },
+    "categorySlug": "medical",
+    "city": "Alhambra",
+    "region": "Greater Los Angeles",
+    "address": "1000 S. Garfield Ave., Alhambra, CA 91801",
+    "serviceAreaText": null,
+    "phone": "(626) 281-3383",
+    "email": null,
+    "website": "https://tzuchimedical.us/contact",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Contact Us Questions?",
+      "zh": null
+    },
+    "description": {
+      "en": "Contact Us Questions? Comments? We’d love to hear from you. Please fill out the form below with any questions or feedback, and we’ll be sure to get back to you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Buddhist Tzu Chi Medical Foundation - Alhambra Health Center",
+      "Alhambra",
+      "healthcare"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://tzuchimedical.us/contact"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0022",
+    "slug": "henry-s-w-chen-dds-dental-office-san-gabriel",
+    "name": {
+      "en": "Henry S.W. Chen DDS Dental Office",
+      "zh": null
+    },
+    "categorySlug": "medical",
+    "city": "San Gabriel",
+    "region": "Greater Los Angeles",
+    "address": "1120 South San Gabriel Blvd., Suite 100, San Gabriel, CA 91007",
+    "serviceAreaText": null,
+    "phone": "(626) 309-1100",
+    "email": null,
+    "website": "https://www.4ursmile.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "We have team members who speak Mandarin, Taiwanese, Cantonese and Vietnamese.",
+      "zh": null
+    },
+    "description": {
+      "en": "We have team members who speak Mandarin, Taiwanese, Cantonese and Vietnamese. Phone: 626-309-1100 Address: 1120 South San Gabriel Blvd., Suite 100 San Gabriel, CA 91007 Hours: Monday - Friday: 10 am - 6 pm Saturday: 9:30 am - 5 pm Sunday:",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Taiwanese"
+    ],
+    "searchAliases": [
+      "Henry S.W. Chen DDS Dental Office",
+      "San Gabriel",
+      "healthcare"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.4ursmile.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0023",
+    "slug": "sgv-dentistry-san-gabriel",
+    "name": {
+      "en": "SGV Dentistry",
+      "zh": null
+    },
+    "categorySlug": "medical",
+    "city": "San Gabriel",
+    "region": "Greater Los Angeles",
+    "address": "416 W Las Tunas Dr, Suite 201, San Gabriel, CA 91776",
+    "serviceAreaText": null,
+    "phone": "(626) 288-8376",
+    "email": null,
+    "website": "https://sgvdentistry.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Your San Gabriel Valley Dentist圣盖博谷 牙科诊所 Experience modern, evidence-based, and personalized care, where each patient is treated like family.",
+      "zh": null
+    },
+    "description": {
+      "en": "Your San Gabriel Valley Dentist圣盖博谷 牙科诊所 Experience modern, evidence-based, and personalized care, where each patient is treated like family. 🏳️‍🌈 New patient specials available! Call/text today to schedule your appointment. New Patient Registration Learn More Clinic Hours Monday - Friday(Saturdays by appointment) 9:00 am - 5:00 pm Book Online Click Here to Schedule Appointment Call/Text Today 我们讲国语,粤语 (626) 288-8376 […]",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "SGV Dentistry",
+      "San Gabriel",
+      "healthcare"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://sgvdentistry.com/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0024",
+    "slug": "southern-california-chinese-lawyers-association-los-angeles",
+    "name": {
+      "en": "Southern California Chinese Lawyers Association",
+      "zh": null
+    },
+    "categorySlug": "legal-finance",
+    "city": "Los Angeles",
+    "region": "Greater Los Angeles",
+    "address": "1301 N Broadway #36846, Los Angeles, CA 90012",
+    "serviceAreaText": null,
+    "phone": null,
+    "email": "scclamedia@gmail.com",
+    "website": "https://www.sccla.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "S outhern California Chinese Lawyers Association Access to Justice, Professional Development, and Mentorship Organized in 1975, the Southern California Chinese Lawyers Association…",
+      "zh": null
+    },
+    "description": {
+      "en": "S outhern California Chinese Lawyers Association Access to Justice, Professional Development, and Mentorship Organized in 1975, the Southern California Chinese Lawyers Association (SCCLA) provides mutual support for Chinese American and Asian American lawyers, jurists, and law students in Los Angeles and Orange County. We work to: advance the professional growth and interests of Chinese and Asian American lawyers, jurists and law students;",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Southern California Chinese Lawyers Association",
+      "Los Angeles",
+      "legal accounting insurance"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.sccla.org/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0025",
+    "slug": "usc-pacific-asia-museum-pasadena",
+    "name": {
+      "en": "USC Pacific Asia Museum",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Pasadena",
+    "region": "Greater Los Angeles",
+    "address": "46 North Los Robles Avenue, Pasadena, CA 91101",
+    "serviceAreaText": null,
+    "phone": "(626) 787-2680",
+    "email": null,
+    "website": "https://pacificasiamuseum.usc.edu/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Visit Us Welcome to USC PAM!",
+      "zh": null
+    },
+    "description": {
+      "en": "Visit Us Welcome to USC PAM! Admission Rates Admission Rates General $15 Senior $12 Student (15+) $9 Children 14 & under Free Every Second Sunday Free Free days courtesy of East West Bank Exhibit Opening and Closing weekends Lunar New Year week May AAPI month Group Visits & Tours Docent-led Tours: Learn about the arts and […]",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "USC Pacific Asia Museum",
+      "Pasadena",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://pacificasiamuseum.usc.edu/visit-us/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0026",
+    "slug": "chinese-christian-herald-crusades-san-gabriel-center-san-gabriel",
+    "name": {
+      "en": "Chinese Christian Herald Crusades - San Gabriel Center",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "San Gabriel",
+    "region": "Greater Los Angeles",
+    "address": "715 E Mission Rd., San Gabriel, CA 91776",
+    "serviceAreaText": null,
+    "phone": null,
+    "email": null,
+    "website": "https://www.cchcla.org/sangabriel",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "聖蓋博 San Gabriel｜角聲中心 聖蓋博角聲中心位於 San Gabriel Blvd.",
+      "zh": null
+    },
+    "description": {
+      "en": "聖蓋博 San Gabriel｜角聲中心 聖蓋博角聲中心位於 San Gabriel Blvd. 與 Mission Rd. 的交界，坐落在社區核心，致力於為周邊華裔社區提供優質的社區服務。 在這裡，我們提供各類社區服務、癌症關懷及家庭事工，全方位關心身心靈的需要。同時，這裡也是基督教角聲佈道圖南加州分會的總部，承擔服務人群、見證基督的使命。 在聖蓋博角聲中心，我們盼望透過全人的關懷與信仰的力量，陪伴每一位走過困境，邁向更穩定、更充滿盼望的生活。 715 E Mission Rd., San Gabriel, CA 91776 ( San Gabriel Blvd. 與 Mission Rd. 的交界, 加油站旁) 在聖蓋博角聲中心提供的服務： 社區服務",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "Chinese Christian Herald Crusades - San Gabriel Center",
+      "San Gabriel",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.cchcla.org/sangabriel/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0027",
+    "slug": "chinese-evangelical-free-church-of-los-angeles-monterey-park",
+    "name": {
+      "en": "Chinese Evangelical Free Church of Los Angeles",
+      "zh": null
+    },
+    "categorySlug": "faith-community",
+    "city": "Monterey Park",
+    "region": "Greater Los Angeles",
+    "address": null,
+    "serviceAreaText": "Monterey Park",
+    "phone": null,
+    "email": null,
+    "website": "https://cefcla.org/en/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinese Evangelical Free Church of Los Angeles in Monterey Park.",
+      "zh": null
+    },
+    "description": {
+      "en": "Chinese Evangelical Free Church of Los Angeles in Monterey Park.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Chinese Evangelical Free Church of Los Angeles",
+      "Monterey Park",
+      "chinese churches religious groups"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://cefcla.org/en/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0028",
+    "slug": "asian-youth-center-san-gabriel",
+    "name": {
+      "en": "Asian Youth Center",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "San Gabriel",
+    "region": "Greater Los Angeles",
+    "address": null,
+    "serviceAreaText": "San Gabriel",
+    "phone": null,
+    "email": null,
+    "website": "https://www.asianyouthcenter.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian Youth Center in San Gabriel.",
+      "zh": null
+    },
+    "description": {
+      "en": "Asian Youth Center in San Gabriel.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Asian Youth Center",
+      "San Gabriel",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:07+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.asianyouthcenter.org/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0029",
+    "slug": "happy-lemon-alhambra-alhambra",
+    "name": {
+      "en": "Happy Lemon Alhambra",
+      "zh": null
+    },
+    "categorySlug": "shopping",
+    "city": "Alhambra",
+    "region": "Greater Los Angeles",
+    "address": null,
+    "serviceAreaText": "Alhambra",
+    "phone": null,
+    "email": null,
+    "website": "https://happylemonusa.com/location/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Happy Lemon Alhambra in Alhambra.",
+      "zh": null
+    },
+    "description": {
+      "en": "Happy Lemon Alhambra in Alhambra.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Happy Lemon Alhambra",
+      "Alhambra",
+      "grocery markets"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://happylemonusa.com/location/"
+    ]
+  },
+  {
+    "id": "los-angeles-imported-0030",
+    "slug": "chicha-san-chen-san-gabriel-san-gabriel",
+    "name": {
+      "en": "CHICHA San Chen San Gabriel",
+      "zh": null
+    },
+    "categorySlug": "shopping",
+    "city": "San Gabriel",
+    "region": "Greater Los Angeles",
+    "address": null,
+    "serviceAreaText": "San Gabriel",
+    "phone": null,
+    "email": null,
+    "website": "https://chichasanchensocal.com/index.php",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "CHICHA San Chen San Gabriel in San Gabriel.",
+      "zh": null
+    },
+    "description": {
+      "en": "CHICHA San Chen San Gabriel in San Gabriel.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "CHICHA San Chen San Gabriel",
+      "San Gabriel",
+      "grocery markets"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:05:06+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://chichasanchensocal.com/index.php"
+    ]
   }
 ]

@@ -24,12 +24,29 @@
       "zh": "三峡人家位于北奥斯汀 Research Boulevard 华人餐饮走廊，为本地居民提供川菜选择。本条目依据餐厅公开网站整理，包含地址、电话、菜单、点餐链接与营业时间等信息。"
     },
     "services": [
-      { "en": "Sichuan dine-in", "zh": "川菜堂食" },
-      { "en": "Menu and online ordering links", "zh": "菜单与线上点餐链接" },
-      { "en": "North Austin restaurant corridor", "zh": "北奥斯汀餐饮商圈" }
+      {
+        "en": "Sichuan dine-in",
+        "zh": "川菜堂食"
+      },
+      {
+        "en": "Menu and online ordering links",
+        "zh": "菜单与线上点餐链接"
+      },
+      {
+        "en": "North Austin restaurant corridor",
+        "zh": "北奥斯汀餐饮商圈"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["sichuan austin", "川菜", "三峡人家", "research boulevard chinese food"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "sichuan austin",
+      "川菜",
+      "三峡人家",
+      "research boulevard chinese food"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -41,13 +58,30 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Mon", "value": "Closed" },
-      { "label": "Tue-Thu", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM" },
-      { "label": "Fri-Sat", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:30 PM" },
-      { "label": "Sun", "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM" }
+      {
+        "label": "Mon",
+        "value": "Closed"
+      },
+      {
+        "label": "Tue-Thu",
+        "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM"
+      },
+      {
+        "label": "Fri-Sat",
+        "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:30 PM"
+      },
+      {
+        "label": "Sun",
+        "value": "11:00 AM - 2:30 PM; 4:30 PM - 9:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.3664, "lng": -97.7192 },
-    "sourceUrls": ["https://www.houseofthreegorges.com/"]
+    "coordinates": {
+      "lat": 30.3664,
+      "lng": -97.7192
+    },
+    "sourceUrls": [
+      "https://www.houseofthreegorges.com/"
+    ]
   },
   {
     "id": "austin-din-ho-chinese-bbq",
@@ -75,12 +109,29 @@
       "zh": "Din Ho Chinese BBQ 是北奥斯汀中式烧腊餐馆，公开联系页面列出 Research Boulevard 地址、电话、邮箱与每周营业时间。适合寻找粤式烧腊、家庭合菜与传统中餐馆体验的社区居民。"
     },
     "services": [
-      { "en": "Chinese barbecue", "zh": "中式烧腊" },
-      { "en": "Family-style dining", "zh": "家庭合菜" },
-      { "en": "Takeout support", "zh": "外带服务" }
+      {
+        "en": "Chinese barbecue",
+        "zh": "中式烧腊"
+      },
+      {
+        "en": "Family-style dining",
+        "zh": "家庭合菜"
+      },
+      {
+        "en": "Takeout support",
+        "zh": "外带服务"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["din ho", "chinese bbq austin", "烧腊", "cantonese austin"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "din ho",
+      "chinese bbq austin",
+      "烧腊",
+      "cantonese austin"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -92,12 +143,26 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Mon", "value": "11:00 AM - 9:00 PM" },
-      { "label": "Tue", "value": "Closed" },
-      { "label": "Wed-Sun", "value": "11:00 AM - 9:00 PM" }
+      {
+        "label": "Mon",
+        "value": "11:00 AM - 9:00 PM"
+      },
+      {
+        "label": "Tue",
+        "value": "Closed"
+      },
+      {
+        "label": "Wed-Sun",
+        "value": "11:00 AM - 9:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.3665, "lng": -97.719 },
-    "sourceUrls": ["https://www.dinhochinesebbq.com/contact.php"]
+    "coordinates": {
+      "lat": 30.3665,
+      "lng": -97.719
+    },
+    "sourceUrls": [
+      "https://www.dinhochinesebbq.com/contact.php"
+    ]
   },
   {
     "id": "austin-julies-noodles",
@@ -125,12 +190,29 @@
       "zh": "Julie 手工面位于 Research Boulevard，多家中餐商户集中在这一带。餐厅公开地点页面列出地址、邮箱、电话与营业时间，因此本条目使用明确的奥斯汀本地信息，而不是复用其他城市数据。"
     },
     "services": [
-      { "en": "Handmade noodles", "zh": "手工面" },
-      { "en": "Dumplings", "zh": "饺子" },
-      { "en": "Dine-in and online ordering", "zh": "堂食与线上点餐" }
+      {
+        "en": "Handmade noodles",
+        "zh": "手工面"
+      },
+      {
+        "en": "Dumplings",
+        "zh": "饺子"
+      },
+      {
+        "en": "Dine-in and online ordering",
+        "zh": "堂食与线上点餐"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["julie's noodles", "handmade noodles", "手工面", "dumplings austin"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "julie's noodles",
+      "handmade noodles",
+      "手工面",
+      "dumplings austin"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -142,12 +224,26 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Mon", "value": "11:00 AM - 8:30 PM" },
-      { "label": "Tue", "value": "Closed" },
-      { "label": "Wed-Sun", "value": "11:00 AM - 8:30 PM" }
+      {
+        "label": "Mon",
+        "value": "11:00 AM - 8:30 PM"
+      },
+      {
+        "label": "Tue",
+        "value": "Closed"
+      },
+      {
+        "label": "Wed-Sun",
+        "value": "11:00 AM - 8:30 PM"
+      }
     ],
-    "coordinates": { "lat": 30.3662, "lng": -97.7191 },
-    "sourceUrls": ["https://juliesnoodlesaustin.com/location"]
+    "coordinates": {
+      "lat": 30.3662,
+      "lng": -97.7191
+    },
+    "sourceUrls": [
+      "https://juliesnoodlesaustin.com/location"
+    ]
   },
   {
     "id": "austin-chens-noodle-house",
@@ -174,12 +270,29 @@
       "zh": "陈记面馆被收录为奥斯汀本地餐饮条目，因为其公开网站列出 Spicewood Springs Road 的奥斯汀地点与联系电话。该条目为 ChineseAustin 提供真实的西北奥斯汀餐饮信息，不导入其他城市目录文案。"
     },
     "services": [
-      { "en": "Noodle dishes", "zh": "面食" },
-      { "en": "Restaurant ordering", "zh": "餐厅点餐" },
-      { "en": "Northwest Austin dining", "zh": "西北奥斯汀餐饮" }
+      {
+        "en": "Noodle dishes",
+        "zh": "面食"
+      },
+      {
+        "en": "Restaurant ordering",
+        "zh": "餐厅点餐"
+      },
+      {
+        "en": "Northwest Austin dining",
+        "zh": "西北奥斯汀餐饮"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["chen's noodle house", "陈记面馆", "spicewood springs", "northwest austin noodles"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "chen's noodle house",
+      "陈记面馆",
+      "spicewood springs",
+      "northwest austin noodles"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -191,8 +304,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.4308, "lng": -97.7734 },
-    "sourceUrls": ["https://chensnoodles.com/"]
+    "coordinates": {
+      "lat": 30.4308,
+      "lng": -97.7734
+    },
+    "sourceUrls": [
+      "https://chensnoodles.com/"
+    ]
   },
   {
     "id": "austin-noodle-alley",
@@ -220,12 +338,29 @@
       "zh": "Noodle Alley 为奥斯汀目录补充雪松公园覆盖。其官方网站列出 North Bell Boulevard 地址、电话、邮箱，并说明面食与饺子等服务，覆盖 Cedar Park 与 Leander 一带。"
     },
     "services": [
-      { "en": "Noodles", "zh": "面食" },
-      { "en": "Dumplings", "zh": "饺子" },
-      { "en": "Cedar Park dine-in", "zh": "雪松公园堂食" }
+      {
+        "en": "Noodles",
+        "zh": "面食"
+      },
+      {
+        "en": "Dumplings",
+        "zh": "饺子"
+      },
+      {
+        "en": "Cedar Park dine-in",
+        "zh": "雪松公园堂食"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["cedar park noodles", "noodle alley", "dumplings cedar park", "雪松公园中餐"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "cedar park noodles",
+      "noodle alley",
+      "dumplings cedar park",
+      "雪松公园中餐"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -237,11 +372,22 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Sun-Thu", "value": "11:00 AM - 9:00 PM" },
-      { "label": "Fri-Sat", "value": "11:00 AM - 10:00 PM" }
+      {
+        "label": "Sun-Thu",
+        "value": "11:00 AM - 9:00 PM"
+      },
+      {
+        "label": "Fri-Sat",
+        "value": "11:00 AM - 10:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.5215, "lng": -97.8293 },
-    "sourceUrls": ["https://www.noodlealleycp.com/"]
+    "coordinates": {
+      "lat": 30.5215,
+      "lng": -97.8293
+    },
+    "sourceUrls": [
+      "https://www.noodlealleycp.com/"
+    ]
   },
   {
     "id": "austin-hunan-lion-round-rock",
@@ -268,12 +414,29 @@
       "zh": "Hunan Lion 为 ChineseAustin 提供真实的朗德罗克目录条目。餐厅官方网站列出 Round Rock 地址、电话、线上点餐，并说明其长期服务朗德罗克社区。"
     },
     "services": [
-      { "en": "Chinese restaurant", "zh": "中餐馆" },
-      { "en": "Online ordering", "zh": "线上点餐" },
-      { "en": "Round Rock dining", "zh": "朗德罗克餐饮" }
+      {
+        "en": "Chinese restaurant",
+        "zh": "中餐馆"
+      },
+      {
+        "en": "Online ordering",
+        "zh": "线上点餐"
+      },
+      {
+        "en": "Round Rock dining",
+        "zh": "朗德罗克餐饮"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["hunan lion", "round rock chinese", "湘菜", "朗德罗克中餐"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "hunan lion",
+      "round rock chinese",
+      "湘菜",
+      "朗德罗克中餐"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -285,11 +448,22 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Mon-Fri", "value": "11:00 AM - 3:00 PM; 4:30 PM - 9:30 PM" },
-      { "label": "Sat-Sun", "value": "11:30 AM - 9:30 PM" }
+      {
+        "label": "Mon-Fri",
+        "value": "11:00 AM - 3:00 PM; 4:30 PM - 9:30 PM"
+      },
+      {
+        "label": "Sat-Sun",
+        "value": "11:30 AM - 9:30 PM"
+      }
     ],
-    "coordinates": { "lat": 30.5218, "lng": -97.6899 },
-    "sourceUrls": ["https://www.hunanlionrr.com/"]
+    "coordinates": {
+      "lat": 30.5218,
+      "lng": -97.6899
+    },
+    "sourceUrls": [
+      "https://www.hunanlionrr.com/"
+    ]
   },
   {
     "id": "austin-bamboo-bistro-pflugerville",
@@ -316,12 +490,29 @@
       "zh": "Bamboo Bistro 为奥斯汀北部家庭补充普弗拉格维尔覆盖。商家网站列出 FM 685 普弗拉格维尔地点、电话、点餐入口，以及中式、泰式、面食、鸡翅与素食等菜单方向。"
     },
     "services": [
-      { "en": "Chinese takeout", "zh": "中式外带" },
-      { "en": "Delivery and pickup", "zh": "外送与自取" },
-      { "en": "Pflugerville location", "zh": "普弗拉格维尔地点" }
+      {
+        "en": "Chinese takeout",
+        "zh": "中式外带"
+      },
+      {
+        "en": "Delivery and pickup",
+        "zh": "外送与自取"
+      },
+      {
+        "en": "Pflugerville location",
+        "zh": "普弗拉格维尔地点"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["bamboo bistro", "pflugerville chinese", "pflugerville takeout", "普弗拉格维尔中餐"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "bamboo bistro",
+      "pflugerville chinese",
+      "pflugerville takeout",
+      "普弗拉格维尔中餐"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -333,8 +524,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.4549, "lng": -97.6055 },
-    "sourceUrls": ["https://www.bamboobistroonline.com/"]
+    "coordinates": {
+      "lat": 30.4549,
+      "lng": -97.6055
+    },
+    "sourceUrls": [
+      "https://www.bamboobistroonline.com/"
+    ]
   },
   {
     "id": "austin-asia-market",
@@ -361,12 +557,29 @@
       "zh": "Asia Market 是西北奥斯汀居民常用的亚洲食品与熟食据点。商家网站列出 Spicewood Springs Road 套房地址、电话、熟食店位置说明与公开更新。"
     },
     "services": [
-      { "en": "Asian groceries", "zh": "亚洲食品杂货" },
-      { "en": "Prepared foods", "zh": "熟食" },
-      { "en": "Northwest Austin market", "zh": "西北奥斯汀市场" }
+      {
+        "en": "Asian groceries",
+        "zh": "亚洲食品杂货"
+      },
+      {
+        "en": "Prepared foods",
+        "zh": "熟食"
+      },
+      {
+        "en": "Northwest Austin market",
+        "zh": "西北奥斯汀市场"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["asia market", "spicewood springs asian grocery", "asian market austin", "亚洲超市"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "asia market",
+      "spicewood springs asian grocery",
+      "asian market austin",
+      "亚洲超市"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -378,10 +591,18 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Thu-Sun", "value": "12:00 PM - 5:00 PM" }
+      {
+        "label": "Thu-Sun",
+        "value": "12:00 PM - 5:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.4307, "lng": -97.7736 },
-    "sourceUrls": ["https://asiamarketeatery.com/"]
+    "coordinates": {
+      "lat": 30.4307,
+      "lng": -97.7736
+    },
+    "sourceUrls": [
+      "https://asiamarketeatery.com/"
+    ]
   },
   {
     "id": "austin-h-mart-austin",
@@ -407,12 +628,30 @@
       "zh": "H Mart Austin 是服务奥斯汀、雪松公园与 Leander 家庭的重要亚洲超市和美食广场据点。奥斯汀商会目录列出 Lakeline Boulevard 地址、网站、电话与 grocery store 分类。"
     },
     "services": [
-      { "en": "Asian supermarket", "zh": "亚洲超市" },
-      { "en": "Food hall", "zh": "美食广场" },
-      { "en": "Lakeline grocery anchor", "zh": "Lakeline 生活采购据点" }
+      {
+        "en": "Asian supermarket",
+        "zh": "亚洲超市"
+      },
+      {
+        "en": "Food hall",
+        "zh": "美食广场"
+      },
+      {
+        "en": "Lakeline grocery anchor",
+        "zh": "Lakeline 生活采购据点"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["hmart", "h mart austin", "lakeline asian grocery", "韩国超市", "亚洲超市"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "hmart",
+      "h mart austin",
+      "lakeline asian grocery",
+      "韩国超市",
+      "亚洲超市"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -424,8 +663,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.4787, "lng": -97.8006 },
-    "sourceUrls": ["https://www.austinchamber.com/directory/h-mart"]
+    "coordinates": {
+      "lat": 30.4787,
+      "lng": -97.8006
+    },
+    "sourceUrls": [
+      "https://www.austinchamber.com/directory/h-mart"
+    ]
   },
   {
     "id": "austin-99-ranch-market",
@@ -451,12 +695,29 @@
       "zh": "大华超市奥斯汀店是中北奥斯汀居民采购华人及亚洲食材的重要超市。公开门店信息列出 Airport Boulevard 套房、电话与 99 Ranch 网站，因此目录可展示奥斯汀本地采购资源，而不回退到其他城市数据。"
     },
     "services": [
-      { "en": "Asian groceries", "zh": "亚洲食品杂货" },
-      { "en": "Seafood and produce", "zh": "海鲜与生鲜" },
-      { "en": "Central Austin shopping", "zh": "中奥斯汀采购" }
+      {
+        "en": "Asian groceries",
+        "zh": "亚洲食品杂货"
+      },
+      {
+        "en": "Seafood and produce",
+        "zh": "海鲜与生鲜"
+      },
+      {
+        "en": "Central Austin shopping",
+        "zh": "中奥斯汀采购"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["99 ranch", "ranch 99", "大华超市", "airport boulevard asian grocery"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "99 ranch",
+      "ranch 99",
+      "大华超市",
+      "airport boulevard asian grocery"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -468,8 +729,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.3329, "lng": -97.7153 },
-    "sourceUrls": ["https://www.loc8nearme.com/texas/austin/99-ranch-market/2470722/"]
+    "coordinates": {
+      "lat": 30.3329,
+      "lng": -97.7153
+    },
+    "sourceUrls": [
+      "https://www.loc8nearme.com/texas/austin/99-ranch-market/2470722/"
+    ]
   },
   {
     "id": "austin-austin-chinese-school",
@@ -495,12 +761,30 @@
       "zh": "奥斯汀中文学校是德州注册非营利组织，专注中文与中华文化教育。学校公开页面列出 Great Northern Boulevard 校址、周日上课时间、联系邮箱，并说明服务奥斯汀儿童与成人社区的宗旨。"
     },
     "services": [
-      { "en": "Chinese language classes", "zh": "中文课程" },
-      { "en": "Culture education", "zh": "文化教育" },
-      { "en": "Sunday school program", "zh": "周日学校课程" }
+      {
+        "en": "Chinese language classes",
+        "zh": "中文课程"
+      },
+      {
+        "en": "Culture education",
+        "zh": "文化教育"
+      },
+      {
+        "en": "Sunday school program",
+        "zh": "周日学校课程"
+      }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["austin chinese school", "中文学校", "mandarin class austin", "austinchineseschool"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "austin chinese school",
+      "中文学校",
+      "mandarin class austin",
+      "austinchineseschool"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -512,10 +796,18 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Sun", "value": "2:00 PM - 4:00 PM" }
+      {
+        "label": "Sun",
+        "value": "2:00 PM - 4:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.3647, "lng": -97.7392 },
-    "sourceUrls": ["https://www.austinchineseschool.org/"]
+    "coordinates": {
+      "lat": 30.3647,
+      "lng": -97.7392
+    },
+    "sourceUrls": [
+      "https://www.austinchineseschool.org/"
+    ]
   },
   {
     "id": "austin-great-wall-chinese-school",
@@ -542,12 +834,30 @@
       "zh": "奥斯汀长城中文学校公开列出 Webb Middle School 实体上课地点、电话、邮箱与儿童及成人课程范围。该条目让目录不只包含餐饮，也覆盖奥斯汀华人家庭常用的教育资源。"
     },
     "services": [
-      { "en": "Chinese courses", "zh": "中文课程" },
-      { "en": "STEM and enrichment", "zh": "STEM 与兴趣课程" },
-      { "en": "Adult classes", "zh": "成人课程" }
+      {
+        "en": "Chinese courses",
+        "zh": "中文课程"
+      },
+      {
+        "en": "STEM and enrichment",
+        "zh": "STEM 与兴趣课程"
+      },
+      {
+        "en": "Adult classes",
+        "zh": "成人课程"
+      }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["agwcs", "great wall chinese school", "长城中文学校", "austin mandarin class"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "agwcs",
+      "great wall chinese school",
+      "长城中文学校",
+      "austin mandarin class"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -559,8 +869,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.3322, "lng": -97.707 },
-    "sourceUrls": ["https://agwcs.org/"]
+    "coordinates": {
+      "lat": 30.3322,
+      "lng": -97.707
+    },
+    "sourceUrls": [
+      "https://agwcs.org/"
+    ]
   },
   {
     "id": "austin-austin-quan-yin",
@@ -586,12 +901,29 @@
       "zh": "Austin Quan Yin 归入医疗保健分类，因为其公开网站说明提供针灸、中医、功能医学、营养与按摩等服务。网站列出 Medical Parkway 地址和电话，是寻求传统中医与针灸服务居民的真实本地资源。"
     },
     "services": [
-      { "en": "Acupuncture", "zh": "针灸" },
-      { "en": "Chinese medicine", "zh": "中医" },
-      { "en": "Integrative wellness", "zh": "整合健康" }
+      {
+        "en": "Acupuncture",
+        "zh": "针灸"
+      },
+      {
+        "en": "Chinese medicine",
+        "zh": "中医"
+      },
+      {
+        "en": "Integrative wellness",
+        "zh": "整合健康"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["austin acupuncture", "chinese medicine austin", "针灸", "中医"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "austin acupuncture",
+      "chinese medicine austin",
+      "针灸",
+      "中医"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -603,8 +935,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.3064, "lng": -97.7424 },
-    "sourceUrls": ["https://www.austinquanyin.com/"]
+    "coordinates": {
+      "lat": 30.3064,
+      "lng": -97.7424
+    },
+    "sourceUrls": [
+      "https://www.austinquanyin.com/"
+    ]
   },
   {
     "id": "austin-kung-acupuncture",
@@ -630,12 +967,29 @@
       "zh": "Kung Acupuncture 自述为服务奥斯汀的传统中医诊所，并公开列出奥斯汀办公室地址、电话，以及针灸、拔罐、刮痧、草药和远程咨询等服务。该条目为目录补充第二个奥斯汀健康资源，而不是借用其他城市医疗条目。"
     },
     "services": [
-      { "en": "Acupuncture", "zh": "针灸" },
-      { "en": "Cupping and gua sha", "zh": "拔罐与刮痧" },
-      { "en": "Herbal remedies", "zh": "草药调理" }
+      {
+        "en": "Acupuncture",
+        "zh": "针灸"
+      },
+      {
+        "en": "Cupping and gua sha",
+        "zh": "拔罐与刮痧"
+      },
+      {
+        "en": "Herbal remedies",
+        "zh": "草药调理"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["kung acupuncture", "traditional chinese medicine", "cupping austin", "刮痧"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "kung acupuncture",
+      "traditional chinese medicine",
+      "cupping austin",
+      "刮痧"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -647,8 +1001,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.2751, "lng": -97.7502 },
-    "sourceUrls": ["https://www.kungacu.com/"]
+    "coordinates": {
+      "lat": 30.2751,
+      "lng": -97.7502
+    },
+    "sourceUrls": [
+      "https://www.kungacu.com/"
+    ]
   },
   {
     "id": "austin-cheng-wooster-real-estate",
@@ -675,12 +1034,29 @@
       "zh": "Cheng Wooster Real Estate 是本地相关的房产资源，因为其公开网站列出奥斯汀办公室、电话、邮箱、德州经纪经验与中文能力。该条目服务新居民找房需求，不依赖其他城市房产经纪资料。"
     },
     "services": [
-      { "en": "Buyer consultation", "zh": "买方咨询" },
-      { "en": "Listing strategy", "zh": "卖房策略" },
-      { "en": "Chinese-language real estate support", "zh": "中文房产支持" }
+      {
+        "en": "Buyer consultation",
+        "zh": "买方咨询"
+      },
+      {
+        "en": "Listing strategy",
+        "zh": "卖房策略"
+      },
+      {
+        "en": "Chinese-language real estate support",
+        "zh": "中文房产支持"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["austin chinese realtor", "cheng wooster", "奥斯汀房产", "mandarin realtor austin"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "austin chinese realtor",
+      "cheng wooster",
+      "奥斯汀房产",
+      "mandarin realtor austin"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -692,8 +1068,13 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "coordinates": { "lat": 30.4484, "lng": -97.7755 },
-    "sourceUrls": ["https://www.chengwooster.com/"]
+    "coordinates": {
+      "lat": 30.4484,
+      "lng": -97.7755
+    },
+    "sourceUrls": [
+      "https://www.chengwooster.com/"
+    ]
   },
   {
     "id": "austin-yz-cpa",
@@ -718,12 +1099,29 @@
       "zh": "YZ CPA LLC 被收录是因为其公开网站明确说明提供 Austin, Texas 中文会计与报税服务，覆盖 W-2、1099、小企业与远程报税支持。本条目使用该事务所自身的奥斯汀业务信息，不导入其他城市 CPA 条目。"
     },
     "services": [
-      { "en": "Chinese tax preparation", "zh": "中文报税" },
-      { "en": "1099 and W-2 support", "zh": "1099 与 W-2 支持" },
-      { "en": "Small-business tax consulting", "zh": "小企业税务咨询" }
+      {
+        "en": "Chinese tax preparation",
+        "zh": "中文报税"
+      },
+      {
+        "en": "1099 and W-2 support",
+        "zh": "1099 与 W-2 支持"
+      },
+      {
+        "en": "Small-business tax consulting",
+        "zh": "小企业税务咨询"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["chinese cpa austin", "yz cpa", "中文报税", "奥斯汀会计"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "chinese cpa austin",
+      "yz cpa",
+      "中文报税",
+      "奥斯汀会计"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -735,7 +1133,9 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "sourceUrls": ["https://yz-cpa.com/"]
+    "sourceUrls": [
+      "https://yz-cpa.com/"
+    ]
   },
   {
     "id": "austin-asian-american-resource-center",
@@ -761,12 +1161,29 @@
       "zh": "奥斯汀亚裔资源中心属于公共社区资源，而非私营商家，但它是奥斯汀华人与更广泛亚裔社区的重要本地基础设施。奥斯汀市官网列出 Cameron Road 地址、电话、开放时间，以及服务亚裔社区的使命。"
     },
     "services": [
-      { "en": "Community programs", "zh": "社区活动" },
-      { "en": "Cultural education", "zh": "文化教育" },
-      { "en": "Rental space and exhibitions", "zh": "场地与展览" }
+      {
+        "en": "Community programs",
+        "zh": "社区活动"
+      },
+      {
+        "en": "Cultural education",
+        "zh": "文化教育"
+      },
+      {
+        "en": "Rental space and exhibitions",
+        "zh": "场地与展览"
+      }
     ],
-    "languages": ["English", "Mandarin"],
-    "searchAliases": ["aarc", "asian american resource center", "亚裔资源中心", "austin asian community"],
+    "languages": [
+      "English",
+      "Mandarin"
+    ],
+    "searchAliases": [
+      "aarc",
+      "asian american resource center",
+      "亚裔资源中心",
+      "austin asian community"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -778,11 +1195,22 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
-      { "label": "Mon-Fri", "value": "10:00 AM - 6:00 PM" },
-      { "label": "Sat", "value": "10:00 AM - 4:00 PM" }
+      {
+        "label": "Mon-Fri",
+        "value": "10:00 AM - 6:00 PM"
+      },
+      {
+        "label": "Sat",
+        "value": "10:00 AM - 4:00 PM"
+      }
     ],
-    "coordinates": { "lat": 30.3361, "lng": -97.684 },
-    "sourceUrls": ["https://www.austintexas.gov/aarc/contact-asian-american-resource-center"]
+    "coordinates": {
+      "lat": 30.3361,
+      "lng": -97.684
+    },
+    "sourceUrls": [
+      "https://www.austintexas.gov/aarc/contact-asian-american-resource-center"
+    ]
   },
   {
     "id": "austin-chinese-society-of-austin",
@@ -809,12 +1237,30 @@
       "zh": "奥斯汀华人协会是面向居民的社区资源条目，帮助查找华人活动、文化节庆、会员与本地联结。其公开网站说明服务大奥斯汀华人社区的使命，并列出电话、邮寄地址和邮箱。"
     },
     "services": [
-      { "en": "Community events", "zh": "社区活动" },
-      { "en": "Cultural celebrations", "zh": "文化节庆" },
-      { "en": "Membership and local connection", "zh": "会员与本地联结" }
+      {
+        "en": "Community events",
+        "zh": "社区活动"
+      },
+      {
+        "en": "Cultural celebrations",
+        "zh": "文化节庆"
+      },
+      {
+        "en": "Membership and local connection",
+        "zh": "会员与本地联结"
+      }
     ],
-    "languages": ["English", "Mandarin", "Traditional Chinese"],
-    "searchAliases": ["chinese society of austin", "csa austin", "奥斯汀华人协会", "texas csa"],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese"
+    ],
+    "searchAliases": [
+      "chinese society of austin",
+      "csa austin",
+      "奥斯汀华人协会",
+      "texas csa"
+    ],
     "verified": true,
     "bilingual": true,
     "newcomerFriendly": true,
@@ -826,6 +1272,845 @@
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
-    "sourceUrls": ["https://www.texascsa.org/"]
+    "sourceUrls": [
+      "https://www.texascsa.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0019",
+    "slug": "red-lotus-asian-grille-austin",
+    "name": {
+      "en": "Red Lotus Asian Grille",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "6507 Jester Boulevard, Suite 501, Austin, TX 78750",
+    "serviceAreaText": null,
+    "phone": "(512) 494-4994",
+    "email": null,
+    "website": "https://www.redlotusasiangrille.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Online ordering menu for Red Lotus Asian Grille (Austin).",
+      "zh": null
+    },
+    "description": {
+      "en": "Online ordering menu for Red Lotus Asian Grille (Austin). Welcome to Red Lotus Asian Grille, where we specialize in Chinese & Vietnamese cuisine. Start off with one of our appetizers which include fried calamari, egg rolls, Vietnamese spring rolls and more. Our menu also features Pho, General Tso’s and Pad Thai. Kid’s menu and Desserts are also available. We are located on Jester Blvd, near Ranch to Market 2222. Next to Children’s Center of Austin. 15 minutes drive from The University of Texas at Austin. Order Online now for Carryout or Delivery!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Red Lotus Asian Grille",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.redlotusasiangrille.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0020",
+    "slug": "rice-bowl-cafe-austin",
+    "name": {
+      "en": "Rice Bowl Cafe",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "11220 N Lamar Blvd, Austin, TX, 78753",
+    "serviceAreaText": null,
+    "phone": "(512) 835-8888",
+    "email": null,
+    "website": "https://www.ricebowlcafeaustin.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at Rice Bowl Cafe.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at Rice Bowl Cafe. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Rice Bowl Cafe",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.ricebowlcafeaustin.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0021",
+    "slug": "shan-china-bistro-and-bar-austin",
+    "name": {
+      "en": "Shan China Bistro and Bar",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "1700 Ranch Rd 620 N #110, Austin, TX, 78734",
+    "serviceAreaText": null,
+    "phone": "(512) 284-9909",
+    "email": null,
+    "website": "https://www.shanchinabistro.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "We offer authentic and delicious tasting Chinese cuisine in Austin, TX.",
+      "zh": null
+    },
+    "description": {
+      "en": "We offer authentic and delicious tasting Chinese cuisine in Austin, TX. Order online for pickup and enjoy your favorite dishes in the comfort of your home.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Shan China Bistro and Bar",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.shanchinabistro.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0022",
+    "slug": "soupleaf-hot-pot-austin",
+    "name": {
+      "en": "Soupleaf Hot Pot",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "6929 Airport Blvd, Austin, TX 78752",
+    "serviceAreaText": null,
+    "phone": "(512) 373-3378",
+    "email": "contact@soupleafhotpot.com",
+    "website": "https://www.soupleafhotpot.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin Born, Authentic Hot Pot.",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin Born, Authentic Hot Pot. Veggie-friendly (plenty of meat options still). Momma run business, daily made from scratch stock",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Soupleaf Hot Pot",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.soupleafhotpot.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0023",
+    "slug": "steamies-dumplings-austin",
+    "name": {
+      "en": "Steamies Dumplings",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "6929 Airport Blvd Ste 148, Austin, TX 78752",
+    "serviceAreaText": null,
+    "phone": null,
+    "email": null,
+    "website": "https://steamiesdumplings.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin-based hand-crafted authentic Chinese dumplings made from simple, locally sourced ingredients.",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin-based hand-crafted authentic Chinese dumplings made from simple, locally sourced ingredients. Order today.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Steamies Dumplings",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://steamiesdumplings.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0024",
+    "slug": "austin-table-tennis-club-austin",
+    "name": {
+      "en": "Austin Table Tennis Club",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "8956 Research Boulevard, Austin, TX, 78758-5902",
+    "serviceAreaText": null,
+    "phone": "(512) 491-7664",
+    "email": "info@austintabletennis.net",
+    "website": "https://www.austintabletennis.net",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin Table Tennis Club offers Open Play , Professional Coaching, Pro Shop and Weekly Leagues",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin Table Tennis Club offers Open Play , Professional Coaching, Pro Shop and Weekly Leagues",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Austin Table Tennis Club",
+      "Austin",
+      "ping pong table tennis"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.austintabletennis.net/"
+    ]
+  },
+  {
+    "id": "austin-imported-0025",
+    "slug": "greater-austin-asian-chamber-of-commerce-austin",
+    "name": {
+      "en": "Greater Austin Asian Chamber of Commerce",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "8001 Centre Park Drive, #160, Austin, TX 78754",
+    "serviceAreaText": null,
+    "phone": "(512) 407-8240",
+    "email": "info@austinasianchamber.org",
+    "website": "https://austinasianchamber.org",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "The Greater Austin Asian Chamber of Commerce supports Asian-owned and allied businesses across Central Texas through programs focused on Advocacy, Connection, and Education.",
+      "zh": null
+    },
+    "description": {
+      "en": "The Greater Austin Asian Chamber of Commerce supports Asian-owned and allied businesses across Central Texas through programs focused on Advocacy, Connection, and Education.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Greater Austin Asian Chamber of Commerce",
+      "Austin",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://austinasianchamber.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0026",
+    "slug": "lotus-chinese-austin",
+    "name": {
+      "en": "Lotus Chinese",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": "%20gary@lotuschineseatx.com",
+    "website": "https://www.lotuschineseatx.com",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "<p>Lotus Chinese is a modern Chinese restaurant on Rock Rose in the Domain Northside in Austin.</p>",
+      "zh": null
+    },
+    "description": {
+      "en": "<p>Lotus Chinese is a modern Chinese restaurant on Rock Rose in the Domain Northside in Austin.</p>",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Lotus Chinese",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.lotuschineseatx.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0027",
+    "slug": "tso-chinese-takeout-delivery-round-rock",
+    "name": {
+      "en": "Tso Chinese Takeout & Delivery",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Round Rock",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin and Round Rock",
+    "phone": null,
+    "email": null,
+    "website": "https://tsochinese.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Tso is Austin and Round Rock's favorite Chinese Takeout and Delivery, with free delivery and a no-tipping policy.",
+      "zh": null
+    },
+    "description": {
+      "en": "Tso is Austin and Round Rock's favorite Chinese Takeout and Delivery, with free delivery and a no-tipping policy. Order online. Catering services available.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Tso Chinese Takeout & Delivery",
+      "Round Rock",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://tsochinese.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0028",
+    "slug": "taiwan-center-for-mandarin-learning-at-austin-austin",
+    "name": {
+      "en": "Taiwan Center for Mandarin Learning at Austin",
+      "zh": null
+    },
+    "categorySlug": "education",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": null,
+    "website": "https://atpcweb.org/gma/tcml/about",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "About us TCML at Austin Taiwan Center for Mandarin Learning at Austin (TCML at Austin) is a learning center hosted by Goodnews Mandarin Academy (GMA) under Austin Taiwanese Presby…",
+      "zh": null
+    },
+    "description": {
+      "en": "About us TCML at Austin Taiwan Center for Mandarin Learning at Austin (TCML at Austin) is a learning center hosted by Goodnews Mandarin Academy (GMA) under Austin Taiwanese Presbyterian Church (ATPC). We offer classes in Mandarin language with Traditional Chinese characters and Taiwan’s culture experiences. In 2022, GMA was selected to be the official TCML center to serve Austin’s communities providing adults (over the age of 18) an authentic environment in learning Mandarin and to experience Taiwan culture locally. GMA is a Mandarin language ministry launched by the Austin Taiwanese Presbyterian Church in 2014. Different from the previous ATPC Chinese School in Austin (founded in 1999), the academy focuses on traditional Taiwanese culture in addition to the existing Traditional Chinese language teaching with inheritance and initiation of the Christian faith. Introduction to Taiwan Center for Mandarin Learning​ © 2026 Austin Taiwanese Presbyterian Church. All rights reserved.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Mandarin",
+      "Traditional Chinese",
+      "Taiwanese"
+    ],
+    "searchAliases": [
+      "Taiwan Center for Mandarin Learning at Austin",
+      "Austin",
+      "education language schools"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://atpcweb.org/gma/tcml/about/"
+    ]
+  },
+  {
+    "id": "austin-imported-0029",
+    "slug": "austin-chinese-church-austin",
+    "name": {
+      "en": "Austin Chinese Church",
+      "zh": null
+    },
+    "categorySlug": "faith-community",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": null,
+    "website": "https://austinchinesechurch.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin Chinese Church in Austin.",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin Chinese Church in Austin.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Austin Chinese Church",
+      "Austin",
+      "chinese churches religious groups"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://austinchinesechurch.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0030",
+    "slug": "austin-christian-assembly-austin",
+    "name": {
+      "en": "Austin Christian Assembly",
+      "zh": null
+    },
+    "categorySlug": "faith-community",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": null,
+    "website": "https://www.acafamily.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin Christian Assembly (a Chinese and English speaking church in Austin, Texas)",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin Christian Assembly (a Chinese and English speaking church in Austin, Texas)",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Austin Christian Assembly",
+      "Austin",
+      "chinese churches religious groups"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.acafamily.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0031",
+    "slug": "austin-taiwanese-presbyterian-church-austin",
+    "name": {
+      "en": "Austin Taiwanese Presbyterian Church",
+      "zh": null
+    },
+    "categorySlug": "faith-community",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": null,
+    "website": "https://atpcweb.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Austin Taiwanese Presbyterian Church in Austin.",
+      "zh": null
+    },
+    "description": {
+      "en": "Austin Taiwanese Presbyterian Church in Austin.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English",
+      "Taiwanese"
+    ],
+    "searchAliases": [
+      "Austin Taiwanese Presbyterian Church",
+      "Austin",
+      "chinese churches religious groups"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://atpcweb.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0032",
+    "slug": "asian-family-support-services-of-austin-austin",
+    "name": {
+      "en": "Asian Family Support Services of Austin",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin metro",
+    "phone": null,
+    "email": null,
+    "website": "https://www.afssaustin.org/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Asian Family Support Services of Austin in Austin.",
+      "zh": null
+    },
+    "description": {
+      "en": "Asian Family Support Services of Austin in Austin.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Asian Family Support Services of Austin",
+      "Austin",
+      "cultural community organizations"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.afssaustin.org/"
+    ]
+  },
+  {
+    "id": "austin-imported-0033",
+    "slug": "wu-chow-downtown-austin",
+    "name": {
+      "en": "Wu Chow Downtown",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "500 Congress Ave, Austin, TX 78701",
+    "serviceAreaText": null,
+    "phone": null,
+    "email": null,
+    "website": "https://www.wuchowaustin.com/locations-menus",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "LOCATION + MENUS GROUP DINING GIFT CARDS PRESS More DOWNTOWN 500 Congress Ave Austin, TX 78701",
+      "zh": null
+    },
+    "description": {
+      "en": "LOCATION + MENUS GROUP DINING GIFT CARDS PRESS More DOWNTOWN 500 Congress Ave Austin, TX 78701",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Wu Chow Downtown",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.wuchowaustin.com/locations-menus"
+    ]
+  },
+  {
+    "id": "austin-imported-0034",
+    "slug": "ct3-table-tennis-club-austin",
+    "name": {
+      "en": "CT3 Table Tennis Club",
+      "zh": null
+    },
+    "categorySlug": "local-services",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": "9501 Menchaca Rd, Austin, TX 78748",
+    "serviceAreaText": null,
+    "phone": null,
+    "email": null,
+    "website": "https://playct3.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Learn and play table tennis (aka ping pong!) at the most active club in south Austin TX and the surrounding central Texas areas",
+      "zh": null
+    },
+    "description": {
+      "en": "Learn and play table tennis (aka ping pong!) at the most active club in south Austin TX and the surrounding central Texas areas",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "CT3 Table Tennis Club",
+      "Austin",
+      "ping pong table tennis"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://playct3.com/"
+    ]
+  },
+  {
+    "id": "austin-imported-0035",
+    "slug": "hunan-bistro-austin",
+    "name": {
+      "en": "Hunan Bistro",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Austin",
+    "region": "Austin metro",
+    "address": null,
+    "serviceAreaText": "Austin",
+    "phone": null,
+    "email": null,
+    "website": "https://www.hunanbistroonline.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Hunan Bistro in Austin.",
+      "zh": null
+    },
+    "description": {
+      "en": "Hunan Bistro in Austin.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Hunan Bistro",
+      "Austin",
+      "restaurants"
+    ],
+    "verified": true,
+    "bilingual": false,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-06-01T01:04:48+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "sourceUrls": [
+      "https://www.hunanbistroonline.com/"
+    ]
   }
 ]

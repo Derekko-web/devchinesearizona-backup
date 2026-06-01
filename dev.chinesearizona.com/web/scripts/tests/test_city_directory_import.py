@@ -122,6 +122,59 @@ def business_page_html(name: str = "Example Noodle", city: str = "Austin", state
     """
 
 
+def text_address_page_html(name: str = "Example Noodle") -> str:
+    return f"""
+      <html>
+        <head><title>{name}</title></head>
+        <body>
+          <h1>{name}</h1>
+          <p>Chinese noodle restaurant with Mandarin-speaking staff.</p>
+          <p>Visit us at 8956 Research Blvd, Austin, TX 78758 or call (512) 491-7664.</p>
+        </body>
+      </html>
+    """
+
+
+def messy_text_address_page_html(name: str = "Example Noodle") -> str:
+    return f"""
+      <html>
+        <head><title>{name}</title></head>
+        <body>
+          <h1>{name}</h1>
+          <p>Call <a href="tel:%28512%29%20491-7664">(512) 491-7664</a>.</p>
+          <p>Directions 46 North Lamar Boulevard, Austin, TX 78701.</p>
+        </body>
+      </html>
+    """
+
+
+def relative_host_jsonld_page_html(name: str = "Example CPA") -> str:
+    return f"""
+      <html>
+        <head>
+          <script type="application/ld+json">
+          {{
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "{name}",
+            "url": "example-cpa.test",
+            "telephone": "(512) 123-4567",
+            "description": "Chinese and English accounting service.",
+            "address": {{
+              "@type": "PostalAddress",
+              "streetAddress": "100 Congress Ave",
+              "addressLocality": "Austin",
+              "addressRegion": "TX",
+              "postalCode": "78701"
+            }}
+          }}
+          </script>
+        </head>
+        <body>{name} Austin</body>
+      </html>
+    """
+
+
 class CityDirectoryImportTests(unittest.TestCase):
     def test_missing_site_config_fails_without_arizona_fallback(self) -> None:
         with TemporaryDirectory() as directory:
@@ -373,6 +426,88 @@ class CityDirectoryImportTests(unittest.TestCase):
             exported = export_approved(site)
 
             self.assertEqual(exported, [])
+
+    def test_discovery_extracts_visible_text_address_when_json_ld_is_missing(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "text-address-source",
+                                "url": "https://text-address-source.test/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Noodle",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({"https://text-address-source.test/": text_address_page_html()}))
+            queue = read_queue(review_queue_path(site))
+
+            self.assertEqual(queue[0].address, "8956 Research Blvd, Austin, TX 78758")
+            self.assertEqual(queue[0].city, "Austin")
+            self.assertEqual(queue[0].reviewStatus, "needs_review")
+            self.assertIn("has address in selected state", queue[0].confidenceNotes)
+
+    def test_text_address_extraction_ignores_preceding_phone_digits(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "messy-text-address-source",
+                                "url": "https://messy-text-address-source.test/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Noodle",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({"https://messy-text-address-source.test/": messy_text_address_page_html()}))
+            queue = read_queue(review_queue_path(site))
+
+            self.assertEqual(queue[0].address, "46 North Lamar Boulevard, Austin, TX 78701")
+            self.assertEqual(queue[0].phone, "(512) 491-7664")
+
+    def test_json_ld_host_like_url_is_not_treated_as_relative_path(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "host-like-url-source",
+                                "url": "https://example-cpa.test/",
+                                "sourceCategory": "legal_accounting_insurance",
+                                "city": "Austin",
+                                "nameHint": "Example CPA",
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({"https://example-cpa.test/": relative_host_jsonld_page_html()}))
+            queue = read_queue(review_queue_path(site))
+
+            self.assertEqual(queue[0].website, "https://example-cpa.test")
 
     def test_promote_approved_is_idempotent_against_current_live_listings(self) -> None:
         with TemporaryDirectory() as directory:
