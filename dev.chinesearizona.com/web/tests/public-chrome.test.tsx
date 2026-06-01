@@ -66,6 +66,34 @@ afterEach(() => {
 });
 
 describe('public chrome', () => {
+  it('uses city-specific generated images instead of starter placeholders for launched non-Arizona city home pages', async () => {
+    const { siteProfiles } = await import('@/lib/site-config');
+    const starterPlaceholderPaths = new Set(['/window.svg', '/globe.svg']);
+    const launchedCityProfiles = [siteProfiles.austin, siteProfiles['los-angeles'], siteProfiles['sf-bay']];
+
+    for (const site of launchedCityProfiles) {
+      const imagePaths = [
+        site.home.heroImageUrl,
+        site.home.heroForegroundImageUrl,
+        site.home.mapImageUrl,
+        site.home.relocationImageUrl,
+        ...site.home.featuredCards.map((card) => card.imageUrl),
+        ...site.home.neighborhoods.map((neighborhood) => neighborhood.imageUrl),
+      ];
+
+      expect(imagePaths, site.key).not.toContain(Array.from(starterPlaceholderPaths)[0]);
+      expect(imagePaths, site.key).not.toContain(Array.from(starterPlaceholderPaths)[1]);
+
+      for (const imagePath of imagePaths) {
+        expect(imagePath, `${site.key} ${imagePath}`).toMatch(/^\/city-site-images\/.+\.webp$/);
+        expect(fs.existsSync(path.join(process.cwd(), 'public', imagePath.slice(1))), imagePath).toBe(true);
+      }
+    }
+
+    expect(siteProfiles.arizona.home.heroImageUrl).toBe('/directory-ai-replacements/old-town-taste-tempe-v2.webp');
+    expect(siteProfiles.arizona.domains).toContain('dev.chinesearizona.com');
+  });
+
   it('does not expose protected routes to signed-out visitors', async () => {
     const Navbar = (await import('@/components/Navbar')).default;
     const Footer = (await import('@/components/Footer')).default;
