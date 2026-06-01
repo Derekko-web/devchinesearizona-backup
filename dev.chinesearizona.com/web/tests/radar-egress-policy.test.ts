@@ -43,6 +43,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(service).toContain('Environment=PATH=/usr/local/bin:/usr/bin:/bin');
     expect(service).toContain('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
     expect(service).toContain('RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX');
+    expect(service).not.toContain('MemoryDenyWriteExecute=true');
 
     for (const range of deniedRanges) {
       expect(service).toContain(`IPAddressDeny=${range}`);

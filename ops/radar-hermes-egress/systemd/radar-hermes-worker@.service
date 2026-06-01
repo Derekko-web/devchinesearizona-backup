@@ -22,7 +22,6 @@ ProtectSystem=strict
 ReadWritePaths=/var/www/runtime-data/dev.chinesearizona.com/web
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 LockPersonality=true
-MemoryDenyWriteExecute=true
 
 # IPv4 unspecified, private, loopback, link-local, carrier-grade NAT,
 # documentation, benchmarking, multicast, and reserved ranges.
