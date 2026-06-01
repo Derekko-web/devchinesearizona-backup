@@ -61,6 +61,41 @@ describe('SF Bay Radar configuration', () => {
     expect(getRadarStorePath(siteProfiles['sf-bay'])).toContain('sf-bay-radar-runtime/store.json');
   });
 
+  it('resolves SF Bay runtime stores under the migrated runtime data root', () => {
+    const originalRuntimeRoot = process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
+    const originalCanonicalStorePath = process.env.RADAR_STORE_PATH_SF_BAY;
+    const originalStorePath = process.env.SF_BAY_RADAR_STORE_PATH;
+    const runtimeRoot = path.join(process.cwd(), 'tmp-runtime-root');
+
+    try {
+      process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT = runtimeRoot;
+      delete process.env.RADAR_STORE_PATH_SF_BAY;
+      delete process.env.SF_BAY_RADAR_STORE_PATH;
+
+      expect(getRadarStorePath(siteProfiles['sf-bay'])).toBe(
+        path.join(runtimeRoot, 'data', 'sf-bay-radar-runtime', 'store.json')
+      );
+    } finally {
+      if (originalRuntimeRoot) {
+        process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT = originalRuntimeRoot;
+      } else {
+        delete process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
+      }
+
+      if (originalStorePath) {
+        process.env.SF_BAY_RADAR_STORE_PATH = originalStorePath;
+      } else {
+        delete process.env.SF_BAY_RADAR_STORE_PATH;
+      }
+
+      if (originalCanonicalStorePath) {
+        process.env.RADAR_STORE_PATH_SF_BAY = originalCanonicalStorePath;
+      } else {
+        delete process.env.RADAR_STORE_PATH_SF_BAY;
+      }
+    }
+  });
+
   it('runs the SF Bay radar wrapper as a real CLI entrypoint', () => {
     const result = spawnSync(
       process.execPath,

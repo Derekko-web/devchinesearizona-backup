@@ -80,11 +80,7 @@ import {
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
 import { getDiscoverAdminQueue } from '@/lib/discover-arizona';
-import {
-  getRadarAdminSnapshotAsync,
-  getRadarArticlesAsync,
-  radarArticleToArticle,
-} from '@/lib/radar';
+import { getRadarAdminSnapshotAsync } from '@/lib/radar';
 import { isSupabaseServiceConfigured } from '@/lib/supabase';
 import { shouldRenderAdSensePlacement } from '@/lib/adsense';
 import {
@@ -2658,10 +2654,10 @@ export async function CommunityRadarPageView({
 
   const activeLane = parseRadarLane(searchParams?.lane);
   const requestedPage = parsePageNumber(searchParams?.page);
-  const allRadarArticles = await getRadarArticlesAsync({ site });
-  const allFeedArticles = allRadarArticles
-    .filter((article) => (activeLane ? article.lane === activeLane : true))
-    .map((article) => radarArticleToArticle(article, { site }));
+  const allCurrentArticles = await getCurrentArticlesAsync(undefined, site);
+  const allFeedArticles = allCurrentArticles.filter((article) =>
+    activeLane ? article.radarLane === activeLane : true
+  );
   const totalFeedArticles = allFeedArticles.length;
   const totalFeedPages = Math.max(1, Math.ceil(totalFeedArticles / RADAR_FEED_PAGE_SIZE));
   const currentFeedPage = Math.min(requestedPage, totalFeedPages);

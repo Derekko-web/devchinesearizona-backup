@@ -6,6 +6,8 @@ import { describe, expect, it } from 'vitest';
 
 import austinManifest from '@/data/austin-radar-source-manifest.json';
 import arizonaManifest from '@/data/radar-source-manifest.json';
+import { getRadarStorePath } from '@/lib/radar';
+import { siteProfiles } from '@/lib/site-config';
 
 const require = createRequire(import.meta.url);
 const {
@@ -72,6 +74,41 @@ describe('Austin Radar config', () => {
     expect(austinSourceText).not.toContain('phoenix');
     expect(austinSourceText).not.toContain('arizona');
     expect(austinSourceText).not.toContain('skyharbor');
+  });
+
+  it('resolves Austin runtime stores under the migrated runtime data root', () => {
+    const originalRuntimeRoot = process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
+    const originalStorePath = process.env.RADAR_STORE_PATH_AUSTIN;
+    const originalLegacyStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
+    const runtimeRoot = path.join(process.cwd(), 'tmp-runtime-root');
+
+    try {
+      process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT = runtimeRoot;
+      delete process.env.RADAR_STORE_PATH_AUSTIN;
+      delete process.env.AUSTIN_RADAR_STORE_PATH;
+
+      expect(getRadarStorePath(siteProfiles.austin)).toBe(
+        path.join(runtimeRoot, 'data', 'sites', 'austin', 'radar-runtime', 'store.json')
+      );
+    } finally {
+      if (originalRuntimeRoot) {
+        process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT = originalRuntimeRoot;
+      } else {
+        delete process.env.CHINESEARIZONA_RUNTIME_DATA_ROOT;
+      }
+
+      if (originalStorePath) {
+        process.env.RADAR_STORE_PATH_AUSTIN = originalStorePath;
+      } else {
+        delete process.env.RADAR_STORE_PATH_AUSTIN;
+      }
+
+      if (originalLegacyStorePath) {
+        process.env.AUSTIN_RADAR_STORE_PATH = originalLegacyStorePath;
+      } else {
+        delete process.env.AUSTIN_RADAR_STORE_PATH;
+      }
+    }
   });
 
   it('publishes Austin summary/link-only drafts with canonical source links', () => {
