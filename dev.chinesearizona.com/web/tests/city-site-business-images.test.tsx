@@ -130,10 +130,10 @@ describe('city-site business images', () => {
 
     expect(austinDirectory).toContain('/city-site-images/house-of-three-gorges-austin.webp');
     expect(austinDirectory).not.toContain('Placeholder');
-    expect(laDetail).toContain('/city-site-images/los-angeles-community-hero.webp');
-    expect(laDetail).toContain('Los Angeles Legal &amp; Finance guide image for Kit Leung CPA');
+    expect(laDetail).toContain('/city-site-images/kit-leung-cpa-alhambra.webp');
+    expect(laDetail).toContain('Kit Leung CPA');
     expect(laDetail).not.toContain('Temporary image');
-    expect(sfBayDetail).toContain('/city-site-images/sf-bay-community-hero.webp');
+    expect(sfBayDetail).toContain('/city-site-images/api-legal-outreach-san-francisco.webp');
     expect(sfBayDetail).not.toContain('Temporary image');
   });
 });
