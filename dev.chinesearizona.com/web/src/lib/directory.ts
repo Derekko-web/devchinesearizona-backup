@@ -126,6 +126,23 @@ const SEARCH_DOMINANT_CATEGORY_THRESHOLD = 5;
 type Coordinates = NonNullable<Business['coordinates']>;
 type BusinessHoursState = 'open' | 'closed' | 'unknown';
 
+const nonArizonaDirectoryImageFallbacks: Partial<Record<SiteProfile['key'], string>> = {
+  austin: '/city-site-images/austin-community-hero.webp',
+  'los-angeles': '/city-site-images/los-angeles-community-hero.webp',
+  'sf-bay': '/city-site-images/sf-bay-community-hero.webp',
+};
+
+const nonArizonaDirectorySlugImages: Record<string, string> = {
+  'austin-chinese-school': '/city-site-images/austin-chinese-school.webp',
+  'cheng-wooster-real-estate-austin': '/city-site-images/cheng-wooster-real-estate-austin.webp',
+  'chinatown-service-center-los-angeles': '/city-site-images/chinatown-service-center-los-angeles.webp',
+  'chinese-american-museum-los-angeles': '/city-site-images/chinese-american-museum-los-angeles.webp',
+  'h-mart-austin': '/city-site-images/h-mart-austin.webp',
+  'house-of-three-gorges-austin': '/city-site-images/house-of-three-gorges-austin.webp',
+  'irn-realty-arcadia': '/city-site-images/irn-realty-arcadia.webp',
+  'lunasia-dim-sum-house-alhambra': '/city-site-images/lunasia-dim-sum-house-alhambra.webp',
+};
+
 const searchDominantCategories = [
   'real-estate',
   'legal-finance',
@@ -590,13 +607,27 @@ function fixtureBusinessesEnabled(): boolean {
   );
 }
 
-function mapFixtureBusiness(business: Business): Business {
+function getNonArizonaDirectoryImageFallback(business: Business, site?: SiteProfile): string | undefined {
+  if (!site || site.key === defaultSiteProfile.key) {
+    return undefined;
+  }
+
+  return nonArizonaDirectorySlugImages[business.slug] ?? nonArizonaDirectoryImageFallbacks[site.key];
+}
+
+function mapFixtureBusiness(business: Business, site?: SiteProfile): Business {
+  const heroImage =
+    getDirectoryAiReplacementImage(business.slug, business.heroImage) ??
+    getNonArizonaDirectoryImageFallback(business, site);
+  const gallery = business.gallery.length > 0 ? business.gallery : heroImage ? Array(4).fill(heroImage) : [];
+
   return applyBusinessDirectoryOverride({
     ...business,
     legacySponsored: business.legacySponsored ?? business.sponsored,
     serviceAreaText: business.serviceAreaText,
     phone: formatPhoneNumber(business.phone),
-    heroImage: getDirectoryAiReplacementImage(business.slug, business.heroImage),
+    heroImage,
+    gallery,
     status: business.status ?? 'live',
     verificationState: business.verificationState ?? (business.verified ? 'editor_verified' : 'unverified'),
   });
@@ -1091,7 +1122,7 @@ function queryStaticBusinesses(
 ): Business[] {
   const sort = filters.sort ?? 'featured';
   const search = normalize(filters.q);
-  const mapped = sourceBusinesses.map(mapFixtureBusiness);
+  const mapped = sourceBusinesses.map((business) => mapFixtureBusiness(business, options.site));
   const referencePoint = getDistanceReferencePoint(mapped, filters);
   const filtered = mapped.filter((business) => {
     if (options.excludeSlug && business.slug === options.excludeSlug) {

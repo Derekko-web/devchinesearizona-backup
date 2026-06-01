@@ -1015,30 +1015,38 @@ export async function BusinessDetailPageView({
         : 'Language details pending';
   const popularityBadge = isMostPopularDirectoryBusiness(business);
   const menuOrWebsiteHref = menuHref ?? websiteHref;
+  const usesCityGeneratedImages = site.key === 'austin' || site.key === 'los-angeles' || site.key === 'sf-bay';
+  const generatedImageSubtitle = usesCityGeneratedImages
+    ? locale === 'zh'
+      ? '城市指南圖像'
+      : 'City guide image'
+    : locale === 'zh'
+      ? '暫用圖像'
+      : 'Temporary image';
   const menuShowcase =
     business.categorySlug === 'dining'
       ? [
           {
             title: locale === 'zh' ? '招牌飲品' : 'Signature drink',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: '$5.75',
             imageUrl: business.gallery[0] ?? business.heroImage,
           },
           {
             title: locale === 'zh' ? '手作點心' : 'House dessert',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: '$3.95',
             imageUrl: business.gallery[1],
           },
           {
             title: locale === 'zh' ? '人氣主食' : 'Popular entree',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: '$10.95',
             imageUrl: business.gallery[2],
           },
           {
             title: locale === 'zh' ? '季節推薦' : 'Seasonal pick',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: '$8.50',
             imageUrl: business.gallery[3],
           },
@@ -1046,25 +1054,25 @@ export async function BusinessDetailPageView({
       : [
           {
             title: locale === 'zh' ? '核心服務' : 'Primary service',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
             imageUrl: business.gallery[0] ?? business.heroImage,
           },
           {
             title: locale === 'zh' ? '雙語協助' : 'Bilingual help',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
             imageUrl: business.gallery[1],
           },
           {
             title: locale === 'zh' ? '在地經驗' : 'Local guidance',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '洽詢' : 'Ask',
             imageUrl: business.gallery[2],
           },
           {
             title: locale === 'zh' ? '預約諮詢' : 'Consultation',
-            subtitle: locale === 'zh' ? '暫用圖像' : 'Temporary image',
+            subtitle: generatedImageSubtitle,
             price: locale === 'zh' ? '預約' : 'Book',
             imageUrl: business.gallery[3],
           },
@@ -1359,8 +1367,12 @@ export async function BusinessDetailPageView({
                   </h2>
                   <p className="mt-2 text-sm text-[#6d6258]">
                     {locale === 'zh'
-                      ? '暫用實際資料與示意圖，之後可接入商家照片與菜單。'
-                      : 'Uses available listing data with temporary placeholders until menu photos are connected.'}
+                      ? usesCityGeneratedImages
+                        ? '使用城市專屬圖像與現有商家資料呈現。'
+                        : '暫用實際資料與示意圖，之後可接入商家照片與菜單。'
+                      : usesCityGeneratedImages
+                        ? 'Uses city-specific generated images with available listing data.'
+                        : 'Uses available listing data with temporary placeholders until menu photos are connected.'}
                   </p>
                 </div>
                 {menuOrWebsiteHref ? (
@@ -1458,7 +1470,13 @@ export async function BusinessDetailPageView({
                 <div>
                   <h2 className="text-3xl font-semibold text-[#2c2722]">{locale === 'zh' ? '照片' : 'Photos'}</h2>
                   <p className="mt-2 text-sm text-[#6d6258]">
-                    {locale === 'zh' ? '缺少照片的位置先使用臨時佔位。' : 'Missing photo slots use temporary placeholders for now.'}
+                    {locale === 'zh'
+                      ? usesCityGeneratedImages
+                        ? '照片區使用城市專屬圖像，之後可接入商家照片。'
+                        : '缺少照片的位置先使用臨時佔位。'
+                      : usesCityGeneratedImages
+                        ? 'Photo slots use city-specific generated images until business photos are connected.'
+                        : 'Missing photo slots use temporary placeholders for now.'}
                   </p>
                 </div>
                 <Camera className="h-6 w-6 text-[#bd2730]" aria-hidden="true" />
