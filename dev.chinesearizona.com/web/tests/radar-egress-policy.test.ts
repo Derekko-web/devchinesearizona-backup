@@ -92,7 +92,10 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(applyRuntime).toContain('install_runtime_env_files');
     expect(applyRuntime).toContain('systemd-analyze verify');
     expect(applyRuntime).toContain('systemctl daemon-reload');
-    expect(applyRuntime).toContain('systemctl start "radar-hermes-worker@$city.service"');
+    expect(applyRuntime).toContain('systemctl start --no-block "$unit"');
+    expect(applyRuntime).toContain('systemctl list-jobs --no-legend "$unit"');
+    expect(applyRuntime).toContain('Still waiting for protected radar/Hermes worker for %s after %ss.');
+    expect(applyRuntime).toContain('systemctl status --no-pager -l "$unit"');
     expect(applyRuntime).toContain('systemctl enable --now "radar-hermes-worker@$city.timer"');
     expect(applyRuntime).toContain('disable_legacy_cron_entries');
     expect(applyRuntime).toContain('operator=github-actions-deploy');
