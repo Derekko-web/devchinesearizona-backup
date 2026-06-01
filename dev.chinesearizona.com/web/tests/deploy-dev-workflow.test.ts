@@ -23,7 +23,19 @@ describe('Deploy Dev dirty tree guard', () => {
       '"dev.chinesearizona.com/web/data/sf-bay-radar-runtime/store.json"'
     );
     expect(workflow).toContain(
+      '"dev.chinesearizona.com/web/data/article-ingest-staging/english-translation-cache.json"'
+    );
+    expect(workflow).toContain(
+      '"dev.chinesearizona.com/web/data/article-ingest-staging/chinese-translation-cache.json"'
+    );
+    expect(workflow).toContain(
       '"dev.chinesearizona.com/web/src/data/generated-local-articles.json"'
+    );
+    expect(workflow).toContain(
+      'ARTICLE_EN_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/english-translation-cache.json"'
+    );
+    expect(workflow).toContain(
+      'ARTICLE_ZH_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/chinese-translation-cache.json"'
     );
     expect(workflow).toContain('if [ -n "$unsafe_dirty" ]; then');
     expect(workflow).toContain('git checkout -- "${generated_data_paths[@]}"');

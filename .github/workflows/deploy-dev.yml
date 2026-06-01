@@ -104,6 +104,8 @@ jobs:
             "dev.chinesearizona.com/web/data/sites/austin/radar-runtime/store.json"
             "dev.chinesearizona.com/web/data/sites/los-angeles/radar-runtime/store.json"
             "dev.chinesearizona.com/web/data/sf-bay-radar-runtime/store.json"
+            "dev.chinesearizona.com/web/data/article-ingest-staging/english-translation-cache.json"
+            "dev.chinesearizona.com/web/data/article-ingest-staging/chinese-translation-cache.json"
             "dev.chinesearizona.com/web/src/data/generated-local-articles.json"
           )
 
@@ -174,6 +176,8 @@ jobs:
           export RADAR_STORE_PATH_AUSTIN="$runtime_data_root/data/sites/austin/radar-runtime/store.json"
           export RADAR_STORE_PATH_LOS_ANGELES="$runtime_data_root/data/sites/los-angeles/radar-runtime/store.json"
           export SF_BAY_RADAR_STORE_PATH="$runtime_data_root/data/sf-bay-radar-runtime/store.json"
+          export ARTICLE_EN_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/english-translation-cache.json"
+          export ARTICLE_ZH_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/chinese-translation-cache.json"
           export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"
           npm ci
           npm run build

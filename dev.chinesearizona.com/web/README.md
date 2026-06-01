@@ -24,9 +24,11 @@ Deploy Dev migrates only these known generated files out of the checkout before 
 - `data/sites/austin/radar-runtime/store.json`
 - `data/sites/los-angeles/radar-runtime/store.json`
 - `data/sf-bay-radar-runtime/store.json`
+- `data/article-ingest-staging/english-translation-cache.json`
+- `data/article-ingest-staging/chinese-translation-cache.json`
 - `src/data/generated-local-articles.json`
 
-The PM2 process receives the corresponding external paths through `RADAR_STORE_PATH_AUSTIN`, `RADAR_STORE_PATH_LOS_ANGELES`, `SF_BAY_RADAR_STORE_PATH`, and `GENERATED_LOCAL_ARTICLES_PATH`. Host cron jobs that generate these files should use the same environment variables instead of writing into `/var/www/dev.chinesearizona.com/web`.
+The PM2 process receives the corresponding external paths through `RADAR_STORE_PATH_AUSTIN`, `RADAR_STORE_PATH_LOS_ANGELES`, `SF_BAY_RADAR_STORE_PATH`, `ARTICLE_EN_TRANSLATION_CACHE_PATH`, `ARTICLE_ZH_TRANSLATION_CACHE_PATH`, and `GENERATED_LOCAL_ARTICLES_PATH`. Host cron jobs that generate these files should use the same environment variables instead of writing into `/var/www/dev.chinesearizona.com/web`.
 
 ## Getting Started
 
