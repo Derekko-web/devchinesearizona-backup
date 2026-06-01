@@ -106,6 +106,7 @@ jobs:
             "dev.chinesearizona.com/web/data/sf-bay-radar-runtime/store.json"
             "dev.chinesearizona.com/web/data/article-ingest-staging/english-translation-cache.json"
             "dev.chinesearizona.com/web/data/article-ingest-staging/chinese-translation-cache.json"
+            "dev.chinesearizona.com/web/data/article-ingest-staging/sync-manifest.json"
             "dev.chinesearizona.com/web/src/data/generated-local-articles.json"
           )
 
