@@ -651,6 +651,31 @@ describe('directory trust gates', () => {
     }
   });
 
+  it('hydrates launched non-Arizona city directories with generated images without changing Arizona fixtures', async () => {
+    const citySites = [siteProfiles.austin, siteProfiles['los-angeles'], siteProfiles['sf-bay']];
+
+    for (const site of citySites) {
+      const businesses = await getDirectoryBusinesses({}, { site, limit: 1000 });
+
+      expect(businesses.length, site.key).toBeGreaterThan(0);
+      for (const business of businesses) {
+        expect(business.heroImage, `${site.key}:${business.slug}`).toMatch(/^\/city-site-images\/.+\.webp$/);
+        expect(business.gallery.length, `${site.key}:${business.slug}`).toBeGreaterThanOrEqual(4);
+        expect(business.gallery.every((image) => image.startsWith('/city-site-images/')), `${site.key}:${business.slug}`).toBe(true);
+      }
+    }
+
+    await expect(getDirectoryBusinessBySlug('house-of-three-gorges-austin', { site: siteProfiles.austin })).resolves.toMatchObject({
+      heroImage: '/city-site-images/house-of-three-gorges-austin.webp',
+    });
+    await expect(getDirectoryBusinessBySlug('lunasia-dim-sum-house-alhambra', { site: siteProfiles['los-angeles'] })).resolves.toMatchObject({
+      heroImage: '/city-site-images/lunasia-dim-sum-house-alhambra.webp',
+    });
+
+    const arizonaBusinesses = await getDirectoryBusinesses({}, { site: siteProfiles.arizona, limit: 1000 });
+    expect(arizonaBusinesses.some((business) => business.heroImage?.startsWith('/city-site-images/'))).toBe(false);
+  });
+
   it('keeps SF Bay filters and details from falling back to Arizona listings', async () => {
     const site = siteProfiles['sf-bay'];
 
