@@ -67,11 +67,12 @@
       "domain": "chineseaustin.com",
       "stateCode": "TX",
       "regionName": "Austin metro",
-      "allowedCities": ["Austin", "Cedar Park", "Round Rock", "Pflugerville"],
+      "allowedCities": ["Austin", "Bastrop", "Bee Cave", "Buda", "Cedar Park", "Dripping Springs", "Elgin", "Georgetown", "Hutto", "Kyle", "Lago Vista", "Lakeway", "Leander", "Liberty Hill", "Manor", "Pflugerville", "Round Rock", "San Marcos", "Sunset Valley", "Taylor", "Wimberley"],
       "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
       "existingListingsPath": "src/data/sites/austin/businesses.json",
       "stagingDir": "data/sites/austin/directory-import-staging",
       "approvedListingsPath": "data/sites/austin/directory-import-staging/approved-businesses.json",
+      "sourcesFile": "data/sites/austin/directory-import-sources/overture-places.json",
       "sources": [
         {
           "id": "austin-house-of-three-gorges",
@@ -300,11 +301,12 @@
       "domain": "chineselosangeles.com",
       "stateCode": "CA",
       "regionName": "Greater Los Angeles",
-      "allowedCities": ["Los Angeles", "Alhambra", "Arcadia", "Monterey Park", "San Gabriel", "Pasadena", "Temple City"],
+      "allowedCities": ["Los Angeles", "Alhambra", "Arcadia", "Hacienda Heights", "Monterey Park", "Pasadena", "Rosemead", "Rowland Heights", "San Gabriel", "Temple City"],
       "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
       "existingListingsPath": "src/data/los-angeles-directory-businesses.json",
       "stagingDir": "data/sites/los-angeles/directory-import-staging",
       "approvedListingsPath": "data/sites/los-angeles/directory-import-staging/approved-businesses.json",
+      "sourcesFile": "data/sites/los-angeles/directory-import-sources/overture-places.json",
       "sources": [
         {
           "id": "la-lunasia-alhambra",
@@ -493,11 +495,12 @@
       "domain": "chinesesfbay.com",
       "stateCode": "CA",
       "regionName": "San Francisco Bay Area",
-      "allowedCities": ["San Francisco", "Oakland", "San Jose", "Cupertino", "Sunnyvale", "Santa Clara"],
+      "allowedCities": ["San Francisco", "Oakland", "San Jose", "Cupertino", "Sunnyvale", "Santa Clara", "Fremont", "Milpitas", "Daly City", "Berkeley"],
       "allowedCategorySlugs": ["dining", "shopping", "real-estate", "legal-finance", "medical", "beauty-wellness", "education", "faith-community", "local-services", "home-services", "moving"],
       "existingListingsPath": "src/data/generated-sf-bay-directory-businesses.json",
       "stagingDir": "data/sites/sf-bay/directory-import-staging",
       "approvedListingsPath": "data/sites/sf-bay/directory-import-staging/approved-businesses.json",
+      "sourcesFile": "data/sites/sf-bay/directory-import-sources/overture-places.json",
       "sources": [
         {
           "id": "sf-rg-lounge",

@@ -62,7 +62,7 @@ describe('Austin directory pages', () => {
       })
     );
 
-    expect(html).toContain('Showing 1-24 of 35');
+    expect(html).toContain('Showing 1-24 of 322');
     expect(html).toContain('House of Three Gorges');
     expect(html).toContain('H Mart Austin');
     expect(html).toContain('Soupleaf Hot Pot');

@@ -364,11 +364,14 @@ def _fetch_pages_with_stdlib(urls: list[str]) -> dict[str, FetchedPage]:
 
 def discover(site: CityDirectorySiteConfig, fetcher: Fetcher | None = None) -> list[CityDirectoryCandidate]:
     fetcher = fetcher or _fetch_pages
-    source_urls = [source.url for source in site.sources]
+    source_urls = [source.url for source in site.sources if source.sourceType != "open_data_seed"]
     fetched_pages = fetcher(source_urls)
     records: list[CityDirectoryCandidate] = []
 
     for source in site.sources:
+        if source.sourceType == "open_data_seed":
+            records.append(candidate_from_source_seed(source, site, "staged from configured public open-data seed"))
+            continue
         page = fetched_pages.get(source.url)
         if page and page.html:
             records.append(candidate_from_source_html(page.html, page.url, source, site))

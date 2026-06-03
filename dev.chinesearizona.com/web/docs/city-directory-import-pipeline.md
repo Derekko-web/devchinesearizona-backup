@@ -35,6 +35,9 @@ directory category slugs:
 
 Edit `data/city-directory-source-manifest.json` and add sources under exactly
 one site key. Each source must use a city in that site's `allowedCities` list.
+Large generated source sets can live in a separate JSON file referenced by
+`sourcesFile` or `sourcesFiles`; those files use the same `sources` array shape
+as the inline manifest.
 
 Required source fields:
 
@@ -48,6 +51,18 @@ Recommended source fields:
 - `nameHint`: name from the official/public source.
 - `serviceAreaText`: use only when the source is service-area based.
 - `notes`: short source note for reviewers.
+
+Public open-data source rows can use `sourceType: "open_data_seed"` and
+`seedData` for structured fields such as `name`, `address`, `phone`, `website`,
+`shortDescription`, `services`, `languages`, and `sourceNotes`. These rows skip
+HTML fetching and still pass through the same discovery, review, dedupe, export,
+and promotion steps.
+
+To regenerate the Overture Maps Places source files used by the city domains:
+
+```bash
+PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.overture_places_sources
+```
 
 If a fetched page exposes structured address data, that address locality is
 treated as authoritative. A source row configured for Austin will still be

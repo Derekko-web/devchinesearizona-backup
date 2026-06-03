@@ -343,29 +343,81 @@ def _score_candidate(
     if chinese_signal_count:
         score += 10
         notes.append("has Chinese-community signal")
-    if source.sourceType == "official_site":
+    if source.sourceType in {"official_site", "open_data_seed"}:
         score += 5
-        notes.append("source is configured as official site")
+        notes.append("source is configured public evidence")
     return min(score, 100), notes
 
 
+def _seed_text(seed_data: dict[str, Any], key: str) -> str | None:
+    value = seed_data.get(key)
+    if value is None:
+        return None
+    return maybe_none(str(value))
+
+
+def _seed_list(seed_data: dict[str, Any], key: str) -> list[str]:
+    value = seed_data.get(key)
+    if not value:
+        return []
+    if isinstance(value, list):
+        return unique_strings([str(item) for item in value if item])
+    return [str(value)]
+
+
 def candidate_from_source_seed(source: CityDirectorySource, site: CityDirectorySiteConfig, note: str) -> CityDirectoryCandidate:
-    name = source.nameHint or ""
-    city = source.city
-    dedupe_keys = _candidate_dedupe_keys(name, city, None, source.url)
+    seed_data = source.seedData
+    name = _seed_text(seed_data, "name") or source.nameHint or ""
+    city = _canonical_allowed_city(_seed_text(seed_data, "city") or source.city, site.allowedCities) or source.city
+    address = _seed_text(seed_data, "address")
+    address_state = _state_from_address(address) or _state_code_from_region(_seed_text(seed_data, "stateCode"))
+    phone = _seed_text(seed_data, "phone")
+    seed_website = _seed_text(seed_data, "website")
+    website = normalize_url(seed_website) if seed_website else None
+    if not website and source.sourceType != "open_data_seed":
+        website = source.url
+    email = _seed_text(seed_data, "email")
+    service_area = _seed_text(seed_data, "serviceAreaText") or source.serviceAreaText
+    short_description = _seed_text(seed_data, "shortDescription") or f"{name} in {city}."
+    description = _seed_text(seed_data, "description") or short_description
+    services = _seed_list(seed_data, "services")
+    signal_text = " ".join(
+        [
+            name,
+            source.sourceCategory.replace("_", " "),
+            source.categorySlug.replace("-", " "),
+            short_description,
+            description,
+            source.notes,
+        ]
+    )
+    chinese_signals = detect_chinese_signals(signal_text, website or source.url)
+    languages = _seed_list(seed_data, "languages") or infer_languages(signal_text)
+    source_urls = unique_strings([url for url in [source.url, website, *_seed_list(seed_data, "sourceUrls")] if url])
+    source_notes = unique_strings([note, source.notes, *_seed_list(seed_data, "sourceNotes")])
+
+    city_mismatch = city not in site.allowedCities
+    state_mismatch = bool(address_state and address_state != site.stateCode)
+    dedupe_keys = _candidate_dedupe_keys(name, city, phone, website)
     duplicate_key = dedupe_keys[0] if dedupe_keys else f"source:{source.id}"
     score, notes = _score_candidate(
         name=name,
         category_slug=source.categorySlug,
-        city=city,
-        address=None,
-        state_code=None,
-        phone=None,
-        website=source.url,
+        city=city if not city_mismatch else "",
+        address=address,
+        state_code=address_state if not state_mismatch else None,
+        phone=phone,
+        website=website,
         source=source,
-        chinese_signal_count=0,
+        chinese_signal_count=len(chinese_signals),
     )
-    review_status = "needs_review_low_confidence" if score < 60 else "needs_review"
+    if city_mismatch:
+        notes.append(f"blocked: city '{city}' is outside {site.siteKey} allowed cities")
+    if state_mismatch:
+        notes.append(f"blocked: address state '{address_state}' does not match {site.stateCode}")
+    review_status = "blocked_city_mismatch" if city_mismatch or state_mismatch else "needs_review"
+    if review_status == "needs_review" and score < 60:
+        review_status = "needs_review_low_confidence"
     return CityDirectoryCandidate(
         candidateId=_candidate_id(site.siteKey, duplicate_key),
         siteKey=site.siteKey,
@@ -374,14 +426,21 @@ def candidate_from_source_seed(source: CityDirectorySource, site: CityDirectoryS
         categorySlug=source.categorySlug,
         city=city,
         region=site.regionName,
-        serviceAreaText=source.serviceAreaText,
-        website=source.url,
-        sourceUrls=[source.url],
+        address=address,
+        serviceAreaText=None if address else service_area,
+        phone=phone,
+        website=website,
+        email=email,
+        languages=languages,
+        shortDescription=shorten_text(short_description),
+        description=description,
+        services=services,
+        sourceUrls=source_urls,
         sourceIds=[source.id],
         confidenceScore=score,
         confidenceLevel=_confidence_level(score),
         confidenceNotes=notes,
-        sourceNotes=[note, source.notes],
+        sourceNotes=source_notes,
         duplicateKey=duplicate_key,
         dedupeKeys=dedupe_keys or [duplicate_key],
         reviewStatus=review_status,

@@ -19,6 +19,21 @@ def resolve_web_path(path: str | Path) -> Path:
     return WEB_ROOT / candidate
 
 
+def _source_payloads(site_payload: dict) -> list[dict]:
+    sources = list(site_payload.get("sources", []))
+    source_files = site_payload.get("sourcesFiles", [])
+    if site_payload.get("sourcesFile"):
+        source_files = [*source_files, site_payload["sourcesFile"]]
+    for source_file in source_files:
+        source_path = resolve_web_path(source_file)
+        payload = json.loads(source_path.read_text(encoding="utf-8"))
+        if isinstance(payload, list):
+            sources.extend(payload)
+        else:
+            sources.extend(payload.get("sources", []))
+    return sources
+
+
 def load_site_config(site_key: str, manifest_path: Path | None = None) -> CityDirectorySiteConfig:
     manifest_path = manifest_path or default_manifest_path()
     payload = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -35,8 +50,13 @@ def load_site_config(site_key: str, manifest_path: Path | None = None) -> CityDi
     allowed_cities = site_payload.get("allowedCities", [])
     allowed_categories = site_payload.get("allowedCategorySlugs", [])
     sources: list[CityDirectorySource] = []
+    source_ids: set[str] = set()
 
-    for source_payload in site_payload.get("sources", []):
+    for source_payload in _source_payloads(site_payload):
+        source_id = source_payload["id"]
+        if source_id in source_ids:
+            raise ValueError(f"Duplicate source id '{source_id}' in site '{site_key}'")
+        source_ids.add(source_id)
         source_category = source_payload["sourceCategory"]
         if source_category not in source_categories:
             supported = ", ".join(sorted(source_categories)) or "none"
@@ -60,7 +80,7 @@ def load_site_config(site_key: str, manifest_path: Path | None = None) -> CityDi
             )
         sources.append(
             CityDirectorySource(
-                id=source_payload["id"],
+                id=source_id,
                 url=source_payload["url"],
                 sourceCategory=source_category,
                 categorySlug=category_slug,
@@ -69,6 +89,7 @@ def load_site_config(site_key: str, manifest_path: Path | None = None) -> CityDi
                 serviceAreaText=source_payload.get("serviceAreaText"),
                 sourceType=source_payload.get("sourceType", "official_site"),
                 notes=source_payload.get("notes", ""),
+                seedData=source_payload.get("seedData") or {},
             )
         )
 

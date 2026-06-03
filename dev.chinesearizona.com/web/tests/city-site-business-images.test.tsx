@@ -53,12 +53,6 @@ vi.mock('@/components/forms/ReportIssueForm', () => ({
   ReportIssueForm: () => <form data-testid="report-issue-form" />,
 }));
 
-const cityBusinessGroups = [
-  { businesses: austinBusinesses },
-  { businesses: losAngelesBusinesses },
-  { businesses: sfBayBusinesses },
-];
-
 function pathWithoutQueryString(value: string): string {
   return value.split('?')[0] ?? value;
 }
@@ -126,25 +120,42 @@ describe('city-site business images', () => {
     expect(images.usesContextualFallback).toBe(false);
   });
 
-  it('maps every Austin, Los Angeles, and SF Bay business to an existing unique static image', async () => {
-    const { getCitySiteBusinessSpecificImage } = await import('@/lib/city-site-business-images');
+  it('keeps curated city-site image mappings valid and resolves expanded directories to existing static images', async () => {
+    const { getCitySiteBusinessSpecificImage, resolveCitySiteBusinessImages } = await import('@/lib/city-site-business-images');
+    const { siteProfiles } = await import('@/lib/site-config');
     const mappedImages = new Map<string, string[]>();
+    const groups = [
+      { businesses: austinBusinesses, site: siteProfiles.austin },
+      { businesses: losAngelesBusinesses, site: siteProfiles['los-angeles'] },
+      { businesses: sfBayBusinesses, site: siteProfiles['sf-bay'] },
+    ];
 
-    for (const { businesses } of cityBusinessGroups) {
+    for (const { businesses, site } of groups) {
       for (const business of businesses) {
         const imagePath = getCitySiteBusinessSpecificImage(business.slug);
-        expect(imagePath, `${business.slug} is missing a city-site image mapping`).toBeDefined();
-        expect(imagePath, `${business.slug} should use a city-site asset`).toMatch(
-          /^\/city-site-images\/[a-z0-9-]+\.webp$/
-        );
+        const images = resolveCitySiteBusinessImages(business, site, { locale: 'en', minimumGalleryImages: 4 });
 
-        const assetPath = path.join(process.cwd(), 'public', imagePath!);
+        expect(images.heroImage, `${business.slug} should resolve a city-site image`).toMatch(
+          /^\/city-site-images\/[a-z0-9-]+\.webp(?:\?.*)?$/
+        );
+        expect(images.gallery.length, `${business.slug} should resolve a city-site gallery`).toBeGreaterThanOrEqual(4);
+
+        const heroAssetPath = path.join(process.cwd(), 'public', pathWithoutQueryString(images.heroImage!));
+        expect(existsSync(heroAssetPath), `${business.slug} resolved image does not exist: ${images.heroImage}`).toBe(true);
+
+        if (!imagePath) {
+          continue;
+        }
+        expect(imagePath, `${business.slug} should use a city-site asset`).toMatch(/^\/city-site-images\/[a-z0-9-]+\.webp$/);
+
+        const assetPath = path.join(process.cwd(), 'public', imagePath);
         expect(existsSync(assetPath), `${business.slug} mapped image does not exist: ${imagePath}`).toBe(true);
 
-        mappedImages.set(imagePath!, [...(mappedImages.get(imagePath!) ?? []), business.slug]);
+        mappedImages.set(imagePath, [...(mappedImages.get(imagePath) ?? []), business.slug]);
       }
     }
 
+    expect(mappedImages.size).toBeGreaterThan(0);
     const duplicatedImages = [...mappedImages.entries()].filter(([, slugs]) => slugs.length > 1);
     expect(duplicatedImages).toEqual([]);
   });
