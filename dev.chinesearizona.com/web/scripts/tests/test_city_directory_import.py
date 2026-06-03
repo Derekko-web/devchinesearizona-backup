@@ -232,6 +232,86 @@ class CityDirectoryImportTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "unsupported sourceCategory"):
                 load_site_config("austin", manifest)
 
+    def test_load_site_config_reads_external_sources_file(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            sources_path = tmp / "external-sources.json"
+            sources_path.write_text(
+                json.dumps(
+                    {
+                        "sources": [
+                            {
+                                "id": "external-open-data-source",
+                                "url": "https://docs.overturemaps.org/guides/places/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "External Dumpling",
+                                "sourceType": "open_data_seed",
+                                "seedData": {
+                                    "address": "123 N Lamar Blvd, Austin, TX 78701",
+                                    "website": "https://external-dumpling.test/",
+                                },
+                            }
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            payload = site_payload(tmp, [])
+            payload["sourcesFile"] = str(sources_path)
+            manifest = write_manifest(tmp, {"austin": payload})
+
+            site = load_site_config("austin", manifest)
+
+            self.assertEqual(len(site.sources), 1)
+            self.assertEqual(site.sources[0].id, "external-open-data-source")
+            self.assertEqual(site.sources[0].seedData["website"], "https://external-dumpling.test/")
+
+    def test_open_data_seed_uses_seed_fields_instead_of_source_url(self) -> None:
+        with TemporaryDirectory() as directory:
+            tmp = Path(directory)
+            manifest = write_manifest(
+                tmp,
+                {
+                    "austin": site_payload(
+                        tmp,
+                        [
+                            {
+                                "id": "overture-example-dumpling",
+                                "url": "https://docs.overturemaps.org/guides/places/",
+                                "sourceCategory": "restaurants",
+                                "city": "Austin",
+                                "nameHint": "Example Dumpling",
+                                "sourceType": "open_data_seed",
+                                "notes": "Overture Places seed record test-id.",
+                                "seedData": {
+                                    "address": "123 N Lamar Blvd, Austin, TX 78701",
+                                    "phone": "(512) 123-4567",
+                                    "website": "https://example-dumpling.test/",
+                                    "shortDescription": "Chinese dumpling restaurant in Austin.",
+                                    "services": ["Dumplings"],
+                                    "languages": ["English", "Mandarin"],
+                                },
+                            }
+                        ],
+                    )
+                },
+            )
+            site = load_site_config("austin", manifest)
+            discover(site, fetcher=fake_fetcher({}))
+            queue = read_queue(review_queue_path(site))
+            queue[0].reviewStatus = "approved"
+            write_queue(review_queue_path(site), queue)
+
+            exported = export_approved(site)
+
+            self.assertEqual(queue[0].reviewStatus, "approved")
+            self.assertGreaterEqual(queue[0].confidenceScore, 70)
+            self.assertEqual(exported[0]["website"], "https://example-dumpling.test/")
+            self.assertNotEqual(exported[0]["website"], "https://docs.overturemaps.org/guides/places/")
+            self.assertEqual(exported[0]["address"], "123 N Lamar Blvd, Austin, TX 78701")
+            self.assertEqual(exported[0]["languages"], ["English", "Mandarin"])
+
     def test_discovery_dedupes_same_run_candidates_against_existing_city_listings(self) -> None:
         with TemporaryDirectory() as directory:
             tmp = Path(directory)

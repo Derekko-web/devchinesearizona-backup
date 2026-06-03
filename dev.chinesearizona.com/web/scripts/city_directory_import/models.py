@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from typing import Literal
+from typing import Any, Literal
 
 from scripts.directory_scrape.utils import iso_now
 
@@ -42,6 +42,7 @@ class CityDirectorySource:
     serviceAreaText: str | None = None
     sourceType: str = "official_site"
     notes: str = ""
+    seedData: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
