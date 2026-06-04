@@ -68,6 +68,10 @@ const RADAR_FALLBACK_HEROES = {
   social:
     'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
 };
+const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
+  'los-angeles-opening-radar-local-source-watch',
+  'sgv-housing-transit-watch-source-linked-summaries',
+]);
 const DEFAULT_SOURCE_NAME =
   process.env.RADAR_FALLBACK_SOURCE_NAME ||
   (process.env.RADAR_REGION_NAME ? `${process.env.RADAR_REGION_NAME} Source` : 'Arizona Source');
@@ -93,6 +97,8 @@ function defaultStoreSnapshot() {
 
 function normalizeStore(input) {
   const fallback = defaultStoreSnapshot();
+  const isRemovedPlaceholder = (entry) =>
+    REMOVED_PLACEHOLDER_ARTICLE_SLUGS.has(String(entry.slug || ''));
 
   return {
     version: 1,
@@ -102,8 +108,12 @@ function normalizeStore(input) {
     },
     sourceControls: Array.isArray(input && input.sourceControls) ? input.sourceControls : [],
     runs: Array.isArray(input && input.runs) ? input.runs : [],
-    candidates: Array.isArray(input && input.candidates) ? input.candidates : [],
-    articles: Array.isArray(input && input.articles) ? input.articles : [],
+    candidates: Array.isArray(input && input.candidates)
+      ? input.candidates.filter((candidate) => !isRemovedPlaceholder(candidate))
+      : [],
+    articles: Array.isArray(input && input.articles)
+      ? input.articles.filter((article) => !isRemovedPlaceholder(article))
+      : [],
   };
 }
 
@@ -116,8 +126,32 @@ function readStore(storePath) {
 }
 
 function writeStore(storePath, store) {
+  const normalizedStore = normalizeStore(store);
+  let existingStore = null;
+  try {
+    if (fs.existsSync(storePath)) {
+      existingStore = normalizeStore(JSON.parse(fs.readFileSync(storePath, 'utf8')));
+    }
+  } catch (_error) {
+    existingStore = null;
+  }
+
+  const allowEmptyStoreWrite = ['1', 'true', 'yes', 'on'].includes(
+    String(process.env.RADAR_ALLOW_EMPTY_STORE_WRITE || '').trim().toLowerCase()
+  );
+  if (
+    existingStore &&
+    existingStore.articles.length > 0 &&
+    normalizedStore.articles.length === 0 &&
+    !allowEmptyStoreWrite
+  ) {
+    throw new Error(
+      `Refusing to overwrite non-empty radar store with an empty article list: ${storePath}`
+    );
+  }
+
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
-  fs.writeFileSync(storePath, `${JSON.stringify(normalizeStore(store), null, 2)}\n`, 'utf8');
+  fs.writeFileSync(storePath, `${JSON.stringify(normalizedStore, null, 2)}\n`, 'utf8');
 }
 
 function hashValue(value) {

@@ -15,6 +15,8 @@ The worker combines two source paths:
 
 The RSS path is intentionally summary/link-only and avoids republishing source article text. To verify freshness after deploy, run the cron wrapper or wait for the host schedule, then check that `data/radar-runtime/store.json` has a recent run and that `/arizona-news` shows a new published radar item.
 
+The production city radar jobs are scheduled through the protected `radar-hermes-worker@CITY.timer` systemd units installed by `ops/radar-hermes-egress/apply-runtime-deploy.sh`. The current weekly schedule is Arizona Monday 00:17 UTC, Austin Tuesday 01:23 UTC, Los Angeles Wednesday 02:29 UTC, and SF Bay Thursday 03:35 UTC.
+
 ## Runtime generated data
 
 Tracked generated JSON files are repository fixtures. The dev VPS must keep mutable runtime/generated copies outside the Git checkout, under `/var/www/runtime-data/dev.chinesearizona.com/web`, so deploys can continue to require a clean `/var/www` working tree.

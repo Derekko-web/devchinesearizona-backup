@@ -804,7 +804,6 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
             en: 'LA opening radar starts with source-linked local summaries',
             zh: '洛杉磯新店雷達使用附來源連結的本地摘要',
           },
-          href: '/los-angeles-news/los-angeles-opening-radar-local-source-watch',
           bodyText: {
             en: 'Restaurant, retail, and plaza updates stay tied to LA and SGV sources.',
             zh: '餐飲、零售與商場動態都保持連回洛杉磯與聖蓋博谷來源。',
@@ -819,7 +818,6 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
             en: 'SGV housing and transit watch stays LA-only',
             zh: '聖蓋博谷住房與交通觀察僅使用洛杉磯資料',
           },
-          href: '/los-angeles-news/sgv-housing-transit-watch-source-linked-summaries',
           bodyText: {
             en: 'Neighborhood context covers school pickup, Metro access, freeway time, and parking.',
             zh: '街區脈絡涵蓋接送小孩、Metro、freeway 時間與停車。',

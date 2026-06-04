@@ -64,6 +64,10 @@ const RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
   social:
     'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
 };
+const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
+  'los-angeles-opening-radar-local-source-watch',
+  'sgv-housing-transit-watch-source-linked-summaries',
+]);
 
 function radarFallbackHero(lane: RadarLane): string {
   return RADAR_FALLBACK_HEROES[lane] ?? RADAR_FALLBACK_HEROES.community;
@@ -220,6 +224,8 @@ function normalizeStoredArticle(article: RadarArticle): RadarArticle {
 
 function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): RadarStoreSnapshot {
   const fallback = defaultStore();
+  const isRemovedPlaceholder = (entry: { slug?: string }) =>
+    REMOVED_PLACEHOLDER_ARTICLE_SLUGS.has(String(entry.slug || ''));
 
   return {
     version: 1,
@@ -229,8 +235,14 @@ function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): 
     },
     sourceControls: Array.isArray(input?.sourceControls) ? input.sourceControls : [],
     runs: Array.isArray(input?.runs) ? input.runs : [],
-    candidates: Array.isArray(input?.candidates) ? input.candidates : [],
-    articles: Array.isArray(input?.articles) ? input.articles.map(normalizeStoredArticle) : [],
+    candidates: Array.isArray(input?.candidates)
+      ? input.candidates.filter((candidate) => !isRemovedPlaceholder(candidate))
+      : [],
+    articles: Array.isArray(input?.articles)
+      ? input.articles
+          .filter((article) => !isRemovedPlaceholder(article))
+          .map(normalizeStoredArticle)
+      : [],
   };
 }
 

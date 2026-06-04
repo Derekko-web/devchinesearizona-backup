@@ -1,8 +1,13 @@
 import { createRequire } from 'node:module';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import losAngelesManifest from '@/data/los-angeles-radar-source-manifest.json';
+import { getArticleBySlugAsync, getCurrentArticlesAsync } from '@/lib/content';
+import { siteProfiles } from '@/lib/site-config';
 import losAngelesStore from '../data/sites/los-angeles/radar-runtime/store.json';
 
 const require = createRequire(import.meta.url);
@@ -56,6 +61,24 @@ const {
     options: { lookbackHours: number; maxItems: number; now: string }
   ) => Array<Record<string, unknown>>;
 };
+
+const originalLosAngelesStorePath = process.env.RADAR_STORE_PATH_LOS_ANGELES;
+
+afterEach(() => {
+  if (originalLosAngelesStorePath) {
+    process.env.RADAR_STORE_PATH_LOS_ANGELES = originalLosAngelesStorePath;
+  } else {
+    delete process.env.RADAR_STORE_PATH_LOS_ANGELES;
+  }
+});
+
+function writeLosAngelesRadarStore(store: unknown) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'los-angeles-radar-store-'));
+  const storePath = path.join(directory, 'store.json');
+  fs.writeFileSync(storePath, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
+  process.env.RADAR_STORE_PATH_LOS_ANGELES = storePath;
+  return storePath;
+}
 
 describe('Los Angeles Radar config', () => {
   it('uses Los Angeles-specific source configuration without Arizona or LA Chinese News sources', () => {
@@ -211,16 +234,103 @@ describe('Los Angeles Radar config', () => {
     });
   });
 
-  it('ships only Los Angeles summary/link articles in the LA runtime seed store', () => {
+  it('ships no placeholder articles in the LA runtime seed store', () => {
     const serialized = JSON.stringify(losAngelesStore);
 
     expect(serialized).not.toMatch(/arizona|phoenix|skyharbor|chinesearizona|lachinesenews/i);
-    for (const article of losAngelesStore.articles) {
-      expect(article.isPublished).toBe(true);
-      expect(article.aiGeneratedSummary).toBe(true);
-      expect(article.sourcePolicy).toBe('summary_link');
-      expect(article.sourceLinks.length).toBeGreaterThan(0);
-      expect(article.body.length).toBeLessThanOrEqual(2);
-    }
+    expect(losAngelesStore.articles).toHaveLength(0);
+    expect(losAngelesStore.candidates).toHaveLength(0);
+    expect(serialized).not.toContain('los-angeles-opening-radar-local-source-watch');
+    expect(serialized).not.toContain('sgv-housing-transit-watch-source-linked-summaries');
+  });
+
+  it('filters removed placeholder slugs from external LA runtime stores', async () => {
+    writeLosAngelesRadarStore({
+      version: 1,
+      jobControl: {
+        paused: false,
+        publishCap: 10,
+        updatedAt: '2026-05-29T16:00:00.000Z',
+      },
+      sourceControls: [],
+      runs: [],
+      candidates: [
+        {
+          id: 'la-candidate-opening-radar-launch',
+          slug: 'los-angeles-opening-radar-local-source-watch',
+          sourceSlug: 'what-now-los-angeles',
+          sourceName: 'What Now Los Angeles',
+          sourceUrl: 'https://whatnow.com/los-angeles/',
+          canonicalUrl: 'https://whatnow.com/los-angeles/',
+          sourceType: 'local_media',
+          sourcePolicy: 'summary_link',
+          lane: 'openings',
+          title: {
+            en: 'Los Angeles opening radar starts with source-linked restaurant and retail summaries',
+            zh: '洛杉磯新店雷達先從附來源連結的餐飲與零售摘要開始',
+          },
+          excerpt: {
+            en: 'Placeholder copy must not render.',
+            zh: 'Placeholder copy must not render.',
+          },
+          topicFingerprint: 'los-angeles opening radar source linked summaries',
+          moderationState: 'published',
+          firstSeenAt: '2026-05-29T16:00:00.000Z',
+          lastSeenAt: '2026-05-29T16:00:30.000Z',
+          sourcePublishedAt: '2026-05-29T16:00:00.000Z',
+        },
+      ],
+      articles: [
+        {
+          id: 'la-article-opening-radar-launch',
+          candidateId: 'la-candidate-opening-radar-launch',
+          slug: 'los-angeles-opening-radar-local-source-watch',
+          lane: 'openings',
+          title: {
+            en: 'Los Angeles opening radar starts with source-linked restaurant and retail summaries',
+            zh: '洛杉磯新店雷達先從附來源連結的餐飲與零售摘要開始',
+          },
+          excerpt: {
+            en: 'Placeholder copy must not render.',
+            zh: 'Placeholder copy must not render.',
+          },
+          body: [
+            {
+              en: 'Placeholder copy must not render.',
+              zh: 'Placeholder copy must not render.',
+            },
+          ],
+          heroImage: '',
+          heroImagePolicy: 'fallback_only',
+          category: 'news',
+          freshnessTier: 'weekly',
+          sourcePolicy: 'summary_link',
+          sourceType: 'local_media',
+          sourceName: 'What Now Los Angeles',
+          sourceUrl: 'https://whatnow.com/los-angeles/',
+          sourceLinks: [],
+          relatedCategorySlugs: [],
+          ctaBusinessSlugs: [],
+          personaTargets: ['local_families'],
+          publishedAt: '2026-05-29T16:00:30.000Z',
+          updatedAt: '2026-05-29T16:00:30.000Z',
+          lastCheckedAt: '2026-05-29T16:00:30.000Z',
+          isPublished: true,
+          aiGeneratedSummary: true,
+        },
+      ],
+    });
+
+    const articles = await getCurrentArticlesAsync(undefined, siteProfiles['los-angeles']);
+
+    expect(articles.map((article) => article.slug)).not.toContain(
+      'los-angeles-opening-radar-local-source-watch'
+    );
+    await expect(
+      getArticleBySlugAsync(
+        'los-angeles-opening-radar-local-source-watch',
+        siteProfiles['los-angeles']
+      )
+    ).resolves.toBeUndefined();
   });
 });

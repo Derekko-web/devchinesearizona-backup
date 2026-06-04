@@ -370,6 +370,157 @@ function writeEmptyLosAngelesStore() {
   process.env.RADAR_STORE_PATH_LOS_ANGELES = storePath;
 }
 
+function writeCityRadarStore({
+  envKey,
+  tempPrefix,
+  slug,
+  lane,
+  sourceSlug,
+  sourceName,
+  sourceUrl,
+  title,
+  excerpt,
+  body,
+  publishedAt,
+}: {
+  envKey: 'RADAR_STORE_PATH_LOS_ANGELES' | 'SF_BAY_RADAR_STORE_PATH';
+  tempPrefix: string;
+  slug: string;
+  lane: string;
+  sourceSlug: string;
+  sourceName: string;
+  sourceUrl: string;
+  title: { en: string; zh: string };
+  excerpt: { en: string; zh: string };
+  body: { en: string; zh: string };
+  publishedAt: string;
+}) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), tempPrefix));
+  const storePath = path.join(directory, 'store.json');
+  fs.writeFileSync(
+    storePath,
+    `${JSON.stringify(
+      {
+        version: 1,
+        jobControl: {
+          paused: false,
+          publishCap: 10,
+          updatedAt: publishedAt,
+        },
+        sourceControls: [],
+        runs: [],
+        candidates: [
+          {
+            id: `${slug}-candidate`,
+            slug,
+            sourceSlug,
+            sourceName,
+            sourceUrl,
+            canonicalUrl: sourceUrl,
+            sourceType: 'local_media',
+            sourcePolicy: 'summary_link',
+            lane,
+            title,
+            excerpt,
+            topicFingerprint: slug,
+            moderationState: 'published',
+            firstSeenAt: publishedAt,
+            lastSeenAt: publishedAt,
+          },
+        ],
+        articles: [
+          {
+            id: `${slug}-article`,
+            candidateId: `${slug}-candidate`,
+            slug,
+            lane,
+            title,
+            excerpt,
+            body: [body],
+            heroImage: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
+            heroImagePolicy: 'fallback_only',
+            category: 'news',
+            freshnessTier: 'weekly',
+            sourcePolicy: 'summary_link',
+            sourceType: 'local_media',
+            sourceName,
+            sourceUrl,
+            sourceLinks: [
+              {
+                label: { en: sourceName, zh: sourceName },
+                url: sourceUrl,
+                source: sourceName,
+              },
+            ],
+            relatedCategorySlugs: [],
+            ctaBusinessSlugs: [],
+            personaTargets: ['local_families'],
+            publishedAt,
+            updatedAt: publishedAt,
+            lastCheckedAt: publishedAt,
+            isPublished: true,
+            aiGeneratedSummary: true,
+          },
+        ],
+      },
+      null,
+      2
+    )}\n`,
+    'utf8'
+  );
+  process.env[envKey] = storePath;
+}
+
+function writeLosAngelesRadarStore() {
+  writeCityRadarStore({
+    envKey: 'RADAR_STORE_PATH_LOS_ANGELES',
+    tempPrefix: 'radar-ui-la-live-',
+    slug: 'los-angeles-transit-summary',
+    lane: 'official',
+    sourceSlug: 'urbanize-los-angeles',
+    sourceName: 'Urbanize LA',
+    sourceUrl: 'https://la.urbanize.city/example-transit-summary',
+    title: {
+      en: 'Los Angeles transit summary',
+      zh: '洛杉磯交通摘要',
+    },
+    excerpt: {
+      en: 'A short source-linked Los Angeles summary for local readers.',
+      zh: '面向本地讀者的洛杉磯來源摘要。',
+    },
+    body: {
+      en: 'This Los Angeles item is a concise generated summary that points readers back to the original source instead of replacing it.',
+      zh: '這則洛杉磯內容是簡短生成摘要，引導讀者回到原始來源，而不是替代原文。',
+    },
+    publishedAt: '2026-05-30T12:00:00.000Z',
+  });
+}
+
+function writeSfBayRadarStore() {
+  writeCityRadarStore({
+    envKey: 'SF_BAY_RADAR_STORE_PATH',
+    tempPrefix: 'radar-ui-sf-bay-live-',
+    slug: 'sf-bay-transit-summary',
+    lane: 'official',
+    sourceSlug: 'sf-standard',
+    sourceName: 'The San Francisco Standard',
+    sourceUrl: 'https://sfstandard.com/example-transit-summary',
+    title: {
+      en: 'SF Bay transit summary',
+      zh: '灣區交通摘要',
+    },
+    excerpt: {
+      en: 'A short source-linked SF Bay summary for local readers.',
+      zh: '面向本地讀者的灣區來源摘要。',
+    },
+    body: {
+      en: 'This SF Bay item is a concise generated summary that points readers back to the original source instead of replacing it.',
+      zh: '這則灣區內容是簡短生成摘要，引導讀者回到原始來源，而不是替代原文。',
+    },
+    publishedAt: '2026-05-30T12:00:00.000Z',
+  });
+}
+
 describe('radar ui', () => {
   it('renders the radar hero without exposing operational metrics', async () => {
     writeRadarStore();
@@ -452,13 +603,15 @@ describe('radar ui', () => {
     );
 
     expect(html).toContain('All SF Bay News');
-    expect(html).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
+    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).not.toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
   });
 
   it('renders Los Angeles labels and source links for Los Angeles article pages', async () => {
+    writeLosAngelesRadarStore();
     const [{ ArticleDetailPageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),
       import('@/lib/site-config'),
@@ -467,13 +620,13 @@ describe('radar ui', () => {
     const html = renderToStaticMarkup(
       (await ArticleDetailPageView({
         locale: 'en',
-        slug: 'los-angeles-opening-radar-local-source-watch',
+        slug: 'los-angeles-transit-summary',
         site: siteProfiles['los-angeles'],
       }))!
     );
 
     expect(html).toContain('Back to Los Angeles News');
-    expect(html).toContain('What Now Los Angeles');
+    expect(html).toContain('Urbanize LA');
     expect(html).toContain('This page is an editorial summary');
     expect(html).not.toContain('Back to Arizona News');
     expect(html).not.toContain('Phoenix Sky Harbor');
@@ -534,6 +687,7 @@ describe('radar ui', () => {
 
   it('renders SF Bay feed, archive, and article pages with SF Bay labels and source links only', async () => {
     writeRadarStore();
+    writeSfBayRadarStore();
     const [{ ArticleDetailPageView, CommunityRadarPageView, NewsArchivePageView }, { siteProfiles }] = await Promise.all([
       import('@/views/site-pages'),
       import('@/lib/site-config'),
@@ -556,19 +710,20 @@ describe('radar ui', () => {
     const detailHtml = renderToStaticMarkup(
       (await ArticleDetailPageView({
         locale: 'en',
-        slug: 'sf-bay-chinatown-downtown-resource-watch',
+        slug: 'sf-bay-transit-summary',
         site: siteProfiles['sf-bay'],
       }))!
     );
 
     expect(feedHtml).toContain('All SF Bay News');
-    expect(feedHtml).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
+    expect(feedHtml).toContain('/en/news/sf-bay-transit-summary');
     expect(feedHtml).not.toContain('There are no public items for this filter yet');
+    expect(feedHtml).not.toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(feedHtml).not.toContain('mesa-radar-housing-pulse');
     expect(feedHtml).not.toContain('Phoenix Sky Harbor');
     expect(feedHtml).not.toContain('Arizona News');
     expect(archiveHtml).toContain('The SF Bay News homepage');
-    expect(archiveHtml).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
+    expect(archiveHtml).toContain('/en/news/sf-bay-transit-summary');
     expect(detailHtml).toContain('Back to SF Bay News');
     expect(detailHtml).toContain('The San Francisco Standard');
     expect(detailHtml).toContain('This page is an editorial summary');
