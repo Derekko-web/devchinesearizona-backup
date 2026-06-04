@@ -8,6 +8,8 @@ on:
       - 'dev.chinesearizona.com/web/package.json'
       - 'dev.chinesearizona.com/web/package-lock.json'
       - 'dev.chinesearizona.com/web/requirements.txt'
+      - 'chinesearizona.com/public/wp-content/themes/twentytwentyfive/package.json'
+      - 'chinesearizona.com/public/wp-content/themes/twentytwentyfive/package-lock.json'
   workflow_dispatch:
 
 permissions:

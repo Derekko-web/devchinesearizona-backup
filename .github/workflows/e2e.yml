@@ -1,10 +1,6 @@
-name: Dev E2E
+name: Dev E2E Manual
 
 on:
-  pull_request:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:

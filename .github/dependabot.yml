@@ -15,6 +15,21 @@ updates:
           - minor
           - patch
 
+  - package-ecosystem: npm
+    directory: /chinesearizona.com/public/wp-content/themes/twentytwentyfive
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:15"
+      timezone: America/Phoenix
+    groups:
+      wordpress-theme-npm-security-and-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
   - package-ecosystem: pip
     directory: /dev.chinesearizona.com/web
     schedule:

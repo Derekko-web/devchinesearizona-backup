@@ -39,6 +39,22 @@ describe('Deploy Dev rollback', () => {
   });
 });
 
+describe('Deploy Dev gate', () => {
+  it('requires every deploy target to be a main SHA with successful Dev CI', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('actions: read');
+    expect(workflow).toContain('- name: Check deploy SHA is verified main');
+    expect(workflow).toContain('git merge-base --is-ancestor "$deploy_sha" origin/main');
+    expect(workflow).toContain('Deploy target $deploy_sha is not on main. Deploy Dev only accepts main commits.');
+    expect(workflow).toContain('Deploy target $deploy_sha came from a successful Dev CI workflow_run.');
+    expect(workflow).toContain('/actions/workflows/ci.yml/runs');
+    expect(workflow).toContain('-f head_sha="$deploy_sha"');
+    expect(workflow).toContain('Deploy Dev for main SHA $deploy_sha requires a successful Dev CI run first.');
+    expect(workflow).toContain('Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, scraper checks, and WordPress theme checks when applicable.');
+  });
+});
+
 describe('Deploy Dev dirty tree guard', () => {
   it('only migrates known generated runtime data paths before requiring a clean checkout', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');

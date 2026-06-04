@@ -15,6 +15,7 @@ on:
         required: false
 
 permissions:
+  actions: read
   contents: read
   issues: write
 
@@ -45,6 +46,52 @@ jobs:
       - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Check deploy SHA is verified main
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion || '' }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha || '' }}
+        run: |
+          set -euo pipefail
+
+          deploy_sha="$(git rev-parse HEAD)"
+          git fetch --no-tags origin main
+
+          if ! git merge-base --is-ancestor "$deploy_sha" origin/main; then
+            echo "Deploy target $deploy_sha is not on main. Deploy Dev only accepts main commits." >&2
+            exit 1
+          fi
+
+          if [ "$EVENT_NAME" = "workflow_run" ]; then
+            if [ "$WORKFLOW_RUN_CONCLUSION" = "success" ] && [ "$WORKFLOW_RUN_HEAD_SHA" = "$deploy_sha" ]; then
+              echo "Deploy target $deploy_sha came from a successful Dev CI workflow_run."
+              exit 0
+            fi
+
+            echo "Deploy target $deploy_sha did not come from a successful Dev CI workflow_run." >&2
+            exit 1
+          fi
+
+          gate_conclusion="$(
+            gh api \
+              --method GET \
+              "/repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+              -f branch=main \
+              -f head_sha="$deploy_sha" \
+              -f status=success \
+              -f per_page=1 \
+              --jq '.workflow_runs[0].conclusion // empty'
+          )"
+
+          if [ "$gate_conclusion" != "success" ]; then
+            echo "Deploy Dev for main SHA $deploy_sha requires a successful Dev CI run first." >&2
+            echo "Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, scraper checks, and WordPress theme checks when applicable." >&2
+            exit 1
+          fi
 
       - name: Check deploy freshness
         id: freshness
