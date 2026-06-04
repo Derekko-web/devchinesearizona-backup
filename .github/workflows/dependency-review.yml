@@ -38,7 +38,7 @@ jobs:
         run: npm run security:audit
 
       - name: Dependency review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v5
         continue-on-error: true
         with:
           fail-on-severity: moderate
