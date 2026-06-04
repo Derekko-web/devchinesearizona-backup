@@ -7,17 +7,51 @@ const workflowPath = path.join(process.cwd(), '..', '..', '.github', 'workflows'
 const rootGitignorePath = path.join(process.cwd(), '..', '..', '.gitignore');
 
 describe('Deploy Dev SSH setup', () => {
-  it('retries VPS host key scans without disabling strict SSH host checking', () => {
+  it('retries VPS host key scans and falls back without disabling host checking', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');
 
+    expect(workflow).toContain('name: dev');
+    expect(workflow).toContain('url: https://dev.chinesearizona.com');
     expect(workflow).toContain('for attempt in 1 2 3 4 5; do');
-    expect(workflow).toContain('ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST"');
+    expect(workflow).toContain('VPS_SSH_KNOWN_HOSTS: ${{ secrets.DEV_VPS_SSH_KNOWN_HOSTS }}');
+    expect(workflow).toContain('ssh-keyscan -4 -H -T 30 -p "$VPS_PORT" "$VPS_HOST"');
     expect(workflow).toContain('sleep $((attempt * 5))');
-    expect(workflow).toContain('Unable to fetch the VPS SSH host key after 5 attempts.');
+    expect(workflow).toContain('StrictHostKeyChecking=accept-new');
     expect(workflow).toContain('-o ConnectionAttempts=5');
     expect(workflow).toContain('-o ConnectTimeout=20');
-    expect(workflow).toContain('-o StrictHostKeyChecking=yes');
+    expect(workflow).toContain('-o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING"');
+    expect(workflow).toContain('-o UserKnownHostsFile="$HOME/.ssh/known_hosts"');
     expect(workflow).not.toContain('StrictHostKeyChecking=no');
+  });
+});
+
+describe('Deploy Dev rollback', () => {
+  it('restores the previous checkout if post-reload smoke fails', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('previous_sha="$(git rev-parse HEAD)"');
+    expect(workflow).toContain('rollback_to_previous_sha()');
+    expect(workflow).toContain('Smoke failed; rolling back to previous SHA $previous_sha.');
+    expect(workflow).toContain('git checkout --force -B main "$previous_sha"');
+    expect(workflow).toContain('git checkout --force --detach "$previous_sha"');
+    expect(workflow).toContain('export GIT_SHA="$previous_sha"');
+    expect(workflow).toContain('rollback_to_previous_sha || true');
+  });
+});
+
+describe('Deploy Dev gate', () => {
+  it('requires every deploy target to be a main SHA with successful Dev CI', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('actions: read');
+    expect(workflow).toContain('- name: Check deploy SHA is verified main');
+    expect(workflow).toContain('git merge-base --is-ancestor "$deploy_sha" origin/main');
+    expect(workflow).toContain('Deploy target $deploy_sha is not on main. Deploy Dev only accepts main commits.');
+    expect(workflow).toContain('Deploy target $deploy_sha came from a successful Dev CI workflow_run.');
+    expect(workflow).toContain('/actions/workflows/ci.yml/runs');
+    expect(workflow).toContain('-f head_sha="$deploy_sha"');
+    expect(workflow).toContain('Deploy Dev for main SHA $deploy_sha requires a successful Dev CI run first.');
+    expect(workflow).toContain('Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, scraper checks, and WordPress theme checks when applicable.');
   });
 });
 

@@ -15,6 +15,7 @@ on:
         required: false
 
 permissions:
+  actions: read
   contents: read
   issues: write
 
@@ -26,6 +27,9 @@ jobs:
   deploy:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://dev.chinesearizona.com
     defaults:
       run:
         working-directory: dev.chinesearizona.com/web
@@ -35,11 +39,59 @@ jobs:
       VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
       VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
       VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
+      VPS_SSH_KNOWN_HOSTS: ${{ secrets.DEV_VPS_SSH_KNOWN_HOSTS }}
       VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
+      SSH_STRICT_HOST_KEY_CHECKING: yes
     steps:
       - uses: actions/checkout@v5
         with:
           ref: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+          fetch-depth: 0
+
+      - name: Check deploy SHA is verified main
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion || '' }}
+          WORKFLOW_RUN_HEAD_SHA: ${{ github.event.workflow_run.head_sha || '' }}
+        run: |
+          set -euo pipefail
+
+          deploy_sha="$(git rev-parse HEAD)"
+          git fetch --no-tags origin main
+
+          if ! git merge-base --is-ancestor "$deploy_sha" origin/main; then
+            echo "Deploy target $deploy_sha is not on main. Deploy Dev only accepts main commits." >&2
+            exit 1
+          fi
+
+          if [ "$EVENT_NAME" = "workflow_run" ]; then
+            if [ "$WORKFLOW_RUN_CONCLUSION" = "success" ] && [ "$WORKFLOW_RUN_HEAD_SHA" = "$deploy_sha" ]; then
+              echo "Deploy target $deploy_sha came from a successful Dev CI workflow_run."
+              exit 0
+            fi
+
+            echo "Deploy target $deploy_sha did not come from a successful Dev CI workflow_run." >&2
+            exit 1
+          fi
+
+          gate_conclusion="$(
+            gh api \
+              --method GET \
+              "/repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs" \
+              -f branch=main \
+              -f head_sha="$deploy_sha" \
+              -f status=success \
+              -f per_page=1 \
+              --jq '.workflow_runs[0].conclusion // empty'
+          )"
+
+          if [ "$gate_conclusion" != "success" ]; then
+            echo "Deploy Dev for main SHA $deploy_sha requires a successful Dev CI run first." >&2
+            echo "Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, scraper checks, and WordPress theme checks when applicable." >&2
+            exit 1
+          fi
 
       - name: Check deploy freshness
         id: freshness
@@ -89,10 +141,17 @@ jobs:
           chmod 700 ~/.ssh
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
           chmod 600 ~/.ssh/dev_key
+          touch ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          if [ -n "${VPS_SSH_KNOWN_HOSTS:-}" ]; then
+            printf '%s\n' "$VPS_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+            exit 0
+          fi
 
           keyscan_output="$(mktemp)"
           for attempt in 1 2 3 4 5; do
-            if ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
+            if ssh-keyscan -4 -H -T 30 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
               cat "$keyscan_output" >> ~/.ssh/known_hosts
               rm -f "$keyscan_output"
               exit 0
@@ -105,8 +164,8 @@ jobs:
           done
 
           rm -f "$keyscan_output"
-          echo "Unable to fetch the VPS SSH host key after 5 attempts." >&2
-          exit 1
+          echo "Unable to fetch the VPS SSH host key after 5 attempts; falling back to StrictHostKeyChecking=accept-new." >&2
+          echo "SSH_STRICT_HOST_KEY_CHECKING=accept-new" >> "$GITHUB_ENV"
 
       - name: Deploy exact SHA to VPS
         if: steps.freshness.outputs.deploy == 'true'
@@ -116,12 +175,14 @@ jobs:
             -o BatchMode=yes \
             -o ConnectionAttempts=5 \
             -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking=yes \
+            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
             "$VPS_USER@$VPS_HOST" \
             "DEPLOY_SHA=$DEPLOY_SHA CLOSED_LOOP_GITHUB_TOKEN=$CLOSED_LOOP_GITHUB_TOKEN bash -s" <<'REMOTE'
           set -euo pipefail
 
           cd /var/www
+          previous_sha="$(git rev-parse HEAD)"
           runtime_data_root="/var/www/runtime-data/dev.chinesearizona.com/web"
           git_exclude_path="$(git rev-parse --git-path info/exclude)"
           mkdir -p "$(dirname "$git_exclude_path")"
@@ -216,7 +277,38 @@ jobs:
           pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
           pm2 save
 
+          rollback_to_previous_sha() {
+            if [ "$previous_sha" = "$DEPLOY_SHA" ]; then
+              echo "Smoke failed, but previous SHA matches deploy SHA; no rollback target is available." >&2
+              return 1
+            fi
+
+            echo "Smoke failed; rolling back to previous SHA $previous_sha." >&2
+            cd /var/www
+            git fetch origin "$previous_sha" || true
+            latest_main_sha="$(git rev-parse origin/main)"
+            if [ "$previous_sha" = "$latest_main_sha" ]; then
+              git checkout --force -B main "$previous_sha"
+              git branch --set-upstream-to=origin/main main
+            else
+              git checkout --force --detach "$previous_sha"
+            fi
+
+            cd /var/www/dev.chinesearizona.com/web
+            export GIT_SHA="$previous_sha"
+            export NEXT_PUBLIC_GIT_SHA="$previous_sha"
+            export BUILD_TIME="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            export NEXT_PUBLIC_BUILD_TIME="$BUILD_TIME"
+            npm ci
+            npm run build
+            pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
+            pm2 save
+            npm run smoke:dev
+          }
+
           if ! npm run smoke:dev; then
+            npm run loop:collect || true
+            rollback_to_previous_sha || true
             npm run loop:collect || true
             exit 1
           fi
