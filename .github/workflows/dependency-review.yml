@@ -1,0 +1,44 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    paths:
+      - '.github/dependabot.yml'
+      - '.github/workflows/**'
+      - 'dev.chinesearizona.com/web/package.json'
+      - 'dev.chinesearizona.com/web/package-lock.json'
+      - 'dev.chinesearizona.com/web/requirements.txt'
+      - 'chinesearizona.com/public/wp-content/themes/twentytwentyfive/package.json'
+      - 'chinesearizona.com/public/wp-content/themes/twentytwentyfive/package-lock.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dev.chinesearizona.com/web
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20.20.2
+          cache: npm
+          cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Security audit
+        run: npm run security:audit
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@v4
+        continue-on-error: true
+        with:
+          fail-on-severity: moderate

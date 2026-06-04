@@ -61,6 +61,7 @@ const deploymentId = configuredDeploymentId();
 
 const nextConfig: NextConfig = {
   ...(deploymentId ? { deploymentId } : {}),
+  outputFileTracingRoot: process.cwd(),
   images: {
     remotePatterns: articleImageHosts.map((hostname) => ({
       hostname,

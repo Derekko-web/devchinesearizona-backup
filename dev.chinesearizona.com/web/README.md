@@ -32,6 +32,25 @@ Deploy Dev migrates only these known generated files out of the checkout before 
 
 The PM2 process receives the corresponding external paths through `RADAR_STORE_PATH_AUSTIN`, `RADAR_STORE_PATH_LOS_ANGELES`, `SF_BAY_RADAR_STORE_PATH`, `ARTICLE_EN_TRANSLATION_CACHE_PATH`, `ARTICLE_ZH_TRANSLATION_CACHE_PATH`, and `GENERATED_LOCAL_ARTICLES_PATH`. Host cron jobs that generate these files should use the same environment variables instead of writing into `/var/www/dev.chinesearizona.com/web`.
 
+## GitHub CI/CD settings
+
+The `Dev CI` workflow exposes one stable required status check: `ci-required`.
+Branch protection for `main` should require `ci-required` and should not require
+older per-job checks such as `verify`, `playwright-e2e`, `Dev E2E`, or
+path-scoped dependency jobs that may not run on every pull request.
+
+Use GitHub Environments without required reviewers so the solo-project deploy
+loop stays unattended:
+
+- `dev`: restrict deployment branches to `main` or protected branches only. Keep
+  the VPS deploy secrets here.
+- `dev-content`: restrict deployment branches to `main` or protected branches
+  only. Do not store VPS SSH deploy secrets here; content jobs should only open
+  PRs and upload Actions artifacts.
+- `dev-runtime`: restrict deployment branches to `main` or protected branches
+  only. Keep runtime-operator secrets such as
+  `DEV_VPS_RUNTIME_EGRESS_USER` and `DEV_VPS_RUNTIME_EGRESS_SSH_KEY` here.
+
 ## Getting Started
 
 First, run the development server:

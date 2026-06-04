@@ -9,7 +9,10 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "verify": "npm run lint -- --max-warnings=0 && npm test && npm run build",
+    "test:coverage": "vitest run --coverage",
+    "e2e": "playwright test",
+    "security:audit": "npm audit --audit-level=moderate",
+    "verify": "npm run lint -- --max-warnings=0 && npm run test:coverage && npm run build",
     "smoke:dev": "node scripts/smoke-dev.mjs",
     "loop:collect": "node ../../ops/closed-loop/collect-dev-signals.mjs",
     "atlas:sync": "PYTHONPATH=.python-packages python3 -m scripts.atlas_obscura_ingest.cli sync",
@@ -20,6 +23,7 @@
     "scrape:dedupe": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli dedupe_score",
     "scrape:site-fixtures": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli export_site_fixtures",
     "scrape:run": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli run",
+    "scrape:promote-directory": "PYTHONPATH=.python-packages python3 scripts/plaza_directory_site_export.py",
     "city-directory:discover": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli discover",
     "city-directory:run": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli run",
     "city-directory:export-approved": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli export-approved",
@@ -48,20 +52,25 @@
     "undici": "^7.25.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "playwright": "^1.59.1",
+    "playwright": "^1.60.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.8"
   },
   "overrides": {
     "convex": {
       "ws": "8.20.1"
+    },
+    "minimatch@10.2.5": {
+      "brace-expansion": "5.0.6"
     },
     "next": {
       "postcss": "8.5.10"
