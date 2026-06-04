@@ -311,9 +311,9 @@ describe('SF Bay Radar configuration', () => {
     const sfBayArticles = await getCurrentArticlesAsync(undefined, siteProfiles['sf-bay']);
     const arizonaSlug = 'housing-watch-where-tsmc-families-compare-first';
 
-    expect(sfBayArticles.map((article) => article.slug)).toContain('sf-bay-news-desk-source-linked-launch');
+    expect(sfBayArticles.map((article) => article.slug)).toContain('sf-bay-chinatown-downtown-resource-watch');
     expect(sfBayArticles.map((article) => article.slug)).not.toContain(arizonaSlug);
     expect(await getArticleBySlugAsync(arizonaSlug, siteProfiles['sf-bay'])).toBeUndefined();
-    expect(await getArticleBySlugAsync('sf-bay-news-desk-source-linked-launch', siteProfiles['sf-bay'])).toBeDefined();
+    expect(await getArticleBySlugAsync('sf-bay-chinatown-downtown-resource-watch', siteProfiles['sf-bay'])).toBeDefined();
   });
 });

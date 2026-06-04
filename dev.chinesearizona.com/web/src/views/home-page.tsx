@@ -345,16 +345,10 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
     site.directory.categorySlugs.includes(category.slug)
   );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
-  const storyCards: HomeStoryCard[] = newsIsLive
+  const articleStoryCards: HomeStoryCard[] = newsIsLive
     ? getCurrentArticlesForSite(site)
         .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
-        .filter(
-          (article) =>
-            hasLatinCharacters(article.title.en) &&
-            !hasCjkCharacters(article.title.en) &&
-            Boolean(article.title.zh) &&
-            article.title.zh !== article.title.en
-        )
+        .filter((article) => hasLatinCharacters(article.title.en) && !hasCjkCharacters(article.title.en))
         .sort((left, right) => {
           const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
           if (titleLengthDifference !== 0) {
@@ -367,18 +361,30 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
         .map((article) => ({
           href: getLocalizedNewsArticlePath(locale, site, article.slug),
           title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
-          bodyText: stripStoryCardLeadIn(oppositeCopy(locale, article.title.en, article.title.zh ?? article.title.en)),
+          bodyText: stripStoryCardLeadIn(copy(locale, article.excerpt.en, article.excerpt.zh ?? article.excerpt.en)),
           date: formatCardDate(article.publishedAt, locale),
           image: article.heroImage,
         }))
     : [];
+  const configuredStoryCards: HomeStoryCard[] = newsIsLive
+    ? (home.storyCards ?? []).map((story) => ({
+        href: story.href
+          ? story.href.startsWith('/')
+            ? withLocale(locale, story.href)
+            : story.href
+          : getLocalizedNewsPath(locale, site),
+        title: copy(locale, story.title.en, story.title.zh),
+        bodyText: copy(locale, story.bodyText.en, story.bodyText.zh),
+        date: copy(locale, story.date.en, story.date.zh),
+      }))
+    : [];
+  const storyCards = [...articleStoryCards, ...configuredStoryCards]
+    .filter((story, index, stories) => stories.findIndex((candidate) => candidate.href === story.href && candidate.title === story.title) === index)
+    .slice(0, 3);
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
-  const verifiedCount =
-    site.key === defaultSiteProfile.key
-      ? allBusinesses.filter((business) => business.verified).length
-      : home.featuredCards.length;
+  const verifiedCount = allBusinesses.filter((business) => business.verified).length;
   const trustedServiceTiles: TrustedServiceTile[] = [
     {
       slug: 'real-estate',
