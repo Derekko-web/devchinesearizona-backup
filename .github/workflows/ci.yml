@@ -14,7 +14,7 @@ jobs:
       python_scraper: ${{ steps.filter.outputs.python_scraper }}
       wordpress_theme: ${{ steps.filter.outputs.wordpress_theme }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -73,7 +73,7 @@ jobs:
       run:
         working-directory: dev.chinesearizona.com/web
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v5
         with:
@@ -173,7 +173,7 @@ jobs:
       run:
         working-directory: dev.chinesearizona.com/web
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v5
         with:
@@ -209,7 +209,7 @@ jobs:
       run:
         working-directory: dev.chinesearizona.com/web
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v5
         with:
@@ -242,7 +242,7 @@ jobs:
       run:
         working-directory: chinesearizona.com/public/wp-content/themes/twentytwentyfive
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v5
         with:
