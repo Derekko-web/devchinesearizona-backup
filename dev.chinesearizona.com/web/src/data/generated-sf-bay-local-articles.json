@@ -1,33 +1,40 @@
 [
   {
-    "slug": "sf-bay-news-desk-source-linked-launch",
+    "slug": "sf-bay-chinatown-downtown-resource-watch",
     "title": {
-      "en": "SF Bay News Desk: How ChineseSFBay Uses Local Sources Without Republishing Them",
-      "zh": "灣區新聞室：ChineseSFBay 如何使用本地來源而不全文轉載"
+      "en": "SF Chinatown and Downtown Resource Watch",
+      "zh": "舊金山華埠與市中心資源觀察"
     },
     "excerpt": {
-      "en": "ChineseSFBay starts with Bay Area source links, then writes short bilingual summaries that point readers back to the original reporting, newsroom, or official page.",
-      "zh": "ChineseSFBay 從灣區來源連結出發，撰寫簡短雙語摘要，再把讀者帶回原始報導、新聞室或官方頁面。"
+      "en": "A practical Bay Area brief for tracking San Francisco Chinatown, downtown services, transit access, restaurant corridors, and civic updates from local sources.",
+      "zh": "整理舊金山華埠、市中心服務、交通可達性、餐飲走廊與市政更新的實用灣區摘要，來源保持本地化。"
     },
-    "heroImage": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-05-30T08:00:00.000Z",
-    "updatedAt": "2026-05-30T08:00:00.000Z",
-    "category": "feature",
+    "heroImage": "/city-site-images/sf-chinatown-bay.webp",
+    "publishedAt": "2026-06-03T15:00:00.000Z",
+    "updatedAt": "2026-06-03T15:00:00.000Z",
+    "category": "news",
     "body": [
       {
-        "en": "The SF Bay pipeline is designed as a summary and link surface, not a republishing feed. A useful item should tell readers why a San Francisco, Oakland, San Jose, Peninsula, or South Bay update matters, then send them to the original source for full reporting, quotes, photos, maps, and current details.",
-        "zh": "灣區新聞管線的設計是摘要與連結入口，不是全文轉載。真正有用的項目，應該說清楚某則舊金山、奧克蘭、聖荷西、半島或南灣更新為什麼重要，再把讀者帶回原始來源查看完整報導、引述、照片、地圖與最新細節。"
+        "en": "San Francisco Chinatown and the downtown edge are useful starting points for readers who need restaurants, clinics, transit, cultural anchors, and city-service context in one place. ChineseSFBay keeps this lane as a short original brief and sends readers back to the local newsroom or official page for full details.",
+        "zh": "舊金山華埠與市中心邊緣，是讀者查找餐飲、診所、交通、文化據點與城市服務脈絡的實用起點。ChineseSFBay 會把這條 lane 保持為簡短原創摘要，並把完整細節交回本地新聞室或官方頁面。"
       },
       {
-        "en": "That rule matters because Bay Area local news changes quickly. Housing, transit, airport, school, restaurant, and public safety updates often depend on details that belong with the reporting newsroom or official agency. ChineseSFBay keeps the local context concise and keeps the source link visible.",
-        "zh": "這條規則很重要，因為灣區本地新聞變化很快。住房、交通、機場、學校、餐飲與公共安全更新常常依賴新聞室或官方機構掌握的細節。ChineseSFBay 保持本地脈絡精簡，也讓來源連結保持清楚可見。"
+        "en": "For families and small businesses, the most useful signals are practical: street access, transit changes, neighborhood safety, restaurant openings, and services that affect weekly routines.",
+        "zh": "對家庭與小商家來說，最有用的訊號通常很實際：街道可達性、交通變化、街區安全、餐飲新店，以及會影響一週生活節奏的服務。"
       }
     ],
     "series": "sf-bay-radar",
-    "freshnessTier": "evergreen",
+    "freshnessTier": "weekly",
     "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [],
-    "ctaBusinessSlugs": [],
+    "sourceType": "local_media",
+    "relatedCategorySlugs": [
+      "dining",
+      "local-services"
+    ],
+    "ctaBusinessSlugs": [
+      "r-g-lounge-san-francisco",
+      "chinese-hospital-san-francisco"
+    ],
     "personaTargets": [
       "local_families",
       "business_owners"
@@ -35,90 +42,173 @@
     "sourceLinks": [
       {
         "label": {
-          "en": "The San Francisco Standard feed",
-          "zh": "The San Francisco Standard 來源"
+          "en": "The San Francisco Standard",
+          "zh": "The San Francisco Standard"
         },
-        "url": "https://sfstandard.com/feed/",
+        "url": "https://sfstandard.com/",
         "source": "The San Francisco Standard"
       },
       {
         "label": {
-          "en": "San Jose Spotlight feed",
-          "zh": "San Jose Spotlight 來源"
+          "en": "SFGATE Bay Area News",
+          "zh": "SFGATE 灣區新聞"
         },
-        "url": "https://sanjosespotlight.com/feed/",
+        "url": "https://www.sfgate.com/bayarea/",
+        "source": "SFGATE"
+      },
+      {
+        "label": {
+          "en": "SFist",
+          "zh": "SFist"
+        },
+        "url": "https://sfist.com/",
+        "source": "SFist"
+      }
+    ],
+    "sourceName": "ChineseSFBay News Desk",
+    "sourceId": "sf_bay_chinatown_downtown_resource_watch_2026_06_03",
+    "republishedWithPermission": false
+  },
+  {
+    "slug": "south-bay-cupertino-community-services-watch",
+    "title": {
+      "en": "South Bay and Cupertino Services Watch",
+      "zh": "南灣與庫比蒂諾服務觀察"
+    },
+    "excerpt": {
+      "en": "A source-linked South Bay brief for schools, groceries, civic updates, airport logistics, and services around San Jose, Cupertino, Sunnyvale, and Santa Clara.",
+      "zh": "面向聖荷西、庫比蒂諾、桑尼維爾與聖塔克拉拉的南灣摘要，聚焦學校、超市、市政更新、機場動線與服務資源。"
+    },
+    "heroImage": "/city-site-images/san-jose-silicon-valley-plaza.webp",
+    "publishedAt": "2026-06-03T14:50:00.000Z",
+    "updatedAt": "2026-06-03T14:50:00.000Z",
+    "category": "news",
+    "body": [
+      {
+        "en": "South Bay readers often need city context that crosses boundaries: San Jose civic updates, Cupertino school and service routines, Sunnyvale errands, Santa Clara County logistics, and SJC travel access.",
+        "zh": "南灣讀者常需要跨城市的生活脈絡：聖荷西市政更新、庫比蒂諾學校與服務路線、桑尼維爾 errands、聖塔克拉拉縣動線，以及 SJC 旅行可達性。"
+      },
+      {
+        "en": "ChineseSFBay keeps this watch source-linked and practical, with short summaries that help readers decide when to open the original reporting or official page.",
+        "zh": "ChineseSFBay 會讓這類觀察保持來源連結與實用取向，用簡短摘要幫讀者判斷何時需要打開原始報導或官方頁面。"
+      }
+    ],
+    "series": "sf-bay-radar",
+    "freshnessTier": "weekly",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "relatedCategorySlugs": [
+      "education",
+      "shopping",
+      "local-services"
+    ],
+    "ctaBusinessSlugs": [
+      "99-ranch-market-cupertino",
+      "asian-law-alliance-san-jose"
+    ],
+    "personaTargets": [
+      "local_families",
+      "students"
+    ],
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "San Jose Spotlight",
+          "zh": "San Jose Spotlight"
+        },
+        "url": "https://sanjosespotlight.com/",
         "source": "San Jose Spotlight"
       },
       {
         "label": {
-          "en": "The Oaklandside feed",
-          "zh": "The Oaklandside 來源"
+          "en": "Local News Matters",
+          "zh": "Local News Matters"
         },
-        "url": "https://oaklandside.org/feed/",
-        "source": "The Oaklandside"
+        "url": "https://localnewsmatters.org/",
+        "source": "Local News Matters"
+      },
+      {
+        "label": {
+          "en": "San Jose Mineta International Airport",
+          "zh": "聖荷西機場新聞室"
+        },
+        "url": "https://www.flysanjose.com/newsroom",
+        "source": "San Jose Mineta International Airport"
       }
     ],
     "sourceName": "ChineseSFBay News Desk",
-    "sourceId": "sf_bay_source_linked_launch_2026_05_30",
+    "sourceId": "south_bay_cupertino_services_watch_2026_06_03",
     "republishedWithPermission": false
   },
   {
-    "slug": "sf-bay-openings-watch-why-source-links-matter",
+    "slug": "oakland-east-bay-community-anchor-watch",
     "title": {
-      "en": "Openings Watch: Bay Area Restaurant and Retail Signals Need Local Links",
-      "zh": "新店觀察：灣區餐飲與零售訊號需要本地來源連結"
+      "en": "Oakland and East Bay Community Anchor Watch",
+      "zh": "奧克蘭與東灣社區據點觀察"
     },
     "excerpt": {
-      "en": "Restaurant and retail openings can affect weekend routines, commute stops, and family errands, but ChineseSFBay keeps those notes short and points readers to the original listing or newsroom.",
-      "zh": "餐飲與零售新店會影響週末動線、通勤停靠點與家庭 errands；ChineseSFBay 只保留短摘要，並連回原始清單或新聞室。"
+      "en": "A concise East Bay brief for Oakland Chinatown, schools, housing, public safety, small businesses, and community-service updates from source-linked local outlets.",
+      "zh": "面向奧克蘭華埠、學校、住房、公共安全、小商家與社區服務更新的東灣摘要，保持連回本地來源。"
     },
-    "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-05-30T08:10:00.000Z",
-    "updatedAt": "2026-05-30T08:10:00.000Z",
+    "heroImage": "/city-site-images/oakland-chinatown-street.webp",
+    "publishedAt": "2026-06-03T14:40:00.000Z",
+    "updatedAt": "2026-06-03T14:40:00.000Z",
     "category": "news",
     "body": [
       {
-        "en": "For Bay Area readers, an opening is useful when it changes a real route: after-school pickup in Fremont, a South Bay lunch stop, a late train home from San Francisco, or a weekend grocery loop through Oakland and the Peninsula. The pipeline treats opening coverage as a pointer to those routines, not as a copy of the source article.",
-        "zh": "對灣區讀者來說，新店消息之所以有用，是因為它可能改變真實路線：佛利蒙課後接送、南灣午餐停靠、舊金山晚班車回家，或週末在奧克蘭與半島之間採買。這條管線把新店報導當作生活動線提示，而不是複製來源文章。"
+        "en": "Oakland and the East Bay need a separate watch lane because community anchors are different from San Francisco and South Bay routines. A useful item should identify the neighborhood, the service or business impact, and the source readers can open for complete reporting.",
+        "zh": "奧克蘭與東灣需要獨立的觀察 lane，因為社區據點與舊金山、南灣的生活路線不同。實用項目應該說清楚街區、服務或商業影響，以及讀者可打開查看完整報導的來源。"
       },
       {
-        "en": "When an opening item is generated, ChineseSFBay should identify the neighborhood, business category, and practical reason to care, then link to the source for addresses, owner details, photos, menus, and schedule changes.",
-        "zh": "產生新店項目時，ChineseSFBay 應該指出街區、商家類型與實用關聯，再把地址、業主資訊、照片、菜單與時程變更交給來源頁面。"
+        "en": "This keeps East Bay coverage useful without copying article text, captions, photos, or social posts from the original publisher.",
+        "zh": "這樣可以讓東灣覆蓋保持有用，同時不複製原始發布方的文章、caption、照片或社群內容。"
       }
     ],
     "series": "sf-bay-radar",
-    "freshnessTier": "evergreen",
+    "freshnessTier": "weekly",
     "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
     "relatedCategorySlugs": [
-      "dining",
+      "local-services",
+      "medical",
       "shopping"
     ],
-    "ctaBusinessSlugs": [],
+    "ctaBusinessSlugs": [
+      "asian-health-services-oakland",
+      "self-help-for-the-elderly-san-francisco"
+    ],
     "personaTargets": [
       "local_families",
-      "students",
       "business_owners"
     ],
     "sourceLinks": [
       {
         "label": {
-          "en": "What Now San Francisco feed",
-          "zh": "What Now San Francisco 來源"
+          "en": "The Oaklandside",
+          "zh": "The Oaklandside"
         },
-        "url": "https://whatnow.com/san-francisco/feed/",
-        "source": "What Now San Francisco"
+        "url": "https://oaklandside.org/",
+        "source": "The Oaklandside"
       },
       {
         "label": {
-          "en": "SFGATE Bay Area News feed",
-          "zh": "SFGATE Bay Area News 來源"
+          "en": "Local News Matters",
+          "zh": "Local News Matters"
         },
-        "url": "https://www.sfgate.com/rss/feed/Bay-Area-News-429.php",
-        "source": "SFGATE"
+        "url": "https://localnewsmatters.org/",
+        "source": "Local News Matters"
+      },
+      {
+        "label": {
+          "en": "NBC Bay Area",
+          "zh": "NBC Bay Area"
+        },
+        "url": "https://www.nbcbayarea.com/",
+        "source": "NBC Bay Area"
       }
     ],
     "sourceName": "ChineseSFBay News Desk",
-    "sourceId": "sf_bay_openings_watch_2026_05_30",
+    "sourceId": "oakland_east_bay_anchor_watch_2026_06_03",
     "republishedWithPermission": false
   }
 ]

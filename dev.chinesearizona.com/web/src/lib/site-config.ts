@@ -41,6 +41,13 @@ export type SiteFeaturedShowcaseCard = {
   line2Zh: string;
 };
 
+export type SiteHomeStoryCard = {
+  title: LocalizedText;
+  bodyText: LocalizedText;
+  date: LocalizedText;
+  href?: string;
+};
+
 export type SiteHomeProfile = {
   headline: LocalizedText;
   kicker: LocalizedText;
@@ -64,6 +71,7 @@ export type SiteHomeProfile = {
   mapImageAlt: LocalizedText;
   relocationImageUrl: string;
   relocationImageAlt: LocalizedText;
+  storyCards?: SiteHomeStoryCard[];
   newcomerTitle: LocalizedText;
   newcomerBody: LocalizedText;
 };
@@ -239,28 +247,28 @@ const losAngelesNeighborhoods: SiteNeighborhoodSpot[] = [
     cityZh: '洛杉磯',
     regionEn: 'Chinatown and Downtown',
     regionZh: '華埠與市中心',
-    imageUrl: '/city-site-images/los-angeles-community-hero.webp',
+    imageUrl: '/city-site-images/la-chinatown-downtown.webp',
   },
   {
     city: 'Alhambra',
     cityZh: '阿罕布拉',
     regionEn: 'West San Gabriel Valley',
     regionZh: '西聖蓋博谷',
-    imageUrl: '/city-site-images/los-angeles-community-hero.webp',
+    imageUrl: '/city-site-images/alhambra-main-street.webp',
   },
   {
     city: 'San Gabriel',
     cityZh: '聖蓋博',
     regionEn: 'San Gabriel Valley',
     regionZh: '聖蓋博谷',
-    imageUrl: '/city-site-images/los-angeles-community-hero.webp',
+    imageUrl: '/city-site-images/san-gabriel-valley-boulevard.webp',
   },
   {
     city: 'Arcadia',
     cityZh: '亞凱迪亞',
     regionEn: 'Santa Anita corridor',
     regionZh: 'Santa Anita 生活圈',
-    imageUrl: '/city-site-images/los-angeles-community-hero.webp',
+    imageUrl: '/city-site-images/arcadia-foothills.webp',
   },
 ];
 
@@ -324,6 +332,100 @@ const losAngelesFeaturedCards: SiteFeaturedShowcaseCard[] = [
     line1Zh: '425 N Los Angeles St',
     line2En: 'Los Angeles, CA 90012',
     line2Zh: 'Los Angeles, CA 90012',
+  },
+];
+
+const sfBayNeighborhoods: SiteNeighborhoodSpot[] = [
+  {
+    city: 'San Francisco',
+    cityZh: '舊金山',
+    regionEn: 'Chinatown and downtown',
+    regionZh: '華埠與市中心',
+    imageUrl: '/city-site-images/sf-chinatown-bay.webp',
+  },
+  {
+    city: 'Oakland',
+    cityZh: '奧克蘭',
+    regionEn: 'East Bay',
+    regionZh: '東灣',
+    imageUrl: '/city-site-images/oakland-chinatown-street.webp',
+  },
+  {
+    city: 'San Jose',
+    cityZh: '聖荷西',
+    regionEn: 'South Bay',
+    regionZh: '南灣',
+    imageUrl: '/city-site-images/san-jose-silicon-valley-plaza.webp',
+  },
+  {
+    city: 'Cupertino',
+    cityZh: '庫比蒂諾',
+    regionEn: 'Silicon Valley',
+    regionZh: '矽谷',
+    imageUrl: '/city-site-images/cupertino-tech-avenue.webp',
+  },
+];
+
+const sfBayFeaturedCards: SiteFeaturedShowcaseCard[] = [
+  {
+    slug: 'r-g-lounge-san-francisco',
+    badge: 'Verified',
+    categoryEn: 'Dining',
+    categoryZh: '餐廳美食',
+    nameEn: 'R&G Lounge',
+    nameZh: '嶺南小館',
+    imageUrl: '/city-site-images/r-g-lounge-san-francisco.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '631 Kearny St',
+    line1Zh: '631 Kearny St',
+    line2En: 'San Francisco, CA 94108',
+    line2Zh: 'San Francisco, CA 94108',
+  },
+  {
+    slug: '99-ranch-market-cupertino',
+    badge: 'Verified',
+    categoryEn: 'Shopping',
+    categoryZh: '購物零售',
+    nameEn: '99 Ranch Market Cupertino',
+    nameZh: '大華超級市場 Cupertino',
+    imageUrl: '/city-site-images/99-ranch-market-cupertino.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '10425 S De Anza Blvd',
+    line1Zh: '10425 S De Anza Blvd',
+    line2En: 'Cupertino, CA 95014',
+    line2Zh: 'Cupertino, CA 95014',
+  },
+  {
+    slug: 'chinese-american-international-school-san-francisco',
+    badge: 'Verified',
+    categoryEn: 'Education',
+    categoryZh: '教育學習',
+    nameEn: 'Chinese American International School',
+    nameZh: '舊金山中美國際學校',
+    imageUrl: '/city-site-images/chinese-american-international-school-san-francisco.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: 'San Francisco',
+    line1Zh: '舊金山',
+    line2En: 'Bay Area education resource',
+    line2Zh: '灣區教育資源',
+  },
+  {
+    slug: 'asian-law-alliance-san-jose',
+    badge: 'Verified',
+    categoryEn: 'Legal',
+    categoryZh: '法律服務',
+    nameEn: 'Asian Law Alliance',
+    nameZh: 'Asian Law Alliance',
+    imageUrl: '/city-site-images/asian-law-alliance-san-jose.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '991 W Hedding St',
+    line1Zh: '991 W Hedding St',
+    line2En: 'San Jose, CA 95126',
+    line2Zh: 'San Jose, CA 95126',
   },
 ];
 
@@ -663,7 +765,7 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Los Angeles city guide image',
         zh: '洛杉磯城市指南圖片',
       },
-      heroForegroundImageUrl: '/city-site-images/los-angeles-community-hero.webp',
+      heroForegroundImageUrl: '/city-site-images/la-chinatown-downtown.webp',
       heroForegroundAlt: {
         en: 'Los Angeles platform mark',
         zh: '洛杉磯平台標記',
@@ -686,16 +788,62 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       },
       featuredCards: losAngelesFeaturedCards,
       neighborhoods: losAngelesNeighborhoods,
-      mapImageUrl: '/city-site-images/los-angeles-community-hero.webp',
+      mapImageUrl: '/city-site-images/san-gabriel-valley-boulevard.webp',
       mapImageAlt: {
         en: 'Los Angeles and San Gabriel Valley community guide image',
         zh: '洛杉磯與聖蓋博谷社區指南圖片',
       },
-      relocationImageUrl: '/city-site-images/los-angeles-community-hero.webp',
+      relocationImageUrl: '/city-site-images/la-newcomer-corridor.webp',
       relocationImageAlt: {
         en: 'Los Angeles relocation and community guide image',
         zh: '洛杉磯安家與社區指南圖片',
       },
+      storyCards: [
+        {
+          title: {
+            en: 'LA opening radar starts with source-linked local summaries',
+            zh: '洛杉磯新店雷達使用附來源連結的本地摘要',
+          },
+          href: '/los-angeles-news/los-angeles-opening-radar-local-source-watch',
+          bodyText: {
+            en: 'Restaurant, retail, and plaza updates stay tied to LA and SGV sources.',
+            zh: '餐飲、零售與商場動態都保持連回洛杉磯與聖蓋博谷來源。',
+          },
+          date: {
+            en: 'May 29, 2026',
+            zh: '2026 年 5 月 29 日',
+          },
+        },
+        {
+          title: {
+            en: 'SGV housing and transit watch stays LA-only',
+            zh: '聖蓋博谷住房與交通觀察僅使用洛杉磯資料',
+          },
+          href: '/los-angeles-news/sgv-housing-transit-watch-source-linked-summaries',
+          bodyText: {
+            en: 'Neighborhood context covers school pickup, Metro access, freeway time, and parking.',
+            zh: '街區脈絡涵蓋接送小孩、Metro、freeway 時間與停車。',
+          },
+          date: {
+            en: 'May 29, 2026',
+            zh: '2026 年 5 月 29 日',
+          },
+        },
+        {
+          title: {
+            en: 'Directory highlights LA and SGV community anchors',
+            zh: '目錄整理洛杉磯與聖蓋博谷社區據點',
+          },
+          bodyText: {
+            en: 'Chinatown, Alhambra, San Gabriel, and Arcadia each get local discovery paths.',
+            zh: '華埠、Alhambra、San Gabriel 與 Arcadia 都有本地探索入口。',
+          },
+          date: {
+            en: 'May 29, 2026',
+            zh: '2026 年 5 月 29 日',
+          },
+        },
+      ],
       newcomerTitle: {
         en: 'Los Angeles Directory Connected',
         zh: '洛杉磯商家目錄已接入',
@@ -829,8 +977,8 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         zh: '有來源連結的灣區新聞與在地發現',
       },
       intro: {
-        en: 'Follow local summaries for San Francisco, Oakland, San Jose, the Peninsula, and South Bay without copying third-party articles.',
-        zh: '追蹤舊金山、奧克蘭、聖荷西、半島與南灣的本地摘要，不轉載第三方全文。',
+        en: 'Find SF Bay Chinese restaurants, Asian markets, schools, health services, legal help, housing support, and community resources.',
+        zh: '查找灣區中餐、亞洲超市、中文學校、健康服務、法律協助、住房支援與社區資源。',
       },
       citySelectSuffix: { en: 'CA', zh: 'CA' },
       defaultSearchCity: 'San Francisco',
@@ -855,7 +1003,7 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'SF Bay city launch image',
         zh: '灣區城市首頁圖',
       },
-      heroForegroundImageUrl: '/city-site-images/sf-bay-community-hero.webp',
+      heroForegroundImageUrl: '/city-site-images/sf-chinatown-bay.webp',
       heroForegroundAlt: {
         en: 'SF Bay local platform mark',
         zh: '灣區平台標記',
@@ -876,18 +1024,62 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Local news, openings, official updates',
         zh: '本地新聞、新店與官方更新',
       },
-      featuredCards: [],
-      neighborhoods: [],
-      mapImageUrl: '/city-site-images/sf-bay-community-hero.webp',
+      featuredCards: sfBayFeaturedCards,
+      neighborhoods: sfBayNeighborhoods,
+      mapImageUrl: '/city-site-images/san-jose-silicon-valley-plaza.webp',
       mapImageAlt: {
         en: 'SF Bay local source guide image',
         zh: '灣區本地來源指南圖片',
       },
-      relocationImageUrl: '/city-site-images/sf-bay-community-hero.webp',
+      relocationImageUrl: '/city-site-images/sf-bay-newcomer-discovery.webp',
       relocationImageAlt: {
         en: 'SF Bay local discovery guide image',
         zh: '灣區在地發現指南圖片',
       },
+      storyCards: [
+        {
+          title: {
+            en: 'SF Bay source-linked news desk is live',
+            zh: '灣區附來源連結新聞室已上線',
+          },
+          bodyText: {
+            en: 'San Francisco, Oakland, San Jose, Peninsula, and South Bay summaries stay local.',
+            zh: '舊金山、奧克蘭、聖荷西、半島與南灣摘要保持本地化。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+        {
+          title: {
+            en: 'Bay Area directory separates city coverage',
+            zh: '灣區目錄分開整理各城市覆蓋',
+          },
+          bodyText: {
+            en: 'Chinatown, East Bay, South Bay, and Silicon Valley cards now use distinct signals.',
+            zh: '華埠、東灣、南灣與矽谷卡片現在使用不同本地訊號。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+        {
+          title: {
+            en: 'Community discovery focuses on Bay Area anchors',
+            zh: '社區探索聚焦灣區生活據點',
+          },
+          bodyText: {
+            en: 'Schools, services, groceries, legal help, and cultural resources are grouped by area.',
+            zh: '學校、服務、超市、法律協助與文化資源按地區整理。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+      ],
       newcomerTitle: {
         en: 'SF Bay Directory',
         zh: '灣區商家目錄',
@@ -1029,7 +1221,7 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Austin city guide visual',
         zh: '奥斯汀城市指南视觉图',
       },
-      heroForegroundImageUrl: '/city-site-images/austin-community-hero.webp',
+      heroForegroundImageUrl: '/city-site-images/austin-skyline-lake.webp',
       heroForegroundAlt: {
         en: 'ChineseAustin platform mark',
         zh: 'ChineseAustin 平台标识',
@@ -1118,40 +1310,84 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
           cityZh: '奥斯汀',
           regionEn: 'Central Texas',
           regionZh: '中德州',
-          imageUrl: '/city-site-images/austin-community-hero.webp',
+          imageUrl: '/city-site-images/austin-skyline-lake.webp',
         },
         {
           city: 'Cedar Park',
           cityZh: '雪松公园',
           regionEn: 'Northwest Austin',
           regionZh: '奥斯汀西北',
-          imageUrl: '/city-site-images/austin-community-hero.webp',
+          imageUrl: '/city-site-images/cedar-park-market-street.webp',
         },
         {
           city: 'Round Rock',
           cityZh: '朗德罗克',
           regionEn: 'North Austin Metro',
           regionZh: '奥斯汀北都会区',
-          imageUrl: '/city-site-images/austin-community-hero.webp',
+          imageUrl: '/city-site-images/round-rock-downtown.webp',
         },
         {
           city: 'Pflugerville',
           cityZh: '普弗拉格维尔',
           regionEn: 'Northeast Austin Metro',
           regionZh: '奥斯汀东北都会区',
-          imageUrl: '/city-site-images/austin-community-hero.webp',
+          imageUrl: '/city-site-images/pflugerville-lake-trail.webp',
         },
       ],
-      mapImageUrl: '/city-site-images/austin-community-hero.webp',
+      mapImageUrl: '/city-site-images/pflugerville-lake-trail.webp',
       mapImageAlt: {
         en: 'Austin area source map',
         zh: '奥斯汀地区来源地图',
       },
-      relocationImageUrl: '/city-site-images/austin-community-hero.webp',
+      relocationImageUrl: '/city-site-images/austin-newcomer-services.webp',
       relocationImageAlt: {
         en: 'Austin relocation and services guide',
         zh: '奥斯汀安家与服务指南',
       },
+      storyCards: [
+        {
+          title: {
+            en: 'Austin news desk starts with Central Texas sources',
+            zh: '奥斯汀新闻室从中德州本地来源开始',
+          },
+          bodyText: {
+            en: 'Short bilingual briefs cover schools, restaurants, services, housing, and community resources.',
+            zh: '简短双语摘要覆盖学校、餐饮、服务、住房与社区资源。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+        {
+          title: {
+            en: 'Northwest Austin corridor watch',
+            zh: '奥斯汀西北走廊观察',
+          },
+          bodyText: {
+            en: 'Research Boulevard, Lakeline, Cedar Park, and family routines get clearer context.',
+            zh: 'Research Boulevard、Lakeline、Cedar Park 与家庭生活路线有更清楚的脉络。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+        {
+          title: {
+            en: 'Round Rock and Pflugerville resources expand coverage',
+            zh: 'Round Rock 与 Pflugerville 资源扩展覆盖',
+          },
+          bodyText: {
+            en: 'North-metro dining, services, and community resources are separated from central Austin.',
+            zh: '北部都会区餐饮、服务与社区资源和奥斯汀市中心分开呈现。',
+          },
+          date: {
+            en: 'May 30, 2026',
+            zh: '2026 年 5 月 30 日',
+          },
+        },
+      ],
       newcomerTitle: {
         en: 'New to Austin',
         zh: '初到奥斯汀',

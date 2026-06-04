@@ -452,7 +452,7 @@ describe('radar ui', () => {
     );
 
     expect(html).toContain('All SF Bay News');
-    expect(html).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
+    expect(html).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
@@ -556,19 +556,19 @@ describe('radar ui', () => {
     const detailHtml = renderToStaticMarkup(
       (await ArticleDetailPageView({
         locale: 'en',
-        slug: 'sf-bay-news-desk-source-linked-launch',
+        slug: 'sf-bay-chinatown-downtown-resource-watch',
         site: siteProfiles['sf-bay'],
       }))!
     );
 
     expect(feedHtml).toContain('All SF Bay News');
-    expect(feedHtml).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
+    expect(feedHtml).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(feedHtml).not.toContain('There are no public items for this filter yet');
     expect(feedHtml).not.toContain('mesa-radar-housing-pulse');
     expect(feedHtml).not.toContain('Phoenix Sky Harbor');
     expect(feedHtml).not.toContain('Arizona News');
     expect(archiveHtml).toContain('The SF Bay News homepage');
-    expect(archiveHtml).toContain('/en/news/sf-bay-news-desk-source-linked-launch');
+    expect(archiveHtml).toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(detailHtml).toContain('Back to SF Bay News');
     expect(detailHtml).toContain('The San Francisco Standard');
     expect(detailHtml).toContain('This page is an editorial summary');
