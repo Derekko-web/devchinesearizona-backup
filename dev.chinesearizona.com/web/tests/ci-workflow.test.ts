@@ -6,6 +6,18 @@ import { describe, expect, it } from 'vitest';
 const workflowPath = path.join(process.cwd(), '..', '..', '.github', 'workflows', 'ci.yml');
 
 describe('Dev CI homepage smoke check', () => {
+  it('runs for every PR and includes the dependency security gate', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('pull_request:');
+    expect(workflow).not.toContain("'.github/workflows/**'");
+    expect(workflow).not.toContain("'.github/dependabot.yml'");
+    expect(workflow).toContain('- name: Security audit');
+    expect(workflow).toContain('npm run security:audit');
+    expect(workflow).toContain('- name: Upload coverage report');
+    expect(workflow).toContain('dev.chinesearizona.com/web/coverage');
+  });
+
   it('starts the built Next app and verifies the homepage locally', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');
 

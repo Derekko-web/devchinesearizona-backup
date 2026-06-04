@@ -26,12 +26,16 @@ jobs:
   apply-runtime-egress:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    environment:
+      name: dev-runtime
     env:
       DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
       VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
       VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
       VPS_SSH_KEY: ${{ secrets.DEV_VPS_RUNTIME_EGRESS_SSH_KEY }}
+      VPS_SSH_KNOWN_HOSTS: ${{ secrets.DEV_VPS_SSH_KNOWN_HOSTS }}
       VPS_USER: ${{ secrets.DEV_VPS_RUNTIME_EGRESS_USER }}
+      SSH_STRICT_HOST_KEY_CHECKING: yes
     steps:
       - name: Configure SSH
         run: |
@@ -46,10 +50,17 @@ jobs:
           chmod 700 ~/.ssh
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/runtime_egress_key
           chmod 600 ~/.ssh/runtime_egress_key
+          touch ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+          if [ -n "${VPS_SSH_KNOWN_HOSTS:-}" ]; then
+            printf '%s\n' "$VPS_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+            exit 0
+          fi
 
           keyscan_output="$(mktemp)"
           for attempt in 1 2 3 4 5; do
-            if ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
+            if ssh-keyscan -4 -H -T 30 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
               cat "$keyscan_output" >> ~/.ssh/known_hosts
               rm -f "$keyscan_output"
               exit 0
@@ -62,8 +73,8 @@ jobs:
           done
 
           rm -f "$keyscan_output"
-          echo "Unable to fetch the VPS SSH host key after 5 attempts." >&2
-          exit 1
+          echo "Unable to fetch the VPS SSH host key after 5 attempts; falling back to StrictHostKeyChecking=accept-new." >&2
+          echo "SSH_STRICT_HOST_KEY_CHECKING=accept-new" >> "$GITHUB_ENV"
 
       - name: Apply radar Hermes runtime egress
         run: |
@@ -72,7 +83,8 @@ jobs:
             -o BatchMode=yes \
             -o ConnectionAttempts=5 \
             -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking=yes \
+            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
+            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
             "$VPS_USER@$VPS_HOST" \
             "DEPLOY_SHA=$DEPLOY_SHA bash -s" <<'REMOTE'
           set -euo pipefail
