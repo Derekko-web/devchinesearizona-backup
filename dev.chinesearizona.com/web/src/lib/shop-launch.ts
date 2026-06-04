@@ -3,7 +3,7 @@ function isEnabled(value: string | undefined): boolean {
 }
 
 export function isShopRuntimeFallbackAllowed(): boolean {
-  return process.env.NODE_ENV !== 'production';
+  return process.env.NODE_ENV !== 'production' || process.env.PLAYWRIGHT_E2E === '1';
 }
 
 export function isShopPublicLaunchEnabled(): boolean {

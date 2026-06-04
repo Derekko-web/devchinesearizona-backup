@@ -939,10 +939,12 @@ export function AuthPageClient({
             aria-invalid={Boolean(fieldErrors.email)}
             aria-describedby={fieldErrors.email ? 'auth-email-error' : undefined}
             onInput={(event) => {
-              setFieldErrors((current) => updateFieldErrorState(current, 'email', validateEmailField(event.currentTarget, locale)));
+              const emailError = validateEmailField(event.currentTarget, locale);
+              setFieldErrors((current) => updateFieldErrorState(current, 'email', emailError));
             }}
             onBlur={(event) => {
-              setFieldErrors((current) => updateFieldErrorState(current, 'email', validateEmailField(event.currentTarget, locale)));
+              const emailError = validateEmailField(event.currentTarget, locale);
+              setFieldErrors((current) => updateFieldErrorState(current, 'email', emailError));
             }}
             className={`w-full rounded-xl border bg-white px-4 py-3.5 text-base text-[#4b3a2a] outline-none transition disabled:cursor-not-allowed disabled:bg-slate-50 ${
               fieldErrors.email
@@ -978,11 +980,13 @@ export function AuthPageClient({
               aria-invalid={Boolean(fieldErrors.password)}
               aria-describedby={fieldErrors.password ? 'auth-password-error' : undefined}
               onInput={(event) => {
+                const passwordError = validatePasswordField(event.currentTarget, locale);
                 setPasswordValue(event.currentTarget.value);
-                setFieldErrors((current) => updateFieldErrorState(current, 'password', validatePasswordField(event.currentTarget, locale)));
+                setFieldErrors((current) => updateFieldErrorState(current, 'password', passwordError));
               }}
               onBlur={(event) => {
-                setFieldErrors((current) => updateFieldErrorState(current, 'password', validatePasswordField(event.currentTarget, locale)));
+                const passwordError = validatePasswordField(event.currentTarget, locale);
+                setFieldErrors((current) => updateFieldErrorState(current, 'password', passwordError));
               }}
               className={`w-full rounded-xl border bg-white px-4 py-3.5 pr-20 text-base text-[#4b3a2a] outline-none transition disabled:cursor-not-allowed disabled:bg-slate-50 ${
                 fieldErrors.password
