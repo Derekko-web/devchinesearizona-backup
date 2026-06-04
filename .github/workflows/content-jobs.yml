@@ -32,7 +32,7 @@ jobs:
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload directory scrape artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: directory-scrape-${{ github.run_id }}
           retention-days: 14
@@ -124,7 +124,7 @@ jobs:
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
@@ -146,7 +146,7 @@ jobs:
 
       - name: Upload signal desk artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: signal-desk-${{ github.run_id }}
           retention-days: 14

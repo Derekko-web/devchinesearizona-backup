@@ -11,9 +11,18 @@ updates:
       npm-security-and-minor:
         patterns:
           - "*"
+        exclude-patterns:
+          - stripe
         update-types:
           - minor
           - patch
+    ignore:
+      - dependency-name: undici
+        update-types:
+          - version-update:semver-major
+      - dependency-name: eslint
+        update-types:
+          - version-update:semver-major
 
   - package-ecosystem: npm
     directory: /chinesearizona.com/public/wp-content/themes/twentytwentyfive

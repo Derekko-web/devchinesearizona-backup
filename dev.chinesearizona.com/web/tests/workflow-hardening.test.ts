@@ -17,10 +17,10 @@ describe('workflow hardening', () => {
   it('makes scheduled content jobs reproducible and persistent', () => {
     const workflow = fs.readFileSync(contentJobsPath, 'utf8');
 
-    expect(workflow).toContain('actions/setup-python@v5');
+    expect(workflow).toContain('actions/setup-python@v6');
     expect(workflow).toContain('name: dev-content');
     expect(workflow).toContain('python3 -m pip install --target .python-packages -r requirements.txt');
-    expect(workflow).toContain('actions/upload-artifact@v4');
+    expect(workflow).toContain('actions/upload-artifact@v7');
     expect(workflow).toContain('Open content update PR');
     expect(workflow).toContain('git status --porcelain -- "${changed_paths[@]}"');
     expect(workflow).toContain('npm run scrape:promote-directory');
@@ -61,6 +61,7 @@ describe('workflow hardening', () => {
     expect(workflow).toContain('playwright-e2e:');
     expect(workflow).toContain('npx playwright install --with-deps chromium');
     expect(workflow).toContain('npm run e2e');
+    expect(workflow).toContain('actions/upload-artifact@v7');
     expect(workflow).toContain('ci-required:');
     expect(workflow).toContain('name: ci-required');
 
@@ -76,6 +77,7 @@ describe('workflow hardening', () => {
     expect(workflow).toContain('python-scraper-tests:');
     expect(workflow).toContain("if: needs.changes.outputs.python_scraper == 'true'");
     expect(workflow).toContain('cache-dependency-path: dev.chinesearizona.com/web/requirements.txt');
+    expect(workflow).toContain('actions/setup-python@v6');
     expect(workflow).toContain('npm run scrape:test');
 
     expect(workflow).toContain('wordpress-theme:');
@@ -89,12 +91,17 @@ describe('workflow hardening', () => {
     const dependencyReview = fs.readFileSync(dependencyReviewPath, 'utf8');
     const dependabot = fs.readFileSync(dependabotPath, 'utf8');
 
-    expect(dependencyReview).toContain('actions/dependency-review-action@v4');
+    expect(dependencyReview).toContain('actions/dependency-review-action@v5');
     expect(dependencyReview).toContain('npm run security:audit');
     expect(dependencyReview).toContain('continue-on-error: true');
     expect(dependencyReview).toContain('fail-on-severity: moderate');
     expect(dependencyReview).toContain('chinesearizona.com/public/wp-content/themes/twentytwentyfive/package-lock.json');
     expect(dependabot).toContain('package-ecosystem: npm');
+    expect(dependabot).toContain('exclude-patterns:');
+    expect(dependabot).toContain('- stripe');
+    expect(dependabot).toContain('dependency-name: undici');
+    expect(dependabot).toContain('dependency-name: eslint');
+    expect(dependabot).toContain('version-update:semver-major');
     expect(dependabot).toContain('directory: /chinesearizona.com/public/wp-content/themes/twentytwentyfive');
     expect(dependabot).toContain('wordpress-theme-npm-security-and-minor');
     expect(dependabot).toContain('package-ecosystem: pip');
