@@ -23,6 +23,7 @@
     "scrape:dedupe": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli dedupe_score",
     "scrape:site-fixtures": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli export_site_fixtures",
     "scrape:run": "PYTHONPATH=.python-packages python3 -m scripts.directory_scrape.cli run",
+    "scrape:promote-directory": "PYTHONPATH=.python-packages python3 scripts/plaza_directory_site_export.py",
     "city-directory:discover": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli discover",
     "city-directory:run": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli run",
     "city-directory:export-approved": "PYTHONPATH=.python-packages python3 -m scripts.city_directory_import.cli export-approved",

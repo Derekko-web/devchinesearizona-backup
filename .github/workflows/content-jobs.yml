@@ -7,7 +7,6 @@ on:
     - cron: '45 11 * * *'
 
 permissions:
-  actions: write
   contents: write
   pull-requests: write
 
@@ -24,13 +23,6 @@ jobs:
     defaults:
       run:
         working-directory: dev.chinesearizona.com/web
-    env:
-      VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
-      VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
-      VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
-      VPS_SSH_KNOWN_HOSTS: ${{ secrets.DEV_VPS_SSH_KNOWN_HOSTS }}
-      VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
-      SSH_STRICT_HOST_KEY_CHECKING: yes
     steps:
       - uses: actions/checkout@v5
 
@@ -57,6 +49,9 @@ jobs:
       - name: Run directory scraper
         run: npm run scrape:run
 
+      - name: Promote directory scrape fixtures
+        run: npm run scrape:promote-directory
+
       - name: Verify scraper tests
         run: npm run scrape:test
 
@@ -69,6 +64,9 @@ jobs:
           path: |
             dev.chinesearizona.com/web/data/scrape-staging/**
             dev.chinesearizona.com/web/src/data/generated-scraped-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-directory-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-plaza-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-business-image-overrides.json
           if-no-files-found: warn
 
       - name: Open content update PR
@@ -82,6 +80,9 @@ jobs:
           changed_paths=(
             "data/scrape-staging"
             "src/data/generated-scraped-businesses.json"
+            "src/data/generated-directory-businesses.json"
+            "src/data/generated-plaza-businesses.json"
+            "src/data/generated-business-image-overrides.json"
           )
 
           if [ -z "$(git status --porcelain -- "${changed_paths[@]}")" ]; then
@@ -106,78 +107,6 @@ jobs:
 
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
-      - name: Configure SSH
-        run: |
-          set -euo pipefail
-          test -n "$VPS_HOST"
-          test -n "$VPS_PORT"
-          test -n "$VPS_USER"
-          test -n "$VPS_SSH_KEY"
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
-          chmod 600 ~/.ssh/dev_key
-          touch ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-          if [ -n "${VPS_SSH_KNOWN_HOSTS:-}" ]; then
-            printf '%s\n' "$VPS_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-            exit 0
-          fi
-
-          keyscan_output="$(mktemp)"
-          for attempt in 1 2 3 4 5; do
-            if ssh-keyscan -4 -H -T 30 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
-              cat "$keyscan_output" >> ~/.ssh/known_hosts
-              rm -f "$keyscan_output"
-              exit 0
-            fi
-
-            if [ "$attempt" -lt 5 ]; then
-              echo "ssh-keyscan failed; retrying in $((attempt * 5)) seconds." >&2
-              sleep $((attempt * 5))
-            fi
-          done
-
-          rm -f "$keyscan_output"
-          echo "Unable to fetch the VPS SSH host key after 5 attempts; falling back to StrictHostKeyChecking=accept-new." >&2
-          echo "SSH_STRICT_HOST_KEY_CHECKING=accept-new" >> "$GITHUB_ENV"
-
-      - name: Sync directory artifacts to runtime storage
-        run: |
-          set -euo pipefail
-
-          archive_path="$RUNNER_TEMP/directory-scrape-runtime.tar.gz"
-          tar -czf "$archive_path" \
-            data/scrape-staging \
-            src/data/generated-scraped-businesses.json
-
-          scp -i ~/.ssh/dev_key \
-            -P "$VPS_PORT" \
-            -o BatchMode=yes \
-            -o ConnectionAttempts=5 \
-            -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
-            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
-            "$archive_path" \
-            "$VPS_USER@$VPS_HOST:/tmp/directory-scrape-runtime-${GITHUB_RUN_ID}.tar.gz"
-
-          ssh -i ~/.ssh/dev_key \
-            -p "$VPS_PORT" \
-            -o BatchMode=yes \
-            -o ConnectionAttempts=5 \
-            -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
-            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
-            "$VPS_USER@$VPS_HOST" \
-            "GITHUB_RUN_ID=$GITHUB_RUN_ID bash -s" <<'REMOTE'
-          set -euo pipefail
-          runtime_root=/var/www/runtime-data/dev.chinesearizona.com/web
-          mkdir -p "$runtime_root"
-          tar -xzf "/tmp/directory-scrape-runtime-${GITHUB_RUN_ID}.tar.gz" -C "$runtime_root"
-          rm -f "/tmp/directory-scrape-runtime-${GITHUB_RUN_ID}.tar.gz"
-          REMOTE
-
   signal-desk:
     if: github.event_name != 'schedule' || github.event.schedule == '45 11 * * *'
     runs-on: ubuntu-latest
@@ -186,13 +115,6 @@ jobs:
     defaults:
       run:
         working-directory: dev.chinesearizona.com/web
-    env:
-      VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
-      VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
-      VPS_SSH_KEY: ${{ secrets.DEV_VPS_SSH_KEY }}
-      VPS_SSH_KNOWN_HOSTS: ${{ secrets.DEV_VPS_SSH_KNOWN_HOSTS }}
-      VPS_USER: ${{ secrets.DEV_VPS_USER || 'derek' }}
-      SSH_STRICT_HOST_KEY_CHECKING: yes
     steps:
       - uses: actions/checkout@v5
 
@@ -269,81 +191,3 @@ jobs:
             --body "Automated signal desk output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}."
 
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
-
-      - name: Configure SSH
-        run: |
-          set -euo pipefail
-          test -n "$VPS_HOST"
-          test -n "$VPS_PORT"
-          test -n "$VPS_USER"
-          test -n "$VPS_SSH_KEY"
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
-          chmod 600 ~/.ssh/dev_key
-          touch ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-          if [ -n "${VPS_SSH_KNOWN_HOSTS:-}" ]; then
-            printf '%s\n' "$VPS_SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-            exit 0
-          fi
-
-          keyscan_output="$(mktemp)"
-          for attempt in 1 2 3 4 5; do
-            if ssh-keyscan -4 -H -T 30 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
-              cat "$keyscan_output" >> ~/.ssh/known_hosts
-              rm -f "$keyscan_output"
-              exit 0
-            fi
-
-            if [ "$attempt" -lt 5 ]; then
-              echo "ssh-keyscan failed; retrying in $((attempt * 5)) seconds." >&2
-              sleep $((attempt * 5))
-            fi
-          done
-
-          rm -f "$keyscan_output"
-          echo "Unable to fetch the VPS SSH host key after 5 attempts; falling back to StrictHostKeyChecking=accept-new." >&2
-          echo "SSH_STRICT_HOST_KEY_CHECKING=accept-new" >> "$GITHUB_ENV"
-
-      - name: Sync signal desk artifacts to runtime storage
-        run: |
-          set -euo pipefail
-
-          archive_path="$RUNNER_TEMP/signal-desk-runtime.tar.gz"
-          tar -czf "$archive_path" \
-            data/signal-desk-staging \
-            src/data/generated-local-articles.json \
-            src/data/generated-signal-desk-queue.json
-
-          scp -i ~/.ssh/dev_key \
-            -P "$VPS_PORT" \
-            -o BatchMode=yes \
-            -o ConnectionAttempts=5 \
-            -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
-            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
-            "$archive_path" \
-            "$VPS_USER@$VPS_HOST:/tmp/signal-desk-runtime-${GITHUB_RUN_ID}.tar.gz"
-
-          ssh -i ~/.ssh/dev_key \
-            -p "$VPS_PORT" \
-            -o BatchMode=yes \
-            -o ConnectionAttempts=5 \
-            -o ConnectTimeout=20 \
-            -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
-            -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
-            "$VPS_USER@$VPS_HOST" \
-            "GITHUB_RUN_ID=$GITHUB_RUN_ID bash -s" <<'REMOTE'
-          set -euo pipefail
-          runtime_root=/var/www/runtime-data/dev.chinesearizona.com/web
-          mkdir -p "$runtime_root"
-          tar -xzf "/tmp/signal-desk-runtime-${GITHUB_RUN_ID}.tar.gz" -C "$runtime_root"
-          rm -f "/tmp/signal-desk-runtime-${GITHUB_RUN_ID}.tar.gz"
-          REMOTE
-
-      - name: Trigger Deploy Dev
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-dev.yml --repo "$GITHUB_REPOSITORY" --ref main --field sha="$(git rev-parse HEAD)"
