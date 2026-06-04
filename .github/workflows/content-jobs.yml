@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload directory scrape artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: directory-scrape-${{ github.run_id }}
           retention-days: 14
@@ -146,7 +146,7 @@ jobs:
 
       - name: Upload signal desk artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: signal-desk-${{ github.run_id }}
           retention-days: 14
