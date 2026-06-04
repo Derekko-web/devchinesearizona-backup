@@ -80,19 +80,45 @@ jobs:
       - name: Configure SSH
         if: steps.freshness.outputs.deploy == 'true'
         run: |
+          set -euo pipefail
           test -n "$VPS_HOST"
+          test -n "$VPS_PORT"
           test -n "$VPS_USER"
           test -n "$VPS_SSH_KEY"
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/dev_key
           chmod 600 ~/.ssh/dev_key
-          ssh-keyscan -p "$VPS_PORT" "$VPS_HOST" >> ~/.ssh/known_hosts
+
+          keyscan_output="$(mktemp)"
+          for attempt in 1 2 3 4 5; do
+            if ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST" > "$keyscan_output" && [ -s "$keyscan_output" ]; then
+              cat "$keyscan_output" >> ~/.ssh/known_hosts
+              rm -f "$keyscan_output"
+              exit 0
+            fi
+
+            if [ "$attempt" -lt 5 ]; then
+              echo "ssh-keyscan failed; retrying in $((attempt * 5)) seconds." >&2
+              sleep $((attempt * 5))
+            fi
+          done
+
+          rm -f "$keyscan_output"
+          echo "Unable to fetch the VPS SSH host key after 5 attempts." >&2
+          exit 1
 
       - name: Deploy exact SHA to VPS
         if: steps.freshness.outputs.deploy == 'true'
         run: |
-          ssh -i ~/.ssh/dev_key -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "DEPLOY_SHA=$DEPLOY_SHA CLOSED_LOOP_GITHUB_TOKEN=$CLOSED_LOOP_GITHUB_TOKEN bash -s" <<'REMOTE'
+          ssh -i ~/.ssh/dev_key \
+            -p "$VPS_PORT" \
+            -o BatchMode=yes \
+            -o ConnectionAttempts=5 \
+            -o ConnectTimeout=20 \
+            -o StrictHostKeyChecking=yes \
+            "$VPS_USER@$VPS_HOST" \
+            "DEPLOY_SHA=$DEPLOY_SHA CLOSED_LOOP_GITHUB_TOKEN=$CLOSED_LOOP_GITHUB_TOKEN bash -s" <<'REMOTE'
           set -euo pipefail
 
           cd /var/www

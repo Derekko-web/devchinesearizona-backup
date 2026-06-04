@@ -6,6 +6,21 @@ import { describe, expect, it } from 'vitest';
 const workflowPath = path.join(process.cwd(), '..', '..', '.github', 'workflows', 'deploy-dev.yml');
 const rootGitignorePath = path.join(process.cwd(), '..', '..', '.gitignore');
 
+describe('Deploy Dev SSH setup', () => {
+  it('retries VPS host key scans without disabling strict SSH host checking', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('for attempt in 1 2 3 4 5; do');
+    expect(workflow).toContain('ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST"');
+    expect(workflow).toContain('sleep $((attempt * 5))');
+    expect(workflow).toContain('Unable to fetch the VPS SSH host key after 5 attempts.');
+    expect(workflow).toContain('-o ConnectionAttempts=5');
+    expect(workflow).toContain('-o ConnectTimeout=20');
+    expect(workflow).toContain('-o StrictHostKeyChecking=yes');
+    expect(workflow).not.toContain('StrictHostKeyChecking=no');
+  });
+});
+
 describe('Deploy Dev dirty tree guard', () => {
   it('only migrates known generated runtime data paths before requiring a clean checkout', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');

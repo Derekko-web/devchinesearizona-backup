@@ -85,6 +85,13 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(runtimeWorkflow).toContain('DEV_VPS_RUNTIME_EGRESS_SSH_KEY');
     expect(runtimeWorkflow).toContain('approved runtime operator');
     expect(runtimeWorkflow).toContain('runtime_egress_key');
+    expect(runtimeWorkflow).toContain('for attempt in 1 2 3 4 5; do');
+    expect(runtimeWorkflow).toContain('ssh-keyscan -T 20 -p "$VPS_PORT" "$VPS_HOST"');
+    expect(runtimeWorkflow).toContain('Unable to fetch the VPS SSH host key after 5 attempts.');
+    expect(runtimeWorkflow).toContain('-o ConnectionAttempts=5');
+    expect(runtimeWorkflow).toContain('-o ConnectTimeout=20');
+    expect(runtimeWorkflow).toContain('-o StrictHostKeyChecking=yes');
+    expect(runtimeWorkflow).not.toContain('StrictHostKeyChecking=no');
     expect(runtimeWorkflow).toContain('apply-runtime-deploy.sh');
     expect(runtimeWorkflow).toContain('current_sha="$(git rev-parse HEAD)"');
     expect(applyRuntime).toContain('backup_existing_runtime_state');
