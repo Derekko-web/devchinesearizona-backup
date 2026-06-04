@@ -6,10 +6,20 @@ on:
     - cron: '15 10 * * *'
     - cron: '45 11 * * *'
 
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dev-content-jobs-${{ github.event.schedule || github.run_id }}
+  cancel-in-progress: false
+
 jobs:
   directory-scrape:
     if: github.event_name != 'schedule' || github.event.schedule == '15 10 * * *'
     runs-on: ubuntu-latest
+    environment:
+      name: dev-content
     defaults:
       run:
         working-directory: dev.chinesearizona.com/web
@@ -22,24 +32,86 @@ jobs:
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: dev.chinesearizona.com/web/requirements.txt
+
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --target .python-packages -r requirements.txt
+
       - name: Run directory scraper
-        env:
-          DIRECTORY_STORAGE_BUCKET: ${{ secrets.DIRECTORY_STORAGE_BUCKET }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          OPENAI_TRANSLATION_MODEL: ${{ secrets.OPENAI_TRANSLATION_MODEL }}
-          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: npm run scrape:run
+
+      - name: Promote directory scrape fixtures
+        run: npm run scrape:promote-directory
 
       - name: Verify scraper tests
         run: npm run scrape:test
 
+      - name: Upload directory scrape artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: directory-scrape-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            dev.chinesearizona.com/web/data/scrape-staging/**
+            dev.chinesearizona.com/web/src/data/generated-scraped-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-directory-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-plaza-businesses.json
+            dev.chinesearizona.com/web/src/data/generated-business-image-overrides.json
+          if-no-files-found: warn
+
+      - name: Open content update PR
+        id: content-pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTENT_BRANCH: content/directory-scrape-${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          changed_paths=(
+            "data/scrape-staging"
+            "src/data/generated-scraped-businesses.json"
+            "src/data/generated-directory-businesses.json"
+            "src/data/generated-plaza-businesses.json"
+            "src/data/generated-business-image-overrides.json"
+          )
+
+          if [ -z "$(git status --porcelain -- "${changed_paths[@]}")" ]; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "Directory scrape produced no checked-in changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$CONTENT_BRANCH"
+          git add "${changed_paths[@]}"
+          git commit -m "Update directory scrape outputs"
+          git push --set-upstream origin "$CONTENT_BRANCH"
+
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$CONTENT_BRANCH" \
+            --title "Update directory scrape outputs" \
+            --body "Automated directory scrape output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}."
+
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
+
   signal-desk:
     if: github.event_name != 'schedule' || github.event.schedule == '45 11 * * *'
     runs-on: ubuntu-latest
+    environment:
+      name: dev-content
     defaults:
       run:
         working-directory: dev.chinesearizona.com/web
@@ -52,11 +124,70 @@ jobs:
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: dev.chinesearizona.com/web/requirements.txt
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --target .python-packages -r requirements.txt
 
       - name: Generate signal desk content
         run: npm run scrape:signal-desk
 
       - name: Verify app tests
         run: npm test
+
+      - name: Upload signal desk artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: signal-desk-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            dev.chinesearizona.com/web/data/signal-desk-staging/**
+            dev.chinesearizona.com/web/src/data/generated-local-articles.json
+            dev.chinesearizona.com/web/src/data/generated-signal-desk-queue.json
+          if-no-files-found: warn
+
+      - name: Open content update PR
+        id: content-pr
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CONTENT_BRANCH: content/signal-desk-${{ github.run_id }}
+        run: |
+          set -euo pipefail
+
+          changed_paths=(
+            "data/signal-desk-staging"
+            "src/data/generated-local-articles.json"
+            "src/data/generated-signal-desk-queue.json"
+          )
+
+          if [ -z "$(git status --porcelain -- "${changed_paths[@]}")" ]; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "Signal desk generated no checked-in changes."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$CONTENT_BRANCH"
+          git add "${changed_paths[@]}"
+          git commit -m "Update signal desk outputs"
+          git push --set-upstream origin "$CONTENT_BRANCH"
+
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$CONTENT_BRANCH" \
+            --title "Update signal desk outputs" \
+            --body "Automated signal desk output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}."
+
+          echo "has_changes=true" >> "$GITHUB_OUTPUT"
