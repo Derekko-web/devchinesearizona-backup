@@ -53,9 +53,13 @@ const {
   parseHermesOutput: (text: string) => Array<Record<string, unknown>>;
   runWorker: (args: Record<string, unknown>) => Promise<Record<string, unknown>>;
 };
+const { writeStore } = require('../scripts/arizona_radar/core.cjs') as {
+  writeStore: (storePath: string, store: Record<string, unknown>) => void;
+};
 
 const originalEnv = {
   NODE_ENV: process.env.NODE_ENV,
+  RADAR_ALLOW_EMPTY_STORE_WRITE: process.env.RADAR_ALLOW_EMPTY_STORE_WRITE,
   RADAR_LOOKBACK_HOURS: process.env.RADAR_LOOKBACK_HOURS,
   RADAR_MAX_ITEMS: process.env.RADAR_MAX_ITEMS,
   RADAR_SOURCE_BATCH_SIZE: process.env.RADAR_SOURCE_BATCH_SIZE,
@@ -141,6 +145,50 @@ describe('Arizona Radar worker command parsing', () => {
 
     expect(worker).toContain('await collectDraftsFromFeeds(activeManifest, {');
     expect(worker).not.toContain('await collectDraftsFromFeeds(filteredManifest, {');
+  });
+
+  it('refuses accidental empty overwrites of non-empty file-backed article stores', () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-safe-write-'));
+    const storePath = path.join(directory, 'store.json');
+    const nonEmptyStore = {
+      version: 1,
+      jobControl: {
+        paused: false,
+        publishCap: 10,
+        updatedAt: '2026-06-01T12:00:00.000Z',
+      },
+      sourceControls: [],
+      runs: [],
+      candidates: [],
+      articles: [
+        {
+          id: 'existing-article',
+          slug: 'existing-real-article',
+          title: { en: 'Existing real article', zh: 'Existing real article' },
+          publishedAt: '2026-06-01T12:00:00.000Z',
+          isPublished: true,
+        },
+      ],
+    };
+
+    fs.writeFileSync(storePath, `${JSON.stringify(nonEmptyStore, null, 2)}\n`, 'utf8');
+
+    expect(() =>
+      writeStore(storePath, {
+        ...nonEmptyStore,
+        articles: [],
+      })
+    ).toThrow(/Refusing to overwrite non-empty radar store with an empty article list/);
+    expect(JSON.parse(fs.readFileSync(storePath, 'utf8')).articles).toHaveLength(1);
+
+    process.env.RADAR_ALLOW_EMPTY_STORE_WRITE = '1';
+    expect(() =>
+      writeStore(storePath, {
+        ...nonEmptyStore,
+        articles: [],
+      })
+    ).not.toThrow();
+    expect(JSON.parse(fs.readFileSync(storePath, 'utf8')).articles).toHaveLength(0);
   });
 });
 

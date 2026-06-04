@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
+import generatedSfBayLocalArticles from '@/data/generated-sf-bay-local-articles.json';
 import sfBayManifest from '@/data/sf-bay-radar-source-manifest.json';
 import { getArticleBySlugAsync, getCurrentArticlesAsync } from '@/lib/content';
 import { getRadarSourceManifest, getRadarStorePath } from '@/lib/radar';
@@ -307,13 +308,21 @@ describe('SF Bay Radar configuration', () => {
     });
   });
 
-  it('does not return Arizona articles when resolving SF Bay content', async () => {
+  it('does not return Arizona or removed static placeholder articles when resolving SF Bay content', async () => {
     const sfBayArticles = await getCurrentArticlesAsync(undefined, siteProfiles['sf-bay']);
     const arizonaSlug = 'housing-watch-where-tsmc-families-compare-first';
+    const removedStaticSlugs = [
+      'sf-bay-chinatown-downtown-resource-watch',
+      'south-bay-cupertino-community-services-watch',
+      'oakland-east-bay-community-anchor-watch',
+    ];
 
-    expect(sfBayArticles.map((article) => article.slug)).toContain('sf-bay-chinatown-downtown-resource-watch');
+    expect(generatedSfBayLocalArticles).toHaveLength(0);
     expect(sfBayArticles.map((article) => article.slug)).not.toContain(arizonaSlug);
+    for (const slug of removedStaticSlugs) {
+      expect(sfBayArticles.map((article) => article.slug)).not.toContain(slug);
+      expect(await getArticleBySlugAsync(slug, siteProfiles['sf-bay'])).toBeUndefined();
+    }
     expect(await getArticleBySlugAsync(arizonaSlug, siteProfiles['sf-bay'])).toBeUndefined();
-    expect(await getArticleBySlugAsync('sf-bay-chinatown-downtown-resource-watch', siteProfiles['sf-bay'])).toBeDefined();
   });
 });

@@ -69,9 +69,10 @@ describe('HomePageView', () => {
     expect(html).toContain('Chinatown Service Center');
     expect(html).toContain('San Gabriel');
     expect(html).toContain('LA opening radar starts with source-linked local summaries');
-    expect(html).toContain('/en/los-angeles-news/los-angeles-opening-radar-local-source-watch');
     expect(html).toContain('/city-site-images/la-chinatown-downtown.webp');
     expect(html).toContain('/city-site-images/alhambra-main-street.webp');
+    expect(html).not.toContain('/en/los-angeles-news/los-angeles-opening-radar-local-source-watch');
+    expect(html).not.toContain('/en/los-angeles-news/sgv-housing-transit-watch-source-linked-summaries');
     expect(html).not.toContain('Bido Cafe');
     expect(html).not.toContain('Hedy Li');
     expect(html).not.toContain('/directory-ai-replacements/');
@@ -79,7 +80,7 @@ describe('HomePageView', () => {
     expect(html).not.toContain('/relocation-guide');
   });
 
-  it('renders SF Bay homepage counts, articles, featured businesses, and local intro copy', async () => {
+  it('renders SF Bay homepage counts, story cards, featured businesses, and local intro copy', async () => {
     const [{ HomePageView }, { siteProfiles }] = await Promise.all([
       import('@/views/home-page'),
       import('@/lib/site-config'),
@@ -95,12 +96,15 @@ describe('HomePageView', () => {
     expect(html).toContain('99 Ranch Market Cupertino');
     expect(html).toContain('Chinese American International School');
     expect(html).toContain('Asian Law Alliance');
-    expect(html).toContain('SF Chinatown and Downtown Resource Watch');
-    expect(html).toContain('South Bay and Cupertino Services Watch');
-    expect(html).toContain('Oakland and East Bay Community Anchor Watch');
+    expect(html).toContain('SF Bay source-linked news desk is live');
+    expect(html).toContain('Bay Area directory separates city coverage');
+    expect(html).toContain('Community discovery focuses on Bay Area anchors');
     expect(html).toContain('/city-site-images/sf-chinatown-bay.webp');
     expect(html).toContain('/city-site-images/oakland-chinatown-street.webp');
     expect(html).toContain('/city-site-images/cupertino-tech-avenue.webp');
+    expect(html).not.toContain('SF Chinatown and Downtown Resource Watch');
+    expect(html).not.toContain('South Bay and Cupertino Services Watch');
+    expect(html).not.toContain('Oakland and East Bay Community Anchor Watch');
     expect(html).not.toContain('SF Bay News Desk: How ChineseSFBay Uses Local Sources');
     expect(html).not.toContain('Openings Watch: Bay Area Restaurant and Retail Signals Need Local Links');
     expect(html).not.toContain('Bido Cafe');
