@@ -237,7 +237,7 @@ describe('content selectors', () => {
             },
           ],
           heroImage:
-            'https://ewscripps.brightspotcdn.com/dims4/default/01d40c9/2147483647/strip/true/crop/1292x678+0+22/resize/1200x630!/quality/90?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fimage.jpg',
+            'https://npr.brightspotcdn.com/dims4/default/87a2150/2147483647/strip/true/crop/3000x1575+0+213/resize/1200x630!/quality/90?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F95%2F7b%2Facaa012c4ae09d702ce676524174%2F20240920-shooter-threats-presser22.JPG',
           heroImagePolicy: 'source_allowed',
           category: 'news',
           freshnessTier: 'breaking',
@@ -272,8 +272,10 @@ describe('content selectors', () => {
     expect(archivePage.articles.some((article) => article.slug === 'mesa-radar-housing-pulse')).toBe(true);
     expect(detailArticle?.series).toBe('arizona-radar');
     expect(detailArticle?.aiGeneratedSummary).toBe(true);
-    expect(detailArticle?.heroImage).toBe('/home-neighborhood/phoenix-card.webp');
-    expect(detailArticle?.heroImagePolicy).toBe('fallback_only');
+    expect(detailArticle?.heroImage).toBe(
+      'https://npr-brightspot.s3.amazonaws.com/95/7b/acaa012c4ae09d702ce676524174/20240920-shooter-threats-presser22.JPG'
+    );
+    expect(detailArticle?.heroImagePolicy).toBe('source_allowed');
   });
 
   it('loads Austin radar articles from the Austin store without falling back to Arizona content', async () => {

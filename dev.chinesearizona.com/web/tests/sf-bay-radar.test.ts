@@ -236,6 +236,7 @@ describe('SF Bay Radar configuration', () => {
           bodyZh: [
             '這則更新以精簡灣區摘要處理。讀者可先在這裡掌握實用交通脈絡，再透過來源連結查看完整報導與後續變更。',
           ],
+          heroImage: 'https://assets.sfstandard.com/image/994911177489/image_test/-S1200x630-FPNG',
           topicFingerprint: 'san francisco transit weekend families',
         },
       ],
@@ -287,6 +288,7 @@ describe('SF Bay Radar configuration', () => {
             '第二段繼續展開來源脈絡，已超出精簡摘要需求。',
             '第三段把項目變成全文改寫，灣區管線必須阻擋。',
           ],
+          heroImage: 'https://assets.sfstandard.com/image/994911177489/image_full/-S1200x630-FPNG',
           topicFingerprint: 'san francisco full rewrite enforcement',
         },
       ],
