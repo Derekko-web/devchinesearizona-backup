@@ -7,11 +7,11 @@ export function isShopRuntimeFallbackAllowed(): boolean {
 }
 
 export function isShopPublicLaunchEnabled(): boolean {
-  if (isShopRuntimeFallbackAllowed()) {
+  if (process.env.NODE_ENV !== 'production') {
     return true;
   }
 
   return isEnabled(
-    process.env.NEXT_PUBLIC_SHOP_PUBLIC_ENABLED ?? process.env.SHOP_PUBLIC_ENABLED
+    process.env.NEXT_PUBLIC_SHOP_PUBLIC_ENABLED
   );
 }

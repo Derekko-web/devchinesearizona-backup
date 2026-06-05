@@ -136,8 +136,8 @@ test.describe('signed-out auth and form validation', () => {
     await page.goto('/en/dashboard');
 
     await expect(page).toHaveURL(/\/en\/auth\/login\?next=%2Fen%2Fdashboard$/);
-    await expect(page.getByRole('heading', { name: 'Log In' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Join' })).toHaveAttribute(
+    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Create account' })).toHaveAttribute(
       'href',
       '/en/auth/join?next=%2Fen%2Fdashboard'
     );
@@ -157,11 +157,11 @@ test.describe('signed-out auth and form validation', () => {
 
   test('validates login form fields before attempting authentication', async ({ page }) => {
     await page.goto('/en/auth/login');
-    await expect(page.getByRole('heading', { name: 'Log In' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
 
     await page.getByLabel('Email address').fill('not-an-email');
     await page.locator('#password').fill('123');
-    await page.getByRole('button', { name: 'Log In With Email' }).click();
+    await page.getByRole('button', { name: 'Log in with email' }).click();
 
     await expect(page.getByText('Enter a valid email.')).toBeVisible();
     await expect(page.getByText('Password must be at least 6 characters.')).toBeVisible();
