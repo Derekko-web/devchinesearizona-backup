@@ -9,5 +9,5 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const site = await getCurrentSiteProfile();
-  return <HomePageView locale="en" site={site} />;
+  return await HomePageView({ locale: 'en', site });
 }

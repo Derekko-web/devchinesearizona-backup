@@ -264,7 +264,7 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
-    return <HomePageView locale={locale} site={site} />;
+    return await HomePageView({ locale, site });
   }
 
   if (isArizonaOnlyRouteSegments(segments) && !canServeArizonaOnlyContent(site)) {

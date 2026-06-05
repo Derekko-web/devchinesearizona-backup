@@ -1,8 +1,7 @@
-import { notFound } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
-import { communityNewsMetadata } from '@/lib/page-metadata';
+import { getNewsArchivePath, newsSearchParamsToString } from '@/lib/arizona-news';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
-import { NewsArchivePageView } from '@/views/site-pages';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,20 +16,11 @@ type PageProps = {
   }>;
 };
 
-export async function generateMetadata({ searchParams }: PageProps) {
-  const site = await getCurrentSiteProfile();
-  if (site.key !== 'los-angeles') {
-    return {};
-  }
-
-  return communityNewsMetadata('en', await searchParams, site);
+export function generateMetadata() {
+  return {};
 }
 
 export default async function Page({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  if (site.key !== 'los-angeles') {
-    notFound();
-  }
-
-  return await NewsArchivePageView({ locale: 'en', searchParams: await searchParams, site });
+  permanentRedirect(getNewsArchivePath(site, newsSearchParamsToString(await searchParams)));
 }

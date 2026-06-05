@@ -105,7 +105,7 @@ describe('public chrome', () => {
     expect(navbarHtml).toContain('/zh/business');
     expect(navbarHtml).toContain('商家');
     expect(navbarHtml).toContain('Business');
-    expect(navbarHtml).toContain('/zh/arizona-news');
+    expect(navbarHtml).toContain('/zh/news');
     expect(navbarHtml).toContain('亞利桑那新聞');
     expect(navbarHtml).toContain('/zh/relocation-guide');
     expect(navbarHtml).not.toContain('/zh/directory');
@@ -134,9 +134,10 @@ describe('public chrome', () => {
 
     expect(navbarHtml).toContain('/zh/business');
     expect(navbarHtml).toContain('/zh/community');
-    expect(navbarHtml).toContain('/zh/local-news');
+    expect(navbarHtml).toContain('/zh/news');
     expect(navbarHtml).toContain('奥斯汀新聞');
     expect(navbarHtml).not.toContain('/zh/arizona-news');
+    expect(navbarHtml).not.toContain('/zh/local-news');
     expect(navbarHtml).not.toContain('/zh/relocation-guide');
   });
 
@@ -151,6 +152,7 @@ describe('public chrome', () => {
     expect(navbarHtml).toContain('/zh/news');
     expect(navbarHtml).toContain('灣區新聞');
     expect(navbarHtml).not.toContain('/zh/arizona-news');
+    expect(navbarHtml).not.toContain('/zh/local-news');
     expect(navbarHtml).not.toContain('/zh/relocation-guide');
   });
 

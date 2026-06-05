@@ -497,8 +497,8 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       allowDefaultFallback: true,
     },
     news: {
-      routePath: '/arizona-news',
-      archivePath: '/arizona-news/archive',
+      routePath: '/news',
+      archivePath: '/news/archive',
       articleDataSource: {
         state: 'live',
         label: 'Arizona Radar and editorial articles',
@@ -686,8 +686,8 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       allowDefaultFallback: false,
     },
     news: {
-      routePath: '/los-angeles-news',
-      archivePath: '/los-angeles-news/archive',
+      routePath: '/news',
+      archivePath: '/news/archive',
       articleDataSource: {
         state: 'live',
         label: 'Los Angeles Radar generated summaries',
@@ -1153,8 +1153,8 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       allowDefaultFallback: false,
     },
     news: {
-      routePath: '/local-news',
-      archivePath: '/local-news/archive',
+      routePath: '/news',
+      archivePath: '/news/archive',
       articleDataSource: {
         state: 'live',
         label: 'Austin Radar article data',

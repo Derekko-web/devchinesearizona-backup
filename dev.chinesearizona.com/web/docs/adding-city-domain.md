@@ -43,7 +43,7 @@ Every city PR should extend tests so CI catches accidental fallback:
 - Host resolution maps the city domain to the intended city key.
 - Placeholder or incomplete city configs return `hasLiveDirectoryData(site) === false` and `hasLiveNewsData(site) === false`.
 - Directory metadata for incomplete cities is `noindex` and says local data is required.
-- Homepage rendering for incomplete cities does not include Arizona business slugs, Arizona image paths, or `/arizona-news/` links.
+- Homepage rendering for incomplete cities does not include Arizona business slugs, Arizona image paths, or legacy Arizona news links.
 - News/Radar views for incomplete cities render the missing-source state and do not include Arizona article slugs or source names.
 
 ## Activation Steps

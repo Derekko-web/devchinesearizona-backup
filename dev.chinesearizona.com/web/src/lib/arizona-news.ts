@@ -2,8 +2,8 @@ import { appendSearch, withLocale } from '@/lib/routing';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type { Locale } from '@/lib/types';
 
-export const ARIZONA_NEWS_PATH = '/arizona-news';
-export const ARIZONA_NEWS_ARCHIVE_PATH = '/arizona-news/archive';
+export const ARIZONA_NEWS_PATH = '/news';
+export const ARIZONA_NEWS_ARCHIVE_PATH = '/news/archive';
 
 function normalizeBasePath(path: string): string {
   const normalized = `/${String(path || '').replace(/^\/+|\/+$/g, '')}`;
@@ -92,6 +92,22 @@ export type SiteNewsRouteMatch =
   | { kind: 'index' }
   | { kind: 'archive' }
   | { kind: 'article'; slug: string };
+
+export function newsSearchParamsToString(
+  params: Record<string, string | string[] | undefined>
+): string {
+  const search = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value === 'string' && value.length > 0) {
+      search.set(key, value);
+    } else if (Array.isArray(value)) {
+      value.filter(Boolean).forEach((item) => search.append(key, item));
+    }
+  }
+
+  return search.toString();
+}
 
 export function getSiteNewsPath(
   site: SiteProfile = defaultSiteProfile,

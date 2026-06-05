@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
-import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesForSite } from '@/lib/content';
+import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesAsync } from '@/lib/content';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
@@ -335,18 +335,19 @@ function StoryCard({ story }: { story: HomeStoryCard }) {
   );
 }
 
-export function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
+export async function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
   const home = site.home;
   const directoryIsLive = hasLiveDirectoryData(site);
   const newsIsLive = hasLiveNewsData(site);
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
   const allBusinesses = directoryIsLive ? getBusinessesForSite(locale, site, { sort: 'featured' }) : [];
+  const currentArticles = newsIsLive ? await getCurrentArticlesAsync(undefined, site) : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
   );
   const categoryBySlug = new Map(categories.map((category) => [category.slug, category]));
   const articleStoryCards: HomeStoryCard[] = newsIsLive
-    ? getCurrentArticlesForSite(site)
+    ? currentArticles
         .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
         .filter((article) => hasLatinCharacters(article.title.en) && !hasCjkCharacters(article.title.en))
         .slice(0, 3)
@@ -370,9 +371,12 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
         date: copy(locale, story.date.en, story.date.zh),
       }))
     : [];
-  const storyCards = [...articleStoryCards, ...configuredStoryCards]
-    .filter((story, index, stories) => stories.findIndex((candidate) => candidate.href === story.href && candidate.title === story.title) === index)
-    .slice(0, 3);
+  const storyCards =
+    articleStoryCards.length > 0
+      ? articleStoryCards
+      : configuredStoryCards
+          .filter((story, index, stories) => stories.findIndex((candidate) => candidate.href === story.href && candidate.title === story.title) === index)
+          .slice(0, 3);
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));

@@ -1,8 +1,7 @@
-import { notFound } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
-import { communityRadarMetadata } from '@/lib/page-metadata';
+import { getNewsPath, newsSearchParamsToString } from '@/lib/arizona-news';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
-import { CommunityRadarPageView } from '@/views/site-pages';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,18 +12,11 @@ type PageProps = {
   }>;
 };
 
-export async function generateMetadata() {
-  const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
-    return {};
-  }
-  return communityRadarMetadata('en', site);
+export function generateMetadata() {
+  return {};
 }
 
 export default async function Page({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
-    notFound();
-  }
-  return await CommunityRadarPageView({ locale: 'en', searchParams: await searchParams, site });
+  permanentRedirect(getNewsPath(site, newsSearchParamsToString(await searchParams)));
 }
