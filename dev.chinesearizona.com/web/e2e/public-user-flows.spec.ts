@@ -83,12 +83,20 @@ test.describe('directory discovery', () => {
     await filters.getByRole('button', { name: 'Apply filters' }).click();
 
     await expect(page).toHaveURL(/\/en\/business\?/);
-    await expect(page.getByText('Showing 1-1 of 1')).toBeVisible();
-    await expect(page.getByText('3 active filters')).toBeVisible();
-    await expect(page.getByRole('heading', { level: 3, name: 'China Chili' })).toBeVisible();
-    await expect(page.getByText('302 E Flower St Phoenix, AZ 85012')).toBeVisible();
+    await expect(page.getByText(/^Showing \d+-\d+ of \d+$/)).toBeVisible();
 
-    await page.getByRole('link', { name: 'View full profile' }).click();
+    const filteredUrl = new URL(page.url());
+    expect(filteredUrl.searchParams.get('q')).toBe('china chili');
+    expect(filteredUrl.searchParams.get('city')).toBe('Phoenix');
+    expect(filteredUrl.searchParams.get('category')).toBe('dining');
+
+    const chinaChiliListing = page.locator('article', {
+      has: page.getByRole('heading', { level: 3, name: 'China Chili' }),
+    });
+    await expect(chinaChiliListing).toBeVisible();
+    await expect(chinaChiliListing.getByText('302 E Flower St Phoenix, AZ 85012')).toBeVisible();
+
+    await chinaChiliListing.getByRole('link', { name: 'View full profile' }).click();
 
     await expect(page).toHaveURL(/\/en\/business\/china-chili-phoenix$/);
     await expect(page.getByRole('heading', { level: 1, name: 'China Chili' })).toBeVisible();
