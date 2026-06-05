@@ -211,6 +211,19 @@ function sortArticlesNewestFirst(articles: Article[]): Article[] {
     );
 }
 
+function dedupeArticlesBySlug(articles: Article[]): Article[] {
+  const seen = new Set<string>();
+
+  return articles.filter((article) => {
+    if (seen.has(article.slug)) {
+      return false;
+    }
+
+    seen.add(article.slug);
+    return true;
+  });
+}
+
 function isArticleSeries(value: string): value is ArticleSeries {
   return (
     value === 'housing-watch' ||
@@ -465,11 +478,13 @@ export async function getArticlesAsync(
   limit?: number,
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
-  const sortedArticles = sortArticlesNewestFirst([
-    ...getLocalArticlesForSite(site),
-    ...getImportedArticlesForSite(site),
-    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
-  ]);
+  const sortedArticles = dedupeArticlesBySlug(
+    sortArticlesNewestFirst([
+      ...getLocalArticlesForSite(site),
+      ...getImportedArticlesForSite(site),
+      ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
+    ])
+  );
 
   return typeof limit === 'number' ? sortedArticles.slice(0, limit) : sortedArticles;
 }
@@ -491,10 +506,12 @@ export async function getCurrentArticlesAsync(
   limit?: number,
   site: SiteProfile = defaultSiteProfile
 ): Promise<Article[]> {
-  const articles = sortArticlesNewestFirst([
-    ...getLocalArticlesForSite(site),
-    ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
-  ]);
+  const articles = dedupeArticlesBySlug(
+    sortArticlesNewestFirst([
+      ...getLocalArticlesForSite(site),
+      ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
+    ])
+  );
 
   return typeof limit === 'number' ? articles.slice(0, limit) : articles;
 }
@@ -660,10 +677,12 @@ export async function getArticleArchivePageAsync(
   const bucketArticles =
     filters.bucket === 'legacy'
       ? sortArticlesNewestFirst(getImportedArticlesForSite(site))
-      : sortArticlesNewestFirst([
-          ...getLocalArticlesForSite(site),
-          ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
-        ]);
+      : dedupeArticlesBySlug(
+          sortArticlesNewestFirst([
+            ...getLocalArticlesForSite(site),
+            ...(await getPublishedRadarArticlesAsArticlesAsync(undefined, { site })),
+          ])
+        );
   const availableYears = Array.from(
     new Set(bucketArticles.map((article) => articlePublishedParts(article).year))
   ).sort((left, right) => right - left);

@@ -2217,13 +2217,13 @@ export const guides: Guide[] = [
   },
 ];
 
-export const localArticles: Article[] = (generatedLocalArticles as Article[]).map((article) =>
-  normalizeImportedArticle(article as ImportedArticle)
-);
+export const localArticles: Article[] = (
+  generatedLocalArticles as unknown as ImportedArticle[]
+).map((article) => normalizeImportedArticle(article));
 
-export const sfBayLocalArticles: Article[] = (generatedSfBayLocalArticles as Article[]).map((article) =>
-  normalizeImportedArticle(article as ImportedArticle)
-);
+export const sfBayLocalArticles: Article[] = (
+  generatedSfBayLocalArticles as unknown as ImportedArticle[]
+).map((article) => normalizeImportedArticle(article));
 
 export const monitoredSources = monitoredSourcesData as MonitoredSource[];
 

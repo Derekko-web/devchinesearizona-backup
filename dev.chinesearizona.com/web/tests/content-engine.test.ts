@@ -4,42 +4,43 @@ import { getArticleBySlug, getArticles, getCommunityTrendingArticles } from '@/l
 import { getMonitoredSources, getSignalDeskQueue, getSignalDeskSummary } from '@/lib/signal-desk';
 
 describe('content engine', () => {
-  it('publishes original local articles with series metadata and directory CTAs', () => {
-    const article = getArticleBySlug('housing-watch-where-tsmc-families-compare-first');
+  it('publishes fresh generated local articles with source metadata and hero images', () => {
+    const article = getArticleBySlug('black-rock-coffee-bar-lines-up-three-arizona-shops');
 
     expect(article).toBeDefined();
-    expect(article?.series).toBe('housing-watch');
+    expect(article?.series).toBe('community-wire');
     expect(article?.sourcePolicy).toBe('summary_link');
     expect(article?.title.zh).toBeTruthy();
     expect(article?.excerpt.zh).toBeTruthy();
+    expect(article?.heroImage).toContain('whatnow.com');
     expect(article?.sourceLinks.length).toBeGreaterThan(0);
-    expect(article?.ctaBusinessSlugs.length).toBeGreaterThan(0);
+    expect(article?.sourceName).toBe('What Now Phoenix');
   });
 
-  it('keeps trend radar stories in signal-only mode without source-media hero images', () => {
-    const article = getArticleBySlug('trend-radar-phoenix-apartment-myths-short-video-apps');
+  it('keeps generated article images tied to source media', () => {
+    const article = getArticleBySlug('atashi-yokocho-planned-for-scottsdale-s-the-sydney');
 
     expect(article).toBeDefined();
-    expect(article?.sourcePolicy).toBe('signal_only');
-    expect(article?.heroImage).toContain('images.unsplash.com');
-    expect(article?.sourceLinks[0]?.url).toContain('tiktok.com');
+    expect(article?.sourcePolicy).toBe('summary_link');
+    expect(article?.heroImage).toContain('whatnow.com');
+    expect(article?.sourceLinks[0]?.url).toContain('whatnow.com/phoenix');
   });
 
   it('sorts the newest local series items ahead of older imported archive pieces', () => {
     const articles = getArticles(3);
 
-    expect(articles[0]?.slug).toBe('housing-watch-where-tsmc-families-compare-first');
-    expect(articles[1]?.slug).toBe('tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure');
+    expect(articles[0]?.slug).toBe('black-rock-coffee-bar-lines-up-three-arizona-shops');
+    expect(articles[1]?.slug).toBe('atashi-yokocho-planned-for-scottsdale-s-the-sydney');
   });
 
-  it('curates a trending rail around TSMC, air service, and Arizona restaurant openings', () => {
+  it('curates the trending rail from the freshest generated local articles', () => {
     const articles = getCommunityTrendingArticles(4);
 
     expect(articles.map((article) => article.slug)).toEqual([
-      'tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure',
-      'phoenix-route-watch-asia-connector-playbook',
-      'trend-radar-what-phoenix-food-posts-keep-highlighting',
-      'restaurant-opening-radar-east-valley-plaza-shifts',
+      'black-rock-coffee-bar-lines-up-three-arizona-shops',
+      'atashi-yokocho-planned-for-scottsdale-s-the-sydney',
+      'luna-grill-plans-three-more-phoenix-area-restaurants-in-2026',
+      'grandioso-targets-mid-july-debut-on-phoenix-s-grand-avenue',
     ]);
   });
 
