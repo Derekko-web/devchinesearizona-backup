@@ -97,6 +97,18 @@ const DEFAULT_SOURCE_NAME =
   process.env.RADAR_FALLBACK_SOURCE_NAME ||
   (process.env.RADAR_REGION_NAME ? `${process.env.RADAR_REGION_NAME} Source` : 'Arizona Source');
 
+function isKnownBrokenRadarHeroUrl(value) {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    const isBrightspotCdn =
+      hostname === 'brightspotcdn.com' || hostname.endsWith('.brightspotcdn.com');
+    return isBrightspotCdn && url.pathname.includes('/dims4/');
+  } catch (_error) {
+    return false;
+  }
+}
+
 function nowIso() {
   return new Date().toISOString();
 }
@@ -128,6 +140,10 @@ function radarHeroImageLooksRenderable(value) {
 
   try {
     const url = new URL(rawValue);
+    if (isKnownBrokenRadarHeroUrl(rawValue)) {
+      return false;
+    }
+
     return ['http:', 'https:'].includes(url.protocol);
   } catch (_error) {
     return false;

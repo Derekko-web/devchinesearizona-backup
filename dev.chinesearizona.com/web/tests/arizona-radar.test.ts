@@ -197,16 +197,27 @@ describe('Arizona Radar core', () => {
           heroImage: 'https://example.com/favicon.ico',
           heroImagePolicy: 'source_allowed',
         },
+        {
+          id: 'stored-brightspot-transform-image',
+          candidateId: 'candidate-brightspot-transform-image',
+          slug: 'stored-brightspot-transform-image',
+          lane: 'community',
+          heroImage:
+            'https://npr.brightspotcdn.com/dims4/default/87a2150/2147483647/strip/true/crop/3000x1575+0+213/resize/1200x630!/quality/90?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F95%2F7b%2Fimage.JPG',
+          heroImagePolicy: 'source_allowed',
+        },
       ],
     });
 
-    expect(store.articles).toHaveLength(2);
+    expect(store.articles).toHaveLength(3);
     expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
     expect(store.articles[0]?.heroImage).toBe('/home-neighborhood/phoenix-card.webp');
     expect(store.articles[1]?.heroImagePolicy).toBe('fallback_only');
     expect(store.articles[1]?.heroImage).toBe(
       '/directory-ai-replacements/old-town-taste-tempe-v2.webp'
     );
+    expect(store.articles[2]?.heroImagePolicy).toBe('fallback_only');
+    expect(store.articles[2]?.heroImage).toBe('/home-neighborhood/tempe-card.webp');
   });
 
   it('repairs city radar article images with site-local fallback assets', () => {
@@ -411,6 +422,39 @@ describe('Arizona Radar core', () => {
     expect(result.summary.publishedCount).toBe(1);
     expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
     expect(result.store.articles[0]?.heroImage).toBe('/city-site-images/austin-skyline-lake.webp');
+  });
+
+  it('uses city-local fallback images for generated LA articles with broken Brightspot transforms', () => {
+    const result = applyDraftsToStore(
+      defaultStoreSnapshot(),
+      [
+        {
+          sourceName: 'Los Angeles Times',
+          sourceUrl: 'https://www.latimes.com/california/story/test-item',
+          canonicalUrl: 'https://www.latimes.com/california/story/test-item',
+          sourcePublishedAt: '2026-06-05T10:00:00.000Z',
+          titleEn: 'Los Angeles update uses fallback art',
+          titleZh: '洛杉磯更新使用備用圖片',
+          excerptEn: 'A concise Los Angeles summary keeps source links while replacing broken CDN art.',
+          excerptZh: '一則簡短的洛杉磯摘要保留來源連結並改用備用圖片。',
+          bodyEn: ['Los Angeles readers get a source-linked summary with stable local artwork.'],
+          bodyZh: ['洛杉磯讀者可閱讀附來源連結並使用穩定本地圖片的摘要。'],
+          topicFingerprint: 'los angeles broken brightspot fallback art',
+          heroImage:
+            'https://ca-times.brightspotcdn.com/dims4/default/cdbaa47/2147483647/strip/true/crop/3900x2048+0+285/resize/1200x630!/quality/75?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fimage.jpg',
+        },
+      ],
+      {
+        manifest: [...manifest],
+        publishCap: 10,
+        now: '2026-06-05T12:00:00.000Z',
+        siteKey: 'los-angeles',
+      }
+    );
+
+    expect(result.summary.publishedCount).toBe(1);
+    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
+    expect(result.store.articles[0]?.heroImage).toBe('/city-site-images/los-angeles-community-hero.webp');
   });
 
   it('suppresses duplicates by canonical url for web items and by topic fingerprint for social items', () => {
