@@ -318,6 +318,7 @@ jobs:
           export ARTICLE_ZH_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/chinese-translation-cache.json"
           export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"
           npm ci
+          node scripts/arizona_radar/repair_current_article_images.cjs --strict
           npm run build
 
           export GIT_SHA="$DEPLOY_SHA"
