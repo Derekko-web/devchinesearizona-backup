@@ -29,7 +29,7 @@ test.describe('shop signed-out handoff', () => {
     await expect(page).toHaveURL(
       /\/en\/auth\/login\?next=%2Fen%2Fshop%2Fitem%2Fmacbook-air-m2-13-east-valley$/
     );
-    await expect(page.getByRole('heading', { name: 'Log In' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
     expect(unsafeCheckoutRequests).toEqual([]);
   });
 
@@ -39,8 +39,8 @@ test.describe('shop signed-out handoff', () => {
     await page.goto('/en/shop/checkout');
 
     await expect(page).toHaveURL(/\/en\/auth\/login\?next=%2Fen%2Fshop%2Fcheckout$/);
-    await expect(page.getByRole('heading', { name: 'Log In' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Join' })).toHaveAttribute(
+    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Create account' })).toHaveAttribute(
       'href',
       '/en/auth/join?next=%2Fen%2Fshop%2Fcheckout'
     );
