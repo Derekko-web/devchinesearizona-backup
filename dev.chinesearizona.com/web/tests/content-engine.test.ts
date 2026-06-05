@@ -5,7 +5,7 @@ import { getMonitoredSources, getSignalDeskQueue, getSignalDeskSummary } from '@
 
 describe('content engine', () => {
   it('publishes fresh generated local articles with source metadata and hero images', () => {
-    const article = getArticleBySlug('angry-crab-shack-sets-june-11-opening-in-chandler');
+    const article = getArticleBySlug('black-rock-coffee-bar-lines-up-three-arizona-shops');
 
     expect(article).toBeDefined();
     expect(article?.series).toBe('community-wire');
@@ -18,7 +18,7 @@ describe('content engine', () => {
   });
 
   it('keeps generated article images tied to source media', () => {
-    const article = getArticleBySlug('black-rock-coffee-bar-lines-up-three-arizona-shops');
+    const article = getArticleBySlug('atashi-yokocho-planned-for-scottsdale-s-the-sydney');
 
     expect(article).toBeDefined();
     expect(article?.sourcePolicy).toBe('summary_link');
@@ -29,18 +29,18 @@ describe('content engine', () => {
   it('sorts the newest local series items ahead of older imported archive pieces', () => {
     const articles = getArticles(3);
 
-    expect(articles[0]?.slug).toBe('angry-crab-shack-sets-june-11-opening-in-chandler');
-    expect(articles[1]?.slug).toBe('black-rock-coffee-bar-lines-up-three-arizona-shops');
+    expect(articles[0]?.slug).toBe('black-rock-coffee-bar-lines-up-three-arizona-shops');
+    expect(articles[1]?.slug).toBe('atashi-yokocho-planned-for-scottsdale-s-the-sydney');
   });
 
   it('curates the trending rail from the freshest generated local articles', () => {
     const articles = getCommunityTrendingArticles(4);
 
     expect(articles.map((article) => article.slug)).toEqual([
-      'angry-crab-shack-sets-june-11-opening-in-chandler',
       'black-rock-coffee-bar-lines-up-three-arizona-shops',
-      'luna-grill-plans-three-more-phoenix-area-restaurants-in-2026',
       'atashi-yokocho-planned-for-scottsdale-s-the-sydney',
+      'luna-grill-plans-three-more-phoenix-area-restaurants-in-2026',
+      'grandioso-targets-mid-july-debut-on-phoenix-s-grand-avenue',
     ]);
   });
 
