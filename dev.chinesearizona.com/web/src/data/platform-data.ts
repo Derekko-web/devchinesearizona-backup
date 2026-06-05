@@ -21,6 +21,18 @@ import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrid
 import monitoredSourcesData from '@/data/monitored-sources.json';
 import { formatPhoneNumber } from '@/lib/phone';
 
+type JsonArrayImport<T> = T[] | { default: T[] };
+
+function unwrapJsonArray<T>(value: JsonArrayImport<T>, label: string): T[] {
+  const arrayValue = Array.isArray(value) ? value : value.default;
+
+  if (!Array.isArray(arrayValue)) {
+    throw new Error(`${label} must be an array`);
+  }
+
+  return arrayValue;
+}
+
 export type ImportedBusiness = Omit<
   Business,
   'address' | 'serviceAreaText' | 'phone' | 'email' | 'website' | 'menuUrl' | 'priceRange' | 'coordinates'
@@ -2217,13 +2229,19 @@ export const guides: Guide[] = [
   },
 ];
 
-export const localArticles: Article[] = (
-  generatedLocalArticles as unknown as ImportedArticle[]
-).map((article) => normalizeImportedArticle(article));
+export const localArticles: Article[] = unwrapJsonArray(
+  generatedLocalArticles as JsonArrayImport<ImportedArticle>,
+  'generated-local-articles'
+).map((article) =>
+  normalizeImportedArticle(article)
+);
 
-export const sfBayLocalArticles: Article[] = (
-  generatedSfBayLocalArticles as unknown as ImportedArticle[]
-).map((article) => normalizeImportedArticle(article));
+export const sfBayLocalArticles: Article[] = unwrapJsonArray(
+  generatedSfBayLocalArticles as JsonArrayImport<ImportedArticle>,
+  'generated-sf-bay-local-articles'
+).map((article) =>
+  normalizeImportedArticle(article)
+);
 
 export const monitoredSources = monitoredSourcesData as MonitoredSource[];
 

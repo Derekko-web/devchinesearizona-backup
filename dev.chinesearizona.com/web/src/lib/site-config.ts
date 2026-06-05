@@ -765,11 +765,12 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Los Angeles city guide image',
         zh: '洛杉磯城市指南圖片',
       },
-      heroForegroundImageUrl: '/city-site-images/la-chinatown-downtown.webp',
+      heroForegroundImageUrl: '/city-site-images/los-angeles-city-shape.webp',
       heroForegroundAlt: {
-        en: 'Los Angeles platform mark',
-        zh: '洛杉磯平台標記',
+        en: 'Los Angeles skyline and palm landscape',
+        zh: '洛杉磯天際線與棕櫚城市風景',
       },
+      heroForegroundTransparent: true,
       heroBadge: {
         en: 'LOS ANGELES, CALIFORNIA',
         zh: '洛杉磯，加州',
@@ -1001,11 +1002,12 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'SF Bay city launch image',
         zh: '灣區城市首頁圖',
       },
-      heroForegroundImageUrl: '/city-site-images/sf-chinatown-bay.webp',
+      heroForegroundImageUrl: '/city-site-images/sf-bay-city-shape.webp',
       heroForegroundAlt: {
-        en: 'SF Bay local platform mark',
-        zh: '灣區平台標記',
+        en: 'San Francisco Bay skyline and bridge landscape',
+        zh: '舊金山灣區天際線與橋景',
       },
+      heroForegroundTransparent: true,
       heroBadge: {
         en: 'SF BAY, CALIFORNIA',
         zh: '舊金山灣區，加州',
@@ -1219,11 +1221,12 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         en: 'Austin city guide visual',
         zh: '奥斯汀城市指南视觉图',
       },
-      heroForegroundImageUrl: '/city-site-images/austin-skyline-lake.webp',
+      heroForegroundImageUrl: '/city-site-images/austin-city-shape.webp',
       heroForegroundAlt: {
-        en: 'ChineseAustin platform mark',
-        zh: 'ChineseAustin 平台标识',
+        en: 'Austin skyline and lake landscape',
+        zh: '奥斯汀天际线与湖景',
       },
+      heroForegroundTransparent: true,
       heroBadge: {
         en: 'AUSTIN, TEXAS',
         zh: '奥斯汀，德州',
