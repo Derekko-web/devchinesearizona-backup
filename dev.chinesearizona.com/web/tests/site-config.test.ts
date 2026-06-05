@@ -35,8 +35,8 @@ describe('city site configuration', () => {
     expect(site.directory.allowDefaultFallback).toBe(false);
     expect(site.news.allowDefaultFallback).toBe(false);
     expect(site.directory.listingSource.path).toBe('src/data/sites/austin/businesses.json');
-    expect(site.news.routePath).toBe('/local-news');
-    expect(site.news.archivePath).toBe('/local-news/archive');
+    expect(site.news.routePath).toBe('/news');
+    expect(site.news.archivePath).toBe('/news/archive');
     expect(site.news.articleDataSource.path).toBe('data/sites/austin/radar-runtime/store.json');
     expect(site.news.sourceManifest.path).toBe('src/data/austin-radar-source-manifest.json');
     expect(JSON.stringify(site)).not.toContain('generated-directory-businesses.json');
@@ -142,7 +142,8 @@ describe('city site configuration', () => {
     expect(site.directory.categorySlugs).toEqual(
       expect.arrayContaining(['dining', 'shopping', 'real-estate', 'legal-finance', 'medical'])
     );
-    expect(site.news.routePath).toBe('/los-angeles-news');
+    expect(site.news.routePath).toBe('/news');
+    expect(site.news.archivePath).toBe('/news/archive');
     expect(site.news.articleDataSource.path).toBe(
       'data/sites/los-angeles/radar-runtime/store.json'
     );

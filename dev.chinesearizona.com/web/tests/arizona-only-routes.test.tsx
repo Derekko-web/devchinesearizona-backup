@@ -113,6 +113,45 @@ describe('Arizona-only route guards', () => {
     }
   });
 
+  it('redirects localized legacy news routes to the normalized news route', async () => {
+    const redirectCases = [
+      {
+        host: 'dev.chinesearizona.com',
+        locale: 'zh',
+        segments: ['arizona-news'],
+        searchParams: { lane: 'official', page: '2' },
+        expectedUrl: '/zh/news?lane=official&page=2',
+      },
+      {
+        host: 'www.chineseaustin.com',
+        locale: 'en',
+        segments: ['local-news', 'archive'],
+        searchParams: { lane: 'community' },
+        expectedUrl: '/en/news/archive?lane=community',
+      },
+      {
+        host: 'chineselosangeles.com',
+        locale: 'en',
+        segments: ['los-angeles-news', 'la-source-summary'],
+        searchParams: {},
+        expectedUrl: '/en/news/la-source-summary',
+      },
+    ];
+
+    for (const { host, locale, segments, searchParams, expectedUrl } of redirectCases) {
+      vi.resetModules();
+      mockRequestHost(host);
+
+      const localizedPage = await import('@/app/[locale]/[[...segments]]/page');
+      await expect(
+        localizedPage.default({
+          params: Promise.resolve({ locale, segments }),
+          searchParams: Promise.resolve(searchParams),
+        })
+      ).rejects.toMatchObject({ url: expectedUrl });
+    }
+  });
+
   it('blocks unlocalized Arizona-only route files for Austin hosts', async () => {
     vi.resetModules();
     mockRequestHost('www.chineseaustin.com');

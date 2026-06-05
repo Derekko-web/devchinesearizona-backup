@@ -113,6 +113,12 @@ function isSiteNewsRoute(segments: string[], routeSegment: string): boolean {
   return segments[0] === routeSegment;
 }
 
+const legacyNewsRouteSegments = new Set(['arizona-news', 'local-news', 'los-angeles-news']);
+
+function isLegacyNewsRoute(segments: string[], routeSegment: string): boolean {
+  return Boolean(segments[0]) && segments[0] !== routeSegment && legacyNewsRouteSegments.has(segments[0]);
+}
+
 export async function generateMetadata({ params, searchParams }: PageProps) {
   const { locale, segments = [] } = await params;
   if (!isLocale(locale)) {
@@ -264,11 +270,27 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   const newsRouteSegment = getNewsRouteSegment(site);
 
   if (segments.length === 0) {
-    return <HomePageView locale={locale} site={site} />;
+    return await HomePageView({ locale, site });
   }
 
   if (isArizonaOnlyRouteSegments(segments) && !canServeArizonaOnlyContent(site)) {
     notFound();
+  }
+
+  if (isLegacyNewsRoute(segments, newsRouteSegment)) {
+    const query = await searchParams;
+
+    if (segments.length === 1) {
+      permanentRedirect(getLocalizedNewsPath(locale, site, buildSearchString(query)));
+    }
+
+    if (segments[1] === 'archive' && segments.length === 2) {
+      permanentRedirect(getLocalizedNewsArchivePath(locale, site, buildSearchString(query)));
+    }
+
+    if (segments[1] && segments.length === 2) {
+      permanentRedirect(getLocalizedNewsArticlePath(locale, site, segments[1]));
+    }
   }
 
   if (segments[0] === 'business' && segments.length === 1) {

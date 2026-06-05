@@ -677,7 +677,7 @@ describe('radar ui', () => {
     );
 
     expect(feedHtml).toContain('All Austin News');
-    expect(feedHtml).toContain('/en/local-news/austin-transit-summary');
+    expect(feedHtml).toContain('/en/news/austin-transit-summary');
     expect(detailHtml).toContain('Back to Austin News');
     expect(detailHtml).toContain('Austin Monitor');
     expect(detailHtml).toContain('This page is an editorial summary');
@@ -758,7 +758,7 @@ describe('radar ui', () => {
     const html = renderToStaticMarkup(await CommunityPageView({ locale: 'en' }));
 
     expect(html).toContain('Local news and content');
-    expect(html).toContain('/en/arizona-news/archive');
+    expect(html).toContain('/en/news/archive');
   });
 
   it('renders admin kill-switch actions for radar controls', async () => {

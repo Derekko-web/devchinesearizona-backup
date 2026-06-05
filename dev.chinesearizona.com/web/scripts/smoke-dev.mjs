@@ -158,8 +158,8 @@ export function buildSmokeChecks(env = process.env) {
       requiredText: ['ChineseArizona', 'Showing 1-24'],
     }),
     redirect(baseUrl, '/directory', '/business', 'dev:directory-redirect'),
-    route(baseUrl, '/arizona-news', {
-      id: 'dev:arizona-news',
+    route(baseUrl, '/news', {
+      id: 'dev:news',
       requiredText: ['ChineseArizona'],
     }),
     route(baseUrl, '/api/health', {
@@ -198,7 +198,7 @@ export function buildSmokeChecks(env = process.env) {
       },
       directoryCities: ['Austin', 'Round Rock'],
       directoryOrigin: austinUrl,
-      newsPath: '/local-news',
+      newsPath: '/news',
       sitemapNeedle: '/business/house-of-three-gorges-austin',
     }),
     ...citySiteChecks({
@@ -210,7 +210,7 @@ export function buildSmokeChecks(env = process.env) {
       },
       directoryCities: ['Los Angeles', 'Alhambra'],
       directoryOrigin: losAngelesUrl,
-      newsPath: '/los-angeles-news',
+      newsPath: '/news',
       sitemapNeedle: '/business/lunasia-dim-sum-house-alhambra',
     }),
     ...citySiteChecks({

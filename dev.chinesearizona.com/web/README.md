@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Arizona Radar Freshness
 
-`/arizona-news` reads published Arizona Radar items from Supabase when service credentials are configured, with `data/radar-runtime/store.json` as the local mirror/fallback. The normal refresh path is `scripts/arizona_radar/cron_sync.sh`, which loads `dev.chinesearizona.com/web/.env.local` on the host and runs:
+`/news` reads published Arizona Radar items from Supabase when service credentials are configured, with `data/radar-runtime/store.json` as the local mirror/fallback. The normal refresh path is `scripts/arizona_radar/cron_sync.sh`, which loads `dev.chinesearizona.com/web/.env.local` on the host and runs:
 
 ```bash
 node scripts/arizona_radar/run.cjs run
@@ -13,7 +13,7 @@ The worker combines two source paths:
 - configured RSS feeds from `src/data/radar-source-manifest.json` `feedUrl` entries, scanned across all unpaused sources
 - Hermes-generated drafts from the rotating source batch
 
-The RSS path is intentionally summary/link-only and avoids republishing source article text. To verify freshness after deploy, run the cron wrapper or wait for the host schedule, then check that `data/radar-runtime/store.json` has a recent run and that `/arizona-news` shows a new published radar item.
+The RSS path is intentionally summary/link-only and avoids republishing source article text. To verify freshness after deploy, run the cron wrapper or wait for the host schedule, then check that `data/radar-runtime/store.json` has a recent run and that `/news` shows a new published radar item.
 
 The production city radar jobs are scheduled through the protected `radar-hermes-worker@CITY.timer` systemd units installed by `ops/radar-hermes-egress/apply-runtime-deploy.sh`. The current weekly schedule is Arizona Monday 00:17 UTC, Austin Tuesday 01:23 UTC, Los Angeles Wednesday 02:29 UTC, and SF Bay Thursday 03:35 UTC.
 

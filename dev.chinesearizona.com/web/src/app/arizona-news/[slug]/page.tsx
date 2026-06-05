@@ -1,8 +1,7 @@
-import { notFound } from 'next/navigation';
+import { permanentRedirect } from 'next/navigation';
 
-import { articleMetadata } from '@/lib/page-metadata';
+import { getNewsArticlePath } from '@/lib/arizona-news';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
-import { ArticleDetailPageView } from '@/views/site-pages';
 
 type PageProps = {
   params: Promise<{
@@ -10,13 +9,8 @@ type PageProps = {
   }>;
 };
 
-export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params;
-  const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
-    return {};
-  }
-  return (await articleMetadata('en', slug, site)) ?? {};
+export function generateMetadata() {
+  return {};
 }
 
 export const dynamic = 'force-dynamic';
@@ -24,13 +18,5 @@ export const dynamic = 'force-dynamic';
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
   const site = await getCurrentSiteProfile();
-  if (site.news.routePath !== '/arizona-news') {
-    notFound();
-  }
-  const rendered = await ArticleDetailPageView({ locale: 'en', slug, site });
-  if (!rendered) {
-    notFound();
-  }
-
-  return rendered;
+  permanentRedirect(getNewsArticlePath(site, slug));
 }
