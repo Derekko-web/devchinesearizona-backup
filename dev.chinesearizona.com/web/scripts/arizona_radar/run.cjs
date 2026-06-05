@@ -1682,7 +1682,7 @@ async function runWorker(args) {
   const manifest = loadManifest(siteConfig);
   const startedAt = new Date().toISOString();
   const runId = `${siteConfig.runIdPrefix}-${startedAt}`;
-  const storageOptions = { useSupabase: siteConfig.useSupabase };
+  const storageOptions = { useSupabase: siteConfig.useSupabase, siteKey: siteConfig.key };
   const initialStore = await readStoreSnapshot(args.storePath, storageOptions);
 
   if (initialStore.jobControl.paused) {
@@ -1792,6 +1792,7 @@ async function runWorker(args) {
       publishCap,
       now: finishedAt,
       defaultSourceName: siteConfig.defaultSourceName,
+      siteKey: siteConfig.key,
       summaryOnly: siteConfig.summaryOnly,
     });
     const nextStore = appendRun(

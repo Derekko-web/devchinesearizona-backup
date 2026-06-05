@@ -300,7 +300,7 @@ function mapArticleRow(row) {
   };
 }
 
-async function readSupabaseStore() {
+async function readSupabaseStore(options = {}) {
   const supabase = getSupabaseClient();
   if (!supabase) {
     return defaultStoreSnapshot();
@@ -348,7 +348,7 @@ async function readSupabaseStore() {
     runs: (runsResult.data || []).map(mapRunRow),
     candidates: (candidatesResult.data || []).map(mapCandidateRow),
     articles: (articlesResult.data || []).map(mapArticleRow),
-  });
+  }, options.siteKey);
 }
 
 function serializeBody(body, locale) {
@@ -358,8 +358,8 @@ function serializeBody(body, locale) {
     .join('\n\n');
 }
 
-function buildIdMaps(store) {
-  const snapshot = normalizeStore(store);
+function buildIdMaps(store, options = {}) {
+  const snapshot = normalizeStore(store, options.siteKey);
   const candidateIds = new Map();
   const articleIds = new Map();
   const runIds = new Map();
@@ -385,14 +385,14 @@ function buildIdMaps(store) {
   return { candidateIds, articleIds, runIds };
 }
 
-async function writeSupabaseStore(store) {
+async function writeSupabaseStore(store, options = {}) {
   const supabase = getSupabaseClient();
   if (!supabase) {
-    return normalizeStore(store);
+    return normalizeStore(store, options.siteKey);
   }
 
-  const snapshot = normalizeStore(store);
-  const { candidateIds, articleIds, runIds } = buildIdMaps(snapshot);
+  const snapshot = normalizeStore(store, options.siteKey);
+  const { candidateIds, articleIds, runIds } = buildIdMaps(snapshot, options);
 
   const { error: jobControlError } = await supabase.from('radar_job_controls').upsert({
     id: true,
@@ -505,42 +505,42 @@ async function writeSupabaseStore(store) {
     }
   }
 
-  return readSupabaseStore();
+  return readSupabaseStore(options);
 }
 
 async function readStoreSnapshot(storePath, options = {}) {
   if (!shouldUseSupabaseStore(options)) {
-    return readStore(storePath);
+    return readStore(storePath, { siteKey: options.siteKey });
   }
 
   try {
-    const persistedStore = await withSupabaseRetries(readSupabaseStore);
+    const persistedStore = await withSupabaseRetries(() => readSupabaseStore(options));
     try {
-      writeStore(storePath, persistedStore);
+      writeStore(storePath, persistedStore, { siteKey: options.siteKey });
     } catch (mirrorError) {
       console.error(`Unable to refresh local ${RADAR_LABEL} store mirror.`, mirrorError);
     }
     return persistedStore;
   } catch (error) {
     console.error(`Falling back to file-backed ${RADAR_LABEL} store.`, error);
-    return readStore(storePath);
+    return readStore(storePath, { siteKey: options.siteKey });
   }
 }
 
 async function writeStoreSnapshot(storePath, store, options = {}) {
   if (!shouldUseSupabaseStore(options)) {
-    writeStore(storePath, store);
-    return normalizeStore(store);
+    writeStore(storePath, store, { siteKey: options.siteKey });
+    return normalizeStore(store, options.siteKey);
   }
 
   try {
-    const persistedStore = await withSupabaseRetries(() => writeSupabaseStore(store));
-    writeStore(storePath, persistedStore);
+    const persistedStore = await withSupabaseRetries(() => writeSupabaseStore(store, options));
+    writeStore(storePath, persistedStore, { siteKey: options.siteKey });
     return persistedStore;
   } catch (error) {
     console.error(`Falling back to file-backed ${RADAR_LABEL} store on write.`, error);
-    writeStore(storePath, store);
-    return normalizeStore(store);
+    writeStore(storePath, store, { siteKey: options.siteKey });
+    return normalizeStore(store, options.siteKey);
   }
 }
 

@@ -12,7 +12,12 @@ const {
   applyDraftsToStore: (
     store: Record<string, unknown>,
     drafts: Array<Record<string, unknown>>,
-    options: { manifest: Array<Record<string, unknown>>; publishCap: number; now: string }
+    options: {
+      manifest: Array<Record<string, unknown>>;
+      publishCap: number;
+      now: string;
+      siteKey?: string;
+    }
   ) => {
     store: {
       candidates: Array<Record<string, unknown>>;
@@ -26,7 +31,7 @@ const {
   };
   defaultStoreSnapshot: () => Record<string, unknown>;
   normalizeCanonicalUrl: (value: string) => string;
-  normalizeStore: (store: Record<string, unknown>) => {
+  normalizeStore: (store: Record<string, unknown>, siteKey?: string) => {
     articles: Array<Record<string, unknown>>;
   };
 };
@@ -169,8 +174,7 @@ describe('Arizona Radar core', () => {
     expect(webArticle?.heroImagePolicy).toBe('source_allowed');
     expect(webArticle?.heroImage).toBe('https://example.com/not-allowed-source-image.jpg');
     expect(socialArticle?.heroImagePolicy).toBe('fallback_only');
-    expect(typeof socialArticle?.heroImage).toBe('string');
-    expect(String(socialArticle?.heroImage)).toContain('images.unsplash.com');
+    expect(socialArticle?.heroImage).toBe('/home-neighborhood/scottsdale-card.webp');
   });
 
   it('repairs stored articles with empty or non-renderable hero images', () => {
@@ -198,9 +202,33 @@ describe('Arizona Radar core', () => {
 
     expect(store.articles).toHaveLength(2);
     expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(String(store.articles[0]?.heroImage)).toContain('images.unsplash.com');
+    expect(store.articles[0]?.heroImage).toBe('/home-neighborhood/phoenix-card.webp');
     expect(store.articles[1]?.heroImagePolicy).toBe('fallback_only');
-    expect(String(store.articles[1]?.heroImage)).toContain('images.unsplash.com');
+    expect(store.articles[1]?.heroImage).toBe(
+      '/directory-ai-replacements/old-town-taste-tempe-v2.webp'
+    );
+  });
+
+  it('repairs city radar article images with site-local fallback assets', () => {
+    const store = normalizeStore(
+      {
+        ...defaultStoreSnapshot(),
+        articles: [
+          {
+            id: 'la-stored-opening',
+            candidateId: 'candidate-la-stored-opening',
+            slug: 'la-stored-opening',
+            lane: 'openings',
+            heroImage: '',
+            heroImagePolicy: 'source_allowed',
+          },
+        ],
+      },
+      'los-angeles'
+    );
+
+    expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
+    expect(store.articles[0]?.heroImage).toBe('/city-site-images/alhambra-main-street.webp');
   });
 
   it('accepts Arizona sources that are not in the manifest by inferring source metadata', () => {
@@ -318,7 +346,7 @@ describe('Arizona Radar core', () => {
       expect.objectContaining({ url: 'https://city.example/austin/transit-doc' }),
     ]);
     expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(String(result.store.articles[0]?.heroImage)).toContain('images.unsplash.com');
+    expect(result.store.articles[0]?.heroImage).toBe('/home-neighborhood/tempe-card.webp');
   });
 
   it('infers signal_only handling for Arizona social sources outside the manifest', () => {
@@ -350,7 +378,39 @@ describe('Arizona Radar core', () => {
     expect(result.store.articles[0]?.sourceType).toBe('social_signal');
     expect(result.store.articles[0]?.sourcePolicy).toBe('signal_only');
     expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(String(result.store.articles[0]?.heroImage)).toContain('images.unsplash.com');
+    expect(result.store.articles[0]?.heroImage).toBe('/home-neighborhood/scottsdale-card.webp');
+  });
+
+  it('uses city-local fallback images for generated Austin articles without usable source art', () => {
+    const result = applyDraftsToStore(
+      defaultStoreSnapshot(),
+      [
+        {
+          sourceName: 'Austin Community News',
+          sourceUrl: 'https://news.example/austin/community-update',
+          canonicalUrl: 'https://news.example/austin/community-update',
+          sourcePublishedAt: '2026-04-18T10:00:00.000Z',
+          titleEn: 'Austin community center update adds weekend services',
+          titleZh: 'Austin 社區中心更新新增週末服務',
+          excerptEn: 'A concise Austin community update keeps source links while using local fallback art.',
+          excerptZh: '一則簡短的 Austin 社區更新保留來源連結並使用本地備用圖片。',
+          bodyEn: ['Austin readers get a source-linked summary for the community update.'],
+          bodyZh: ['Austin 讀者可閱讀附來源連結的社區更新摘要。'],
+          topicFingerprint: 'austin community local fallback art',
+          heroImage: 'https://news.example/assets/logo.png',
+        },
+      ],
+      {
+        manifest: [...manifest],
+        publishCap: 10,
+        now: '2026-04-18T12:00:00.000Z',
+        siteKey: 'austin',
+      }
+    );
+
+    expect(result.summary.publishedCount).toBe(1);
+    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
+    expect(result.store.articles[0]?.heroImage).toBe('/city-site-images/austin-skyline-lake.webp');
   });
 
   it('suppresses duplicates by canonical url for web items and by topic fingerprint for social items', () => {

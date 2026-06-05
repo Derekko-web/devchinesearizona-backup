@@ -56,17 +56,36 @@ const BLOCKED_SOCIAL_FIELDS = [
   'embedHtml',
   'embedUrl',
 ];
-const RADAR_FALLBACK_HEROES = {
-  housing:
-    'https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1400&q=80',
-  openings:
-    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80',
-  community:
-    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
-  official:
-    'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
-  social:
-    'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
+const DEFAULT_RADAR_FALLBACK_HEROES = {
+  housing: '/home-neighborhood/phoenix-card.webp',
+  openings: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
+  community: '/home-neighborhood/tempe-card.webp',
+  official: '/home-neighborhood/phoenix-card.webp',
+  social: '/home-neighborhood/scottsdale-card.webp',
+};
+const SITE_RADAR_FALLBACK_HEROES = {
+  arizona: DEFAULT_RADAR_FALLBACK_HEROES,
+  austin: {
+    housing: '/city-site-images/austin-newcomer-services.webp',
+    openings: '/city-site-images/austin-community-hero.webp',
+    community: '/city-site-images/austin-skyline-lake.webp',
+    official: '/city-site-images/austin-community-hero.webp',
+    social: '/city-site-images/asian-american-resource-center-austin.webp',
+  },
+  'los-angeles': {
+    housing: '/city-site-images/la-newcomer-corridor.webp',
+    openings: '/city-site-images/alhambra-main-street.webp',
+    community: '/city-site-images/los-angeles-community-hero.webp',
+    official: '/city-site-images/la-chinatown-downtown.webp',
+    social: '/city-site-images/san-gabriel-valley-boulevard.webp',
+  },
+  'sf-bay': {
+    housing: '/city-site-images/sf-bay-newcomer-discovery.webp',
+    openings: '/city-site-images/sf-chinatown-bay.webp',
+    community: '/city-site-images/sf-bay-community-hero.webp',
+    official: '/city-site-images/sf-bay-community-hero.webp',
+    social: '/city-site-images/oakland-chinatown-street.webp',
+  },
 };
 const NON_RENDERABLE_RADAR_HERO_PATTERN =
   /(favicon|logo|sprite|spacer|tracking|pixel|blank|1x1|placeholder)/i;
@@ -115,7 +134,7 @@ function radarHeroImageLooksRenderable(value) {
   }
 }
 
-function normalizeStoredArticle(article) {
+function normalizeStoredArticle(article, siteKey = currentRadarSiteKey()) {
   const lane = VALID_LANES.has(article.lane) ? article.lane : 'community';
   const heroImage = String(article.heroImage || '').trim();
   const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
@@ -123,14 +142,14 @@ function normalizeStoredArticle(article) {
   return {
     ...article,
     lane,
-    heroImage: hasRenderableHeroImage ? heroImage : buildFallbackHero(lane),
+    heroImage: hasRenderableHeroImage ? heroImage : buildFallbackHero(lane, siteKey),
     heroImagePolicy: hasRenderableHeroImage
       ? String(article.heroImagePolicy || 'source_allowed')
       : 'fallback_only',
   };
 }
 
-function normalizeStore(input) {
+function normalizeStore(input, siteKey = currentRadarSiteKey()) {
   const fallback = defaultStoreSnapshot();
   const isRemovedPlaceholder = (entry) =>
     REMOVED_PLACEHOLDER_ARTICLE_SLUGS.has(String(entry.slug || ''));
@@ -149,25 +168,28 @@ function normalizeStore(input) {
     articles: Array.isArray(input && input.articles)
       ? input.articles
           .filter((article) => !isRemovedPlaceholder(article))
-          .map(normalizeStoredArticle)
+          .map((article) => normalizeStoredArticle(article, siteKey))
       : [],
   };
 }
 
-function readStore(storePath) {
+function readStore(storePath, options = {}) {
   try {
-    return normalizeStore(JSON.parse(fs.readFileSync(storePath, 'utf8')));
+    return normalizeStore(JSON.parse(fs.readFileSync(storePath, 'utf8')), options.siteKey);
   } catch (_error) {
     return defaultStoreSnapshot();
   }
 }
 
-function writeStore(storePath, store) {
-  const normalizedStore = normalizeStore(store);
+function writeStore(storePath, store, options = {}) {
+  const normalizedStore = normalizeStore(store, options.siteKey);
   let existingStore = null;
   try {
     if (fs.existsSync(storePath)) {
-      existingStore = normalizeStore(JSON.parse(fs.readFileSync(storePath, 'utf8')));
+      existingStore = normalizeStore(
+        JSON.parse(fs.readFileSync(storePath, 'utf8')),
+        options.siteKey
+      );
     }
   } catch (_error) {
     existingStore = null;
@@ -800,8 +822,37 @@ function buildSourceLinks(draft, source, canonicalUrl) {
   return sourceLinks;
 }
 
-function buildFallbackHero(lane) {
-  return RADAR_FALLBACK_HEROES[lane] || RADAR_FALLBACK_HEROES.community;
+function normalizeRadarSiteKey(value) {
+  const normalized = String(value || 'arizona').trim().toLowerCase();
+  if (normalized === 'atx') {
+    return 'austin';
+  }
+  if (normalized === 'la' || normalized === 'los_angeles') {
+    return 'los-angeles';
+  }
+  if (
+    normalized === 'sfbay' ||
+    normalized === 'sf_bay' ||
+    normalized === 'bay-area' ||
+    normalized === 'bay_area' ||
+    normalized === 'san-francisco' ||
+    normalized === 'san_francisco'
+  ) {
+    return 'sf-bay';
+  }
+
+  return SITE_RADAR_FALLBACK_HEROES[normalized] ? normalized : 'arizona';
+}
+
+function currentRadarSiteKey() {
+  return normalizeRadarSiteKey(process.env.RADAR_SITE || process.env.RADAR_CITY_KEY);
+}
+
+function buildFallbackHero(lane, siteKey = currentRadarSiteKey()) {
+  const fallbackHeroes =
+    SITE_RADAR_FALLBACK_HEROES[normalizeRadarSiteKey(siteKey)] ||
+    DEFAULT_RADAR_FALLBACK_HEROES;
+  return fallbackHeroes[lane] || fallbackHeroes.community;
 }
 
 function candidateDedupeKey(candidate) {
@@ -837,7 +888,7 @@ function withBlockedFields(draft) {
   });
 }
 
-function normalizeDraft(draft, source, now) {
+function normalizeDraft(draft, source, now, options = {}) {
   const title = localizedTextFromDraft(draft, 'title');
   const excerpt = localizedTextFromDraft(draft, 'excerpt');
   const body = localizedBodyFromDraft(draft);
@@ -882,7 +933,9 @@ function normalizeDraft(draft, source, now) {
   const providedHeroImage = normalizeCanonicalUrl(draft.heroImage);
   const hasProvidedHeroImage =
     heroImageAllowed && radarHeroImageLooksRenderable(providedHeroImage);
-  const heroImage = hasProvidedHeroImage ? providedHeroImage : buildFallbackHero(source.lane);
+  const heroImage = hasProvidedHeroImage
+    ? providedHeroImage
+    : buildFallbackHero(source.lane, options.siteKey);
 
   return {
     candidate: {
@@ -1059,7 +1112,8 @@ function publishQueuedArticles(store, publishCap, now) {
 }
 
 function applyDraftsToStore(store, drafts, options = {}) {
-  const nextStore = normalizeStore(store);
+  const siteKey = options.siteKey || currentRadarSiteKey();
+  const nextStore = normalizeStore(store, siteKey);
   const now = options.now || nowIso();
   const publishCap = Math.max(
     1,
@@ -1088,7 +1142,7 @@ function applyDraftsToStore(store, drafts, options = {}) {
       defaultSourceName: options.defaultSourceName,
     });
 
-    let normalized = normalizeDraft(draft, source, now);
+    let normalized = normalizeDraft(draft, source, now, { siteKey });
     if (!normalized.error && options.summaryOnly) {
       const summaryOnlyError = validateSummaryOnlyArticle(normalized.article);
       if (summaryOnlyError) {
