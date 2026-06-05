@@ -34,7 +34,7 @@ export function RadarArticleCard({
       <div className="relative h-48 w-full bg-slate-200">
         <DiscoverArticleImage
           src={article.heroImage}
-          fallbackSrc={article.radarLane ? getRadarHeroImageFallback(article.radarLane) : undefined}
+          fallbackSrc={article.radarLane ? getRadarHeroImageFallback(article.radarLane, site) : undefined}
           alt={displayTitle}
           className="object-cover"
         />

@@ -52,17 +52,36 @@ type RadarStoreOptions = {
   site?: RadarSiteInput;
 };
 
-const RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
-  housing:
-    'https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1400&q=80',
-  openings:
-    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80',
-  community:
-    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1400&q=80',
-  official:
-    'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80',
-  social:
-    'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
+const DEFAULT_RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
+  housing: '/home-neighborhood/phoenix-card.webp',
+  openings: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
+  community: '/home-neighborhood/tempe-card.webp',
+  official: '/home-neighborhood/phoenix-card.webp',
+  social: '/home-neighborhood/scottsdale-card.webp',
+};
+const SITE_RADAR_FALLBACK_HEROES: Record<SiteKey, Record<RadarLane, string>> = {
+  arizona: DEFAULT_RADAR_FALLBACK_HEROES,
+  austin: {
+    housing: '/city-site-images/austin-newcomer-services.webp',
+    openings: '/city-site-images/austin-community-hero.webp',
+    community: '/city-site-images/austin-skyline-lake.webp',
+    official: '/city-site-images/austin-community-hero.webp',
+    social: '/city-site-images/asian-american-resource-center-austin.webp',
+  },
+  'los-angeles': {
+    housing: '/city-site-images/la-newcomer-corridor.webp',
+    openings: '/city-site-images/alhambra-main-street.webp',
+    community: '/city-site-images/los-angeles-community-hero.webp',
+    official: '/city-site-images/la-chinatown-downtown.webp',
+    social: '/city-site-images/san-gabriel-valley-boulevard.webp',
+  },
+  'sf-bay': {
+    housing: '/city-site-images/sf-bay-newcomer-discovery.webp',
+    openings: '/city-site-images/sf-chinatown-bay.webp',
+    community: '/city-site-images/sf-bay-community-hero.webp',
+    official: '/city-site-images/sf-bay-community-hero.webp',
+    social: '/city-site-images/oakland-chinatown-street.webp',
+  },
 };
 const NON_RENDERABLE_RADAR_HERO_PATTERN =
   /(favicon|logo|sprite|spacer|tracking|pixel|blank|1x1|placeholder)/i;
@@ -71,12 +90,18 @@ const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
   'sgv-housing-transit-watch-source-linked-summaries',
 ]);
 
-function radarFallbackHero(lane: RadarLane): string {
-  return RADAR_FALLBACK_HEROES[lane] ?? RADAR_FALLBACK_HEROES.community;
+function radarFallbackHero(lane: RadarLane, siteInput?: RadarSiteInput): string {
+  const site = resolveRadarSite(siteInput);
+  const siteKey: SiteKey = site.key === 'unconfigured' ? 'arizona' : site.key;
+  const fallbackHeroes = SITE_RADAR_FALLBACK_HEROES[siteKey] ?? DEFAULT_RADAR_FALLBACK_HEROES;
+  return fallbackHeroes[lane] ?? fallbackHeroes.community;
 }
 
-export function getRadarHeroImageFallback(lane?: RadarLane | null): string {
-  return radarFallbackHero(lane ?? 'community');
+export function getRadarHeroImageFallback(
+  lane?: RadarLane | null,
+  site?: RadarSiteInput
+): string {
+  return radarFallbackHero(lane ?? 'community', site);
 }
 
 function radarHeroImageLooksRenderable(value: string): boolean {
@@ -100,13 +125,14 @@ function radarHeroImageLooksRenderable(value: string): boolean {
 function normalizeRadarHeroImage(
   rawHeroImage: unknown,
   lane: RadarLane,
-  rawPolicy?: unknown
+  rawPolicy?: unknown,
+  site?: RadarSiteInput
 ): Pick<RadarArticle, 'heroImage' | 'heroImagePolicy'> {
   const heroImage = String(rawHeroImage || '').trim();
   const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
 
   return {
-    heroImage: hasRenderableHeroImage ? heroImage : radarFallbackHero(lane),
+    heroImage: hasRenderableHeroImage ? heroImage : radarFallbackHero(lane, site),
     heroImagePolicy: (hasRenderableHeroImage
       ? String(rawPolicy || 'source_allowed')
       : 'fallback_only') as RadarHeroImagePolicy,
@@ -250,9 +276,9 @@ function defaultStore(): RadarStoreSnapshot {
   };
 }
 
-function normalizeStoredArticle(article: RadarArticle): RadarArticle {
+function normalizeStoredArticle(article: RadarArticle, site?: RadarSiteInput): RadarArticle {
   const lane = (article.lane || 'community') as RadarLane;
-  const normalizedHero = normalizeRadarHeroImage(article.heroImage, lane, article.heroImagePolicy);
+  const normalizedHero = normalizeRadarHeroImage(article.heroImage, lane, article.heroImagePolicy, site);
 
   return {
     ...article,
@@ -261,7 +287,10 @@ function normalizeStoredArticle(article: RadarArticle): RadarArticle {
   };
 }
 
-function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): RadarStoreSnapshot {
+function normalizeStore(
+  input: Partial<RadarStoreSnapshot> | null | undefined,
+  site?: RadarSiteInput
+): RadarStoreSnapshot {
   const fallback = defaultStore();
   const isRemovedPlaceholder = (entry: { slug?: string }) =>
     REMOVED_PLACEHOLDER_ARTICLE_SLUGS.has(String(entry.slug || ''));
@@ -280,7 +309,7 @@ function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): 
     articles: Array.isArray(input?.articles)
       ? input.articles
           .filter((article) => !isRemovedPlaceholder(article))
-          .map(normalizeStoredArticle)
+          .map((article) => normalizeStoredArticle(article, site))
       : [],
   };
 }
@@ -463,13 +492,14 @@ function mapCandidateRow(row: Record<string, unknown>): RadarCandidate {
   };
 }
 
-function mapArticleRow(row: Record<string, unknown>): RadarArticle {
+function mapArticleRow(row: Record<string, unknown>, site?: RadarSiteInput): RadarArticle {
   const sourceName = String(row.source_name ?? row.sourceName ?? '');
   const lane = String(row.lane || 'community') as RadarLane;
   const normalizedHero = normalizeRadarHeroImage(
     row.hero_image ?? row.heroImage,
     lane,
-    row.hero_image_policy ?? row.heroImagePolicy
+    row.hero_image_policy ?? row.heroImagePolicy,
+    site
   );
 
   return {
@@ -600,7 +630,7 @@ export function readRadarStore(site?: RadarSiteInput): RadarStoreSnapshot {
 
   try {
     const payload = fs.readFileSync(storePath, 'utf8');
-    return normalizeStore(JSON.parse(payload) as Partial<RadarStoreSnapshot>);
+    return normalizeStore(JSON.parse(payload) as Partial<RadarStoreSnapshot>, site);
   } catch {
     return defaultStore();
   }
@@ -611,9 +641,10 @@ export function writeRadarStore(
   site?: RadarSiteInput
 ): RadarStoreSnapshot {
   const storePath = getRadarStorePath(site);
+  const normalizedStore = normalizeStore(store, site);
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
-  fs.writeFileSync(storePath, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
-  return store;
+  fs.writeFileSync(storePath, `${JSON.stringify(normalizedStore, null, 2)}\n`, 'utf8');
+  return normalizedStore;
 }
 
 export function mutateRadarStore(
@@ -621,11 +652,11 @@ export function mutateRadarStore(
   options: RadarStoreOptions = {}
 ): RadarStoreSnapshot {
   const current = readRadarStore(options.site);
-  const next = normalizeStore(mutate(current));
+  const next = normalizeStore(mutate(current), options.site);
   return writeRadarStore(next, options.site);
 }
 
-async function readRadarStoreFromSupabase(): Promise<RadarStoreSnapshot> {
+async function readRadarStoreFromSupabase(site?: RadarSiteInput): Promise<RadarStoreSnapshot> {
   const supabase = getSupabaseServiceClient();
   if (!supabase) {
     return defaultStore();
@@ -675,9 +706,9 @@ async function readRadarStoreFromSupabase(): Promise<RadarStoreSnapshot> {
       mapCandidateRow(row as Record<string, unknown>)
     ),
     articles: (articlesResult.data || []).map((row) =>
-      mapArticleRow(row as Record<string, unknown>)
+      mapArticleRow(row as Record<string, unknown>, site)
     ),
-  });
+  }, site);
 }
 
 export async function readRadarStoreAsync(
@@ -688,7 +719,7 @@ export async function readRadarStoreAsync(
   }
 
   try {
-    const persistedStore = await readRadarStoreFromSupabase();
+    const persistedStore = await readRadarStoreFromSupabase(options.site);
     try {
       writeRadarStore(persistedStore, options.site);
     } catch (mirrorError) {
@@ -1146,10 +1177,11 @@ export async function unpublishRadarArticleAsync(articleId: string): Promise<voi
 }
 
 export async function backfillRadarStoreToSupabase(
-  store: RadarStoreSnapshot
+  store: RadarStoreSnapshot,
+  options: RadarStoreOptions = {}
 ): Promise<RadarStoreSnapshot> {
   const supabase = await getRadarServiceClientOrThrow();
-  const snapshot = normalizeStore(store);
+  const snapshot = normalizeStore(store, options.site);
 
   const { error: jobControlError } = await supabase.from('radar_job_controls').upsert({
     id: true,

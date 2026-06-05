@@ -271,7 +271,7 @@ describe('content selectors', () => {
     expect(archivePage.articles.some((article) => article.slug === 'mesa-radar-housing-pulse')).toBe(true);
     expect(detailArticle?.series).toBe('arizona-radar');
     expect(detailArticle?.aiGeneratedSummary).toBe(true);
-    expect(detailArticle?.heroImage).toContain('images.unsplash.com/photo-1520607162513-77705c0f0d4a');
+    expect(detailArticle?.heroImage).toBe('/home-neighborhood/phoenix-card.webp');
     expect(detailArticle?.heroImagePolicy).toBe('fallback_only');
   });
 
