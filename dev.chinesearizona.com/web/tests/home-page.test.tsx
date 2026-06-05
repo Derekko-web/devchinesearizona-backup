@@ -36,15 +36,13 @@ describe('HomePageView', () => {
     const { HomePageView } = await import('@/views/home-page');
 
     const html = renderToStaticMarkup(<HomePageView locale="en" />);
-    const angryCrabIndex = html.indexOf('Angry Crab Shack sets June 11 opening in Chandler');
-    const blackRockIndex = html.indexOf('Black Rock Coffee Bar lines up three Arizona shops');
-    const lunaGrillIndex = html.indexOf(
-      'Luna Grill plans three more Phoenix area restaurants in 2026'
-    );
+    const blackRockIndex = html.indexOf('Black Rock Coffee Bar adds three Arizona shops');
+    const atashiIndex = html.indexOf('Atashi Yokocho planned for Scottsdale development');
+    const lunaGrillIndex = html.indexOf('Luna Grill plans three more Phoenix area restaurants');
 
-    expect(angryCrabIndex).toBeGreaterThan(-1);
-    expect(blackRockIndex).toBeGreaterThan(angryCrabIndex);
-    expect(lunaGrillIndex).toBeGreaterThan(blackRockIndex);
+    expect(blackRockIndex).toBeGreaterThan(-1);
+    expect(atashiIndex).toBeGreaterThan(blackRockIndex);
+    expect(lunaGrillIndex).toBeGreaterThan(atashiIndex);
     expect(html).not.toContain('Phoenix Apartment Myths Newcomers Keep Hearing');
     expect(html).not.toContain('Din Tai Fung Targets April 20, 2026 at Fashion Square');
   });

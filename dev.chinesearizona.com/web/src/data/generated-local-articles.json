@@ -1,94 +1,33 @@
 [
   {
-    "id": "db3c69fe-f937-4ff1-8d33-304140847e3b",
-    "candidateId": "a60d2d69-3292-4a17-b872-bd33ee54fe0d",
-    "slug": "angry-crab-shack-sets-june-11-opening-in-chandler",
-    "lane": "openings",
-    "title": {
-      "en": "Angry Crab Shack sets June 11 opening in Chandler",
-      "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 開幕"
-    },
-    "excerpt": {
-      "en": "Angry Crab Shack will open a Chandler restaurant at 3033 S. Gilbert Road on June 11. The Appiah family will operate the location and launch it with contests, children's activities and nonprofit support.",
-      "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 的 3033 S. Gilbert Road 開設餐廳。這家店由 Appiah 家族經營，開幕活動包括比賽、兒童活動和非營利組織支援。"
-    },
-    "body": [
-      {
-        "en": "Angry Crab Shack is opening a new Chandler restaurant on June 11 at 3033 S. Gilbert Road. The location gives the seafood chain another Southeast Valley address for its seafood boils, sauces and casual dining.",
-        "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 開設新餐廳，地址是 3033 S. Gilbert Road。這個新據點讓這家海鮮連鎖品牌在東南 Valley 又多了一個供應海鮮鍋、醬料和休閒用餐的地址。"
-      },
-      {
-        "en": "The Chandler restaurant is owned and operated by the Appiah family, local franchise partners for the brand. The menu will bring the chain's seafood boil format and flavors influenced by Asian and Cajun cooking to the neighborhood.",
-        "zh": "Chandler 餐廳由當地加盟夥伴 Appiah 家族擁有並經營。菜單會把品牌的海鮮鍋形式，以及受亞洲與卡津料理影響的風味帶進這個社區。"
-      },
-      {
-        "en": "The grand opening will include a spicy wing eating competition with participation from the Chandler Police and Fire Departments. A DJ, a balloon artist for children and a spin to win prize table are also planned, including a chance to win a TV.",
-        "zh": "開幕活動將安排辣味雞翅大胃王比賽，Chandler 警察局和消防局也會參與。現場還計畫有 DJ、兒童氣球藝術師，以及 spin to win 獎品桌，其中包含贏得電視的機會。"
-      },
-      {
-        "en": "The event will support local nonprofit organizations, and the restaurant will take part in Angry Crab Shack charitable programs tied to veterans, children's hospitals and local food banks. Angry Crab Shack operates 15 Arizona locations and has more planned for this year.",
-        "zh": "這場活動將支援當地非營利組織，而餐廳也會參與 Angry Crab Shack 的慈善項目，相關計畫支持退伍軍人、兒童醫院和在地食物銀行。Angry Crab Shack 目前在亞利桑那有 15 個據點，今年還規劃更多門市。"
-      }
-    ],
-    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/129896006_919360601929960_144754164420173428_n-1.jpg",
-    "heroImagePolicy": "source_allowed",
-    "category": "news",
-    "freshnessTier": "breaking",
-    "sourcePolicy": "summary_link",
-    "sourceType": "local_media",
-    "sourceName": "What Now Phoenix",
-    "sourceUrl": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
-    "sourceLinks": [
-      {
-        "label": {
-          "en": "What Now Phoenix",
-          "zh": "What Now Phoenix"
-        },
-        "url": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
-        "source": "What Now Phoenix"
-      }
-    ],
-    "relatedCategorySlugs": [],
-    "ctaBusinessSlugs": [],
-    "personaTargets": [
-      "local_families",
-      "business_owners"
-    ],
-    "publishedAt": "2026-06-05T00:10:01.692+00:00",
-    "updatedAt": "2026-06-05T00:10:01.692+00:00",
-    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
-    "isPublished": true,
-    "aiGeneratedSummary": true
-  },
-  {
     "id": "c6dd9125-aa88-4dba-b4ed-9af51d592de6",
     "candidateId": "a8c2b99e-4c60-4855-ade1-6eda4cbb7fbb",
     "slug": "black-rock-coffee-bar-lines-up-three-arizona-shops",
     "lane": "openings",
     "title": {
-      "en": "Black Rock Coffee Bar lines up three Arizona shops",
-      "zh": "Black Rock Coffee Bar 將在亞利桑那新增三家門市"
+      "en": "Black Rock Coffee Bar adds three Arizona shops",
+      "zh": "Black Rock Coffee Bar 亞利桑那新增三家店"
     },
     "excerpt": {
-      "en": "Black Rock Coffee Bar is preparing new shops in Glendale, Chandler and Prescott Valley. The first is expected in June, with two more planned for July.",
-      "zh": "Black Rock Coffee Bar 準備在 Glendale、Chandler 和 Prescott Valley 開設新門市。第一家預計 6 月開幕，另外兩家規劃在 7 月登場。"
+      "en": "Black Rock Coffee Bar is preparing openings in Glendale, Chandler and Prescott Valley. The first shop is expected in June, with two more planned for July.",
+      "zh": "Black Rock Coffee Bar 正準備在 Glendale、Chandler 與 Prescott Valley 開新店。首家預計 6 月開幕，另外兩家計畫在 7 月接續登場。"
     },
     "body": [
       {
-        "en": "Black Rock Coffee Bar is adding three more Arizona addresses as the coffee chain keeps building its presence in the state. The new shops are planned for Glendale, Chandler and Prescott Valley, giving customers in three different markets another option for coffee, breakfast and quick drinks.",
-        "zh": "Black Rock Coffee Bar 將在亞利桑那再增加三個地址，延續這家咖啡連鎖品牌在州內的展店腳步。新門市分別規劃在 Glendale、Chandler 和 Prescott Valley，讓三個不同市場的顧客多一個買咖啡、早餐和快速飲品的選擇。"
+        "en": "Black Rock Coffee Bar is adding three more Arizona locations as the coffee chain continues building its footprint in the state. The next shop is planned for 5937 N. 91st Ave., Suite 130, in Glendale, with an opening expected in June.",
+        "zh": "Black Rock Coffee Bar 正在亞利桑那新增三家據點，延續這家咖啡連鎖品牌在州內的擴張。下一家店計畫設於 Glendale 的 5937 N. 91st Ave., Suite 130，預計 6 月開幕。"
       },
       {
-        "en": "The Glendale location is expected to open first in June at 5937 N. 91st Ave., Suite 130. Two more shops are scheduled to follow in July, one at 3103 S. McQueen Road in Chandler and another at 6272 E. 2nd Street in Prescott Valley.",
-        "zh": "Glendale 門市預計最先在 6 月開幕，地址是 5937 N. 91st Ave., Suite 130。接下來兩家預定在 7 月開出，一家位於 Chandler 的 3103 S. McQueen Road，另一家位於 Prescott Valley 的 6272 E. 2nd Street。"
+        "en": "Two more Arizona stores are scheduled to follow in July. One is planned at 3103 S. McQueen Road in Chandler, and another is planned at 6272 E. 2nd Street in Prescott Valley.",
+        "zh": "另外兩家亞利桑那門市預定在 7 月接續開出。其中一家位於 Chandler 的 3103 S. McQueen Road，另一家位於 Prescott Valley 的 6272 E. 2nd Street。"
       },
       {
-        "en": "The company began in Oregon in 2008, when Jeff Hernandez started Black Rock Coffee Bar as a single coffee stand. It has since grown to more than 150 locations across the United States, and the Arizona openings continue that wider expansion.",
-        "zh": "Black Rock Coffee Bar 由 Jeff Hernandez 於 2008 年在俄勒岡創立，最初只是一個咖啡攤。如今品牌在全美已有超過 150 個據點，這批亞利桑那新店是其全國展店的一部分。"
+        "en": "The expansion gives customers in three different Arizona communities another place for coffee drinks, cold brew, tea, smoothies, energy beverages and protein options. The menu also includes breakfast items such as burritos, sandwiches, bagels, muffins and other baked goods.",
+        "zh": "這波展店將讓三個亞利桑那社區的顧客多一個選擇，可購買咖啡飲品、冷萃咖啡、茶、冰沙、能量飲料與蛋白質飲品。菜單也提供早餐品項，包括 burrito、三明治、貝果、馬芬與其他烘焙食品。"
       },
       {
-        "en": "The menu covers hot and iced coffee drinks, cold brew, teas, smoothies, energy beverages and drinks with protein. Food options include breakfast burritos, sandwiches, bagels, muffins and other baked goods.",
-        "zh": "菜單包括熱咖啡與冰咖啡、冷萃、茶飲、冰沙、能量飲品和含蛋白質的飲品。餐點則有早餐捲餅、三明治、貝果、瑪芬和其他烘焙食品。"
+        "en": "Black Rock began in Oregon in 2008 under founder Jeff Hernandez. The company has grown from one coffee stand into a chain with more than 150 locations across the United States, and Arizona remains part of that wider growth plan.",
+        "zh": "Black Rock 由 Jeff Hernandez 於 2008 年在 Oregon 創立。公司從一個咖啡攤發展成全美超過 150 家店的連鎖品牌，而亞利桑那仍是其美國展店計畫的一部分。"
       }
     ],
     "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/SaveClip.App_612744509_18544834240049713_2097338163297914576_n-1.jpg",
@@ -116,69 +55,8 @@
       "business_owners"
     ],
     "publishedAt": "2026-06-05T00:10:01.692+00:00",
-    "updatedAt": "2026-06-05T00:10:01.692+00:00",
-    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
-    "isPublished": true,
-    "aiGeneratedSummary": true
-  },
-  {
-    "id": "94900089-d66d-4dfe-b649-5ed339f0f772",
-    "candidateId": "a0b3b922-7327-495f-8849-f0e6c1dfebf9",
-    "slug": "luna-grill-plans-three-more-phoenix-area-restaurants-in-2026",
-    "lane": "openings",
-    "title": {
-      "en": "Luna Grill plans three more Phoenix area restaurants in 2026",
-      "zh": "Luna Grill 計畫 2026 年在鳳凰城地區再開三家餐廳"
-    },
-    "excerpt": {
-      "en": "Luna Grill expects to add restaurants in Tempe, Avondale and north Phoenix before the end of 2026. The additions would follow its first Arizona restaurants in Mesa and Gilbert.",
-      "zh": "Luna Grill 預計在 2026 年底前於 Tempe、Avondale 和北鳳凰城新增餐廳。這些新據點將接續品牌在 Mesa 和 Gilbert 開出的亞利桑那首批門市。"
-    },
-    "body": [
-      {
-        "en": "Luna Grill is preparing at least three more restaurants in the Phoenix area before the end of 2026. The Mediterranean restaurant chain is looking at Tempe, Avondale and north Phoenix for the next stage of its Arizona expansion.",
-        "zh": "Luna Grill 準備在 2026 年底前於鳳凰城地區至少再開三家餐廳。這家地中海料理連鎖品牌下一階段的亞利桑那展店地點包括 Tempe、Avondale 和北鳳凰城。"
-      },
-      {
-        "en": "The north Phoenix restaurant is planned near the growing area around TSMC's semiconductor campus. A proposed Luna Grill in that part of the city has also been tied to a planned retail project near Dove Valley Road.",
-        "zh": "北鳳凰城餐廳規劃在 TSMC 半導體園區周邊成長中的區域附近。該市北側先前提出的 Luna Grill 據點，也與 Dove Valley Road 附近一項規劃中的零售開發案有關。"
-      },
-      {
-        "en": "The new restaurants would follow Luna Grill's entry into Arizona through locations in Mesa and Gilbert. The company started in 2004 with founders Sean and Maria Pourteymour and now operates more than 50 restaurants in California, Texas and Arizona.",
-        "zh": "這些新餐廳將接續 Luna Grill 在 Mesa 和 Gilbert 開出的亞利桑那首批據點。Luna Grill 由 Sean 和 Maria Pourteymour 於 2004 年創立，目前在加州、德州和亞利桑那經營超過 50 家餐廳。"
-      },
-      {
-        "en": "Luna Grill's menu includes kabobs, bowls, salads, pitas, family meals and other Mediterranean dishes made with fresh ingredients and cooked to order. Exact opening dates for the Tempe, Avondale and north Phoenix restaurants have not been announced.",
-        "zh": "Luna Grill 的菜單有烤肉串、碗餐、沙拉、皮塔餅、家庭餐和其他以新鮮食材現做的地中海料理。Tempe、Avondale 和北鳳凰城餐廳的確切開幕日期尚未公布。"
-      }
-    ],
-    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/Mesa_Exterior-1-1157x1536-1.jpg",
-    "heroImagePolicy": "source_allowed",
-    "category": "news",
-    "freshnessTier": "breaking",
-    "sourcePolicy": "summary_link",
-    "sourceType": "local_media",
-    "sourceName": "What Now Phoenix",
-    "sourceUrl": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
-    "sourceLinks": [
-      {
-        "label": {
-          "en": "What Now Phoenix",
-          "zh": "What Now Phoenix"
-        },
-        "url": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
-        "source": "What Now Phoenix"
-      }
-    ],
-    "relatedCategorySlugs": [],
-    "ctaBusinessSlugs": [],
-    "personaTargets": [
-      "local_families",
-      "business_owners"
-    ],
-    "publishedAt": "2026-06-05T00:10:01.692+00:00",
-    "updatedAt": "2026-06-05T00:10:01.692+00:00",
-    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:19:29.225348+00:00",
+    "lastCheckedAt": "2026-06-05T00:19:28.269+00:00",
     "isPublished": true,
     "aiGeneratedSummary": true
   },
@@ -188,33 +66,33 @@
     "slug": "atashi-yokocho-planned-for-scottsdale-s-the-sydney",
     "lane": "openings",
     "title": {
-      "en": "Atashi Yokocho planned for Scottsdale's The Sydney",
-      "zh": "Atashi Yokocho 規劃進駐 Scottsdale 的 The Sydney"
+      "en": "Atashi Yokocho planned for Scottsdale development",
+      "zh": "Atashi Yokocho 計畫進駐 Scottsdale 開發案"
     },
     "excerpt": {
-      "en": "Restaurateur Huy Truong is planning a Japanese dining hall at The Sydney in Scottsdale. Atashi Yokocho is expected in 2028 with about 15 separate restaurant concepts.",
-      "zh": "餐飲業者 Huy Truong 正計畫在 Scottsdale 的 The Sydney 打造日本餐飲空間。Atashi Yokocho 預計 2028 年開幕，內部約有 15 個不同餐飲概念。"
+      "en": "Atashi Yokocho is planned for The Sydney at 7339 E. McDonald Drive in Scottsdale. The Japanese inspired dining project is expected to open in 2028 with about 15 restaurant concepts.",
+      "zh": "Atashi Yokocho 計畫進駐 Scottsdale 的 The Sydney，地址為 7339 E. McDonald Drive。這個日本風格餐飲項目預計 2028 年開幕，將包含約 15 個餐廳概念。"
     },
     "body": [
       {
-        "en": "Atashi Yokocho is planned for The Sydney at 7339 E. McDonald Drive in Scottsdale. Restaurateur Huy Truong is preparing the project for a 2028 opening at the large development near Loop 101 and Pima Road.",
-        "zh": "Atashi Yokocho 規劃落腳於 Scottsdale 的 The Sydney，地址是 7339 E. McDonald Drive。餐飲業者 Huy Truong 正籌備這個項目，預計 2028 年在 Loop 101 和 Pima Road 附近的大型開發案中開幕。"
+        "en": "Atashi Yokocho is planned for The Sydney, a large mixed use project at 7339 E. McDonald Drive in Scottsdale. Restaurateur Huy Truong is preparing the Japanese inspired dining destination for a 2028 opening near Loop 101 and Pima Road.",
+        "zh": "Atashi Yokocho 計畫落腳 The Sydney，這是 Scottsdale 一個大型綜合用途開發案，地址為 7339 E. McDonald Drive。餐飲業者 Huy Truong 正籌備這個日本風格餐飲項目，預計 2028 年在 Loop 101 與 Pima Road 附近開幕。"
       },
       {
-        "en": "The project takes its cue from Japan's yokocho dining culture, where narrow lanes are filled with small restaurants and bars. In Scottsdale, the format is expected to bring about 15 individual eateries into one shared destination.",
-        "zh": "這個項目以日本橫丁飲食文化為靈感，日本橫丁通常是狹窄巷弄中聚集小餐館和酒吧的空間。到了 Scottsdale，這個形式預計會把約 15 個獨立餐飲概念放在同一個目的地內。"
+        "en": "The project takes cues from Japan's yokocho dining culture, where small restaurants and bars are grouped along narrow alleyways. In Scottsdale, the plan calls for about 15 separate eateries operating inside one shared location.",
+        "zh": "這個項目的靈感來自日本的 yokocho 飲食文化，也就是在狹窄巷弄中聚集小餐館與酒吧的形式。Scottsdale 版本計畫在同一個空間內設置約 15 個獨立餐飲概念。"
       },
       {
-        "en": "The food lineup is planned to cover several types of Japanese cuisine. Ramen, sushi, tempura, yakitori, yakiniku, kaiseki and regional specialties are among the categories being considered for the space.",
-        "zh": "規劃中的餐飲內容涵蓋多種日本料理。拉麵、壽司、天婦羅、串燒、燒肉、懷石料理和地方特色料理，都是目前考慮納入的類別。"
+        "en": "Truong has already brought several Japanese dining brands to the Valley. His portfolio includes multiple Mensho Ramen locations, tied to the Michelin recognized Tokyo ramen concept, and Udon Shin, a Japanese noodle restaurant that recently opened in Mesa.",
+        "zh": "Truong 先前已把多個日本餐飲品牌帶到 Valley。他的餐飲組合包括多家 Mensho Ramen，該品牌與 Tokyo 的米其林認可拉麵概念有關，也包括近期在 Mesa 開幕的日本麵食餐廳 Udon Shin。"
       },
       {
-        "en": "Restaurant spaces inside Atashi Yokocho could vary widely in size, with some seating as few as eight guests and others seating up to 50. Truong is also looking at rotating short run concepts that would let Japanese operators test their brands with Arizona diners.",
-        "zh": "Atashi Yokocho 內部的餐廳空間大小可能差異很大，有些只能容納 8 位客人，有些可坐到 50 人。Truong 也在研究輪替式短期餐飲概念，讓日本業者有機會向亞利桑那食客介紹品牌。"
+        "en": "Atashi Yokocho is expected to cover a broad range of Japanese food. Planned offerings include ramen, sushi, tempura, yakitori, yakiniku, kaiseki and regional dishes.",
+        "zh": "Atashi Yokocho 預計涵蓋多種類型的日本料理。規劃中的品項包括拉麵、壽司、天婦羅、yakitori 串燒、yakiniku 燒肉、kaiseki 懷石料理與地方特色菜。"
       },
       {
-        "en": "Truong has already brought several Japanese restaurant brands to the Valley, including multiple Mensho Ramen locations and Udon Shin in Mesa. Atashi Yokocho is set to join other restaurant and entertainment tenants planned for The Sydney.",
-        "zh": "Truong 已經把多個日本餐飲品牌帶進 Valley，包括數家 Mensho Ramen 門市，以及位於 Mesa 的 Udon Shin。Atashi Yokocho 將加入 The Sydney 規劃中的其他餐飲與娛樂租戶。"
+        "en": "The restaurant spaces may vary in size, from small rooms seating about eight people to larger areas for as many as 50 guests. Truong is also considering rotating pop ups, which could give Japanese operators limited runs in front of Arizona diners.",
+        "zh": "各餐飲空間大小可能不同，小型座位區約可容納八人，較大的區域可容納最多 50 人。Truong 也在研究輪替 pop up 的可能性，讓日本餐飲業者以限期形式面向亞利桑那食客。"
       }
     ],
     "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/the-sydney.jpg",
@@ -242,8 +120,73 @@
       "business_owners"
     ],
     "publishedAt": "2026-06-05T00:10:01.692+00:00",
-    "updatedAt": "2026-06-05T00:10:01.692+00:00",
-    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:19:29.225348+00:00",
+    "lastCheckedAt": "2026-06-05T00:19:28.269+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
+  },
+  {
+    "id": "94900089-d66d-4dfe-b649-5ed339f0f772",
+    "candidateId": "a0b3b922-7327-495f-8849-f0e6c1dfebf9",
+    "slug": "luna-grill-plans-three-more-phoenix-area-restaurants-in-2026",
+    "lane": "openings",
+    "title": {
+      "en": "Luna Grill plans three more Phoenix area restaurants",
+      "zh": "Luna Grill 計畫再開三家鳳凰城地區餐廳"
+    },
+    "excerpt": {
+      "en": "Luna Grill expects to open at least three more restaurants in the Phoenix area before the end of 2026. The planned locations include Tempe, Avondale and north Phoenix.",
+      "zh": "Luna Grill 預計在 2026 年底前於鳳凰城地區至少再開三家餐廳。計畫地點包括 Tempe、Avondale 與 north Phoenix。"
+    },
+    "body": [
+      {
+        "en": "Luna Grill is preparing another round of growth in metro Phoenix, with at least three restaurants planned before the end of 2026. The San Diego based chain is targeting Tempe, Avondale and north Phoenix for the new openings.",
+        "zh": "Luna Grill 正準備在大鳳凰城地區展開下一波擴張，計畫在 2026 年底前至少開出三家餐廳。這家總部位於 San Diego 的連鎖品牌鎖定 Tempe、Avondale 與 north Phoenix 作為新據點。"
+      },
+      {
+        "en": "The north Phoenix restaurant is planned near the area around TSMC's semiconductor campus, where new development has been moving ahead. A Luna Grill location has also been proposed as part of a retail project near Dove Valley Road.",
+        "zh": "north Phoenix 的餐廳預計靠近 TSMC 半導體園區周邊，該區正在持續開發。Dove Valley Road 附近的一個零售開發案中，也曾提出 Luna Grill 據點計畫。"
+      },
+      {
+        "en": "The company has already entered Arizona with restaurants in Mesa and Gilbert. The next openings would move the brand into more parts of the Valley and give additional communities access to its Mediterranean inspired menu.",
+        "zh": "Luna Grill 已透過 Mesa 與 Gilbert 的門市進入亞利桑那市場。接下來的新店將把品牌帶到 Valley 更多區域，讓更多社區接觸到其地中海風味菜單。"
+      },
+      {
+        "en": "Luna Grill was founded in 2004 by Sean and Maria Pourteymour. Its menu includes kabobs, bowls, salads, pitas, family meals and other dishes prepared with fresh ingredients and cooked to order.",
+        "zh": "Luna Grill 由 Sean 與 Maria Pourteymour 於 2004 年創立。菜單包括 kabob 烤肉串、碗餐、沙拉、pita、家庭餐與其他以新鮮食材現點現做的餐點。"
+      },
+      {
+        "en": "The brand operates more than 50 restaurants in California, Texas and Arizona. Exact opening dates for the Tempe, Avondale and north Phoenix locations have not been announced, but the company expects them to arrive by the end of 2026.",
+        "zh": "這個品牌目前在 California、Texas 與 Arizona 經營超過 50 家餐廳。Tempe、Avondale 與 north Phoenix 新店的確切開幕日期尚未公布，但公司預計會在 2026 年底前開出。"
+      }
+    ],
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/Mesa_Exterior-1-1157x1536-1.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "breaking",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
+        },
+        "url": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
+        "source": "What Now Phoenix"
+      }
+    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "business_owners"
+    ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:19:29.225348+00:00",
+    "lastCheckedAt": "2026-06-05T00:19:28.269+00:00",
     "isPublished": true,
     "aiGeneratedSummary": true
   },
@@ -253,33 +196,33 @@
     "slug": "grandioso-targets-mid-july-debut-on-phoenix-s-grand-avenue",
     "lane": "openings",
     "title": {
-      "en": "Grandioso targets mid July debut on Phoenix's Grand Avenue",
-      "zh": "Grandioso 目標 7 月中旬在鳳凰城 Grand Avenue 開幕"
+      "en": "Grandioso targets mid July opening on Grand Avenue",
+      "zh": "Grandioso 目標 7 月中旬在 Grand Avenue 開幕"
     },
     "excerpt": {
-      "en": "Justin Piazza is preparing Grandioso at 1227 Grand Ave with pizza, drinks and a bar style setup. The opening could come July 15, later than the July 1 target.",
-      "zh": "Justin Piazza 正在 1227 Grand Ave 籌備 Grandioso，主打披薩、飲品和酒吧式空間。開幕時間可能落在 7 月 15 日，晚於原先 7 月 1 日的目標。"
+      "en": "Grandioso is planned for 1227 Grand Ave in Phoenix, with Justin Piazza aiming for a summer opening. The bar focused restaurant will serve several pizza styles along with drinks, wings, appetizers and panino sandwiches.",
+      "zh": "Grandioso 計畫設於 Phoenix 的 1227 Grand Ave，Justin Piazza 目標在夏季開幕。這家以酒吧氛圍為主的餐廳將供應多種披薩，並提供飲品、烤雞翅、前菜與 panino 三明治。"
     },
     "body": [
       {
-        "en": "Grandioso is planned for 1227 Grand Ave in Phoenix, where restaurateur and pizzaiolo Justin Piazza is preparing a summer opening. The team has aimed for July 1, but Piazza has said July 15 is now the more likely date.",
-        "zh": "Grandioso 規劃開在鳳凰城 1227 Grand Ave，餐飲業者與披薩師 Justin Piazza 正準備夏季開幕。團隊原本瞄準 7 月 1 日，但 Piazza 表示目前 7 月 15 日更有可能。"
+        "en": "Grandioso is planned for 1227 Grand Ave in Phoenix, where restaurateur and pizzaiolo Justin Piazza is preparing a summer opening. The team has looked at July 1, but Piazza now sees July 15 as the more likely opening date.",
+        "zh": "Grandioso 計畫設於 Phoenix 的 1227 Grand Ave，餐飲業者與披薩師 Justin Piazza 正籌備夏季開幕。團隊曾考慮 7 月 1 日開店，但 Piazza 目前認為 7 月 15 日更可能成為正式日期。"
       },
       {
-        "en": "The concept will focus on pizza and drinks with the feel of a neighborhood dive bar. Piazza is shaping the restaurant as a place for a slice, a drink and time spent hanging out on the Grand Avenue corridor.",
-        "zh": "這個概念會以披薩和飲品為主，空間氛圍接近社區型 dive bar。Piazza 正把餐廳打造為一個能吃一片披薩、喝一杯飲料，並在 Grand Avenue 走廊停留聊天的地方。"
+        "en": "The restaurant is being built around pizza, drinks and a neighborhood bar feel connected to the Grand Avenue arts scene. Piazza, known for La Piazza Al Forno and earlier downtown Phoenix projects, is shaping Grandioso as a place for slices, drinks and hanging out rather than formal table service.",
+        "zh": "這家餐廳將以披薩、飲品與鄰里酒吧氛圍為核心，並與 Grand Avenue 的藝術社群連結。Piazza 以 La Piazza Al Forno 及過去的 downtown Phoenix 項目聞名，他正把 Grandioso 打造成供人吃披薩、喝飲料與停留的空間，而非傳統桌邊服務餐廳。"
       },
       {
-        "en": "Pizza will be the center of the menu, with four styles planned. Grandioso will serve New York style pizza, Roman taglio style squares, Detroit style pan pizza and tavern style pies with a thin, crisp crust.",
-        "zh": "披薩會是菜單核心，目前規劃四種風格。Grandioso 將供應 New York style 披薩、Roman taglio style 方形披薩、Detroit style 烤盤披薩，以及薄脆餅皮的 tavern style 披薩。"
+        "en": "Grandioso is expected to serve four pizza styles. The lineup includes traditional New York style pizza, Roman taglio squares, Detroit style pan pizza and thin tavern style pies with a crisp texture.",
+        "zh": "Grandioso 預計供應四種披薩風格。菜單包括傳統 New York style pizza、Roman taglio 方形披薩、Detroit style pan pizza，以及薄而酥脆的 tavern style 披薩。"
       },
       {
-        "en": "The restaurant is also expected to have a full bar, baked wings, appetizers and panino sandwiches. Service will follow a quick service and bar model rather than traditional table service.",
-        "zh": "餐廳也預計提供完整酒吧、烤雞翅、開胃菜和 panino 三明治。營運模式會偏向快速點餐與酒吧服務，而不是傳統桌邊服務。"
+        "en": "The menu will go beyond pizza with a full bar program, baked wings, appetizers and panino style sandwiches. The operating model is planned as fast casual and bar oriented, giving customers a more informal option on the Grand Avenue corridor.",
+        "zh": "披薩之外，菜單還將包括完整酒吧飲品、烤雞翅、前菜與 panino style 三明治。營運模式規劃為 fast casual 並偏向酒吧，為 Grand Avenue 走廊提供一個較輕鬆的用餐選擇。"
       },
       {
-        "en": "Piazza is known for La Piazza Al Forno and past downtown Phoenix restaurant projects. Grandioso will also lean into the area's arts identity, with murals planned inside and outside, plus a pool table and jukebox in the space.",
-        "zh": "Piazza 以 La Piazza Al Forno 及過去在鳳凰城市中心的餐飲項目為人所知。Grandioso 也會呼應該區的藝術特色，室內外都規劃壁畫，空間內還會有撞球桌和點唱機。"
+        "en": "Piazza returned to Phoenix and found Grand Avenue to be the right fit because of its people, atmosphere and creative activity. The space is expected to include murals inside and outside by Arizona artists, along with a pool table, jukebox and late night energy.",
+        "zh": "Piazza 回到 Phoenix 後，因為當地居民、氛圍與創意活動而認為 Grand Avenue 適合這個項目。店內外預計會有亞利桑那藝術家創作的壁畫，並設置撞球桌、jukebox 與深夜時段的活動氣氛。"
       }
     ],
     "heroImage": "https://whatnow.com/wp-content/uploads/2026/05/529af7d429304b369cf033fa22d9278b-1.jpg",
@@ -307,8 +250,73 @@
       "business_owners"
     ],
     "publishedAt": "2026-06-05T00:10:01.692+00:00",
-    "updatedAt": "2026-06-05T00:10:01.692+00:00",
-    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:19:29.225348+00:00",
+    "lastCheckedAt": "2026-06-05T00:19:28.269+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
+  },
+  {
+    "id": "db3c69fe-f937-4ff1-8d33-304140847e3b",
+    "candidateId": "a60d2d69-3292-4a17-b872-bd33ee54fe0d",
+    "slug": "angry-crab-shack-sets-june-11-opening-in-chandler",
+    "lane": "openings",
+    "title": {
+      "en": "Angry Crab Shack opens Chandler restaurant June 11",
+      "zh": "Angry Crab Shack 6 月 11 日在 Chandler 開店"
+    },
+    "excerpt": {
+      "en": "Angry Crab Shack is opening a new restaurant at 3033 S. Gilbert Road in Chandler. The June 11 celebration will include a spicy wing contest, children's activities and local nonprofit support.",
+      "zh": "Angry Crab Shack 將在 Chandler 的 3033 S. Gilbert Road 開設新餐廳。6 月 11 日的開幕活動將包括辣雞翅比賽、兒童活動，並支持在地非營利組織。"
+    },
+    "body": [
+      {
+        "en": "Angry Crab Shack is opening its newest Arizona restaurant on June 11 at 3033 S. Gilbert Road in Chandler. The Arizona based seafood chain will bring its seafood boils, bold sauces and Asian Cajun flavors to the Southeast Valley.",
+        "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 的 3033 S. Gilbert Road 開設最新亞利桑那餐廳。這家亞利桑那本地海鮮連鎖品牌將把海鮮鍋、重口味醬料與 Asian Cajun 風味帶到 Southeast Valley。"
+      },
+      {
+        "en": "The Chandler restaurant is owned and operated by local franchise partners from the Appiah family. Franchisee Adelaide Appiah said the family is proud to bring the brand's seafood and community focused approach to its own neighborhood.",
+        "zh": "Chandler 餐廳由在地加盟夥伴 Appiah 家族擁有並營運。加盟業者 Adelaide Appiah 表示，家族很高興能把品牌的海鮮餐點與重視社區的經營方式帶到自己的社區。"
+      },
+      {
+        "en": "The grand opening is planned as a public event rather than a simple first day of service. Chandler police and fire personnel are expected to take part in a spicy wing eating competition, and a DJ will provide music and entertainment.",
+        "zh": "開幕日規劃成一場公開活動，而不只是一般營業首日。Chandler 警察與消防人員預計參加辣雞翅吃食比賽，現場也會有 DJ 帶來音樂與娛樂。"
+      },
+      {
+        "en": "Families visiting the opening can expect a balloon artist for children and a spin to win prize table that includes a chance to win a TV. The event will also support local nonprofit organizations.",
+        "zh": "到場家庭可期待兒童氣球藝術師，以及 spin to win 抽獎桌，獎品包括有機會抽中電視。活動也將支持在地非營利組織。"
+      },
+      {
+        "en": "The new restaurant will participate in Angry Crab Shack charitable programs tied to veterans, children's hospitals and local food banks. Angry Crab Shack operates 15 locations across Arizona and has more planned for this year.",
+        "zh": "這家新餐廳也將參與 Angry Crab Shack 的慈善計畫，相關項目支持退伍軍人、兒童醫院與在地食物銀行。Angry Crab Shack 目前在亞利桑那經營 15 家店，並計畫今年繼續增加據點。"
+      }
+    ],
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/129896006_919360601929960_144754164420173428_n-1.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "breaking",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
+        },
+        "url": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
+        "source": "What Now Phoenix"
+      }
+    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "business_owners"
+    ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:19:29.225348+00:00",
+    "lastCheckedAt": "2026-06-05T00:19:28.269+00:00",
     "isPublished": true,
     "aiGeneratedSummary": true
   }
