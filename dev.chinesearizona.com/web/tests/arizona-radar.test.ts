@@ -141,7 +141,7 @@ describe('Arizona Radar core', () => {
     expect(result.store.candidates[0]?.moderationState).toBe('blocked');
   });
 
-  it('preserves source hero images for article sources and falls back for signal_only items', () => {
+  it('preserves source hero images for article sources and blocks signal_only media reuse', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
       [
@@ -167,17 +167,20 @@ describe('Arizona Radar core', () => {
       }
     );
 
-    expect(result.store.articles).toHaveLength(2);
+    expect(result.summary.publishedCount).toBe(1);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.articles).toHaveLength(1);
     const webArticle = result.store.articles.find((article) => article.sourcePolicy === 'summary_link');
-    const socialArticle = result.store.articles.find((article) => article.sourcePolicy === 'signal_only');
 
     expect(webArticle?.heroImagePolicy).toBe('source_allowed');
     expect(webArticle?.heroImage).toBe('https://example.com/not-allowed-source-image.jpg');
-    expect(socialArticle?.heroImagePolicy).toBe('fallback_only');
-    expect(socialArticle?.heroImage).toBe('/home-neighborhood/scottsdale-card.webp');
+    expect(result.store.candidates.find((candidate) => candidate.sourcePolicy === 'signal_only')).toMatchObject({
+      moderationState: 'blocked',
+      blockReason: 'missing_usable_hero_image',
+    });
   });
 
-  it('repairs stored articles with empty or non-renderable hero images', () => {
+  it('drops stored articles without usable images and recovers Brightspot source images', () => {
     const store = normalizeStore({
       ...defaultStoreSnapshot(),
       articles: [
@@ -209,18 +212,14 @@ describe('Arizona Radar core', () => {
       ],
     });
 
-    expect(store.articles).toHaveLength(3);
-    expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(store.articles[0]?.heroImage).toBe('/home-neighborhood/phoenix-card.webp');
-    expect(store.articles[1]?.heroImagePolicy).toBe('fallback_only');
-    expect(store.articles[1]?.heroImage).toBe(
-      '/directory-ai-replacements/old-town-taste-tempe-v2.webp'
+    expect(store.articles).toHaveLength(1);
+    expect(store.articles[0]?.heroImagePolicy).toBe('source_allowed');
+    expect(store.articles[0]?.heroImage).toBe(
+      'https://npr-brightspot.s3.amazonaws.com/95/7b/image.JPG'
     );
-    expect(store.articles[2]?.heroImagePolicy).toBe('fallback_only');
-    expect(store.articles[2]?.heroImage).toBe('/home-neighborhood/tempe-card.webp');
   });
 
-  it('repairs city radar article images with site-local fallback assets', () => {
+  it('drops city radar articles without usable source images', () => {
     const store = normalizeStore(
       {
         ...defaultStoreSnapshot(),
@@ -238,8 +237,7 @@ describe('Arizona Radar core', () => {
       'los-angeles'
     );
 
-    expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(store.articles[0]?.heroImage).toBe('/city-site-images/alhambra-main-street.webp');
+    expect(store.articles).toHaveLength(0);
   });
 
   it('accepts Arizona sources that are not in the manifest by inferring source metadata', () => {
@@ -318,7 +316,7 @@ describe('Arizona Radar core', () => {
     });
   });
 
-  it('drops unsafe optional source and hero URLs without weakening valid source-linked articles', () => {
+  it('blocks drafts with unsafe hero URLs while keeping safe optional source links out of articles', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
       [
@@ -349,15 +347,13 @@ describe('Arizona Radar core', () => {
       }
     );
 
-    expect(result.summary.publishedCount).toBe(1);
-    expect(result.summary.blockedCount).toBe(0);
-    expect(result.store.articles[0]?.sourcePolicy).toBe('summary_link');
-    expect(result.store.articles[0]?.sourceLinks).toEqual([
-      expect.objectContaining({ url: 'https://news.example/austin/transit-update' }),
-      expect.objectContaining({ url: 'https://city.example/austin/transit-doc' }),
-    ]);
-    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(result.store.articles[0]?.heroImage).toBe('/home-neighborhood/tempe-card.webp');
+    expect(result.summary.publishedCount).toBe(0);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.articles).toHaveLength(0);
+    expect(result.store.candidates[0]).toMatchObject({
+      moderationState: 'blocked',
+      blockReason: 'missing_usable_hero_image',
+    });
   });
 
   it('infers signal_only handling for Arizona social sources outside the manifest', () => {
@@ -385,14 +381,18 @@ describe('Arizona Radar core', () => {
       }
     );
 
-    expect(result.summary.publishedCount).toBe(1);
-    expect(result.store.articles[0]?.sourceType).toBe('social_signal');
-    expect(result.store.articles[0]?.sourcePolicy).toBe('signal_only');
-    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(result.store.articles[0]?.heroImage).toBe('/home-neighborhood/scottsdale-card.webp');
+    expect(result.summary.publishedCount).toBe(0);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.articles).toHaveLength(0);
+    expect(result.store.candidates[0]).toMatchObject({
+      sourceType: 'social_signal',
+      sourcePolicy: 'signal_only',
+      moderationState: 'blocked',
+      blockReason: 'missing_usable_hero_image',
+    });
   });
 
-  it('uses city-local fallback images for generated Austin articles without usable source art', () => {
+  it('blocks generated Austin articles without usable source art', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
       [
@@ -403,11 +403,11 @@ describe('Arizona Radar core', () => {
           sourcePublishedAt: '2026-04-18T10:00:00.000Z',
           titleEn: 'Austin community center update adds weekend services',
           titleZh: 'Austin 社區中心更新新增週末服務',
-          excerptEn: 'A concise Austin community update keeps source links while using local fallback art.',
-          excerptZh: '一則簡短的 Austin 社區更新保留來源連結並使用本地備用圖片。',
+          excerptEn: 'A concise Austin community update keeps source links but has no source art.',
+          excerptZh: '一則簡短的 Austin 社區更新保留來源連結但沒有來源圖片。',
           bodyEn: ['Austin readers get a source-linked summary for the community update.'],
           bodyZh: ['Austin 讀者可閱讀附來源連結的社區更新摘要。'],
-          topicFingerprint: 'austin community local fallback art',
+          topicFingerprint: 'austin community missing source art',
           heroImage: 'https://news.example/assets/logo.png',
         },
       ],
@@ -419,12 +419,16 @@ describe('Arizona Radar core', () => {
       }
     );
 
-    expect(result.summary.publishedCount).toBe(1);
-    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(result.store.articles[0]?.heroImage).toBe('/city-site-images/austin-skyline-lake.webp');
+    expect(result.summary.publishedCount).toBe(0);
+    expect(result.summary.blockedCount).toBe(1);
+    expect(result.store.articles).toHaveLength(0);
+    expect(result.store.candidates[0]).toMatchObject({
+      moderationState: 'blocked',
+      blockReason: 'missing_usable_hero_image',
+    });
   });
 
-  it('uses city-local fallback images for generated LA articles with broken Brightspot transforms', () => {
+  it('recovers source images from generated LA articles with broken Brightspot transforms', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
       [
@@ -433,12 +437,12 @@ describe('Arizona Radar core', () => {
           sourceUrl: 'https://www.latimes.com/california/story/test-item',
           canonicalUrl: 'https://www.latimes.com/california/story/test-item',
           sourcePublishedAt: '2026-06-05T10:00:00.000Z',
-          titleEn: 'Los Angeles update uses fallback art',
-          titleZh: '洛杉磯更新使用備用圖片',
-          excerptEn: 'A concise Los Angeles summary keeps source links while replacing broken CDN art.',
-          excerptZh: '一則簡短的洛杉磯摘要保留來源連結並改用備用圖片。',
-          bodyEn: ['Los Angeles readers get a source-linked summary with stable local artwork.'],
-          bodyZh: ['洛杉磯讀者可閱讀附來源連結並使用穩定本地圖片的摘要。'],
+          titleEn: 'Los Angeles update uses recovered source art',
+          titleZh: '洛杉磯更新使用原始來源圖片',
+          excerptEn: 'A concise Los Angeles summary keeps source links while recovering CDN source art.',
+          excerptZh: '一則簡短的洛杉磯摘要保留來源連結並還原來源圖片。',
+          bodyEn: ['Los Angeles readers get a source-linked summary with the original article image.'],
+          bodyZh: ['洛杉磯讀者可閱讀附來源連結並使用原文圖片的摘要。'],
           topicFingerprint: 'los angeles broken brightspot fallback art',
           heroImage:
             'https://ca-times.brightspotcdn.com/dims4/default/cdbaa47/2147483647/strip/true/crop/3900x2048+0+285/resize/1200x630!/quality/75?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fimage.jpg',
@@ -453,8 +457,10 @@ describe('Arizona Radar core', () => {
     );
 
     expect(result.summary.publishedCount).toBe(1);
-    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
-    expect(result.store.articles[0]?.heroImage).toBe('/city-site-images/los-angeles-community-hero.webp');
+    expect(result.store.articles[0]?.heroImagePolicy).toBe('source_allowed');
+    expect(result.store.articles[0]?.heroImage).toBe(
+      'https://california-times-brightspot.s3.amazonaws.com/image.jpg'
+    );
   });
 
   it('suppresses duplicates by canonical url for web items and by topic fingerprint for social items', () => {
@@ -499,9 +505,10 @@ describe('Arizona Radar core', () => {
       }
     );
 
-    expect(result.summary.publishedCount).toBe(2);
-    expect(result.summary.duplicateCount).toBe(2);
-    expect(result.store.articles).toHaveLength(2);
+    expect(result.summary.publishedCount).toBe(1);
+    expect(result.summary.duplicateCount).toBe(1);
+    expect(result.summary.blockedCount).toBe(2);
+    expect(result.store.articles).toHaveLength(1);
   });
 
   it('caps publication at 10 items and queues overflow candidates', () => {

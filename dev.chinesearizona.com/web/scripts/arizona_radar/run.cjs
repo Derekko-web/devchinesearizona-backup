@@ -11,6 +11,7 @@ const { Agent } = require('undici');
 const {
   applyDraftsToStore,
   normalizeCanonicalUrl,
+  normalizeRadarHeroImageUrl,
 } = require('./core.cjs');
 const {
   readStoreSnapshot,
@@ -440,9 +441,9 @@ function normalizeImageUrl(value, baseUrl = '') {
 
   try {
     const resolved = baseUrl ? new URL(raw, baseUrl).toString() : raw;
-    return normalizeCanonicalUrl(resolved);
+    return normalizeRadarHeroImageUrl(resolved);
   } catch (_error) {
-    return normalizeCanonicalUrl(raw);
+    return normalizeRadarHeroImageUrl(raw);
   }
 }
 
@@ -866,7 +867,8 @@ function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
     `- Explain what happened, who is involved, where it is, timing, and why a ${siteConfig.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
-    '- If articleImage is present, copy it into heroImage. Do not invent image URLs.',
+    '- Copy articleImage into heroImage. It is required. Do not invent image URLs.',
+    '- If an item has no usable articleImage, skip it instead of returning a draft.',
     '- Use plain, direct language. Do not inflate significance.',
     '',
     'Banned style:',
@@ -892,7 +894,7 @@ function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
     '    "excerptZh": "matching Traditional Chinese excerpt",',
     schemaBodyEn,
     schemaBodyZh,
-    '    "heroImage": "optional image URL",',
+    '    "heroImage": "required articleImage URL copied from input",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
     ']',
@@ -992,7 +994,9 @@ function mergeFeedRewriteDraft(seed, draft, options = {}) {
     excerptZh: normalizeGeneratedText(draft.excerptZh || excerptEn),
     bodyEn,
     bodyZh,
-    heroImage: normalizeCanonicalUrl(draft.heroImage || seed.articlePayload.heroImage || seed.heroImage),
+    heroImage: normalizeRadarHeroImageUrl(
+      draft.heroImage || seed.articlePayload.heroImage || seed.heroImage
+    ),
     topicFingerprint: normalizeGeneratedText(draft.topicFingerprint || seed.topicFingerprint),
     personaTargets: seed.personaTargets,
   };
@@ -1207,6 +1211,123 @@ async function fetchText(url, timeoutMs, siteConfig = RADAR_CITY) {
   }
 }
 
+async function cancelResponseBody(response) {
+  try {
+    await response.body?.cancel();
+  } catch (_error) {
+    // Image validation only needs headers; ignore body cleanup failures.
+  }
+}
+
+async function fetchImageWithRedirects(url, options) {
+  const redirectCount = Number.isFinite(options.redirectCount) ? options.redirectCount : 0;
+  if (redirectCount > SAFE_FETCH_MAX_REDIRECTS) {
+    throw new Error('Too many image redirects.');
+  }
+
+  const fetchUrl = await resolveFetchablePublicUrl(url);
+  const response = await fetch(fetchUrl, {
+    dispatcher: SAFE_FETCH_DISPATCHER,
+    headers: {
+      accept: 'image/avif,image/webp,image/*,*/*;q=0.8',
+      'accept-encoding': 'identity',
+      range: 'bytes=0-1023',
+      'user-agent': `${options.siteConfig.brandName}RadarImageCheck/1.0`,
+    },
+    redirect: 'manual',
+    signal: options.signal,
+  });
+
+  if (SAFE_FETCH_REDIRECT_STATUSES.has(response.status)) {
+    await cancelResponseBody(response);
+    const redirectUrl = resolveFetchRedirectUrl(response.headers.get('location'), fetchUrl);
+    return fetchImageWithRedirects(redirectUrl, {
+      ...options,
+      redirectCount: redirectCount + 1,
+    });
+  }
+
+  const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+  await cancelResponseBody(response);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} ${response.statusText}`.trim());
+  }
+  if (!contentType.startsWith('image/')) {
+    throw new Error(`Non-image content type: ${contentType || 'missing'}`);
+  }
+
+  return true;
+}
+
+async function imageUrlIsUsable(url, timeoutMs, siteConfig = RADAR_CITY) {
+  const normalizedUrl = normalizeRadarHeroImageUrl(url);
+  if (!normalizedUrl) {
+    return false;
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    await fetchImageWithRedirects(normalizedUrl, {
+      redirectCount: 0,
+      siteConfig,
+      signal: controller.signal,
+    });
+    return true;
+  } catch (_error) {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function filterDraftsWithUsableImages(drafts, options = {}) {
+  const timeoutMs = Number.isFinite(options.timeoutMs)
+    ? Math.max(1000, Math.floor(options.timeoutMs))
+    : 15000;
+  const siteConfig = options.siteConfig || RADAR_CITY;
+  const filteredDrafts = [];
+
+  for (const draft of Array.isArray(drafts) ? drafts : []) {
+    const heroImage = normalizeRadarHeroImageUrl(draft?.heroImage);
+    if (!heroImage) {
+      process.stderr.write(
+        JSON.stringify({
+          status: 'draft_image_rejected',
+          sourceSlug: draft?.sourceSlug,
+          canonicalUrl: draft?.canonicalUrl || draft?.sourceUrl,
+          errorMessage: 'Missing usable hero image URL.',
+          timestamp: new Date().toISOString(),
+        }) + '\n'
+      );
+      continue;
+    }
+
+    if (!(await imageUrlIsUsable(heroImage, timeoutMs, siteConfig))) {
+      process.stderr.write(
+        JSON.stringify({
+          status: 'draft_image_rejected',
+          sourceSlug: draft?.sourceSlug,
+          canonicalUrl: draft?.canonicalUrl || draft?.sourceUrl,
+          heroImage,
+          errorMessage: 'Hero image URL did not return an image response.',
+          timestamp: new Date().toISOString(),
+        }) + '\n'
+      );
+      continue;
+    }
+
+    filteredDrafts.push({
+      ...draft,
+      heroImage,
+    });
+  }
+
+  return filteredDrafts;
+}
+
 async function collectDraftsFromFeeds(manifest, options = {}) {
   const maxItems = Number.isFinite(options.maxItems) ? Math.max(1, Math.floor(options.maxItems)) : 10;
   const timeoutMs = Number.isFinite(options.timeoutMs) ? Math.max(1000, Math.floor(options.timeoutMs)) : 15000;
@@ -1260,6 +1381,17 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
             sourceSlug: seed.sourceSlug,
             canonicalUrl: seed.canonicalUrl,
             textLength: articlePayload.text.length,
+            timestamp: new Date().toISOString(),
+          }) + '\n'
+        );
+        continue;
+      }
+      if (!articlePayload.heroImage) {
+        process.stderr.write(
+          JSON.stringify({
+            status: 'feed_article_missing_image',
+            sourceSlug: seed.sourceSlug,
+            canonicalUrl: seed.canonicalUrl,
             timestamp: new Date().toISOString(),
           }) + '\n'
         );
@@ -1523,7 +1655,7 @@ function buildHermesPrompt(
     '    "excerptZh": "matching Traditional Chinese deck covering the same angle",',
     schemaBodyEn,
     schemaBodyZh,
-    '    "heroImage": "https://source-image.example/hero.jpg optional for non-social sources",',
+    '    "heroImage": "required usable http(s) article image URL from the source page",',
     '    "topicFingerprint": "stable short topic description"',
     '  }',
     ']',
@@ -1539,7 +1671,8 @@ function buildHermesPrompt(
     '- Avoid AI-style filler and banned phrasing: pivotal, testament, landscape, showcasing, nestled, boasts, unlock, seamless, vibrant, robust, at its core, future looks bright, here is what you need to know.',
     bannedDetectorRule,
     '- Do not use emojis, markdown, bullet lists, inline section headers, title-case headings, em dashes, en dashes, vague attribution, generic conclusions, or not just X but Y framing.',
-    '- If the source page exposes a clear article image or OG image and the source is not signal_only, include it in heroImage.',
+    '- Every returned item must include a usable article image or OG image in heroImage.',
+    '- Skip any source item that does not expose a usable article image.',
     '- Public social sources must become signal_only trend summaries. Do not reuse captions, hashtags, quotes, embeds, or any third-party media URLs.',
     '- Do not fabricate filler. If there are fewer than the requested count, return fewer.',
     '- As soon as you have enough qualifying items, stop searching and return the JSON immediately.',
@@ -1780,9 +1913,13 @@ async function runWorker(args) {
             siteConfig,
           })
         : drafts;
-    const filteredDrafts = dedupeDrafts([...feedDrafts, ...recoveredDrafts]).filter(
+    const collectedDrafts = dedupeDrafts([...feedDrafts, ...recoveredDrafts]).filter(
       (draft) => draft && typeof draft === 'object'
     );
+    const filteredDrafts = await filterDraftsWithUsableImages(collectedDrafts, {
+      timeoutMs: args.feedTimeoutMs,
+      siteConfig,
+    });
     if (hermesError && filteredDrafts.length === 0) {
       throw hermesError;
     }
@@ -1868,8 +2005,10 @@ module.exports = {
   buildHermesPrompt,
   collectDraftsFromFeeds,
   extractJsonPayload,
+  filterDraftsWithUsableImages,
   fetchText,
   getSiteConfig,
+  imageUrlIsUsable,
   lookupPublicFetchAddress,
   parseFeedItems,
   parseArgs,
