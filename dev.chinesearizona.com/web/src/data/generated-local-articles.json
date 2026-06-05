@@ -1,414 +1,315 @@
 [
   {
-    "slug": "housing-watch-where-tsmc-families-compare-first",
+    "id": "db3c69fe-f937-4ff1-8d33-304140847e3b",
+    "candidateId": "a60d2d69-3292-4a17-b872-bd33ee54fe0d",
+    "slug": "angry-crab-shack-sets-june-11-opening-in-chandler",
+    "lane": "openings",
     "title": {
-      "en": "Housing Watch: Where TSMC-Area Families Are Actually Comparing First",
-      "zh": "房市觀察：TSMC 周邊家庭最先比較的落腳區"
+      "en": "Angry Crab Shack sets June 11 opening in Chandler",
+      "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 開幕"
     },
     "excerpt": {
-      "en": "West Valley interest is rising, but many bilingual households are still weighing Peoria, North Phoenix, and Chandler against school rhythm, community access, and airport convenience before they commit.",
-      "zh": "雖然西谷熱度上升，不少雙語家庭在拍板前仍會把 Peoria、北鳳凰城與 Chandler 一起比較學校節奏、社群資源與機場便利性。"
+      "en": "Angry Crab Shack will open a Chandler restaurant at 3033 S. Gilbert Road on June 11. The Appiah family will operate the location and launch it with contests, children's activities and nonprofit support.",
+      "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 的 3033 S. Gilbert Road 開設餐廳。這家店由 Appiah 家族經營，開幕活動包括比賽、兒童活動和非營利組織支援。"
     },
-    "heroImage": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-15T09:00:00.000Z",
-    "updatedAt": "2026-04-15T09:00:00.000Z",
-    "category": "feature",
     "body": [
       {
-        "en": "The first real housing decision for TSMC-linked families is rarely one neighborhood versus another. It is usually a three-way tradeoff between a shorter fab commute, stronger East Valley Chinese community anchors, and a smoother airport-plus-school routine for the rest of family life.",
-        "zh": "對與 TSMC 有關的家庭來說，第一個真正的住房決策很少只是某個社區和另一個社區二選一，而是在更短的廠區通勤、更成熟的東谷華人生活圈，以及更順手的機場與學校日常之間做三方取捨。"
+        "en": "Angry Crab Shack is opening a new Chandler restaurant on June 11 at 3033 S. Gilbert Road. The location gives the seafood chain another Southeast Valley address for its seafood boils, sauces and casual dining.",
+        "zh": "Angry Crab Shack 將於 6 月 11 日在 Chandler 開設新餐廳，地址是 3033 S. Gilbert Road。這個新據點讓這家海鮮連鎖品牌在東南 Valley 又多了一個供應海鮮鍋、醬料和休閒用餐的地址。"
       },
       {
-        "en": "That is why ChineseArizona treats housing as a systems story instead of a listing mirror. Price snapshots matter, but so do shaded parking, school pickup friction, Chinese class driving time, and how exhausting the weekend grocery run becomes once the novelty of the move wears off.",
-        "zh": "這也是 ChineseArizona 把住房當成生活系統來看，而不是把第三方房源重新搬過來。價格固然重要，但停車遮蔭、接送小孩是否卡、去上中文課要開多久，以及新鮮感過後週末買菜會不會變成負擔，同樣重要。"
+        "en": "The Chandler restaurant is owned and operated by the Appiah family, local franchise partners for the brand. The menu will bring the chain's seafood boil format and flavors influenced by Asian and Cajun cooking to the neighborhood.",
+        "zh": "Chandler 餐廳由當地加盟夥伴 Appiah 家族擁有並經營。菜單會把品牌的海鮮鍋形式，以及受亞洲與卡津料理影響的風味帶進這個社區。"
       },
       {
-        "en": "Use market portals for rough directional signals, then work with trusted bilingual real-estate and relocation providers to translate those signals into an actual landing plan. The goal is not just to win a search filter. It is to build a week that feels sustainable once work and school both start.",
-        "zh": "房市平台適合拿來看大方向，但真正要落地，還是得和可信任的雙語房產與搬遷顧問一起把訊號轉成可執行的安家方案。重點不是在搜尋器裡找到一個看起來漂亮的條件，而是讓工作和學校都開始後的一週仍然能過得順。"
+        "en": "The grand opening will include a spicy wing eating competition with participation from the Chandler Police and Fire Departments. A DJ, a balloon artist for children and a spin to win prize table are also planned, including a chance to win a TV.",
+        "zh": "開幕活動將安排辣味雞翅大胃王比賽，Chandler 警察局和消防局也會參與。現場還計畫有 DJ、兒童氣球藝術師，以及 spin to win 獎品桌，其中包含贏得電視的機會。"
+      },
+      {
+        "en": "The event will support local nonprofit organizations, and the restaurant will take part in Angry Crab Shack charitable programs tied to veterans, children's hospitals and local food banks. Angry Crab Shack operates 15 Arizona locations and has more planned for this year.",
+        "zh": "這場活動將支援當地非營利組織，而餐廳也會參與 Angry Crab Shack 的慈善項目，相關計畫支持退伍軍人、兒童醫院和在地食物銀行。Angry Crab Shack 目前在亞利桑那有 15 個據點，今年還規劃更多門市。"
       }
     ],
-    "series": "housing-watch",
-    "freshnessTier": "monthly",
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/129896006_919360601929960_144754164420173428_n-1.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "breaking",
     "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [
-      "real-estate",
-      "moving",
-      "education"
-    ],
-    "ctaBusinessSlugs": [
-      "elite-az-realty-team",
-      "desert-bridge-relocation",
-      "arizona-chinese-language-academy"
-    ],
-    "personaTargets": [
-      "tsmc_newcomers",
-      "local_families"
-    ],
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
     "sourceLinks": [
       {
         "label": {
-          "en": "Zillow housing portal",
-          "zh": "Zillow 房市平台"
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
         },
-        "url": "https://www.zillow.com/",
-        "source": "Zillow"
-      },
-      {
-        "label": {
-          "en": "Redfin market pages",
-          "zh": "Redfin 市場頁面"
-        },
-        "url": "https://www.redfin.com/",
-        "source": "Redfin"
-      },
-      {
-        "label": {
-          "en": "Arizona School Report Cards",
-          "zh": "亞利桑那學校成績卡"
-        },
-        "url": "https://azreportcards.azed.gov/",
-        "source": "Arizona Department of Education"
+        "url": "https://whatnow.com/phoenix/restaurants/a-growing-arizona-seafood-chain-is-opening-a-new-chandler-location",
+        "source": "What Now Phoenix"
       }
     ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_housing_watch_west_valley_compare_2026_04_15",
-    "republishedWithPermission": false
-  },
-  {
-    "slug": "tsmc-corridor-watch-supplier-growth-and-neighborhood-pressure",
-    "title": {
-      "en": "TSMC Arizona Update: First Fab Is Running, Fab 2 Targets 2027 as the Buildout Grows",
-      "zh": "TSMC 亞利桑那更新：首座晶圓廠已量產，二廠目標 2027 年啟動，整體布局持續擴大"
-    },
-    "excerpt": {
-      "en": "TSMC says its first Arizona fab began high-volume N4 production in Q4 2024, the second fab structure was completed in 2025, and N3 volume production is targeted for the second half of 2027.",
-      "zh": "TSMC 表示，亞利桑那首座晶圓廠已於 2024 年第四季開始 N4 高量產，第二座晶圓廠結構於 2025 年完工，N3 量產目標為 2027 年下半年。"
-    },
-    "heroImage": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-14T10:00:00.000Z",
-    "updatedAt": "2026-04-16T12:00:00.000Z",
-    "category": "news",
-    "body": [
-      {
-        "en": "As of April 2026, the clearest TSMC Arizona story is execution, not rumor. On its Arizona site, TSMC says the first Phoenix fab started high-volume N4 production in Q4 2024. The company also says the second fab structure was completed in 2025 and N3 volume production is targeted for the second half of 2027.",
-        "zh": "截至 2026 年 4 月，TSMC 亞利桑那最清楚的主線已經不是傳言，而是實際執行。TSMC 在其亞利桑那專頁表示，鳳凰城首座晶圓廠已於 2024 年第四季開始 N4 高量產；公司也指出，第二座晶圓廠結構已於 2025 年完工，N3 量產目標為 2027 年下半年。"
-      },
-      {
-        "en": "TSMC now describes the Phoenix campus as a much larger long-term buildout. Its Arizona page says the plan includes six wafer fabs, two advanced packaging facilities and an R&D team center. In a March 4, 2025 press release, TSMC said its total planned U.S. investment would reach $165 billion, with Arizona already employing more than 3,000 people.",
-        "zh": "TSMC 現在把鳳凰城園區描述為更大規模的長期布局。其亞利桑那頁面指出，整體計畫包含六座晶圓廠、兩座先進封裝設施與一個研發團隊中心。TSMC 在 2025 年 3 月 4 日的新聞稿中表示，其美國總投資規劃將達 1650 億美元，而亞利桑那園區目前已有超過 3000 名員工。"
-      },
-      {
-        "en": "For Arizona readers, that changes the local conversation. The live questions are now supplier hiring, workforce training, housing pressure, and Taiwan-linked business travel around a campus that is already producing chips and still getting bigger.",
-        "zh": "對亞利桑那讀者來說，這讓在地討論焦點明顯改變。現在真正需要追蹤的，是供應鏈招聘、人才培訓、住房壓力，以及圍繞這座已經開始生產且仍在擴張的園區所帶動的台美商務往返。"
-      }
-    ],
-    "series": "tsmc-corridor-watch",
-    "freshnessTier": "weekly",
-    "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [
-      "real-estate",
-      "jobs",
-      "legal-finance"
-    ],
-    "ctaBusinessSlugs": [
-      "elite-az-realty-team",
-      "sonoran-career-bridge",
-      "chen-cpa-associates"
-    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
     "personaTargets": [
-      "tsmc_newcomers",
+      "local_families",
       "business_owners"
     ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:10:01.692+00:00",
+    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
+  },
+  {
+    "id": "c6dd9125-aa88-4dba-b4ed-9af51d592de6",
+    "candidateId": "a8c2b99e-4c60-4855-ade1-6eda4cbb7fbb",
+    "slug": "black-rock-coffee-bar-lines-up-three-arizona-shops",
+    "lane": "openings",
+    "title": {
+      "en": "Black Rock Coffee Bar lines up three Arizona shops",
+      "zh": "Black Rock Coffee Bar 將在亞利桑那新增三家門市"
+    },
+    "excerpt": {
+      "en": "Black Rock Coffee Bar is preparing new shops in Glendale, Chandler and Prescott Valley. The first is expected in June, with two more planned for July.",
+      "zh": "Black Rock Coffee Bar 準備在 Glendale、Chandler 和 Prescott Valley 開設新門市。第一家預計 6 月開幕，另外兩家規劃在 7 月登場。"
+    },
+    "body": [
+      {
+        "en": "Black Rock Coffee Bar is adding three more Arizona addresses as the coffee chain keeps building its presence in the state. The new shops are planned for Glendale, Chandler and Prescott Valley, giving customers in three different markets another option for coffee, breakfast and quick drinks.",
+        "zh": "Black Rock Coffee Bar 將在亞利桑那再增加三個地址，延續這家咖啡連鎖品牌在州內的展店腳步。新門市分別規劃在 Glendale、Chandler 和 Prescott Valley，讓三個不同市場的顧客多一個買咖啡、早餐和快速飲品的選擇。"
+      },
+      {
+        "en": "The Glendale location is expected to open first in June at 5937 N. 91st Ave., Suite 130. Two more shops are scheduled to follow in July, one at 3103 S. McQueen Road in Chandler and another at 6272 E. 2nd Street in Prescott Valley.",
+        "zh": "Glendale 門市預計最先在 6 月開幕，地址是 5937 N. 91st Ave., Suite 130。接下來兩家預定在 7 月開出，一家位於 Chandler 的 3103 S. McQueen Road，另一家位於 Prescott Valley 的 6272 E. 2nd Street。"
+      },
+      {
+        "en": "The company began in Oregon in 2008, when Jeff Hernandez started Black Rock Coffee Bar as a single coffee stand. It has since grown to more than 150 locations across the United States, and the Arizona openings continue that wider expansion.",
+        "zh": "Black Rock Coffee Bar 由 Jeff Hernandez 於 2008 年在俄勒岡創立，最初只是一個咖啡攤。如今品牌在全美已有超過 150 個據點，這批亞利桑那新店是其全國展店的一部分。"
+      },
+      {
+        "en": "The menu covers hot and iced coffee drinks, cold brew, teas, smoothies, energy beverages and drinks with protein. Food options include breakfast burritos, sandwiches, bagels, muffins and other baked goods.",
+        "zh": "菜單包括熱咖啡與冰咖啡、冷萃、茶飲、冰沙、能量飲品和含蛋白質的飲品。餐點則有早餐捲餅、三明治、貝果、瑪芬和其他烘焙食品。"
+      }
+    ],
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/SaveClip.App_612744509_18544834240049713_2097338163297914576_n-1.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "breaking",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/black-rock-coffee-bar-expands-with-three-new-arizona-locations",
     "sourceLinks": [
       {
         "label": {
-          "en": "TSMC Arizona site",
-          "zh": "TSMC Arizona 專頁"
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
         },
-        "url": "https://www.tsmc.com/static/abouttsmcaz/index.htm",
-        "source": "TSMC"
-      },
-      {
-        "label": {
-          "en": "TSMC $165 billion U.S. investment release",
-          "zh": "TSMC 1650 億美元美國投資新聞稿"
-        },
-        "url": "https://pr.tsmc.com/english/news/3210",
-        "source": "TSMC"
+        "url": "https://whatnow.com/phoenix/restaurants/black-rock-coffee-bar-expands-with-three-new-arizona-locations",
+        "source": "What Now Phoenix"
       }
     ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona News Desk",
-    "sourceId": "ca_tsmc_arizona_update_2026_04_16",
-    "republishedWithPermission": false
-  },
-  {
-    "slug": "phoenix-route-watch-asia-connector-playbook",
-    "title": {
-      "en": "Phoenix Air Service Update: Taipei Flights Are Live and Porter Adds New Canada Routes",
-      "zh": "鳳凰城航線更新：台北直飛已上線，Porter 再增加拿大新航點"
-    },
-    "excerpt": {
-      "en": "Phoenix now has two Taipei carriers at Sky Harbor. China Airlines launched on Dec. 3, 2025, STARLUX launched on Jan. 15, 2026 and increased service in March, and Porter added Vancouver and Ottawa for the 2026 winter season.",
-      "zh": "鳳凰城天港機場現在已有兩家台北直飛航空公司。華航於 2025 年 12 月 3 日開航，STARLUX 於 2026 年 1 月 15 日開航並在 3 月增班，Porter 也為 2026 冬季新增溫哥華與渥太華。"
-    },
-    "heroImage": "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-13T08:30:00.000Z",
-    "updatedAt": "2026-04-16T12:00:00.000Z",
-    "category": "news",
-    "body": [
-      {
-        "en": "Phoenix air service is no longer stuck at the rumor stage. China Airlines began nonstop Taipei service on Dec. 3, 2025, giving Phoenix its first nonstop route to Asia. On Jan. 15, 2026, STARLUX launched its own Taipei service, and Sky Harbor says STARLUX increased from three weekly flights to four in March 2026.",
-        "zh": "鳳凰城的國際航線消息已經不是停留在傳聞階段。華航於 2025 年 12 月 3 日開通鳳凰城直飛台北，為鳳凰城帶來首條亞洲直飛航線。到了 2026 年 1 月 15 日，STARLUX 也開通自家台北航線，而天港機場表示 STARLUX 已在 2026 年 3 月由每週三班增至四班。"
-      },
-      {
-        "en": "That means Arizona travelers now have two Taipei carriers at PHX, both using Airbus A350 aircraft with 306 seats. Phoenix Sky Harbor also says Porter added new winter routes from Vancouver starting Feb. 2, 2026 and Ottawa starting Feb. 7, 2026, giving PHX more international and transborder options at the same time.",
-        "zh": "這代表亞利桑那旅客現在在 PHX 已有兩家台北直飛航空公司，兩者都使用 306 座的 Airbus A350 機型。鳳凰城天港機場也表示，Porter 新增自 2026 年 2 月 2 日起的溫哥華航線，以及自 2026 年 2 月 7 日起的渥太華航線，讓 PHX 同時擴大了國際與跨境選擇。"
-      },
-      {
-        "en": "The practical takeaway for local readers is simple: Phoenix’s map looks different than it did a year ago. For Taiwan trips, supplier visits, school-break travel, and cross-Pacific family planning, the question is now which schedule and partnership works best, not whether Phoenix has service at all.",
-        "zh": "對本地讀者來說，最實際的重點很簡單：鳳凰城的航線版圖已經和一年前不一樣。對於往返台灣、供應鏈商務行程、寒暑假旅行與跨太平洋家庭規劃而言，現在要比較的是哪一個班表與合作網路更適合，而不是鳳凰城到底有沒有航班。"
-      }
-    ],
-    "series": "route-watch",
-    "freshnessTier": "weekly",
-    "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [
-      "travel",
-      "moving"
-    ],
-    "ctaBusinessSlugs": [
-      "lotus-travel-center",
-      "desert-bridge-relocation"
-    ],
-    "personaTargets": [
-      "tsmc_newcomers",
-      "local_families",
-      "students"
-    ],
-    "sourceLinks": [
-      {
-        "label": {
-          "en": "China Airlines Taipei launch at PHX",
-          "zh": "華航鳳凰城台北開航"
-        },
-        "url": "https://www.skyharbor.com/about-phx/news-media/press-releases/china-airlines-begins-service-to-taipei/",
-        "source": "Phoenix Sky Harbor"
-      },
-      {
-        "label": {
-          "en": "STARLUX Taipei launch at PHX",
-          "zh": "STARLUX 鳳凰城台北開航"
-        },
-        "url": "https://www.skyharbor.com/about-phx/news-media/press-releases/starlux-airlines-launches-nonstop-service-between-taipei-and-phoenix/",
-        "source": "Phoenix Sky Harbor"
-      },
-      {
-        "label": {
-          "en": "Porter Vancouver and Ottawa announcement",
-          "zh": "Porter 溫哥華與渥太華新航線"
-        },
-        "url": "https://www.skyharbor.com/about-phx/news-media/phx-check-in/2025/october-2025/porter-airlines-announces-vancouver-ottawa-service/",
-        "source": "Phoenix Sky Harbor"
-      }
-    ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona News Desk",
-    "sourceId": "ca_phx_air_service_update_2026_04_16",
-    "republishedWithPermission": false
-  },
-  {
-    "slug": "restaurant-opening-radar-east-valley-plaza-shifts",
-    "title": {
-      "en": "Chandler Dining District Watch: Seafood City Is Due in 2026 and Din Tai Fung in 2027",
-      "zh": "Chandler 餐飲區觀察：Seafood City 預定 2026 年進場，Din Tai Fung 接續於 2027 年登場"
-    },
-    "excerpt": {
-      "en": "Chandler Fashion Center says its outdoor dining refresh includes Seafood City opening in 2026 and Din Tai Fung set for 2027, signaling a larger Asian dining buildout instead of a one-off opening.",
-      "zh": "Chandler Fashion Center 表示，其戶外餐飲改造將包含 2026 年開設的 Seafood City，以及預定 2027 年進場的 Din Tai Fung，顯示這是一波更完整的亞洲餐飲布局，而不只是單一新店。"
-    },
-    "heroImage": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-12T09:15:00.000Z",
-    "updatedAt": "2026-04-16T12:00:00.000Z",
-    "category": "news",
-    "body": [
-      {
-        "en": "On Chandler Fashion Center’s official refresh page, the mall says a new outdoor dining district is taking shape. The clearest named tenants are Seafood City, which the site says is opening in 2026, and Din Tai Fung, which the mall lists for 2027.",
-        "zh": "在 Chandler Fashion Center 的官方改造頁面上，商場表示一個新的戶外餐飲區正在成形。當中最明確被點名的品牌是預計於 2026 年開幕的 Seafood City，以及商場列為 2027 年進駐的 Din Tai Fung。"
-      },
-      {
-        "en": "That matters because Seafood City is more than one storefront. The mall describes it as a Filipino grocery with in-house restaurants, bakery items, street food and seafood tanks, while Din Tai Fung would add a high-profile Taiwanese full-service anchor later.",
-        "zh": "這之所以重要，是因為 Seafood City 並不只是單一店面。商場把它描述為結合熟食餐飲、烘焙、街頭小吃與海鮮活水槽的菲律賓超市，而 Din Tai Fung 則會在之後補上更高辨識度的台灣餐飲主力店。"
-      },
-      {
-        "en": "For East Valley readers, the useful read is timing. Scottsdale’s Din Tai Fung is the near-term Arizona debut, but Chandler’s refresh looks like the broader neighborhood-utility play: grocery traffic, prepared food and a restaurant lineup designed to keep people on site longer.",
-        "zh": "對東谷讀者來說，真正有用的是時間表。Scottsdale 的 Din Tai Fung 才是眼前這一波的亞利桑那首發，但 Chandler 的改造更像是完整的社區機能布局：把超市人流、熟食需求與餐飲停留時間一起做大。"
-      }
-    ],
-    "series": "restaurant-opening-radar",
-    "freshnessTier": "weekly",
-    "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [
-      "dining",
-      "shopping"
-    ],
-    "ctaBusinessSlugs": [
-      "taste-of-taiwan",
-      "99-ranch-market-chandler",
-      "85-degrees-chandler"
-    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
     "personaTargets": [
       "local_families",
-      "students"
+      "business_owners"
     ],
-    "sourceLinks": [
-      {
-        "label": {
-          "en": "Chandler Fashion Center refresh page",
-          "zh": "Chandler Fashion Center 改造頁面"
-        },
-        "url": "https://www.shopchandlerfashioncenter.com/refresh",
-        "source": "Chandler Fashion Center"
-      },
-      {
-        "label": {
-          "en": "Arizona’s Family Din Tai Fung Arizona report",
-          "zh": "Arizona’s Family Din Tai Fung 亞利桑那報導"
-        },
-        "url": "https://www.azfamily.com/2026/02/24/din-tai-fung-announces-scottsdale-opening-date/",
-        "source": "Arizona’s Family"
-      }
-    ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona News Desk",
-    "sourceId": "ca_chandler_dining_district_watch_2026_04_16",
-    "republishedWithPermission": false
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:10:01.692+00:00",
+    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
   },
   {
-    "slug": "trend-radar-phoenix-apartment-myths-short-video-apps",
+    "id": "94900089-d66d-4dfe-b649-5ed339f0f772",
+    "candidateId": "a0b3b922-7327-495f-8849-f0e6c1dfebf9",
+    "slug": "luna-grill-plans-three-more-phoenix-area-restaurants-in-2026",
+    "lane": "openings",
     "title": {
-      "en": "Trend Radar: Phoenix Apartment Myths Newcomers Keep Hearing on Short-Video Apps",
-      "zh": "趨勢雷達：新居民在短影音平台上反覆聽到的鳳凰城租屋迷思"
+      "en": "Luna Grill plans three more Phoenix area restaurants in 2026",
+      "zh": "Luna Grill 計畫 2026 年在鳳凰城地區再開三家餐廳"
     },
     "excerpt": {
-      "en": "Social feeds are useful for spotting what newcomers worry about, but they often flatten Phoenix into a single apartment story. The real decision still depends on commute, shade, groceries, and school flow.",
-      "zh": "社群短影音很適合看出新居民在擔心什麼，但它常把鳳凰城講成同一種租屋故事。真正的決策還是得回到通勤、遮蔭、買菜與學校節奏。"
+      "en": "Luna Grill expects to add restaurants in Tempe, Avondale and north Phoenix before the end of 2026. The additions would follow its first Arizona restaurants in Mesa and Gilbert.",
+      "zh": "Luna Grill 預計在 2026 年底前於 Tempe、Avondale 和北鳳凰城新增餐廳。這些新據點將接續品牌在 Mesa 和 Gilbert 開出的亞利桑那首批門市。"
     },
-    "heroImage": "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-11T08:45:00.000Z",
-    "updatedAt": "2026-04-11T08:45:00.000Z",
-    "category": "feature",
     "body": [
       {
-        "en": "Short-video apps are powerful as signal tools because they surface anxiety early. Right now the recurring apartment themes are heat panic, fear of unsafe areas, and the idea that every useful neighborhood is either too expensive or impossibly far from everything else.",
-        "zh": "短影音平台很適合當訊號工具，因為它會把焦慮提早浮出來。最近反覆出現的租屋主題包括對高溫的恐慌、對治安的擔心，以及覺得所有方便社區不是太貴就是離什麼都太遠。"
+        "en": "Luna Grill is preparing at least three more restaurants in the Phoenix area before the end of 2026. The Mediterranean restaurant chain is looking at Tempe, Avondale and north Phoenix for the next stage of its Arizona expansion.",
+        "zh": "Luna Grill 準備在 2026 年底前於鳳凰城地區至少再開三家餐廳。這家地中海料理連鎖品牌下一階段的亞利桑那展店地點包括 Tempe、Avondale 和北鳳凰城。"
       },
       {
-        "en": "ChineseArizona uses those posts as prompts, not as publishable truth. The useful editorial move is to ask what the videos are missing: shaded parking, actual commute-hour drive tests, where groceries and Chinese classes happen, and whether a household is optimizing for fab access or East Valley community life.",
-        "zh": "ChineseArizona 只把這些內容當成題目，不把它們直接當成可發佈事實。真正有用的編輯動作，是去看影片漏掉了什麼：停車位有沒有遮蔭、真正尖峰時段要開多久、買菜和中文課在哪裡，以及一個家庭到底是在優先 fab 通勤還是東谷社群生活。"
+        "en": "The north Phoenix restaurant is planned near the growing area around TSMC's semiconductor campus. A proposed Luna Grill in that part of the city has also been tied to a planned retail project near Dove Valley Road.",
+        "zh": "北鳳凰城餐廳規劃在 TSMC 半導體園區周邊成長中的區域附近。該市北側先前提出的 Luna Grill 據點，也與 Dove Valley Road 附近一項規劃中的零售開發案有關。"
       },
       {
-        "en": "For that reason, Trend Radar pages stay summary-only. We do not reuse captions, embeds, or video assets. We convert the recurring questions into calmer, bilingual guidance and then send readers to directory providers who can help them compare real options.",
-        "zh": "因此 Trend Radar 頁面只會保留摘要，不會重用原始 caption、嵌入或影片素材。我們把反覆出現的問題轉成更冷靜的雙語指引，再把讀者導向能協助比較真實選項的目錄服務者。"
-      }
-    ],
-    "series": "trend-radar",
-    "freshnessTier": "weekly",
-    "sourcePolicy": "signal_only",
-    "relatedCategorySlugs": [
-      "real-estate",
-      "moving",
-      "home-services"
-    ],
-    "ctaBusinessSlugs": [
-      "elite-az-realty-team",
-      "desert-bridge-relocation",
-      "profix-home-services"
-    ],
-    "personaTargets": [
-      "tsmc_newcomers",
-      "students"
-    ],
-    "sourceLinks": [
+        "en": "The new restaurants would follow Luna Grill's entry into Arizona through locations in Mesa and Gilbert. The company started in 2004 with founders Sean and Maria Pourteymour and now operates more than 50 restaurants in California, Texas and Arizona.",
+        "zh": "這些新餐廳將接續 Luna Grill 在 Mesa 和 Gilbert 開出的亞利桑那首批據點。Luna Grill 由 Sean 和 Maria Pourteymour 於 2004 年創立，目前在加州、德州和亞利桑那經營超過 50 家餐廳。"
+      },
       {
-        "label": {
-          "en": "TikTok Phoenix apartments tag",
-          "zh": "TikTok 鳳凰城租屋標籤"
-        },
-        "url": "https://www.tiktok.com/tag/phoenixapartments",
-        "source": "TikTok"
+        "en": "Luna Grill's menu includes kabobs, bowls, salads, pitas, family meals and other Mediterranean dishes made with fresh ingredients and cooked to order. Exact opening dates for the Tempe, Avondale and north Phoenix restaurants have not been announced.",
+        "zh": "Luna Grill 的菜單有烤肉串、碗餐、沙拉、皮塔餅、家庭餐和其他以新鮮食材現做的地中海料理。Tempe、Avondale 和北鳳凰城餐廳的確切開幕日期尚未公布。"
       }
     ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona Signal Desk",
-    "sourceId": "sig_trend_radar_apartment_myths_2026_04_11",
-    "republishedWithPermission": false
-  },
-  {
-    "slug": "trend-radar-what-phoenix-food-posts-keep-highlighting",
-    "title": {
-      "en": "Scottsdale Restaurant Watch: Din Tai Fung Targets April 20, 2026 at Fashion Square",
-      "zh": "Scottsdale 餐飲觀察：Din Tai Fung 預計於 2026 年 4 月 20 日進駐 Fashion Square"
-    },
-    "excerpt": {
-      "en": "As of April 16, 2026, Arizona’s Family reports that Din Tai Fung’s first Arizona restaurant is scheduled to open on April 20 at Scottsdale Fashion Square.",
-      "zh": "截至 2026 年 4 月 16 日，Arizona’s Family 報導 Din Tai Fung 亞利桑那首店預計將於 4 月 20 日在 Scottsdale Fashion Square 開幕。"
-    },
-    "heroImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
-    "publishedAt": "2026-04-10T11:20:00.000Z",
-    "updatedAt": "2026-04-16T12:00:00.000Z",
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/Mesa_Exterior-1-1157x1536-1.jpg",
+    "heroImagePolicy": "source_allowed",
     "category": "news",
-    "body": [
+    "freshnessTier": "breaking",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
+    "sourceLinks": [
       {
-        "en": "As of April 16, 2026, the most concrete Din Tai Fung news in Arizona is in Scottsdale, not Chandler. Arizona’s Family reported on Feb. 24 that the company’s first Arizona restaurant is scheduled to open on April 20 at Scottsdale Fashion Square.",
-        "zh": "截至 2026 年 4 月 16 日，Din Tai Fung 在亞利桑那最明確的消息發生在 Scottsdale，而不是 Chandler。Arizona’s Family 在 2 月 24 日報導，品牌在亞利桑那的首間餐廳預計將於 4 月 20 日在 Scottsdale Fashion Square 開幕。"
-      },
-      {
-        "en": "That report said reservations opened on Feb. 26 and described the restaurant as a roughly 10,000-square-foot space with about 340 seats and a dumpling expo kitchen. Scottsdale Fashion Square’s own materials still list Din Tai Fung as a lower-level culinary arrival, which matches the fact that the opening is only days away, not months away.",
-        "zh": "該報導指出，訂位已於 2 月 26 日開放，餐廳空間約 1 萬平方英尺、約 340 個座位，並設有可觀看製作過程的包餃展示廚房。Scottsdale Fashion Square 的官方資料目前也仍把 Din Tai Fung 列為下層的新餐飲進駐品牌，這與目前距離開幕只剩幾天、而不是幾個月的節奏一致。"
-      },
-      {
-        "en": "For readers deciding where to plan a spring visit, the practical answer is straightforward. Scottsdale is the immediate launch market. Chandler is still part of the brand’s Arizona expansion story, but the East Valley location is currently planned for a later phase.",
-        "zh": "對正在安排春季聚餐或探店的人來說，實際答案很直接：Scottsdale 才是眼前這一波的正式落地市場。Chandler 仍然是品牌在亞利桑那擴張故事的一部分，但東谷據點目前還屬於後續階段。"
+        "label": {
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
+        },
+        "url": "https://whatnow.com/phoenix/restaurants/luna-grill-plans-three-more-phoenix-area-locations-this-year",
+        "source": "What Now Phoenix"
       }
     ],
-    "series": "restaurant-opening-radar",
-    "freshnessTier": "weekly",
-    "sourcePolicy": "summary_link",
-    "relatedCategorySlugs": [
-      "dining",
-      "shopping"
-    ],
-    "ctaBusinessSlugs": [
-      "taste-of-taiwan",
-      "85-degrees-chandler"
-    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
     "personaTargets": [
       "local_families",
-      "students"
+      "business_owners"
     ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:10:01.692+00:00",
+    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
+  },
+  {
+    "id": "8812893e-5be9-4900-a0c2-604e5839389b",
+    "candidateId": "f8ef35f8-ec4f-4bcd-b69d-1c7fd07357a0",
+    "slug": "atashi-yokocho-planned-for-scottsdale-s-the-sydney",
+    "lane": "openings",
+    "title": {
+      "en": "Atashi Yokocho planned for Scottsdale's The Sydney",
+      "zh": "Atashi Yokocho 規劃進駐 Scottsdale 的 The Sydney"
+    },
+    "excerpt": {
+      "en": "Restaurateur Huy Truong is planning a Japanese dining hall at The Sydney in Scottsdale. Atashi Yokocho is expected in 2028 with about 15 separate restaurant concepts.",
+      "zh": "餐飲業者 Huy Truong 正計畫在 Scottsdale 的 The Sydney 打造日本餐飲空間。Atashi Yokocho 預計 2028 年開幕，內部約有 15 個不同餐飲概念。"
+    },
+    "body": [
+      {
+        "en": "Atashi Yokocho is planned for The Sydney at 7339 E. McDonald Drive in Scottsdale. Restaurateur Huy Truong is preparing the project for a 2028 opening at the large development near Loop 101 and Pima Road.",
+        "zh": "Atashi Yokocho 規劃落腳於 Scottsdale 的 The Sydney，地址是 7339 E. McDonald Drive。餐飲業者 Huy Truong 正籌備這個項目，預計 2028 年在 Loop 101 和 Pima Road 附近的大型開發案中開幕。"
+      },
+      {
+        "en": "The project takes its cue from Japan's yokocho dining culture, where narrow lanes are filled with small restaurants and bars. In Scottsdale, the format is expected to bring about 15 individual eateries into one shared destination.",
+        "zh": "這個項目以日本橫丁飲食文化為靈感，日本橫丁通常是狹窄巷弄中聚集小餐館和酒吧的空間。到了 Scottsdale，這個形式預計會把約 15 個獨立餐飲概念放在同一個目的地內。"
+      },
+      {
+        "en": "The food lineup is planned to cover several types of Japanese cuisine. Ramen, sushi, tempura, yakitori, yakiniku, kaiseki and regional specialties are among the categories being considered for the space.",
+        "zh": "規劃中的餐飲內容涵蓋多種日本料理。拉麵、壽司、天婦羅、串燒、燒肉、懷石料理和地方特色料理，都是目前考慮納入的類別。"
+      },
+      {
+        "en": "Restaurant spaces inside Atashi Yokocho could vary widely in size, with some seating as few as eight guests and others seating up to 50. Truong is also looking at rotating short run concepts that would let Japanese operators test their brands with Arizona diners.",
+        "zh": "Atashi Yokocho 內部的餐廳空間大小可能差異很大，有些只能容納 8 位客人，有些可坐到 50 人。Truong 也在研究輪替式短期餐飲概念，讓日本業者有機會向亞利桑那食客介紹品牌。"
+      },
+      {
+        "en": "Truong has already brought several Japanese restaurant brands to the Valley, including multiple Mensho Ramen locations and Udon Shin in Mesa. Atashi Yokocho is set to join other restaurant and entertainment tenants planned for The Sydney.",
+        "zh": "Truong 已經把多個日本餐飲品牌帶進 Valley，包括數家 Mensho Ramen 門市，以及位於 Mesa 的 Udon Shin。Atashi Yokocho 將加入 The Sydney 規劃中的其他餐飲與娛樂租戶。"
+      }
+    ],
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/06/the-sydney.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "breaking",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/atashi-yokocho-planned-for-scottsdales-sydney-development",
     "sourceLinks": [
       {
         "label": {
-          "en": "Arizona’s Family Scottsdale opening report",
-          "zh": "Arizona’s Family Scottsdale 開幕報導"
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
         },
-        "url": "https://www.azfamily.com/2026/02/24/din-tai-fung-announces-scottsdale-opening-date/",
-        "source": "Arizona’s Family"
-      },
-      {
-        "label": {
-          "en": "Scottsdale Fashion Square dining page",
-          "zh": "Scottsdale Fashion Square 餐飲頁面"
-        },
-        "url": "https://www.fashionsquare.com/dining/restaurants",
-        "source": "Scottsdale Fashion Square"
+        "url": "https://whatnow.com/phoenix/restaurants/atashi-yokocho-planned-for-scottsdales-sydney-development",
+        "source": "What Now Phoenix"
       }
     ],
-    "authorProfileSlug": "phoenix-community-team",
-    "sourceName": "ChineseArizona News Desk",
-    "sourceId": "ca_scottsdale_dtf_watch_2026_04_16",
-    "republishedWithPermission": false
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "business_owners"
+    ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:10:01.692+00:00",
+    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
+  },
+  {
+    "id": "a4c126ae-aa48-4773-bb8a-a356f2762252",
+    "candidateId": "7769930c-520d-4915-9b77-64ca3f44a330",
+    "slug": "grandioso-targets-mid-july-debut-on-phoenix-s-grand-avenue",
+    "lane": "openings",
+    "title": {
+      "en": "Grandioso targets mid July debut on Phoenix's Grand Avenue",
+      "zh": "Grandioso 目標 7 月中旬在鳳凰城 Grand Avenue 開幕"
+    },
+    "excerpt": {
+      "en": "Justin Piazza is preparing Grandioso at 1227 Grand Ave with pizza, drinks and a bar style setup. The opening could come July 15, later than the July 1 target.",
+      "zh": "Justin Piazza 正在 1227 Grand Ave 籌備 Grandioso，主打披薩、飲品和酒吧式空間。開幕時間可能落在 7 月 15 日，晚於原先 7 月 1 日的目標。"
+    },
+    "body": [
+      {
+        "en": "Grandioso is planned for 1227 Grand Ave in Phoenix, where restaurateur and pizzaiolo Justin Piazza is preparing a summer opening. The team has aimed for July 1, but Piazza has said July 15 is now the more likely date.",
+        "zh": "Grandioso 規劃開在鳳凰城 1227 Grand Ave，餐飲業者與披薩師 Justin Piazza 正準備夏季開幕。團隊原本瞄準 7 月 1 日，但 Piazza 表示目前 7 月 15 日更有可能。"
+      },
+      {
+        "en": "The concept will focus on pizza and drinks with the feel of a neighborhood dive bar. Piazza is shaping the restaurant as a place for a slice, a drink and time spent hanging out on the Grand Avenue corridor.",
+        "zh": "這個概念會以披薩和飲品為主，空間氛圍接近社區型 dive bar。Piazza 正把餐廳打造為一個能吃一片披薩、喝一杯飲料，並在 Grand Avenue 走廊停留聊天的地方。"
+      },
+      {
+        "en": "Pizza will be the center of the menu, with four styles planned. Grandioso will serve New York style pizza, Roman taglio style squares, Detroit style pan pizza and tavern style pies with a thin, crisp crust.",
+        "zh": "披薩會是菜單核心，目前規劃四種風格。Grandioso 將供應 New York style 披薩、Roman taglio style 方形披薩、Detroit style 烤盤披薩，以及薄脆餅皮的 tavern style 披薩。"
+      },
+      {
+        "en": "The restaurant is also expected to have a full bar, baked wings, appetizers and panino sandwiches. Service will follow a quick service and bar model rather than traditional table service.",
+        "zh": "餐廳也預計提供完整酒吧、烤雞翅、開胃菜和 panino 三明治。營運模式會偏向快速點餐與酒吧服務，而不是傳統桌邊服務。"
+      },
+      {
+        "en": "Piazza is known for La Piazza Al Forno and past downtown Phoenix restaurant projects. Grandioso will also lean into the area's arts identity, with murals planned inside and outside, plus a pool table and jukebox in the space.",
+        "zh": "Piazza 以 La Piazza Al Forno 及過去在鳳凰城市中心的餐飲項目為人所知。Grandioso 也會呼應該區的藝術特色，室內外都規劃壁畫，空間內還會有撞球桌和點唱機。"
+      }
+    ],
+    "heroImage": "https://whatnow.com/wp-content/uploads/2026/05/529af7d429304b369cf033fa22d9278b-1.jpg",
+    "heroImagePolicy": "source_allowed",
+    "category": "news",
+    "freshnessTier": "weekly",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "sourceName": "What Now Phoenix",
+    "sourceUrl": "https://whatnow.com/phoenix/restaurants/grandioso-planning-mid-july-opening-on-grand-avenue",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "What Now Phoenix",
+          "zh": "What Now Phoenix"
+        },
+        "url": "https://whatnow.com/phoenix/restaurants/grandioso-planning-mid-july-opening-on-grand-avenue",
+        "source": "What Now Phoenix"
+      }
+    ],
+    "relatedCategorySlugs": [],
+    "ctaBusinessSlugs": [],
+    "personaTargets": [
+      "local_families",
+      "business_owners"
+    ],
+    "publishedAt": "2026-06-05T00:10:01.692+00:00",
+    "updatedAt": "2026-06-05T00:10:01.692+00:00",
+    "lastCheckedAt": "2026-06-05T00:10:01.692+00:00",
+    "isPublished": true,
+    "aiGeneratedSummary": true
   }
 ]

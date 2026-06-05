@@ -349,14 +349,6 @@ export function HomePageView({ locale, site = defaultSiteProfile }: HomePageView
     ? getCurrentArticlesForSite(site)
         .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
         .filter((article) => hasLatinCharacters(article.title.en) && !hasCjkCharacters(article.title.en))
-        .sort((left, right) => {
-          const titleLengthDifference = left.title.en.trim().length - right.title.en.trim().length;
-          if (titleLengthDifference !== 0) {
-            return titleLengthDifference;
-          }
-
-          return left.title.en.localeCompare(right.title.en);
-        })
         .slice(0, 3)
         .map((article) => ({
           href: getLocalizedNewsArticlePath(locale, site, article.slug),

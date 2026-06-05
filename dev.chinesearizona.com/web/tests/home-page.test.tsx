@@ -32,6 +32,23 @@ describe('HomePageView', () => {
     expect(html).toContain('/en/relocation-guide');
   });
 
+  it('uses the freshest generated Arizona articles for News & Community cards', async () => {
+    const { HomePageView } = await import('@/views/home-page');
+
+    const html = renderToStaticMarkup(<HomePageView locale="en" />);
+    const angryCrabIndex = html.indexOf('Angry Crab Shack sets June 11 opening in Chandler');
+    const blackRockIndex = html.indexOf('Black Rock Coffee Bar lines up three Arizona shops');
+    const lunaGrillIndex = html.indexOf(
+      'Luna Grill plans three more Phoenix area restaurants in 2026'
+    );
+
+    expect(angryCrabIndex).toBeGreaterThan(-1);
+    expect(blackRockIndex).toBeGreaterThan(angryCrabIndex);
+    expect(lunaGrillIndex).toBeGreaterThan(blackRockIndex);
+    expect(html).not.toContain('Phoenix Apartment Myths Newcomers Keep Hearing');
+    expect(html).not.toContain('Din Tai Fung Targets April 20, 2026 at Fashion Square');
+  });
+
   it('renders Austin-specific directory content without reusing Arizona listings', async () => {
     const [{ HomePageView }, { siteProfiles }] = await Promise.all([
       import('@/views/home-page'),
