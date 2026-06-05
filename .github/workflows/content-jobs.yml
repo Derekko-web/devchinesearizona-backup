@@ -98,12 +98,20 @@ jobs:
           git commit -m "Update directory scrape outputs"
           git push --set-upstream origin "$CONTENT_BRANCH"
 
-          gh pr create \
+          if pr_create_output="$(gh pr create \
             --repo "$GITHUB_REPOSITORY" \
             --base main \
             --head "$CONTENT_BRANCH" \
             --title "Update directory scrape outputs" \
-            --body "Automated directory scrape output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}."
+            --body "Automated directory scrape output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}." 2>&1)"; then
+            echo "$pr_create_output"
+          elif grep -q "GitHub Actions is not permitted to create or approve pull requests" <<< "$pr_create_output"; then
+            echo "::warning title=Content PR creation blocked::$pr_create_output"
+            echo "Content branch pushed. Open the PR manually: https://github.com/${GITHUB_REPOSITORY}/pull/new/${CONTENT_BRANCH}"
+          else
+            echo "$pr_create_output" >&2
+            exit 1
+          fi
 
           echo "has_changes=true" >> "$GITHUB_OUTPUT"
 
@@ -183,11 +191,19 @@ jobs:
           git commit -m "Update signal desk outputs"
           git push --set-upstream origin "$CONTENT_BRANCH"
 
-          gh pr create \
+          if pr_create_output="$(gh pr create \
             --repo "$GITHUB_REPOSITORY" \
             --base main \
             --head "$CONTENT_BRANCH" \
             --title "Update signal desk outputs" \
-            --body "Automated signal desk output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}."
+            --body "Automated signal desk output refresh from Dev Content Jobs run ${GITHUB_RUN_ID}." 2>&1)"; then
+            echo "$pr_create_output"
+          elif grep -q "GitHub Actions is not permitted to create or approve pull requests" <<< "$pr_create_output"; then
+            echo "::warning title=Content PR creation blocked::$pr_create_output"
+            echo "Content branch pushed. Open the PR manually: https://github.com/${GITHUB_REPOSITORY}/pull/new/${CONTENT_BRANCH}"
+          else
+            echo "$pr_create_output" >&2
+            exit 1
+          fi
 
           echo "has_changes=true" >> "$GITHUB_OUTPUT"

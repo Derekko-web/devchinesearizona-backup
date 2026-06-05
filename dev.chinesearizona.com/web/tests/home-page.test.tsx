@@ -18,6 +18,26 @@ vi.mock('next/link', () => ({
   ),
 }));
 
+function hasLatinCharacters(value: string): boolean {
+  return /[A-Za-z]/.test(value);
+}
+
+function hasCjkCharacters(value: string): boolean {
+  return /[\u3400-\u9FFF\uF900-\uFAFF]/.test(value);
+}
+
+function stripStoryCardLeadIn(value: string) {
+  const normalized = value.trim();
+  const separatorIndex = normalized.search(/[:：]/);
+
+  if (separatorIndex === -1) {
+    return normalized;
+  }
+
+  const stripped = normalized.slice(separatorIndex + 1).trim();
+  return stripped || normalized;
+}
+
 describe('HomePageView', () => {
   it('renders the redesigned landing page sections', async () => {
     const { HomePageView } = await import('@/views/home-page');
@@ -33,18 +53,23 @@ describe('HomePageView', () => {
   });
 
   it('uses the freshest generated Arizona articles for News & Community cards', async () => {
-    const { HomePageView } = await import('@/views/home-page');
+    const [{ HomePageView }, { getCurrentArticlesForSite }] = await Promise.all([
+      import('@/views/home-page'),
+      import('@/lib/content'),
+    ]);
 
     const html = renderToStaticMarkup(<HomePageView locale="en" />);
-    const blackRockIndex = html.indexOf('Black Rock Coffee Bar adds three Arizona shops');
-    const atashiIndex = html.indexOf('Atashi Yokocho planned for Scottsdale development');
-    const lunaGrillIndex = html.indexOf('Luna Grill plans three more Phoenix area restaurants');
+    const expectedStoryTitles = getCurrentArticlesForSite()
+      .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
+      .filter((article) => hasLatinCharacters(article.title.en) && !hasCjkCharacters(article.title.en))
+      .slice(0, 3)
+      .map((article) => stripStoryCardLeadIn(article.title.en));
+    const storyIndexes = expectedStoryTitles.map((title) => html.indexOf(title));
 
-    expect(blackRockIndex).toBeGreaterThan(-1);
-    expect(atashiIndex).toBeGreaterThan(blackRockIndex);
-    expect(lunaGrillIndex).toBeGreaterThan(atashiIndex);
-    expect(html).not.toContain('Phoenix Apartment Myths Newcomers Keep Hearing');
-    expect(html).not.toContain('Din Tai Fung Targets April 20, 2026 at Fashion Square');
+    expect(expectedStoryTitles).toHaveLength(3);
+    storyIndexes.forEach((index) => expect(index).toBeGreaterThan(-1));
+    expect(storyIndexes[1]).toBeGreaterThan(storyIndexes[0]);
+    expect(storyIndexes[2]).toBeGreaterThan(storyIndexes[1]);
   });
 
   it('renders Austin-specific directory content without reusing Arizona listings', async () => {

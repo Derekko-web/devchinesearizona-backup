@@ -23,6 +23,8 @@ describe('workflow hardening', () => {
     expect(workflow).toContain('actions/upload-artifact@v7');
     expect(workflow).toContain('Open content update PR');
     expect(workflow).toContain('git status --porcelain -- "${changed_paths[@]}"');
+    expect(workflow).toContain('GitHub Actions is not permitted to create or approve pull requests');
+    expect(workflow).toContain('Content branch pushed. Open the PR manually');
     expect(workflow).toContain('npm run scrape:promote-directory');
     expect(workflow).toContain('src/data/generated-directory-businesses.json');
     expect(workflow).toContain('src/data/generated-plaza-businesses.json');
