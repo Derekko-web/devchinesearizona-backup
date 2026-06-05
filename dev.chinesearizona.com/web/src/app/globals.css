@@ -80,28 +80,6 @@ body::before {
   }
 }
 
-@keyframes auth-page-rise {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes auth-skeleton-pulse {
-  from {
-    opacity: 0.55;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes shop-dashboard-enter {
   from {
     opacity: 0;
@@ -193,25 +171,6 @@ body::before {
     transform: translateY(-4px);
     box-shadow: 0 28px 60px -34px rgba(78, 47, 20, 0.22);
     border-color: rgba(187, 61, 41, 0.28);
-  }
-
-  .auth-page-rise {
-    animation: auth-page-rise 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .auth-page-photo {
-    transition:
-      transform 320ms ease,
-      box-shadow 320ms ease;
-  }
-
-  .auth-page-photo:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 30px 68px -52px rgba(74, 49, 27, 0.66);
-  }
-
-  .auth-skeleton-line {
-    animation: auth-skeleton-pulse 900ms ease-in-out infinite alternate;
   }
 
   .shop-dashboard-shell {

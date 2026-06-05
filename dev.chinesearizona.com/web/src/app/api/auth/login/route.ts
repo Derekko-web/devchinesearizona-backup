@@ -53,10 +53,6 @@ function redirectToAuth(authUrl: URL) {
   return NextResponse.redirect(authUrl, { status: 303 });
 }
 
-function isLikelyEmail(value: string): boolean {
-  return value.includes('@');
-}
-
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const baseUrl = getRequestBaseUrl(request);
@@ -64,31 +60,6 @@ export async function POST(request: NextRequest) {
   const nextPath = String(formData.get('next') ?? '').trim();
   const email = String(formData.get('email') ?? '').trim();
   const password = String(formData.get('password') ?? '');
-
-  if (!email || !password) {
-    return redirectToAuth(
-      buildAuthRedirectUrl(baseUrl, locale, {
-        nextPath,
-        emailError: !email ? (locale === 'zh' ? '請輸入 email。' : 'Enter an email.') : undefined,
-        passwordError: !password ? (locale === 'zh' ? '請輸入密碼。' : 'Enter a password.') : undefined,
-      })
-    );
-  }
-
-  if (!isLikelyEmail(email) || password.length < 6) {
-    return redirectToAuth(
-      buildAuthRedirectUrl(baseUrl, locale, {
-        nextPath,
-        emailError: !isLikelyEmail(email) ? (locale === 'zh' ? '請輸入有效的 email。' : 'Enter a valid email.') : undefined,
-        passwordError:
-          password.length < 6
-            ? locale === 'zh'
-              ? '密碼至少需要 6 個字元。'
-              : 'Password must be at least 6 characters.'
-            : undefined,
-      })
-    );
-  }
 
   if (!isSupabaseConfigured()) {
     return redirectToAuth(
@@ -99,6 +70,16 @@ export async function POST(request: NextRequest) {
             ? '尚未設定 Supabase Auth 環境值。'
             : 'Supabase Auth env vars are missing.',
         tone: 'error',
+      })
+    );
+  }
+
+  if (!email || !password) {
+    return redirectToAuth(
+      buildAuthRedirectUrl(baseUrl, locale, {
+        nextPath,
+        emailError: !email ? (locale === 'zh' ? '請輸入 email。' : 'Enter an email.') : undefined,
+        passwordError: !password ? (locale === 'zh' ? '請輸入密碼。' : 'Enter a password.') : undefined,
       })
     );
   }
