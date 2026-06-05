@@ -95,6 +95,7 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(runtimeWorkflow).toContain('-o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING"');
     expect(runtimeWorkflow).toContain('-o UserKnownHostsFile="$HOME/.ssh/known_hosts"');
     expect(runtimeWorkflow).not.toContain('StrictHostKeyChecking=no');
+    expect(runtimeWorkflow).toContain('RADAR_HERMES_RUN_NOW=always');
     expect(runtimeWorkflow).toContain('apply-runtime-deploy.sh');
     expect(runtimeWorkflow).toContain('current_sha="$(git rev-parse HEAD)"');
     expect(applyRuntime).toContain('backup_existing_runtime_state');

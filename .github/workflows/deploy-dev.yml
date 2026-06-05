@@ -197,6 +197,51 @@ jobs:
             "dev.chinesearizona.com/web/src/data/generated-local-articles.json"
           )
 
+          runtime_article_count() {
+            node -e '
+          const fs = require("node:fs");
+          const file = process.argv[1];
+
+          try {
+            const data = JSON.parse(fs.readFileSync(file, "utf8"));
+            const articles = Array.isArray(data)
+              ? data
+              : data && Array.isArray(data.articles)
+                ? data.articles
+                : null;
+
+            if (articles) {
+              console.log(articles.length);
+            }
+          } catch {
+            process.exit(0);
+          }
+          ' "$1"
+          }
+
+          should_preserve_external_runtime_data() {
+            local source_path="$1"
+            local external_path="$2"
+            local source_count=""
+            local external_count=""
+
+            if [ ! -f "$source_path" ] || [ ! -f "$external_path" ]; then
+              return 1
+            fi
+
+            source_count="$(runtime_article_count "$source_path")"
+            external_count="$(runtime_article_count "$external_path")"
+
+            if [[ "$source_count" =~ ^[0-9]+$ ]] && \
+              [[ "$external_count" =~ ^[0-9]+$ ]] && \
+              [ "$source_count" -eq 0 ] && \
+              [ "$external_count" -gt 0 ]; then
+              return 0
+            fi
+
+            return 1
+          }
+
           dirty_status="$(git status --porcelain --untracked-files=all)"
           if [ -n "$dirty_status" ]; then
             unsafe_dirty=""
@@ -226,6 +271,11 @@ jobs:
             for generated_path in "${generated_data_paths[@]}"; do
               if [ -f "$generated_path" ]; then
                 external_path="$runtime_data_root/${generated_path#dev.chinesearizona.com/web/}"
+                if should_preserve_external_runtime_data "$generated_path" "$external_path"; then
+                  echo "Preserving non-empty runtime data fixture $external_path; checked-out source has no articles."
+                  continue
+                fi
+
                 mkdir -p "$(dirname "$external_path")"
                 cp "$generated_path" "$external_path"
                 echo "  $generated_path -> $external_path"

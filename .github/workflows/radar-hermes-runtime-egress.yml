@@ -86,7 +86,7 @@ jobs:
             -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
             -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
             "$VPS_USER@$VPS_HOST" \
-            "DEPLOY_SHA=$DEPLOY_SHA bash -s" <<'REMOTE'
+            "DEPLOY_SHA=$DEPLOY_SHA RADAR_HERMES_RUN_NOW=always bash -s" <<'REMOTE'
           set -euo pipefail
 
           web_root=/var/www/dev.chinesearizona.com/web

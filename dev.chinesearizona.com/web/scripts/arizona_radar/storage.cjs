@@ -56,6 +56,22 @@ function shouldUseSupabaseStore(options = {}) {
   return process.env.NODE_ENV !== 'test';
 }
 
+function getSupabaseRealtimeOptions() {
+  if (typeof globalThis.WebSocket === 'function') {
+    return {};
+  }
+
+  try {
+    return {
+      realtime: {
+        transport: require('ws'),
+      },
+    };
+  } catch {
+    return {};
+  }
+}
+
 function getSupabaseClient() {
   if (!hasSupabaseConfig()) {
     return null;
@@ -69,6 +85,7 @@ function getSupabaseClient() {
         persistSession: false,
         autoRefreshToken: false,
       },
+      ...getSupabaseRealtimeOptions(),
     }
   );
 }

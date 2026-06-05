@@ -90,6 +90,11 @@ describe('Deploy Dev dirty tree guard', () => {
       'ARTICLE_ZH_TRANSLATION_CACHE_PATH="$runtime_data_root/data/article-ingest-staging/chinese-translation-cache.json"'
     );
     expect(workflow).toContain('if [ -n "$unsafe_dirty" ]; then');
+    expect(workflow).toContain('runtime_article_count()');
+    expect(workflow).toContain('should_preserve_external_runtime_data()');
+    expect(workflow).toContain(
+      'Preserving non-empty runtime data fixture $external_path; checked-out source has no articles.'
+    );
     expect(workflow).toContain('git checkout -- "${generated_data_paths[@]}"');
     expect(workflow).toContain('Seeded runtime data fixture $external_path');
     expect(workflow).toContain('git status --porcelain --untracked-files=all');

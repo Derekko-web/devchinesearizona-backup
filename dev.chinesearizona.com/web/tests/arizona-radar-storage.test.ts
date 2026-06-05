@@ -79,6 +79,7 @@ function createStorageModuleWithFakeSupabase() {
     publish_cap: 10,
     updated_at: '2026-04-18T12:00:00.000Z',
   };
+  const createClientOptions: unknown[] = [];
   const upserts: Array<{ payload: unknown; table: string }> = [];
 
   function queryResultFor(table: string): QueryResult {
@@ -120,9 +121,12 @@ function createStorageModuleWithFakeSupabase() {
   nodeModule._load = ((request: string, parent?: unknown, isMain?: boolean) => {
     if (request === '@supabase/supabase-js') {
       return {
-        createClient: () => ({
-          from: (table: string) => createQueryBuilder(table),
-        }),
+        createClient: (_url: string, _key: string, options: unknown) => {
+          createClientOptions.push(options);
+          return {
+            from: (table: string) => createQueryBuilder(table),
+          };
+        },
       };
     }
 
@@ -138,6 +142,7 @@ function createStorageModuleWithFakeSupabase() {
           store: Record<string, unknown>
         ) => Promise<Record<string, unknown>>;
       },
+      createClientOptions,
       upserts,
     };
   } finally {
@@ -197,6 +202,44 @@ describe('Arizona Radar storage', () => {
     });
     expect(mirrored.jobControl.publishCap).toBe(10);
     expect(mirrored.jobControl.updatedAt).toBe('2026-04-18T12:00:00.000Z');
+  });
+
+  it('passes a ws transport to Supabase Realtime when Node lacks native WebSocket', async () => {
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.NODE_ENV = 'production';
+    process.env.RADAR_STORAGE_MODE = 'supabase';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
+
+    const originalWebSocket = Object.getOwnPropertyDescriptor(globalThis, 'WebSocket');
+    Object.defineProperty(globalThis, 'WebSocket', {
+      configurable: true,
+      value: undefined,
+      writable: true,
+    });
+
+    try {
+      const { module: storage, createClientOptions } = createStorageModuleWithFakeSupabase();
+      const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-storage-ws-'));
+      const storePath = path.join(tempDir, 'radar-runtime', 'store.json');
+
+      await storage.readStoreSnapshot(storePath);
+
+      expect(createClientOptions[0]).toMatchObject({
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+        realtime: {
+          transport: require('ws'),
+        },
+      });
+    } finally {
+      if (originalWebSocket) {
+        Object.defineProperty(globalThis, 'WebSocket', originalWebSocket);
+      } else {
+        delete (globalThis as { WebSocket?: unknown }).WebSocket;
+      }
+    }
   });
 
   it('refreshes the local runtime store mirror after Supabase writes succeed', async () => {
