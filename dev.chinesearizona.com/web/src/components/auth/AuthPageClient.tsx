@@ -87,13 +87,11 @@ function updateFieldErrorState(current: FieldErrors, field: FieldName, message: 
 }
 
 function validateEmailField(input: HTMLInputElement, locale: Locale): string | null {
-  const value = input.value.trim();
-
-  if (!value || input.validity.valueMissing) {
+  if (input.validity.valueMissing) {
     return locale === 'zh' ? '請輸入 email。' : 'Enter an email.';
   }
 
-  if (input.validity.typeMismatch || !value.includes('@')) {
+  if (input.validity.typeMismatch) {
     return locale === 'zh' ? '請輸入有效的 email。' : 'Enter a valid email.';
   }
 
@@ -723,22 +721,24 @@ export function AuthPageClient({
 
   if (user && !initialComplete) {
     return (
-      <div className="rounded-[28px] border border-[#e2d0bf] bg-[#fffdfa] p-6 shadow-[0_26px_60px_-46px_rgba(74,49,27,0.55)] sm:p-8">
-        <p className="text-sm font-semibold text-brand-700">{locale === 'zh' ? '登入成功' : 'Signed in'}</p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-[#261b15] [font-family:var(--font-display)]">
+      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-600">
+          {locale === 'zh' ? '登入成功' : 'Signed in'}
+        </p>
+        <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
           {locale === 'zh' ? '正在帶你回到原本流程' : 'Returning you to your workflow'}
         </h2>
-        <p className="mt-3 text-sm leading-6 text-[#6b5748]">
+        <p className="mt-3 text-sm leading-6 text-slate-600">
           {locale === 'zh'
             ? `目前使用 ${user.email ?? '你的帳號'}。如果沒有自動跳轉，請點下方按鈕前往下一頁。`
             : `You are signed in as ${user.email ?? 'your account'}. If the redirect does not happen automatically, use the button below.`}
         </p>
         {canAddPassword ? (
-          <div className="mt-5 rounded-[22px] border border-brand-100 bg-brand-50/70 p-4">
-            <p className="text-sm font-semibold text-[#2d2119]">
+          <div className="mt-5 rounded-2xl border border-brand-200 bg-brand-50 p-4">
+            <p className="text-sm font-semibold text-slate-900">
               {locale === 'zh' ? '這個帳號目前只接上 Google 登入' : 'This account is currently connected through Google only'}
             </p>
-            <p className="mt-2 text-sm leading-6 text-[#5d4a3d]">
+            <p className="mt-2 text-sm leading-6 text-slate-700">
               {locale === 'zh'
                 ? '如果你也想用 email 與密碼登入，現在可以直接為同一個帳號設定密碼。'
                 : 'If you also want to use email and password, you can set a password for this same account right now.'}
@@ -751,7 +751,7 @@ export function AuthPageClient({
               className="mt-4 space-y-3"
             >
               <div>
-                <label htmlFor="newPassword" className="mb-2 block text-sm font-semibold text-[#35271f]">
+                <label htmlFor="newPassword" className="mb-2 block text-sm font-semibold text-slate-800">
                   {locale === 'zh' ? '設定密碼' : 'Set password'}
                 </label>
                 <input
@@ -761,13 +761,13 @@ export function AuthPageClient({
                   autoComplete="new-password"
                   placeholder={locale === 'zh' ? '至少 6 個字元' : 'At least 6 characters'}
                   disabled={isBusy}
-                  className="w-full rounded-[16px] border border-[#d6c2af] bg-white px-4 py-3 text-sm text-[#33251d] outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:bg-[#f5eee5]"
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-brand-400 disabled:cursor-not-allowed disabled:bg-slate-50"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isBusy}
-                className="inline-flex items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-2.5 text-sm font-semibold text-[#35271f] transition hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {locale === 'zh' ? '儲存密碼' : 'Save password'}
               </button>
@@ -777,7 +777,7 @@ export function AuthPageClient({
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href={redirectPath}
-            className="inline-flex items-center justify-center rounded-[16px] bg-brand-900 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_18px_38px_-28px_rgba(102,33,22,0.85)] transition hover:-translate-y-0.5 hover:bg-brand-800 active:translate-y-px"
+            className="inline-flex items-center justify-center rounded-full bg-brand-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800"
           >
             {locale === 'zh' ? '繼續前往下一步' : 'Continue'}
           </Link>
@@ -785,7 +785,7 @@ export function AuthPageClient({
             type="button"
             onClick={handleSignOut}
             disabled={isBusy}
-            className="inline-flex items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-2.5 text-sm font-semibold text-[#35271f] transition hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {locale === 'zh' ? '登出' : 'Sign out'}
           </button>
@@ -799,9 +799,11 @@ export function AuthPageClient({
 
   if (initialComplete) {
     return (
-      <div className="rounded-[28px] border border-[#e2d0bf] bg-[#fffdfa] p-6 shadow-[0_26px_60px_-46px_rgba(74,49,27,0.55)] sm:p-8">
-        <p className="text-sm font-semibold text-brand-700">{locale === 'zh' ? '登入中' : 'Signing you in'}</p>
-        <h2 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-[#261b15] [font-family:var(--font-display)]">
+      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-600">
+          {locale === 'zh' ? '登入中' : 'Signing you in'}
+        </p>
+        <h2 className="mt-3 text-2xl font-bold tracking-tight text-slate-900">
           {status?.tone === 'error'
             ? locale === 'zh'
               ? '這次登入沒有完成'
@@ -810,21 +812,20 @@ export function AuthPageClient({
               ? '正在完成你的帳號登入'
               : 'Finishing your account sign-in'}
         </h2>
-        <p className="mt-3 text-sm leading-6 text-[#6b5748]">
+        <p className="mt-3 text-sm leading-6 text-slate-600">
           {status?.message ??
             (locale === 'zh'
               ? '我們正在完成登入並把你送回剛剛的操作。這裡不需要額外點擊。'
               : 'We are finishing the sign-in and sending you back to the action you started. No extra click is needed here.')}
         </p>
-        <div className="mt-6 grid gap-3">
-          <div className="auth-skeleton-line h-3 w-3/4 rounded-full bg-brand-100" />
-          <div className="auth-skeleton-line h-3 w-1/2 rounded-full bg-[#eadccc]" />
+        <div className="mt-6 h-2 overflow-hidden rounded-full bg-slate-100">
+          <div className="h-full w-1/2 animate-pulse rounded-full bg-brand-500" />
         </div>
         {status?.tone === 'error' ? (
           <div className="mt-5">
             <Link
               href={signInHref}
-              className="inline-flex items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-2.5 text-sm font-semibold text-[#35271f] transition hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700 active:translate-y-px"
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
             >
               {locale === 'zh' ? '返回登入頁' : 'Back to login'}
             </Link>
@@ -836,43 +837,33 @@ export function AuthPageClient({
 
   return (
     <div
-      aria-busy={isBusy}
-      className="rounded-[28px] border border-[#e2d0bf] bg-[#fffdfa] p-5 shadow-[0_30px_76px_-50px_rgba(74,49,27,0.62)] sm:p-6"
+      className={`rounded-[2rem] border p-6 shadow-[0_24px_80px_rgba(82,57,30,0.12)] sm:p-8 ${
+        isJoinPage ? 'border-white/80 bg-white/95' : 'border-[#eadfd1] bg-white/96'
+      }`}
     >
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-brand-700">
-            {isJoinPage
-              ? locale === 'zh'
-                ? '建立帳號'
-                : 'Create account'
-              : locale === 'zh'
-                ? '帳號登入'
-                : 'Account login'}
-          </p>
-          <h2 className="mt-2 text-4xl font-semibold leading-tight tracking-tight text-[#261b15] [font-family:var(--font-display)]">
-            {isJoinPage
-              ? locale === 'zh'
-                ? '加入'
-                : 'Join'
-              : locale === 'zh'
-                ? '登入'
-                : 'Sign in'}
-          </h2>
-        </div>
-        <p className="max-w-[15rem] text-sm leading-6 text-[#6f5a4a] sm:text-right">
+      <div className={isJoinPage ? 'text-center' : 'mx-auto max-w-md text-center'}>
+        <h2 className="text-[2.35rem] font-bold tracking-tight text-[#3b2a1a]">
+          {isJoinPage
+            ? locale === 'zh'
+              ? '加入'
+              : 'Join'
+            : locale === 'zh'
+              ? '登入'
+              : 'Log In'}
+        </h2>
+        <p className="mt-3 text-sm leading-6 text-[#6f5e4e]">
           {isJoinPage ? (
             <>
               {locale === 'zh' ? '已經有帳號？' : 'Already have an account?'}{' '}
-              <Link href={signInHref} className="font-semibold text-brand-700 underline underline-offset-4 hover:text-brand-900">
-                {locale === 'zh' ? '登入' : 'Log in'}
+              <Link href={signInHref} className="font-semibold text-[#9a6230] underline underline-offset-2">
+                {locale === 'zh' ? '登入' : 'Log In'}
               </Link>
             </>
           ) : (
             <>
               {locale === 'zh' ? '還沒有帳號？' : "Don't have an account?"}{' '}
-              <Link href={signUpHref} className="font-semibold text-brand-700 underline underline-offset-4 hover:text-brand-900">
-                {locale === 'zh' ? '建立帳號' : 'Create account'}
+              <Link href={signUpHref} className="font-semibold text-[#9a6230] underline underline-offset-2">
+                {locale === 'zh' ? '加入' : 'Join'}
               </Link>
             </>
           )}
@@ -880,42 +871,46 @@ export function AuthPageClient({
       </div>
 
       {!isConfigured ? (
-        <div className="mt-5 rounded-[18px] border border-amber-200 bg-amber-50 px-4 py-2.5 text-xs leading-5 text-amber-900">
+        <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800">
           {locale === 'zh'
-            ? '這個環境尚未設定 Supabase Auth 公開環境值。'
-            : 'Supabase Auth public env vars are missing in this environment.'}
+            ? '目前這個環境尚未設定 Supabase Auth 公開環境值，所以表單會保持為安全的展示模式。'
+            : 'This environment does not have Supabase Auth public env vars yet, so the form stays in a safe scaffolded mode.'}
         </div>
       ) : null}
 
-      <a
-        href={googleAuthHref}
-        onClick={handleGoogleSignIn}
-        aria-disabled={isBusy}
-        className={`mt-5 inline-flex w-full items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-3 text-base font-semibold text-[#2f241d] transition hover:-translate-y-0.5 hover:border-brand-200 hover:text-brand-700 active:translate-y-px ${
-          isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
-        }`}
-      >
-        {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
-      </a>
+      {!isJoinPage ? (
+        <>
+          <a
+            href={googleAuthHref}
+            onClick={handleGoogleSignIn}
+            aria-disabled={isBusy}
+            className={`mt-8 inline-flex w-full items-center justify-center rounded-xl bg-[#4f7df3] px-5 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#466fda] ${
+              isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
+            }`}
+          >
+            {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
+          </a>
 
-      <div className="mt-4 flex items-center gap-3 text-sm font-semibold text-[#8a7666]">
-        <span className="h-px flex-1 bg-[#eadfd1]" />
-        <span>{locale === 'zh' ? '或使用 email' : 'or use email'}</span>
-        <span className="h-px flex-1 bg-[#eadfd1]" />
-      </div>
+          <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">
+            <span className="h-px flex-1 bg-[#eadfd1]" />
+            <span>{locale === 'zh' ? '或' : 'OR'}</span>
+            <span className="h-px flex-1 bg-[#eadfd1]" />
+          </div>
+        </>
+      ) : null}
 
       <form
         action={mode === 'signup' ? signupFallbackAction : loginFallbackAction}
         method="post"
         noValidate
         onSubmit={handleFormSubmit}
-        className="mt-4 space-y-3"
+        className="mt-6 space-y-4"
       >
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="next" value={redirectPath} />
         {isJoinPage ? (
           <div>
-            <label htmlFor="fullName" className="mb-2 block text-sm font-semibold text-[#35271f]">
+            <label htmlFor="fullName" className="mb-2 block text-sm font-semibold text-[#4b3a2a]">
               {locale === 'zh' ? '姓名' : 'Full name'}
             </label>
             <input
@@ -924,16 +919,13 @@ export function AuthPageClient({
               type="text"
               placeholder={locale === 'zh' ? '王小明' : 'Grace Lin'}
               disabled={isBusy}
-              className="w-full rounded-[16px] border border-[#d6c2af] bg-white px-4 py-3 text-base text-[#33251d] outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:bg-[#f5eee5]"
+              className="w-full rounded-xl border border-[#ccb49a] bg-white px-4 py-3.5 text-base text-[#4b3a2a] outline-none transition focus:border-[#b2743e] disabled:cursor-not-allowed disabled:bg-slate-50"
             />
-            <p className="mt-1.5 text-xs leading-5 text-[#7b6658]">
-              {locale === 'zh' ? '這會顯示在你的帳號資料中。' : 'This appears in your account profile.'}
-            </p>
           </div>
         ) : null}
 
         <div>
-          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#35271f]">
+          <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#4b3a2a]">
             {locale === 'zh' ? 'Email 地址' : 'Email address'}
           </label>
           <input
@@ -954,10 +946,10 @@ export function AuthPageClient({
               const emailError = validateEmailField(event.currentTarget, locale);
               setFieldErrors((current) => updateFieldErrorState(current, 'email', emailError));
             }}
-            className={`w-full rounded-[16px] border bg-white px-4 py-3 text-base text-[#33251d] outline-none transition focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:bg-[#f5eee5] ${
+            className={`w-full rounded-xl border bg-white px-4 py-3.5 text-base text-[#4b3a2a] outline-none transition disabled:cursor-not-allowed disabled:bg-slate-50 ${
               fieldErrors.email
                 ? 'border-rose-500 focus:border-rose-500'
-                : 'border-[#d6c2af] focus:border-brand-500'
+                : 'border-[#ccb49a] focus:border-[#b2743e]'
             }`}
             style={inputErrorStyle(Boolean(fieldErrors.email))}
           />
@@ -965,15 +957,11 @@ export function AuthPageClient({
             <p id="auth-email-error" aria-live="polite" className="mt-1.5 pl-1 text-sm font-semibold text-rose-700">
               {fieldErrors.email}
             </p>
-          ) : (
-            <p className="mt-1.5 text-xs leading-5 text-[#7b6658]">
-              {locale === 'zh' ? '我們會用這個 email 處理登入與帳號通知。' : 'Used for login and account notices.'}
-            </p>
-          )}
+          ) : null}
         </div>
 
         <div>
-          <label htmlFor="password" className="mb-2 block text-sm font-semibold text-[#35271f]">
+          <label htmlFor="password" className="mb-2 block text-sm font-semibold text-[#4b3a2a]">
             {locale === 'zh' ? '密碼' : 'Password'}
           </label>
           <div className="relative" data-auth-password-toggle-root data-auth-client-ready={isClientReady ? 'true' : 'false'}>
@@ -1000,10 +988,10 @@ export function AuthPageClient({
                 const passwordError = validatePasswordField(event.currentTarget, locale);
                 setFieldErrors((current) => updateFieldErrorState(current, 'password', passwordError));
               }}
-              className={`w-full rounded-[16px] border bg-white px-4 py-3 pr-20 text-base text-[#33251d] outline-none transition focus:ring-2 focus:ring-brand-100 disabled:cursor-not-allowed disabled:bg-[#f5eee5] ${
+              className={`w-full rounded-xl border bg-white px-4 py-3.5 pr-20 text-base text-[#4b3a2a] outline-none transition disabled:cursor-not-allowed disabled:bg-slate-50 ${
                 fieldErrors.password
                   ? 'border-rose-500 focus:border-rose-500'
-                  : 'border-[#d6c2af] focus:border-brand-500'
+                  : 'border-[#ccb49a] focus:border-[#b2743e]'
               }`}
               style={inputErrorStyle(Boolean(fieldErrors.password))}
             />
@@ -1027,7 +1015,7 @@ export function AuthPageClient({
                     : 'Show password'
               }
               onClick={handlePasswordToggle}
-              className="absolute inset-y-0 right-0 z-10 cursor-pointer px-4 text-sm font-semibold text-brand-700 transition-colors hover:text-brand-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-200 disabled:cursor-not-allowed disabled:opacity-50"
+              className="absolute inset-y-0 right-0 z-10 cursor-pointer px-4 text-sm font-medium text-[#8f6239] transition-colors hover:text-[#724a28] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b2743e]/35 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {showPassword
                 ? locale === 'zh'
@@ -1042,38 +1030,49 @@ export function AuthPageClient({
             <p id="auth-password-error" aria-live="polite" className="mt-1.5 pl-1 text-sm font-semibold text-rose-700">
               {fieldErrors.password}
             </p>
-          ) : (
-            <p className="mt-1.5 text-xs leading-5 text-[#7b6658]">
-              {locale === 'zh' ? '至少 6 個字元。' : 'At least 6 characters.'}
-            </p>
-          )}
+          ) : null}
         </div>
 
         <button
           type="submit"
           disabled={isBusy}
-          className="inline-flex w-full items-center justify-center rounded-[16px] bg-brand-900 px-5 py-3 text-base font-semibold text-white shadow-[0_20px_42px_-30px_rgba(102,33,22,0.9)] transition hover:-translate-y-0.5 hover:bg-brand-800 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center rounded-xl bg-[#b2743e] px-5 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#9c6536] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isBusy
-            ? locale === 'zh'
-              ? '處理中...'
-              : 'Working...'
-            : isJoinPage
+          {isJoinPage
             ? locale === 'zh'
               ? '建立帳號'
-              : 'Create account'
+              : 'Create Account'
             : locale === 'zh'
               ? '以 Email 登入'
-              : 'Log in with email'}
+              : 'Log In With Email'}
         </button>
       </form>
 
       {isJoinPage ? (
-        <p className="mt-4 text-xs leading-5 text-[#7a6658]">
-          {locale === 'zh'
-            ? '建立帳號後，你就能使用商家、社群與 Shop 帳號工具。'
-            : 'After account creation, business, community, and shop tools use the same profile.'}
-        </p>
+        <>
+          <p className="mt-4 text-xs leading-5 text-[#7a6a5b]">
+            {locale === 'zh'
+              ? '建立帳號後，你就能認領商家、發佈社群內容、儲存搜尋與使用 Shop 功能。'
+              : 'Creating an account lets you claim listings, publish in the community, save searches, and use shop features.'}
+          </p>
+
+          <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">
+            <span className="h-px flex-1 bg-[#eadfd1]" />
+            <span>{locale === 'zh' ? '或' : 'OR'}</span>
+            <span className="h-px flex-1 bg-[#eadfd1]" />
+          </div>
+
+          <a
+            href={googleAuthHref}
+            onClick={handleGoogleSignIn}
+            aria-disabled={isBusy}
+            className={`mt-6 inline-flex w-full items-center justify-center rounded-xl bg-[#4f7df3] px-5 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#466fda] ${
+              isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
+            }`}
+          >
+            {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
+          </a>
+        </>
       ) : null}
 
       {status ? (
@@ -1082,10 +1081,10 @@ export function AuthPageClient({
 
       {!isJoinPage ? (
         <div className="mt-6 text-center">
-            <Link
-              href={resetPasswordHref}
-              className="text-sm font-semibold text-brand-700 underline underline-offset-4 transition-colors hover:text-brand-900"
-            >
+          <Link
+            href={resetPasswordHref}
+            className="text-sm font-semibold text-[#9a6230] underline underline-offset-4 transition-colors hover:text-[#7f4f24]"
+          >
             {locale === 'zh' ? '忘記密碼？' : 'Forgot your password?'}
           </Link>
         </div>
