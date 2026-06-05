@@ -90,6 +90,18 @@ const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
   'sgv-housing-transit-watch-source-linked-summaries',
 ]);
 
+function isKnownBrokenRadarHeroUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    const isBrightspotCdn =
+      hostname === 'brightspotcdn.com' || hostname.endsWith('.brightspotcdn.com');
+    return isBrightspotCdn && url.pathname.includes('/dims4/');
+  } catch {
+    return false;
+  }
+}
+
 function radarFallbackHero(lane: RadarLane, siteInput?: RadarSiteInput): string {
   const site = resolveRadarSite(siteInput);
   const siteKey: SiteKey = site.key === 'unconfigured' ? 'arizona' : site.key;
@@ -116,6 +128,10 @@ function radarHeroImageLooksRenderable(value: string): boolean {
 
   try {
     const url = new URL(rawValue);
+    if (isKnownBrokenRadarHeroUrl(rawValue)) {
+      return false;
+    }
+
     return url.protocol === 'https:' || url.protocol === 'http:';
   } catch {
     return false;

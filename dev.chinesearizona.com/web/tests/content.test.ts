@@ -236,7 +236,8 @@ describe('content selectors', () => {
               zh: '這篇文章只存在於 Arizona Radar 的即時資料儲存。',
             },
           ],
-          heroImage: '',
+          heroImage:
+            'https://ewscripps.brightspotcdn.com/dims4/default/01d40c9/2147483647/strip/true/crop/1292x678+0+22/resize/1200x630!/quality/90?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fimage.jpg',
           heroImagePolicy: 'source_allowed',
           category: 'news',
           freshnessTier: 'breaking',
