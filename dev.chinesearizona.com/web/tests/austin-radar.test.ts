@@ -181,6 +181,7 @@ describe('Austin Radar config', () => {
           bodyZh: [
             '奥斯汀读者可以先读到简短摘要，并通过保留的原始来源链接查看完整背景。',
           ],
+          heroImage: 'https://austinmonitor.com/images/transit-planning.jpg',
           topicFingerprint: 'austin civic transit planning update',
         },
       ],

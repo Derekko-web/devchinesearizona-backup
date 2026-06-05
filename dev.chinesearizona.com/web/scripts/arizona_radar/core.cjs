@@ -97,7 +97,7 @@ const DEFAULT_SOURCE_NAME =
   process.env.RADAR_FALLBACK_SOURCE_NAME ||
   (process.env.RADAR_REGION_NAME ? `${process.env.RADAR_REGION_NAME} Source` : 'Arizona Source');
 
-function isKnownBrokenRadarHeroUrl(value) {
+function isBrightspotTransformHeroUrl(value) {
   try {
     const url = new URL(value);
     const hostname = url.hostname.toLowerCase();
@@ -106,6 +106,22 @@ function isKnownBrokenRadarHeroUrl(value) {
     return isBrightspotCdn && url.pathname.includes('/dims4/');
   } catch (_error) {
     return false;
+  }
+}
+
+function recoverBrightspotSourceHeroImage(value) {
+  if (!isBrightspotTransformHeroUrl(value)) {
+    return '';
+  }
+
+  try {
+    const sourceUrl = new URL(value).searchParams.get('url');
+    if (!sourceUrl) {
+      return '';
+    }
+    return normalizeCanonicalUrl(sourceUrl.replace(/^http:/i, 'https:'));
+  } catch (_error) {
+    return '';
   }
 }
 
@@ -135,12 +151,12 @@ function radarHeroImageLooksRenderable(value) {
   }
 
   if (rawValue.startsWith('/')) {
-    return true;
+    return false;
   }
 
   try {
     const url = new URL(rawValue);
-    if (isKnownBrokenRadarHeroUrl(rawValue)) {
+    if (isBrightspotTransformHeroUrl(rawValue)) {
       return false;
     }
 
@@ -150,18 +166,26 @@ function radarHeroImageLooksRenderable(value) {
   }
 }
 
-function normalizeStoredArticle(article, siteKey = currentRadarSiteKey()) {
+function normalizeRadarHeroImageUrl(value) {
+  const rawValue = String(value || '').trim();
+  const recoveredSourceImage = recoverBrightspotSourceHeroImage(rawValue);
+  const normalized = recoveredSourceImage || normalizeCanonicalUrl(rawValue);
+
+  return radarHeroImageLooksRenderable(normalized) ? normalized : '';
+}
+
+function normalizeStoredArticle(article) {
   const lane = VALID_LANES.has(article.lane) ? article.lane : 'community';
-  const heroImage = String(article.heroImage || '').trim();
-  const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
+  const heroImage = normalizeRadarHeroImageUrl(article.heroImage);
+  if (!heroImage) {
+    return null;
+  }
 
   return {
     ...article,
     lane,
-    heroImage: hasRenderableHeroImage ? heroImage : buildFallbackHero(lane, siteKey),
-    heroImagePolicy: hasRenderableHeroImage
-      ? String(article.heroImagePolicy || 'source_allowed')
-      : 'fallback_only',
+    heroImage,
+    heroImagePolicy: 'source_allowed',
   };
 }
 
@@ -184,7 +208,8 @@ function normalizeStore(input, siteKey = currentRadarSiteKey()) {
     articles: Array.isArray(input && input.articles)
       ? input.articles
           .filter((article) => !isRemovedPlaceholder(article))
-          .map((article) => normalizeStoredArticle(article, siteKey))
+          .map((article) => normalizeStoredArticle(article))
+          .filter(Boolean)
       : [],
   };
 }
@@ -946,12 +971,10 @@ function normalizeDraft(draft, source, now, options = {}) {
     : inferFreshnessTier(sourcePublishedAt, now);
   const category = VALID_CATEGORIES.has(draft.category) ? draft.category : 'news';
   const heroImageAllowed = source.sourcePolicy !== 'signal_only';
-  const providedHeroImage = normalizeCanonicalUrl(draft.heroImage);
-  const hasProvidedHeroImage =
-    heroImageAllowed && radarHeroImageLooksRenderable(providedHeroImage);
-  const heroImage = hasProvidedHeroImage
-    ? providedHeroImage
-    : buildFallbackHero(source.lane, options.siteKey);
+  const heroImage = heroImageAllowed ? normalizeRadarHeroImageUrl(draft.heroImage) : '';
+  if (!heroImage) {
+    return { error: 'missing_usable_hero_image' };
+  }
 
   return {
     candidate: {
@@ -978,7 +1001,7 @@ function normalizeDraft(draft, source, now, options = {}) {
       excerpt,
       body,
       heroImage,
-      heroImagePolicy: hasProvidedHeroImage ? 'source_allowed' : 'fallback_only',
+      heroImagePolicy: 'source_allowed',
       category,
       freshnessTier,
       sourcePolicy: source.sourcePolicy,
@@ -1355,6 +1378,7 @@ module.exports = {
   defaultStoreSnapshot,
   normalizeCanonicalUrl,
   normalizeDraft,
+  normalizeRadarHeroImageUrl,
   generatedCopyHasSourceProvenance,
   normalizeStore,
   normalizeTopicFingerprint,

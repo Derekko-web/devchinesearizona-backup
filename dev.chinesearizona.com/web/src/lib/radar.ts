@@ -90,7 +90,7 @@ const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
   'sgv-housing-transit-watch-source-linked-summaries',
 ]);
 
-function isKnownBrokenRadarHeroUrl(value: string): boolean {
+function isBrightspotTransformHeroUrl(value: string): boolean {
   try {
     const url = new URL(value);
     const hostname = url.hostname.toLowerCase();
@@ -99,6 +99,46 @@ function isKnownBrokenRadarHeroUrl(value: string): boolean {
     return isBrightspotCdn && url.pathname.includes('/dims4/');
   } catch {
     return false;
+  }
+}
+
+function normalizeExternalRadarHeroUrl(value: string): string {
+  const rawValue = String(value || '').trim();
+  if (
+    !rawValue ||
+    rawValue.startsWith('/') ||
+    /^data:/i.test(rawValue) ||
+    NON_RENDERABLE_RADAR_HERO_PATTERN.test(rawValue)
+  ) {
+    return '';
+  }
+
+  try {
+    const url = new URL(rawValue);
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      return '';
+    }
+    if (isBrightspotTransformHeroUrl(rawValue)) {
+      return '';
+    }
+
+    url.hash = '';
+    return url.toString();
+  } catch {
+    return '';
+  }
+}
+
+function recoverBrightspotSourceHeroImage(value: string): string {
+  if (!isBrightspotTransformHeroUrl(value)) {
+    return '';
+  }
+
+  try {
+    const sourceUrl = new URL(value).searchParams.get('url');
+    return normalizeExternalRadarHeroUrl(sourceUrl?.replace(/^http:/i, 'https:') ?? '');
+  } catch {
+    return '';
   }
 }
 
@@ -116,42 +156,19 @@ export function getRadarHeroImageFallback(
   return radarFallbackHero(lane ?? 'community', site);
 }
 
-function radarHeroImageLooksRenderable(value: string): boolean {
+function normalizeRadarHeroImageUrl(value: unknown): string {
   const rawValue = String(value || '').trim();
-  if (!rawValue || /^data:/i.test(rawValue) || NON_RENDERABLE_RADAR_HERO_PATTERN.test(rawValue)) {
-    return false;
-  }
-
-  if (rawValue.startsWith('/')) {
-    return true;
-  }
-
-  try {
-    const url = new URL(rawValue);
-    if (isKnownBrokenRadarHeroUrl(rawValue)) {
-      return false;
-    }
-
-    return url.protocol === 'https:' || url.protocol === 'http:';
-  } catch {
-    return false;
-  }
+  return recoverBrightspotSourceHeroImage(rawValue) || normalizeExternalRadarHeroUrl(rawValue);
 }
 
 function normalizeRadarHeroImage(
-  rawHeroImage: unknown,
-  lane: RadarLane,
-  rawPolicy?: unknown,
-  site?: RadarSiteInput
+  rawHeroImage: unknown
 ): Pick<RadarArticle, 'heroImage' | 'heroImagePolicy'> {
-  const heroImage = String(rawHeroImage || '').trim();
-  const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
+  const heroImage = normalizeRadarHeroImageUrl(rawHeroImage);
 
   return {
-    heroImage: hasRenderableHeroImage ? heroImage : radarFallbackHero(lane, site),
-    heroImagePolicy: (hasRenderableHeroImage
-      ? String(rawPolicy || 'source_allowed')
-      : 'fallback_only') as RadarHeroImagePolicy,
+    heroImage,
+    heroImagePolicy: (heroImage ? 'source_allowed' : 'fallback_only') as RadarHeroImagePolicy,
   };
 }
 
@@ -292,9 +309,12 @@ function defaultStore(): RadarStoreSnapshot {
   };
 }
 
-function normalizeStoredArticle(article: RadarArticle, site?: RadarSiteInput): RadarArticle {
+function normalizeStoredArticle(article: RadarArticle): RadarArticle | null {
   const lane = (article.lane || 'community') as RadarLane;
-  const normalizedHero = normalizeRadarHeroImage(article.heroImage, lane, article.heroImagePolicy, site);
+  const normalizedHero = normalizeRadarHeroImage(article.heroImage);
+  if (!normalizedHero.heroImage) {
+    return null;
+  }
 
   return {
     ...article,
@@ -303,10 +323,7 @@ function normalizeStoredArticle(article: RadarArticle, site?: RadarSiteInput): R
   };
 }
 
-function normalizeStore(
-  input: Partial<RadarStoreSnapshot> | null | undefined,
-  site?: RadarSiteInput
-): RadarStoreSnapshot {
+function normalizeStore(input: Partial<RadarStoreSnapshot> | null | undefined): RadarStoreSnapshot {
   const fallback = defaultStore();
   const isRemovedPlaceholder = (entry: { slug?: string }) =>
     REMOVED_PLACEHOLDER_ARTICLE_SLUGS.has(String(entry.slug || ''));
@@ -325,7 +342,8 @@ function normalizeStore(
     articles: Array.isArray(input?.articles)
       ? input.articles
           .filter((article) => !isRemovedPlaceholder(article))
-          .map((article) => normalizeStoredArticle(article, site))
+          .map((article) => normalizeStoredArticle(article))
+          .filter((article): article is RadarArticle => Boolean(article))
       : [],
   };
 }
@@ -508,15 +526,10 @@ function mapCandidateRow(row: Record<string, unknown>): RadarCandidate {
   };
 }
 
-function mapArticleRow(row: Record<string, unknown>, site?: RadarSiteInput): RadarArticle {
+function mapArticleRow(row: Record<string, unknown>): RadarArticle {
   const sourceName = String(row.source_name ?? row.sourceName ?? '');
   const lane = String(row.lane || 'community') as RadarLane;
-  const normalizedHero = normalizeRadarHeroImage(
-    row.hero_image ?? row.heroImage,
-    lane,
-    row.hero_image_policy ?? row.heroImagePolicy,
-    site
-  );
+  const normalizedHero = normalizeRadarHeroImage(row.hero_image ?? row.heroImage);
 
   return {
     id: String(row.id),
@@ -646,7 +659,7 @@ export function readRadarStore(site?: RadarSiteInput): RadarStoreSnapshot {
 
   try {
     const payload = fs.readFileSync(storePath, 'utf8');
-    return normalizeStore(JSON.parse(payload) as Partial<RadarStoreSnapshot>, site);
+    return normalizeStore(JSON.parse(payload) as Partial<RadarStoreSnapshot>);
   } catch {
     return defaultStore();
   }
@@ -657,7 +670,7 @@ export function writeRadarStore(
   site?: RadarSiteInput
 ): RadarStoreSnapshot {
   const storePath = getRadarStorePath(site);
-  const normalizedStore = normalizeStore(store, site);
+  const normalizedStore = normalizeStore(store);
   fs.mkdirSync(path.dirname(storePath), { recursive: true });
   fs.writeFileSync(storePath, `${JSON.stringify(normalizedStore, null, 2)}\n`, 'utf8');
   return normalizedStore;
@@ -668,11 +681,11 @@ export function mutateRadarStore(
   options: RadarStoreOptions = {}
 ): RadarStoreSnapshot {
   const current = readRadarStore(options.site);
-  const next = normalizeStore(mutate(current), options.site);
+  const next = normalizeStore(mutate(current));
   return writeRadarStore(next, options.site);
 }
 
-async function readRadarStoreFromSupabase(site?: RadarSiteInput): Promise<RadarStoreSnapshot> {
+async function readRadarStoreFromSupabase(): Promise<RadarStoreSnapshot> {
   const supabase = getSupabaseServiceClient();
   if (!supabase) {
     return defaultStore();
@@ -722,9 +735,9 @@ async function readRadarStoreFromSupabase(site?: RadarSiteInput): Promise<RadarS
       mapCandidateRow(row as Record<string, unknown>)
     ),
     articles: (articlesResult.data || []).map((row) =>
-      mapArticleRow(row as Record<string, unknown>, site)
+      mapArticleRow(row as Record<string, unknown>)
     ),
-  }, site);
+  });
 }
 
 export async function readRadarStoreAsync(
@@ -735,7 +748,7 @@ export async function readRadarStoreAsync(
   }
 
   try {
-    const persistedStore = await readRadarStoreFromSupabase(options.site);
+    const persistedStore = await readRadarStoreFromSupabase();
     try {
       writeRadarStore(persistedStore, options.site);
     } catch (mirrorError) {
@@ -1193,11 +1206,10 @@ export async function unpublishRadarArticleAsync(articleId: string): Promise<voi
 }
 
 export async function backfillRadarStoreToSupabase(
-  store: RadarStoreSnapshot,
-  options: RadarStoreOptions = {}
+  store: RadarStoreSnapshot
 ): Promise<RadarStoreSnapshot> {
   const supabase = await getRadarServiceClientOrThrow();
-  const snapshot = normalizeStore(store, options.site);
+  const snapshot = normalizeStore(store);
 
   const { error: jobControlError } = await supabase.from('radar_job_controls').upsert({
     id: true,

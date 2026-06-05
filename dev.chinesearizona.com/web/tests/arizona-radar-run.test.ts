@@ -13,8 +13,10 @@ const {
   parseFeedItems,
   collectDraftsFromFeeds,
   extractJsonPayload,
+  filterDraftsWithUsableImages,
   fetchText,
   getSiteConfig,
+  imageUrlIsUsable,
   lookupPublicFetchAddress,
   parseArgs,
   parseHermesOutput,
@@ -25,8 +27,17 @@ const {
     options: Record<string, unknown>
   ) => Promise<Array<Record<string, unknown>>>;
   extractJsonPayload: (text: string) => string;
+  filterDraftsWithUsableImages: (
+    drafts: Array<Record<string, unknown>>,
+    options: Record<string, unknown>
+  ) => Promise<Array<Record<string, unknown>>>;
   fetchText: (url: string, timeoutMs: number, siteConfig?: { brandName: string }) => Promise<string>;
   getSiteConfig: (siteKey: string) => Record<string, unknown>;
+  imageUrlIsUsable: (
+    url: string,
+    timeoutMs: number,
+    siteConfig?: { brandName: string }
+  ) => Promise<boolean>;
   lookupPublicFetchAddress: (
     hostname: string,
     options: { all?: boolean; family?: number; hints?: number },
@@ -165,6 +176,8 @@ describe('Arizona Radar worker command parsing', () => {
           id: 'existing-article',
           slug: 'existing-real-article',
           title: { en: 'Existing real article', zh: 'Existing real article' },
+          heroImage: 'https://example.com/images/existing-real-article.jpg',
+          heroImagePolicy: 'source_allowed',
           publishedAt: '2026-06-01T12:00:00.000Z',
           isPublished: true,
         },
@@ -230,6 +243,94 @@ describe('Arizona Radar feed fallback', () => {
     expect(drafts.map((draft) => draft.heroImage)).toEqual([
       'https://cdn.example.com/photos/transit-board.jpg',
       'https://example.com/images/summer-meals.jpg',
+    ]);
+  });
+
+  it('recovers direct source images from Brightspot transform URLs in feeds', () => {
+    const drafts = parseFeedItems(
+      `<?xml version="1.0" encoding="UTF-8"?>
+      <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+        <channel>
+          <item>
+            <title>Austin public safety update</title>
+            <link>https://example.com/news/austin-public-safety</link>
+            <pubDate>Mon, 01 Jun 2026 15:00:00 GMT</pubDate>
+            <description>Austin officials shared a public safety update.</description>
+            <media:thumbnail url="https://npr.brightspotcdn.com/dims4/default/87a2150/2147483647/strip/true/crop/3000x1575+0+213/resize/1200x630!/quality/90?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2F95%2F7b%2Fimage.JPG" />
+          </item>
+        </channel>
+      </rss>`,
+      {
+        slug: 'austin-civic-feed',
+        name: 'Austin Civic Feed',
+        sourceType: 'local_media',
+        sourcePolicy: 'summary_link',
+        lane: 'official',
+      },
+      {
+        lookbackHours: 48,
+        maxItems: 5,
+        now: '2026-06-01T18:00:00.000Z',
+      }
+    );
+
+    expect(drafts[0]?.heroImage).toBe('https://npr-brightspot.s3.amazonaws.com/95/7b/image.JPG');
+  });
+
+  it('keeps only drafts whose hero image URL returns an image response', async () => {
+    mockPublicDnsResolution();
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://cdn.example.com/images/usable.jpg') {
+        return new Response('', {
+          status: 200,
+          headers: { 'content-type': 'image/jpeg' },
+        });
+      }
+      if (String(url) === 'https://cdn.example.com/pages/not-image') {
+        return new Response('<html></html>', {
+          status: 200,
+          headers: { 'content-type': 'text/html; charset=utf-8' },
+        });
+      }
+
+      throw new Error(`Unexpected fetch: ${String(url)}`);
+    }) as typeof fetch;
+
+    await expect(
+      imageUrlIsUsable('https://cdn.example.com/images/usable.jpg', 1000, {
+        brandName: 'TestRadar',
+      })
+    ).resolves.toBe(true);
+
+    const drafts = await filterDraftsWithUsableImages(
+      [
+        {
+          sourceSlug: 'test',
+          canonicalUrl: 'https://example.com/usable',
+          heroImage: 'https://cdn.example.com/images/usable.jpg',
+        },
+        {
+          sourceSlug: 'test',
+          canonicalUrl: 'https://example.com/no-image',
+          heroImage: '',
+        },
+        {
+          sourceSlug: 'test',
+          canonicalUrl: 'https://example.com/not-image',
+          heroImage: 'https://cdn.example.com/pages/not-image',
+        },
+      ],
+      {
+        timeoutMs: 1000,
+        siteConfig: { brandName: 'TestRadar' },
+      }
+    );
+
+    expect(drafts).toEqual([
+      expect.objectContaining({
+        canonicalUrl: 'https://example.com/usable',
+        heroImage: 'https://cdn.example.com/images/usable.jpg',
+      }),
     ]);
   });
 
@@ -643,6 +744,12 @@ describe('Arizona Radar feed fallback', () => {
           headers: { 'content-type': 'text/html; charset=utf-8' },
         });
       }
+      if (String(url) === 'https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg') {
+        return new Response('', {
+          status: 200,
+          headers: { 'content-type': 'image/jpeg' },
+        });
+      }
 
       throw new Error(`Unexpected fetch: ${String(url)}`);
     }) as typeof fetch;
@@ -888,6 +995,12 @@ describe('Arizona Radar feed fallback', () => {
         return new Response(articleFixture, {
           status: 200,
           headers: { 'content-type': 'text/html; charset=utf-8' },
+        });
+      }
+      if (String(url) === 'https://whatnow.com/wp-content/uploads/2026/05/project-leannation.jpg') {
+        return new Response('', {
+          status: 200,
+          headers: { 'content-type': 'image/jpeg' },
         });
       }
 
