@@ -68,6 +68,8 @@ const RADAR_FALLBACK_HEROES = {
   social:
     'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
 };
+const NON_RENDERABLE_RADAR_HERO_PATTERN =
+  /(favicon|logo|sprite|spacer|tracking|pixel|blank|1x1|placeholder)/i;
 const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
   'los-angeles-opening-radar-local-source-watch',
   'sgv-housing-transit-watch-source-linked-summaries',
@@ -95,6 +97,39 @@ function defaultStoreSnapshot() {
   };
 }
 
+function radarHeroImageLooksRenderable(value) {
+  const rawValue = String(value || '').trim();
+  if (!rawValue || /^data:/i.test(rawValue) || NON_RENDERABLE_RADAR_HERO_PATTERN.test(rawValue)) {
+    return false;
+  }
+
+  if (rawValue.startsWith('/')) {
+    return true;
+  }
+
+  try {
+    const url = new URL(rawValue);
+    return ['http:', 'https:'].includes(url.protocol);
+  } catch (_error) {
+    return false;
+  }
+}
+
+function normalizeStoredArticle(article) {
+  const lane = VALID_LANES.has(article.lane) ? article.lane : 'community';
+  const heroImage = String(article.heroImage || '').trim();
+  const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
+
+  return {
+    ...article,
+    lane,
+    heroImage: hasRenderableHeroImage ? heroImage : buildFallbackHero(lane),
+    heroImagePolicy: hasRenderableHeroImage
+      ? String(article.heroImagePolicy || 'source_allowed')
+      : 'fallback_only',
+  };
+}
+
 function normalizeStore(input) {
   const fallback = defaultStoreSnapshot();
   const isRemovedPlaceholder = (entry) =>
@@ -112,7 +147,9 @@ function normalizeStore(input) {
       ? input.candidates.filter((candidate) => !isRemovedPlaceholder(candidate))
       : [],
     articles: Array.isArray(input && input.articles)
-      ? input.articles.filter((article) => !isRemovedPlaceholder(article))
+      ? input.articles
+          .filter((article) => !isRemovedPlaceholder(article))
+          .map(normalizeStoredArticle)
       : [],
   };
 }
@@ -843,9 +880,9 @@ function normalizeDraft(draft, source, now) {
   const category = VALID_CATEGORIES.has(draft.category) ? draft.category : 'news';
   const heroImageAllowed = source.sourcePolicy !== 'signal_only';
   const providedHeroImage = normalizeCanonicalUrl(draft.heroImage);
-  const heroImage = heroImageAllowed && providedHeroImage
-    ? providedHeroImage
-    : buildFallbackHero(source.lane);
+  const hasProvidedHeroImage =
+    heroImageAllowed && radarHeroImageLooksRenderable(providedHeroImage);
+  const heroImage = hasProvidedHeroImage ? providedHeroImage : buildFallbackHero(source.lane);
 
   return {
     candidate: {
@@ -872,7 +909,7 @@ function normalizeDraft(draft, source, now) {
       excerpt,
       body,
       heroImage,
-      heroImagePolicy: heroImageAllowed ? 'source_allowed' : 'fallback_only',
+      heroImagePolicy: hasProvidedHeroImage ? 'source_allowed' : 'fallback_only',
       category,
       freshnessTier,
       sourcePolicy: source.sourcePolicy,

@@ -64,6 +64,8 @@ const RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
   social:
     'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
 };
+const NON_RENDERABLE_RADAR_HERO_PATTERN =
+  /(favicon|logo|sprite|spacer|tracking|pixel|blank|1x1|placeholder)/i;
 const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
   'los-angeles-opening-radar-local-source-watch',
   'sgv-housing-transit-watch-source-linked-summaries',
@@ -71,6 +73,44 @@ const REMOVED_PLACEHOLDER_ARTICLE_SLUGS = new Set([
 
 function radarFallbackHero(lane: RadarLane): string {
   return RADAR_FALLBACK_HEROES[lane] ?? RADAR_FALLBACK_HEROES.community;
+}
+
+export function getRadarHeroImageFallback(lane?: RadarLane | null): string {
+  return radarFallbackHero(lane ?? 'community');
+}
+
+function radarHeroImageLooksRenderable(value: string): boolean {
+  const rawValue = String(value || '').trim();
+  if (!rawValue || /^data:/i.test(rawValue) || NON_RENDERABLE_RADAR_HERO_PATTERN.test(rawValue)) {
+    return false;
+  }
+
+  if (rawValue.startsWith('/')) {
+    return true;
+  }
+
+  try {
+    const url = new URL(rawValue);
+    return url.protocol === 'https:' || url.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+function normalizeRadarHeroImage(
+  rawHeroImage: unknown,
+  lane: RadarLane,
+  rawPolicy?: unknown
+): Pick<RadarArticle, 'heroImage' | 'heroImagePolicy'> {
+  const heroImage = String(rawHeroImage || '').trim();
+  const hasRenderableHeroImage = radarHeroImageLooksRenderable(heroImage);
+
+  return {
+    heroImage: hasRenderableHeroImage ? heroImage : radarFallbackHero(lane),
+    heroImagePolicy: (hasRenderableHeroImage
+      ? String(rawPolicy || 'source_allowed')
+      : 'fallback_only') as RadarHeroImagePolicy,
+  };
 }
 
 function resolveRadarSite(input?: RadarSiteInput): SiteProfile {
@@ -212,13 +252,12 @@ function defaultStore(): RadarStoreSnapshot {
 
 function normalizeStoredArticle(article: RadarArticle): RadarArticle {
   const lane = (article.lane || 'community') as RadarLane;
-  const heroImage = String(article.heroImage || '').trim();
+  const normalizedHero = normalizeRadarHeroImage(article.heroImage, lane, article.heroImagePolicy);
 
   return {
     ...article,
     lane,
-    heroImage: heroImage || radarFallbackHero(lane),
-    heroImagePolicy: heroImage ? article.heroImagePolicy : 'fallback_only',
+    ...normalizedHero,
   };
 }
 
@@ -427,7 +466,11 @@ function mapCandidateRow(row: Record<string, unknown>): RadarCandidate {
 function mapArticleRow(row: Record<string, unknown>): RadarArticle {
   const sourceName = String(row.source_name ?? row.sourceName ?? '');
   const lane = String(row.lane || 'community') as RadarLane;
-  const rawHeroImage = String(row.hero_image ?? row.heroImage ?? '').trim();
+  const normalizedHero = normalizeRadarHeroImage(
+    row.hero_image ?? row.heroImage,
+    lane,
+    row.hero_image_policy ?? row.heroImagePolicy
+  );
 
   return {
     id: String(row.id),
@@ -443,10 +486,7 @@ function mapArticleRow(row: Record<string, unknown>): RadarArticle {
       zh: String(row.excerpt_zh ?? row.excerptZh ?? row.excerpt_en ?? row.excerptEn ?? ''),
     },
     body: normalizeBodyParagraphs(row.body_en, row.body_zh),
-    heroImage: rawHeroImage || radarFallbackHero(lane),
-    heroImagePolicy: (rawHeroImage
-      ? String(row.hero_image_policy ?? row.heroImagePolicy ?? 'fallback_only')
-      : 'fallback_only') as RadarHeroImagePolicy,
+    ...normalizedHero,
     category: String(row.category || 'news') as Article['category'],
     freshnessTier: String(row.freshness_tier ?? row.freshnessTier ?? 'weekly') as Article['freshnessTier'],
     sourcePolicy: String(row.source_policy ?? row.sourcePolicy ?? 'summary_link') as SourcePolicy,

@@ -7,6 +7,7 @@ const {
   applyDraftsToStore,
   defaultStoreSnapshot,
   normalizeCanonicalUrl,
+  normalizeStore,
 } = require('../scripts/arizona_radar/core.cjs') as {
   applyDraftsToStore: (
     store: Record<string, unknown>,
@@ -25,6 +26,9 @@ const {
   };
   defaultStoreSnapshot: () => Record<string, unknown>;
   normalizeCanonicalUrl: (value: string) => string;
+  normalizeStore: (store: Record<string, unknown>) => {
+    articles: Array<Record<string, unknown>>;
+  };
 };
 
 const manifest = [
@@ -169,6 +173,36 @@ describe('Arizona Radar core', () => {
     expect(String(socialArticle?.heroImage)).toContain('images.unsplash.com');
   });
 
+  it('repairs stored articles with empty or non-renderable hero images', () => {
+    const store = normalizeStore({
+      ...defaultStoreSnapshot(),
+      articles: [
+        {
+          id: 'stored-empty-image',
+          candidateId: 'candidate-empty-image',
+          slug: 'stored-empty-image',
+          lane: 'official',
+          heroImage: '',
+          heroImagePolicy: 'source_allowed',
+        },
+        {
+          id: 'stored-favicon-image',
+          candidateId: 'candidate-favicon-image',
+          slug: 'stored-favicon-image',
+          lane: 'openings',
+          heroImage: 'https://example.com/favicon.ico',
+          heroImagePolicy: 'source_allowed',
+        },
+      ],
+    });
+
+    expect(store.articles).toHaveLength(2);
+    expect(store.articles[0]?.heroImagePolicy).toBe('fallback_only');
+    expect(String(store.articles[0]?.heroImage)).toContain('images.unsplash.com');
+    expect(store.articles[1]?.heroImagePolicy).toBe('fallback_only');
+    expect(String(store.articles[1]?.heroImage)).toContain('images.unsplash.com');
+  });
+
   it('accepts Arizona sources that are not in the manifest by inferring source metadata', () => {
     const result = applyDraftsToStore(
       defaultStoreSnapshot(),
@@ -283,7 +317,7 @@ describe('Arizona Radar core', () => {
       expect.objectContaining({ url: 'https://news.example/austin/transit-update' }),
       expect.objectContaining({ url: 'https://city.example/austin/transit-doc' }),
     ]);
-    expect(result.store.articles[0]?.heroImagePolicy).toBe('source_allowed');
+    expect(result.store.articles[0]?.heroImagePolicy).toBe('fallback_only');
     expect(String(result.store.articles[0]?.heroImage)).toContain('images.unsplash.com');
   });
 

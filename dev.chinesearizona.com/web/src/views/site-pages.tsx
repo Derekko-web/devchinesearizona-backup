@@ -81,7 +81,7 @@ import {
   shouldNoIndexCommunityPost,
 } from '@/lib/content';
 import { getDiscoverAdminQueue } from '@/lib/discover-arizona';
-import { getRadarAdminSnapshotAsync } from '@/lib/radar';
+import { getRadarAdminSnapshotAsync, getRadarHeroImageFallback } from '@/lib/radar';
 import { isSupabaseServiceConfigured } from '@/lib/supabase';
 import { shouldRenderAdSensePlacement } from '@/lib/adsense';
 import {
@@ -2814,6 +2814,7 @@ export async function CommunityRadarPageView({
                       <div className="relative h-24 overflow-hidden rounded-2xl bg-[#eaded0] md:h-20">
                         <DiscoverArticleImage
                           src={article.heroImage}
+                          fallbackSrc={article.radarLane ? getRadarHeroImageFallback(article.radarLane) : undefined}
                           alt={localizedText.title}
                           className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-[1.04]"
                         />
@@ -3455,6 +3456,7 @@ export async function ArticleDetailPageView({
               <div className="relative aspect-[16/9] overflow-hidden rounded-[1.25rem] border border-[#dfcfbf] bg-[#eaded0] shadow-[0_24px_70px_-54px_rgba(78,47,20,0.42)]">
                 <DiscoverArticleImage
                   src={article.heroImage}
+                  fallbackSrc={article.radarLane ? getRadarHeroImageFallback(article.radarLane) : undefined}
                   alt={descriptiveImageAlt(displayArticle.title, 'article', locale)}
                   className="object-cover"
                   priority

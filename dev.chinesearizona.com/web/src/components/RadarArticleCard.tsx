@@ -5,6 +5,7 @@ import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import { DiscoverArticleImage } from '@/components/DiscoverArticleImage';
 import { LocalDateTime } from '@/components/LocalDateTime';
 import { radarLaneLabel, t } from '@/lib/i18n';
+import { getRadarHeroImageFallback } from '@/lib/radar';
 import type { Article, Locale } from '@/lib/types';
 
 export function RadarArticleCard({
@@ -33,6 +34,7 @@ export function RadarArticleCard({
       <div className="relative h-48 w-full bg-slate-200">
         <DiscoverArticleImage
           src={article.heroImage}
+          fallbackSrc={article.radarLane ? getRadarHeroImageFallback(article.radarLane) : undefined}
           alt={displayTitle}
           className="object-cover"
         />
