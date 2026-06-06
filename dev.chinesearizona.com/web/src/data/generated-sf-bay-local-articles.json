@@ -1,13 +1,13 @@
 [
   {
-    "slug": "sf-bay-chinese-community-service-anchors",
+    "slug": "sf-bay-chinese-immigrant-rights-senior-legal-help",
     "title": {
-      "en": "SF Bay Chinese community services: Chinatown, seniors, and legal help",
-      "zh": "灣區華人社區服務：華埠、長者與法律協助"
+      "en": "SF Bay Chinese community services: immigrant rights, seniors, and legal help",
+      "zh": "灣區華人社區服務：移民權益、長者與法律協助"
     },
     "excerpt": {
-      "en": "ChineseSFBay needs source-linked service coverage from real Bay Area organizations, not empty feeds or generic California copy.",
-      "zh": "ChineseSFBay 需要連到真實灣區機構的服務內容，而不是空文章列表或泛加州文字。"
+      "en": "Chinese for Affirmative Action, Self-Help for the Elderly, and API Legal Outreach give Bay Area readers concrete places to start for rights, senior, and legal support.",
+      "zh": "華人權益促進會、安老自助處與 API Legal Outreach，為灣區讀者提供移民權益、長者與法律支援的實用入口。"
     },
     "heroImage": "/city-site-images/sf-chinatown-bay.webp",
     "publishedAt": "2026-06-06T14:00:00.000Z",
@@ -15,16 +15,16 @@
     "category": "feature",
     "body": [
       {
-        "en": "A useful Bay Area Chinese article feed should surface organizations readers can actually use. Chinese for Affirmative Action, Self-Help for the Elderly, Chinese Hospital, and API Legal Outreach each answer a different resident need: civic rights, senior services, health navigation, and legal help.",
-        "zh": "有用的灣區華人文章列表應呈現讀者真的會用到的機構。華促會、安老自助處、東華醫院與 API Legal Outreach 分別對應不同居民需求：公民權益、長者服務、健康導航與法律協助。"
+        "en": "Chinese for Affirmative Action lists immigrant-rights workshops, voter guides, and issue-area resources from its San Francisco Chinatown base. Its current event list includes an online Cantonese and Mandarin immigration webinar.",
+        "zh": "華人權益促進會從舊金山華埠出發，整理移民權益工作坊、選民指南與議題資源。目前活動列表包含粵語與華語的線上移民資訊講座。"
       },
       {
-        "en": "That mix matters because the Bay Area is not one city. A reader may live in San Francisco, work on the Peninsula, help family in Oakland, and look for services in Cantonese, Mandarin, or English.",
-        "zh": "這種組合很重要，因為灣區不是單一城市。讀者可能住在舊金山、在半島工作、協助奧克蘭家人，並需要粵語、華語或英文服務。"
+        "en": "Self-Help for the Elderly and API Legal Outreach fill different needs: senior services, case support, language access, and legal navigation. Together, they cover practical next steps for many Bay Area families.",
+        "zh": "安老自助處與 API Legal Outreach 分別補上長者服務、個案支援、語言協助與法律導航。它們合在一起，能提供許多灣區家庭需要的實際下一步。"
       },
       {
-        "en": "This baseline item gives the SF Bay archive a real community-service spine while runtime Radar can add fresher headlines later.",
-        "zh": "這篇基礎內容讓灣區文章庫先有真實的社區服務骨架，之後即時 Radar 仍可加入更新新聞。"
+        "en": "Open the source links for eligibility, language options, locations, and appointment details. Services can change by office and program, so the linked pages should be checked before a visit.",
+        "zh": "請打開來源連結查看資格、語言選項、據點與預約細節。服務可能依辦公室與項目而變動，前往前應先核對原始頁面。"
       }
     ],
     "series": "sf-bay-radar",
@@ -74,8 +74,8 @@
       "zh": "面向移民家庭與學生的南灣市政觀察"
     },
     "excerpt": {
-      "en": "San Jose and Santa Clara County coverage should connect civic reporting with practical immigrant-resource sources.",
-      "zh": "聖荷西與聖塔克拉拉縣內容應把市政報導與實用移民資源來源連起來。"
+      "en": "San Jose Spotlight and Asian Law Alliance connect South Bay civic reporting with legal, housing, benefits, and immigrant-resource next steps.",
+      "zh": "San Jose Spotlight 與 Asian Law Alliance 把南灣市政報導，連到法律、住房、福利與移民資源下一步。"
     },
     "heroImage": "/city-site-images/san-jose-silicon-valley-plaza.webp",
     "publishedAt": "2026-06-06T13:30:00.000Z",
@@ -83,16 +83,16 @@
     "category": "news",
     "body": [
       {
-        "en": "San Jose Spotlight gives ChineseSFBay a local reporting source for South Bay civic decisions, development, business issues, and neighborhood policy debates. That is more useful for South Bay readers than a generic San Francisco-only feed.",
-        "zh": "San Jose Spotlight 為 ChineseSFBay 提供南灣市政決策、開發、商業議題與社區政策討論的本地報導來源。這比只有舊金山泛用內容更適合南灣讀者。"
+        "en": "San Jose Spotlight gives South Bay readers reporting on city decisions, development, housing, business issues, and neighborhood debates. That matters for families in San Jose, Santa Clara, Cupertino, Sunnyvale, and Fremont.",
+        "zh": "San Jose Spotlight 為南灣讀者報導市政決策、開發、住房、商業議題與社區討論。這些內容與 San Jose、Santa Clara、Cupertino、Sunnyvale 和 Fremont 家庭相關。"
       },
       {
-        "en": "Asian Law Alliance adds the practical side for immigrant families: legal navigation, public benefits, housing, and community advocacy. A source-linked brief can tell readers why an issue matters while preserving the original source path.",
-        "zh": "Asian Law Alliance 則補上移民家庭的實用面：法律導航、公共福利、住房與社區倡議。有來源連結的摘要可以說明議題為何重要，同時保留原始來源路徑。"
+        "en": "Asian Law Alliance adds a direct immigrant-resource path for legal navigation, housing, benefits, and community advocacy. It belongs beside civic reporting because readers often need help acting on a policy change.",
+        "zh": "Asian Law Alliance 提供法律導航、住房、福利與社區倡議的移民資源入口。它應與市政報導並列，因為讀者常需要協助把政策變化轉成行動。"
       },
       {
-        "en": "For students and families moving between San Jose, Santa Clara, Cupertino, Sunnyvale, and Fremont, this is the type of article selection that feels local rather than scraped.",
-        "zh": "對往返 San Jose、Santa Clara、Cupertino、Sunnyvale 與 Fremont 的學生和家庭來說，這類文章選擇才會顯得本地化，而不是抓取拼湊。"
+        "en": "When a South Bay issue affects school routes, rent, permits, or public meetings, start with the reporting link, then confirm services or legal next steps with the resource link.",
+        "zh": "當南灣議題影響上學路線、租金、許可或公開會議時，可先看報導連結，再用資源連結確認服務或法律下一步。"
       }
     ],
     "series": "sf-bay-radar",
@@ -128,14 +128,14 @@
     "republishedWithPermission": false
   },
   {
-    "slug": "east-bay-dining-openings-source-linked-watch",
+    "slug": "east-bay-dining-milk-tea-noodles-chinatown-watch",
     "title": {
-      "en": "East Bay dining openings and Chinatown corridor watch",
-      "zh": "東灣餐飲新店與華埠走廊觀察"
+      "en": "East Bay dining openings: milk tea, noodles, cafes, and Chinatown corridors",
+      "zh": "東灣餐飲新店：奶茶、麵食、咖啡館與華埠走廊"
     },
     "excerpt": {
-      "en": "Oakland and Berkeley dining coverage gives the Bay Area feed a real East Bay lane instead of treating San Francisco as the whole region.",
-      "zh": "奧克蘭與柏克萊餐飲內容讓灣區文章列表擁有真正的東灣路徑，而不是把舊金山當成整個灣區。"
+      "en": "East Bay Nosh tracks new Oakland, Berkeley, Richmond, Alameda, and nearby restaurant openings, including recent milk tea, dumpling, noodle, cafe, Thai, and Nepali items.",
+      "zh": "East Bay Nosh 追蹤 Oakland、Berkeley、Richmond、Alameda 與周邊新店，近期包括奶茶、餃子、麵食、咖啡館、泰餐與尼泊爾餐飲。"
     },
     "heroImage": "/city-site-images/oakland-chinatown-street.webp",
     "publishedAt": "2026-06-06T13:00:00.000Z",
@@ -143,16 +143,16 @@
     "category": "news",
     "body": [
       {
-        "en": "The Oaklandside's East Bay Nosh and Eater SF's East Bay restaurant guides are stronger sources than a generic food scrape because they keep the focus on Oakland, Berkeley, Richmond, and neighborhoods east of the bridge.",
-        "zh": "The Oaklandside 的 East Bay Nosh 與 Eater SF 的東灣餐廳指南，比泛用餐飲抓取更可靠，因為它們把焦點放在 Oakland、Berkeley、Richmond 與海灣大橋以東的街區。"
+        "en": "East Bay Nosh's new-restaurant page is active local coverage for Oakland, Berkeley, Richmond, Alameda, and nearby cities. Recent items include milk tea, Thai, Nepali, cafe, dumpling, noodle, taco, and ramen openings.",
+        "zh": "East Bay Nosh 的新餐廳頁面持續報導 Oakland、Berkeley、Richmond、Alameda 與周邊城市。近期項目包含奶茶、泰餐、尼泊爾餐、咖啡館、餃子、麵食、墨西哥卷與拉麵。"
       },
       {
-        "en": "ChineseSFBay should use that coverage to help readers notice openings, closures, and corridors that affect weekend plans, family meals, and small-business visibility around Oakland Chinatown and nearby communities.",
-        "zh": "ChineseSFBay 應利用這類來源，協助讀者掌握影響週末安排、家庭聚餐與奧克蘭華埠及周邊小商家能見度的新店、結束營業與街區變化。"
+        "en": "That mix matters for ChineseSFBay readers because East Bay plans often revolve around weekend meals, Oakland Chinatown errands, Berkeley student visits, and family meetups east of the bridge.",
+        "zh": "這種組合對 ChineseSFBay 讀者重要，因為東灣行程常圍繞週末聚餐、Oakland 華埠辦事、Berkeley 學生探訪與海灣大橋以東的家庭聚會。"
       },
       {
-        "en": "Runtime Radar can make this fresher later, but the static baseline keeps the Bay Area article archive from being empty when the store has not published anything yet.",
-        "zh": "之後即時 Radar 可讓內容更新，但靜態基礎內容能避免資料庫尚未發布文章時，灣區文章庫變成空白。"
+        "en": "Use the linked page to check what just opened and where it sits. Restaurant pages can change quickly, so confirm hours and soft-opening status before making the trip.",
+        "zh": "可用來源頁確認近期開了什麼店、位置在哪裡。餐廳頁面變動很快，出發前請先確認營業時間與試營運狀態。"
       }
     ],
     "series": "sf-bay-radar",
@@ -194,8 +194,8 @@
       "zh": "灣區家庭應查看的 SFO、SJC 與官方通知"
     },
     "excerpt": {
-      "en": "Airport and official updates belong in the Bay Area article mix because families often split travel between SFO, SJC, and Oakland-area routes.",
-      "zh": "機場與官方更新應納入灣區文章組合，因為許多家庭會在 SFO、SJC 與奧克蘭周邊路線之間安排出行。"
+      "en": "SFO and San Jose Mineta updates help families verify airport construction, programs, route announcements, and traveler advisories before a trip.",
+      "zh": "SFO 與 San Jose Mineta 更新可幫助家庭在出行前核對機場施工、項目、航線公告與旅客提醒。"
     },
     "heroImage": "/city-site-images/sf-bay-community-hero.webp",
     "publishedAt": "2026-06-06T12:30:00.000Z",
@@ -203,16 +203,16 @@
     "category": "news",
     "body": [
       {
-        "en": "Bay Area travel planning is regional. Families may choose SFO for international routes, SJC for South Bay convenience, and local transit or rideshare depending on where relatives live.",
-        "zh": "灣區出行規劃本來就是區域性的。家庭可能因國際航線選擇 SFO，因南灣便利選擇 SJC，再依親友住所搭配大眾運輸或叫車。"
+        "en": "Bay Area travel planning is regional. Families may choose SFO for international routes, SJC for South Bay convenience, or Oakland-area routes depending on where relatives live.",
+        "zh": "灣區出行規劃本來就是區域性的。家庭可能因國際航線選擇 SFO，因南灣便利選擇 SJC，也可能依親友住所選擇 Oakland 周邊路線。"
       },
       {
-        "en": "The SFO press-release page and San Jose Mineta newsroom give readers official places to confirm construction notices, airport programs, route announcements, and traveler advisories.",
-        "zh": "SFO 新聞發布頁與 San Jose Mineta 新聞室，是讀者核對施工通知、機場項目、航線公告與旅客提醒的官方來源。"
+        "en": "The SFO press-release page and San Jose Mineta newsroom are the official places to confirm construction notices, new airport programs, route announcements, and traveler advisories.",
+        "zh": "SFO 新聞發布頁與 San Jose Mineta 新聞室，是核對施工通知、新機場項目、航線公告與旅客提醒的官方來源。"
       },
       {
-        "en": "This baseline article keeps the Bay Area feed practical: readers get the source links they need before travel, and the archive does not depend on a runtime store being populated first.",
-        "zh": "這篇基礎文章讓灣區資訊流保持實用：讀者在出行前能取得需要的來源連結，而文章庫不必等即時資料庫先有內容。"
+        "en": "Check them before airport pickups, student move-ins, holiday trips, or business travel. Official notices help confirm what is changing before a social post turns into a travel problem.",
+        "zh": "機場接送、學生搬家、假期出行或商務旅行前都應查看。官方通知能在社群貼文變成出行問題前，先確認真正改變了什麼。"
       }
     ],
     "series": "sf-bay-radar",
