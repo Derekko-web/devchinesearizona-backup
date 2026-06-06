@@ -2,12 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import {
+  austinLocalArticles,
   businesses,
   businessCategories,
   communityPosts,
   events,
   guides,
   localArticles,
+  losAngelesLocalArticles,
   normalizeImportedArticle,
   profiles,
   reviews,
@@ -192,6 +194,12 @@ function getAllArticles(): Article[] {
 }
 
 function getLocalArticlesForSite(site: SiteProfile = defaultSiteProfile): Article[] {
+  if (site.key === 'austin') {
+    return austinLocalArticles;
+  }
+  if (site.key === 'los-angeles') {
+    return losAngelesLocalArticles;
+  }
   if (site.key === 'sf-bay') {
     return sfBayLocalArticles;
   }

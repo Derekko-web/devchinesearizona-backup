@@ -326,10 +326,12 @@ describe('SF Bay Radar configuration', () => {
       'south-bay-cupertino-community-services-watch',
       'oakland-east-bay-community-anchor-watch',
     ];
+    const generatedSlugs = generatedSfBayLocalArticles.map((article) => article.slug);
 
-    expect(generatedSfBayLocalArticles).toHaveLength(0);
+    expect(generatedSfBayLocalArticles.length).toBeGreaterThanOrEqual(4);
     expect(sfBayArticles.map((article) => article.slug)).not.toContain(arizonaSlug);
     for (const slug of removedStaticSlugs) {
+      expect(generatedSlugs).not.toContain(slug);
       expect(sfBayArticles.map((article) => article.slug)).not.toContain(slug);
       expect(await getArticleBySlugAsync(slug, siteProfiles['sf-bay'])).toBeUndefined();
     }
