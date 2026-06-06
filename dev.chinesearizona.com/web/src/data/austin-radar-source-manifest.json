@@ -62,6 +62,20 @@
     }
   },
   {
+    "slug": "texas-capital-news",
+    "name": "Texas Capital News",
+    "url": "https://www.texascapitalnews.com/",
+    "feedUrl": "https://www.texascapitalnews.com/home?format=rss",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Austin Chinese-language community news, events, and local publication items from the long-running Texas Capital News.",
+      "zh": "用于德州首府新闻的奥斯汀中文社区新闻、活动与本地刊物内容。"
+    }
+  },
+  {
     "slug": "austin-towers",
     "name": "Towers Austin",
     "url": "https://austin.towers.net/",

@@ -76,6 +76,10 @@ describe('Austin Radar config', () => {
         (source) => 'feedUrl' in source && source.feedUrl?.includes('austinmonitor.com/feed')
       )
     ).toBe(true);
+    expect(austinManifest.find((source) => source.slug === 'texas-capital-news')).toMatchObject({
+      lane: 'chinese',
+      feedUrl: 'https://www.texascapitalnews.com/home?format=rss',
+    });
     expect(austinManifest.some((source) => source.sourcePolicy === 'signal_only')).toBe(true);
     expect(austinManifest.every((source) => !arizonaSourceSlugs.has(source.slug))).toBe(true);
     expect(austinSourceText).not.toContain('phoenix');

@@ -2,6 +2,8 @@ import { createRequire } from 'node:module';
 
 import { describe, expect, it } from 'vitest';
 
+import arizonaManifest from '@/data/radar-source-manifest.json';
+
 const require = createRequire(import.meta.url);
 const {
   applyDraftsToStore,
@@ -87,6 +89,20 @@ function makeWebDraft(index: number) {
 }
 
 describe('Arizona Radar core', () => {
+  it('includes Arizona Chinese-language source entries for the Chinese lane', () => {
+    expect(arizonaManifest.map((source) => source.slug)).toEqual(
+      expect.arrayContaining(['az-chinese-news', 'next-weekly-az'])
+    );
+    expect(arizonaManifest.find((source) => source.slug === 'az-chinese-news')).toMatchObject({
+      lane: 'chinese',
+      sourcePolicy: 'summary_link',
+    });
+    expect(arizonaManifest.find((source) => source.slug === 'next-weekly-az')).toMatchObject({
+      lane: 'chinese',
+      feedUrl: 'https://www.nextweeklyaz.com/blog-feed.xml',
+    });
+  });
+
   it('normalizes only public http and https URLs for generated radar links', () => {
     expect(normalizeCanonicalUrl('https://example.com/a?utm_source=test#section')).toBe(
       'https://example.com/a'

@@ -186,6 +186,7 @@ export function sourcePolicyLabel(policy: SourcePolicy, locale: Locale): string 
 export function radarLaneLabel(lane: RadarLane, locale: Locale): string {
   const labels: Record<RadarLane, LocalizedText> = {
     housing: { en: 'Housing', zh: '住房' },
+    chinese: { en: 'Chinese', zh: '中文' },
     openings: { en: 'Openings', zh: '新店' },
     community: { en: 'Community', zh: '社群' },
     official: { en: 'Official', zh: '官方' },

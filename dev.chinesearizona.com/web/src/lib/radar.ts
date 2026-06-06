@@ -54,6 +54,7 @@ type RadarStoreOptions = {
 
 const DEFAULT_RADAR_FALLBACK_HEROES: Record<RadarLane, string> = {
   housing: '/home-neighborhood/phoenix-card.webp',
+  chinese: '/home-neighborhood/tempe-card.webp',
   openings: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
   community: '/home-neighborhood/tempe-card.webp',
   official: '/home-neighborhood/phoenix-card.webp',
@@ -63,6 +64,7 @@ const SITE_RADAR_FALLBACK_HEROES: Record<SiteKey, Record<RadarLane, string>> = {
   arizona: DEFAULT_RADAR_FALLBACK_HEROES,
   austin: {
     housing: '/city-site-images/austin-newcomer-services.webp',
+    chinese: '/city-site-images/asian-american-resource-center-austin.webp',
     openings: '/city-site-images/austin-community-hero.webp',
     community: '/city-site-images/austin-skyline-lake.webp',
     official: '/city-site-images/austin-community-hero.webp',
@@ -70,6 +72,7 @@ const SITE_RADAR_FALLBACK_HEROES: Record<SiteKey, Record<RadarLane, string>> = {
   },
   'los-angeles': {
     housing: '/city-site-images/la-newcomer-corridor.webp',
+    chinese: '/city-site-images/la-chinatown-downtown.webp',
     openings: '/city-site-images/alhambra-main-street.webp',
     community: '/city-site-images/los-angeles-community-hero.webp',
     official: '/city-site-images/la-chinatown-downtown.webp',
@@ -77,6 +80,7 @@ const SITE_RADAR_FALLBACK_HEROES: Record<SiteKey, Record<RadarLane, string>> = {
   },
   'sf-bay': {
     housing: '/city-site-images/sf-bay-newcomer-discovery.webp',
+    chinese: '/city-site-images/sf-chinatown-bay.webp',
     openings: '/city-site-images/sf-chinatown-bay.webp',
     community: '/city-site-images/sf-bay-community-hero.webp',
     official: '/city-site-images/sf-bay-community-hero.webp',
