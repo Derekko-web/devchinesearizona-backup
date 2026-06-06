@@ -1,13 +1,13 @@
 [
   {
-    "slug": "sgv-dining-map-chinese-asian-restaurant-baseline",
+    "slug": "sgv-dining-dumplings-noodles-family-meals",
     "title": {
-      "en": "SGV dining guide: Chinese and Asian restaurants as the local baseline",
-      "zh": "聖蓋博谷餐飲指南：以中餐與亞洲餐館作為本地基準"
+      "en": "SGV dining guide: dumplings, noodles, cafes, and family meals",
+      "zh": "聖蓋博谷餐飲指南：餃子、麵食、茶餐廳與家庭聚餐"
     },
     "excerpt": {
-      "en": "ChineseLosAngeles should lead with San Gabriel Valley dining context, not generic Los Angeles filler.",
-      "zh": "ChineseLosAngeles 應先呈現聖蓋博谷餐飲脈絡，而不是泛洛杉磯填充內容。"
+      "en": "Eater LA's SGV guide gives readers a concrete restaurant map for Alhambra, Arcadia, Monterey Park, San Gabriel, Rowland Heights, and nearby family dining corridors.",
+      "zh": "Eater LA 的聖蓋博谷指南，為讀者整理 Alhambra、Arcadia、Monterey Park、San Gabriel、Rowland Heights 與周邊家庭餐飲走廊。"
     },
     "heroImage": "/city-site-images/san-gabriel-valley-boulevard.webp",
     "publishedAt": "2026-06-06T14:00:00.000Z",
@@ -15,16 +15,16 @@
     "category": "feature",
     "body": [
       {
-        "en": "For Los Angeles Chinese community readers, the San Gabriel Valley is not a side note. It is the practical dining map for family meals, newcomer errands, weekend meetups, and out-of-town guests.",
-        "zh": "對洛杉磯華人社群讀者來說，聖蓋博谷不是附註，而是家庭聚餐、新居民辦事、週末聚會與外地親友來訪時真正會使用的餐飲地圖。"
+        "en": "The SGV guide centers the places ChineseLosAngeles readers actually use: Alhambra, Arcadia, Monterey Park, San Gabriel, West Covina, Rowland Heights, and nearby corridors east of downtown LA.",
+        "zh": "這份 SGV 指南聚焦 ChineseLosAngeles 讀者真正會去的地方：Alhambra、Arcadia、Monterey Park、San Gabriel、West Covina、Rowland Heights，以及洛杉磯市中心以東的周邊走廊。"
       },
       {
-        "en": "Eater LA's SGV restaurant guide is a better source-linked baseline than a random restaurant-opening scrape because it keeps the selection anchored in Alhambra, Arcadia, Monterey Park, San Gabriel, Temple City, and nearby communities.",
-        "zh": "Eater LA 的聖蓋博谷餐廳指南，比隨機抓取的新店短文更適合作為來源連結基準，因為它把選擇放回 Alhambra、Arcadia、Monterey Park、San Gabriel、Temple City 與周邊社區。"
+        "en": "The current Eater LA update adds places such as Good Alley, Banh Mi Hoa Phat, Thumbling, Mongolian Homemade Pie, and Lulala Lemon Tea, alongside Sichuan, Cantonese, Vietnamese, Malaysian, and Japanese options.",
+        "zh": "目前 Eater LA 更新加入 Good Alley、Banh Mi Hoa Phat、Thumbling、Mongolian Homemade Pie 與 Lulala Lemon Tea，並涵蓋川菜、粵菜、越南、馬來西亞與日式選擇。"
       },
       {
-        "en": "The city feed can still add fresher Radar items later. The baseline should make the archive feel like a real ChineseLosAngeles product from the first page.",
-        "zh": "城市資訊流之後仍可加入更新的 Radar 項目。基礎內容應讓文章頁從第一屏開始就像真正的 ChineseLosAngeles 產品。"
+        "en": "Use it as a weekend shortlist: dumplings, hand-pulled noodles, Hong Kong-style cafes, omakase, tea shops, and family restaurants. Check the linked map for addresses, hours, and updates before going.",
+        "zh": "可把它當作週末短清單：餃子、手拉麵、港式茶餐廳、omakase、茶飲店與家庭餐館。出發前請用來源地圖確認地址、營業時間與更新。"
       }
     ],
     "series": "local-radar",
@@ -58,8 +58,8 @@
       "zh": "聖蓋博谷交通觀察：為什麼走廊規劃值得關注"
     },
     "excerpt": {
-      "en": "Transit planning in the San Gabriel Valley affects commutes, elder care, school runs, and small-business access across Chinese community hubs.",
-      "zh": "聖蓋博谷交通規劃會影響華人社區核心區的通勤、長者照護、接送上學與小商家可達性。"
+      "en": "SGV corridor planning can change how families move between downtown LA, Alhambra, Monterey Park, San Gabriel, Pasadena, Pomona, and job centers.",
+      "zh": "聖蓋博谷走廊規劃可能改變家庭往返洛杉磯市中心、Alhambra、Monterey Park、San Gabriel、Pasadena、Pomona 與工作中心的方式。"
     },
     "heroImage": "/city-site-images/alhambra-main-street.webp",
     "publishedAt": "2026-06-06T13:30:00.000Z",
@@ -67,16 +67,16 @@
     "category": "news",
     "body": [
       {
-        "en": "A useful Los Angeles city article set needs more than food. SGV transit planning is directly relevant to readers moving between Alhambra, Monterey Park, San Gabriel, Pasadena, Arcadia, downtown Los Angeles, and job centers across the county.",
-        "zh": "有用的洛杉磯城市文章不能只有餐飲。聖蓋博谷交通規劃與往返 Alhambra、Monterey Park、San Gabriel、Pasadena、Arcadia、洛杉磯市中心與全縣工作中心的讀者直接相關。"
+        "en": "Urbanize LA's transit brief explains why SGV transportation planning remains active: money left after the dropped SR-60 rail extension is being studied for new bus, rail, and fixed-guideway options.",
+        "zh": "Urbanize LA 的交通摘要說明了為何 SGV 交通規劃仍在推進：SR-60 軌道延伸取消後留下的資金，正被研究是否可用於新的公車、軌道與固定導向路線。"
       },
       {
-        "en": "Urbanize LA and the SGV Council of Governments give the source trail for proposed corridors, feasibility studies, and long-range mobility plans. ChineseLosAngeles can summarize what readers should watch, then send them to the source documents for the full detail.",
-        "zh": "Urbanize LA 與聖蓋博谷政府協會提供擬議走廊、可行性研究與長期交通規劃的來源脈絡。ChineseLosAngeles 可以先整理讀者該注意什麼，再把完整細節交給來源文件。"
+        "en": "The alternatives include Valley Boulevard, SR-60, I-10, Garvey, Atlantic, Rosemead, Azusa, Citrus, and Metrolink concepts. Some are rapid bus or BRT ideas; others look at light rail or commuter rail upgrades.",
+        "zh": "方案涉及 Valley Boulevard、SR-60、I-10、Garvey、Atlantic、Rosemead、Azusa、Citrus 與 Metrolink 構想。有些是快速公車或 BRT，有些則評估輕軌或通勤鐵路升級。"
       },
       {
-        "en": "The right article selection should answer practical questions: which cities are included, what kind of service is being studied, and whether public feedback windows are open.",
-        "zh": "正確的文章選擇應回答實用問題：哪些城市被納入、正在研究哪類服務，以及是否有公開意見期。"
+        "en": "For readers, the practical question is simple: does a proposal improve school runs, elder care trips, restaurant access, or commutes across SGV cities? Use the SGVCOG study link for project details.",
+        "zh": "對讀者而言，實際問題很直接：方案是否改善接送上學、長者照護出行、餐館可達性或跨 SGV 城市通勤？詳情請看 SGVCOG 研究連結。"
       }
     ],
     "series": "local-radar",
@@ -118,8 +118,8 @@
       "zh": "洛杉磯華人社區服務：法律、語言與家庭支點"
     },
     "excerpt": {
-      "en": "A real ChineseLosAngeles feed should surface the organizations readers use for legal help, language access, health navigation, and family services.",
-      "zh": "真正的 ChineseLosAngeles 文章列表應呈現讀者會用到的法律協助、語言服務、健康導航與家庭服務機構。"
+      "en": "Chinatown Service Center, AJSOCAL, and the Chinese American Museum give readers practical service, legal, and cultural starting points in Los Angeles.",
+      "zh": "華埠服務中心、AJSOCAL 與洛杉磯華美博物館，為讀者提供洛杉磯服務、法律與文化資源的實用起點。"
     },
     "heroImage": "/city-site-images/chinatown-service-center-los-angeles.webp",
     "publishedAt": "2026-06-06T13:00:00.000Z",
@@ -127,16 +127,16 @@
     "category": "feature",
     "body": [
       {
-        "en": "Los Angeles Chinese community coverage should include service anchors, not just headlines. Chinatown Service Center gives readers a practical starting point for health, social services, and language-access needs.",
-        "zh": "洛杉磯華人社區內容應包含服務支點，而不只是新聞標題。華埠服務中心可作為讀者尋找健康、社福與語言服務的實用入口。"
+        "en": "Chinatown Service Center is a practical first stop for health, social services, family support, and language-access needs. Its locations page helps readers move from a summary to an office or program.",
+        "zh": "華埠服務中心是查找健康、社福、家庭支持與語言服務的實用入口。它的據點頁可幫助讀者從摘要進一步找到辦公室或服務項目。"
       },
       {
-        "en": "Asian Americans Advancing Justice Southern California adds a legal and civic-rights lens for immigrants, workers, families, and community organizations. That belongs in the article mix because many readers need trusted next steps more than another scraped news blurb.",
-        "zh": "南加州亞美公義促進中心則提供移民、勞工、家庭與社區組織所需的法律與公民權益視角。這類內容應進入文章組合，因為許多讀者需要可信的下一步，而不是另一則抓取短文。"
+        "en": "Asian Americans Advancing Justice Southern California adds legal and civic-rights help for immigrants, workers, families, and community organizations. That is the next link to check when a problem needs trusted guidance.",
+        "zh": "南加州亞美公義促進中心提供移民、勞工、家庭與社區組織所需的法律與公民權益協助。遇到需要可信指引的問題時，這是下一個應查看的來源。"
       },
       {
-        "en": "The Chinese American Museum rounds out the service map with history and culture near El Pueblo and Union Station. Together, these sources make the page feel rooted in Los Angeles rather than assembled from generic California copy.",
-        "zh": "洛杉磯華美博物館則在 El Pueblo 與 Union Station 附近補上歷史與文化脈絡。這些來源放在一起，能讓頁面真正扎根洛杉磯，而不是由泛加州文字拼湊。"
+        "en": "The Chinese American Museum rounds out the map with history and culture near El Pueblo and Union Station. Together, these links point readers to LA institutions with service desks, visit pages, and clear next steps.",
+        "zh": "洛杉磯華美博物館則在 El Pueblo 與 Union Station 附近補上歷史與文化脈絡。這些連結指向有服務窗口、參觀資訊與清楚下一步的洛杉磯機構。"
       }
     ],
     "series": "local-radar",
@@ -186,8 +186,8 @@
       "zh": "家庭出行前應查看的 LAX 與市府通知"
     },
     "excerpt": {
-      "en": "Airport and official city updates belong in the LA article feed because travel, pickup logistics, permits, and safety notices affect readers immediately.",
-      "zh": "機場與市府官方更新應納入洛杉磯文章列表，因為旅行、接送、許可與安全通知會立即影響讀者。"
+      "en": "LAX and Los Angeles city updates help families verify terminal traffic, traveler advisories, construction, public-safety notices, and service changes.",
+      "zh": "LAX 與洛杉磯市府更新可幫助家庭核對航站樓交通、旅客提醒、施工、公共安全通知與服務變化。"
     },
     "heroImage": "/city-site-images/los-angeles-community-hero.webp",
     "publishedAt": "2026-06-06T12:30:00.000Z",
@@ -195,16 +195,16 @@
     "category": "news",
     "body": [
       {
-        "en": "For many ChineseLosAngeles readers, LAX is a family logistics hub: international arrivals, student travel, elder pickups, and business trips all run through the airport. A city feed should point readers to official airport updates before they rely on secondhand posts.",
-        "zh": "對許多 ChineseLosAngeles 讀者而言，LAX 是家庭行程樞紐：國際抵達、學生出行、長者接送與商務旅行都會經過機場。城市資訊流應先把讀者帶到官方機場更新，而不是依賴轉述貼文。"
+        "en": "For LA Chinese families, LAX is often where international arrivals, student flights, business trips, and elder pickups converge. Official airport updates help avoid surprises around terminals, traffic, and construction.",
+        "zh": "對洛杉磯華人家庭來說，LAX 經常連著國際抵達、學生航班、商務旅行與長者接送。官方機場更新可幫助避開航站樓、交通與施工上的意外。"
       },
       {
-        "en": "The Los Angeles Mayor's news page is useful for citywide announcements, public-safety items, and service changes. It should sit beside local media sources so summaries can separate official action from commentary.",
-        "zh": "洛杉磯市長新聞頁適合核對全市公告、公共安全項目與服務變更。它應與本地媒體來源並列，讓摘要能區分官方行動與評論。"
+        "en": "The LAX Media Center is useful for airport programs, road work, traveler advisories, and operations news. The Mayor's news page adds citywide safety, service, and policy announcements.",
+        "zh": "LAX Media Center 適合查看機場項目、道路工程、旅客提醒與營運消息。市長新聞頁則補上全市安全、服務與政策公告。"
       },
       {
-        "en": "This article sets the baseline: if the runtime store has no fresh LA airport or city notice items, readers still see local, verifiable sources instead of blank or irrelevant content.",
-        "zh": "這篇文章設定基本線：如果即時資料庫沒有新的洛杉磯機場或市府通知，讀者仍能看到本地且可核對的來源，而不是空白或無關內容。"
+        "en": "Check both before a major pickup, flight connection, or permit-sensitive city errand. Official links are slower than social posts, but they are where details can be verified.",
+        "zh": "大型接送、轉機或涉及許可的市府事項前，兩者都應查看。官方連結通常比社群貼文慢，但細節最能在那裡核實。"
       }
     ],
     "series": "local-radar",
