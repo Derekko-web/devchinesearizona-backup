@@ -94,11 +94,11 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
   const dashboardHref = withLocale(locale, '/dashboard');
   const editProfileHref = withLocale(locale, '/dashboard/profile');
   const myListsHref = withLocale(locale, '/shop/watchlist');
-  const favoritesHref = shopEnabled
-    ? user
+  const favoritesHref = user
+    ? shopEnabled
       ? myListsHref
-      : loginHref
-    : withLocale(locale, '/community');
+      : withLocale(locale, '/community')
+    : loginHref;
   const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const mobileOpen = mobileMenuPath === currentPath;
