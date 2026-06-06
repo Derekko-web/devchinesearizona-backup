@@ -412,7 +412,7 @@ export type Article = {
   republishedWithPermission?: boolean;
 };
 
-export type RadarLane = 'housing' | 'openings' | 'community' | 'official' | 'social';
+export type RadarLane = 'housing' | 'chinese' | 'openings' | 'community' | 'official' | 'social';
 
 export type RadarHeroImagePolicy = 'source_allowed' | 'fallback_only';
 

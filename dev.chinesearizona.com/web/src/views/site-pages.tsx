@@ -200,7 +200,7 @@ const directorySortOptions: SortOption[] = [
 const DIRECTORY_PAGE_SIZE = 24;
 const RADAR_FEED_PAGE_SIZE = 12;
 const directoryQuickCategorySlugs = ['dining', 'real-estate', 'medical', 'education', 'local-services'] as const;
-const radarLaneOptions: RadarLane[] = ['housing', 'openings', 'community', 'official', 'social'];
+const radarLaneOptions: RadarLane[] = ['chinese', 'openings', 'community'];
 const articleSeriesOptions: ArticleSeries[] = [
   'housing-watch',
   'tsmc-corridor-watch',

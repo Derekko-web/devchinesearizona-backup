@@ -84,6 +84,33 @@
     }
   },
   {
+    "slug": "world-journal-la",
+    "name": "World Journal Los Angeles",
+    "url": "https://www.worldjournal.com/wj/cate/la",
+    "feedUrl": "https://www.worldjournal.com/wj/rssfeed/121094",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for World Journal Chinese-language Los Angeles and Southern California local coverage with source-linked summaries only.",
+      "zh": "用於世界新聞網洛杉磯與南加州中文本地報導；僅做來源連結摘要。"
+    }
+  },
+  {
+    "slug": "chineseinla-hot-news",
+    "name": "ChineseinLA Hot News",
+    "url": "https://www.chineseinla.com/hotnews.html",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use as a Los Angeles Chinese-language local news and community information discovery source, especially for San Gabriel Valley reader needs.",
+      "zh": "作為洛杉磯中文本地新聞與社區資訊發現來源，特別關注聖蓋博谷讀者需求。"
+    }
+  },
+  {
     "slug": "los-angeles-mayor-news",
     "name": "Los Angeles Mayor News",
     "url": "https://mayor.lacity.gov/news",

@@ -81,7 +81,7 @@ function writeLosAngelesRadarStore(store: unknown) {
 }
 
 describe('Los Angeles Radar config', () => {
-  it('uses Los Angeles-specific source configuration without Arizona or LA Chinese News sources', () => {
+  it('uses Los Angeles-specific source configuration including Chinese-language local sources', () => {
     const serialized = JSON.stringify(losAngelesManifest);
 
     expect(losAngelesManifest.length).toBeGreaterThanOrEqual(8);
@@ -90,11 +90,25 @@ describe('Los Angeles Radar config', () => {
         'what-now-los-angeles',
         'eater-los-angeles',
         'urbanize-los-angeles',
+        'world-journal-la',
+        'chineseinla-hot-news',
         'lax-media-center',
       ])
     );
     expect(serialized).toContain('https://whatnow.com/los-angeles/feed/');
     expect(serialized).toContain('https://la.urbanize.city/rss.xml');
+    expect(
+      losAngelesManifest.find((source) => source.slug === 'world-journal-la')
+    ).toMatchObject({
+      lane: 'chinese',
+      feedUrl: 'https://www.worldjournal.com/wj/rssfeed/121094',
+    });
+    expect(
+      losAngelesManifest.find((source) => source.slug === 'chineseinla-hot-news')
+    ).toMatchObject({
+      lane: 'chinese',
+      url: 'https://www.chineseinla.com/hotnews.html',
+    });
     expect(serialized).not.toMatch(/arizona|phoenix|skyharbor|lachinesenews/i);
     expect(
       losAngelesManifest.find((source) => source.slug === 'tiktok-sgv-food')

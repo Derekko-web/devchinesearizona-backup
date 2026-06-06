@@ -549,6 +549,13 @@ function feedSourceUrl(source) {
 }
 
 function laneContext(lane, siteConfig = RADAR_CITY) {
+  if (lane === 'chinese') {
+    return {
+      en: 'a Chinese-language local news story',
+      zh: '中文本地新聞',
+      personas: ['local_families', 'students', 'business_owners'],
+    };
+  }
   if (lane === 'openings') {
     return {
       en: 'an openings story',
@@ -867,6 +874,7 @@ function buildFeedRewritePrompt(items, siteConfig = RADAR_CITY) {
     '- Keep source attribution only in the sourceLinks metadata and article page source link.',
     `- Explain what happened, who is involved, where it is, timing, and why a ${siteConfig.regionName} reader would care when the source supports it.`,
     '- Keep sourcePolicy summary_link. Link readers to the source; do not republish the source article.',
+    `- If an item is not clearly tied to ${siteConfig.regionRelevance}, skip it.`,
     '- Copy articleImage into heroImage. It is required. Do not invent image URLs.',
     '- If an item has no usable articleImage, skip it instead of returning a draft.',
     '- Use plain, direct language. Do not inflate significance.',

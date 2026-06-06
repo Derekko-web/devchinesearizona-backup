@@ -70,6 +70,47 @@
     }
   },
   {
+    "slug": "news-for-chinese",
+    "name": "News for Chinese",
+    "url": "https://newsforchinese.com/v3/",
+    "feedUrl": "https://newsforchinese.com/v3/feed/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Chinese-language Bay Area community news, local events, civic updates, and resident-facing coverage.",
+      "zh": "用於灣區中文社區新聞、本地活動、市政更新與居民實用報導。"
+    }
+  },
+  {
+    "slug": "world-journal-sf",
+    "name": "World Journal San Francisco",
+    "url": "https://www.worldjournal.com/wj/cate/sf",
+    "feedUrl": "https://www.worldjournal.com/wj/rssfeed/121095",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for World Journal Chinese-language San Francisco and Bay Area local coverage with source-linked summaries only.",
+      "zh": "用於世界新聞網舊金山與灣區中文本地報導；僅做來源連結摘要。"
+    }
+  },
+  {
+    "slug": "wind-newspaper",
+    "name": "Wind Newspaper",
+    "url": "https://www.windnewspaper.com/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use as a bilingual Chinese American San Francisco community news source for civic, Chinatown, public-safety, and small-business coverage.",
+      "zh": "作為舊金山華裔雙語社區新聞來源，用於市政、華埠、公共安全與小商家報導。"
+    }
+  },
+  {
     "slug": "what-now-san-francisco",
     "name": "What Now San Francisco",
     "url": "https://whatnow.com/san-francisco/",

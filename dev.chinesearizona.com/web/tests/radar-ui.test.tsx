@@ -526,12 +526,16 @@ describe('radar ui', () => {
     writeRadarStore();
     const { CommunityRadarPageView } = await import('@/views/site-pages');
 
-    const html = renderToStaticMarkup(
-      await CommunityRadarPageView({ locale: 'en', searchParams: { lane: 'official' } })
-    );
+    const html = renderToStaticMarkup(await CommunityRadarPageView({ locale: 'en', searchParams: {} }));
 
-    expect(html).toContain('Official');
-    expect(html).toContain('Official news');
+    expect(html).toContain('All Arizona News');
+    expect(html).toContain('href="/en/news?lane=chinese"');
+    expect(html).toContain('href="/en/news?lane=openings"');
+    expect(html).toContain('href="/en/news?lane=community"');
+    expect(html).not.toContain('href="/en/news?lane=housing"');
+    expect(html).not.toContain('href="/en/news?lane=official"');
+    expect(html).not.toContain('href="/en/news?lane=social"');
+    expect(html).not.toContain('Social posts');
     expect(html).toContain('mesa-radar-housing-pulse');
     expect(html).toContain('Read article');
     expect(html).not.toContain('Newest Arizona News');
@@ -575,12 +579,12 @@ describe('radar ui', () => {
     const html = renderToStaticMarkup(
       await CommunityRadarPageView({
         locale: 'en',
-        searchParams: { lane: 'official' },
+        searchParams: { lane: 'chinese' },
         site: siteProfiles['los-angeles'],
       })
     );
 
-    expect(html).toContain('Official news');
+    expect(html).toContain('Chinese news');
     expect(html).toContain('There are no public items for this filter yet');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
@@ -736,14 +740,12 @@ describe('radar ui', () => {
     mockChineseTranslationFetch();
     const { ArticleDetailPageView, CommunityRadarPageView } = await import('@/views/site-pages');
 
-    const feedHtml = renderToStaticMarkup(
-      await CommunityRadarPageView({ locale: 'zh', searchParams: { lane: 'official' } })
-    );
+    const feedHtml = renderToStaticMarkup(await CommunityRadarPageView({ locale: 'zh', searchParams: {} }));
     const detailHtml = renderToStaticMarkup(
       (await ArticleDetailPageView({ locale: 'zh', slug: 'mesa-radar-housing-pulse' }))!
     );
 
-    expect(feedHtml).toContain('官方新聞');
+    expect(feedHtml).toContain('完整亞利桑那新聞');
     expect(feedHtml).toContain('翻譯：Mesa radar housing pulse');
     expect(feedHtml).toContain('翻譯：A runtime test item for Arizona Radar.');
     expect(detailHtml).toContain('翻譯：Mesa radar housing pulse');

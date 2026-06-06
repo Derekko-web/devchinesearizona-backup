@@ -66,6 +66,33 @@
     }
   },
   {
+    "slug": "az-chinese-news",
+    "name": "Arizona Chinese News",
+    "url": "https://www.azchinesenews1.com/",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use as a Chinese-language Arizona community news source and discovery starting point for Phoenix-area Chinese community coverage.",
+      "zh": "作為亞利桑那中文社區新聞來源，優先發現大鳳凰城華人社區報導。"
+    }
+  },
+  {
+    "slug": "next-weekly-az",
+    "name": "Next Weekly Arizona Chinese Newspaper",
+    "url": "https://www.nextweeklyaz.com/azlocalarticles",
+    "feedUrl": "https://www.nextweeklyaz.com/blog-feed.xml",
+    "sourceType": "local_media",
+    "sourcePolicy": "summary_link",
+    "lane": "chinese",
+    "cadence": "hourly",
+    "notes": {
+      "en": "Use for Chinese-language Arizona local briefs, community events, restaurants, schools, civic meetups, and weekly Arizona Chinese newspaper items.",
+      "zh": "用於亞利桑那中文本地快訊、社區活動、餐飲、學校、市政見面會與壹週報內容。"
+    }
+  },
+  {
     "slug": "tiktok-phoenix-food",
     "name": "TikTok Phoenix Food",
     "url": "https://www.tiktok.com/tag/phoenixfood",

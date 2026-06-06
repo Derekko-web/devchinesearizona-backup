@@ -55,6 +55,14 @@ describe('SF Bay Radar configuration', () => {
     expect(sfBayManifest.some((source) => source.feedUrl?.includes('sfstandard.com/feed'))).toBe(true);
     expect(sfBayManifest.some((source) => source.feedUrl?.includes('sanjosespotlight.com/feed'))).toBe(true);
     expect(sfBayManifest.some((source) => source.feedUrl?.includes('oaklandside.org/feed'))).toBe(true);
+    expect(sfBayManifest.find((source) => source.slug === 'news-for-chinese')).toMatchObject({
+      lane: 'chinese',
+      feedUrl: 'https://newsforchinese.com/v3/feed/',
+    });
+    expect(sfBayManifest.find((source) => source.slug === 'world-journal-sf')).toMatchObject({
+      lane: 'chinese',
+      feedUrl: 'https://www.worldjournal.com/wj/rssfeed/121095',
+    });
     expect(getRadarSourceManifest(siteProfiles['sf-bay']).map((source) => source.slug)).toContain('sf-standard');
   });
 
