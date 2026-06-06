@@ -62,7 +62,7 @@ function writeHomepageRadarStore({
   const storePath = path.join(directory, 'store.json');
   const articles = titles.map((title, index) => {
     const slug = `${slugPrefix}-${index + 1}`;
-    const publishedAt = `2026-05-${String(30 - index).padStart(2, '0')}T12:00:00.000Z`;
+    const publishedAt = `2026-06-06T${String(17 - index).padStart(2, '0')}:00:00.000Z`;
 
     return {
       id: `${slug}-article`,

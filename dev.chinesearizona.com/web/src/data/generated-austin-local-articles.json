@@ -1,0 +1,258 @@
+[
+  {
+    "slug": "austin-dining-openings-source-linked-watch",
+    "title": {
+      "en": "Austin dining openings worth checking before the weekend",
+      "zh": "周末前值得关注的奥斯汀餐饮新动向"
+    },
+    "excerpt": {
+      "en": "Austin's food coverage is useful only when it stays local. This brief points readers to Austin restaurant-opening sources instead of recycling another city or generic Texas copy.",
+      "zh": "奥斯汀餐饮内容只有保持本地化才有价值。这篇摘要把读者带到奥斯汀餐厅新店来源，而不是重复其他城市或泛德州内容。"
+    },
+    "heroImage": "/city-site-images/wu-chow-downtown-austin.webp",
+    "publishedAt": "2026-06-06T14:00:00.000Z",
+    "updatedAt": "2026-06-06T14:00:00.000Z",
+    "category": "news",
+    "body": [
+      {
+        "en": "Austin readers should see Austin restaurants, neighborhoods, and sources first. Eater Austin's new-restaurant tracking and What Now Austin's opening reports are a better baseline than generic food blurbs because they keep the focus on local addresses, operators, and dining corridors.",
+        "zh": "奥斯汀读者首先应该看到奥斯汀餐厅、街区和来源。Eater Austin 的新餐厅追踪与 What Now Austin 的开店报道，比泛泛的餐饮短文更适合作为基础，因为它们关注本地地址、经营者和餐饮走廊。"
+      },
+      {
+        "en": "For ChineseAustin, the useful angle is practical: which openings are close to UT, North Austin, Cedar Park, Round Rock, or the Asian grocery and dining clusters families already use. A short source-linked summary can point readers to the original reporting without pretending to be a full restaurant review.",
+        "zh": "对 ChineseAustin 来说，真正有用的角度是实用性：哪些新店靠近 UT、North Austin、Cedar Park、Round Rock，或华人家庭常去的亚洲超市与餐饮聚集区。简短的来源连结摘要可以指向原始报道，而不假装成完整餐评。"
+      },
+      {
+        "en": "This article is part of the Austin-only baseline feed. Runtime radar items can still add fresher openings later, but the city page should never fall back to another city's restaurant summaries when the Austin store is empty.",
+        "zh": "这篇文章属于奥斯汀专属基础内容。之后即时雷达仍可加入更新的新店资讯，但当奥斯汀资料库为空时，城市页面不应回退到其他城市的餐饮摘要。"
+      }
+    ],
+    "series": "austin-radar",
+    "freshnessTier": "weekly",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "radarLane": "openings",
+    "aiGeneratedSummary": false,
+    "heroImagePolicy": "fallback_only",
+    "sourceName": "Eater Austin",
+    "sourceUrl": "https://austin.eater.com/maps/best-new-restaurants-austin-heatmap",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "Eater Austin new restaurant heatmap",
+          "zh": "Eater Austin 新餐厅地图"
+        },
+        "url": "https://austin.eater.com/maps/best-new-restaurants-austin-heatmap",
+        "source": "Eater Austin"
+      },
+      {
+        "label": {
+          "en": "What Now Austin",
+          "zh": "What Now Austin"
+        },
+        "url": "https://whatnow.com/austin/",
+        "source": "What Now Austin"
+      }
+    ],
+    "relatedCategorySlugs": ["dining", "shopping"],
+    "ctaBusinessSlugs": ["wu-chow-downtown-austin", "house-of-three-gorges-austin", "h-mart-austin"],
+    "personaTargets": ["local_families", "students", "business_owners"],
+    "republishedWithPermission": false
+  },
+  {
+    "slug": "austin-civic-housing-transit-source-watch",
+    "title": {
+      "en": "Austin civic watch: housing, transit, and city-service notices",
+      "zh": "奥斯汀市政观察：住房、交通与城市服务通知"
+    },
+    "excerpt": {
+      "en": "A useful Austin article feed needs City Hall, land-use, transportation, and official-service context, not just food openings.",
+      "zh": "有用的奥斯汀文章列表需要包含市政、土地使用、交通与官方服务资讯，而不只是餐饮新店。"
+    },
+    "heroImage": "/city-site-images/austin-skyline-lake.webp",
+    "publishedAt": "2026-06-06T13:30:00.000Z",
+    "updatedAt": "2026-06-06T13:30:00.000Z",
+    "category": "news",
+    "body": [
+      {
+        "en": "Austin Monitor is the right kind of source for local civic items because it follows City Council, boards, land use, housing, mobility, and public-service decisions. Those topics affect renters, homeowners, small-business owners, and parents more directly than broad statewide headlines.",
+        "zh": "Austin Monitor 适合作为本地市政来源，因为它追踪市议会、委员会、土地使用、住房、交通与公共服务决定。这些议题对租客、屋主、小商家和家长的影响，往往比宽泛的全州新闻更直接。"
+      },
+      {
+        "en": "The official City of Austin news page is the companion source. It is where readers can verify service notices, public meetings, safety information, utility changes, and city-program updates before acting on a summary.",
+        "zh": "奥斯汀市政府新闻页面是配套来源。读者可以在那里核对服务通知、公开会议、安全资讯、公用事业调整与城市项目更新，再决定是否采取行动。"
+      },
+      {
+        "en": "For ChineseAustin, the article selection should translate civic noise into a short checklist: what changed, who is affected, which deadline matters, and where the official source lives.",
+        "zh": "对 ChineseAustin 来说，文章筛选应把复杂市政资讯转成简短清单：发生了什么变化、谁受影响、哪个期限重要，以及官方来源在哪里。"
+      }
+    ],
+    "series": "austin-radar",
+    "freshnessTier": "weekly",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "radarLane": "official",
+    "aiGeneratedSummary": false,
+    "heroImagePolicy": "fallback_only",
+    "sourceName": "Austin Monitor",
+    "sourceUrl": "https://austinmonitor.com/",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "Austin Monitor",
+          "zh": "Austin Monitor"
+        },
+        "url": "https://austinmonitor.com/",
+        "source": "Austin Monitor"
+      },
+      {
+        "label": {
+          "en": "City of Austin News",
+          "zh": "奥斯汀市政府新闻"
+        },
+        "url": "https://www.austintexas.gov/news",
+        "source": "City of Austin"
+      }
+    ],
+    "relatedCategorySlugs": ["real-estate", "local-services", "legal-finance"],
+    "ctaBusinessSlugs": ["cheng-wooster-real-estate-austin", "yz-cpa-austin"],
+    "personaTargets": ["local_families", "business_owners", "students"],
+    "republishedWithPermission": false
+  },
+  {
+    "slug": "austin-chinese-community-bilingual-source-watch",
+    "title": {
+      "en": "Chinese Austin community watch starts with bilingual local sources",
+      "zh": "奥斯汀华人社区观察应从双语本地来源开始"
+    },
+    "excerpt": {
+      "en": "Austin's Chinese community coverage should surface local Chinese-language publishing, city cultural resources, and Asian business networks before national filler.",
+      "zh": "奥斯汀华人社区内容应优先呈现本地中文媒体、城市文化资源与亚裔商业网络，而不是全国性填充内容。"
+    },
+    "heroImage": "/city-site-images/asian-american-resource-center-austin.webp",
+    "publishedAt": "2026-06-06T13:00:00.000Z",
+    "updatedAt": "2026-06-06T13:00:00.000Z",
+    "category": "feature",
+    "body": [
+      {
+        "en": "A ChineseAustin article should not feel like an English local-news item with a Chinese headline added afterward. The baseline should include Chinese-language community publishing such as Texas Capital News, plus Austin institutions that families actually use.",
+        "zh": "ChineseAustin 的文章不应像英文地方新闻事后加上中文标题。基础内容应包含《德州首府新闻》等中文社区媒体，也应包含奥斯汀家庭真正会使用的本地机构。"
+      },
+      {
+        "en": "The Asian American Resource Center is one of those anchors. It gives the feed a real Austin civic and cultural reference point for events, services, and community programming instead of a thin list of scraped headlines.",
+        "zh": "Asian American Resource Center 就是这样的本地支点之一。它让文章列表拥有真实的奥斯汀市政与文化参照，可连接活动、服务与社区项目，而不是一串单薄的抓取标题。"
+      },
+      {
+        "en": "The Greater Austin Asian Chamber of Commerce adds a business-owner lens. Together, these sources make the city page feel grounded in Austin's Asian and Chinese community infrastructure.",
+        "zh": "Greater Austin Asian Chamber of Commerce 则补上商家与创业者视角。这些来源组合起来，能让城市页面真正扎根于奥斯汀亚裔与华人社区网络。"
+      }
+    ],
+    "series": "austin-radar",
+    "freshnessTier": "evergreen",
+    "sourcePolicy": "summary_link",
+    "sourceType": "local_media",
+    "radarLane": "chinese",
+    "aiGeneratedSummary": false,
+    "heroImagePolicy": "fallback_only",
+    "sourceName": "Texas Capital News",
+    "sourceUrl": "https://www.texascapitalnews.com/",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "Texas Capital News",
+          "zh": "德州首府新闻"
+        },
+        "url": "https://www.texascapitalnews.com/",
+        "source": "Texas Capital News"
+      },
+      {
+        "label": {
+          "en": "Asian American Resource Center",
+          "zh": "奥斯汀亚裔资源中心"
+        },
+        "url": "https://www.austintexas.gov/aarc",
+        "source": "City of Austin"
+      },
+      {
+        "label": {
+          "en": "Greater Austin Asian Chamber of Commerce",
+          "zh": "Greater Austin Asian Chamber of Commerce"
+        },
+        "url": "https://austinasianchamber.org/",
+        "source": "Greater Austin Asian Chamber of Commerce"
+      }
+    ],
+    "relatedCategorySlugs": ["faith-community", "education", "local-services"],
+    "ctaBusinessSlugs": ["asian-american-resource-center-austin", "greater-austin-asian-chamber-of-commerce-austin", "austin-chinese-school"],
+    "personaTargets": ["local_families", "business_owners", "students"],
+    "republishedWithPermission": false
+  },
+  {
+    "slug": "austin-campus-airport-family-notices",
+    "title": {
+      "en": "Austin travel and campus notices for families and students",
+      "zh": "面向家庭与学生的奥斯汀出行和校园通知"
+    },
+    "excerpt": {
+      "en": "Students, visiting parents, and newcomers need airport, UT, and public-radio context in one local Austin feed.",
+      "zh": "学生、探亲家长与新居民需要在同一个奥斯汀本地列表里看到机场、UT 与公共广播资讯。"
+    },
+    "heroImage": "/city-site-images/austin-community-hero.webp",
+    "publishedAt": "2026-06-06T12:30:00.000Z",
+    "updatedAt": "2026-06-06T12:30:00.000Z",
+    "category": "news",
+    "body": [
+      {
+        "en": "Austin-Bergstrom International Airport updates matter to ChineseAustin readers because many families plan around student move-ins, summer visits, visa appointments, and connecting flights. The airport newsroom is the safest place to confirm route, construction, and traveler notices.",
+        "zh": "Austin-Bergstrom International Airport 的更新对 ChineseAustin 读者很重要，因为许多家庭会围绕学生搬家、暑期探亲、签证安排与转机出行做计划。机场新闻室是核对航线、施工与旅客通知的安全来源。"
+      },
+      {
+        "en": "UT Austin News and KUT fill the rest of the picture. UT gives campus and research context, while KUT often explains schools, transportation, utilities, and civic issues in language newcomers can follow.",
+        "zh": "UT Austin News 与 KUT 补足另一部分资讯。UT 提供校园与研究背景，KUT 则常用新居民也能理解的方式解释学校、交通、公用事业与市政议题。"
+      },
+      {
+        "en": "This kind of article selection gives Austin readers a useful practical feed: what to check before traveling, enrolling, commuting, or helping family members settle in Central Texas.",
+        "zh": "这种文章选择能给奥斯汀读者一个实用资讯列表：出行、入学、通勤，或协助家人在中德州安顿前该查看什么。"
+      }
+    ],
+    "series": "austin-radar",
+    "freshnessTier": "weekly",
+    "sourcePolicy": "summary_link",
+    "sourceType": "airport_newsroom",
+    "radarLane": "official",
+    "aiGeneratedSummary": false,
+    "heroImagePolicy": "fallback_only",
+    "sourceName": "AUS Newsroom",
+    "sourceUrl": "https://www.austintexas.gov/department/aus-newsroom",
+    "sourceLinks": [
+      {
+        "label": {
+          "en": "AUS Newsroom",
+          "zh": "AUS 机场新闻室"
+        },
+        "url": "https://www.austintexas.gov/department/aus-newsroom",
+        "source": "Austin-Bergstrom International Airport"
+      },
+      {
+        "label": {
+          "en": "UT Austin News",
+          "zh": "UT Austin News"
+        },
+        "url": "https://news.utexas.edu/",
+        "source": "The University of Texas at Austin"
+      },
+      {
+        "label": {
+          "en": "KUT Austin",
+          "zh": "KUT Austin"
+        },
+        "url": "https://www.kut.org/",
+        "source": "KUT Austin"
+      }
+    ],
+    "relatedCategorySlugs": ["education", "local-services"],
+    "ctaBusinessSlugs": ["austin-chinese-school", "austin-great-wall-chinese-school"],
+    "personaTargets": ["students", "local_families"],
+    "republishedWithPermission": false
+  }
+]

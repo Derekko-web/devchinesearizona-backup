@@ -116,6 +116,51 @@ describe('content selectors', () => {
     expect(page.articles.every((article) => !isLegacyArticle(article))).toBe(true);
   });
 
+  it('ships source-linked city article baselines for non-Arizona city sites', async () => {
+    const cityCases = [
+      {
+        site: siteProfiles.austin,
+        series: 'austin-radar',
+        localPattern: /Austin|奥斯汀/,
+      },
+      {
+        site: siteProfiles['los-angeles'],
+        series: 'local-radar',
+        localPattern: /Los Angeles|SGV|聖蓋博|洛杉磯/,
+      },
+      {
+        site: siteProfiles['sf-bay'],
+        series: 'sf-bay-radar',
+        localPattern: /Bay Area|San Francisco|San Jose|灣區|舊金山/,
+      },
+    ] as const;
+
+    for (const { site, series, localPattern } of cityCases) {
+      const currentArticles = await getCurrentArticlesAsync(undefined, site);
+      const archivePage = await getArticleArchivePageAsync({ series }, 24, site);
+      const serialized = JSON.stringify(currentArticles);
+
+      expect(currentArticles.length).toBeGreaterThanOrEqual(4);
+      expect(archivePage.totalCount).toBeGreaterThanOrEqual(4);
+      expect(archivePage.articles.every((article) => article.series === series)).toBe(true);
+      expect(currentArticles.every((article) => article.series === series)).toBe(true);
+      expect(currentArticles.every((article) => article.sourcePolicy === 'summary_link')).toBe(true);
+      expect(currentArticles.every((article) => article.sourceLinks.length > 0)).toBe(true);
+      expect(currentArticles.every((article) => article.body.length >= 2)).toBe(true);
+      expect(
+        currentArticles.every((article) =>
+          article.body.every((paragraph) => Boolean(paragraph.zh))
+        )
+      ).toBe(true);
+      expect(serialized).toMatch(localPattern);
+      expect(serialized).not.toMatch(/Arizona|Phoenix|Scottsdale|Tempe|Chandler|Mesa|ChineseArizona/);
+
+      const detailArticle = await getArticleBySlugAsync(currentArticles[0]!.slug, site);
+      expect(detailArticle?.series).toBe(series);
+      expect(detailArticle?.sourceLinks.length).toBeGreaterThan(0);
+    }
+  });
+
   it('can load generated local articles from an external runtime path', () => {
     writeGeneratedLocalArticles([
       {
@@ -386,7 +431,8 @@ describe('content selectors', () => {
 
     expect(currentArticles.map((article) => article.slug)).toContain('austin-only-radar-item');
     expect(currentArticles.map((article) => article.slug)).not.toContain('phoenix-only-radar-item');
-    expect(archivePage.articles.map((article) => article.series)).toEqual(['austin-radar']);
+    expect(archivePage.articles.map((article) => article.slug)).toContain('austin-only-radar-item');
+    expect(archivePage.articles.every((article) => article.series === 'austin-radar')).toBe(true);
     expect(austinArticle?.sourceName).toBe('Austin Monitor');
     expect(austinArticle?.sourceLinks[0]?.url).toBe('https://austinmonitor.com/example/');
     expect(arizonaFallbackArticle).toBeUndefined();

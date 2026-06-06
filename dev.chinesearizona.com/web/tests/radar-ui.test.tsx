@@ -562,7 +562,8 @@ describe('radar ui', () => {
       })
     );
 
-    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).toContain('Austin dining openings worth checking before the weekend');
+    expect(html).toContain('Chinese Austin community watch starts with bilingual local sources');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
@@ -585,7 +586,7 @@ describe('radar ui', () => {
     );
 
     expect(html).toContain('Chinese news');
-    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).toContain('SGV dining guide: Chinese and Asian restaurants as the local baseline');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('Arizona News');
@@ -607,7 +608,8 @@ describe('radar ui', () => {
     );
 
     expect(html).toContain('All SF Bay News');
-    expect(html).toContain('There are no public items for this filter yet');
+    expect(html).toContain('SF Bay Chinese community services: Chinatown, seniors, and legal help');
+    expect(html).toContain('East Bay dining openings and Chinatown corridor watch');
     expect(html).not.toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');

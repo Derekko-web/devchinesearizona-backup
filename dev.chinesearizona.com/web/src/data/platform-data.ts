@@ -11,7 +11,9 @@ import type {
   SignalDeskQueueItem,
 } from '@/lib/types';
 import { businessReviewOverrides } from '@/data/business-review-overrides';
+import generatedAustinLocalArticles from '@/data/generated-austin-local-articles.json';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
+import generatedLosAngelesLocalArticles from '@/data/generated-los-angeles-local-articles.json';
 import generatedLocalArticles from '@/data/generated-local-articles.json';
 import generatedSfBayDirectoryBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 import generatedSfBayLocalArticles from '@/data/generated-sf-bay-local-articles.json';
@@ -2232,6 +2234,20 @@ export const guides: Guide[] = [
 export const localArticles: Article[] = unwrapJsonArray(
   generatedLocalArticles as JsonArrayImport<ImportedArticle>,
   'generated-local-articles'
+).map((article) =>
+  normalizeImportedArticle(article)
+);
+
+export const austinLocalArticles: Article[] = unwrapJsonArray(
+  generatedAustinLocalArticles as JsonArrayImport<ImportedArticle>,
+  'generated-austin-local-articles'
+).map((article) =>
+  normalizeImportedArticle(article)
+);
+
+export const losAngelesLocalArticles: Article[] = unwrapJsonArray(
+  generatedLosAngelesLocalArticles as JsonArrayImport<ImportedArticle>,
+  'generated-los-angeles-local-articles'
 ).map((article) =>
   normalizeImportedArticle(article)
 );
