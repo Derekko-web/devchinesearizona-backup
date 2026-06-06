@@ -207,8 +207,8 @@
         "zh": "灣區出行規劃本來就是區域性的。家庭可能因國際航線選擇 SFO，因南灣便利選擇 SJC，也可能依親友住所選擇 Oakland 周邊路線。"
       },
       {
-        "en": "The SFO press-release page and San Jose Mineta newsroom are the official places to confirm construction notices, new airport programs, route announcements, and traveler advisories.",
-        "zh": "SFO 新聞發布頁與 San Jose Mineta 新聞室，是核對施工通知、新機場項目、航線公告與旅客提醒的官方來源。"
+        "en": "The SFO press-release page and San Jose Mineta news releases are the official places to confirm construction notices, new airport programs, route announcements, and traveler advisories.",
+        "zh": "SFO 新聞發布頁與 San Jose Mineta 新聞發布頁，是核對施工通知、新機場項目、航線公告與旅客提醒的官方來源。"
       },
       {
         "en": "Check them before airport pickups, student move-ins, holiday trips, or business travel. Official notices help confirm what is changing before a social post turns into a travel problem.",
@@ -235,10 +235,10 @@
       },
       {
         "label": {
-          "en": "San Jose Mineta newsroom",
-          "zh": "San Jose Mineta 新聞室"
+          "en": "San Jose Mineta news releases",
+          "zh": "San Jose Mineta 新聞發布"
         },
-        "url": "https://www.flysanjose.com/newsroom",
+        "url": "https://www.flysanjose.com/news-release",
         "source": "San Jose Mineta International Airport"
       }
     ],
