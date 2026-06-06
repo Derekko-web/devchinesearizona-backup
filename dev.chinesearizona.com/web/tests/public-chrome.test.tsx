@@ -179,5 +179,6 @@ describe('public chrome', () => {
 
     expect(navbarHtml).not.toContain('/zh/shop');
     expect(footerHtml).not.toContain('/zh/shop');
+    expect(navbarHtml).toMatch(/<a href="\/zh\/auth\/login\?next=%2Fzh%2Fcommunity" aria-label="收藏"/);
   });
 });
