@@ -41,7 +41,7 @@
     "plaza:site-fixtures": "python3 scripts/plaza_directory_site_export.py"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.107.0",
+    "@supabase/supabase-js": "^2.108.0",
     "cheerio": "^1.2.0",
     "convex": "^1.40.0",
     "lucide-react": "^1.17.0",
@@ -49,7 +49,7 @@
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.0.2",
-    "undici": "^7.27.1",
+    "undici": "^7.27.2",
     "ws": "^8.21.0"
   },
   "devDependencies": {
