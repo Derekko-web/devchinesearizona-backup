@@ -49,7 +49,7 @@
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.0.2",
-    "undici": "^7.27.1",
+    "undici": "^7.28.0",
     "ws": "^8.21.0"
   },
   "devDependencies": {
