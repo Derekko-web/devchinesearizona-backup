@@ -80,7 +80,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
@@ -179,21 +179,21 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
       {
         "label": "Wednesday, Thursday, Friday",
-        "value": "11:00:00 - 20:00:00"
+        "value": "11:00 - 20:00"
       },
       {
         "label": "Saturday",
-        "value": "11:30:00 - 20:00:00"
+        "value": "11:30 - 20:00"
       },
       {
         "label": "Sunday",
-        "value": "11:30:00 - 18:00:00"
+        "value": "11:30 - 18:00"
       }
     ],
     "coordinates": {
@@ -277,17 +277,17 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
       {
         "label": "Tuesday, Wednesday, Thursday, Friday",
-        "value": "11:00:00 - 21:00:00"
+        "value": "11:00 - 21:00"
       },
       {
         "label": "Saturday, Sunday",
-        "value": "12:00:00 - 21:00:00"
+        "value": "12:00 - 21:00"
       }
     ],
     "coordinates": {
@@ -369,17 +369,17 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
       {
         "label": "Monday, Wednesday, Thursday, Sunday",
-        "value": "11:00:00 - 21:00:00"
+        "value": "11:00 - 21:00"
       },
       {
         "label": "Friday, Saturday",
-        "value": "11:00:00 - 21:30:00"
+        "value": "11:00 - 21:30"
       }
     ],
     "coordinates": {
@@ -404,6 +404,7 @@
     "website": "https://www.littleszechuanaz.com",
     "heroImage": "https://static.wixstatic.com/media/322808_a522d187f66945c18d0137b0c744fe34~mv2.png",
     "gallery": [
+      "https://static.wixstatic.com/media/322808_0f5d4f2650c2471284a681d78ffe9d82~mv2.jpg/v1/crop/x_0,y_16,w_2225,h_1534/fill/w_396,h_267,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_1021_edited.jpg",
       "https://static.wixstatic.com/media/322808_fafac02f14ba42008d10eb42111f85df~mv2.jpg/v1/crop/x_0,y_187,w_1444,h_996/fill/w_396,h_267,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/tls_sign.jpg",
       "https://static.wixstatic.com/media/322808_0bdd573bbcbe455ea8ab7af79ec86c1d~mv2.jpg/v1/fill/w_288,h_216,al_c,q_80,usm_0.66_1.00_0.01,blur_2,enc_avif,quality_auto/322808_0bdd573bbcbe455ea8ab7af79ec86c1d~mv2.jpg"
     ],
@@ -434,7 +435,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
@@ -546,7 +547,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -596,7 +597,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
@@ -662,13 +663,13 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
       {
         "label": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
-        "value": "10:00:00 - 20:15:00"
+        "value": "10:00 - 20:15"
       }
     ],
     "coordinates": {
@@ -742,7 +743,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
@@ -823,7 +824,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -857,11 +858,11 @@
       "https://chenwokphoenix.com/images/5.jpg"
     ],
     "shortDescription": {
-      "en": "Phoenix, AZ 85014 Chinese food for Pickup - Delivery Order from Chen & Wok（Phoenix） in Phoenix, AZ 85014, phone: 602-263-0826",
+      "en": "Phoenix, AZ 85014 Chinese food for Pickup - Delivery Order from Chen & Wok in Phoenix, AZ 85014, phone: 602-263-0826",
       "zh": null
     },
     "description": {
-      "en": "Phoenix, AZ 85014 Chinese food for Pickup - Delivery Order from Chen & Wok（Phoenix） in Phoenix, AZ 85014, phone: 602-263-0826",
+      "en": "Phoenix, AZ 85014 Chinese food for Pickup - Delivery Order from Chen & Wok in Phoenix, AZ 85014, phone: 602-263-0826",
       "zh": null
     },
     "services": [
@@ -898,7 +899,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [
@@ -935,107 +936,6 @@
   },
   {
     "id": "scraped_0012",
-    "slug": "new-hong-kong-phoenix",
-    "name": {
-      "en": "New Hong Kong",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "2328 E Indian School Rd, Phoenix, AZ, 85016",
-    "serviceAreaText": null,
-    "phone": "(602) 954-9118",
-    "email": null,
-    "website": "https://newhongkongphoenix.com",
-    "heroImage": "https://newhongkongphoenix.com/assets/images/slider1.jpg",
-    "gallery": [
-      "https://newhongkongphoenix.com/assets/images/slider2.jpg",
-      "https://newhongkongphoenix.com/images/1.jpg",
-      "https://newhongkongphoenix.com/images/2.jpg",
-      "https://newhongkongphoenix.com/images/3.jpg",
-      "https://newhongkongphoenix.com/images/4.jpg",
-      "https://newhongkongphoenix.com/images/5.jpg"
-    ],
-    "shortDescription": {
-      "en": "Phoenix, AZ 85016 Chinese food for Pickup - Delivery Order from New Hong Kong Restaurant in Phoenix, AZ 85016, phone: 602-954-9118",
-      "zh": null
-    },
-    "description": {
-      "en": "Phoenix, AZ 85016 Chinese food for Pickup - Delivery Order from New Hong Kong Restaurant in Phoenix, AZ 85016, phone: 602-954-9118",
-      "zh": null
-    },
-    "services": [
-      {
-        "en": "Phoenix",
-        "zh": null
-      },
-      {
-        "en": "AZ 85016 Chinese food for Pickup Delivery Order Chinese food for Pickup",
-        "zh": null
-      },
-      {
-        "en": "Delivery Best Chinese food for Pickup",
-        "zh": null
-      }
-    ],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "New Hong Kong",
-      "Phoenix",
-      "dining",
-      "newhongkongphoenix.com",
-      "English",
-      "AZ 85016 Chinese food for Pickup Delivery Order Chinese food for Pickup",
-      "Delivery Best Chinese food for Pickup",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [
-      {
-        "label": "Sunday",
-        "value": "12:00 PM - 08:00 PM"
-      },
-      {
-        "label": "Monday",
-        "value": "11:00 AM - 09:00 PM"
-      },
-      {
-        "label": "Tuesday",
-        "value": "11:00 AM - 09:00 PM"
-      },
-      {
-        "label": "Wednesday",
-        "value": "11:00 AM - 09:00 PM"
-      },
-      {
-        "label": "Thursday",
-        "value": "11:00 AM - 09:00 PM"
-      },
-      {
-        "label": "Friday",
-        "value": "11:00 AM - 09:00 PM"
-      },
-      {
-        "label": "Saturday",
-        "value": "11:00 AM - 09:00 PM"
-      }
-    ],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0013",
     "slug": "gilbert-chinese-church-gilbert",
     "name": {
       "en": "Gilbert Chinese Church",
@@ -1044,7 +944,7 @@
     "categorySlug": "faith-community",
     "city": "Gilbert",
     "region": "Greater Phoenix",
-    "address": "21012 S Greenfield Rd, Gilbert, AZ 85298",
+    "address": "5120 S Greenfield Rd, Gilbert, AZ 85298",
     "serviceAreaText": null,
     "phone": "(480) 280-3277",
     "email": "info@azgcc.org",
@@ -1082,14 +982,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0014",
+    "id": "scraped_0013",
     "slug": "az-hope-chinese-school-chandler",
     "name": {
       "en": "AZ Hope Chinese School",
@@ -1106,7 +1006,7 @@
     "heroImage": "https://www.azhopechineseschool.org/static/uploads/20250722/c76eb3cc8c807b1a233cb7411ff5aed5.jpg",
     "gallery": [
       "https://www.azhopechineseschool.org/static/uploads/20250906/f15842bc456c62905bb89f3c7ff21dcf.jpg",
-      "https://www.azhopechineseschool.org/static/uploads/20250907/e48d7a001712c53ecea91c85c6f3cbd9.JPG",
+      "https://www.azhopechineseschool.org/static/uploads/20260511/5f46311a20c870eb4ff8dd2f0134a448.JPG",
       "https://www.azhopechineseschool.org/static/uploads/20250906/eb6ff40c96022dcce3321a1d2d4c82db.png"
     ],
     "shortDescription": {
@@ -1143,14 +1043,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0015",
+    "id": "scraped_0014",
     "slug": "hedy-li-phoenix",
     "name": {
       "en": "Hedy Li",
@@ -1209,14 +1109,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0016",
+    "id": "scraped_0015",
     "slug": "beijing-chinese-food-chandler",
     "name": {
       "en": "BeiJing Chinese Food",
@@ -1279,14 +1179,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0017",
+    "id": "scraped_0016",
     "slug": "chou-s-kitchen-chandler",
     "name": {
       "en": "Chou's Kitchen",
@@ -1338,14 +1238,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0018",
+    "id": "scraped_0017",
     "slug": "golden-valley-chinese-cuisine-mesa",
     "name": {
       "en": "Golden Valley Chinese Cuisine",
@@ -1388,7 +1288,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -1398,7 +1298,7 @@
     }
   },
   {
-    "id": "scraped_0019",
+    "id": "scraped_0018",
     "slug": "happy-bao-s-mesa",
     "name": {
       "en": "Happy Bao's",
@@ -1412,10 +1312,10 @@
     "phone": "(480) 912-1207",
     "email": "hello@happybaos.com",
     "website": "https://www.happybaos.com/",
-    "heroImage": "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/3e/63d05cb22a405e97e5dabfc9121608/:original",
+    "heroImage": "https://cdn.spotapps.co/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/3e/63d05cb22a405e97e5dabfc9121608/:original",
     "gallery": [
-      "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/1c/4b0540d3f54038a92920c426e6e7f9/:original",
-      "https://res.cloudinary.com/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/30/8154589a7b4299958ee9c2860ac9e4/:original"
+      "https://cdn.spotapps.co/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/1c/4b0540d3f54038a92920c426e6e7f9/:original",
+      "https://cdn.spotapps.co/spothopper/image/fetch/f_auto,q_auto:best,c_fit,h_1200/http://static.spotapps.co/spots/30/8154589a7b4299958ee9c2860ac9e4/:original"
     ],
     "shortDescription": {
       "en": "Happy Baos was founded by Chef Mei, who grew up in Northern China, where making hand-made dishes from fresh dough was just as much part of the culture as it was his family tradition.",
@@ -1460,7 +1360,7 @@
     "coordinates": null
   },
   {
-    "id": "scraped_0020",
+    "id": "scraped_0019",
     "slug": "tasty-pot-mesa",
     "name": {
       "en": "Tasty Pot",
@@ -1525,6 +1425,82 @@
     "coordinates": null
   },
   {
+    "id": "scraped_0020",
+    "slug": "george-yang-s-chinese-cuisine-phoenix",
+    "name": {
+      "en": "George Yang's Chinese Cuisine",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Phoenix",
+    "region": "Greater Phoenix",
+    "address": "6048 N 16th St Phoenix, AZ 85016",
+    "serviceAreaText": null,
+    "phone": "(602) 368-2688",
+    "email": null,
+    "website": "https://georgeyangschinesecuisine.com/",
+    "heroImage": "https://static.hungerrush.com/menufy/width=1920,height=1080,fit=scale-down,format=auto/639141179531059212+2015061.png",
+    "gallery": [],
+    "shortDescription": {
+      "en": "Discover George Yang’s Chinese Cuisine in Phoenix—fresh, made-to-order Chinese favorites for dine-in, takeout, delivery, and catering.",
+      "zh": null
+    },
+    "description": {
+      "en": "Discover George Yang’s Chinese Cuisine in Phoenix—fresh, made-to-order Chinese favorites for dine-in, takeout, delivery, and catering. Generous portions and friendly service.",
+      "zh": null
+    },
+    "services": [
+      {
+        "en": "George Yang’s Chinese Cuisine",
+        "zh": null
+      },
+      {
+        "en": "George Yang’s Phoenix",
+        "zh": null
+      },
+      {
+        "en": "Chinese restaurant",
+        "zh": null
+      },
+      {
+        "en": "Chinese food",
+        "zh": null
+      },
+      {
+        "en": "lo mein",
+        "zh": null
+      }
+    ],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "George Yang's Chinese Cuisine",
+      "Phoenix",
+      "dining",
+      "georgeyangschinesecuisine.com",
+      "English",
+      "George Yang’s Chinese Cuisine",
+      "George Yang’s Phoenix",
+      "Chinese restaurant",
+      "Chinese food",
+      "lo mein",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
     "id": "scraped_0021",
     "slug": "kim-s-chinese-kitchen-phoenix",
     "name": {
@@ -1568,7 +1544,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -1579,65 +1555,6 @@
   },
   {
     "id": "scraped_0022",
-    "slug": "big-wa-chinese-tempe",
-    "name": {
-      "en": "Big Wa Chinese",
-      "zh": "VOCs在线监测系统"
-    },
-    "categorySlug": "dining",
-    "city": "Tempe",
-    "region": "Greater Phoenix",
-    "address": "3135 S 48th St Unit 102 Tempe, AZ 85282",
-    "serviceAreaText": "Tempe, Arizona",
-    "phone": "(602) 438-2707",
-    "email": null,
-    "website": "https://www.bigwatempe.com/",
-    "heroImage": "https://www.bigwatempe.com/Uploads/ueditor/image/20220114/6377776576195136487985702.png",
-    "gallery": [
-      "https://www.bigwatempe.com/uploads/20220331085212_443940.png",
-      "https://www.bigwatempe.com/uploads/20220331085928_381858.jpg",
-      "https://www.bigwatempe.com/uploads/20220331090009_001329.jpg",
-      "https://www.bigwatempe.com/uploads/20220331085946_393401.jpg",
-      "https://www.bigwatempe.com/uploads/20210617094658_404346.png",
-      "https://www.bigwatempe.com/uploads/20210625100741_309604.png"
-    ],
-    "shortDescription": {
-      "en": "首页 产品系列 点型光离子VOCs探测器 红外气体探测器 点型可燃气体探测器 点型有气体探测器 便携式气体探测器 气体报警控制器",
-      "zh": null
-    },
-    "description": {
-      "en": "首页 产品系列 点型光离子VOCs探测器 红外气体探测器 点型可燃气体探测器 点型有气体探测器 便携式气体探测器 气体报警控制器",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Big Wa Chinese",
-      "VOCs在线监测系统",
-      "Tempe",
-      "dining",
-      "bigwatempe.com",
-      "English",
-      "Chinese",
-      "Chinese characters"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0023",
     "slug": "noodleholics-tucson",
     "name": {
       "en": "Noodleholics",
@@ -1653,12 +1570,12 @@
     "website": "https://www.noodleholics.com/",
     "heroImage": "https://static1.squarespace.com/static/597bb437d1758e4dad2e3cfd/t/621b2909d39fe3710d5439ed/1645947145073/IMG-5852.jpg?format=1500w",
     "gallery": [
-      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/5a87d8a9-5944-4887-90cf-3b077c0644f9/Dollar+Drinks.jpg",
-      "https://static1.squarespace.com/static/597bb437d1758e4dad2e3cfd/t/69d4a6c3ac2bdf4598374c60/1776572458204",
+      "https://static1.squarespace.com/static/597bb437d1758e4dad2e3cfd/t/69d4a6c3ac2bdf4598374c60/1780777167993",
+      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/f1fcaff0-ebdc-46b1-bf03-4fbd98cd8e39/Drinks+Special+-+DineIn+Only.png",
       "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/da28681f-ff75-44bb-82a9-9dd8fdf77e9a/Location+Hours.png",
       "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/cb03cfaf-3b1f-4d1f-9e64-32df3bfad2d3/Noodleholics+-+Collage.png",
-      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/1776366929449-3I8TBPAZEO2YMCDRP3OR/image-asset.jpeg",
-      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/1762537324291-4A7HLS61G97R2TAJTQBQ/image-asset.jpeg"
+      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/1779648541785-D76CI4IUV4VDVT1R4OJ8/image-asset.jpeg",
+      "https://images.squarespace-cdn.com/content/v1/597bb437d1758e4dad2e3cfd/1776366929449-3I8TBPAZEO2YMCDRP3OR/image-asset.jpeg"
     ],
     "shortDescription": {
       "en": "Your Chinese noodle shop in the desert starts with Noodleholics.",
@@ -1687,14 +1604,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0024",
+    "id": "scraped_0023",
     "slug": "first-chinese-baptist-church-phoenix",
     "name": {
       "en": "First Chinese Baptist Church",
@@ -1742,14 +1659,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0025",
+    "id": "scraped_0024",
     "slug": "tucson-christian-mandarin-church-tucson",
     "name": {
       "en": "Tucson Christian Mandarin Church",
@@ -1799,76 +1716,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0026",
-    "slug": "phoenix-chinese-center-glendale",
-    "name": {
-      "en": "Phoenix Chinese Center",
-      "zh": null
-    },
-    "categorySlug": "education",
-    "city": "Glendale",
-    "region": "Greater Phoenix",
-    "address": null,
-    "serviceAreaText": "Glendale, Arizona",
-    "phone": "(623) 581-3115",
-    "email": null,
-    "website": "https://phoenixchinesecenter.com/",
-    "heroImage": "https://phoenixchinesecenter.com/wp-content/uploads/2023/05/prep-course-0.jpg",
-    "gallery": [
-      "https://phoenixchinesecenter.com/wp-content/uploads/bb-plugin/cache/2-landscape-2aca49cb110830b62512605bfbe3f99d-q31upg9efij5.png",
-      "https://phoenixchinesecenter.com/wp-content/uploads/bb-plugin/cache/Screenshot-2023-10-05-at-8.37.43-AM-circle-43364067f67c6403b2335422dece862f-krzbuv0g2197.png",
-      "https://phoenixchinesecenter.com/wp-content/uploads/2024/08/4.png",
-      "https://phoenixchinesecenter.com/wp-content/uploads/bb-plugin/cache/prep-course-0-landscape-2360b8a93927056c4524529b92ade474-uhzg09aow6s3.jpg"
-    ],
-    "shortDescription": {
-      "en": "Join the Phoenix Chinese Center for fun Mandarin classes that help kids learn language skills.",
-      "zh": null
-    },
-    "description": {
-      "en": "Join the Phoenix Chinese Center for fun Mandarin classes that help kids learn language skills. Enroll today!",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English",
-      "Mandarin",
-      "Traditional Chinese"
-    ],
-    "searchAliases": [
-      "Phoenix Chinese Center",
-      "Glendale",
-      "education",
-      "phoenixchinesecenter.com",
-      "English",
-      "Mandarin",
-      "Traditional Chinese",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.6630444277476,
-      "lng": -112.14567681644148
-    }
-  },
-  {
-    "id": "scraped_0027",
+    "id": "scraped_0025",
     "slug": "tucson-chinese-school-tucson",
     "name": {
       "en": "Tucson Chinese School",
@@ -1882,7 +1737,7 @@
     "phone": "(520) 292-6900",
     "email": "info@tucsonchinese.org",
     "website": "https://www.tucsonchinese.org/tucson-chinese-school",
-    "heroImage": "https://static1.squarespace.com/static/627066308ca91129b8cfc22c/t/68a8c73562961869d1aa78c5/1776203163730",
+    "heroImage": "https://static1.squarespace.com/static/627066308ca91129b8cfc22c/t/68a8c73562961869d1aa78c5/1781156511382",
     "gallery": [
       "https://images.squarespace-cdn.com/content/v1/627066308ca91129b8cfc22c/cd8fb824-415b-4956-9044-dd2c48f12e05/Tucson-Chinese-School-2022.png"
     ],
@@ -1914,50 +1769,60 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0028",
-    "slug": "china-way-restaurant-chandler",
+    "id": "scraped_0026",
+    "slug": "charlotte-chang-peoria",
     "name": {
-      "en": "China Way Restaurant",
-      "zh": null
+      "en": "Charlotte Chang",
+      "zh": "認識曉青姐 Meet Charlotte"
     },
-    "categorySlug": "dining",
-    "city": "Chandler",
+    "categorySlug": "real-estate",
+    "city": "Peoria",
     "region": "Greater Phoenix",
-    "address": "3021 N Alma School Rd Chandler, AZ 85224",
-    "serviceAreaText": null,
-    "phone": "(480) 839-0905",
+    "address": null,
+    "serviceAreaText": "Phoenix Metro Area",
+    "phone": "(623) 332-3540",
     "email": null,
-    "website": "https://www.chinawaychandleraz.com/",
-    "heroImage": "https://menufyproduction.imgix.net/636887955923334113+90547.png?auto=compress,format&h=1080&w=1920&fit=max",
+    "website": "https://cchanghomes.com/",
+    "heroImage": "https://media-production.lp-cdn.com/media/79892011-e718-487e-9997-dff44d03c64d",
     "gallery": [
-      "https://menufyproduction.imgix.net:443/636887955923334113+90547.png?auto=compress,format&fit=max&w=1024&h=1024"
+      "https://media-production.lp-cdn.com/media/0f41ac8d-a2b6-4713-88b8-6bc0f3713ec7",
+      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/fgr2dmm44zrokka5io09",
+      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/din9dvjij1d2bwszna2e",
+      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/qppxbvphovipdrojhfm6",
+      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/thidrz2q9qrtoy8xvmvc",
+      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/yqhwyzqjdpzjpzdos3p0"
     ],
     "shortDescription": {
-      "en": "Online ordering menu for China Way.",
+      "en": "鳳凰城專業房產經紀人，精通中英雙語，專為台灣與亞裔買家提供量身服務。Charlotte Chang — Your trusted Phoenix Metro real estate expert.",
       "zh": null
     },
     "description": {
-      "en": "Online ordering menu for China Way. Welcome to China Way in Chandler, Arizona where we serve Black Pepper Chicken, Wonton Soup, Pork Chop Suey, Stir-Fried Shrimp, and Red Curry Chicken. Find us at the corner of Alma School Rd and Elliot Rd near Marlborough Mesa Park. Order online for carryout or delivery!",
+      "en": "鳳凰城專業房產經紀人，精通中英雙語，專為台灣與亞裔買家提供量身服務。Charlotte Chang — Your trusted Phoenix Metro real estate expert. Buy or sell with confidence.",
       "zh": null
     },
     "services": [],
     "languages": [
-      "English"
+      "English",
+      "Mandarin",
+      "Taiwanese"
     ],
     "searchAliases": [
-      "China Way Restaurant",
-      "Chandler",
-      "dining",
-      "chinawaychandleraz.com",
+      "Charlotte Chang",
+      "認識曉青姐 Meet Charlotte",
+      "Peoria",
+      "real-estate",
+      "cchanghomes.com",
       "English",
-      "Chinese"
+      "Mandarin",
+      "Taiwanese",
+      "Chinese characters"
     ],
     "verified": true,
     "bilingual": true,
@@ -1966,14 +1831,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0029",
+    "id": "scraped_0027",
     "slug": "gold-chef-chandler",
     "name": {
       "en": "Gold Chef",
@@ -1987,9 +1852,9 @@
     "phone": "(480) 812-3661",
     "email": null,
     "website": "https://www.goldchefchinese.com/",
-    "heroImage": "https://menufyproduction.imgix.net/637789772518638940+698402.png?auto=compress,format&h=1080&w=1920&fit=max",
+    "heroImage": "https://static.hungerrush.com/menufy/width=1920,height=1080,fit=scale-down,format=auto/637789772518638940+698402.png",
     "gallery": [
-      "https://menufyproduction.imgix.net:443/637789772469917750+698400.png?auto=compress,format&fit=max&w=1024&h=1024"
+      "https://static.hungerrush.com/menufy/width=1024,height=1024,fit=scale-down,format=auto/637789772469917750+698400.png"
     ],
     "shortDescription": {
       "en": "Online ordering menu for Gold Chef.",
@@ -2018,14 +1883,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0030",
+    "id": "scraped_0028",
     "slug": "hot-wok-chinese-restaurant-chandler",
     "name": {
       "en": "Hot Wok Chinese Restaurant",
@@ -2068,14 +1933,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0031",
+    "id": "scraped_0029",
     "slug": "tao-garden-chandler",
     "name": {
       "en": "Tao Garden",
@@ -2103,7 +1968,7 @@
       "zh": null
     },
     "description": {
-      "en": "Enjoy authentic Chinese dining cooked fresh daily. Tao Garden is a wonderful restaurant to eat fine Hong Kong style food. Voted best Chinese food 2003 by the New Times and best Chinese restaurant by the Phoenix Magazine 2005. Our specialty is fine Cantonese and Mandarin cuisine. Specializing in live seafood, we serve everything from crab, oysters to tilapia. We have a large menu with lots of items to choose from. Party Trays Available! Support your local businesses! This place has been around for 20+ years a true iconic restaurant for my family. Their beef chow fun always hits the spot. The honey walnut ... read more shrimp is so good too, large shrimp and great walnuts. The service is amazing and the vibe is very classic Chinese restaurant, love this family restaurant This place is the real deal! This is high-quality authentic Chinese food and for a reasonable price. I had the house chow mein, and it was absolutely delicious. All the ... read more other items on the menu looked really good too. I think I found my new favorite Chinese restaurant! Good Cantonese style food along with Chinese American offerings. We mainly go for the traditional dishes and it doesn't disappoint. 2050 North Alma School Road, #36 Chandler, Arizona 85224",
+      "en": "Enjoy authentic Chinese dining cooked fresh daily. Tao Garden is a wonderful restaurant to eat fine Hong Kong style food. Voted best Chinese food 2003 by the New Times and best Chinese restaurant by the Phoenix Magazine 2005. Our specialty is fine Cantonese and Mandarin cuisine. Specializing in live seafood, we serve everything from crab, oysters to tilapia. We have a large menu with lots of items to choose from. Party Trays Available! If you like Cantonese style food, you have to try Tao. Seafood pan fried noodle is our family favorite. We come here when we crave for real authentic food. Good Cantonese style food along with Chinese American offerings. We mainly go for the traditional dishes and it doesn't disappoint. This is probably the best Chinese restaurant in the Southeast Valley. Great food. I enjoyed their version of egg drop soup. I recommend trying this place if you ... read more enjoy Chinese food. 2050 North Alma School Road, #36 Chandler, Arizona 85224",
       "zh": null
     },
     "services": [],
@@ -2127,14 +1992,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0032",
+    "id": "scraped_0030",
     "slug": "grand-dragon-glendale",
     "name": {
       "en": "Grand Dragon",
@@ -2147,16 +2012,16 @@
     "serviceAreaText": null,
     "phone": "(623) 939-9668",
     "email": null,
-    "website": "https://www.granddragonchina.com/",
+    "website": "http://www.granddragonchina.com/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Glendale Chinese restaurant with lunch specials, family dinners, chow mein, chow fun, and house favorites.",
-      "zh": "Glendale Chinese restaurant with lunch specials, family dinners, chow mein, chow fun, and house favorites."
+      "en": "Chinese restaurant in Glendale, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Grand Dragon is a Glendale Chinese restaurant with lunch specials, family dinners, noodle dishes, and classic house specialties.",
-      "zh": "Grand Dragon is a Glendale Chinese restaurant with lunch specials, family dinners, noodle dishes, and classic house specialties."
+      "en": "Grand Dragon is a chinese restaurant in Glendale, Arizona. Public contact phone: 623-939-9668.",
+      "zh": null
     },
     "services": [],
     "languages": [
@@ -2179,14 +2044,67 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0033",
+    "id": "scraped_0031",
+    "slug": "ming-gee-chinese-food-restaurant-glendale",
+    "name": {
+      "en": "Ming-Gee Chinese Food Restaurant",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Glendale",
+    "region": "Greater Phoenix",
+    "address": "4431 W Glendale Ave, Glendale, AZ, 85301",
+    "serviceAreaText": null,
+    "phone": "(623) 939-1188",
+    "email": null,
+    "website": "https://www.mingandgee.com",
+    "heroImage": "https://www.mingandgee.com/34x6tpwh/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://www.mingandgee.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fhero%2F12.jpg%3Ftr%3D&w=3840&q=75",
+      "https://www.mingandgee.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fabout_us%2F7.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at Ming-Gee Chinese Food Restaurant.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at Ming-Gee Chinese Food Restaurant. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Ming-Gee Chinese Food Restaurant",
+      "Glendale",
+      "dining",
+      "mingandgee.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0032",
     "slug": "asian-cafe-express-mesa",
     "name": {
       "en": "Asian Cafe Express",
@@ -2237,14 +2155,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0034",
+    "id": "scraped_0033",
     "slug": "best-hong-kong-dining-mesa",
     "name": {
       "en": "Best Hong Kong Dining",
@@ -2313,7 +2231,7 @@
     }
   },
   {
-    "id": "scraped_0035",
+    "id": "scraped_0034",
     "slug": "big-bowl-restaurant-mesa",
     "name": {
       "en": "Big Bowl Restaurant",
@@ -2358,7 +2276,60 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0035",
+    "slug": "dragon-express-mesa",
+    "name": {
+      "en": "Dragon Express",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Mesa",
+    "region": "Greater Phoenix",
+    "address": "1125 W Baseline Rd, Mesa, AZ, 85210",
+    "serviceAreaText": null,
+    "phone": "(480) 755-1888",
+    "email": null,
+    "website": "https://www.dragonexpressmesa.com",
+    "heroImage": "https://www.dragonexpressmesa.com/9xiu0j4y/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://www.dragonexpressmesa.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fasian%2Fred%2Fhero%2F7.jpg%3Ftr%3D&w=3840&q=75",
+      "https://www.dragonexpressmesa.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fasian%2Fred%2Fabout_us%2F1.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at Dragon Express.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at Dragon Express. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "Dragon Express",
+      "Mesa",
+      "dining",
+      "dragonexpressmesa.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2379,7 +2350,7 @@
     "phone": "(480) 256-0638",
     "email": null,
     "website": "https://www.hengskitchenmesaaz.com/",
-    "heroImage": "https://menufyproduction.imgix.net/637261031738197912+210785.png?auto=compress,format&h=1080&w=1920&fit=max",
+    "heroImage": "https://static.hungerrush.com/menufy/width=1920,height=1080,fit=scale-down,format=auto/637261031738197912+210785.png",
     "gallery": [],
     "shortDescription": {
       "en": "Online ordering menu for Heng's Kitchen.",
@@ -2542,7 +2513,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2602,7 +2573,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2654,7 +2625,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2704,7 +2675,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2756,7 +2727,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -2764,63 +2735,6 @@
   },
   {
     "id": "scraped_0043",
-    "slug": "autumn-court-chinese-restaurant-phoenix",
-    "name": {
-      "en": "Autumn Court Chinese Restaurant",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "3752 E. Indian School Rd, Phoenix, AZ 85018",
-    "serviceAreaText": null,
-    "phone": "(602) 234-0512",
-    "email": null,
-    "website": "https://www.autumncourt.com/",
-    "heroImage": "https://www.autumncourt.com/wp-content/uploads/2017/05/uber_eats-1.jpg",
-    "gallery": [
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/doordash-1.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/grubhub.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/postmates-1.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/bite_squad.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/amazon_restaurant.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/05/yelp_eat_24-1.jpg"
-    ],
-    "shortDescription": {
-      "en": "Looking for Asian food near you?",
-      "zh": null
-    },
-    "description": {
-      "en": "Looking for Asian food near you? Rated in Phoenix New Times as Best of Phoenix, Autumn Court has served families and local businesses for two generations",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Autumn Court Chinese Restaurant",
-      "Phoenix",
-      "dining",
-      "autumncourt.com",
-      "English",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0044",
     "slug": "china-chili-phoenix",
     "name": {
       "en": "China Chili",
@@ -2865,14 +2779,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0045",
+    "id": "scraped_0044",
     "slug": "desert-jade-phoenix",
     "name": {
       "en": "Desert Jade",
@@ -2917,14 +2831,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0046",
+    "id": "scraped_0045",
     "slug": "diamond-chinese-restaurant-phoenix",
     "name": {
       "en": "Diamond Chinese Restaurant",
@@ -2972,14 +2886,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0047",
+    "id": "scraped_0046",
     "slug": "flamingo-palace-phoenix",
     "name": {
       "en": "Flamingo Palace",
@@ -3029,37 +2943,38 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0048",
-    "slug": "george-yang-s-chinese-cuisine-phoenix",
+    "id": "scraped_0047",
+    "slug": "great-wall-cuisine-phoenix",
     "name": {
-      "en": "George Yang's Chinese Cuisine",
+      "en": "Great Wall Cuisine",
       "zh": null
     },
     "categorySlug": "dining",
     "city": "Phoenix",
     "region": "Greater Phoenix",
-    "address": "6048 N 16th St Phoenix, AZ 85016",
+    "address": "3446 W Camelback Rd #155 Phoenix, AZ 85017",
     "serviceAreaText": null,
-    "phone": "(602) 368-2688",
+    "phone": "(602) 973-1112",
     "email": null,
-    "website": "https://georgeyangschinesecuisine.com/",
-    "heroImage": "https://georgeyangschinesecuisine.com/wp-content/uploads/2017/05/GY-4.png",
+    "website": "https://greatwallcuisineaz.com/",
+    "heroImage": "https://greatwallcuisineaz.com/static/media/Landing-1.6b1cd3d8.jpg",
     "gallery": [
-      "https://b1201085.smushcdn.com/1201085/wp-content/uploads/2018/01/George-Yangs-Chinese-Cuisine-Phoenix-AZ-85016.png?lossy=1&strip=1&webp=1"
+      "https://greatwallcuisineaz.com/static/media/Landing-2.f1248c4f.jpg",
+      "https://greatwallcuisineaz.com/static/media/Landing-3.74e99d4f.jpg"
     ],
     "shortDescription": {
-      "en": "George Yang’s Chinese Cuisine George Yang’s Chinese Cuisine Chinese Food & More George Yang’s is far from a typical Chinese restaurant with several varieties of Asian food offered and award winning recipes.",
+      "en": "3446 W Camelback Rd #155 Phoenix, AZ 85017 (602) 973-1112 Mon - Fri 11AM - 9PM Sat - Sun 10AM - 9PM News Response to COVID-19 Update In response of COVID-19, we've adjusted our operations to protect our communities by f…",
       "zh": null
     },
     "description": {
-      "en": "George Yang’s Chinese Cuisine George Yang’s Chinese Cuisine Chinese Food & More George Yang’s is far from a typical Chinese restaurant with several varieties of Asian food offered and award winning recipes. Our Asian restaurant features carefully selected menu options that demonstrate the best that the different regions of Asia have to offer. There are…",
+      "en": "3446 W Camelback Rd #155 Phoenix, AZ 85017 (602) 973-1112 Mon - Fri 11AM - 9PM Sat - Sun 10AM - 9PM News Response to COVID-19 Update In response of COVID-19, we've adjusted our operations to protect our communities by following the ADHS (Arizona Department of Health Services) guidelines . Meanwhile getting your favorite food in town is important, your safety is also our concern. So please follow these rules when visiting: To cope with the ADHS, we must therefore, our available seating is limited. Placing an order for pickup is always an option, please call ahead to avoid waiting.",
       "zh": null
     },
     "services": [],
@@ -3067,10 +2982,10 @@
       "English"
     ],
     "searchAliases": [
-      "George Yang's Chinese Cuisine",
+      "Great Wall Cuisine",
       "Phoenix",
       "dining",
-      "georgeyangschinesecuisine.com",
+      "greatwallcuisineaz.com",
       "English",
       "Chinese"
     ],
@@ -3081,7 +2996,60 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0048",
+    "slug": "king-wong-chinese-food-phoenix",
+    "name": {
+      "en": "King Wong Chinese Food",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Phoenix",
+    "region": "Greater Phoenix",
+    "address": "2545 N 32nd St, Phoenix, AZ, 85008",
+    "serviceAreaText": null,
+    "phone": "(602) 954-8088",
+    "email": null,
+    "website": "https://www.kingwongphoenix.com",
+    "heroImage": "https://www.kingwongphoenix.com/eagvktik/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://www.kingwongphoenix.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fasian%2Fred%2Fhero%2F4.jpg%3Ftr%3D&w=3840&q=75",
+      "https://www.kingwongphoenix.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fasian%2Fred%2Fabout_us%2F8.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at King Wong Chinese.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at King Wong Chinese. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "King Wong Chinese Food",
+      "Phoenix",
+      "dining",
+      "kingwongphoenix.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -3131,7 +3099,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -3139,6 +3107,59 @@
   },
   {
     "id": "scraped_0050",
+    "slug": "new-hong-kong-phoenix",
+    "name": {
+      "en": "New Hong Kong",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Phoenix",
+    "region": "Greater Phoenix",
+    "address": "2328 E Indian School Rd, Phoenix, AZ, 85016",
+    "serviceAreaText": null,
+    "phone": "(602) 954-9118",
+    "email": null,
+    "website": "https://www.newhongkongphoenix.com",
+    "heroImage": "https://www.newhongkongphoenix.com/njxkwmta/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://newhongkongphoenix.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fhero%2F9.jpg%3Ftr%3D&w=3840&q=75",
+      "https://newhongkongphoenix.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fabout_us%2F4.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at New Hong Kong Restaurant.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at New Hong Kong Restaurant. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "New Hong Kong",
+      "Phoenix",
+      "dining",
+      "newhongkongphoenix.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0051",
     "slug": "wong-s-chinese-dining-phoenix",
     "name": {
       "en": "Wong's Chinese Dining",
@@ -3181,14 +3202,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0051",
+    "id": "scraped_0052",
     "slug": "chen-s-noodle-house-tempe",
     "name": {
       "en": "Chen's Noodle House",
@@ -3202,10 +3223,10 @@
     "phone": "(480) 912-2773",
     "email": null,
     "website": "https://www.chensnoodlehousetempeaz.com/",
-    "heroImage": "https://menufyproduction.imgix.net/637003576372726076+113997.png?auto=compress,format&h=1080&w=1920&fit=max",
+    "heroImage": "https://static.hungerrush.com/menufy/width=1920,height=1080,fit=scale-down,format=auto/637003576372726076+113997.png",
     "gallery": [
-      "https://menufyproduction.imgix.net:443/637699235433240104+582215.png?auto=compress,format&fit=max&w=1024&h=1024",
-      "https://menufyproduction.imgix.net:443/637699240220664006+582221.png?fit=clip&w=400&h=&auto=compress,format"
+      "https://static.hungerrush.com/menufy/width=1024,height=1024,fit=scale-down,format=auto/637699235433240104+582215.png",
+      "https://static.hungerrush.com/menufy/width=400,fit=contain,format=auto/637699240220664006+582221.png"
     ],
     "shortDescription": {
       "en": "Online ordering menu for Chen's Noodle House.",
@@ -3234,14 +3255,67 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0052",
+    "id": "scraped_0053",
+    "slug": "china-jade-tempe",
+    "name": {
+      "en": "China Jade",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Tempe",
+    "region": "Greater Phoenix",
+    "address": "825 W Baseline Rd, Tempe, AZ, 85283",
+    "serviceAreaText": null,
+    "phone": "(480) 897-2558",
+    "email": null,
+    "website": "https://www.chinajadetempe.com",
+    "heroImage": "https://www.chinajadetempe.com/hq23oht0/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://www.chinajadetempe.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fhero%2F5.jpg%3Ftr%3D&w=3840&q=75",
+      "https://www.chinajadetempe.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fabout_us%2F8.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at China Jade.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at China Jade. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "China Jade",
+      "Tempe",
+      "dining",
+      "chinajadetempe.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0054",
     "slug": "dragon-flame-chinese-grill-tempe",
     "name": {
       "en": "Dragon Flame Chinese Grill",
@@ -3293,14 +3367,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0053",
+    "id": "scraped_0055",
     "slug": "old-town-taste-tempe",
     "name": {
       "en": "Old Town Taste",
@@ -3350,14 +3424,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0054",
+    "id": "scraped_0056",
     "slug": "81-hong-kong-cafe-tucson",
     "name": {
       "en": "81 Hong Kong Cafe",
@@ -3371,7 +3445,7 @@
     "phone": "(913) 738-9399",
     "email": null,
     "website": "https://www.the81hongkongcafe.com/",
-    "heroImage": "https://static1.squarespace.com/static/5b1590a93c3a53e49c6d280d/t/62166b2e80a612472925ab3d/1776448055257",
+    "heroImage": "https://static1.squarespace.com/static/5b1590a93c3a53e49c6d280d/t/62166b2e80a612472925ab3d/1783012618994",
     "gallery": [
       "https://images.squarespace-cdn.com/content/v1/5b1590a93c3a53e49c6d280d/cea052fe-2f04-4895-9e62-764d6ead941d/Support+Team+Menufy.png?format=2500w",
       "https://images.squarespace-cdn.com/content/v1/5b1590a93c3a53e49c6d280d/f7c51552-321f-4d8b-816a-cd2ead0b32e0/Menufy_home_feature_04_POS_img.png?format=2500w",
@@ -3408,14 +3482,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0055",
+    "id": "scraped_0057",
     "slug": "ba-dar-tucson",
     "name": {
       "en": "Ba Dar",
@@ -3429,11 +3503,11 @@
     "phone": "(520) 296-8888",
     "email": null,
     "website": "https://www.ba-dar.com/",
-    "heroImage": "https://lh3.googleusercontent.com/sitesv/AA5AbUBzjI70wDEV5U9jkId_yVhs1vLqjKdBAe-P4PLHYuH3Lycw8rdvzirz6m__mD0Fk9vY_U3VCH1KWZZyQvx4BM7Yx3TSgmyyj98kJvuSM7CIPUpclish0ncqWZhXMCCvAz_uwiqq-DQ5hEwvEETsjXiHuBLzAlqpvik=w16383",
+    "heroImage": "https://lh3.googleusercontent.com/sitesv/AA5AbUCdjL_cxqjfdFcK-TLic4dlos4Hmf5UGuh_fCpLa3MIZsbdP6Sqg8pqH-kbutuQjWeRwZevv0Uu6tth_k8n1jymvOq02COnngnnKxD6esMSvY3vgDYNSm90QyXWKO_dzBOgvmA08aSBt7pLY0O1WA6c7N8mviljGLB_Jg8=w16383",
     "gallery": [
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUDfIm--0WqB1h8mY9dxchhbTGKmK6ah4b7ulcL0-vtgYV0i3__-KrzchcwaS0TuTnF3-GdqQIn0qS4Q9r2ADYbHu2htxNtN5TJ_LlQtwY7h6I3vcePsuiFQYNOsbdjtrmy7VhfvA6KD07QlIkuEPbHrsiI4qAns1Crzh-acofsSSQsVbN-7FYYh6JBipKUkBjmM2oFHYvo0xiBn6-8nvmV7WaUW1JGNdSrJkj8=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUBhDj2cXOWOxzhR0rKKC2N54QKhcDXyX0y0H3dZkcGyDkOVZVP_eTLeL-4AFTZ4L8Y6i04weUK_lfn_4uvZCRD0EoQW9t7RJrhyEP8pXs5KWheAjLRXF913isVe7-LWg426BjY2QF_qFiu7jqNWbD4QChtncveCaBAzHtzhaUiN8rYxnaY28goRX31hMoc5gG2JvQ9HKO98iIGnsT-lXEBT7fPfkaB7NuXZ=w1280",
-      "https://lh3.googleusercontent.com/sitesv/AA5AbUARXWdfLVkaK0NSfiKOmrT5LgM584FCZvn-ZD7wtQeA81NdrDcokc8Ljhd-9_IkRVM3rwBjJmKqZGTyec2hjg35Uns-nzbbb4-5Kbjk6B4YdUXqHroXDW03dUE2IS_oHL_MfYCcJf7E6t3fOt9bDNMIqc7dGe1UVF1fYf6cQWKwykkOUYZTO-La=w1280"
+      "https://lh3.googleusercontent.com/sitesv/AA5AbUDDnRypkXCeHFvfFN481aMZgMPiGIjMvBhWM3I2uQ3uk2Y5JkJlwp1-WyFRrmUt0I_USEc8ku2w0iKysOIDfdt2vEz5fblnVUWCodW6J9IdFKPqo31pG6tNq5BkPk7uUXxSo593ftvu1XWBOTPOxlacFGnpyff_48-JoS2-_gzhTvJoYleAV9BuhadrTVF8aniovN1Wt68tAJZDOET8zVnettWQ1i7XBZEzpGYWWaE=w1280",
+      "https://lh3.googleusercontent.com/sitesv/AA5AbUCr0ndiJRtPG16D5mul6vtdw1p8AyS5nSuX0Jllqu6LRcGTS9OX-11sJOXRHvSp5WHFz5KsBlmQILs213kWG5wVX4FrweOaF1fvFitms3PPgi_fuAd6wOQ6JLzQLxgQ8vgo2sbGuVn1m83FI-tyJ-KGlBpvNh5uGa5iJE48fP4-nh7Fv7dtYdX-rwy7_R6rinb2eT2aOFN6iuRq-3IvtaWYl-49G9FjyrJDjXJ6=w1280",
+      "https://lh3.googleusercontent.com/sitesv/AA5AbUDtyiUclHLL_R6CoJzrgxC8vHhxuahLIPaOuuXPjo1sme9n_hRa_ugTb3HLRnxAYOw9_DMpVN_-fNQTQ_g_SSKSKmSmSjkBN9PduqMHTvPoZPUgXVLSw3Jf2GTvxpbRN2I0XzQdtbL-36pvINA5dWWpg7h_IWXir5kafRtX93krZ1A2GxiMky4iCziS=w1280"
     ],
     "shortDescription": {
       "en": "Monday - Sunday 11:00am - 3:00pm Lunch - Dine-In and Carry Out Only 3:00pm - 8:00pm Dinner - Dine-In and Carry Out Only",
@@ -3462,14 +3536,67 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0056",
+    "id": "scraped_0058",
+    "slug": "china-pasta-house-tucson",
+    "name": {
+      "en": "China Pasta House",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Tucson",
+    "region": "Greater Tucson",
+    "address": "430 N Park Ave, Tucson, AZ 85719",
+    "serviceAreaText": null,
+    "phone": "(520) 623-3334",
+    "email": null,
+    "website": "https://www.chinapastahousetucson.com/",
+    "heroImage": "https://www.chinapastatogo.com/h3soht05/opengraph-image-959cal/og-image?0b56cf29834ff804",
+    "gallery": [
+      "https://www.chinapastahousetucson.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fbeyondmenu%2Fhero%2F30.jpg%3Ftr%3D&w=3840&q=75",
+      "https://www.chinapastahousetucson.com/_next/image?url=https%3A%2F%2Fik.imagekit.io%2Fawwybhhmo%2Fsatellite_images%2Fchinese%2Fred%2Fabout_us%2F8.jpg%3Ftr%3D&w=3840&q=75"
+    ],
+    "shortDescription": {
+      "en": "Enjoy the best authentic and delicious chinese at China Pasta House.",
+      "zh": null
+    },
+    "description": {
+      "en": "Enjoy the best authentic and delicious chinese at China Pasta House. View our hours, explore our menu, and order online for convenient pickup or delivery near you!",
+      "zh": null
+    },
+    "services": [],
+    "languages": [
+      "English"
+    ],
+    "searchAliases": [
+      "China Pasta House",
+      "Tucson",
+      "dining",
+      "chinapastahousetucson.com",
+      "English",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0059",
     "slug": "jun-dynasty-tucson",
     "name": {
       "en": "Jun Dynasty",
@@ -3518,14 +3645,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0057",
+    "id": "scraped_0060",
     "slug": "contemporary-chinese-school-of-arizona-tempe",
     "name": {
       "en": "Contemporary Chinese School of Arizona",
@@ -3577,14 +3704,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0058",
+    "id": "scraped_0061",
     "slug": "grace-tung-gilbert",
     "name": {
       "en": "Grace Tung",
@@ -3602,9 +3729,9 @@
     "gallery": [
       "https://graceazrealty.com/wp-content/uploads/2022/01/GT46.jpg",
       "https://graceazrealty.com/wp-content/uploads/2022/01/GT44.jpg",
+      "https://graceazrealty.com/wp-content/uploads/2024/08/superstn.webp",
+      "https://graceazrealty.com/wp-content/uploads/2023/08/cch03.jpg",
       "https://graceazrealty.com/wp-content/uploads/2023/12/Tempe-AZ.jpg",
-      "https://graceazrealty.com/wp-content/uploads/2024/05/DT-Tempe.webp",
-      "https://graceazrealty.com/wp-content/uploads/2025/03/stv4.webp",
       "https://graceazrealty.com/wp-content/uploads/2022/01/EHE-R-300x138.png"
     ],
     "shortDescription": {
@@ -3634,136 +3761,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0059",
-    "slug": "asian-real-estate-association-of-america-greater-phoenix-phoenix",
-    "name": {
-      "en": "Asian Real Estate Association of America Greater Phoenix",
-      "zh": null
-    },
-    "categorySlug": "real-estate",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "727 E Bethany Home Rd, D225, Phoenix, AZ, 85014",
-    "serviceAreaText": "Phoenix, Arizona",
-    "phone": null,
-    "email": "info@areaagreaterphoenix.org",
-    "website": "https://areaagreaterphoenix.org/",
-    "heroImage": "https://areaagreaterphoenix.org/wp-content/uploads/slider/cache/41dfdb3ae6e081c32575d02e6ec85eef/IMG_7800-scaled.jpg",
-    "gallery": [
-      "https://heritageweb.com/cdn-cgi/imagedelivery/n12z2FIWKA5iB6vfvG4ygw/Asian-Real-Estate-Association-of-America-Greater-Phoenix-68c32882114c3/full",
-      "https://areaagreaterphoenix.org/wp-content/uploads/slider/cache/d5a724ff9bc673de1fce52cb42ef9b54/AREAA-Sponsors.png",
-      "https://areaagreaterphoenix.org/wp-content/uploads/slider/cache/4097fae44fbad06578ba2250ad1aac0f/IMG_5964.png",
-      "https://areaagreaterphoenix.org/wp-content/uploads/slider/cache/d9e3a6a5843fad49976947f75e7770d1/unnamed.webp",
-      "https://i0.wp.com/areaagreaterphoenix.org/wp-content/uploads/slider/cache/b9b6c6fa462b4900b393fa0e0101927f/IMG_7800-scaled.jpg?resize=240%2C120&ssl=1",
-      "https://i0.wp.com/areaagreaterphoenix.org/wp-content/uploads/slider/cache/6ed50e7e7c36615e123c45915bdc258d/AREAA-Sponsors.png?resize=240%2C120&ssl=1",
-      "https://i0.wp.com/areaagreaterphoenix.org/wp-content/uploads/slider/cache/2999aff9362884ae0a03c9d69fc06b9e/IMG_5964.png?resize=240%2C120&ssl=1"
-    ],
-    "shortDescription": {
-      "en": "Check out these amazing people here In addition to our informative seminars, AREAA Greater Phoenix holds several fun activities and events to meet others in the community, and most of all, have a good time!",
-      "zh": null
-    },
-    "description": {
-      "en": "Check out these amazing people here In addition to our informative seminars, AREAA Greater Phoenix holds several fun activities and events to meet others in the community, and most of all, have a good time! Discover what makes us excellent for these past years. Contact Chapter President: Rebecca Chen Email: info@areaagreaterphoenix.org Membership Who We Are Join AREAA Now Membership Benefits Resources",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Asian Real Estate Association of America Greater Phoenix",
-      "Phoenix",
-      "real-estate",
-      "areaagreaterphoenix.org",
-      "English",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.507201,
-      "lng": -112.057941
-    }
-  },
-  {
-    "id": "scraped_0060",
-    "slug": "charlotte-chang-peoria",
-    "name": {
-      "en": "Charlotte Chang",
-      "zh": null
-    },
-    "categorySlug": "real-estate",
-    "city": "Peoria",
-    "region": "Greater Phoenix",
-    "address": null,
-    "serviceAreaText": "Phoenix Metro Area",
-    "phone": "(623) 332-3540",
-    "email": null,
-    "website": "https://cchanghomes.com/",
-    "heroImage": "https://media-production.lp-cdn.com/media/79892011-e718-487e-9997-dff44d03c64d",
-    "gallery": [
-      "https://media-production.lp-cdn.com/media/0f41ac8d-a2b6-4713-88b8-6bc0f3713ec7",
-      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/fgr2dmm44zrokka5io09",
-      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/din9dvjij1d2bwszna2e",
-      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/qppxbvphovipdrojhfm6",
-      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/thidrz2q9qrtoy8xvmvc",
-      "https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=1280/https://media-production.lp-cdn.com/media/yqhwyzqjdpzjpzdos3p0"
-    ],
-    "shortDescription": {
-      "en": "旅美40載，精通中英雙語，曉青姊結合房產投資專業、藝術美感與高科技分析，提供最誠信、接地氣的鳳凰城置業服務。立即聯繫，讓您的置業之路更安心！",
-      "zh": null
-    },
-    "description": {
-      "en": "旅美40載，精通中英雙語，曉青姊結合房產投資專業、藝術美感與高科技分析，提供最誠信、接地氣的鳳凰城置業服務。立即聯繫，讓您的置業之路更安心！",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English",
-      "Taiwanese"
-    ],
-    "searchAliases": [
-      "Charlotte Chang",
-      "Peoria",
-      "real-estate",
-      "cchanghomes.com",
-      "English",
-      "Taiwanese",
-      "Chinese",
-      "Mandarin",
-      "Chinese characters"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0061",
+    "id": "scraped_0062",
     "slug": "asian-garden-express-glendale",
     "name": {
       "en": "Asian Garden Express",
@@ -3780,12 +3785,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Glendale Chinese takeout spot with online ordering, pickup, and delivery.",
-      "zh": "Glendale Chinese takeout spot with online ordering, pickup, and delivery."
+      "en": "Chinese restaurant in Glendale, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Chinese restaurant in Glendale near 55th Avenue and Northern with online ordering, pickup, and delivery for classic takeout favorites.",
-      "zh": "Chinese restaurant in Glendale near 55th Avenue and Northern with online ordering, pickup, and delivery for classic takeout favorites."
+      "en": "Asian Garden Express is a chinese restaurant in Glendale, Arizona. Public contact phone: 623-215-4478.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -3803,54 +3808,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0062",
-    "slug": "ming-gee-chinese-food-restaurant-glendale",
-    "name": {
-      "en": "Ming-Gee Chinese Food Restaurant",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Glendale",
-    "region": "Greater Phoenix",
-    "address": "4431 W Glendale Ave Glendale, AZ 85301",
-    "serviceAreaText": null,
-    "phone": "(623) 939-1188",
-    "email": null,
-    "website": "https://www.mingandgee.com/",
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Glendale Chinese restaurant on Glendale Avenue serving classic takeout dishes with pickup and delivery.",
-      "zh": "Glendale Chinese restaurant on Glendale Avenue serving classic takeout dishes with pickup and delivery."
-    },
-    "description": {
-      "en": "Ming-Gee Chinese Food Restaurant in Glendale serves classic Chinese takeout dishes with pickup and delivery.",
-      "zh": "Ming-Gee Chinese Food Restaurant in Glendale serves classic Chinese takeout dishes with pickup and delivery."
-    },
-    "services": [],
-    "languages": [],
-    "searchAliases": [
-      "Ming-Gee Chinese Food Restaurant",
-      "Glendale",
-      "dining",
-      "mingandgee.com",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -3858,53 +3816,6 @@
   },
   {
     "id": "scraped_0063",
-    "slug": "dragon-express-mesa",
-    "name": {
-      "en": "Dragon Express",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Mesa",
-    "region": "Greater Phoenix",
-    "address": "1125 W Baseline Rd Mesa, AZ 85210",
-    "serviceAreaText": null,
-    "phone": "(480) 755-1888",
-    "email": null,
-    "website": "https://www.dragonexpressmesa.com/",
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Mesa Chinese takeout restaurant on Baseline Road serving pickup, delivery, and comfort classics.",
-      "zh": "Mesa Chinese takeout restaurant on Baseline Road serving pickup, delivery, and comfort classics."
-    },
-    "description": {
-      "en": "Dragon Express is a Mesa Chinese takeout restaurant on Baseline Road serving classic dishes for pickup and delivery.",
-      "zh": "Dragon Express is a Mesa Chinese takeout restaurant on Baseline Road serving classic dishes for pickup and delivery."
-    },
-    "services": [],
-    "languages": [],
-    "searchAliases": [
-      "Dragon Express",
-      "Mesa",
-      "dining",
-      "dragonexpressmesa.com",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0064",
     "slug": "golden-gate-chinese-restaurant-mesa",
     "name": {
       "en": "Golden Gate Chinese Restaurant",
@@ -3917,16 +3828,16 @@
     "serviceAreaText": null,
     "phone": "(480) 897-1335",
     "email": null,
-    "website": "https://goldengatechinese.biz/",
+    "website": "http://www.goldengatechinese.biz/welcome.html",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa Chinese restaurant serving Mandarin and Szechuan dishes, lunch specials, noodles, and fried rice.",
-      "zh": "Mesa Chinese restaurant serving Mandarin and Szechuan dishes, lunch specials, noodles, and fried rice."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Golden Gate Chinese Restaurant in Mesa serves Mandarin and Szechuan dishes, lunch specials, noodles, and fried rice on Baseline Road.",
-      "zh": "Golden Gate Chinese Restaurant in Mesa serves Mandarin and Szechuan dishes, lunch specials, noodles, and fried rice on Baseline Road."
+      "en": "Golden Gate Chinese Restaurant is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-897-1335.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -3944,14 +3855,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0065",
+    "id": "scraped_0064",
     "slug": "king-s-chef-mesa",
     "name": {
       "en": "King's Chef",
@@ -3964,16 +3875,16 @@
     "serviceAreaText": null,
     "phone": "(480) 833-9259",
     "email": null,
-    "website": "https://www.kingschefmesa.com/",
+    "website": "https://kingschef.kitchen/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa Chinese restaurant on Stapley Drive serving dine-in and takeout favorites plus lunch specials.",
-      "zh": "Mesa Chinese restaurant on Stapley Drive serving dine-in and takeout favorites plus lunch specials."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "King's Chef in Mesa serves dine-in and takeout Chinese dishes, lunch specials, chow fun, and house sauces on Stapley Drive.",
-      "zh": "King's Chef in Mesa serves dine-in and takeout Chinese dishes, lunch specials, chow fun, and house sauces on Stapley Drive."
+      "en": "King's Chef is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-833-9259.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -3991,14 +3902,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0066",
+    "id": "scraped_0065",
     "slug": "kwan-s-sampan-restaurant-mesa",
     "name": {
       "en": "Kwan's Sampan Restaurant",
@@ -4015,12 +3926,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa Chinese restaurant with takeout, delivery, reservations, and a full bar on Gilbert Road.",
-      "zh": "Mesa Chinese restaurant with takeout, delivery, reservations, and a full bar on Gilbert Road."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Kwan's Sampan Restaurant in Mesa offers Chinese dining, takeout, delivery, reservations, and a full bar on Gilbert Road.",
-      "zh": "Kwan's Sampan Restaurant in Mesa offers Chinese dining, takeout, delivery, reservations, and a full bar on Gilbert Road."
+      "en": "Kwan's Sampan Restaurant is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-969-6958.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4038,7 +3949,54 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
+    "verificationState": "editor_verified",
+    "hours": [],
+    "coordinates": null
+  },
+  {
+    "id": "scraped_0066",
+    "slug": "autumn-court-chinese-restaurant-phoenix",
+    "name": {
+      "en": "Autumn Court Chinese Restaurant",
+      "zh": null
+    },
+    "categorySlug": "dining",
+    "city": "Phoenix",
+    "region": "Greater Phoenix",
+    "address": "3752 E Indian School Rd Phoenix, AZ 85018",
+    "serviceAreaText": null,
+    "phone": "(602) 234-0512",
+    "email": null,
+    "website": "https://www.autumncourt.com/",
+    "heroImage": null,
+    "gallery": [],
+    "shortDescription": {
+      "en": "Chinese restaurant in Phoenix, Arizona.",
+      "zh": null
+    },
+    "description": {
+      "en": "Autumn Court Chinese Restaurant is a chinese restaurant in Phoenix, Arizona. Public contact phone: 602-234-0512.",
+      "zh": null
+    },
+    "services": [],
+    "languages": [],
+    "searchAliases": [
+      "Autumn Court Chinese Restaurant",
+      "Phoenix",
+      "dining",
+      "autumncourt.com",
+      "Chinese"
+    ],
+    "verified": true,
+    "bilingual": true,
+    "newcomerFriendly": false,
+    "sponsored": false,
+    "featured": false,
+    "rating": 0,
+    "reviewCount": 0,
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
@@ -4058,16 +4016,16 @@
     "serviceAreaText": null,
     "phone": "(602) 956-9840",
     "email": null,
-    "website": null,
+    "website": "https://chinavillagerestaurantaz.business.site/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Former family-owned Phoenix Chinese restaurant that closed in 2023 after decades in business.",
-      "zh": "Former family-owned Phoenix Chinese restaurant that closed in 2023 after decades in business."
+      "en": "Chinese restaurant in Phoenix, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "China Village served classic Chinese food on Indian School Road for decades before the family closed the restaurant in 2023.",
-      "zh": "China Village served classic Chinese food on Indian School Road for decades before the family closed the restaurant in 2023."
+      "en": "China Village is a chinese restaurant in Phoenix, Arizona. Public contact phone: 602-956-9840.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4085,108 +4043,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "stale",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
+    "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
     "id": "scraped_0068",
-    "slug": "great-wall-cuisine-phoenix",
-    "name": {
-      "en": "Great Wall Cuisine",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "3446 W Camelback Rd #155, Phoenix, AZ 85017",
-    "serviceAreaText": null,
-    "phone": "(602) 973-1112",
-    "email": null,
-    "website": "https://greatwallaz.kwickmenu.com/",
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Phoenix Chinese restaurant known for dim sum, Cantonese dishes, hot pot, and lunch specials.",
-      "zh": "Phoenix Chinese restaurant known for dim sum, Cantonese dishes, hot pot, and lunch specials."
-    },
-    "description": {
-      "en": "Great Wall Cuisine on Camelback Road serves dim sum, Cantonese dinner dishes, hot pot, and lunch specials in west Phoenix.",
-      "zh": "Great Wall Cuisine on Camelback Road serves dim sum, Cantonese dinner dishes, hot pot, and lunch specials in west Phoenix."
-    },
-    "services": [],
-    "languages": [],
-    "searchAliases": [
-      "Great Wall Cuisine",
-      "Phoenix",
-      "dining",
-      "greatwallcuisineaz.com",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0069",
-    "slug": "king-wong-chinese-food-phoenix",
-    "name": {
-      "en": "King Wong Chinese Food",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "2545 N 32nd St Phoenix, AZ 85008",
-    "serviceAreaText": null,
-    "phone": "(602) 954-8088",
-    "email": null,
-    "website": "https://www.kingwongphoenix.com/",
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Phoenix Chinese takeout spot on 32nd Street serving lo mein, fried rice, egg rolls, and favorites.",
-      "zh": "Phoenix Chinese takeout spot on 32nd Street serving lo mein, fried rice, egg rolls, and favorites."
-    },
-    "description": {
-      "en": "King Wong Chinese Food in Phoenix serves lo mein, fried rice, egg rolls, and classic Chinese takeout dishes for pickup or delivery.",
-      "zh": "King Wong Chinese Food in Phoenix serves lo mein, fried rice, egg rolls, and classic Chinese takeout dishes for pickup or delivery."
-    },
-    "services": [],
-    "languages": [],
-    "searchAliases": [
-      "King Wong Chinese Food",
-      "Phoenix",
-      "dining",
-      "kingwongphoenix.com",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0070",
     "slug": "yin-s-chinese-restaurant-phoenix",
     "name": {
       "en": "Yin's Chinese Restaurant",
@@ -4203,12 +4067,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Phoenix Chinese restaurant on Indian School Road serving bowls, noodles, chow fun, and chef specials.",
-      "zh": "Phoenix Chinese restaurant on Indian School Road serving bowls, noodles, chow fun, and chef specials."
+      "en": "Chinese restaurant in Phoenix, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Yin's Chinese Restaurant in Phoenix serves bowls, noodles, chow fun, fried rice, and classic chef-specialty dishes on Indian School Road.",
-      "zh": "Yin's Chinese Restaurant in Phoenix serves bowls, noodles, chow fun, fried rice, and classic chef-specialty dishes on Indian School Road."
+      "en": "Yin's Chinese Restaurant is a chinese restaurant in Phoenix, Arizona. Public contact phone: 602-279-5174.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4226,14 +4090,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0071",
+    "id": "scraped_0069",
     "slug": "bao-chow-tempe",
     "name": {
       "en": "Bao Chow",
@@ -4250,12 +4114,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tempe bao spot inside Yucca Tap Room serving steamed buns, wings, and fries.",
-      "zh": "Tempe bao spot inside Yucca Tap Room serving steamed buns, wings, and fries."
+      "en": "Chinese restaurant in Tempe, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Bao Chow operates inside Yucca Tap Room in Tempe, with bao buns, wings, fries, and other Taiwanese-inspired bar food.",
-      "zh": "Bao Chow operates inside Yucca Tap Room in Tempe, with bao buns, wings, fries, and other Taiwanese-inspired bar food."
+      "en": "Bao Chow is a chinese restaurant in Tempe, Arizona. Public contact phone: 480-626-3053.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4273,44 +4137,44 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0072",
-    "slug": "china-jade-tempe",
+    "id": "scraped_0070",
+    "slug": "big-wa-chinese-tempe",
     "name": {
-      "en": "China Jade",
+      "en": "Big Wa Chinese",
       "zh": null
     },
     "categorySlug": "dining",
     "city": "Tempe",
     "region": "Greater Phoenix",
-    "address": "825 W Baseline Rd Unit 7 Tempe, AZ 85283",
+    "address": "3135 S 48th St Unit 102 Tempe, AZ 85282",
     "serviceAreaText": null,
-    "phone": "(480) 897-2558",
+    "phone": "(602) 438-2707",
     "email": null,
-    "website": "https://www.chinajadetempe.com/",
+    "website": "https://www.bigwatempe.com/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tempe Chinese takeout restaurant on Baseline Road serving pickup and delivery favorites.",
-      "zh": "Tempe Chinese takeout restaurant on Baseline Road serving pickup and delivery favorites."
+      "en": "Chinese restaurant in Tempe, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Chinese restaurant in Tempe on Baseline Road offering pickup, delivery, and a menu built around classic Chinese takeout dishes.",
-      "zh": "Chinese restaurant in Tempe on Baseline Road offering pickup, delivery, and a menu built around classic Chinese takeout dishes."
+      "en": "Big Wa Chinese is a chinese restaurant in Tempe, Arizona. Public contact phone: 602-438-2707.",
+      "zh": null
     },
     "services": [],
     "languages": [],
     "searchAliases": [
-      "China Jade",
+      "Big Wa Chinese",
       "Tempe",
       "dining",
-      "chinajadetempe.com",
+      "bigwatempe.com",
       "Chinese"
     ],
     "verified": true,
@@ -4320,14 +4184,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0073",
+    "id": "scraped_0071",
     "slug": "tang-garden-tempe",
     "name": {
       "en": "Tang Garden",
@@ -4340,16 +4204,16 @@
     "serviceAreaText": null,
     "phone": "(480) 209-1770",
     "email": null,
-    "website": "https://www.azharmonykitchen.com/",
+    "website": "https://www.tanggardentempeaz.com/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tempe Chinese and Szechuan restaurant on Broadway Road serving hot pot and online ordering.",
-      "zh": "Tempe Chinese and Szechuan restaurant on Broadway Road serving hot pot and online ordering."
+      "en": "Chinese restaurant in Tempe, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "The former Tang Garden listing now points to Harmony Kitchen, a Tempe Chinese and Szechuan restaurant known for hot pot, grilled dishes, and online ordering.",
-      "zh": "The former Tang Garden listing now points to Harmony Kitchen, a Tempe Chinese and Szechuan restaurant known for hot pot, grilled dishes, and online ordering."
+      "en": "Tang Garden is a chinese restaurant in Tempe, Arizona. Public contact phone: 480-209-1770.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4367,61 +4231,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0074",
-    "slug": "china-pasta-house-tucson",
-    "name": {
-      "en": "China Pasta House",
-      "zh": null
-    },
-    "categorySlug": "dining",
-    "city": "Tucson",
-    "region": "Greater Tucson",
-    "address": "430 N Park Ave, Tucson, AZ 85719",
-    "serviceAreaText": null,
-    "phone": "(520) 623-3334",
-    "email": null,
-    "website": "https://www.chinapastahousetucson.com/",
-    "heroImage": null,
-    "gallery": [],
-    "shortDescription": {
-      "en": "Tucson Chinese restaurant near the university known for noodle dishes and takeout.",
-      "zh": "Tucson Chinese restaurant near the university known for noodle dishes and takeout."
-    },
-    "description": {
-      "en": "China Pasta House is a Tucson Chinese restaurant near the university with noodle dishes, takeout, and online ordering.",
-      "zh": "China Pasta House is a Tucson Chinese restaurant near the university with noodle dishes, takeout, and online ordering."
-    },
-    "services": [],
-    "languages": [],
-    "searchAliases": [
-      "China Pasta House",
-      "Tucson",
-      "dining",
-      "chinapastahousetucson.com",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": null
-  },
-  {
-    "id": "scraped_0075",
+    "id": "scraped_0072",
     "slug": "new-asia-chinese-restaurant-tucson",
     "name": {
       "en": "New Asia Chinese Restaurant",
@@ -4434,16 +4251,16 @@
     "serviceAreaText": null,
     "phone": "(520) 623-5033",
     "email": null,
-    "website": "https://newasiatucson.com/",
+    "website": "http://www.newasiatucson.com/welcome.html",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tucson Chinese restaurant on Grant Road focused on fresh-ingredient classics and house specialties.",
-      "zh": "Tucson Chinese restaurant on Grant Road focused on fresh-ingredient classics and house specialties."
+      "en": "Chinese restaurant in Tucson, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "New Asia Chinese Restaurant in Tucson serves fresh-ingredient Chinese dishes and house specialties on Grant Road.",
-      "zh": "New Asia Chinese Restaurant in Tucson serves fresh-ingredient Chinese dishes and house specialties on Grant Road."
+      "en": "New Asia Chinese Restaurant is a chinese restaurant in Tucson, Arizona. Public contact phone: (520) 623-5033.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4461,14 +4278,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0076",
+    "id": "scraped_0073",
     "slug": "ehotpot-tucson",
     "name": {
       "en": "eHotPot",
@@ -4481,16 +4298,16 @@
     "serviceAreaText": null,
     "phone": "(520) 999-8839",
     "email": null,
-    "website": "https://www.ehotpot.com/",
+    "website": "https://takeout.ehotpot.com/",
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tucson restaurant specializing in Chinese and Taiwanese hot pot, noodle soups, and street-food favorites.",
-      "zh": "Tucson restaurant specializing in Chinese and Taiwanese hot pot, noodle soups, and street-food favorites."
+      "en": "Chinese restaurant in Tucson, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "eHotPot is a Tucson restaurant focused on Chinese and Taiwanese hot pot, noodle soups, appetizers, desserts, and specialty drinks.",
-      "zh": "eHotPot is a Tucson restaurant focused on Chinese and Taiwanese hot pot, noodle soups, appetizers, desserts, and specialty drinks."
+      "en": "eHotPot is a chinese restaurant in Tucson, Arizona. Public contact phone: (520) 999-8839.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4508,14 +4325,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0077",
+    "id": "scraped_0074",
     "slug": "chinese-linguistic-school-of-phoenix-mesa",
     "name": {
       "en": "Chinese Linguistic School of Phoenix",
@@ -4532,11 +4349,11 @@
     "heroImage": "https://img1.wsimg.com/isteam/ip/4b4981f8-99be-4370-8c75-b8a1d4a7c8ad/cb058670-9015-4248-9b8a-d6044369159e.JPG.webp",
     "gallery": [],
     "shortDescription": {
-      "en": "2026 Restaurant Discount Card Fundraiser ends.",
+      "en": "The Fall 2026 term will begin on August 23.",
       "zh": null
     },
     "description": {
-      "en": "2026 Restaurant Discount Card Fundraiser ends. Thanks for your suport! 2026年度的餐廳優惠卡義賣活動已結束，感謝大家踴躍支持！",
+      "en": "The Fall 2026 term will begin on August 23. 2026年度秋季班將於八月23日開課 Our New Course Stay Informed. Speak Chinese Welcome to join us",
       "zh": null
     },
     "services": [],
@@ -4564,133 +4381,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:50+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0078",
-    "slug": "asian-american-journalists-association-at-asu-phoenix",
-    "name": {
-      "en": "Asian American Journalists Association at ASU",
-      "zh": null
-    },
-    "categorySlug": "education",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "555 N. Central Avenue, Phoenix, AZ, 85004",
-    "serviceAreaText": "Phoenix, Arizona",
-    "phone": null,
-    "email": null,
-    "website": "https://cronkite.asu.edu/students/student-clubs-organizations",
-    "heroImage": "https://cronkite.asu.edu/sites/g/files/litvpz4131/files/2025-09/180811-Fall-Move-In-Taylor-Place-2104-EO.jpg",
-    "gallery": [
-      "https://heritageweb.com/cdn-cgi/imagedelivery/n12z2FIWKA5iB6vfvG4ygw/Asian-American-Journalists-Association-at-ASU-68e41ac0b38a1/Profile",
-      "https://imagedelivery.net/n12z2FIWKA5iB6vfvG4ygw/Asian-American-Journalists-Association-at-ASU-social-64f756560f332/public"
-    ],
-    "shortDescription": {
-      "en": "Cronkite",
-      "zh": null
-    },
-    "description": {
-      "en": "Cronkite",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English"
-    ],
-    "searchAliases": [
-      "Asian American Journalists Association at ASU",
-      "Phoenix",
-      "education",
-      "cronkite.asu.edu/students/student-clubs-organizations",
-      "English",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.451569,
-      "lng": -112.069969
-    }
-  },
-  {
-    "id": "scraped_0079",
-    "slug": "arizona-asian-american-bar-association-phoenix",
-    "name": {
-      "en": "Arizona Asian American Bar Association",
-      "zh": null
-    },
-    "categorySlug": "legal-finance",
-    "city": "Phoenix",
-    "region": "Greater Phoenix",
-    "address": "P.O. Box 3496, Phoenix, AZ, 85003",
-    "serviceAreaText": "Phoenix, Arizona",
-    "phone": null,
-    "email": null,
-    "website": "https://www.azasianbar.org/",
-    "heroImage": "https://www.azasianbar.org/images/Azasianbar_Board_2025.png",
-    "gallery": [
-      "https://heritageweb.com/cdn-cgi/imagedelivery/n12z2FIWKA5iB6vfvG4ygw/Arizona-Asian-American-Bar-Association-68bdd8aa93f9e/public",
-      "https://www.azasianbar.org/images/English.png",
-      "https://www.azasianbar.org/images/Mandarin.png",
-      "https://www.azasianbar.org/images/Japanese.png",
-      "https://www.azasianbar.org/images/Korean.png",
-      "https://www.azasianbar.org/images/Hindi.png",
-      "https://www.azasianbar.org/images/Vietnamese.png"
-    ],
-    "shortDescription": {
-      "en": "Vision: To promote and advocate for justice, equity, equality, inclusion, and opportunity for Asian Pacific Americans (APA) in the Arizona legal profession and the community-at-large.",
-      "zh": null
-    },
-    "description": {
-      "en": "Vision: To promote and advocate for justice, equity, equality, inclusion, and opportunity for Asian Pacific Americans (APA) in the Arizona legal profession and the community-at-large. Mission: The Arizona Asian American Bar Association (AAABA) is a voluntary bar association for individuals of all backgrounds, including attorneys, judges, law professors, law students, and community members with an interest in the Arizona legal profession. Welcome to the Arizona Asian American Bar Association Attorney Directory, featuring profiles of attorneys across Arizona. You may search by Area of Practice, Popular Cities or even language preference. To get started, use the search box or view all. Search By Name Search By City Search By Zip Search By Practice Area",
-      "zh": null
-    },
-    "services": [],
-    "languages": [
-      "English",
-      "Mandarin"
-    ],
-    "searchAliases": [
-      "Arizona Asian American Bar Association",
-      "Phoenix",
-      "legal-finance",
-      "azasianbar.org",
-      "English",
-      "Mandarin",
-      "Chinese"
-    ],
-    "verified": true,
-    "bilingual": true,
-    "newcomerFriendly": false,
-    "sponsored": false,
-    "featured": false,
-    "rating": 0,
-    "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:49+00:00",
-    "status": "live",
-    "verificationState": "editor_verified",
-    "hours": [],
-    "coordinates": {
-      "lat": 33.45065,
-      "lng": -112.078569
-    }
-  },
-  {
-    "id": "scraped_0080",
+    "id": "scraped_0075",
     "slug": "china-magic-noodle-house-chandler",
     "name": {
       "en": "China Magic Noodle House",
@@ -4707,12 +4405,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Former Chandler noodle house known for hand-pulled Lanzhou-style noodles and made-to-order soups.",
-      "zh": "Former Chandler noodle house known for hand-pulled Lanzhou-style noodles and made-to-order soups."
+      "en": "Chinese restaurant in Chandler, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "China Magic Noodle House was a Chandler restaurant near Lee Lee that became known for hand-pulled noodles before closing in 2022.",
-      "zh": "China Magic Noodle House was a Chandler restaurant near Lee Lee that became known for hand-pulled noodles before closing in 2022."
+      "en": "China Magic Noodle House is a chinese restaurant in Chandler, Arizona. Public contact phone: 480-786-8002.",
+      "zh": null
     },
     "services": [
       {
@@ -4739,13 +4437,13 @@
     "rating": 0,
     "reviewCount": 0,
     "lastUpdated": "2026-04-15T21:34:08+00:00",
-    "status": "stale",
+    "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0081",
+    "id": "scraped_0076",
     "slug": "singing-pandas-asian-restaurant-bar-chandler",
     "name": {
       "en": "Singing Pandas Asian Restaurant & Bar",
@@ -4758,16 +4456,16 @@
     "serviceAreaText": null,
     "phone": "(480) 777-5050",
     "email": null,
-    "website": "https://www.singingpandaschandler.com/",
+    "website": null,
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Chandler Asian restaurant and bar with online pickup, a full bar, and free live entertainment.",
-      "zh": "Chandler Asian restaurant and bar with online pickup, a full bar, and free live entertainment."
+      "en": "Chinese restaurant in Chandler, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Singing Pandas in Chandler pairs Chinese and Asian comfort dishes with online pickup, a full bar, and regular live entertainment nights.",
-      "zh": "Singing Pandas in Chandler pairs Chinese and Asian comfort dishes with online pickup, a full bar, and regular live entertainment nights."
+      "en": "Singing Pandas Asian Restaurant & Bar is a chinese restaurant in Chandler, Arizona. Public contact phone: 480-777-5050.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4784,14 +4482,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0082",
+    "id": "scraped_0077",
     "slug": "chang-s-chinese-buffet-glendale",
     "name": {
       "en": "Chang's Chinese Buffet",
@@ -4808,12 +4506,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Glendale Chinese buffet on 43rd Avenue offering takeout, delivery, and familiar favorites.",
-      "zh": "Glendale Chinese buffet on 43rd Avenue offering takeout, delivery, and familiar favorites."
+      "en": "Chinese restaurant in Glendale, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Chinese buffet in Glendale with takeout, delivery, and a menu centered on familiar Chinese-American dishes.",
-      "zh": "Chinese buffet in Glendale with takeout, delivery, and a menu centered on familiar Chinese-American dishes."
+      "en": "Chang's Chinese Buffet is a chinese restaurant in Glendale, Arizona. Public contact phone: 623-930-6888.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4830,14 +4528,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0083",
+    "id": "scraped_0078",
     "slug": "autumn-moon-chinese-buffet-mesa",
     "name": {
       "en": "Autumn Moon Chinese Buffet",
@@ -4854,12 +4552,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa Chinese buffet on Country Club Drive serving classic buffet staples and combo-plate favorites.",
-      "zh": "Mesa Chinese buffet on Country Club Drive serving classic buffet staples and combo-plate favorites."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Chinese buffet in Mesa on Country Club Drive known for a compact buffet of familiar Chinese-American dishes and value-focused plates.",
-      "zh": "Chinese buffet in Mesa on Country Club Drive known for a compact buffet of familiar Chinese-American dishes and value-focused plates."
+      "en": "Autumn Moon Chinese Buffet is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-962-4114.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4876,14 +4574,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0084",
+    "id": "scraped_0079",
     "slug": "chili-rush-mesa",
     "name": {
       "en": "Chili Rush",
@@ -4900,12 +4598,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa Chinese restaurant known for spicy Sichuan-style dishes, noodles, and chef specialties.",
-      "zh": "Mesa Chinese restaurant known for spicy Sichuan-style dishes, noodles, and chef specialties."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Chinese restaurant in Mesa serving spicy Sichuan-style dishes, chow fun, pad thai, and chef-specialty plates on Country Club Drive.",
-      "zh": "Chinese restaurant in Mesa serving spicy Sichuan-style dishes, chow fun, pad thai, and chef-specialty plates on Country Club Drive."
+      "en": "Chili Rush is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-590-2008.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4922,14 +4620,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0085",
+    "id": "scraped_0080",
     "slug": "shaanxi-garden-mesa",
     "name": {
       "en": "Shaanxi Garden",
@@ -4946,12 +4644,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Mesa restaurant specializing in handmade noodles, barbecue, and regional Shaanxi dishes.",
-      "zh": "Mesa restaurant specializing in handmade noodles, barbecue, and regional Shaanxi dishes."
+      "en": "Chinese restaurant in Mesa, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Shaanxi Garden in Mesa's Asian market district is known for handmade noodles, barbecue, and regional dishes inspired by Shaanxi cuisine.",
-      "zh": "Shaanxi Garden in Mesa's Asian market district is known for handmade noodles, barbecue, and regional dishes inspired by Shaanxi cuisine."
+      "en": "Shaanxi Garden is a chinese restaurant in Mesa, Arizona. Public contact phone: 480-733-8888.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -4968,14 +4666,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0086",
+    "id": "scraped_0081",
     "slug": "kwan-wok-chinese-fast-food-phoenix",
     "name": {
       "en": "Kwan & Wok Chinese Fast Food",
@@ -4992,12 +4690,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Phoenix fast-casual Chinese spot on Camelback serving combo plates, fried rice, and lunch favorites.",
-      "zh": "Phoenix fast-casual Chinese spot on Camelback serving combo plates, fried rice, and lunch favorites."
+      "en": "Chinese restaurant in Phoenix, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Kwan & Wok Chinese Fast Food in Phoenix is a quick-service Chinese spot on Camelback known for combo plates, fried rice, and lunch favorites.",
-      "zh": "Kwan & Wok Chinese Fast Food in Phoenix is a quick-service Chinese spot on Camelback known for combo plates, fried rice, and lunch favorites."
+      "en": "Kwan & Wok Chinese Fast Food is a chinese restaurant in Phoenix, Arizona. Public contact phone: 602-246-7442.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -5014,14 +4712,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0087",
+    "id": "scraped_0082",
     "slug": "little-dragon-chinese-restaurant-phoenix",
     "name": {
       "en": "Little Dragon Chinese Restaurant",
@@ -5038,12 +4736,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Family-run Phoenix Chinese restaurant on Thomas Road known for honey chicken and generous portions.",
-      "zh": "Family-run Phoenix Chinese restaurant on Thomas Road known for honey chicken and generous portions."
+      "en": "Chinese restaurant in Phoenix, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Little Dragon Chinese Restaurant is a family-run Phoenix spot on Thomas Road known for honey chicken, chow mein, and solid takeout portions.",
-      "zh": "Little Dragon Chinese Restaurant is a family-run Phoenix spot on Thomas Road known for honey chicken, chow mein, and solid takeout portions."
+      "en": "Little Dragon Chinese Restaurant is a chinese restaurant in Phoenix, Arizona. Public contact phone: 602-352-1602.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -5060,14 +4758,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0088",
+    "id": "scraped_0083",
     "slug": "beijing-express-tempe",
     "name": {
       "en": "Beijing Express",
@@ -5080,16 +4778,16 @@
     "serviceAreaText": null,
     "phone": "(480) 755-2298",
     "email": null,
-    "website": "https://www.beijing-express.com/",
+    "website": null,
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "Tempe Chinese takeout restaurant on Baseline Road with online ordering and pickup.",
-      "zh": "Tempe Chinese takeout restaurant on Baseline Road with online ordering and pickup."
+      "en": "Chinese restaurant in Tempe, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Beijing Express is a Tempe Chinese takeout spot on Baseline Road with online ordering, pickup, and a wide range of classic favorites.",
-      "zh": "Beijing Express is a Tempe Chinese takeout spot on Baseline Road with online ordering, pickup, and a wide range of classic favorites."
+      "en": "Beijing Express is a chinese restaurant in Tempe, Arizona. Public contact phone: 480-755-2298.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -5106,14 +4804,14 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
     "coordinates": null
   },
   {
-    "id": "scraped_0089",
+    "id": "scraped_0084",
     "slug": "great-village-chinese-restaurant-tucson",
     "name": {
       "en": "Great Village Chinese Restaurant",
@@ -5130,12 +4828,12 @@
     "heroImage": null,
     "gallery": [],
     "shortDescription": {
-      "en": "East Tucson Chinese restaurant serving traditional dishes, set menus, and group dining.",
-      "zh": "East Tucson Chinese restaurant serving traditional dishes, set menus, and group dining."
+      "en": "Chinese restaurant in Tucson, Arizona.",
+      "zh": null
     },
     "description": {
-      "en": "Great Village Chinese Restaurant in east Tucson serves traditional Chinese dishes, set menus, and group-friendly dining.",
-      "zh": "Great Village Chinese Restaurant in east Tucson serves traditional Chinese dishes, set menus, and group-friendly dining."
+      "en": "Great Village Chinese Restaurant is a chinese restaurant in Tucson, Arizona. Public contact phone: (520) 298-5661.",
+      "zh": null
     },
     "services": [],
     "languages": [],
@@ -5152,7 +4850,7 @@
     "featured": false,
     "rating": 0,
     "reviewCount": 0,
-    "lastUpdated": "2026-04-19T15:58:46+00:00",
+    "lastUpdated": "2026-07-10T12:37:12+00:00",
     "status": "live",
     "verificationState": "editor_verified",
     "hours": [],
