@@ -217,7 +217,7 @@ jobs:
           cache: npm
           cache-dependency-path: dev.chinesearizona.com/web/package-lock.json
 
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
