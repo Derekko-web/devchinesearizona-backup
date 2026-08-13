@@ -1,104 +1,79 @@
 {
-  "happy-bao-s-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5005213/d_happy_bao_s_photo.jpg?q=69d616251da04",
+  "gilbert-chinese-church-gilbert": {
+    "heroImage": "https://azgcc.org/wp-content/uploads/2023/07/12771688749199_.pic_hd-768x576.jpg",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5005213/m_happy_bao_s_photo.jpg?q=69d616251d9fa",
-      "https://cdn6.localdatacdn.com/images/5005213/m_happy_bao_s_menu.jpg?q=69d616251da00",
-      "https://cdn6.localdatacdn.com/images/5005213/d_happy_bao_s_menu.jpg?q=69d616251da08"
+      "https://azgcc.org/wp-content/uploads/2024/03/52258477-A9D2-4AD1-9FC3-5C1C6C3846D5_1_105_c-768x576.jpg",
+      "https://azgcc.org/wp-content/uploads/2024/03/18731699675099_.pic_-768x576.jpg",
+      "https://azgcc.org/wp-content/uploads/2024/03/DSC08120-768x525.jpg",
+      "https://azgcc.org/wp-content/uploads/2024/03/DSC08183-768x432.jpg",
+      "https://azgcc.org/wp-content/uploads/2024/03/DSC08189-768x449.jpg",
+      "https://azgcc.org/wp-content/uploads/2024/03/DSC03333-768x432.jpg"
     ]
   },
   "hot-wok-chinese-restaurant-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3365980/d_hot_wok_chinese_restaurant_photo.jpg?q=69cf2c2243805",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3365980/d_hot_wok_chinese_restaurant_photo.jpg?q=6a7360b167267",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3365980/m_hot_wok_chinese_restaurant_photo.jpg?q=69cf2c22437ff"
+      "https://cdn6.localdatacdn.com/images/3365980/m_hot_wok_chinese_restaurant_photo.jpg?q=6a7360b167262"
     ]
   },
   "grand-dragon-glendale": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369012/d_grand_dragon_photo.jpg?q=69d5d0838d377",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3369012/d_grand_dragon_photo.jpg?q=6a57644d98f84",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369012/m_grand_dragon_photo.jpg?q=69d5d0838d372"
+      "https://cdn6.localdatacdn.com/images/3369012/m_grand_dragon_photo.jpg?q=6a57644d98f7e"
     ]
   },
-  "asian-cafe-express-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369447/d_asian_cafe_express_photo.jpg?q=69cf379cc72f4",
+  "81-hong-kong-cafe-tucson": {
+    "heroImage": "https://cdn6.localdatacdn.com/images/6032137/d_the_81_hong_kong_cafe_photo.jpg?q=6a6fef7588d35",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369447/m_asian_cafe_express_photo.jpg?q=69cf379cc72f0"
-    ]
-  },
-  "mekong-palace-mesa": {
-    "heroImage": "https://static.wixstatic.com/media/c1b3db_402dd611f705460486d7f9ad4d7ab039~mv2.png/v1/fill/w_991,h_671,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/c1b3db_402dd611f705460486d7f9ad4d7ab039~mv2.png"
-  },
-  "original-cuisine-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4981092/d_original_cuisine_photo.jpg?q=69ab3eb288b17",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/4981092/m_original_cuisine_photo.jpg?q=69ab3eb288b11"
-    ]
-  },
-  "autumn-court-chinese-restaurant-phoenix": {
-    "heroImage": "https://www.autumncourt.com/wp-content/uploads/2017/12/4-400x284.jpg",
-    "gallery": [
-      "https://www.autumncourt.com/wp-content/uploads/2017/08/autumn_court_entrance-1.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/08/autumn_court_location-1.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/12/11-400x284.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/12/13-400x284.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/12/8-400x284.jpg",
-      "https://www.autumncourt.com/wp-content/uploads/2017/12/12-400x284.jpg"
-    ]
-  },
-  "diamond-chinese-restaurant-phoenix": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5580833/d_diamond_chinese_restaurant_photo.jpg?q=6861eff4bc3b9",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/5580833/m_diamond_chinese_restaurant_photo.jpg?q=6861eff4bc3c4",
-      "https://cdn6.localdatacdn.com/images/5580833/d_diamond_chinese_restaurant_menu.jpg?q=6861eff4bc3bf",
-      "https://cdn6.localdatacdn.com/images/5580833/m_diamond_chinese_restaurant_menu.jpg?q=6861eff4bc3c8"
+      "https://cdn6.localdatacdn.com/images/6032137/m_the_81_hong_kong_cafe_photo.jpg?q=6a6fef7588d2a",
+      "https://cdn6.localdatacdn.com/images/6032137/m_the_81_hong_kong_cafe_menu.jpg?q=6a6fef7588d30",
+      "https://cdn6.localdatacdn.com/images/6032137/d_the_81_hong_kong_cafe_menu.jpg?q=6a6fef7588d39"
     ]
   },
   "liyuen-phoenix": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3490541/d_liyuen_photo.jpg?q=69d0cbc94c3b4",
+    "heroImage": "https://cdn.hey-restaurants.com/liyuen/photo-1.jpg",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3490541/m_liyuen_photo.jpg?q=69d0cbc94c3b0"
+      "https://hey-restaurants.com/public/dot.jpg"
     ]
-  },
-  "wong-s-chinese-dining-phoenix": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3366042/d_wong_s_chinese_dining_photo.jpg?q=69cf2c556abf5",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3366042/d_wong_s_chinese_dining_menu.jpg?q=69cf2c556abfa",
-      "https://cdn6.localdatacdn.com/images/3366042/m_wong_s_chinese_dining_menu.jpg?q=69cf2c556abfc",
-      "https://cdn6.localdatacdn.com/images/3366042/m_wong_s_chinese_dining_photo.jpg?q=69cf2c556abef"
-    ]
-  },
-  "jun-dynasty-tucson": {
-    "heroImage": "https://static1.squarespace.com/static/55ea14b4e4b067c0c5487174/t/56065eb0e4b003ca2230c29d/1443258034194/Untitled-1-Recovered.jpg?format=1500w"
   },
   "99-ranch-market-chandler": {
-    "heroImage": "https://www.azcentral.com/gcdn/-mm-/a5076e7a43a0cec6129489319d0fb728e2cd1814/c=0-264-5184-3193/local/-/media/2017/04/07/NJGroup/Bridgewater/636271627202751637-99-Ranch-4.jpg?width=3200&height=1809&fit=crop&format=pjpg&auto=webp",
+    "heroImage": "https://www.99ranch.com/images/media/linkedin.png",
     "gallery": [
-      "https://www.azcentral.com/gcdn/-mm-/a5076e7a43a0cec6129489319d0fb728e2cd1814/c=0-264-5184-3193/local/-/media/2017/04/07/NJGroup/Bridgewater/636271627202751637-99-Ranch-4.jpg?width=1600&height=800&fit=crop&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2021/06/04/PPHX/24b24667-5e2b-453e-a2dc-a1cf4881eed6-SC0577.JPG?crop=3124,1758,x0,y0&width=3124&height=1758&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2021/06/04/PPHX/24b24667-5e2b-453e-a2dc-a1cf4881eed6-SC0577.JPG?crop=3124,1758,x0,y0&width=1600&height=800&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/-mm-/a5076e7a43a0cec6129489319d0fb728e2cd1814/c=0-264-5184-3193/local/-/media/2017/04/07/NJGroup/Bridgewater/636271627202751637-99-Ranch-4.jpg?width=660&height=373&fit=crop&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2021/06/04/PPHX/24b24667-5e2b-453e-a2dc-a1cf4881eed6-SC0577.JPG?width=660&height=461&fit=crop&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2021/06/04/PPHX/f7990fa0-c6a9-4258-884c-576521535c66-_DSC0813.JPG?width=660&height=485&fit=crop&format=pjpg&auto=webp"
+      "https://www.99ranch.com/images/media/facebook.png",
+      "https://www.99ranch.com/images/media/twitter.png",
+      "https://www.99ranch.com/images/media/ins.png",
+      "https://www.99ranch.com/_next/image?url=%2Fimages%2Fabout%2Fus%2Fstores.png&w=3840&q=75",
+      "https://www.99ranch.com/_next/image?url=%2Fimages%2Fabout%2Fus%2Fmission.png&w=3840&q=75"
     ]
   },
   "a-ma-s-kitchen-and-pho-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/9059194/d_a_ma_s_kitchen_pho_photo.jpg?q=69b67ce398f27",
+    "heroImage": "https://amasphokitchen.com/wp-content/uploads/a-mas-kitchen-and-pho-dishes-2.jpg",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/9059194/m_a_ma_s_kitchen_pho_photo.jpg?q=69b67ce398f2e"
+      "https://amasphokitchen.com/wp-content/uploads/a-mas-kitchen-and-pho-dishes-3.jpg",
+      "https://amasphokitchen.com/wp-content/uploads/amas-fire-sate.jpg",
+      "https://amasphokitchen.com/wp-content/uploads/A-Mas-Kitchen-and-Pho-3.jpg",
+      "https://amasphokitchen.com/wp-content/uploads/A-Mas-Kitchen-and-Pho-Outside-copy.webp",
+      "https://amasphokitchen.com/wp-content/uploads/A-Mas-Pho-Kitchen-s1.jpg",
+      "https://amasphokitchen.com/wp-content/uploads/A-Mas-Kitchen-and-Pho-2.jpg"
     ]
   },
   "arizona-central-credit-union-chandler": {
-    "heroImage": "https://cdn9.localdatacdn.com/az/chandler/2541454/original/CIeRpHKMsA.jpg"
-  },
-  "bambu-dessert-drink-chandler": {
-    "heroImage": "https://i0.wp.com/www.solelyrecipes.com/wp-content/uploads/2024/12/bambu-desserts-drinks-Solely-Recipes-2.webp"
+    "heroImage": "https://www.azcentralcu.org/wp-content/uploads/2023/11/142-Chandler-Branch.jpg",
+    "gallery": [
+      "https://www.azcentralcu.org/wp-content/uploads/2023/11/Crystal-Chandler-Branch-2.jpg",
+      "https://www.azcentralcu.org/wp-content/uploads/2024/07/iTM-Module3-450x470-1.png",
+      "https://www.azcentralcu.org/wp-content/uploads/2024/07/iTM-Module2-450x470-1.png",
+      "https://www.azcentralcu.org/wp-content/uploads/2023/11/man-checking-watch.jpg",
+      "https://www.azcentralcu.org/wp-content/uploads/2023/10/come-in-were-local.jpg",
+      "https://www.azcentralcu.org/wp-content/uploads/2023/10/train.jpg"
+    ]
   },
   "bbq-chicken-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7283645/d_bb_q_chicken_chandler_photo.jpg?q=69b366920de90",
+    "heroImage": "https://cdn6.localdatacdn.com/images/7283645/d_bb_q_chicken_chandler_photo.jpg?q=6a2a5f0544be8",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/7283645/m_bb_q_chicken_chandler_photo.jpg?q=69b366920de87",
-      "https://cdn6.localdatacdn.com/images/7283645/m_bb_q_chicken_chandler_menu.jpg?q=69b366920de8c",
-      "https://cdn6.localdatacdn.com/images/7283645/d_bb_q_chicken_chandler_menu.jpg?q=69b366920de93"
+      "https://cdn6.localdatacdn.com/images/7283645/m_bb_q_chicken_chandler_photo.jpg?q=6a2a5f0544bdb",
+      "https://cdn6.localdatacdn.com/images/7283645/m_bb_q_chicken_chandler_menu.jpg?q=6a2a5f0544be3",
+      "https://cdn6.localdatacdn.com/images/7283645/d_bb_q_chicken_chandler_menu.jpg?q=6a2a5f0544bec"
     ]
   },
   "boba-and-brew-tea-house-chandler": {
@@ -109,24 +84,17 @@
     ]
   },
   "circle-k-chandler": {
-    "heroImage": "https://cdn2.usarestaurants.info/assets/tumbnails/5b7316d5fafcb60a5fdceb0c411db717_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-    "gallery": [
-      "https://cdn2.usarestaurants.info/assets/uploads/5b7316d5fafcb60a5fdceb0c411db717_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/945d1cfe422dd46d5582a947966dacb2_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/50fd0d6bce3dd5c68cad23a09e0251fb_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/c6f07ff72a8d7554da30259cc1169f83_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/30227c61bc436f94d2132fc1a47c6597_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/f40ef91e4b53f946715d9cfbfdfbae65_-united-states-arizona-maricopa-county-chandler-circle-k-480-892-0597htm.jpg"
-    ]
+    "heroImage": "https://cdn10.localdatacdn.com/az/chandler/15791/original/lmeh1s5fD0.jpeg"
   },
   "cvs-pharmacy-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/15353/preview.jpg"
+    "heroImage": "https://storelocatortool.com/v3/images/cvs-pharmacy-locations-banner.png"
   },
   "cyclo-vietnamese-cuisine-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4925784/d_cyclo_vietnamese_cuisine_photo.jpg?q=69d53e2c80726",
+    "heroImage": "https://cdn6.localdatacdn.com/images/4925784/d_cyclo_vietnamese_cuisine_photo.jpg?q=6a4add85e9e11",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4925784/m_cyclo_vietnamese_cuisine_photo.jpg?q=69d53e2c8071d",
-      "https://cdn6.localdatacdn.com/images/4925784/m_cyclo_vietnamese_cuisine_menu.jpg?q=69d53e2c80722"
+      "https://cdn6.localdatacdn.com/images/4925784/m_cyclo_vietnamese_cuisine_photo.jpg?q=6a4add85e9e05",
+      "https://cdn6.localdatacdn.com/images/4925784/m_cyclo_vietnamese_cuisine_menu.jpg?q=6a4add85e9e0c",
+      "https://cdn6.localdatacdn.com/images/4925784/d_cyclo_vietnamese_cuisine_menu.jpg?q=6a4add85e9e15"
     ]
   },
   "daiso-japan-chandler": {
@@ -135,64 +103,65 @@
       "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/7d3cc145-01cb-4c0d-a85b-fa4391025623-Daiso053.jpg?crop=3509,1974,x1,y0&width=1600&height=800&format=pjpg&auto=webp",
       "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/7d3cc145-01cb-4c0d-a85b-fa4391025623-Daiso053.jpg?width=660&height=462&fit=crop&format=pjpg&auto=webp",
       "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/097eaba7-d96c-456f-9703-11cf77e3b261-Daiso072.jpg?width=660&height=441&fit=crop&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/bb34e66d-78b3-4c0a-92fa-1587685dbdb5-Daiso062.jpg?width=660&height=441&fit=crop&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/c662e64e-7248-4eb4-af14-de243eb020ba-Daiso054.jpg?width=660&height=439&fit=crop&format=pjpg&auto=webp"
+      "https://www.azcentral.com/gcdn/presto/2023/03/02/PPHX/bb34e66d-78b3-4c0a-92fa-1587685dbdb5-Daiso062.jpg?width=660&height=441&fit=crop&format=pjpg&auto=webp"
     ]
   },
   "denny-s-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/9524263/d_denny_s_photo.jpg?q=69ca86583416c",
+    "heroImage": "https://cdn6.localdatacdn.com/images/15468/d_denny_s_restaurant_photo.jpg?q=6a616b1d17c57",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/9524263/m_denny_s_photo.jpg?q=69ca865834167"
-    ]
-  },
-  "gen-korean-bbq-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7694588/d_gen_korean_bbq_house_photo.jpg?q=69b4f56974287",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/7694588/m_gen_korean_bbq_house_photo.jpg?q=69b4f5697427d",
-      "https://cdn6.localdatacdn.com/images/7694588/m_gen_korean_bbq_house_menu.jpg?q=69b4f56974283",
-      "https://cdn6.localdatacdn.com/images/7694588/d_gen_korean_bbq_house_menu.jpg?q=69b4f5697428e"
+      "https://cdn6.localdatacdn.com/images/15468/m_denny_s_restaurant_photo.jpg?q=6a616b1d17c52"
     ]
   },
   "jack-in-the-box-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/15538/d_jack_in_the_box_photo.jpg?q=69cbbed4c462d",
+    "heroImage": "https://locations.jackinthebox.com/media/1gvlszfi/two-tacos.png",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/15534/d_jack_in_the_box_photo.jpg?q=69cbbecf51b0b",
-      "https://cdn6.localdatacdn.com/images/15538/m_jack_in_the_box_photo.jpg?q=69cbbed4c4629",
-      "https://cdn6.localdatacdn.com/images/15534/m_jack_in_the_box_photo.jpg?q=69cbbecf51b07",
-      "https://cdn6.localdatacdn.com/images/15538/m_jack_in_the_box_menu.jpg?q=69cbbed4c4630",
-      "https://cdn6.localdatacdn.com/images/15538/d_jack_in_the_box_menu.jpg?q=69cbbed4c4632",
-      "https://cdn6.localdatacdn.com/images/15534/m_jack_in_the_box_menu.jpg?q=69cbbecf51b0c"
+      "https://locations.jackinthebox.com/media/cxddow4x/homestyle-ranch-chicken-club.webp",
+      "https://locations.jackinthebox.com/media/m00fvvhm/jitb_store1.jpg"
     ]
   },
   "kisses-nails-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3899066/m_kisses_nails_photo.jpg?q=6984f8a510714"
+    "heroImage": "https://cdn6.localdatacdn.com/images/3899066/m_kisses_nails_photo.jpg?q=69f10b1ae4811"
   },
   "kura-sushi-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6497364/d_kura_revolving_sushi_bar_photo.jpg?q=69da2ca68e850",
+    "heroImage": "https://cdn6.localdatacdn.com/images/6497364/d_kura_revolving_sushi_bar_photo.jpg?q=6a75466dc21be",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/6497364/m_kura_revolving_sushi_bar_photo.jpg?q=69da2ca68e84b",
-      "https://cdn6.localdatacdn.com/images/6497364/m_kura_revolving_sushi_bar_menu.jpg?q=69da2ca68e855",
-      "https://cdn6.localdatacdn.com/images/6497364/d_kura_revolving_sushi_bar_menu.jpg?q=69da2ca68e857"
+      "https://cdn6.localdatacdn.com/images/6497364/m_kura_revolving_sushi_bar_photo.jpg?q=6a75466dc21b9",
+      "https://cdn6.localdatacdn.com/images/6497364/m_kura_revolving_sushi_bar_menu.jpg?q=6a75466dc21c3"
     ]
   },
   "lee-s-sandwiches-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369360/d_lee_s_sandwiches_photo.jpg?q=69cf3799df725",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3369360/d_lee_s_sandwiches_photo.jpg?q=6a57751d8ad0c",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369360/m_lee_s_sandwiches_photo.jpg?q=69cf3799df71d"
+      "https://cdn6.localdatacdn.com/images/3369360/m_lee_s_sandwiches_photo.jpg?q=6a57751d8ad02",
+      "https://cdn6.localdatacdn.com/images/3369360/m_lee_s_sandwiches_menu.jpg?q=6a57751d8ad07",
+      "https://cdn6.localdatacdn.com/images/3369360/d_lee_s_sandwiches_menu.jpg?q=6a57751d8ad0f"
+    ]
+  },
+  "los-favoritos-taco-shop-chandler": {
+    "heroImage": "https://cdn6.localdatacdn.com/images/3624688/d_los_favoritos_taco_shop_photo.jpg?q=6a5810e812543",
+    "gallery": [
+      "https://cdn6.localdatacdn.com/images/3624688/m_los_favoritos_taco_shop_photo.jpg?q=6a5810e812538",
+      "https://cdn6.localdatacdn.com/images/3624688/m_los_favoritos_taco_shop_menu.jpg?q=6a5810e81253d",
+      "https://cdn6.localdatacdn.com/images/3624688/d_los_favoritos_taco_shop_menu.jpg?q=6a5810e812545"
     ]
   },
   "mcdonald-s-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/15398/d_mcdonald_s_photo.jpg?q=69cbbe5f4c080",
+    "heroImage": "https://cdn6.localdatacdn.com/images/573405/m_mcdonald_s_photo.jpg?q=6a4b52a480994",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/7301408/d_mcdonald_s_photo.jpg?q=69b39595a2601",
-      "https://cdn6.localdatacdn.com/images/15398/m_mcdonald_s_photo.jpg?q=69cbbe5f4c07b",
-      "https://cdn6.localdatacdn.com/images/7301408/m_mcdonald_s_photo.jpg?q=69b39595a25fb"
+      "https://cdn6.localdatacdn.com/images/15404/m_mcdonald_s_photo.jpg?q=6a4b52a486f4a",
+      "https://cdn6.localdatacdn.com/images/15403/m_mcdonald_s_photo.jpg?q=6a4b52a48ee7c",
+      "https://cdn6.localdatacdn.com/images/7301408/m_mcdonald_s_photo.jpg?q=6a4b52a491f0f",
+      "https://cdn6.localdatacdn.com/images/15401/m_mcdonald_s_photo.jpg?q=6a4b52a4960fc",
+      "https://cdn6.localdatacdn.com/images/15400/m_mcdonald_s_photo.jpg?q=6a4b52a49becc",
+      "https://cdn6.localdatacdn.com/images/15398/m_mcdonald_s_photo.jpg?q=6a4b52a4a1fcd"
     ]
   },
   "meet-fresh-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6446015/d_meet_fresh_photo.jpg?q=69b07daab17bf",
+    "heroImage": "https://cdn6.localdatacdn.com/images/6446015/d_meet_fresh_photo.jpg?q=6a617088a3532",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/6446015/m_meet_fresh_photo.jpg?q=69b07daab17b6"
+      "https://cdn6.localdatacdn.com/images/6446015/m_restaurantji_meet_fresh_photo.jpg?q=6a617088a3528",
+      "https://cdn6.localdatacdn.com/images/6446015/m_meet_fresh_menu.jpg?q=6a617088a352d",
+      "https://cdn6.localdatacdn.com/images/6446015/d_meet_fresh_menu.jpg?q=6a617088a3536"
     ]
   },
   "miracle-ear-chandler": {
@@ -207,40 +176,32 @@
     ]
   },
   "ramen-hood-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7283648/d_ramen_hood_photo.jpg?q=69b36694e8a5e",
+    "heroImage": "https://cdn6.localdatacdn.com/images/7283648/d_ramen_hood_photo.jpg?q=6a2a5f0d22ab9",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/7283648/m_ramen_hood_photo.jpg?q=69b36694e8a5a",
-      "https://cdn6.localdatacdn.com/images/7283648/m_ramen_hood_menu.jpg?q=69b36694e8a60",
-      "https://cdn6.localdatacdn.com/images/7283648/d_ramen_hood_menu.jpg?q=69b36694e8a63"
+      "https://cdn6.localdatacdn.com/images/7283648/m_ramen_hood_photo.jpg?q=6a2a5f0d22ab4",
+      "https://cdn6.localdatacdn.com/images/7283648/m_ramen_hood_menu.jpg?q=6a2a5f0d22abc",
+      "https://cdn6.localdatacdn.com/images/7283648/d_ramen_hood_menu.jpg?q=6a2a5f0d22abf"
     ]
   },
   "salad-and-go-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3488797/d_salad_and_go_photo.jpg?q=69d0c60a4a890",
+    "heroImage": "https://cdn6.localdatacdn.com/images/6127740/d_salad_and_go_photo.jpg?q=6a6ed33138ed0",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/6127740/d_salad_and_go_photo.jpg?q=69baf5b613504",
-      "https://cdn6.localdatacdn.com/images/3488797/m_salad_and_go_photo.jpg?q=69d0c60a4a886",
-      "https://cdn6.localdatacdn.com/images/6127740/m_salad_and_go_photo.jpg?q=69baf5b6134fc",
-      "https://cdn6.localdatacdn.com/images/3488797/m_salad_and_go_menu.jpg?q=69d0c60a4a88c",
-      "https://cdn6.localdatacdn.com/images/3488797/d_salad_and_go_menu.jpg?q=69d0c60a4a896",
-      "https://cdn6.localdatacdn.com/images/6127740/m_salad_and_go_menu.jpg?q=69baf5b613501"
+      "https://cdn6.localdatacdn.com/images/6127740/m_salad_and_go_photo.jpg?q=6a6ed33138ec6"
     ]
   },
   "sola-salons-chandler": {
-    "heroImage": "https://solasalonstudios.s3.amazonaws.com/Sola-Opengraph-Image-2024.jpg"
+    "heroImage": "https://cdn6.localdatacdn.com/images/3897104/m_sola_salon_studios_photo.jpg?q=6a4fdca82e79f"
   },
   "somisomi-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6807285/d_somisomi_photo.jpg?q=69b20f4230fd4",
+    "heroImage": "https://cdn6.localdatacdn.com/images/6807285/d_somisomi_photo.jpg?q=6a71851433924",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/6807285/m_somisomi_photo.jpg?q=69b20f4230fcd",
-      "https://cdn6.localdatacdn.com/images/6807285/m_somisomi_menu.jpg?q=69b20f4230fd9",
-      "https://cdn6.localdatacdn.com/images/6807285/d_somisomi_menu.jpg?q=69b20f4230fde"
+      "https://cdn6.localdatacdn.com/images/6807285/m_somisomi_photo.jpg?q=6a7185143391e",
+      "https://cdn6.localdatacdn.com/images/6807285/m_somisomi_menu.jpg?q=6a7185143392a",
+      "https://cdn6.localdatacdn.com/images/6807285/d_somisomi_menu.jpg?q=6a7185143392f"
     ]
   },
   "subway-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/15428/d_subway_photo.jpg?q=69cbbe7f52c8a",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/15428/m_subway_photo.jpg?q=69cbbe7f52c85"
-    ]
+    "heroImage": "https://restaurants.subway.com/permanent-b0b701/assets/images/Subway2.d3e81a68.jpg"
   },
   "teso-life-chandler": {
     "heroImage": "https://www.azcentral.com/gcdn/authoring/authoring-images/2024/01/05/PPHX/72124551007-teso-life-257.jpg?crop=2997,1686,x1,y313&width=2997&height=1686&format=pjpg&auto=webp",
@@ -250,55 +211,57 @@
     ]
   },
   "the-hungry-monk-chandler": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3370983/d_the_hungry_monk_photo.jpg?q=69db85c3a2780",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3370983/d_the_hungry_monk_photo.jpg?q=6a6a07a0f0c87",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3370983/m_the_hungry_monk_photo.jpg?q=69db85c3a278a"
+      "https://cdn6.localdatacdn.com/images/3370983/m_the_hungry_monk_photo.jpg?q=6a6a07a0f0c91"
     ]
   },
   "walgreens-chandler": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/chandler/15340/original/7WcNMuJVPT.jpeg"
+    "heroImage": "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card1_4up.jpg",
+    "gallery": [
+      "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card4_4up.jpg",
+      "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card2_4up.jpg"
+    ]
   },
   "walgreens-chandler-2": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/chandler/15340/original/7WcNMuJVPT.jpeg"
+    "heroImage": "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card1_4up.jpg",
+    "gallery": [
+      "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card4_4up.jpg",
+      "https://www.walgreens.com/content/dam/connectedassets/walgreens/us/en/shop-page/image-renditions/20260802_SP_ShopEnterpriseA_Image_Card2_4up.jpg"
+    ]
   },
   "aa-ozzy-bakery-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3826292/d_aa_ozzy_bakery_photo.jpg?q=69d40c63efc5d",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3826292/d_aa_ozzy_bakery_photo.jpg?q=69f01ad0cbe7e",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3826292/m_aa_ozzy_bakery_photo.jpg?q=69d40c63efc57",
-      "https://cdn6.localdatacdn.com/images/3826292/d_aa_ozzy_bakery_menu.jpg?q=69d40c63efc61",
-      "https://cdn6.localdatacdn.com/images/3826292/m_aa_ozzy_bakery_menu.jpg?q=69d40c63efc64"
+      "https://cdn6.localdatacdn.com/images/3826292/m_aa_ozzy_bakery_photo.jpg?q=69f01ad0cbe76"
     ]
   },
   "artistic-dragon-jeweler-mesa": {
     "heroImage": "https://cdn10.localdatacdn.com/az/mesa/5047442/original/cz3MJPZSFi.jpeg"
   },
   "beijing-acupuncture-and-health-center-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6246620/m_beijing_acupuncture_photo.jpg?q=69a499903ba8d"
+    "heroImage": "https://img.aculocator.com/aculocator/arizona-mesa-beijing-acupuncture-mesa.jpg"
   },
   "binh-duong-quan-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5931464/d_binh_duong_quan_photo.jpg?q=677f23120717a",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5931464/d_binh_duong_quan_photo.jpg?q=6a7d70d8d705d",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5931464/m_binh_duong_quan_photo.jpg?q=677f231207168",
-      "https://cdn6.localdatacdn.com/images/5931464/m_binh_duong_quan_menu.jpg?q=677f231207184",
-      "https://cdn6.localdatacdn.com/images/5931464/d_binh_duong_quan_menu.jpg?q=677f23120718f"
-    ]
-  },
-  "bun-bo-hue-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4901555/d_bun_bo_hue_photo.jpg?q=69d4dbc1bfd64",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/4901555/m_bun_bo_hue_photo.jpg?q=69d4dbc1bfd5b"
+      "https://cdn6.localdatacdn.com/images/5931464/m_binh_duong_quan_photo.jpg?q=6a7d70d8d7058",
+      "https://cdn6.localdatacdn.com/images/5931464/m_binh_duong_quan_menu.jpg?q=6a7d70d8d7061",
+      "https://cdn6.localdatacdn.com/images/5931464/d_binh_duong_quan_menu.jpg?q=6a7d70d8d7063"
     ]
   },
   "cha-tea-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5634504/d_cha_tea_photo.jpg?q=69d7b4e97268d",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5634504/d_cha_tea_photo.jpg?q=6a54fb6b6b7b3",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5634504/m_cha_tea_photo.jpg?q=69d7b4e972697"
+      "https://cdn6.localdatacdn.com/images/5634504/m_cha_tea_photo.jpg?q=6a54fb6b6b7bf"
     ]
   },
   "coconut-jelly-king-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/8598038/d_coconut_jelly_king_mesa_arizona_photo.jpg?q=69b6186ab80a3",
+    "heroImage": "https://cdn6.localdatacdn.com/images/8598038/d_coconut_jelly_king_mesa_arizona_photo.jpg?q=6a3d7a94d724a",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/8598038/m_coconut_jelly_king_mesa_arizona_photo.jpg?q=69b6186ab809d"
+      "https://cdn6.localdatacdn.com/images/8598038/m_coconut_jelly_king_mesa_arizona_photo.jpg?q=6a3d7a94d7246",
+      "https://cdn6.localdatacdn.com/images/8598038/m_coconut_jelly_king_mesa_arizona_menu.jpg?q=6a3d7a94d724f",
+      "https://cdn6.localdatacdn.com/images/8598038/d_coconut_jelly_king_mesa_arizona_menu.jpg?q=6a3d7a94d7252"
     ]
   },
   "comfort-foot-and-body-massage-mesa": {
@@ -316,173 +279,102 @@
     "heroImage": "https://cdn6.localdatacdn.com/images/2473612/preview.jpg"
   },
   "da-pan-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6632273/d_da_pan_danny_s_kitchen_photo.jpg?q=69de9a4a15cfa",
+    "heroImage": "https://cdn6.localdatacdn.com/images/6632273/d_da_pan_danny_s_kitchen_photo.jpg?q=6a1b5150390bb",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/6632273/m_da_pan_danny_s_kitchen_photo.jpg?q=69de9a4a15d08"
+      "https://cdn6.localdatacdn.com/images/6632273/m_da_pan_danny_s_kitchen_photo.jpg?q=6a1b5150390c8"
     ]
   },
   "daruma-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5929402/d_daruma_sushi_roll_noodle_photo.jpg?q=69d842ca72a8b",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5929402/d_daruma_sushi_roll_noodle_photo.jpg?q=6a5a88eb13085",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5929402/m_daruma_sushi_roll_noodle_photo.jpg?q=69d842ca72a85"
+      "https://cdn6.localdatacdn.com/images/5929402/m_daruma_sushi_roll_noodle_photo.jpg?q=6a5a88eb13080"
     ]
   },
   "deer-garden-signature-mesa": {
-    "heroImage": "https://cdn2.usarestaurants.info/assets/tumbnails/4eadacbbfe668565a459219c9bf170af_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
+    "heroImage": "https://img.restaurantguru.com/w550/h367/r660-meat-Deer-Garden-Signatures-2022-11-4.jpg",
     "gallery": [
-      "https://cdn2.usarestaurants.info/assets/uploads/4eadacbbfe668565a459219c9bf170af_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/486395a835b3be90eb3759f0c03b0d17_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/9d9f41cabbfdb3222aa4900a1c68e754_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/724ef30d7b33bd7398313a772ed3fed3_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/683699a3f1a990f65f886acce3f9c96b_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/4a20f84ac76d0c6e8a58901ad3a4ad50_-united-states-arizona-maricopa-county-mesa-840111-deer-garden-signatureshtm.jpg"
+      "https://img.restaurantguru.com/r660-meat-Deer-Garden-Signatures-2022-11-4.jpg"
     ]
-  },
-  "diamond-national-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3717728/d_diamond_s_sports_grille_photo.jpg?q=69d37c6760b99",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3717728/m_diamond_s_sports_grille_photo.jpg?q=69d37c6760b8d",
-      "https://cdn6.localdatacdn.com/images/3717728/m_diamond_s_sports_grille_menu.jpg?q=69d37c6760b94",
-      "https://cdn6.localdatacdn.com/images/3717728/d_diamond_s_sports_grille_menu.jpg?q=69d37c6760b9e"
-    ]
-  },
-  "discount-tire-mesa": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/14463/original/PdSPaRYeka.jpg"
   },
   "dong-feng-seafood-city-mesa": {
-    "heroImage": "https://whatnow.com/wp-content/uploads/2025/12/seafood_city_one.jpg",
+    "heroImage": "https://www.azcentral.com/gcdn/authoring/authoring-images/2026/07/20/PPHX/90989638007-seafood-city-9.jpg?crop=5436,3060,x0,y278&width=3200&height=1802&format=pjpg&auto=webp",
     "gallery": [
-      "https://whatnow.com/wp-content/uploads/2025/12/seafoodcity_two.jpg",
-      "https://whatnow.com/wp-content/uploads/2026/04/The-Tendit-Group-1.jpg",
-      "https://whatnow.com/wp-content/uploads/2026/04/Pizzicata-Glendale.jpg",
-      "https://whatnow.com/wp-content/uploads/2026/04/postino_one.jpg",
-      "https://whatnow.com/wp-content/uploads/2026/04/berrydivine_one.jpg",
-      "https://whatnow.com/wp-content/uploads/2026/04/olive_farmer.png"
+      "https://www.azcentral.com/gcdn/authoring/authoring-images/2026/07/20/PPHX/90989638007-seafood-city-9.jpg?crop=5436,3060,x0,y278&width=1600&height=800&format=pjpg&auto=webp",
+      "https://www.azcentral.com/gciaf/prod/p?a=pageview&p=PPHX-TEALIUM-TANGENT&m=web&k=f14ebdd6-0569-4c64-af73-99937bc06379&s=noscript"
     ]
   },
   "filiberto-s-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369467/d_filiberto_s_mexican_food_photo.jpg?q=69cf37aae0d8d",
+    "heroImage": "https://filibertos.com/wp-content/uploads/2026/01/transparent-hero.png",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369466/d_filiberto_s_mexican_food_photo.jpg?q=69937d6a93305",
-      "https://cdn6.localdatacdn.com/images/3369467/m_filiberto_s_mexican_food_menu.jpg?q=69cf37aae0d8a",
-      "https://cdn6.localdatacdn.com/images/3369467/d_filiberto_s_mexican_food_menu.jpg?q=69cf37aae0d91",
-      "https://cdn6.localdatacdn.com/images/3369467/m_filiberto_s_mexican_food_photo.jpg?q=69cf37aae0d86",
-      "https://cdn6.localdatacdn.com/images/3369466/m_filiberto_s_mexican_food_menu.jpg?q=69937d6a93302",
-      "https://cdn6.localdatacdn.com/images/3369466/d_filiberto_s_mexican_food_menu.jpg?q=69937d6a93308"
+      "https://filibertos.com/wp-content/uploads/2026/01/California-Burrito-1024x683.jpg",
+      "https://filibertos.com/wp-content/uploads/2026/01/Pollo-Asado-Taco-1024x683.jpg",
+      "https://filibertos.com/wp-content/uploads/2026/01/Machaca-Plate-1024x683.jpg",
+      "https://filibertos.com/wp-content/uploads/2026/01/Spanish-Omelette-1024x683.jpg"
     ]
   },
   "firehouse-subs-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/14830/d_firehouse_subs_mckellips_marketplace_photo.jpg?q=69cbbe070120c",
+    "heroImage": "https://cdn6.localdatacdn.com/images/14830/d_firehouse_subs_mckellips_marketplace_photo.jpg?q=6a616a030d431",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/14830/m_firehouse_subs_mckellips_marketplace_photo.jpg?q=69cbbe0701207",
-      "https://cdn6.localdatacdn.com/images/14830/m_firehouse_subs_mckellips_marketplace_menu.jpg?q=69cbbe070120f",
-      "https://cdn6.localdatacdn.com/images/14830/d_firehouse_subs_mckellips_marketplace_menu.jpg?q=69cbbe0701213"
+      "https://cdn6.localdatacdn.com/images/14830/m_firehouse_subs_mckellips_marketplace_photo.jpg?q=6a616a030d42c",
+      "https://cdn6.localdatacdn.com/images/14830/m_firehouse_subs_mckellips_marketplace_menu.jpg?q=6a616a030d434",
+      "https://cdn6.localdatacdn.com/images/14830/d_firehouse_subs_mckellips_marketplace_menu.jpg?q=6a616a030d437"
     ]
   },
   "gangnam-bbq-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4988474/d_gangnam_bbq_photo.jpg?q=6830b06d0e96d",
+    "heroImage": "https://cdn6.localdatacdn.com/images/4988474/d_gangnam_bbq_photo.jpg?q=6a7ca0d0b5a68",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4988474/m_gangnam_bbq_photo.jpg?q=6830b06d0e967"
+      "https://cdn6.localdatacdn.com/images/4988474/m_gangnam_bbq_photo.jpg?q=6a7ca0d0b5a63"
     ]
   },
   "global-courier-express-mesa": {
     "heroImage": "https://cdn10.localdatacdn.com/az/mesa/9472976/original/YhXAvG9Ivt.jpeg"
   },
-  "h-mart-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5926113/d_h_mart_mesa_photo.jpg?q=69d839565cd44",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/5926113/m_h_mart_mesa_photo.jpg?q=69d839565cd3b",
-      "https://cdn6.localdatacdn.com/images/5926113/m_h_mart_mesa_menu.jpg?q=69d839565cd40",
-      "https://cdn6.localdatacdn.com/images/5926113/d_h_mart_mesa_menu.jpg?q=69d839565cd48"
-    ]
-  },
-  "heads-up-spa-mesa": {
-    "heroImage": "https://spareviewmag.com/wp-content/uploads/2026/03/heads-up-spa-mesa-1.jpg",
-    "gallery": [
-      "https://spareviewmag.com/wp-content/uploads/2026/03/heads-up-spa-mesa-1-520x397.jpg"
-    ]
-  },
   "hi-tech-dentistry-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/8536972/m_hi_tech_dentistry_photo.jpg?q=6913917ea61eb"
+    "heroImage": "https://cdn6.localdatacdn.com/images/8536972/m_hi_tech_dentistry_photo.jpg?q=6a55bc7dbe129"
   },
   "hodori-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3371019/d_hodori_photo.jpg?q=69cf3c6d90856",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3371019/d_hodori_photo.jpg?q=6a57a6b9c6bf9",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3371019/m_hodori_photo.jpg?q=69cf3c6d90863",
-      "https://cdn6.localdatacdn.com/images/3371019/d_hodori_menu.jpg?q=69cf3c6d9085c"
+      "https://cdn6.localdatacdn.com/images/3371019/m_hodori_photo.jpg?q=6a57a6b9c6c02",
+      "https://cdn6.localdatacdn.com/images/3371019/d_hodori_menu.jpg?q=6a57a6b9c6bfd"
     ]
-  },
-  "hong-kong-cafe-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369514/d_best_hong_kong_dining_photo.jpg?q=69cf37d2cafed",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369514/d_best_hong_kong_dining_menu.jpg?q=69cf37d2caff2",
-      "https://cdn6.localdatacdn.com/images/3369514/m_best_hong_kong_dining_menu.jpg?q=69cf37d2caff6",
-      "https://cdn6.localdatacdn.com/images/3369514/m_best_hong_kong_dining_photo.jpg?q=69cf37d2cafe6"
-    ]
-  },
-  "hong-kong-gifts-mesa": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/6830550/original/ApTdsMBBQO.jpeg"
-  },
-  "hung-s-hair-design-by-victor-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3898521/m_hung_s_hair_design_photo.jpg?q=68b6894195865"
   },
   "hungs-hair-design-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3898521/m_hung_s_hair_design_photo.jpg?q=68b6894195865"
+    "heroImage": "https://cdn6.localdatacdn.com/images/3898521/m_hung_s_hair_design_photo.jpg?q=69f10a69c886b"
   },
   "jack-in-the-box-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/14873/d_jack_in_the_box_photo.jpg?q=69cbbe3156b3e",
+    "heroImage": "https://cdn6.localdatacdn.com/images/14873/d_jack_in_the_box_photo.jpg?q=6a616a8214420",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/14873/m_jack_in_the_box_photo.jpg?q=69cbbe3156b39",
-      "https://cdn6.localdatacdn.com/images/14873/d_jack_in_the_box_menu.jpg?q=69cbbe3156b41",
-      "https://cdn6.localdatacdn.com/images/14873/m_jack_in_the_box_menu.jpg?q=69cbbe3156b43"
+      "https://cdn6.localdatacdn.com/images/14873/m_jack_in_the_box_photo.jpg?q=6a616a8214419",
+      "https://cdn6.localdatacdn.com/images/14873/d_jack_in_the_box_menu.jpg?q=6a616a8214425",
+      "https://cdn6.localdatacdn.com/images/14873/m_jack_in_the_box_menu.jpg?q=6a616a8214429"
     ]
-  },
-  "jax-and-ko-international-mesa": {
-    "heroImage": "https://azcompanydb.com/qrcode//company/L17451682/jax-ko-international-llc.html.png?label=Jax%20%26%20Ko%20International%20Llc"
   },
   "jina-s-salon-mesa": {
-    "heroImage": "https://linktr.ee/og/image/hairby_jina.jpg"
-  },
-  "kickin-crab-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/9454714/d_the_kickin_crab_mesa_photo.jpg?q=69bda00d20f0a",
+    "heroImage": "https://vicxle.github.io/jina-salon/images/outside.png",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/9454714/m_the_kickin_crab_mesa_photo.jpg?q=69bda00d20f06",
-      "https://cdn6.localdatacdn.com/images/9454714/m_the_kickin_crab_mesa_menu.jpg?q=69bda00d20efd",
-      "https://cdn6.localdatacdn.com/images/9454714/d_the_kickin_crab_mesa_menu.jpg?q=69bda00d20f03"
+      "https://vicxle.github.io/jina-salon/images/Stylist 2.jpg",
+      "https://vicxle.github.io/jina-salon/images/Stylist 1.jpg",
+      "https://vicxle.github.io/jina-salon/images/Stylist 3.jpg",
+      "https://vicxle.github.io/jina-salon/images/Stylist 4.jpg"
     ]
   },
-  "korea-mart-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5926113/d_h_mart_mesa_photo.jpg?q=69d839565cd44",
+  "kickin-crab-mesa": {
+    "heroImage": "https://cdn6.localdatacdn.com/images/9454714/d_the_kickin_crab_mesa_photo.jpg?q=6a493ecddd00b",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5926113/m_h_mart_mesa_photo.jpg?q=69d839565cd3b",
-      "https://cdn6.localdatacdn.com/images/5926113/m_h_mart_mesa_menu.jpg?q=69d839565cd40",
-      "https://cdn6.localdatacdn.com/images/5926113/d_h_mart_mesa_menu.jpg?q=69d839565cd48"
+      "https://cdn6.localdatacdn.com/images/9454714/m_the_kickin_crab_mesa_photo.jpg?q=6a493ecddd007",
+      "https://cdn6.localdatacdn.com/images/9454714/m_the_kickin_crab_mesa_menu.jpg?q=6a493ecddcfff",
+      "https://cdn6.localdatacdn.com/images/9454714/d_the_kickin_crab_mesa_menu.jpg?q=6a493ecddd004"
     ]
   },
   "krispy-kreme-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/14797/d_krispy_kreme_photo.jpg?q=69cbbde3889ad",
+    "heroImage": "https://krispykreme.ca/wp-content/uploads/2020/02/Factory-web.jpg",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/14796/d_krispy_kreme_photo.jpg?q=69de32ffb7531",
-      "https://cdn6.localdatacdn.com/images/14797/m_krispy_kreme_photo.jpg?q=69cbbde3889a7",
-      "https://cdn6.localdatacdn.com/images/14796/m_krispy_kreme_photo.jpg?q=69de32ffb752c"
-    ]
-  },
-  "little-caesars-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/14725/d_little_caesars_pizza_photo.jpg?q=69cbbda14f8ae",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/14729/d_little_caesars_pizza_photo.jpg?q=69cbbda5cd9e2",
-      "https://cdn6.localdatacdn.com/images/14723/d_little_caesars_pizza_photo.jpg?q=69cbbda153d44",
-      "https://cdn6.localdatacdn.com/images/14725/m_little_caesars_pizza_photo.jpg?q=69cbbda14f8a6",
-      "https://cdn6.localdatacdn.com/images/14729/m_little_caesars_pizza_photo.jpg?q=69cbbda5cd9de",
-      "https://cdn6.localdatacdn.com/images/14723/m_little_caesars_pizza_photo.jpg?q=69cbbda153d3e",
-      "https://cdn6.localdatacdn.com/images/14725/m_little_caesars_pizza_menu.jpg?q=69cbbda14f8aa"
+      "https://krispykreme.ca/wp-content/themes/krispykreme/dist/images/canada_fef2d678.png"
     ]
   },
   "mcdonald-s-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/14665/d_mcdonald_s_photo.jpg?q=69cbbd5ee8663",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/14665/m_mcdonald_s_photo.jpg?q=69cbbd5ee8669"
-    ]
+    "heroImage": "https://macmenuprices.com/wp-content/uploads/2026/06/Latest_McDonalds_menu_with_prices_2026.webp"
   },
   "meet-fresh-mesa": {
     "heroImage": "https://cdn6.localdatacdn.com/images/6983188/d_meet_fresh_photo.jpg?q=68b6020ce8ee2",
@@ -492,32 +384,12 @@
       "https://cdn6.localdatacdn.com/images/6983188/d_meet_fresh_menu.jpg?q=68b6020ce8eea"
     ]
   },
-  "mekong-supermarket-mesa": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/2400025/original/ybSPdREF0B.jpg"
-  },
-  "mekong-vietnamese-sandwiches-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3371017/d_mekong_sandwiches_photo.jpg?q=69cf3c6b179f3",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3371017/m_mekong_sandwiches_photo.jpg?q=69cf3c6b179ed",
-      "https://cdn6.localdatacdn.com/images/3371017/d_mekong_sandwiches_menu.jpg?q=69cf3c6b179f8",
-      "https://cdn6.localdatacdn.com/images/3371017/m_mekong_sandwiches_menu.jpg?q=69cf3c6b179fe"
-    ]
-  },
   "nagasaki-grill-toh-zan-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5476085/d_toh_zan_nagasaki_grill_photo.jpg?q=69d6d1cc414a9",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5476085/d_toh_zan_nagasaki_grill_photo.jpg?q=6a4dbc8b20a15",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5476085/m_toh_zan_nagasaki_grill_photo.jpg?q=69d6d1cc414a3",
-      "https://cdn6.localdatacdn.com/images/5476085/d_toh_zan_nagasaki_grill_menu.jpg?q=69d6d1cc414ae",
-      "https://cdn6.localdatacdn.com/images/5476085/m_toh_zan_nagasaki_grill_menu.jpg?q=69d6d1cc414b2"
-    ]
-  },
-  "name-brand-exchange-mesa": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/5017981/original/JVaApiE3fh.jpg"
-  },
-  "oregano-s-pizza-bistro-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369267/d_oregano_s_photo.jpg?q=69cf371b9f278",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369267/m_oregano_s_photo.jpg?q=69cf371b9f26d"
+      "https://cdn6.localdatacdn.com/images/5476085/m_toh_zan_nagasaki_grill_photo.jpg?q=6a4dbc8b20a11",
+      "https://cdn6.localdatacdn.com/images/5476085/d_toh_zan_nagasaki_grill_menu.jpg?q=6a4dbc8b20a19",
+      "https://cdn6.localdatacdn.com/images/5476085/m_toh_zan_nagasaki_grill_menu.jpg?q=6a4dbc8b20a1d"
     ]
   },
   "p-and-y-insurance-mesa": {
@@ -531,316 +403,187 @@
       "https://pyinsurance.com/wp-content/uploads/2023/11/annuity.png?w=512"
     ]
   },
-  "paris-baguette-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5821202/d_paris_baguette_photo.jpg?q=69d80ec7a1521",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/5821202/m_paris_baguette_photo.jpg?q=69d80ec7a1519",
-      "https://cdn6.localdatacdn.com/images/5821202/m_paris_baguette_menu.jpg?q=69d80ec7a151d"
-    ]
-  },
-  "phoenix-int-l-travel-and-tours-mesa": {
-    "heroImage": "https://travelagencyselma.com/wp-content/uploads/phoenix-international-travel-tours-2.avif",
-    "gallery": [
-      "https://travelagencyselma.com/wp-content/uploads/phoenix-international-travel-tours.avif",
-      "https://travelagencyselma.com/wp-content/uploads/phoenix-international-travel-tours-3.avif",
-      "https://travelagencyselma.com/wp-content/uploads/phoenix-international-travel-tours-1.avif",
-      "https://travelagencyselma.com/wp-content/uploads/redes-300x200.webp"
-    ]
-  },
   "pizza-hut-express-mesa": {
-    "heroImage": "https://a.mktgcdn.com/p/evzmGb_e-Drfe_J0c8mo1Y_ndjC2o0hL0M85vuJRLnM/2122x2122.png",
+    "heroImage": "https://cdn6.localdatacdn.com/images/14708/d_pizza_hut_express_photo.jpg?q=6a79b20000c3c",
     "gallery": [
-      "https://a.mktgcdn.com/p/hxJgH_gPUGuHQPqGidqaJNMl9pbQqLO7esOuNzfyw8o/496x344.png",
-      "https://a.mktgcdn.com/p/mJFe5TGigYqL1hqkcIly2kJ4Vwp5b4ZkwwCm_w35PbA/496x344.jpg"
+      "https://cdn6.localdatacdn.com/images/14708/m_pizza_hut_express_photo.jpg?q=6a79b20000c41"
     ]
   },
   "roll-avenue-ice-cream-rolls-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5581097/d_roll_avenue_photo.jpg?q=69d7529c274bc",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5581097/d_roll_avenue_photo.jpg?q=6a519859123e9",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5581097/m_roll_avenue_photo.jpg?q=69d7529c274c6",
-      "https://cdn6.localdatacdn.com/images/5581097/m_roll_avenue_menu.jpg?q=69d7529c274c1",
-      "https://cdn6.localdatacdn.com/images/5581097/d_roll_avenue_menu.jpg?q=69d7529c274c3"
+      "https://cdn6.localdatacdn.com/images/5581097/m_roll_avenue_photo.jpg?q=6a519859123f4",
+      "https://cdn6.localdatacdn.com/images/5581097/m_roll_avenue_menu.jpg?q=6a519859123ee",
+      "https://cdn6.localdatacdn.com/images/5581097/d_roll_avenue_menu.jpg?q=6a519859123f2"
     ]
   },
   "saigon-jade-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4913667/d_saigon_jade_photo.jpg?q=69df9967c2ce3",
+    "heroImage": "https://cdn6.localdatacdn.com/images/4913667/d_saigon_jade_photo.jpg?q=6a7458080aaf5",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4913667/m_saigon_jade_photo.jpg?q=69df9967c2cda",
-      "https://cdn6.localdatacdn.com/images/4913667/m_saigon_jade_menu.jpg?q=69df9967c2ce0",
-      "https://cdn6.localdatacdn.com/images/4913667/d_saigon_jade_menu.jpg?q=69df9967c2ce9"
+      "https://cdn6.localdatacdn.com/images/4913667/m_saigon_jade_photo.jpg?q=6a7458080aae8",
+      "https://cdn6.localdatacdn.com/images/4913667/m_saigon_jade_menu.jpg?q=6a7458080aaee",
+      "https://cdn6.localdatacdn.com/images/4913667/d_saigon_jade_menu.jpg?q=6a7458080aafb"
     ]
   },
   "saketini-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3371179/d_saketini_photo.jpg?q=69cf3cdf1cee4",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3371179/d_saketini_photo.jpg?q=6a7a7594b02b6",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3371179/m_saketini_photo.jpg?q=69cf3cdf1ceee",
-      "https://cdn6.localdatacdn.com/images/3371179/d_saketini_menu.jpg?q=69cf3cdf1cee9",
-      "https://cdn6.localdatacdn.com/images/3371179/m_saketini_menu.jpg?q=69cf3cdf1cef2"
+      "https://cdn6.localdatacdn.com/images/3371179/m_saketini_photo.jpg?q=6a7a7594b02bf"
     ]
   },
   "simon-med-mesa": {
-    "heroImage": "https://cdn8.localdatacdn.com/az/mesa/5458209/original/aPbD6BanpS.jpg"
-  },
-  "sizzling-and-ramen-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7446605/d_sizzling_house_photo.jpg?q=69b3dc4d3ddac",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/7446605/m_sizzling_house_photo.jpg?q=69b3dc4d3dda2",
-      "https://cdn6.localdatacdn.com/images/7446605/m_sizzling_house_menu.jpg?q=69b3dc4d3dda8",
-      "https://cdn6.localdatacdn.com/images/7446605/d_sizzling_house_menu.jpg?q=69b3dc4d3ddb1"
-    ]
-  },
-  "snowtime-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7984505/d_snowtime_photo.jpg?q=69b5b9ba3f937",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/7984505/m_snowtime_photo.jpg?q=69b5b9ba3f927",
-      "https://cdn6.localdatacdn.com/images/7984505/m_snowtime_menu.jpg?q=69b5b9ba3f92e",
-      "https://cdn6.localdatacdn.com/images/7984505/d_snowtime_menu.jpg?q=69b5b9ba3f933"
-    ]
+    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/6051719/original/GZ8gzyxkhY.jpg"
   },
   "sweet-time-bakery-mesa": {
-    "heroImage": "https://img.heavenlydelightsbakery.com/d20/2510/121072236129714.webp",
+    "heroImage": "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery00-0.webp",
     "gallery": [
-      "https://img.heavenlydelightsbakery.com/d20/2507/4735233420.png",
-      "https://img.heavenlydelightsbakery.com/d20/2510/121072194329715.webp",
-      "https://img.heavenlydelightsbakery.com/d20/2510/121072961629716.webp",
-      "https://img.heavenlydelightsbakery.com/d20/2510/121072715129717.webp",
-      "https://img.heavenlydelightsbakery.com/d20/2510/121072043029719.webp",
-      "https://img.heavenlydelightsbakery.com/d20/2510/121072043029718.webp"
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery01-0.webp",
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery02-0.webp",
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery03-0.webp",
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery04-0.webp",
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery05-0.webp",
+      "https://assets.sagemenu.com/sweet-time-bakery-mesa/gallery/gallery06-0.webp"
     ]
   },
   "tara-thai-2go-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/5563414/d_tara_thai_2go_photo.jpg?q=69d719ca9eacb",
+    "heroImage": "https://cdn6.localdatacdn.com/images/5563414/d_tara_thai_2go_photo.jpg?q=6a74d193ec540",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/5563414/m_tara_thai_2go_photo.jpg?q=69d719ca9eac6",
-      "https://cdn6.localdatacdn.com/images/5563414/d_tara_thai_2go_menu.jpg?q=69d719ca9eacf",
-      "https://cdn6.localdatacdn.com/images/5563414/m_tara_thai_2go_menu.jpg?q=69d719ca9ead2"
+      "https://cdn6.localdatacdn.com/images/5563414/m_tara_thai_2go_photo.jpg?q=6a74d193ec53c",
+      "https://cdn6.localdatacdn.com/images/5563414/d_tara_thai_2go_menu.jpg?q=6a74d193ec544",
+      "https://cdn6.localdatacdn.com/images/5563414/m_tara_thai_2go_menu.jpg?q=6a74d193ec548"
     ]
   },
   "target-mesa": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/mesa/14984/original/uPs3sJuhn4.jpeg"
-  },
-  "tea-snow-lounge-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4970734/d_tea_snow_boba_coffee_photo.jpg?q=69ab1c5c5dbb3",
+    "heroImage": "https://target.scene7.com/is/image/Target/GUEST_7c6d27a6-75e0-4b61-a337-0a03f9478332?qlt=65&fmt=pjpeg&hei=350&wid=350",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4970734/m_tea_snow_boba_coffee_photo.jpg?q=69ab1c5c5dbaa",
-      "https://cdn6.localdatacdn.com/images/4970734/m_tea_snow_boba_coffee_menu.jpg?q=69ab1c5c5dbaf",
-      "https://cdn6.localdatacdn.com/images/4970734/d_tea_snow_boba_coffee_menu.jpg?q=69ab1c5c5dbb7"
-    ]
-  },
-  "teazers-hair-salon-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3897073/m_teazers_hair_salon_photo.jpg?q=66928709f13f0"
-  },
-  "thai-foot-massage-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6830676/m_thai_foot_massage_photo.jpg?q=69abd66542e23",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3544331/d_lemongrass_grill_thai_restaurant_and_bar_photo.jpg?q=69e0fb1789b9d",
-      "https://cdn6.localdatacdn.com/images/3544331/m_lemongrass_grill_thai_restaurant_and_bar_photo.jpg?q=69e0fb1789b95"
-    ]
-  },
-  "thai-spices-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4918611/d_thai_spices_photo.jpg?q=69d52725c767c",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/4918611/m_thai_spices_photo.jpg?q=69d52725c7675",
-      "https://cdn6.localdatacdn.com/images/4918376/d_thai_by_thai_photo.jpg?q=69d52651ea805",
-      "https://cdn6.localdatacdn.com/images/4918376/m_thai_by_thai_photo.jpg?q=69d52651ea7fb",
-      "https://cdn6.localdatacdn.com/images/4918611/m_thai_spices_menu.jpg?q=69d52725c7679",
-      "https://cdn6.localdatacdn.com/images/4918611/d_thai_spices_menu.jpg?q=69d52725c7680"
-    ]
-  },
-  "the-jerky-king-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/8598038/d_coconut_jelly_king_mesa_arizona_photo.jpg?q=69b6186ab80a3",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/8598038/m_coconut_jelly_king_mesa_arizona_photo.jpg?q=69b6186ab809d"
+      "https://target.scene7.com/is/image/Target/GUEST_481efebc-2e90-4799-a78a-8789f05b05a8?qlt=65&fmt=pjpeg&hei=350&wid=350",
+      "https://target.scene7.com/is/image/Target/GUEST_7ad0dd15-827c-4e08-8f3f-1975756febc0?qlt=65&fmt=pjpeg&hei=350&wid=350",
+      "https://target.scene7.com/is/image/Target/GUEST_e8bd07da-92ca-495f-aa52-4b55619b6adc?qlt=65&fmt=pjpeg&hei=350&wid=350",
+      "https://target.scene7.com/is/content/Target/GUEST_ca8f1d56-9000-4407-be78-2c33be983dab?wid=1200&qlt=80",
+      "https://target.scene7.com/is/content/Target/GUEST_0dccf966-e225-4ef1-9682-2fd859af48f3?wid=640&qlt=80",
+      "https://target.scene7.com/is/image/Target/GUEST_1f14654a-15bd-45e9-866a-9eb08e229fdb?qlt=65&fmt=pjpeg&hei=350&wid=350"
     ]
   },
   "the-stone-kroean-tofu-house-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6187620/d_the_stone_korean_tofu_house_photo.jpg?q=69cd18ac07a39",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/6187620/m_the_stone_korean_tofu_house_photo.jpg?q=69cd18ac07a34"
-    ]
+    "heroImage": "https://thestonetofu.com"
   },
   "the-street-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3369908/d_the_street_photo.jpg?q=69c46ae22cad8",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3369908/d_the_street_photo.jpg?q=6a57896b89426",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3369908/m_the_street_photo.jpg?q=69c46ae22cae1",
-      "https://cdn6.localdatacdn.com/images/3369908/d_the_street_menu.jpg?q=69c46ae22cadd",
-      "https://cdn6.localdatacdn.com/images/3369908/m_the_street_menu.jpg?q=69c46ae22cae5"
+      "https://cdn6.localdatacdn.com/images/3369908/m_the_street_photo.jpg?q=6a57896b89431"
     ]
   },
   "tipsy-chicken-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/7451756/d_tipsy_chicken_photo.jpg?q=69b3e7d1b6c38",
+    "heroImage": "https://cdn6.localdatacdn.com/images/7451756/d_tipsy_chicken_photo.jpg?q=6a2beaf582088",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/7451756/m_tipsy_chicken_photo.jpg?q=69b3e7d1b6c2b",
-      "https://cdn6.localdatacdn.com/images/7451756/m_tipsy_chicken_menu.jpg?q=69b3e7d1b6c32",
-      "https://cdn6.localdatacdn.com/images/7451756/d_tipsy_chicken_menu.jpg?q=69b3e7d1b6c3e"
+      "https://cdn6.localdatacdn.com/images/7451756/m_restaurantji_tipsy_chicken_photo.jpg?q=6a2beaf58207d",
+      "https://cdn6.localdatacdn.com/images/7451756/m_restaurantji_tipsy_chicken_menu.jpg?q=6a2beaf582083",
+      "https://cdn6.localdatacdn.com/images/7451756/d_tipsy_chicken_menu.jpg?q=6a2beaf58208c"
     ]
   },
   "two-hands-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6038973/d_two_hands_corn_dogs_photo.jpg?q=69c2566560e8f",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/6038973/m_two_hands_corn_dogs_photo.jpg?q=69c2566560e99"
-    ]
-  },
-  "unphogettable-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4920928/d_unphogettable_photo.jpg?q=69d52fce510c3",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/4920928/m_unphogettable_photo.jpg?q=69d52fce510b7",
-      "https://cdn6.localdatacdn.com/images/4920928/m_unphogettable_menu.jpg?q=69d52fce510bf",
-      "https://cdn6.localdatacdn.com/images/4920928/d_unphogettable_menu.jpg?q=69d52fce510c8"
-    ]
+    "heroImage": "https://static.wixstatic.com/media/c35739_7cedf10598184f44b431c0dfbb32d72b~mv2.png/v1/fill/w_491,h_494,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/twohands-design-home_alt_store.png"
   },
   "wholly-grill-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4921738/d_wholly_grill_photo.jpg?q=69d532494da45",
+    "heroImage": "https://cdn6.localdatacdn.com/images/4921738/d_wholly_grill_photo.jpg?q=6a4a84e762e85",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4921738/m_wholly_grill_photo.jpg?q=69d532494da3a",
-      "https://cdn6.localdatacdn.com/images/4921738/m_wholly_grill_menu.jpg?q=69d532494da41",
-      "https://cdn6.localdatacdn.com/images/4921738/d_wholly_grill_menu.jpg?q=69d532494da4a"
+      "https://cdn6.localdatacdn.com/images/4921738/m_wholly_grill_photo.jpg?q=6a4a84e762e7c"
     ]
-  },
-  "wong-insurance-agency-mesa": {
-    "heroImage": "https://azcompanydb.com/qrcode//company/P13282030/wong-insurance-agency-pllc.html.png?label=Wong%20Insurance%20Agency%2C%20Pllc"
   },
   "xian-fusing-cafe-mesa": {
-    "heroImage": "https://cdn2.usarestaurants.info/assets/tumbnails/284b22ea629426e2ea66f44554dda53d_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg",
+    "heroImage": "https://img.restaurantguru.com/w550/h367/re52-Xian-Fusing-Cafe-by-Michael-Leung-interior.jpg",
     "gallery": [
-      "https://cdn2.usarestaurants.info/assets/uploads/284b22ea629426e2ea66f44554dda53d_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/c3a5082c86a4fdf44925ff071b0f0614_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/e660ae2168e61d464409b1880b2c0ddb_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg",
-      "https://cdn2.usarestaurants.info/assets/uploads/dce9402b6e70fd213d65faab51395d8b_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg"
+      "https://img.restaurantguru.com/re52-Xian-Fusing-Cafe-by-Michael-Leung-interior.jpg"
     ]
-  },
-  "yz-s-ktv-karaoke-cafe-mesa": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6830589/d_yz_karaoke_cafe_photo.jpg?q=69b21edf3993a",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/6830589/m_yz_karaoke_cafe_photo.jpg?q=69b21edf39935",
-      "https://cdn6.localdatacdn.com/images/6830589/d_yz_karaoke_cafe_menu.jpg?q=69b21edf39940",
-      "https://cdn6.localdatacdn.com/images/6830589/m_yz_karaoke_cafe_menu.jpg?q=69b21edf39942"
-    ]
-  },
-  "ace-hardware-peoria": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/peoria/2902683/original/wUHYsvFNmk.jpeg"
   },
   "banner-urgent-care-peoria": {
-    "heroImage": "https://www.bannerhealth.com/-/media/images/project/bh/location-images/peoria/banner-urgent-care-cactus.jpg",
+    "heroImage": "https://www.urgentcare.com/images/heros/og/og-default.jpg",
     "gallery": [
-      "https://www.bannerhealth.com/-/media/images/project/bh/location-images/peoria/banner-urgent-care-cactus.jpg?h=318&iar=0&w=478&hash=09DE1BF65FFA8239B3A7203EB479ED16"
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcom-sema-pen.fbecc42d.png&w=3840&q=75&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4",
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdefault-urgentcare.bbcf982b.png&w=2048&q=100&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4",
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Floadingmap.cc86ca9c.jpg&w=3840&q=75&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4",
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpnm-discountcard-front.37a1ae0b.jpg&w=3840&q=100&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4",
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fpnm-discountcard-back.9f461bc6.jpg&w=3840&q=100&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4",
+      "https://www.urgentcare.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Furgentcare-com-white.95d9910a.png&w=3840&q=100&dpl=dpl_2vNfb7byfUK2QPvPNA61zroNcdZ4"
     ]
   },
   "bomboba-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3831134/d_bomboba_photo.jpg?q=69a8e028c4cf9",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3831134/d_bomboba_photo.jpg?q=6a425a9bc4e14",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3831134/m_bomboba_photo.jpg?q=69a8e028c4cf2",
-      "https://cdn6.localdatacdn.com/images/3831134/d_bomboba_menu.jpg?q=69a8e028c4cfe",
-      "https://cdn6.localdatacdn.com/images/3831134/m_bomboba_menu.jpg?q=69a8e028c4d05"
+      "https://cdn6.localdatacdn.com/images/3831134/m_bomboba_photo.jpg?q=6a425a9bc4e0f"
     ]
   },
   "carl-s-jr-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/18255/d_carl_s_jr_photo.jpg?q=69cbc1c840ac5",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/18255/m_carl_s_jr_photo.jpg?q=69cbc1c840ac1"
-    ]
+    "heroImage": "https://llp-assets.meetsoci.com/live/assets/carljrsites/images/redburrito.6531b609.png"
   },
-  "fry-s-fuel-peoria": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/peoria/2219963/original/HFqgASuBgb.jpeg"
+  "cvs-pharmacy-peoria": {
+    "heroImage": "https://storelocatortool.com/v3/images/cvs-pharmacy-locations-banner.png"
   },
   "global-credit-union-peoria": {
-    "heroImage": "https://www.globalcu.org/siteassets/images/accounts/gcu_teller.jpg",
+    "heroImage": "https://www.creditunionsonline.com/img/wwwglobalcuorg-38.webp",
     "gallery": [
-      "https://www.globalcu.org/siteassets/images/mega-menu/gcu_mobile_app_budgets.webp"
-    ]
-  },
-  "h-and-r-block-peoria": {
-    "heroImage": "https://cdn8.localdatacdn.com/az/peoria/983843/original/Pg2iTn1HQN.jpg"
-  },
-  "little-caesars-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/18248/d_little_caesars_pizza_photo.jpg?q=69cbc1c29a71a",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/18248/m_little_caesars_pizza_photo.jpg?q=69cbc1c29a714"
+      "https://www.creditunionsonline.com/hero/profilesPortrait.webp",
+      "https://www.creditunionsonline.com/news/2026/images/consumers-now-spend-30-percent-of-monthly-food-budgets-on-restaurants.webp",
+      "https://www.creditunionsonline.com/images/savingsCalcs2024.webp",
+      "https://www.creditunionsonline.com/images/autoCalcs2024.webp",
+      "https://www.creditunionsonline.com/images/mortgageCalcs2024.webp",
+      "https://www.creditunionsonline.com/images/creditCardCalcs2024.webp"
     ]
   },
   "midfirst-bank-peoria": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/peoria/2543131/original/OAUj56uHkv.jpg"
+    "heroImage": "https://www.midfirst.com/MidFirstBank/media/MidFirstBankImages/Home%20Page/G-W-Midfirst-Exterior-950w_1.jpg",
+    "gallery": [
+      "https://ou.midfirst.com/images/OU/Banners/Interior/Boomer.jpg",
+      "https://www.midfirst.com/MidFirstBank/media/MidFirstBankImages/Spend/EasySave/6_EasySaveMain_2000x2000.jpg",
+      "https://www.midfirst.com/Content/Images/content/login-image.jpg",
+      "https://www.midfirst.com/getmedia/580c7171-aa6e-45f0-a756-7bd55072b337/26-MKT-210200-1800x1480.jpg",
+      "https://www.midfirst.com/getmedia/ce917df6-af6b-43b8-876e-f19a37ba7908/Q1-Biz-Carousel-1.jpg",
+      "https://www.midfirst.com/getmedia/52adc4a4-dfe7-4754-ab8e-f70a7312f271/thunder500.png"
+    ]
   },
   "nail-supply-peoria": {
-    "heroImage": "https://nationwidenailsupplies.com/cdn/shop/files/Nationwide_Nails_Supply_Cover_b466f54e-ca04-48f0-a983-c2c5c39fea9e.png?v=1747442458",
-    "gallery": [
-      "https://nationwidenailsupplies.com/cdn/shop/files/Screenshot2025-10-15140340.png?v=1760562273&width=533",
-      "https://nationwidenailsupplies.com/cdn/shop/files/Screenshot_2025-10-15_140549.png?v=1760562838&width=533",
-      "https://nationwidenailsupplies.com/cdn/shop/files/bottomBanner.png?v=1747892217&width=3840",
-      "https://nationwidenailsupplies.com/cdn/shop/files/opim_a_bubble_bunny_nls061_nail_lacquer_99399001674.webp?v=1770059879&width=533",
-      "https://nationwidenailsupplies.com/cdn/shop/files/opim_a__bubble_bunny_mani_f6196a12-6b05-4c49-9b88-914cb734cbef.webp?v=1770059897&width=533",
-      "https://nationwidenailsupplies.com/cdn/shop/files/bathtime_bubbly_nls065_nail_lacquer_99399001678_794316c8-e13a-48a0-a6ca-394991ecbb17.webp?v=1770061735&width=533"
-    ]
-  },
-  "ocean-jewelers-peoria": {
-    "heroImage": "https://cdn9.localdatacdn.com/az/peoria/2901948/original/a53RZvdnXY.jpg"
+    "heroImage": "https://cdn6.localdatacdn.com/images/2902818/m_az_nail_supply_photo.jpg?q=6a5f968cecd39"
   },
   "panda-express-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/18261/d_panda_express_photo.jpg?q=69cbc1cf9f592",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/18261/m_panda_express_photo.jpg?q=69cbc1cf9f58d"
-    ]
-  },
-  "steven-crazy-nails-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3898359/m_steven_crazy_nails_photo.jpg?q=69c0b73f58aeb"
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/4/45/Panda_Express_Storefront_%2848128044623%29.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
   },
   "subway-peoria": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/18254/d_subway_photo.jpg?q=69cbc1ce58653",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/18249/d_subway_photo.jpg?q=69cbc1c29c5f3",
-      "https://cdn6.localdatacdn.com/images/18254/m_subway_photo.jpg?q=69cbc1ce5864d",
-      "https://cdn6.localdatacdn.com/images/18249/m_subway_photo.jpg?q=69cbc1c29c5f8",
-      "https://cdn6.localdatacdn.com/images/18249/m_subway_menu.jpg?q=69cbc1c29c5fe",
-      "https://cdn6.localdatacdn.com/images/18249/d_subway_menu.jpg?q=69cbc1c29c603"
-    ]
+    "heroImage": "https://restaurants.subway.com/permanent-b0b701/assets/images/Subway2.d3e81a68.jpg"
   },
   "chinese-combo-thai-tucson": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3365443/d_chinese_combo_thai_cuisine_photo.jpg?q=69c12fb620f7c",
+    "heroImage": "https://cdn6.localdatacdn.com/images/3365443/d_chinese_combo_thai_cuisine_photo.jpg?q=6a56e53b078e9",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/3365443/m_chinese_combo_thai_cuisine_photo.jpg?q=69c12fb620f77",
-      "https://cdn6.localdatacdn.com/images/3365443/m_chinese_combo_thai_cuisine_menu.jpg?q=69c12fb620f80",
-      "https://cdn6.localdatacdn.com/images/3365443/d_chinese_combo_thai_cuisine_menu.jpg?q=69c12fb620f84"
+      "https://cdn6.localdatacdn.com/images/3365443/m_chinese_combo_thai_cuisine_photo.jpg?q=6a56e53b078e3",
+      "https://cdn6.localdatacdn.com/images/3365443/m_chinese_combo_thai_cuisine_menu.jpg?q=6a56e53b078ed",
+      "https://cdn6.localdatacdn.com/images/3365443/d_chinese_combo_thai_cuisine_menu.jpg?q=6a56e53b078f0"
     ]
   },
   "circle-k-tucson": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/tucson/1617929/original/a2akRZ1oJ3.jpg"
-  },
-  "ole-mexican-grill-tucson": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/3365395/d_ole_mexican_grill_photo.jpg?q=69cf2a225ca08",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/3365395/m_ole_mexican_grill_photo.jpg?q=69cf2a225ca04"
-    ]
+    "heroImage": "https://cdn10.localdatacdn.com/az/tucson/1582647/original/wzDwsh8YEY.jpeg"
   },
   "walgreens-tucson": {
-    "heroImage": "https://cdn10.localdatacdn.com/az/tucson/3220735/original/gXHvKaYH1f.jpeg"
+    "heroImage": "https://www.storeopeninghours.com/leaflet/walgreens/1022413/first.jpg"
   },
-  "99-ranch-market-glendale": {
-    "heroImage": "https://ewscripps.brightspotcdn.com/dims4/default/df3d64f/2147483647/strip/true/crop/2034x1068+0+32/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fc8%2F7f%2Fa3a095db4966a66d77368d654ec1%2F99-ranch-market.jpg",
+  "bafang-dumpling-glendale": {
+    "heroImage": "https://bafangdumpling.com/wp-content/uploads/2025/02/1200x630_share.jpg",
     "gallery": [
-      "https://ewscripps.brightspotcdn.com/dims4/default/004edb9/2147483647/strip/true/crop/2034x1144+0+0/resize/1200x675!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fc8%2F7f%2Fa3a095db4966a66d77368d654ec1%2F99-ranch-market.jpg",
-      "https://ewscripps.brightspotcdn.com/dims4/default/dfa8690/2147483647/strip/true/crop/2034x1144+0+0/resize/1280x720!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2Fc8%2F7f%2Fa3a095db4966a66d77368d654ec1%2F99-ranch-market.jpg"
+      "https://bafangdumpling.com/wp-content/plugins/revslider/sr6/assets/assets/dummy.png",
+      "https://bafangdumpling.com/wp-content/uploads/2025/01/Bafang_Brand_Creative_181a.gif",
+      "https://bafangdumpling.com/wp-content/uploads/2025/07/DUMP.webp",
+      "https://bafangdumpling.com/wp-content/uploads/2025/02/home4.gif",
+      "https://bafangdumpling.com/wp-content/uploads/2025/01/popup-3.jpg",
+      "https://bafangdumpling.com/wp-content/uploads/2026/08/popup.webp"
     ]
   },
-  "fat-miilk-coffee-glendale": {
-    "heroImage": "https://fatmiilk.com/cdn/shop/files/FM_Preview_Image_2.webp?v=1700807335",
-    "gallery": [
-      "https://fatmiilk.com/cdn/shop/files/2024-FatMiilk-Uptown_Storefront-Image-14.jpg?v=1719539703&width=3840",
-      "https://fatmiilk.com/cdn/shop/files/2024-FatMiilk-Uptown_Storefront-Image-26.jpg?v=1719539666&width=3840",
-      "https://fatmiilk.com/cdn/shop/files/2024-FatMiilk-Uptown_Storefront-Image-22.jpg?v=1719539642&width=3840",
-      "https://fatmiilk.com/cdn/shop/files/2024-FatMiilk-Retail-eGiftCard-V2.jpg?v=1720648726",
-      "https://fatmiilk.com/cdn/shop/files/Sampler1.jpg?v=1700171096",
-      "https://fatmiilk.com/cdn/shop/files/Sampler2.jpg?v=1700171129"
-    ]
+  "kinokuniya-books-glendale": {
+    "heroImage": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Kinokuniya_point_card.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
   },
   "lady-m-cakes-glendale": {
-    "heroImage": "https://api.ladym.com/images/000/003/762/item_primary@480w.webp",
+    "heroImage": "https://api.ladym.com/images/000/001/859/item_primary@300w.webp",
     "gallery": [
-      "https://api.ladym.com/images/000/001/397/item_primary@480w.webp",
-      "https://api.ladym.com/images/000/001/815/item_primary@480w.webp",
-      "https://api.ladym.com/images/000/003/272/item_primary@480w.webp",
-      "https://api.ladym.com/images/000/003/342/item_primary@480w.webp",
-      "https://api.ladym.com/images/000/003/203/item_primary@480w.webp",
-      "https://api.ladym.com/images/000/003/202/item_primary@480w.webp"
+      "https://api.ladym.com/images/000/003/194/item_primary@300w.webp",
+      "https://api.ladym.com/images/000/003/343/item_primary@300w.webp",
+      "https://api.ladym.com/images/000/003/197/item_primary@300w.webp"
     ]
   },
   "royce-chocolate-glendale": {
@@ -848,45 +591,29 @@
     "gallery": [
       "https://roycechocolate.com/cdn/shop/files/LinkedIn_Cover_Photo.png?crop=center&height=1200&v=1722700245&width=1200",
       "https://roycechocolate.com/pages/Liquid error (layout/theme line 15): invalid url input",
+      "https://roycechocolate.com/cdn/shop/collections/Nama_Chocolate.webp?v=1779014290&width=2048",
+      "https://roycechocolate.com/cdn/shop/collections/Nama_Chocolate.webp?crop=center&height=1200&v=1779014290&width=1200",
       "https://roycechocolate.com/cdn/shop/files/Nama_Chocolates.webp?v=1769511168&width=500",
-      "https://roycechocolate.com/cdn/shop/files/2_c4e13520-5dfd-40c4-9af6-4719044c471d.webp?v=1769511168&width=500",
-      "https://roycechocolate.com/cdn/shop/files/ROYCE__Alderwood_Mall_339bbdbd-a551-44ac-9d94-d697a1fe5243.gif?v=1741940728&width=1000",
-      "https://roycechocolate.com/cdn/shop/files/Premium_Nama_Chocolate_Collection.webp?v=1774941917&width=800"
-    ]
-  },
-  "somi-somi-glendale": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/6192182/d_somisomi_glendale_photo.jpg?q=686c104e7d04c",
-    "gallery": [
-      "https://cdn6.localdatacdn.com/images/6192182/m_somisomi_glendale_photo.jpg?q=686c104e7d047",
-      "https://cdn6.localdatacdn.com/images/6192182/d_somisomi_glendale_menu.jpg?q=686c104e7d04f",
-      "https://cdn6.localdatacdn.com/images/6192182/m_somisomi_glendale_menu.jpg?q=686c104e7d052"
-    ]
-  },
-  "t-swirl-crepe-glendale": {
-    "heroImage": "https://t-swirlcrepe.com/wp-content/uploads/2025/12/1.jpg",
-    "gallery": [
-      "https://t-swirlcrepe.com/wp-content/uploads/2022/12/295775016_438918791581039_1894665812120570908_n.jpg",
-      "https://t-swirlcrepe.com/wp-content/uploads/2021/12/Asset-3-1030x541.png",
-      "https://t-swirlcrepe.com/wp-content/uploads/2021/12/Asset-3.png",
-      "https://t-swirlcrepe.com/wp-content/uploads/2022/12/CA-Arcadia.jpg",
-      "https://t-swirlcrepe.com/wp-content/uploads/2022/12/CA-City-of-industry.jpg",
-      "https://t-swirlcrepe.com/wp-content/uploads/2022/12/CA-Riverside.jpg"
+      "https://roycechocolate.com/cdn/shop/files/ROYCE__Alderwood_Mall_339bbdbd-a551-44ac-9d94-d697a1fe5243.gif?v=1741940728&width=1000"
     ]
   },
   "teso-life-glendale": {
-    "heroImage": "https://www.azcentral.com/gcdn/authoring/authoring-images/2024/01/05/PPHX/72124551007-teso-life-257.jpg?crop=2997,1686,x1,y313&width=2997&height=1686&format=pjpg&auto=webp",
+    "heroImage": "https://www.teso-group.com/_next/image?url=%2Fimages%2Fteso-group%2Fteso-reception-v2.jpg&w=3840&q=75",
     "gallery": [
-      "https://www.azcentral.com/gcdn/authoring/authoring-images/2024/01/05/PPHX/72124551007-teso-life-257.jpg?crop=2997,1686,x1,y313&width=1600&height=800&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gcdn/authoring/authoring-images/2024/01/05/PPHX/72124541007-teso-life-267.jpg?crop=2997,1686,x1,y313&width=660&height=372&format=pjpg&auto=webp",
-      "https://www.azcentral.com/gciaf/prod/p?a=pageview&p=PPHX-TEALIUM-TANGENT&m=web&k=f14ebdd6-0569-4c64-af73-99937bc06379&s=noscript"
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Fhero-image-mobile.jpg&w=3840&q=75",
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Fbeauty-v2.jpg&w=3840&q=75",
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Fsnacks-v2.jpg&w=3840&q=75",
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Fhomegoods.jpg&w=3840&q=75",
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Ftoys.jpg&w=3840&q=75",
+      "https://www.teso-group.com/_next/image?url=%2Fimages%2Ftesolife%2Fstationary-v2.jpg&w=3840&q=75"
     ]
   },
   "tokyo-shokudo-glendale": {
-    "heroImage": "https://cdn6.localdatacdn.com/images/4920220/d_tokyo_lobby_photo.jpg?q=69df6734bc00b",
+    "heroImage": "https://cdn6.localdatacdn.com/images/4920220/d_tokyo_lobby_photo.jpg?q=6a4a5f0dcc0b7",
     "gallery": [
-      "https://cdn6.localdatacdn.com/images/4920220/m_tokyo_lobby_photo.jpg?q=69df6734bc001",
-      "https://cdn6.localdatacdn.com/images/4920220/m_tokyo_lobby_menu.jpg?q=69df6734bc007",
-      "https://cdn6.localdatacdn.com/images/4920220/d_tokyo_lobby_menu.jpg?q=69df6734bc00f"
+      "https://cdn6.localdatacdn.com/images/4920220/m_tokyo_lobby_photo.jpg?q=6a4a5f0dcc0ae",
+      "https://cdn6.localdatacdn.com/images/4920220/m_tokyo_lobby_menu.jpg?q=6a4a5f0dcc0b3",
+      "https://cdn6.localdatacdn.com/images/4920220/d_tokyo_lobby_menu.jpg?q=6a4a5f0dcc0ba"
     ]
   }
 }
