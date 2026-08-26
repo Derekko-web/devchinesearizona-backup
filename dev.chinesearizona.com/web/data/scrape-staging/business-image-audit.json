@@ -1,1 +1,1942 @@
-[]
+[
+  {
+    "slug": "gilbert-chinese-church-gilbert",
+    "name": "Gilbert Chinese Church",
+    "city": "Gilbert",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://azgcc.org/wp-content/uploads/2023/07/12771688749199_.pic_hd-768x576.jpg",
+    "chosenSourcePage": "https://azgcc.org/youth",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "hot-wok-chinese-restaurant-chandler",
+    "name": "Hot Wok Chinese Restaurant",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": "https://img.us980.com/p?r=115742091&s=nWOGhGKyNH0217fsMUjG%2Fg2G%2FJHXaxX4zEMkvrENyu420IPFHiLHsg51RDwhX6CaqRpFCNl8GEtn6teCI6Qnwg%3D%3D&w=250&h=250",
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3365980/d_hot_wok_chinese_restaurant_photo.jpg?q=6a7360b167267",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/hot-wok-chinese-restaurant-",
+    "outcome": "replaced_suspicious",
+    "reasons": [
+      "suspicious_current_image",
+      "tiny_square_image"
+    ]
+  },
+  {
+    "slug": "wong-s-chinese-dining-phoenix",
+    "name": "Wong's Chinese Dining",
+    "city": "Phoenix",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "81-hong-kong-cafe-tucson",
+    "name": "81 Hong Kong Cafe",
+    "city": "Tucson",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "grand-dragon-glendale",
+    "name": "Grand Dragon",
+    "city": "Glendale",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "szechuan-chinese-glendale",
+    "name": "Szechuan Chinese",
+    "city": "Glendale",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "best-hong-kong-dining-mesa",
+    "name": "Best Hong Kong Dining",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "spice-spirit-chinese-cuisine-bar-mesa",
+    "name": "Spice Spirit Chinese Cuisine & Bar",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "liyuen-phoenix",
+    "name": "Liyuen",
+    "city": "Phoenix",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "tang-garden-tempe",
+    "name": "Tang Garden",
+    "city": "Tempe",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "99-ranch-market-chandler",
+    "name": "99 Ranch Market",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.phoenixnewtimes.com/wp-content/uploads/sites/6/2025/09/PHX_1320x825-100.jpg",
+    "chosenSourcePage": "https://www.phoenixnewtimes.com/location/99-ranch-market-22730347",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "a-ma-s-kitchen-and-pho-chandler",
+    "name": "A Ma's Kitchen & Pho",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "arizona-central-credit-union-chandler",
+    "name": "Arizona Central Credit Union",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://test-azcentralcu.pantheonsite.io/wp-content/uploads/2023/11/142-Chandler-Branch.jpg",
+    "chosenSourcePage": "https://www.azcentralcu.org/locations/chandler",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "bambu-dessert-drink-chandler",
+    "name": "Bambu Dessert Drink",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "bbq-chicken-chandler",
+    "name": "BBQ Chicken",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/7283645/d_bb_q_chicken_chandler_photo.jpg?q=6a82983697838",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/bb-q-chicken-chandler-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "boba-and-brew-tea-house-chandler",
+    "name": "Boba & Brew Tea House",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://bobanearme.s3.us-west-1.amazonaws.com/images/ChIJnQIlKzIBK4cRMMh_ZTv5uCQ_1.jpg",
+    "chosenSourcePage": "https://bobanearme.net/cities/chandler-az/stores/27ba8450-d0b4-4f45-97c4-097c9be36bce",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "circle-k-chandler",
+    "name": "Circle K",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn10.localdatacdn.com/az/chandler/15791/original/lmeh1s5fD0.jpeg",
+    "chosenSourcePage": "https://www.loc8nearme.com/arizona/chandler/circle-k/15791",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "cvs-pharmacy-chandler",
+    "name": "CVS Pharmacy",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.storeopeninghours.com/leaflet/cvs-pharmacy/1022779/first.jpg",
+    "chosenSourcePage": "https://www.storeopeninghours.com/cvs-pharmacy-sylvania-oh",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "cyclo-vietnamese-cuisine-chandler",
+    "name": "Cyclo Vietnamese Cuisine",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "daiso-japan-chandler",
+    "name": "Daiso Japan",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn10.localdatacdn.com/az/chandler/7504462/original/nDMtG5rn7d.jpg",
+    "chosenSourcePage": "https://www.loc8nearme.com/arizona/chandler/daiso/7504462",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "denny-s-chandler",
+    "name": "Denny's",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://dennys-prod-awgccqederg4bvbv.a03.azurefd.net/assets/media/sxqf3cri/302551_oct24_cc_enviroment_skillet-hero_17699.webp",
+    "chosenSourcePage": "https://locations.dennys.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "gen-korean-bbq-chandler",
+    "name": "Gen Korean BBQ",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/7694588/d_gen_korean_bbq_house_photo.jpg?q=6a8af4e4756cf",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/gen-korean-bbq-house-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "jack-in-the-box-chandler",
+    "name": "Jack in the Box",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://locations.jackinthebox.com/media/1gvlszfi/two-tacos.png",
+    "chosenSourcePage": "https://locations.jackinthebox.com/us/az/chandler/1790-w-chandler-blvd",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "kisses-nails-chandler",
+    "name": "kisses nails",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "kura-sushi-chandler",
+    "name": "Kura Sushi",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/6497364/d_kura_revolving_sushi_bar_photo.jpg?q=6a75466dc21be",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/kura-revolving-sushi-bar-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "lee-s-sandwiches-chandler",
+    "name": "Lee's Sandwiches",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "los-favoritos-taco-shop-chandler",
+    "name": "Los Favoritos Taco Shop",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "mcdonald-s-chandler",
+    "name": "McDonald's",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "meet-fresh-chandler",
+    "name": "Meet Fresh",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/6446015/d_meet_fresh_photo.jpg?q=6a617088a3532",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/meet-fresh-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "miracle-ear-chandler",
+    "name": "Miracle-Ear",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.miracle-ear.com/content/dam/amplifon-america/us/content-factory/photos/2022-campaign/MiracleEar_07_Welcome_VCC_0505_A.tif/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+    "chosenSourcePage": "https://www.miracle-ear.com/stores-near-me/hearing-aids-chandler-az/miracle-ear-hearing-aid-center-w-chandler-blvd-s10441",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "ramen-hood-chandler",
+    "name": "Ramen Hood",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "salad-and-go-chandler",
+    "name": "Salad and Go",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/6127740/d_salad_and_go_photo.jpg?q=6a821ae1898f2",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/salad-and-go-3",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "serene-healing-massage-and-reflexology-chandler",
+    "name": "Serene Healing Massage and Reflexology",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://lh3.googleusercontent.com/places/ANXAkqGuKFYiHQVLf1poo2BWGMODEYfAxaxZ81VYbG3Ct1TxNdOZom86IPcNbF9OBAb38gm-7h_miK0JD-8lE0KeZTHdINuuEhQYYjs=s4800-w800-h800",
+    "chosenSourcePage": "https://glowupfinder.com/listing/serene-healing-massage-reflexology-chandler",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "sola-salons-chandler",
+    "name": "Sola Salons",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3897104/m_sola_salon_studios_photo.jpg?q=6a4fdca82e79f",
+    "chosenSourcePage": "https://www.bestprosintown.com/az/chandler/sola-salon-studios-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "somisomi-chandler",
+    "name": "SomiSomi",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/6807285/d_somisomi_photo.jpg?q=6a71851433924",
+    "chosenSourcePage": "https://www.restaurantji.com/az/chandler/somisomi-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "subway-chandler",
+    "name": "Subway",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://subwaymenupedia.com/wp-content/uploads/2024/03/Classic-Italian-B.M.T.webp",
+    "chosenSourcePage": "https://subwaymenupedia.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "teso-life-chandler",
+    "name": "Teso Life",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.teso-group.com/_next/image?url=%2Fimages%2Fteso-group%2Fteso-reception-v2.jpg&w=3840&q=75",
+    "chosenSourcePage": "https://www.teso-group.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "the-hungry-monk-chandler",
+    "name": "The Hungry Monk",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "usa-tae-kwon-do-chandler",
+    "name": "USA Tae Kwon Do",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "walgreens-chandler",
+    "name": "Walgreens",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "walgreens-chandler-2",
+    "name": "Walgreens",
+    "city": "Chandler",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "aa-ozzy-bakery-mesa",
+    "name": "AA Ozzy Bakery",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3826292/d_aa_ozzy_bakery_photo.jpg?q=69f01ad0cbe7e",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/aa-ozzy-bakery-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "artistic-dragon-jeweler-mesa",
+    "name": "Artistic Dragon Jeweler",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://watchrepairshopsnearme.com/images/maps/az/mesa/dicksons-jewelers.png",
+    "chosenSourcePage": "https://watchrepairshopsnearme.com/states/az/mesa/artistic-dragon-jewelry",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "beijing-acupuncture-and-health-center-mesa",
+    "name": "Beijing Acupuncture and Health Center",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://img.aculocator.com/aculocator/arizona-mesa-beijing-acupuncture-mesa.jpg",
+    "chosenSourcePage": "https://www.aculocator.com/states/az/mesa/clinics/beijing-acupuncture-mesa",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "binh-duong-quan-mesa",
+    "name": "Binh Duong Quan",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "bun-bo-hue-mesa",
+    "name": "Bún Bò Huế",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "cha-tea-mesa",
+    "name": "Cha Tea",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/5634504/d_cha_tea_photo.jpg?q=6a8d65dd42999",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/cha-tea-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "circle-k-mesa",
+    "name": "Circle K",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "coconut-jelly-king-mesa",
+    "name": "Coconut Jelly King",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "comfort-foot-and-body-massage-mesa",
+    "name": "Comfort Foot & Body Massage",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/5220890/m_comfort_foot_photo.jpg?q=6a438b33bd313",
+    "chosenSourcePage": "https://www.bestprosintown.com/az/mesa/comfort-foot-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "cvs-pharmacy-mesa",
+    "name": "CVS Pharmacy",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.storeopeninghours.com/leaflet/cvs-pharmacy/1022779/first.jpg",
+    "chosenSourcePage": "https://www.storeopeninghours.com/cvs-pharmacy-sylvania-oh",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "da-pan-mesa",
+    "name": "Da Pan",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "daruma-mesa",
+    "name": "Daruma",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/5929402/d_daruma_sushi_roll_noodle_photo.jpg?q=6a5a88eb13085",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/daruma-sushi-roll-noodle-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "deer-garden-signature-mesa",
+    "name": "Deer Garden Signature",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://restaurants-hi.com/public/dot.jpg",
+    "chosenSourcePage": "https://deer-garden-signatures.restaurants-hi.com/",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "diamond-national-mesa",
+    "name": "Diamond National",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Diamond+National+Mesa+AZ+location&q=diamond+national+mesa+az+location+on+map&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-bottom%2Cct%3Asct%2Csa_mk%3A0",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "discount-tire-mesa",
+    "name": "Discount Tire",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn10.localdatacdn.com/az/mesa/14463/original/PdSPaRYeka.jpg",
+    "chosenSourcePage": "https://www.loc8nearme.com/arizona/mesa/discount-tire/14463",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "dong-feng-seafood-city-mesa",
+    "name": "Dong Feng Seafood City",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://whatnow.com/wp-content/uploads/2025/12/seafood_city_one.jpg",
+    "chosenSourcePage": "https://whatnow.com/phoenix/restaurants/seafood-city-is-opening-first-arizona-location-at-chandler-fashion-square",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "filiberto-s-mesa",
+    "name": "Filiberto's",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://filibertos.com/wp-content/uploads/2026/01/transparent-hero.png",
+    "chosenSourcePage": "https://filibertos.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "firehouse-subs-mesa",
+    "name": "Firehouse Subs",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "gangnam-bbq-mesa",
+    "name": "Gangnam BBQ",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/4988474/d_gangnam_bbq_photo.jpg?q=6a7ca0d0b5a68",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/gangnam-bbq-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "global-courier-express-mesa",
+    "name": "Global Courier Express",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn10.localdatacdn.com/az/mesa/9472976/original/YhXAvG9Ivt.jpeg",
+    "chosenSourcePage": "https://www.loc8nearme.com/arizona/mesa/global-courier-express-fei-yang-kuai-di/9472976",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "h-mart-mesa",
+    "name": "H Mart",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://hmartus.vtexassets.com/assets/vtex.file-manager-graphql/images/a63183f1-c744-4f8d-9d5b-791687755b92___1c1c314ac61e3dff4083c3e22376d976.png",
+    "chosenSourcePage": "https://www.hmart.com/store/mesa-az-85201/f6d25951-7644-459c-addf-be97552f7808",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "heads-up-spa-mesa",
+    "name": "Heads Up! Spa",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Heads+Up!+Spa+Mesa+AZ+location&q=heads+up+spa+mesa+az+location+on+map&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-bottom%2Cct%3Asct%2Csa_mk%3A0",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "hi-tech-dentistry-mesa",
+    "name": "Hi-Tech Dentistry",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/8536972/m_hi_tech_dentistry_photo.jpg?q=6a55bc7dbe129",
+    "chosenSourcePage": "https://www.bestprosintown.com/az/mesa/hi-tech-dentistry-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "hodori-mesa",
+    "name": "Hodori",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://hodoriaz.com/wp-content/uploads/2026/03/NEW_MENU2026_RICE_DISHES-copy-2.png",
+    "chosenSourcePage": "https://hodoriaz.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "hong-kong-cafe-mesa",
+    "name": "Hong Kong Cafe",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "hong-kong-gifts-mesa",
+    "name": "Hong Kong Gifts",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Hong+Kong+Gifts+Mesa+AZ&q=hong+kong+gifts+mesa+az+locations&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-mid%2Cct%3Asct%2Csa_mk%3A8",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "hung-s-hair-design-by-victor-mesa",
+    "name": "Hung's Hair Design by Victor",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3898521/m_hung_s_hair_design_photo.jpg?q=6a811b5d5d734",
+    "chosenSourcePage": "https://www.bestprosintown.com/az/mesa/hungs-hair-design-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "hungs-hair-design-mesa",
+    "name": "Hung’s Hair Design",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3898521/m_hung_s_hair_design_photo.jpg?q=6a811b5d5d734",
+    "chosenSourcePage": "https://www.bestprosintown.com/az/mesa/hungs-hair-design-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "jack-in-the-box-mesa",
+    "name": "Jack in the Box",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://locations.jackinthebox.com/media/1gvlszfi/two-tacos.png",
+    "chosenSourcePage": "https://locations.jackinthebox.com/us/az/mesa/2719-n-power-rd",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "jax-and-ko-international-mesa",
+    "name": "Jax & Ko International",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.city-data.com/a/util.php?idsite=1&rec=1",
+    "chosenSourcePage": "https://www.city-data.com/business-entities/AZ/JAX-KO-INTERNATIONAL-LLC-L17451682-AZ.html",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "jina-s-salon-mesa",
+    "name": "Jina's Salon",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://vicxle.github.io/jina-salon/images/outside.png",
+    "chosenSourcePage": "https://vicxle.github.io/jina-salon/home.html",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "kickin-crab-mesa",
+    "name": "Kickin' Crab",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "korea-mart-mesa",
+    "name": "Korea Mart",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://images.squarespace-cdn.com/content/v1/63052421e7d9d936597d248a/22bf4a8c-3726-4649-b610-158d8a99d4e6/_MG_8312.jpeg",
+    "chosenSourcePage": "https://www.busanmart.us/",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "krispy-kreme-mesa",
+    "name": "Krispy Kreme",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://dynl.mktgcdn.com/p/94GHxAwiEeq-fSu-WeHcoPvGEds1GIZEyH7FSKZ7CG8/500x500",
+    "chosenSourcePage": "https://site.krispykreme.com/tx/san-antonio",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "little-caesars-mesa",
+    "name": "Little Caesars",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "mcdonald-s-mesa",
+    "name": "McDonald's",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "meet-fresh-mesa",
+    "name": "Meet Fresh",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/10005145/d_meet_fresh_photo.jpg?q=6a8ba3b61cd24",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/meet-fresh-2",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "mekong-supermarket-mesa",
+    "name": "Mekong Supermarket",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "mekong-vietnamese-sandwiches-mesa",
+    "name": "Mekong Vietnamese Sandwiches",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/3371017/d_mekong_sandwiches_photo.jpg?q=6a57a6d5eb035",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/mekong-sandwiches-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "nagasaki-grill-toh-zan-mesa",
+    "name": "Nagasaki Grill Toh Zan",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "name-brand-exchange-mesa",
+    "name": "Name Brand Exchange",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "oregano-s-pizza-bistro-mesa",
+    "name": "Oregano's Pizza Bistro",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://oreganos.com/wp-content/uploads/2023/04/map-location-mesa.png",
+    "chosenSourcePage": "https://oreganos.com/locations/mesa",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "p-and-y-insurance-mesa",
+    "name": "P & Y Insurance",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://pyinsurance.com/wp-content/uploads/2023/11/pexels-photo-1605943.jpeg",
+    "chosenSourcePage": "https://pyinsurance.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "paris-baguette-mesa",
+    "name": "Paris Baguette",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "phoenix-int-l-travel-and-tours-mesa",
+    "name": "Phoenix Int'l Travel & Tours",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "pizza-hut-express-mesa",
+    "name": "Pizza Hut Express",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://a.mktgcdn.com/p/hxJgH_gPUGuHQPqGidqaJNMl9pbQqLO7esOuNzfyw8o/496x344.png",
+    "chosenSourcePage": "https://locations.pizzahut.com/az/mesa/1051-n-dobson-rd",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "roll-avenue-ice-cream-rolls-mesa",
+    "name": "Roll Avenue Ice Cream Rolls",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "saigon-jade-mesa",
+    "name": "Saigon Jade",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "saketini-mesa",
+    "name": "Saketini",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "simon-med-mesa",
+    "name": "Simon Med",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn10.localdatacdn.com/az/mesa/6051719/original/GZ8gzyxkhY.jpg",
+    "chosenSourcePage": "https://www.loc8nearme.com/arizona/mesa/simonmed-imaging-mesa-greenfield/6051719",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "sizzling-and-ramen-mesa",
+    "name": "Sizzling & Ramen",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "snowtime-mesa",
+    "name": "Snowtime",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://images.squarespace-cdn.com/content/v1/6917433097cc5e0735341b28/11d23db4-2859-4b2d-a1f0-ddc784f79b45/transparent+pattern+snowtime.jpg",
+    "chosenSourcePage": "https://www.snowtimedesserts.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "sweet-time-bakery-mesa",
+    "name": "Sweet Time Bakery",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "tara-thai-2go-mesa",
+    "name": "Tara Thai 2go",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/5563414/d_tara_thai_2go_photo.jpg?q=6a857f471bec6",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/original-thai-cuisine-2-go-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "target-mesa",
+    "name": "Target",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://target.scene7.com/is/image/Target/GUEST_481efebc-2e90-4799-a78a-8789f05b05a8?qlt=65&fmt=pjpeg&hei=350&wid=350",
+    "chosenSourcePage": "https://www.target.com/sl/mesa-east/639",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "tea-snow-lounge-mesa",
+    "name": "Tea Snow Lounge",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "teazers-hair-salon-mesa",
+    "name": "Teazers Hair Salon",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "thai-foot-massage-mesa",
+    "name": "Thai Foot Massage",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://thaifootmassagemesaaz.com/wp-content/uploads/2022/12/pexels-cottonbro-3997996-scaled.jpg",
+    "chosenSourcePage": "https://thaifootmassagemesaaz.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "thai-spices-mesa",
+    "name": "Thai Spices",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://img1.wsimg.com/isteam/ip/c7703414-f84d-42f3-b881-4324a1fe1a9d/duck%20curry2.jpg",
+    "chosenSourcePage": "https://thaispicesmesa.com/gallery",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "the-art-gallery-mesa",
+    "name": "The Art Gallery",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "the-jerky-king-mesa",
+    "name": "The Jerky King",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=The+Jerky+King+Mesa+AZ+location&q=the+jerky+king+mesa+az+location+on+map&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-bottom%2Cct%3Asct%2Csa_mk%3A0",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "the-stone-kroean-tofu-house-mesa",
+    "name": "The Stone Kroean Tofu House",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://thestonetofu.com",
+    "chosenSourcePage": "https://thestonetofuaz.com/about",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "the-street-mesa",
+    "name": "The Street",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "tipsy-chicken-mesa",
+    "name": "Tipsy Chicken",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "two-hands-mesa",
+    "name": "Two Hands",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://static.wixstatic.com/media/c35739_7cedf10598184f44b431c0dfbb32d72b~mv2.png/v1/fill/w_491,h_494,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/twohands-design-home_alt_store.png",
+    "chosenSourcePage": "https://www.twohandsus.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "unphogettable-mesa",
+    "name": "Unphởgettable",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "wendy-s-mesa",
+    "name": "Wendy's",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://order.wendys.com/_next/image?url=%2Fgoogle-maps-loading.png&w=3840&q=75",
+    "chosenSourcePage": "https://order.wendys.com/us/en/select-restaurant",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "wholly-grill-mesa",
+    "name": "Wholly Grill",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/4921738/d_wholly_grill_photo.jpg?q=6a4a84e762e85",
+    "chosenSourcePage": "https://www.restaurantji.com/az/mesa/wholly-grill-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "wong-insurance-agency-mesa",
+    "name": "Wong Insurance Agency",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "xian-fusing-cafe-mesa",
+    "name": "Xian Fusing Cafe",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn.usarestaurants.info/assets/tumbnails/284b22ea629426e2ea66f44554dda53d_-united-states-arizona-maricopa-county-mesa-440880-xian-fusing-cafehtm.jpg",
+    "chosenSourcePage": "https://usarestaurants.info/explore/united-states/arizona/maricopa-county/mesa/440880-xian-fusing-cafe.htm",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "yz-s-ktv-karaoke-cafe-mesa",
+    "name": "YZ's KTV Karaoke Cafe",
+    "city": "Mesa",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "ace-hardware-peoria",
+    "name": "Ace Hardware",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.greatlakesace.com/images/userimages/Home%20Delivery%20Skinny%20Banner.jpg",
+    "chosenSourcePage": "https://www.greatlakesace.com/locations/adrian",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "banner-urgent-care-peoria",
+    "name": "Banner Urgent Care",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Banner+Urgent+Care+Peoria+AZ+location&q=banner+urgent+care+peoria+az+location+map&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-mid%2Cct%3Asct%2Csa_mk%3A8",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "bomboba-peoria",
+    "name": "Bomboba",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "carl-s-jr-peoria",
+    "name": "Carl's Jr.",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.carlsjr.com/getContentAsset/84b917b7-13f1-49da-939e-ecc67c191e12/dfc3d011-8f63-43f6-9ed8-4b444333a1d0/cjr-exterior-min.jpg?language=en-US",
+    "chosenSourcePage": "https://www.carlsjr.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "cvs-pharmacy-peoria",
+    "name": "CVS Pharmacy",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.storeopeninghours.com/leaflet/cvs-pharmacy/1022779/first.jpg",
+    "chosenSourcePage": "https://www.storeopeninghours.com/cvs-pharmacy-sylvania-oh",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "fry-s-fuel-peoria",
+    "name": "Fry's Fuel",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "global-credit-union-peoria",
+    "name": "Global Credit Union",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.creditunionsonline.com/img/wwwglobalcuorg-38.webp",
+    "chosenSourcePage": "https://www.creditunionsonline.com/credit-union-38-7.html",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "h-and-r-block-peoria",
+    "name": "H&R Block",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "little-caesars-peoria",
+    "name": "Little Caesars",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/18248/d_little_caesars_pizza_photo.jpg?q=6a8ccf4a27b62",
+    "chosenSourcePage": "https://www.restaurantji.com/az/peoria/little-caesars-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "midfirst-bank-peoria",
+    "name": "MidFirst Bank",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://www.midfirst.com/getContentAsset/53839ed0-26e8-450e-b181-3956f8bb93cb/e40d38ea-c2b0-4401-8ee6-14e2652bb813/LakePleasant_HappyValley_MLPS0785_2000x880.jpg?language=en",
+    "chosenSourcePage": "https://www.midfirst.com/locations/arizona/peoria/24810-n-lake-pleasant-pkwy",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "nail-supply-peoria",
+    "name": "Nail Supply",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "ocean-jewelers-peoria",
+    "name": "Ocean Jewelers",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "panda-express-peoria",
+    "name": "Panda Express",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "steven-crazy-nails-peoria",
+    "name": "Steven Crazy Nails",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "subway-peoria",
+    "name": "Subway",
+    "city": "Peoria",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://subwaymenupedia.com/wp-content/uploads/2024/03/Classic-Italian-B.M.T.webp",
+    "chosenSourcePage": "https://subwaymenupedia.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "chinese-combo-thai-tucson",
+    "name": "Chinese Combo Thai",
+    "city": "Tucson",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Chinese+Combo+Thai+Tucson+AZ&q=chinese+combo+thai+tucson+az+locations&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-mid%2Cct%3Asct%2Csa_mk%3A8",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "circle-k-tucson",
+    "name": "Circle K",
+    "city": "Tucson",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Circle+K+Tucson+AZ+location&q=circle+k+tucson+az+location+list&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-mid%2Cct%3Asct%2Csa_mk%3A8",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "ole-mexican-grill-tucson",
+    "name": "Olé Mexican Grill",
+    "city": "Tucson",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "walgreens-tucson",
+    "name": "Walgreens",
+    "city": "Tucson",
+    "status": "live",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "99-ranch-market-glendale",
+    "name": "99 Ranch Market",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "bafang-dumpling-glendale",
+    "name": "Bafang Dumpling",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "fat-miilk-coffee-glendale",
+    "name": "Fat Miilk Coffee",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "kinokuniya-books-glendale",
+    "name": "Kinokuniya Books",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Kinokuniya_point_card.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+    "chosenSourcePage": "https://en.wikipedia.org/wiki/Books_Kinokuniya",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "lady-m-cakes-glendale",
+    "name": "Lady M Cakes",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://api.ladym.com/images/000/003/907/item_primary@300w.webp",
+    "chosenSourcePage": "https://www.ladym.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "pho-602-glendale",
+    "name": "Pho 602",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "royce-chocolate-glendale",
+    "name": "Royce Chocolate",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://roycechocolate.com/cdn/shop/files/LinkedIn_Cover_Photo.png?v=1722700245&width=2048",
+    "chosenSourcePage": "https://roycechocolate.com/",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "somi-somi-glendale",
+    "name": "Somi Somi",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://cdn6.localdatacdn.com/images/6192182/d_somisomi_glendale_photo.jpg?q=6a7e2dcd5162e",
+    "chosenSourcePage": "https://www.restaurantji.com/ca/glendale/somisomi-",
+    "outcome": "resolved_missing",
+    "reasons": [
+      "missing_current_image"
+    ]
+  },
+  {
+    "slug": "t-swirl-crepe-glendale",
+    "name": "T-Swirl Crepe",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "teso-life-glendale",
+    "name": "Teso Life",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": "https://s.yimg.com/fg/a06a45/scout-share.jpg",
+    "chosenSourcePage": "https://scout.yahoo.com/chat?p=Teso+Life+Glendale+AZ&q=teso+life+glendale+az+locations&fr2=p%3As%2Cv%3Aw%2Cm%3Ars-mid%2Cct%3Asct%2Csa_mk%3A8",
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "proposed_image_rejected"
+    ]
+  },
+  {
+    "slug": "the-alley-bubble-tea-glendale",
+    "name": "The Alley Bubble Tea",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  },
+  {
+    "slug": "tokyo-shokudo-glendale",
+    "name": "Tokyo Shokudo",
+    "city": "Glendale",
+    "status": "planned",
+    "currentHeroUrl": null,
+    "proposedHeroUrl": null,
+    "chosenSourcePage": null,
+    "outcome": "needs_manual_review",
+    "reasons": [
+      "missing_current_image",
+      "no_candidate_found"
+    ]
+  }
+]
