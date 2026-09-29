@@ -45,7 +45,7 @@
     "cheerio": "^1.2.0",
     "convex": "^1.40.0",
     "lucide-react": "^1.17.0",
-    "next": "16.2.7",
+    "next": "16.3.7",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.0.2",
@@ -58,23 +58,20 @@
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitest/coverage-v8": "^4.1.8",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^9",
-    "eslint-config-next": "16.2.7",
+    "eslint-config-next": "16.3.7",
     "playwright": "^1.60.0",
     "tailwindcss": "^4",
     "typescript": "^6",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.11"
   },
   "overrides": {
-    "convex": {
-      "ws": "8.20.1"
-    },
     "minimatch@10.2.5": {
-      "brace-expansion": "5.0.6"
+      "brace-expansion": "5.0.12"
     },
     "next": {
-      "postcss": "8.5.10"
+      "postcss": "8.5.28"
     }
   }
 }

@@ -160,7 +160,7 @@ function businessSpecificImageVariants(image: string, minimumImages: number): st
 }
 
 function contextualAltLabel(
-  business: Business,
+  business: Pick<Business, 'slug' | 'name' | 'heroImage' | 'gallery'>,
   site: SiteProfile,
   category: BusinessCategory | undefined,
   locale: Locale
@@ -175,7 +175,7 @@ function contextualAltLabel(
 }
 
 export function resolveCitySiteBusinessImages(
-  business: Business,
+  business: Pick<Business, 'slug' | 'name' | 'heroImage' | 'gallery'>,
   site: SiteProfile,
   options: {
     category?: BusinessCategory;

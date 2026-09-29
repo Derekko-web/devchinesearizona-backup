@@ -16,6 +16,7 @@ import { createModerationReport } from '@/lib/runtime-store';
 const originalConvexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   if (originalConvexUrl === undefined) {
     delete process.env.NEXT_PUBLIC_CONVEX_URL;
   } else {
@@ -23,7 +24,6 @@ afterEach(() => {
   }
 
   delete process.env.NEXT_PUBLIC_SITE_URL;
-  process.env.NODE_ENV = 'test';
   vi.resetModules();
 });
 
@@ -139,7 +139,7 @@ describe('indexing signals', () => {
   });
 
   it('falls back to the production domain when a production build is misconfigured with localhost', async () => {
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     process.env.NEXT_PUBLIC_SITE_URL = 'http://localhost:3000';
 
     const { siteUrl } = await import('@/lib/seo');
