@@ -66,27 +66,9 @@ describe('city-site business images', () => {
 
     const images = resolveCitySiteBusinessImages(
       {
-        id: 'test',
         slug: 'test-arizona-business',
         name: { en: 'Test Arizona Business', zh: 'Test Arizona Business' },
-        categorySlug: 'dining',
-        city: 'Phoenix',
-        region: 'Phoenix',
         gallery: [],
-        shortDescription: { en: 'Test', zh: 'Test' },
-        description: { en: 'Test', zh: 'Test' },
-        services: [],
-        languages: [],
-        searchAliases: [],
-        verified: false,
-        bilingual: false,
-        newcomerFriendly: false,
-        sponsored: false,
-        featured: false,
-        rating: 0,
-        reviewCount: 0,
-        lastUpdated: '2026-05-31',
-        hours: [],
       },
       defaultSiteProfile,
       { locale: 'en' }
@@ -133,7 +115,12 @@ describe('city-site business images', () => {
     for (const { businesses, site } of groups) {
       for (const business of businesses) {
         const imagePath = getCitySiteBusinessSpecificImage(business.slug);
-        const images = resolveCitySiteBusinessImages(business, site, { locale: 'en', minimumGalleryImages: 4 });
+        const images = resolveCitySiteBusinessImages({
+          slug: business.slug,
+          name: business.name,
+          heroImage: business.heroImage ?? undefined,
+          gallery: business.gallery,
+        }, site, { locale: 'en', minimumGalleryImages: 4 });
 
         expect(images.heroImage, `${business.slug} should resolve a city-site image`).toMatch(
           /^\/city-site-images\/[a-z0-9-]+\.webp(?:\?.*)?$/

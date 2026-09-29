@@ -105,6 +105,7 @@ function lookupFetchAddress(
 }
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.useRealTimers();
   vi.restoreAllMocks();
   globalThis.fetch = originalFetch;
@@ -674,7 +675,7 @@ describe('Arizona Radar feed fallback', () => {
     // Keep RSS fixtures recent while leaving subprocess timeout timers real.
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-05-30T10:00:00.000Z'));
-    process.env.NODE_ENV = 'test';
+    vi.stubEnv('NODE_ENV', 'test');
     process.env.RADAR_STORAGE_MODE = 'file';
     mockPublicDnsResolution();
 
@@ -808,7 +809,7 @@ describe('Arizona Radar feed fallback', () => {
   });
 
   it('passes Brightspot article body text into Austin feed rewrite prompts', async () => {
-    process.env.NODE_ENV = 'test';
+    vi.stubEnv('NODE_ENV', 'test');
     process.env.RADAR_STORAGE_MODE = 'file';
     mockPublicDnsResolution();
 
@@ -929,7 +930,7 @@ describe('Arizona Radar feed fallback', () => {
   it('does not run broad Hermes retry when rewritten feed articles fill the target', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-05-30T10:00:00.000Z'));
-    process.env.NODE_ENV = 'test';
+    vi.stubEnv('NODE_ENV', 'test');
     process.env.RADAR_STORAGE_MODE = 'file';
     mockPublicDnsResolution();
 
