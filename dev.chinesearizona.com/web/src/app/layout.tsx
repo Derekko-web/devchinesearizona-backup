@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Inter, Noto_Sans_TC } from 'next/font/google';
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/noto-sans-tc/wght.css';
+import '@fontsource-variable/cormorant-garamond/wght.css';
 import './globals.css';
 import { AppShell } from '@/components/AppShell';
 import { AuthProvider } from '@/components/auth/AuthProvider';
@@ -7,13 +9,6 @@ import { getAdSenseClientId } from '@/lib/adsense';
 import { buildSiteVerification } from '@/lib/seo';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const notoSansTC = Noto_Sans_TC({ weight: ['400', '500', '700'], subsets: ['latin'], variable: '--font-noto-sans-tc' });
-const cormorantGaramond = Cormorant_Garamond({
-  subsets: ['latin'],
-  variable: '--font-cormorant',
-  weight: ['500', '600', '700'],
-});
 const adSenseClientId = getAdSenseClientId();
 const iconVersion = '20260423b';
 
@@ -49,7 +44,7 @@ export default async function RootLayout({
     <html
       lang="en"
       translate="no"
-      className={`notranslate ${inter.variable} ${notoSansTC.variable} ${cormorantGaramond.variable}`}
+      className="notranslate"
       suppressHydrationWarning
     >
       <head>
