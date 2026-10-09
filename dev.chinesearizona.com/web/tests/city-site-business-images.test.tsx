@@ -123,6 +123,7 @@ describe('city-site business images', () => {
   it('keeps curated city-site image mappings valid and resolves expanded directories to existing static images', async () => {
     const { getCitySiteBusinessSpecificImage, resolveCitySiteBusinessImages } = await import('@/lib/city-site-business-images');
     const { siteProfiles } = await import('@/lib/site-config');
+    const { getDirectoryBusinessBySlug } = await import('@/lib/directory');
     const mappedImages = new Map<string, string[]>();
     const groups = [
       { businesses: austinBusinesses, site: siteProfiles.austin },
@@ -133,7 +134,9 @@ describe('city-site business images', () => {
     for (const { businesses, site } of groups) {
       for (const business of businesses) {
         const imagePath = getCitySiteBusinessSpecificImage(business.slug);
-        const images = resolveCitySiteBusinessImages(business, site, { locale: 'en', minimumGalleryImages: 4 });
+        const directoryBusiness = await getDirectoryBusinessBySlug(business.slug, { site, includeNonPublic: true });
+        expect(directoryBusiness, `${business.slug} should be in the directory`).toBeDefined();
+        const images = resolveCitySiteBusinessImages(directoryBusiness!, site, { locale: 'en', minimumGalleryImages: 4 });
 
         expect(images.heroImage, `${business.slug} should resolve a city-site image`).toMatch(
           /^\/city-site-images\/[a-z0-9-]+\.webp(?:\?.*)?$/

@@ -27,6 +27,17 @@ npm run verify
 This runs linting, tests with coverage, and the production build. Browser checks
 run separately with `npm run e2e`.
 
+## Build dependencies
+
+Fonts are bundled from Fontsource, including the Traditional Chinese subsets;
+the production build does not fetch Google Fonts.
+
+The Next ESLint plugin uses a scoped `tinyglobby` alias for directory discovery
+to avoid the unpatched `braces` dependency. Its root-directory behavior is covered
+by `tests/next-eslint-root-dirs.test.ts`. React Hooks linting remains pinned to
+7.0.1 to preserve the existing rule set during the security update. Revisit these
+overrides when upgrading the lint configuration.
+
 ## Arizona Radar Freshness
 
 `/news` reads published Arizona Radar items from Supabase when service credentials are configured, with `data/radar-runtime/store.json` as the local mirror/fallback. The normal refresh path is `scripts/arizona_radar/cron_sync.sh`, which loads `dev.chinesearizona.com/web/.env.local` on the host and runs:
