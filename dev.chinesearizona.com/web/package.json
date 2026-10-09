@@ -45,7 +45,7 @@
     "cheerio": "^1.2.0",
     "convex": "^1.40.0",
     "lucide-react": "^1.17.0",
-    "next": "16.2.7",
+    "next": "16.4.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.0.2",
