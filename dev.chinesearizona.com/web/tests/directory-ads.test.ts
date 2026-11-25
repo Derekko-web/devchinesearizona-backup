@@ -359,3 +359,185 @@ describe('directory ad helpers', () => {
     });
   });
 });
+
+type FakeQuery = {
+  action: 'select' | 'insert' | 'update';
+  filters: Record<string, unknown>;
+  payload?: unknown;
+  table: string;
+};
+
+type FakeResult = { data?: unknown; error?: unknown };
+
+function fakeServiceClient(respond: (query: FakeQuery) => FakeResult) {
+  const queries: FakeQuery[] = [];
+  const settle = (query: FakeQuery) => {
+    queries.push({ ...query, filters: { ...query.filters } });
+    return { data: null, error: null, ...respond(query) };
+  };
+
+  const client = {
+    from: vi.fn((table: string) => {
+      const query: FakeQuery = { action: 'select', filters: {}, table };
+      const builder = {
+        select: vi.fn(() => builder),
+        insert: vi.fn((payload: unknown) => {
+          query.action = 'insert';
+          query.payload = payload;
+          return builder;
+        }),
+        update: vi.fn((payload: unknown) => {
+          query.action = 'update';
+          query.payload = payload;
+          return builder;
+        }),
+        eq: vi.fn((column: string, value: unknown) => {
+          query.filters[column] = value;
+          return builder;
+        }),
+        limit: vi.fn(() => builder),
+        maybeSingle: vi.fn(async () => settle(query)),
+        then: (resolve: (value: FakeResult) => unknown, reject: (reason: unknown) => unknown) =>
+          Promise.resolve(settle(query)).then(resolve, reject),
+      };
+      return builder;
+    }),
+  };
+
+  return { client, queries };
+}
+
+const futureEndsAt = () => new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString();
+
+function existingCampaignRow() {
+  return {
+    id: 'campaign-1',
+    business_id: 'business-1',
+    owner_profile_id: 'owner-1',
+    status: 'active',
+    budget_cents: 10_000,
+    remaining_budget_cents: 4_000,
+    cost_per_click_cents: 300,
+    scope_city: 'Phoenix',
+    scope_category: 'grocery',
+    starts_at: new Date().toISOString(),
+    ends_at: futureEndsAt(),
+    stripe_checkout_session_id: 'cs_old',
+    stripe_payment_intent_id: 'pi_old',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}
+
+// A paid checkout for business-1 whose owner matches, so only the database
+// responses decide whether the campaign can be saved.
+function webhookResponder(overrides: Partial<Record<'sessionLookup' | 'business' | 'existingCampaign' | 'insert' | 'update', FakeResult>> = {}) {
+  return (query: FakeQuery): FakeResult => {
+    if (query.table === 'businesses') {
+      return overrides.business ?? { data: { id: 'business-1', owner_profile_id: 'owner-1', city: 'Phoenix' } };
+    }
+
+    if (query.action === 'insert') {
+      return overrides.insert ?? { error: null };
+    }
+
+    if (query.action === 'update') {
+      return overrides.update ?? { error: null };
+    }
+
+    if ('stripe_checkout_session_id' in query.filters) {
+      return overrides.sessionLookup ?? { data: null };
+    }
+
+    return overrides.existingCampaign ?? { data: existingCampaignRow() };
+  };
+}
+
+function completedDirectoryAdCheckout(metadata: Record<string, string> = {}) {
+  return {
+    id: 'evt_checkout_completed',
+    type: 'checkout.session.completed',
+    data: {
+      object: {
+        id: 'cs_new',
+        payment_intent: 'pi_new',
+        payment_status: 'paid',
+        status: 'complete',
+        metadata: {
+          checkout_kind: 'directory_ad',
+          budget_cents: '10000',
+          business_id: 'business-1',
+          owner_profile_id: 'owner-1',
+          scope_city: 'Phoenix',
+          scope_category: 'grocery',
+          ...metadata,
+        },
+      },
+    },
+  } as never;
+}
+
+async function loadWebhookHandler(respond: (query: FakeQuery) => FakeResult) {
+  const fake = fakeServiceClient(respond);
+
+  vi.doMock('@/lib/supabase', () => ({
+    getSupabaseServiceClient: vi.fn(() => fake.client),
+    isSupabaseServiceConfigured: vi.fn(() => true),
+  }));
+  vi.doMock('@/lib/stripe', () => ({
+    getStripeClient: vi.fn(() => null),
+    getStripeWebhookSecret: vi.fn(() => 'whsec_123'),
+    isStripeConfigured: vi.fn(() => true),
+  }));
+
+  const { handleDirectoryAdStripeEvent } = await import('@/lib/directory-ads');
+  return { handleDirectoryAdStripeEvent, queries: fake.queries };
+}
+
+describe('directory ad Stripe webhook handling', () => {
+  it('creates a campaign for a paid checkout', async () => {
+    const { handleDirectoryAdStripeEvent, queries } = await loadWebhookHandler(webhookResponder());
+
+    await expect(handleDirectoryAdStripeEvent(completedDirectoryAdCheckout())).resolves.toBeUndefined();
+
+    expect(queries.filter((query) => query.action === 'insert')).toHaveLength(1);
+  });
+
+  it('fails the event when the new campaign cannot be saved', async () => {
+    const { handleDirectoryAdStripeEvent } = await loadWebhookHandler(
+      webhookResponder({ insert: { error: { message: 'insert failed' } } })
+    );
+
+    await expect(handleDirectoryAdStripeEvent(completedDirectoryAdCheckout())).rejects.toThrow();
+  });
+
+  it('fails the event when the top-up cannot be saved', async () => {
+    const { handleDirectoryAdStripeEvent } = await loadWebhookHandler(
+      webhookResponder({ update: { error: { message: 'update failed' } } })
+    );
+
+    await expect(
+      handleDirectoryAdStripeEvent(completedDirectoryAdCheckout({ campaign_id: 'campaign-1' }))
+    ).rejects.toThrow();
+  });
+
+  it('fails the event without saving when the duplicate-session check errors', async () => {
+    const { handleDirectoryAdStripeEvent, queries } = await loadWebhookHandler(
+      webhookResponder({ sessionLookup: { error: { message: 'lookup failed' } } })
+    );
+
+    await expect(handleDirectoryAdStripeEvent(completedDirectoryAdCheckout())).rejects.toThrow();
+    expect(queries.some((query) => query.action === 'insert' || query.action === 'update')).toBe(false);
+  });
+
+  it('fails the event instead of starting a new campaign when the top-up lookup errors', async () => {
+    const { handleDirectoryAdStripeEvent, queries } = await loadWebhookHandler(
+      webhookResponder({ existingCampaign: { error: { message: 'lookup failed' } } })
+    );
+
+    await expect(
+      handleDirectoryAdStripeEvent(completedDirectoryAdCheckout({ campaign_id: 'campaign-1' }))
+    ).rejects.toThrow();
+    expect(queries.some((query) => query.action === 'insert')).toBe(false);
+  });
+});
