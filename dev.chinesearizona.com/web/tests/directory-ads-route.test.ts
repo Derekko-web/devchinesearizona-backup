@@ -60,4 +60,50 @@ describe('directory ad checkout route', () => {
       url: 'https://checkout.stripe.test/session_123',
     });
   });
+
+  it('builds checkout return links from the public host behind the proxy', async () => {
+    const createDirectoryAdCheckoutForProfile = vi.fn().mockResolvedValue({
+      message: 'Sponsored placement checkout created.',
+      mode: 'redirect',
+      url: 'https://checkout.stripe.test/session_123',
+    });
+
+    vi.doMock('@/lib/api-auth', () => ({
+      requireApiUser: vi.fn().mockResolvedValue({
+        profile: { id: 'profile-1' },
+        response: null,
+        user: { email: 'owner@example.com' },
+      }),
+      withApiAuthSession: vi.fn((response: Response) => response),
+    }));
+    vi.doMock('@/lib/directory-ads', () => ({
+      createDirectoryAdCheckoutForProfile,
+    }));
+    vi.doMock('@/lib/rate-limit', () => ({
+      checkRateLimit: vi.fn(() => true),
+    }));
+
+    const { POST } = await import('@/app/api/directory/ads/checkout/route');
+    // Next builds the request URL from its bind address when it runs behind
+    // the host router, so the public host only arrives in forwarded headers.
+    const request = new NextRequest('http://127.0.0.1:3001/api/directory/ads/checkout', {
+      body: JSON.stringify({
+        budgetCents: 10_000,
+        businessSlug: 'lotus-market',
+      }),
+      headers: {
+        'content-type': 'application/json',
+        'x-forwarded-host': 'chinesearizona.com',
+        'x-forwarded-proto': 'https',
+        'x-locale': 'en',
+      },
+      method: 'POST',
+    });
+
+    await POST(request);
+
+    expect(createDirectoryAdCheckoutForProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ baseUrl: 'https://chinesearizona.com' })
+    );
+  });
 });
