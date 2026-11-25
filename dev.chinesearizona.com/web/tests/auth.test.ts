@@ -57,6 +57,27 @@ describe('auth helpers', () => {
     expect(sanitizeAuthRedirect('//example.com')).toBeUndefined();
   });
 
+  it('rejects path spellings that browsers resolve to another host', () => {
+    expect(sanitizeAuthRedirect('/\\example.com')).toBeUndefined();
+    expect(sanitizeAuthRedirect('/\\/example.com')).toBeUndefined();
+    expect(sanitizeAuthRedirect('/\t/example.com')).toBeUndefined();
+    expect(sanitizeAuthRedirect('/\n/example.com')).toBeUndefined();
+    expect(sanitizeAuthRedirect('/\r/example.com')).toBeUndefined();
+  });
+
+  it('keeps query strings and hashes on safe relative redirects', () => {
+    expect(sanitizeAuthRedirect('/zh/community?tab=events#latest')).toBe('/zh/community?tab=events#latest');
+  });
+
+  it('never builds an off-site post-auth destination', () => {
+    expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en', '/\\example.com')).toBe(
+      'https://chinesearizona.com/en'
+    );
+    expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en', '/\t/example.com')).toBe(
+      'https://chinesearizona.com/en'
+    );
+  });
+
   it('falls back to the localized home page when next is missing or points at auth', () => {
     expect(resolvePostAuthPath('en')).toBe('/en');
     expect(resolvePostAuthPath('zh', '/zh/auth')).toBe('/zh');
