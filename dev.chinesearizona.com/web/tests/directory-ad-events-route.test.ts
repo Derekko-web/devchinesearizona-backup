@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 describe('directory ad events route', () => {
-  it('identifies the visitor by the address nginx appended, not one the client sent', async () => {
+  it('identifies the visitor by the address our proxies forwarded, not one the client sent', async () => {
     const checkRateLimit = vi.fn(() => true);
     const recordDirectoryAdEvent = vi.fn().mockResolvedValue({ billed: true, recorded: true });
 
@@ -15,8 +15,8 @@ describe('directory ad events route', () => {
     vi.doMock('@/lib/directory-ads', () => ({ recordDirectoryAdEvent }));
 
     const { POST } = await import('@/app/api/directory/ads/events/route');
-    // nginx uses $proxy_add_x_forwarded_for, so anything the client sends comes
-    // first and the real remote address is always the last entry.
+    // Traefik sets the real remote address, then nginx appends Traefik's own
+    // loopback address, so the visitor is the rightmost non-internal entry.
     const response = await POST(
       new NextRequest('http://127.0.0.1:3001/api/directory/ads/events', {
         body: JSON.stringify({
@@ -28,7 +28,7 @@ describe('directory ad events route', () => {
         }),
         headers: {
           'content-type': 'application/json',
-          'x-forwarded-for': '10.9.9.9, 192.0.2.55, 203.0.113.7',
+          'x-forwarded-for': '198.51.100.20, 203.0.113.7, 127.0.0.1',
         },
         method: 'POST',
       })
