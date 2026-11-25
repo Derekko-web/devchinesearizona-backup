@@ -4,6 +4,7 @@ import { requireApiUser, withApiAuthSession } from '@/lib/api-auth';
 import { createDirectoryAdCheckoutForProfile } from '@/lib/directory-ads';
 import { resolveLocale } from '@/lib/i18n';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { getRequestBaseUrl } from '@/lib/request-url';
 
 function requesterKey(request: NextRequest) {
   return request.headers.get('x-forwarded-for') ?? 'local-request';
@@ -67,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await createDirectoryAdCheckoutForProfile({
-      baseUrl: request.nextUrl.origin,
+      baseUrl: getRequestBaseUrl(request),
       budgetCents: body.budgetCents,
       businessSlug: body.businessSlug,
       locale,
