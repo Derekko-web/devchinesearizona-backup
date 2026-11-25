@@ -68,6 +68,13 @@ node scripts/arizona_radar/run.cjs run --site=<city>
 ```
 
 The service/timer layer changes only the runtime boundary around that command.
+
+`install-app-env-override.sh` loads the dev app environment into every worker.
+The Arizona worker gets an extra `production-env.conf` drop-in that also loads
+`/var/www/chinesearizona.com/shared/.env.local`, so Arizona news is written to
+the production Supabase project that chinesearizona.com reads. The per-city
+`/etc/chinesearizona/radar-hermes/<city>.env` file still loads last. Austin, Los
+Angeles and SF Bay use file-backed stores and are unaffected.
 For the Hostinger VPS runtime, the template expects the web checkout at
 `/var/www/dev.chinesearizona.com/web` and mutable radar data under
 `/var/www/runtime-data/dev.chinesearizona.com/web`, matching the existing deploy
