@@ -359,3 +359,166 @@ describe('directory ad helpers', () => {
     });
   });
 });
+
+// In-memory stand-in for the two directory ad tables, including the unique
+// dedupe_key index and the remaining-budget guard used when billing clicks.
+function fakeDirectoryAdDatabase() {
+  const campaign = {
+    id: 'campaign-1',
+    business_id: 'business-1',
+    owner_profile_id: 'owner-1',
+    status: 'active',
+    budget_cents: 10_000,
+    remaining_budget_cents: 10_000,
+    cost_per_click_cents: 300,
+    scope_city: 'Phoenix',
+    scope_category: 'grocery',
+    starts_at: new Date().toISOString(),
+    ends_at: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+    stripe_checkout_session_id: 'cs_1',
+    stripe_payment_intent_id: 'pi_1',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+  const events = new Map<string, Record<string, unknown>>();
+
+  const client = {
+    from: vi.fn((table: string) => {
+      const filters: Record<string, unknown> = {};
+      let action: 'select' | 'insert' | 'update' = 'select';
+      let payload: Record<string, unknown> = {};
+
+      const run = () => {
+        if (table === 'directory_ad_events') {
+          if (action === 'insert') {
+            const key = String(payload.dedupe_key);
+            if (events.has(key)) {
+              return {
+                data: null,
+                error: { message: 'duplicate key value violates unique constraint "directory_ad_events_dedupe_key_idx"' },
+              };
+            }
+            events.set(key, { ...payload });
+            return { data: { campaign_id: payload.campaign_id }, error: null };
+          }
+
+          if (action === 'update') {
+            const event = events.get(String(filters.dedupe_key));
+            if (event) {
+              Object.assign(event, payload);
+            }
+          }
+
+          return { data: null, error: null };
+        }
+
+        if (table === 'directory_ad_campaigns') {
+          if (filters.id !== campaign.id) {
+            return { data: null, error: null };
+          }
+
+          if (action === 'update') {
+            if (
+              'remaining_budget_cents' in filters &&
+              filters.remaining_budget_cents !== campaign.remaining_budget_cents
+            ) {
+              return { data: null, error: null };
+            }
+            Object.assign(campaign, payload);
+          }
+
+          return { data: { ...campaign }, error: null };
+        }
+
+        throw new Error(`Unexpected table: ${table}`);
+      };
+
+      const builder = {
+        select: vi.fn(() => builder),
+        insert: vi.fn((value: Record<string, unknown>) => {
+          action = 'insert';
+          payload = value;
+          return builder;
+        }),
+        update: vi.fn((value: Record<string, unknown>) => {
+          action = 'update';
+          payload = value;
+          return builder;
+        }),
+        eq: vi.fn((column: string, value: unknown) => {
+          filters[column] = value;
+          return builder;
+        }),
+        maybeSingle: vi.fn(async () => run()),
+        then: (resolve: (value: unknown) => unknown, reject: (reason: unknown) => unknown) =>
+          Promise.resolve(run()).then(resolve, reject),
+      };
+      return builder;
+    }),
+  };
+
+  return { campaign, client, events };
+}
+
+async function loadDirectoryAdEventRecorder() {
+  const database = fakeDirectoryAdDatabase();
+
+  vi.doMock('@/lib/supabase', () => ({
+    getSupabaseServiceClient: vi.fn(() => database.client),
+    isSupabaseServiceConfigured: vi.fn(() => true),
+  }));
+  vi.doMock('@/lib/stripe', () => ({
+    getStripeClient: vi.fn(() => null),
+    getStripeWebhookSecret: vi.fn(() => 'whsec_123'),
+    isStripeConfigured: vi.fn(() => true),
+  }));
+
+  const { recordDirectoryAdEvent } = await import('@/lib/directory-ads');
+  return { database, recordDirectoryAdEvent };
+}
+
+function sponsoredClick(sessionId: string, visitorAddress: string) {
+  return {
+    businessId: 'business-1',
+    campaignId: 'campaign-1',
+    eventType: 'click' as const,
+    pagePath: '/en/directory',
+    sessionId,
+    visitorAddress,
+  };
+}
+
+describe('directory ad click billing', () => {
+  it('bills a visitor once per campaign per day, whatever session id they send', async () => {
+    const { database, recordDirectoryAdEvent } = await loadDirectoryAdEventRecorder();
+
+    const first = await recordDirectoryAdEvent(sponsoredClick('session-a', '203.0.113.7'));
+    const second = await recordDirectoryAdEvent(sponsoredClick('session-b', '203.0.113.7'));
+    const third = await recordDirectoryAdEvent({
+      ...sponsoredClick('session-c', '203.0.113.7'),
+      pagePath: '/zh/directory',
+    });
+
+    expect(first.billed).toBe(true);
+    expect(second.billed).toBe(false);
+    expect(third.billed).toBe(false);
+    expect(database.campaign.remaining_budget_cents).toBe(9_700);
+  });
+
+  it('bills clicks from different visitors separately', async () => {
+    const { database, recordDirectoryAdEvent } = await loadDirectoryAdEventRecorder();
+
+    await recordDirectoryAdEvent(sponsoredClick('session-a', '203.0.113.7'));
+    await recordDirectoryAdEvent(sponsoredClick('session-a', '198.51.100.4'));
+
+    expect(database.campaign.remaining_budget_cents).toBe(9_400);
+  });
+
+  it('does not store the visitor address in the dedupe key', async () => {
+    const { database, recordDirectoryAdEvent } = await loadDirectoryAdEventRecorder();
+
+    await recordDirectoryAdEvent(sponsoredClick('session-a', '203.0.113.7'));
+
+    expect([...database.events.keys()].some((key) => key.includes('203.0.113.7'))).toBe(false);
+  });
+});

@@ -22,3 +22,16 @@ export function getRequestBaseUrl(request: Pick<NextRequest, 'headers' | 'nextUr
 
   return normalizeAuthBaseUrl(`${protocol}://${host}`);
 }
+
+// nginx forwards with $proxy_add_x_forwarded_for, which appends the real remote
+// address after anything the client sent, so only the last entry can be trusted.
+export function getClientAddress(request: Pick<NextRequest, 'headers'>): string {
+  const entries =
+    request.headers
+      .get('x-forwarded-for')
+      ?.split(',')
+      .map((entry) => entry.trim())
+      .filter(Boolean) ?? [];
+
+  return entries.at(-1) ?? 'local-request';
+}

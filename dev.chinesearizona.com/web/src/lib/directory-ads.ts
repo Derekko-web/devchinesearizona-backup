@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto';
+
 import type Stripe from 'stripe';
 
 import { siteUrl } from '@/lib/seo';
@@ -381,6 +383,22 @@ export function buildDirectoryAdEventDedupeKey(
     normalizePath(pagePath),
     sessionId.trim(),
   ].join(':');
+}
+
+// Billable clicks are de-duplicated per campaign, per visitor, per UTC day using
+// the server-side visitor address, because the browser-sent session id can be
+// anything. The address is hashed so raw IPs are never stored.
+export function buildDirectoryAdClickDedupeKey(
+  campaignId: string,
+  visitorAddress: string,
+  now = new Date()
+) {
+  const visitor = createHmac('sha256', process.env.SUPABASE_SERVICE_ROLE_KEY ?? '')
+    .update(visitorAddress.trim())
+    .digest('hex')
+    .slice(0, 32);
+
+  return ['directory-ad', 'click', campaignId.trim(), now.toISOString().slice(0, 10), visitor].join(':');
 }
 
 export function resolveDirectoryAdCampaignStatus(
@@ -1215,6 +1233,7 @@ export async function recordDirectoryAdEvent(input: {
   eventType: DirectoryAdEventType;
   pagePath: string;
   sessionId: string;
+  visitorAddress: string;
 }): Promise<DirectoryAdEventResult> {
   if (!isSupabaseServiceConfigured() || !isDirectoryAdEligiblePath(input.pagePath)) {
     return {
@@ -1256,12 +1275,15 @@ export async function recordDirectoryAdEvent(input: {
     };
   }
 
-  const dedupeKey = buildDirectoryAdEventDedupeKey(
-    input.eventType,
-    input.campaignId,
-    input.pagePath,
-    input.sessionId
-  );
+  const dedupeKey =
+    input.eventType === 'click'
+      ? buildDirectoryAdClickDedupeKey(input.campaignId, input.visitorAddress)
+      : buildDirectoryAdEventDedupeKey(
+          input.eventType,
+          input.campaignId,
+          input.pagePath,
+          input.sessionId
+        );
   const { data: inserted, error: insertError } = await client
     .from('directory_ad_events')
     .insert({
