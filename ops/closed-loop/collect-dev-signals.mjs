@@ -7,7 +7,18 @@ import { fileURLToPath } from 'node:url';
 
 import { recentServerErrorLines } from './access-log-health.mjs';
 import { recentCronAnomalyLines } from './cron-log-health.mjs';
+import { syncFindingIssue } from './issue-sync.mjs';
 import { evaluatePm2Health, pm2ProcessState } from './pm2-health.mjs';
+import {
+  PROD_PROCESS_NAME,
+  prodAccessLogFindings,
+  prodFindingKeys,
+  prodPm2Findings,
+  prodRuntimeLogFindings,
+  prodSettings,
+  prodSmokeFindings,
+  prodSmokeRoutes,
+} from './prod-signals.mjs';
 import {
   defaultRuntimeLogPatterns,
   hasRuntimeLogPattern,
@@ -33,6 +44,7 @@ const labels = {
   ci: '0e8a16',
   cron: 'fbca04',
   'loop/dev': '5319e7',
+  'loop/prod': 'b60205',
   runtime: 'd73a4a',
 };
 
@@ -122,11 +134,11 @@ function finding(key, title, body, extraLabels = []) {
   };
 }
 
-async function checkRoute(path) {
+async function checkRoute(path, baseUrl) {
   const startedAt = Date.now();
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), Number(process.env.CLOSED_LOOP_TIMEOUT_MS || 15_000));
-  const url = `${BASE_URL}${path}`;
+  const url = `${baseUrl}${path}`;
 
   try {
     const response = await fetch(url, {
@@ -165,7 +177,7 @@ async function checkRoute(path) {
 }
 
 async function collectSmokeFindings() {
-  const results = await Promise.all(requiredRoutes.map(checkRoute));
+  const results = await Promise.all(requiredRoutes.map((path) => checkRoute(path, BASE_URL)));
   const failures = results.filter((result) => !result.ok);
   if (failures.length === 0) {
     return [];
@@ -397,6 +409,51 @@ function collectStalenessFindings() {
   });
 }
 
+// Production (chinesearizona.com) signals. Each read is guarded so a
+// production problem can never stop the dev checks from syncing.
+async function collectProdFindings() {
+  const settings = prodSettings(process.env, { appRoot: APP_ROOT });
+
+  const smokeResults = await Promise.all(
+    prodSmokeRoutes.map((path) => checkRoute(path, settings.baseUrl))
+  );
+
+  const pm2State = readJsonFile(settings.pm2StateFile) ?? {};
+  const pm2 = prodPm2Findings(run('pm2', ['jlist']), {
+    previousState: pm2State[PROD_PROCESS_NAME] ?? null,
+    stableWindowMs: Number(process.env.CLOSED_LOOP_PM2_STABLE_WINDOW_MS || 30 * 60 * 1000),
+    threshold: Number(process.env.CLOSED_LOOP_PM2_RESTART_THRESHOLD || 10),
+  });
+  if (pm2.state) {
+    try {
+      writeJsonFile(settings.pm2StateFile, { ...pm2State, [PROD_PROCESS_NAME]: pm2.state });
+    } catch (error) {
+      process.stderr.write(`Production PM2 state file ${settings.pm2StateFile}: ${error.message}\n`);
+    }
+  }
+
+  const accessLines = tail(settings.accessLog, Number(process.env.CLOSED_LOOP_ACCESS_LOG_SAMPLE || 5000))
+    .split(/\r?\n/)
+    .filter(Boolean);
+
+  let runtimeLog = '';
+  try {
+    runtimeLog = readRuntimeLogAppend(settings.pm2ErrorLog, settings.runtimeLogStateFile);
+  } catch (error) {
+    process.stderr.write(`Production runtime log ${settings.pm2ErrorLog}: ${error.message}\n`);
+  }
+
+  return [
+    ...prodSmokeFindings(smokeResults, { baseUrl: settings.baseUrl }),
+    ...pm2.findings,
+    ...prodAccessLogFindings(accessLines, {
+      threshold: Number(process.env.CLOSED_LOOP_5XX_THRESHOLD || 5),
+      windowMinutes: Number(process.env.CLOSED_LOOP_5XX_WINDOW_MINUTES || 60),
+    }),
+    ...prodRuntimeLogFindings(runtimeLog),
+  ].map((item) => ({ ...item, source: settings.baseUrl }));
+}
+
 async function githubRequest(path, options = {}) {
   if (!githubToken) {
     throw new Error('CLOSED_LOOP_GITHUB_TOKEN, GH_TOKEN, or GITHUB_TOKEN is required.');
@@ -444,63 +501,6 @@ async function ensureLabels() {
   }
 }
 
-async function findOpenIssue(key) {
-  const marker = `closed-loop:dev:${key}`;
-  const query = new URLSearchParams({
-    q: `repo:${GITHUB_REPOSITORY} is:issue is:open ${marker}`,
-  });
-  const result = await githubRequest(`/search/issues?${query.toString()}`);
-  return result.items?.[0];
-}
-
-async function syncIssue(key, currentFinding) {
-  const marker = `<!-- closed-loop:dev:${key} -->`;
-  const openIssue = await findOpenIssue(key);
-
-  if (!currentFinding) {
-    if (openIssue) {
-      await githubRequest(`/repos/${GITHUB_REPOSITORY}/issues/${openIssue.number}`, {
-        body: JSON.stringify({
-          state: 'closed',
-          state_reason: 'completed',
-        }),
-        method: 'PATCH',
-      });
-    }
-    return;
-  }
-
-  const body = [
-    marker,
-    currentFinding.body,
-    '',
-    '---',
-    `Collected at: ${new Date().toISOString()}`,
-    `Source: ${BASE_URL}`,
-  ].join('\n');
-
-  if (openIssue) {
-    await githubRequest(`/repos/${GITHUB_REPOSITORY}/issues/${openIssue.number}`, {
-      body: JSON.stringify({
-        body,
-        labels: currentFinding.labels,
-        title: currentFinding.title,
-      }),
-      method: 'PATCH',
-    });
-    return;
-  }
-
-  await githubRequest(`/repos/${GITHUB_REPOSITORY}/issues`, {
-    body: JSON.stringify({
-      body,
-      labels: currentFinding.labels,
-      title: currentFinding.title,
-    }),
-    method: 'POST',
-  });
-}
-
 const knownKeys = [
   'cron-arizona-radar',
   'cron-sunbird',
@@ -512,6 +512,7 @@ const knownKeys = [
   'smoke',
   'stale-radar-store',
   'stale-sunbird-sync',
+  ...prodFindingKeys,
 ];
 
 const findings = [
@@ -521,6 +522,7 @@ const findings = [
   ...collectRuntimeLogFindings(),
   ...collectCronFindings(),
   ...collectStalenessFindings(),
+  ...(await collectProdFindings()),
 ];
 const findingsByKey = new Map(findings.map((item) => [item.key, item]));
 
@@ -543,7 +545,13 @@ if (!githubToken) {
 } else {
   await ensureLabels();
   for (const key of knownKeys) {
-    await syncIssue(key, findingsByKey.get(key));
+    await syncFindingIssue({
+      finding: findingsByKey.get(key),
+      key,
+      repository: GITHUB_REPOSITORY,
+      request: githubRequest,
+      source: BASE_URL,
+    });
   }
   process.exitCode = process.env.CLOSED_LOOP_FAIL_ON_FINDINGS === '1' && findings.length > 0 ? 1 : 0;
 }
