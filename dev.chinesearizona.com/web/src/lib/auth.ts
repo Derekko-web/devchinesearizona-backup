@@ -24,8 +24,22 @@ function isLocalAuthHost(hostname: string): boolean {
   return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1' || hostname === '[::1]';
 }
 
+// Placeholder origin used only to check that a path stays on the same site.
+const SAME_SITE_CHECK_ORIGIN = 'https://same-site.invalid';
+// Browsers treat backslashes as slashes and drop tabs and newlines, so these
+// can turn an innocent-looking path into a link to another host.
+const unsafeRedirectCharacters = /[\\\u0000-\u001f\u007f]/;
+
 export function sanitizeAuthRedirect(path?: string | null): string | undefined {
-  if (!path || !path.startsWith('/') || path.startsWith('//')) {
+  if (!path || !path.startsWith('/') || path.startsWith('//') || unsafeRedirectCharacters.test(path)) {
+    return undefined;
+  }
+
+  try {
+    if (new URL(path, SAME_SITE_CHECK_ORIGIN).origin !== SAME_SITE_CHECK_ORIGIN) {
+      return undefined;
+    }
+  } catch {
     return undefined;
   }
 
