@@ -96,6 +96,16 @@ describe('indexing signals', () => {
     expect(metadata?.robots).toEqual({ index: false, follow: false });
   });
 
+  it('leaves Shop URLs out of the sitemap even when the old shop flag is set', async () => {
+    vi.stubEnv('NEXT_PUBLIC_SHOP_PUBLIC_ENABLED', '1');
+
+    const entries = await buildSitemap();
+    const urls = entries.map((entry) => entry.url);
+
+    expect(urls.length).toBeGreaterThan(0);
+    expect(urls.filter((url) => new URL(url).pathname.split('/').includes('shop'))).toEqual([]);
+  });
+
   it('adds publisher trust pages to the sitemap', async () => {
     const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
