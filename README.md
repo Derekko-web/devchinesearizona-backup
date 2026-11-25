@@ -11,7 +11,7 @@ multi-city publishing and data-import pipelines.
 - `dev.chinesearizona.com/web/`: the Next.js application, API routes, ingestion scripts, and tests
 - `ops/`: deployment, runtime monitoring, and worker operations
 - `.github/workflows/`: continuous integration and deployment workflows
-- `chinesearizona.com/`, `dev.chinesearizona.com/public/`, and `html/`: site assets and supporting or legacy site files
+- `chinesearizona.com/` and `html/`: the main domain's PM2 process config and supporting server files
 
 ## Development
 
