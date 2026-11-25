@@ -12,6 +12,7 @@ import {
   hasRuntimeLogPattern,
   readRuntimeLogAppend,
 } from './runtime-log.mjs';
+import { arizonaRadarStorePath } from './runtime-paths.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_REPO_ROOT = resolve(__dirname, '../..');
@@ -374,7 +375,7 @@ function collectStalenessFindings() {
       hours: Number(process.env.CLOSED_LOOP_RADAR_STALE_HOURS || 192),
       key: 'stale-radar-store',
       label: 'Arizona Radar runtime store is stale',
-      path: resolve(APP_ROOT, 'data/radar-runtime/store.json'),
+      path: arizonaRadarStorePath(),
     },
   ];
 
