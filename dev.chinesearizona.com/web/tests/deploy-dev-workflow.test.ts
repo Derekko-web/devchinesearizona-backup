@@ -167,3 +167,15 @@ describe('Deploy Dev local article repair', () => {
     expect(workflow).toContain('export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"');
   });
 });
+
+describe('Deploy Dev smoke scope', () => {
+  it('checks only dev.chinesearizona.com, because the city domains are served by production', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+    const skip = workflow.indexOf('export SMOKE_SKIP_PUBLIC_DOMAINS=1');
+
+    expect(skip).toBeGreaterThan(-1);
+    // Set before both the rollback smoke and the main smoke.
+    expect(skip).toBeLessThan(workflow.indexOf('rollback_to_previous_sha() {'));
+    expect(skip).toBeLessThan(workflow.indexOf('if ! npm run smoke:dev; then'));
+  });
+});

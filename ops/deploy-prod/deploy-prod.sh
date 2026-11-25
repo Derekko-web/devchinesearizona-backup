@@ -30,6 +30,10 @@ LOCK_WAIT_SECONDS="${VPS_BUILD_LOCK_WAIT_SECONDS:-1800}"
 READY_ATTEMPTS="${PROD_READY_ATTEMPTS:-45}"
 READY_INTERVAL_SECONDS="${PROD_READY_INTERVAL_SECONDS:-2}"
 KEEP_RELEASES="${PROD_KEEP_RELEASES:-3}"
+# nginx site for one of the city domains. Once ops/move-city-domains-to-prod.sh
+# points the city domains at the production app (through the host router on
+# port 3000), the smoke check covers them too.
+CITY_NGINX_SITE="${PROD_CITY_NGINX_SITE:-/etc/nginx/sites-enabled/chineseaustin.com.conf}"
 
 LEGACY_RELEASE="legacy-20260517"
 RELEASES_DIR="$PROD_ROOT/releases"
@@ -261,16 +265,24 @@ wait_until_serving() {
   return 1
 }
 
+city_domains_on_prod() {
+  grep -qs 'proxy_pass http://127.0.0.1:3000;' "$CITY_NGINX_SITE"
+}
+
 smoke_release() {
   local name="$1"
+  local skip_city_domains=1
   if is_legacy "$name"; then
     log "Skipping smoke for the legacy app; its pages predate the smoke checks."
     return 0
   fi
+  if city_domains_on_prod; then
+    skip_city_domains=0
+  fi
   (
     cd "$RELEASES_DIR/$name"
     SMOKE_BASE_URL="$SITE_URL" \
-      SMOKE_SKIP_PUBLIC_DOMAINS=1 \
+      SMOKE_SKIP_PUBLIC_DOMAINS="$skip_city_domains" \
       SMOKE_EXPECTED_GIT_SHA="$name" \
       npm run smoke:dev
   )
