@@ -48,7 +48,7 @@
     "cheerio": "^1.2.0",
     "convex": "^1.40.0",
     "lucide-react": "^1.17.0",
-    "next": "16.4.0",
+    "next": "16.4.6",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.0.2",
@@ -61,13 +61,13 @@
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "eslint": "^9",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.6",
     "playwright": "^1.60.0",
     "tailwindcss": "^4",
     "typescript": "^6",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   },
   "overrides": {
     "@next/eslint-plugin-next": {
