@@ -1,10 +1,20 @@
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { arizonaRadarStorePath } from '../../../ops/closed-loop/runtime-paths.mjs';
 import { getRadarStorePath } from '@/lib/radar';
 import { defaultSiteProfile } from '@/lib/site-config';
+
+// ops/ lives outside dev.chinesearizona.com/web. Deploy Prod builds (and
+// type-checks) a release folder that holds only the web app, so a static import
+// would fail that build. Load the closed-loop module at run time instead.
+const runtimePathsUrl = pathToFileURL(
+  path.join(process.cwd(), '..', '..', 'ops', 'closed-loop', 'runtime-paths.mjs')
+).href;
+const { arizonaRadarStorePath } = (await import(runtimePathsUrl)) as {
+  arizonaRadarStorePath: (env?: NodeJS.ProcessEnv) => string;
+};
 
 const envKeys = ['CHINESEARIZONA_RUNTIME_DATA_ROOT', 'RADAR_STORE_PATH', 'RADAR_STORE_PATH_ARIZONA'] as const;
 const originalEnv: Partial<Record<(typeof envKeys)[number], string>> = {};
