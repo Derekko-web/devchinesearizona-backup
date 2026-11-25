@@ -158,6 +158,15 @@ describe('indexing signals', () => {
     expect(siteUrl).toBe('https://chinesearizona.com');
   });
 
+  it('keeps crawlers out of the sign-in pages on every site', () => {
+    for (const site of [undefined, siteProfiles.austin]) {
+      const rules = buildRobots(site).rules;
+      const disallow = (Array.isArray(rules) ? rules[0] : rules)?.disallow;
+
+      expect(disallow).toEqual(expect.arrayContaining(['/auth', '/en/auth', '/zh/auth']));
+    }
+  });
+
   it('builds Austin sitemap and robots URLs without default Arizona directory routes', async () => {
     const entries = await buildSitemap(siteProfiles.austin);
     const urls = entries.map((entry) => entry.url);

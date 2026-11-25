@@ -1,23 +1,16 @@
 import { appendSearch, withLocale } from '@/lib/routing';
-import type { Locale } from '@/lib/types';
+import { locales, type Locale } from '@/lib/types';
 
 export type AuthPageKind = 'login' | 'join';
 
+// Every page under /auth (login, join, reset-password, google, and anything
+// added later), with or without a locale prefix. A sign-in page must never be a
+// post-auth destination, or each sign-in link would nest the previous one in
+// `next` and give crawlers an endless supply of new URLs.
+const authPathPattern = new RegExp(`^/(?:(?:${locales.join('|')})/)?auth(?:/|$)`);
+
 function isAuthPath(pathname: string): boolean {
-  return (
-    pathname === '/auth' ||
-    pathname === '/auth/login' ||
-    pathname === '/auth/join' ||
-    pathname === '/auth/reset-password' ||
-    pathname === '/en/auth' ||
-    pathname === '/en/auth/login' ||
-    pathname === '/en/auth/join' ||
-    pathname === '/en/auth/reset-password' ||
-    pathname === '/zh/auth' ||
-    pathname === '/zh/auth/login' ||
-    pathname === '/zh/auth/join' ||
-    pathname === '/zh/auth/reset-password'
-  );
+  return authPathPattern.test(pathname);
 }
 
 function isLocalAuthHost(hostname: string): boolean {
