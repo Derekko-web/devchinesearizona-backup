@@ -130,7 +130,6 @@ import {
   t,
   verificationStateLabel,
 } from '@/lib/i18n';
-import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import {
   getLocalizedNewsArchivePath,
   getLocalizedNewsArticlePath,
@@ -2553,7 +2552,6 @@ export async function CommunityPageView({
   const trendingArticles = articleList;
   const boardPosts = getCommunityPosts('board');
   const classifiedPosts = getCommunityPosts('classified');
-  const shopEnabled = isShopPublicLaunchEnabled();
   const localizedArticleText = await resolveLocalizedTextList(
     articleList.flatMap((article) => [article.title, article.excerpt]),
     locale
@@ -2627,25 +2625,11 @@ export async function CommunityPageView({
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-2xl font-bold text-slate-900">{locale === 'zh' ? '分類資訊' : 'Classifieds'}</h2>
-            {shopEnabled ? (
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href={withLocale(locale, '/shop')}
-                  className="inline-flex items-center rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
-                >
-                  {locale === 'zh' ? '改逛市集' : 'Browse Shop'}
-                </Link>
-              </div>
-            ) : null}
           </div>
           <p className="text-sm leading-6 text-slate-600">
-            {shopEnabled
-              ? locale === 'zh'
-                ? '社群分類資訊會繼續保留輕量發文；若你需要購物車、議價、訂單與退貨流程，請改用在地市集。'
-                : 'Community classifieds stay lightweight for neighborhood posts. If you need carts, offers, orders, and returns, move over to Shop.'
-              : locale === 'zh'
-                ? '社群分類資訊維持輕量發文與鄰里交流，適合快速發布在地需求。'
-                : 'Community classifieds stay lightweight for neighborhood posts and quick local requests.'}
+            {locale === 'zh'
+              ? '社群分類資訊維持輕量發文與鄰里交流，適合快速發布在地需求。'
+              : 'Community classifieds stay lightweight for neighborhood posts and quick local requests.'}
           </p>
           {classifiedPosts.map((post) => (
             <CommunityCard key={post.slug} post={post} locale={locale} />

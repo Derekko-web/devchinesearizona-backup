@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Stripe is configured to post to /api/shop/webhooks/stripe. The Shop is gone,
-// but directory ad payments still arrive at that URL.
+// Stripe is configured to post to /api/shop/webhooks/stripe. The Shop was
+// removed, but directory ad payments still arrive at that URL.
 const WEBHOOK_URL = 'https://dev.chinesearizona.com/api/shop/webhooks/stripe';
 
 const directoryAdEvent = {
@@ -29,9 +29,7 @@ describe('Stripe webhook route', () => {
   it('delivers directory ad events posted to the existing webhook URL', async () => {
     const constructEvent = mockStripe();
     const handleDirectoryAdStripeEvent = vi.fn().mockResolvedValue(undefined);
-    const handleShopStripeEvent = vi.fn().mockResolvedValue(undefined);
     vi.doMock('@/lib/directory-ads', () => ({ handleDirectoryAdStripeEvent }));
-    vi.doMock('@/lib/shop-payments', () => ({ handleShopStripeEvent }));
 
     const { POST } = await import('@/app/api/shop/webhooks/stripe/route');
     const response = await POST(
@@ -54,7 +52,6 @@ describe('Stripe webhook route', () => {
     );
     expect(handleDirectoryAdStripeEvent).toHaveBeenCalledTimes(1);
     expect(handleDirectoryAdStripeEvent).toHaveBeenCalledWith(directoryAdEvent);
-    expect(handleShopStripeEvent).not.toHaveBeenCalled();
   });
 
   it('rejects requests without a Stripe signature', async () => {

@@ -70,8 +70,8 @@ describe('auth helpers', () => {
     expect(buildJoinPath('en')).toBe('/en/auth/join');
     expect(buildAuthPath('zh', '/zh/community?tab=events')).toBe('/zh/auth/login?next=%2Fzh%2Fcommunity%3Ftab%3Devents');
     expect(buildAuthPath('en', '/en/auth/login')).toBe('/en/auth/login');
-    expect(buildGoogleAuthPath('en', '/en/shop')).toBe('/en/auth/google?next=%2Fen%2Fshop');
-    expect(buildAuthCompletePath('zh', 'join', '/zh/shop/sell')).toBe('/zh/auth/join?complete=1&next=%2Fzh%2Fshop%2Fsell');
+    expect(buildGoogleAuthPath('en', '/en/community')).toBe('/en/auth/google?next=%2Fen%2Fcommunity');
+    expect(buildAuthCompletePath('zh', 'join', '/zh/dashboard/profile')).toBe('/zh/auth/join?complete=1&next=%2Fzh%2Fdashboard%2Fprofile');
   });
 
   it('builds absolute post-auth destinations without routing back through auth', () => {
@@ -79,8 +79,8 @@ describe('auth helpers', () => {
     expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'zh', '/zh/community')).toBe(
       'https://chinesearizona.com/zh/community'
     );
-    expect(buildAuthCompleteUrl('https://localhost:3000', 'en', 'login', '/en/shop')).toBe(
-      'http://localhost:3000/en/auth/login?complete=1&next=%2Fen%2Fshop'
+    expect(buildAuthCompleteUrl('https://localhost:3000', 'en', 'login', '/en/community')).toBe(
+      'http://localhost:3000/en/auth/login?complete=1&next=%2Fen%2Fcommunity'
     );
   });
 

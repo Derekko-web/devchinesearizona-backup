@@ -13,12 +13,10 @@ import { getPublishedDiscoverArticles, discoveryCategories } from '@/lib/discove
 import { getDirectoryBusinesses, shouldNoIndexDirectoryBusiness } from '@/lib/directory';
 import { getHiddenArizonaEntries, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
 import { publisherPageSlugs } from '@/lib/publisher-pages';
-import { isShopPublicLaunchReady } from '@/lib/shop-launch-server';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
-import { getPublicShopSitemapData } from '@/lib/shop-service';
 import { locales } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -69,10 +67,6 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
   const communityPosts = canShowArizonaOnlyContent
     ? getCommunityPosts().filter((post) => !shouldNoIndexCommunityPost(post))
     : [];
-  const shopReady = isShopPublicLaunchReady();
-  const publicShopData = shopReady
-    ? await getPublicShopSitemapData()
-    : { listings: [], sellers: [] };
   const businessRoutes = directoryBusinesses
     .filter((business) => !shouldNoIndexDirectoryBusiness(business))
     .map((business) => `/business/${business.slug}`);
@@ -89,14 +83,11 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
     ...communityPosts.map((post) =>
       `/community/${post.type === 'classified' ? 'classifieds' : 'board'}/${post.slug}`
     ),
-    ...publicShopData.listings.map((listing) => `/shop/item/${listing.slug}`),
-    ...publicShopData.sellers.map((seller) => `/shop/seller/${seller.slug}`),
   ];
 
   const allRoutes = Array.from(
     new Set([
       ...staticRoutes,
-      ...(shopReady ? ['/shop' as const] : []),
       ...dynamicRoutes,
     ])
   );

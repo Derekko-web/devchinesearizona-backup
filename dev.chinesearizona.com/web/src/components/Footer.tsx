@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { localeFromPath, withLocale } from '@/lib/routing';
-import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
 function oppositeCopy(locale: string, en: string, zh: string) {
@@ -15,7 +14,6 @@ function oppositeCopy(locale: string, en: string, zh: string) {
 export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfile }) {
   const pathname = usePathname();
   const locale = localeFromPath(pathname);
-  const shopEnabled = isShopPublicLaunchEnabled();
   const featurePillars = [
     {
       icon: Languages,
@@ -46,7 +44,6 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
     { href: '/', label: locale === 'zh' ? '首頁' : 'Home' },
     { href: '/business', label: locale === 'zh' ? '商家' : 'Business' },
     { href: '/community', label: locale === 'zh' ? '社區' : 'Community' },
-    ...(shopEnabled ? [{ href: '/shop', label: locale === 'zh' ? '市集' : 'Shop' }] : []),
   ];
   const publisherLinks = [
     { href: '/about', label: locale === 'zh' ? '關於' : 'About' },
