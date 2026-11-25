@@ -14,6 +14,7 @@ import {
 import {
   addBusinessMetadata,
   adminMetadata,
+  advertiseMetadata,
   articleMetadata,
   businessMetadata,
   cityCategoryMetadata,
@@ -64,6 +65,7 @@ import {
   ProfilePageView,
   RelocationGuidePageView,
 } from '@/views/site-pages';
+import { AdvertisePageView } from '@/views/advertise-page';
 import { CommunityPageView } from '@/views/community-page';
 import { HomePageView } from '@/views/home-page';
 import { PublisherPageView } from '@/views/publisher-pages';
@@ -92,6 +94,7 @@ type PageProps = {
     businessName?: string;
     businessSlug?: string;
     page?: string;
+    plan?: string;
   }>;
 };
 
@@ -240,6 +243,10 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
 
   if (segments[0] === 'add-business') {
     return addBusinessMetadata(locale, site);
+  }
+
+  if (segments[0] === 'advertise' && segments.length === 1) {
+    return advertiseMetadata(locale, site);
   }
 
   if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {
@@ -425,6 +432,10 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments[0] === 'add-business') {
     return <AddBusinessPageView locale={locale} searchParams={await searchParams} site={site} />;
+  }
+
+  if (segments[0] === 'advertise' && segments.length === 1) {
+    return <AdvertisePageView locale={locale} searchParams={await searchParams} site={site} />;
   }
 
   if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {

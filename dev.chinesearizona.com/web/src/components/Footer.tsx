@@ -48,6 +48,7 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
   const publisherLinks = [
     { href: '/about', label: locale === 'zh' ? '關於' : 'About' },
     { href: '/contact', label: locale === 'zh' ? '聯絡' : 'Contact' },
+    { href: '/advertise', label: locale === 'zh' ? '廣告合作' : 'Advertise' },
     { href: '/privacy', label: locale === 'zh' ? '隱私權' : 'Privacy' },
     { href: '/terms', label: locale === 'zh' ? '條款' : 'Terms' },
     { href: '/editorial-policy', label: locale === 'zh' ? '編輯政策' : 'Editorial Policy' },

@@ -1,6 +1,8 @@
 import { resolveArticleText } from '@/lib/article-localization';
 import type { Metadata } from 'next';
 
+import { advertisePath, getAdvertisePageCopy } from '@/lib/advertise';
+
 import { getNewsArchivePath, getNewsArticlePath, getNewsPath } from '@/lib/arizona-news';
 import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
 import {
@@ -180,6 +182,21 @@ export function addBusinessMetadata(locale: Locale, site: SiteProfile = defaultS
         ? `用商家主理人帳號送出${site.regionNameZh}商家認領或新商家申請，並進入人工審核流程。`
         : `Use an owner account to submit a ${site.regionName} business claim or new listing request for manual review.`,
     path: '/add-business',
+    locale,
+    site,
+  });
+}
+
+export function advertiseMetadata(locale: Locale, site: SiteProfile = defaultSiteProfile): Metadata {
+  const page = getAdvertisePageCopy(locale, site);
+
+  return buildMetadata({
+    title:
+      locale === 'zh'
+        ? `廣告合作與價格 | ${site.brandName}`
+        : `Advertise with Us: Plans and Prices | ${site.brandName}`,
+    description: page.description,
+    path: advertisePath,
     locale,
     site,
   });
