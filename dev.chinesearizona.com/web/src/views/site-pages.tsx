@@ -4148,6 +4148,7 @@ function ManagedBusinessWorkspaceRow({
               locale={locale}
               sizes="56px"
               className="object-cover"
+              showIllustrationLabel={false}
             />
           </div>
           <div className="min-w-0">

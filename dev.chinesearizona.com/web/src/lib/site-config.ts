@@ -32,6 +32,7 @@ export type SiteFeaturedShowcaseCard = {
   categoryZh: string;
   nameEn: string;
   nameZh: string;
+  // Empty shows neutral art.
   imageUrl: string;
   rating: string;
   reviewCount: number;
@@ -170,7 +171,8 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     categoryZh: '地产服务',
     nameEn: 'Hedy Li',
     nameZh: 'Hedy Li',
-    imageUrl: '/directory-ai-replacements/hedy-li-phoenix.webp',
+    // No AI portrait for a named person; the card shows neutral art until she adds a photo.
+    imageUrl: '',
     rating: '4.9',
     reviewCount: 47,
     line1En: 'Phoenix Metro Area',

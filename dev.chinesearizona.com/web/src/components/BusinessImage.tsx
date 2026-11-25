@@ -1,6 +1,8 @@
 import type { CSSProperties } from 'react';
 
 import { CategoryIcon } from '@/components/CategoryIcon';
+import { IllustrationLabel } from '@/components/IllustrationLabel';
+import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import type { BusinessCategory, Locale } from '@/lib/types';
 
 type BusinessImageProps = {
@@ -12,6 +14,7 @@ type BusinessImageProps = {
   sizes?: string;
   priority?: boolean;
   style?: CSSProperties;
+  showIllustrationLabel?: boolean;
 };
 
 export function BusinessImage({
@@ -23,20 +26,24 @@ export function BusinessImage({
   sizes = '100vw',
   priority = false,
   style,
+  showIllustrationLabel = true,
 }: BusinessImageProps) {
   if (imageUrl) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={imageUrl}
-        alt={label}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-        referrerPolicy="no-referrer"
-        sizes={sizes}
-        className={`h-full w-full ${className || 'object-cover'}`}
-        style={style}
-      />
+      <>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={imageUrl}
+          alt={label}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          sizes={sizes}
+          className={`h-full w-full ${className || 'object-cover'}`}
+          style={style}
+        />
+        {showIllustrationLabel && isIllustrationImageUrl(imageUrl) ? <IllustrationLabel locale={locale} /> : null}
+      </>
     );
   }
 

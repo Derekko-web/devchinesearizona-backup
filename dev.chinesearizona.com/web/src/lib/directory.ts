@@ -18,7 +18,7 @@ import type {
   VerificationState,
 } from '@/lib/types';
 import { formatPhoneNumber } from '@/lib/phone';
-import { getDirectoryAiReplacementImage } from '@/lib/directory-ai-replacements';
+import { getDirectoryAiReplacementImage, resolveDirectoryHeroImage } from '@/lib/directory-ai-replacements';
 import {
   canUseCitySiteBusinessImageFallback,
   getCitySiteBusinessSpecificImage,
@@ -646,7 +646,11 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
     email: row.email ?? undefined,
     website,
     menuUrl: row.menu_url ?? undefined,
-    heroImage: getDirectoryAiReplacementImage(row.slug, row.hero_image ?? undefined),
+    heroImage: resolveDirectoryHeroImage({
+      slug: row.slug,
+      heroImage: row.hero_image,
+      claimed: verificationState === 'claimed' || Boolean(ownerProfileSlugFromRow(row)),
+    }),
     gallery: row.gallery ?? [],
     shortDescription: {
       en: row.short_description_en ?? row.description_en ?? row.name_en,

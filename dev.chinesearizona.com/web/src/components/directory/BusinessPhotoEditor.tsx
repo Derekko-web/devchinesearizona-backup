@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { appendUploadedGalleryUrl, getClipboardImageFile, uploadBusinessImageFile } from '@/lib/business-image-upload-client';
 import { formatBusinessGalleryInput, getBusinessHeroImageWarning } from '@/lib/business-media';
+import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import type { Business, Locale } from '@/lib/types';
 
 type BusinessPhotoEditorProps = {
@@ -13,10 +14,17 @@ type BusinessPhotoEditorProps = {
   locale: Locale;
 };
 
+// The listing may show an AI illustration. Don't prefill its address as the
+// owner's cover photo, or saving the form would store it as a real photo.
+function ownerCoverPhoto(heroImage?: string | null): string {
+  return heroImage && !isIllustrationImageUrl(heroImage) ? heroImage : '';
+}
+
 export function BusinessPhotoEditor({ business, locale }: BusinessPhotoEditorProps) {
   const router = useRouter();
   const initialGalleryText = formatBusinessGalleryInput(business.gallery);
-  const [heroImage, setHeroImage] = useState(business.heroImage ?? '');
+  const showsIllustration = isIllustrationImageUrl(business.heroImage);
+  const [heroImage, setHeroImage] = useState(ownerCoverPhoto(business.heroImage));
   const [galleryText, setGalleryText] = useState(initialGalleryText);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -25,7 +33,7 @@ export function BusinessPhotoEditor({ business, locale }: BusinessPhotoEditorPro
   const heroImageWarning = getBusinessHeroImageWarning(heroImage, locale);
 
   useEffect(() => {
-    setHeroImage(business.heroImage ?? '');
+    setHeroImage(ownerCoverPhoto(business.heroImage));
     setGalleryText(initialGalleryText);
   }, [business.id, business.heroImage, initialGalleryText]);
 
@@ -135,6 +143,13 @@ export function BusinessPhotoEditor({ business, locale }: BusinessPhotoEditorPro
             ? '可貼上封面與其他照片網址。若封面留白，系統會自動把第一張圖集照片當成封面。'
             : 'Paste a cover photo URL and any gallery URLs. If cover photo is blank, we will use the first gallery image as the cover.'}
         </p>
+        {showsIllustration ? (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900">
+            {locale === 'zh'
+              ? '你的商家目前顯示的是示意圖，不是真實照片。請上傳店面或服務的真實照片，讓顧客一眼就認得你。'
+              : 'Your listing currently shows an illustration, not a real photo. Upload a real photo of your storefront or work so customers recognize you.'}
+          </p>
+        ) : null}
       </div>
 
       <form onSubmit={handleSubmit} className="mt-4 grid gap-4 lg:grid-cols-[1fr,1.2fr]">
