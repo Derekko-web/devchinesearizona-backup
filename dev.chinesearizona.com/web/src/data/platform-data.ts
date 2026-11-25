@@ -1638,13 +1638,13 @@ export const guides: Guide[] = [
       },
       {
         en: 'A move can trigger health insurance decisions. Employer coverage, HealthCare.gov marketplace coverage, AHCCCS, KidsCare, Medicare, and school immunization requirements all have different rules. Use official portals for eligibility, dates, and documents.',
-        zh: '搬家會觸發醫療保險決策。雇主保險、HealthCare.gov marketplace、AHCCCS、KidsCare、Medicare 與學校疫苗要求規則不同。資格、日期與文件請用官方入口確認。',
+        zh: '搬家會觸發醫療保險決策。僱主保險、HealthCare.gov marketplace、AHCCCS、KidsCare、Medicare 與學校疫苗要求規則不同。資格、日期與文件請用官方入口確認。',
       },
     ],
     quickChecklist: [
       {
         en: 'Confirm whether your current insurance works in Arizona. If not, ask about a special enrollment period, employer coverage start date, COBRA, marketplace coverage, or AHCCCS eligibility.',
-        zh: '確認現有保險是否在亞利桑那可用。若不可用，詢問 special enrollment period、雇主保險開始日、COBRA、marketplace 或 AHCCCS 資格。',
+        zh: '確認現有保險是否在亞利桑那可用。若不可用，詢問 special enrollment period、僱主保險開始日、COBRA、marketplace 或 AHCCCS 資格。',
       },
       {
         en: 'Choose a primary care doctor, pediatrician, dentist, eye doctor, urgent care, ER, and pharmacy inside your network.',
@@ -1669,7 +1669,7 @@ export const guides: Guide[] = [
         bullets: [
           {
             en: 'If coverage comes through an employer, ask for the start date, network name, ID cards, dependent enrollment deadline, and whether your preferred doctors are in network.',
-            zh: '若透過雇主保險，詢問生效日、network 名稱、保險卡、家屬加入截止日，以及偏好醫師是否 in network。',
+            zh: '若透過僱主保險，詢問生效日、network 名稱、保險卡、家屬加入截止日，以及偏好醫師是否 in network。',
           },
           {
             en: 'HealthCare.gov says certain life events, including moving, may allow a Special Enrollment Period. Use the official screener because timing and prior coverage rules matter.',

@@ -82,7 +82,7 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
                 <h4 className="flex flex-wrap items-center gap-1.5 text-[12px] font-semibold tracking-tight text-[#2d211b]">
                   <span>{locale === 'zh' ? '訂閱社區資訊' : 'Stay Connected'}</span>
                   <span className="text-[10px] font-medium text-[#8b7768]">
-                    {locale === 'zh' ? 'Stay Connected' : '订阅社区资讯'}
+                    {locale === 'zh' ? 'Stay Connected' : '訂閱社區資訊'}
                   </span>
                 </h4>
                 <p className="mt-1 text-[10px] leading-[1.25] text-[#6f5b50]">

@@ -134,7 +134,7 @@ describe('public chrome', () => {
     expect(navbarHtml).toContain('/zh/business');
     expect(navbarHtml).toContain('/zh/community');
     expect(navbarHtml).toContain('/zh/news');
-    expect(navbarHtml).toContain('奥斯汀新聞');
+    expect(navbarHtml).toContain('奧斯汀新聞');
     expect(navbarHtml).not.toContain('/zh/arizona-news');
     expect(navbarHtml).not.toContain('/zh/local-news');
     expect(navbarHtml).not.toContain('/zh/relocation-guide');

@@ -57,7 +57,7 @@ const SITE_CONFIGS = {
       'Summarize these Austin Radar RSS items into original ChineseAustin summary/link articles.',
     openWebPromptTitle: 'You are preparing structured Austin Radar drafts for ChineseAustin.',
     regionName: 'Austin',
-    regionNameZh: '奥斯汀',
+    regionNameZh: '奧斯汀',
     regionRelevance:
       'Austin, Round Rock, Cedar Park, Pflugerville, Georgetown, Leander, Travis County, Williamson County, Central Texas, or another Austin-area place',
     summarySearchScope:

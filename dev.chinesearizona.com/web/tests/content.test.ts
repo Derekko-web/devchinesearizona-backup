@@ -121,7 +121,7 @@ describe('content selectors', () => {
       {
         site: siteProfiles.austin,
         series: 'austin-radar',
-        localPattern: /Austin|奥斯汀/,
+        localPattern: /Austin|奧斯汀|奥斯汀/,
       },
       {
         site: siteProfiles['los-angeles'],

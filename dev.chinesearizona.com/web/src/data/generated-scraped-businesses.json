@@ -473,7 +473,7 @@
     "slug": "eastern-art-academy-phoenix",
     "name": {
       "en": "Eastern Art Academy",
-      "zh": "​新東方中文藝術學院 -- Eastern Art Academy"
+      "zh": "新東方中文藝術學院"
     },
     "categorySlug": "education",
     "city": "Phoenix",
@@ -490,32 +490,32 @@
       "https://static.wixstatic.com/media/5824ed_dee1537a4fa74b4a889b882c25e56227~mv2.png/v1/fill/w_450,h_600,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/5824ed_dee1537a4fa74b4a889b882c25e56227~mv2.png"
     ],
     "shortDescription": {
-      "en": "新东方中文艺术学院是亚利桑那州最大的私立中文学校，建校时间最长的中国舞蹈学校。主要教授中文简体汉字、中国舞蹈、音乐、乐器、美术，及各类中国传统艺术课程。承办凤凰之春华人春晚，美中艺术教育交流。",
+      "en": "新東方中文藝術學院是亞利桑那州最大的私立中文學校，建校時間最長的中國舞蹈學校。主要教授中文簡體漢字、中國舞蹈、音樂、樂器、美術，及各類中國傳統藝術課程。承辦鳳凰之春華人春晚，美中藝術教育交流。",
       "zh": null
     },
     "description": {
-      "en": "新东方中文艺术学院是亚利桑那州最大的私立中文学校，建校时间最长的中国舞蹈学校。主要教授中文简体汉字、中国舞蹈、音乐、乐器、美术，及各类中国传统艺术课程。承办凤凰之春华人春晚，美中艺术教育交流。",
+      "en": "新東方中文藝術學院是亞利桑那州最大的私立中文學校，建校時間最長的中國舞蹈學校。主要教授中文簡體漢字、中國舞蹈、音樂、樂器、美術，及各類中國傳統藝術課程。承辦鳳凰之春華人春晚，美中藝術教育交流。",
       "zh": null
     },
     "services": [
       {
-        "en": "凤凰之春",
+        "en": "鳳凰之春",
         "zh": null
       },
       {
-        "en": "华人春晚",
+        "en": "華人春晚",
         "zh": null
       },
       {
-        "en": "艺术教育",
+        "en": "藝術教育",
         "zh": null
       },
       {
-        "en": "新东方中文艺术学院",
+        "en": "新東方中文藝術學院",
         "zh": null
       },
       {
-        "en": "美中艺术教育交流",
+        "en": "美中藝術教育交流",
         "zh": null
       }
     ],
@@ -1039,7 +1039,7 @@
     "slug": "gilbert-chinese-church-gilbert",
     "name": {
       "en": "Gilbert Chinese Church",
-      "zh": "邀请你与我们一起：真诚敬拜、研习圣经、彼此服事、传扬福音。"
+      "zh": "Gilbert Chinese Church"
     },
     "categorySlug": "faith-community",
     "city": "Gilbert",
@@ -1093,7 +1093,7 @@
     "slug": "az-hope-chinese-school-chandler",
     "name": {
       "en": "AZ Hope Chinese School",
-      "zh": "记建校三十周年义工聚会"
+      "zh": "AZ Hope Chinese School"
     },
     "categorySlug": "education",
     "city": "Chandler",
@@ -1110,11 +1110,11 @@
       "https://www.azhopechineseschool.org/static/uploads/20250906/eb6ff40c96022dcce3321a1d2d4c82db.png"
     ],
     "shortDescription": {
-      "en": "记建校三十周年义工聚会 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
+      "en": "記建校三十週年義工聚會 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
       "zh": null
     },
     "description": {
-      "en": "记建校三十周年义工聚会 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
+      "en": "記建校三十週年義工聚會 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
       "zh": null
     },
     "services": [],
@@ -1564,7 +1564,7 @@
     "slug": "big-wa-chinese-tempe",
     "name": {
       "en": "Big Wa Chinese",
-      "zh": "VOCs在线监测系统"
+      "zh": "VOCs在線監測系統"
     },
     "categorySlug": "dining",
     "city": "Tempe",
@@ -1584,11 +1584,11 @@
       "https://www.bigwatempe.com/uploads/20210625100741_309604.png"
     ],
     "shortDescription": {
-      "en": "首页 产品系列 点型光离子VOCs探测器 红外气体探测器 点型可燃气体探测器 点型有气体探测器 便携式气体探测器 气体报警控制器",
+      "en": "首頁 產品系列 點型光離子VOCs探測器 紅外氣體探測器 點型可燃氣體探測器 點型有氣體探測器 便攜式氣體探測器 氣體報警控制器",
       "zh": null
     },
     "description": {
-      "en": "首页 产品系列 点型光离子VOCs探测器 红外气体探测器 点型可燃气体探测器 点型有气体探测器 便携式气体探测器 气体报警控制器",
+      "en": "首頁 產品系列 點型光離子VOCs探測器 紅外氣體探測器 點型可燃氣體探測器 點型有氣體探測器 便攜式氣體探測器 氣體報警控制器",
       "zh": null
     },
     "services": [],
@@ -1735,7 +1735,7 @@
     "slug": "tucson-christian-mandarin-church-tucson",
     "name": {
       "en": "Tucson Christian Mandarin Church",
-      "zh": "原創詩歌 这一刻我跟从了耶稣基督 我是喜樂的基督徒 約伯記的啟示 神的國度"
+      "zh": "Tucson Christian Mandarin Church"
     },
     "categorySlug": "faith-community",
     "city": "Tucson",
@@ -3473,7 +3473,7 @@
     "slug": "contemporary-chinese-school-of-arizona-tempe",
     "name": {
       "en": "Contemporary Chinese School of Arizona",
-      "zh": "亚省现代中文学校24-25新学年开启"
+      "zh": "亞省現代中文學校"
     },
     "categorySlug": "education",
     "city": "Tempe",
@@ -3488,11 +3488,11 @@
       "https://www.ccsarizona.org/static/uploads/20191030/661ba6cd77d24581b1b172d3065cb1c1.jpg"
     ],
     "shortDescription": {
-      "en": "亚省现代中文学校24-25新学年开启 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
+      "en": "亞省現代中文學校24-25新學年開啟 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
       "zh": null
     },
     "description": {
-      "en": "亚省现代中文学校24-25新学年开启 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
+      "en": "亞省現代中文學校24-25新學年開啟 TeachingActivity teaching_info Gallery gallery_info TeachingPlan Essay Resource",
       "zh": null
     },
     "services": [],
@@ -4463,7 +4463,7 @@
     "slug": "chinese-linguistic-school-of-phoenix-mesa",
     "name": {
       "en": "Chinese Linguistic School of Phoenix",
-      "zh": "Chinese Linguistic School of Phoenix 鳳凰城中文學校"
+      "zh": "鳳凰城中文學校"
     },
     "categorySlug": "education",
     "city": "Mesa",
