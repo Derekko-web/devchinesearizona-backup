@@ -39,6 +39,38 @@ describe('Deploy Dev rollback', () => {
   });
 });
 
+describe('Deploy Dev readiness', () => {
+  it('waits for the reloaded app to serve the deployed SHA before smoke', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+
+    expect(workflow).toContain('wait_for_app_ready()');
+    expect(workflow).toContain('app_health_url="http://127.0.0.1:3002/api/health"');
+    expect(workflow).toContain('body && body.gitSha === expected');
+
+    const deployReload = workflow.indexOf('export GIT_SHA="$DEPLOY_SHA"');
+    const deployWait = workflow.indexOf('wait_for_app_ready "$DEPLOY_SHA" || true');
+    const deploySmoke = workflow.indexOf('if ! npm run smoke:dev; then');
+    expect(deployReload).toBeGreaterThan(-1);
+    expect(deployWait).toBeGreaterThan(deployReload);
+    expect(deploySmoke).toBeGreaterThan(deployWait);
+  });
+
+  it('smokes the rollback against the rolled-back SHA after it is serving', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+    const rollbackStart = workflow.indexOf('rollback_to_previous_sha() {');
+    const rollbackEnd = workflow.indexOf('if ! npm run smoke:dev; then');
+    const rollback = workflow.slice(rollbackStart, rollbackEnd);
+
+    expect(rollbackStart).toBeGreaterThan(-1);
+    expect(rollback).toContain('export SMOKE_EXPECTED_GIT_SHA="$previous_sha"');
+
+    const rollbackWait = rollback.indexOf('wait_for_app_ready "$previous_sha" || true');
+    const rollbackSmoke = rollback.indexOf('npm run smoke:dev');
+    expect(rollbackWait).toBeGreaterThan(rollback.indexOf('pm2 startOrReload'));
+    expect(rollbackSmoke).toBeGreaterThan(rollbackWait);
+  });
+});
+
 describe('Deploy Dev gate', () => {
   it('requires every deploy target to be a main SHA with successful Dev CI', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');
