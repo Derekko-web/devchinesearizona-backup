@@ -270,13 +270,13 @@ function CityDataUnavailable({
         title={
           title ??
           (locale === 'zh'
-            ? '此城市站点需要本地内容来源'
+            ? '此城市站點需要本地內容來源'
             : 'This city site needs local content sources')
         }
         description={
           description ??
           (locale === 'zh'
-            ? '平台不会回退显示 ChineseArizona 的商家、新闻或生成内容。'
+            ? '平臺不會回退顯示 ChineseArizona 的商家、新聞或生成內容。'
             : 'The platform will not fall back to ChineseArizona listings, news, or generated content.')
         }
       />
@@ -589,7 +589,7 @@ export async function DirectoryPageView({
           }
           description={
             locale === 'zh'
-              ? '此城市設定必須先接入自己的商家來源；平台不会回退顯示 ChineseArizona 商家。'
+              ? '此城市設定必須先接入自己的商家來源；平台不會回退顯示 ChineseArizona 商家。'
               : 'This city config must connect its own business listing sources first; the platform will not fall back to ChineseArizona listings.'
           }
         />
@@ -2405,7 +2405,7 @@ export async function CommunityPageView({
         }
         description={
           locale === 'zh'
-            ? '此城市設定必須先接入自己的活動、貼文與內容來源；平台不会回退顯示 ChineseArizona 社群內容。'
+            ? '此城市設定必須先接入自己的活動、貼文與內容來源；平台不會回退顯示 ChineseArizona 社群內容。'
             : 'This city config must connect its own events, posts, and content sources first; the platform will not fall back to ChineseArizona community content.'
         }
       />
@@ -2525,7 +2525,7 @@ export async function CommunityRadarPageView({
         }
         description={
           locale === 'zh'
-            ? '此城市設定必須先接入自己的新聞來源與生成文章資料；平台不会回退顯示 Arizona News。'
+            ? '此城市設定必須先接入自己的新聞來源與生成文章資料；平台不會回退顯示 Arizona News。'
             : 'This city config must connect its own news feeds and generated article data first; the platform will not fall back to Arizona News.'
         }
       />
@@ -2740,7 +2740,7 @@ export async function NewsArchivePageView({
         }
         description={
           locale === 'zh'
-            ? '此城市設定必須先產生自己的文章資料；平台不会回退顯示 Arizona News 檔案。'
+            ? '此城市設定必須先產生自己的文章資料；平台不會回退顯示 Arizona News 檔案。'
             : 'This city config must generate its own article data first; the platform will not fall back to the Arizona News archive.'
         }
       />

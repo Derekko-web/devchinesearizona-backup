@@ -153,7 +153,7 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     slug: 'bido-cafe',
     badge: 'Verified',
     categoryEn: 'Dining',
-    categoryZh: '餐厅美食',
+    categoryZh: '餐廳美食',
     nameEn: 'Bido Cafe',
     nameZh: 'Bido Cafe',
     imageUrl: '/directory-ai-replacements/bido-cafe.webp',
@@ -168,7 +168,7 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     slug: 'hedy-li-phoenix',
     badge: 'Verified',
     categoryEn: 'Real Estate',
-    categoryZh: '地产服务',
+    categoryZh: '地產服務',
     nameEn: 'Hedy Li',
     nameZh: 'Hedy Li',
     // No AI portrait for a named person; the card shows neutral art until she adds a photo.
@@ -176,7 +176,7 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     rating: '4.9',
     reviewCount: 47,
     line1En: 'Phoenix Metro Area',
-    line1Zh: '凤凰城都会区',
+    line1Zh: '鳳凰城都會區',
     line2En: '',
     line2Zh: '',
   },
@@ -184,7 +184,7 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     slug: 'old-town-taste-tempe',
     badge: 'Claimed',
     categoryEn: 'Beverages',
-    categoryZh: '饮品甜点',
+    categoryZh: '飲品甜點',
     nameEn: 'Old Town Taste',
     nameZh: 'Old Town Taste',
     imageUrl: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
@@ -199,7 +199,7 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
     slug: 'china-magic-noodle-house-chandler',
     badge: 'Verified',
     categoryEn: 'Dining',
-    categoryZh: '餐厅美食',
+    categoryZh: '餐廳美食',
     nameEn: 'China Magic Noodle House',
     nameZh: 'China Magic Noodle House',
     imageUrl: '/directory-ai-replacements/china-magic-noodle-house-chandler.webp',
@@ -215,30 +215,30 @@ const arizonaFeaturedCards: SiteFeaturedShowcaseCard[] = [
 const arizonaNeighborhoods: SiteNeighborhoodSpot[] = [
   {
     city: 'Chandler',
-    cityZh: '钱德勒',
+    cityZh: '錢德勒',
     regionEn: 'East Valley',
-    regionZh: '东谷',
+    regionZh: '東谷',
     imageUrl: '/home-neighborhood/chandler-card.webp',
   },
   {
     city: 'Tempe',
     cityZh: '坦佩',
     regionEn: 'ASU corridor',
-    regionZh: '大学走廊',
+    regionZh: '大學走廊',
     imageUrl: '/home-neighborhood/tempe-card.webp',
   },
   {
     city: 'Phoenix',
-    cityZh: '凤凰城',
+    cityZh: '鳳凰城',
     regionEn: 'Greater Phoenix',
-    regionZh: '都会区',
+    regionZh: '都會區',
     imageUrl: '/home-neighborhood/phoenix-card.webp',
   },
   {
     city: 'Scottsdale',
-    cityZh: '斯科茨代尔',
+    cityZh: '斯科茨代爾',
     regionEn: 'North East Valley',
-    regionZh: '东北谷',
+    regionZh: '東北谷',
     imageUrl: '/home-neighborhood/scottsdale-card.webp',
   },
 ];
@@ -481,12 +481,12 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       defaultSearchCity: 'Tempe',
       launchCities: ['Phoenix', 'Chandler', 'Tempe', 'Mesa', 'Gilbert', 'Scottsdale'],
       cityNamesZh: {
-        Phoenix: '凤凰城',
-        Chandler: '钱德勒',
+        Phoenix: '鳳凰城',
+        Chandler: '錢德勒',
         Tempe: '坦佩',
-        Mesa: '梅萨',
-        Gilbert: '吉尔伯特',
-        Scottsdale: '斯科茨代尔',
+        Mesa: '梅薩',
+        Gilbert: '吉爾伯特',
+        Scottsdale: '斯科茨代爾',
       },
       listingSource: {
         state: 'live',
@@ -544,73 +544,73 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
     home: {
       headline: {
         en: "Your Guide to Arizona's Chinese Community",
-        zh: '亚利桑那华人社区指南',
+        zh: '亞利桑那華人社區指南',
       },
       kicker: {
         en: "Connect with Arizona's Chinese community and discover local highlights",
-        zh: '连接亚利桑那华人社区，发现本地精彩',
+        zh: '連接亞利桑那華人社區，發現本地精彩',
       },
       intro: {
         en: 'Find trusted businesses, local services, and community connections.',
-        zh: '找到可信商家、在地服务与社区连结。',
+        zh: '找到可信商家、在地服務與社區連結。',
       },
       citySelectSuffix: { en: 'AZ', zh: 'AZ' },
       defaultSearchCity: 'Tempe',
       launchCities: ['Phoenix', 'Chandler', 'Tempe', 'Mesa', 'Gilbert', 'Scottsdale'],
       cityNamesZh: {
-        Phoenix: '凤凰城',
-        Chandler: '钱德勒',
+        Phoenix: '鳳凰城',
+        Chandler: '錢德勒',
         Tempe: '坦佩',
-        Mesa: '梅萨',
-        Gilbert: '吉尔伯特',
-        Scottsdale: '斯科茨代尔',
+        Mesa: '梅薩',
+        Gilbert: '吉爾伯特',
+        Scottsdale: '斯科茨代爾',
       },
       heroImageUrl: '/directory-ai-replacements/old-town-taste-tempe-v2.webp',
       heroImageAlt: {
         en: 'Featured Arizona Chinese cuisine',
-        zh: '亚利桑那华人美食',
+        zh: '亞利桑那華人美食',
       },
       heroForegroundImageUrl: '/hero/tempe-landscape-transparent-cropped.png',
       heroForegroundAlt: {
         en: 'Tempe landscape',
-        zh: '坦佩城市风景',
+        zh: '坦佩城市風景',
       },
       heroForegroundTransparent: true,
       heroBadge: {
         en: 'TEMPE, ARIZONA',
-        zh: '坦佩，亚利桑那',
+        zh: '坦佩，亞利桑那',
       },
       heroBadgeSubcopy: {
         en: 'City of sunshine · Active community',
-        zh: '阳光之城 · 活力社区',
+        zh: '陽光之城 · 活力社區',
       },
       focusTitle: {
         en: 'AZ Focused',
-        zh: '亚省聚焦',
+        zh: '亞省聚焦',
       },
       focusBody: {
         en: 'Local neighborhoods and services',
-        zh: '在地社区与服务',
+        zh: '在地社區與服務',
       },
       featuredCards: arizonaFeaturedCards,
       neighborhoods: arizonaNeighborhoods,
       mapImageUrl: '/home-neighborhood/map-reference.png',
       mapImageAlt: {
         en: 'Arizona neighborhood map',
-        zh: '亚利桑那社区地图',
+        zh: '亞利桑那社區地圖',
       },
       relocationImageUrl: '/home-neighborhood/relocation-cactus.webp',
       relocationImageAlt: {
         en: 'Arizona desert landscape',
-        zh: '亚利桑那沙漠风景',
+        zh: '亞利桑那沙漠風景',
       },
       newcomerTitle: {
         en: 'New to Arizona?',
-        zh: '初来亚利桑那？',
+        zh: '初來亞利桑那？',
       },
       newcomerBody: {
         en: 'Your guide to settling in, finding services, schools, and more.',
-        zh: '从学校到服务，把安家路线上需要的信息整理清楚。',
+        zh: '從學校到服務，把安家路線上需要的信息整理清楚。',
       },
     },
   },
@@ -1104,26 +1104,26 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
     countryCode: 'US',
     supportedLocales: ['en', 'zh'],
     brandName: 'ChineseAustin',
-    brandNameZh: '奥斯汀华人',
+    brandNameZh: '奧斯汀華人',
     brandParts: {
       enPrefix: 'Chinese',
       enAccent: 'Austin',
-      zhPrefix: '奥斯汀',
-      zhAccent: '华人',
+      zhPrefix: '奧斯汀',
+      zhAccent: '華人',
     },
     regionName: 'Austin',
-    regionNameZh: '奥斯汀',
+    regionNameZh: '奧斯汀',
     guideTagline: {
       en: 'Austin bilingual guide',
-      zh: '奥斯汀双语指南',
+      zh: '奧斯汀雙語指南',
     },
     localCoverageLabel: {
       en: 'Austin-first coverage',
-      zh: '奥斯汀本地优先',
+      zh: '奧斯汀本地優先',
     },
     description: {
       en: 'A bilingual Austin platform with city-specific business listings, local source-linked news, and community resources for Austin, Round Rock, Cedar Park, Pflugerville, and Central Texas.',
-      zh: '奥斯汀双语城市平台，提供奥斯汀、朗德罗克、雪松公园、普弗拉格维尔与中德州本地商家、新闻与社区资源。',
+      zh: '奧斯汀雙語城市平臺，提供奧斯汀、朗德羅克、雪松公園、普弗拉格維爾與中德州本地商家、新聞與社區資源。',
     },
     directory: {
       categorySlugs: [
@@ -1140,10 +1140,10 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       defaultSearchCity: 'Austin',
       launchCities: ['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville'],
       cityNamesZh: {
-        Austin: '奥斯汀',
-        'Cedar Park': '雪松公园',
-        'Round Rock': '朗德罗克',
-        Pflugerville: '普弗拉格维尔',
+        Austin: '奧斯汀',
+        'Cedar Park': '雪松公園',
+        'Round Rock': '朗德羅克',
+        Pflugerville: '普弗拉格維爾',
       },
       listingSource: {
         state: 'live',
@@ -1176,11 +1176,11 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
     seo: {
       title: {
         en: 'ChineseAustin | Austin Chinese Community Directory, News, and Resources',
-        zh: 'ChineseAustin | 奥斯汀华人商家、新闻与生活资源',
+        zh: 'ChineseAustin | 奧斯汀華人商家、新聞與生活資源',
       },
       description: {
         en: 'Austin Chinese community news, source-linked local summaries, business resources, and bilingual newcomer context for Central Texas.',
-        zh: '奥斯汀华人社区新闻、附来源链接的本地摘要、商家资源与中德州双语生活资讯。',
+        zh: '奧斯汀華人社區新聞、附來源鏈接的本地摘要、商家資源與中德州雙語生活資訊。',
       },
       canonicalBaseUrl: 'https://chineseaustin.com',
     },
@@ -1188,7 +1188,7 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       contactEmail: 'hello@chineseaustin.com',
       updatedLabel: {
         en: 'Austin directory and news sources connected: May 30, 2026',
-        zh: '奥斯汀商家目录与新闻来源已接入：2026 年 5 月 30 日',
+        zh: '奧斯汀商家目錄與新聞來源已接入：2026 年 5 月 30 日',
       },
     },
     runtime: {
@@ -1199,60 +1199,60 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
     home: {
       headline: {
         en: "Austin's Chinese Community Guide",
-        zh: '奥斯汀华人生活指南',
+        zh: '奧斯汀華人生活指南',
       },
       kicker: {
         en: 'Businesses, schools, services, and local updates for Central Texas',
-        zh: '中德州商家、学校、服务与本地资讯',
+        zh: '中德州商家、學校、服務與本地資訊',
       },
       intro: {
         en: 'Find Austin-area Chinese restaurants, Asian markets, schools, health services, real estate help, tax support, and community resources.',
-        zh: '查找奥斯汀地区中餐、亚洲超市、中文学校、健康服务、房产、报税与社区资源。',
+        zh: '查找奧斯汀地區中餐、亞洲超市、中文學校、健康服務、房產、報稅與社區資源。',
       },
       citySelectSuffix: { en: 'TX', zh: 'TX' },
       defaultSearchCity: 'Austin',
       launchCities: ['Austin', 'Cedar Park', 'Round Rock', 'Pflugerville'],
       cityNamesZh: {
-        Austin: '奥斯汀',
-        'Cedar Park': '雪松公园',
-        'Round Rock': '朗德罗克',
-        Pflugerville: '普弗拉格维尔',
+        Austin: '奧斯汀',
+        'Cedar Park': '雪松公園',
+        'Round Rock': '朗德羅克',
+        Pflugerville: '普弗拉格維爾',
       },
       heroImageUrl: '/city-site-images/austin-community-hero.webp',
       heroImageAlt: {
         en: 'Austin city guide visual',
-        zh: '奥斯汀城市指南视觉图',
+        zh: '奧斯汀城市指南視覺圖',
       },
       heroForegroundImageUrl: '/city-site-images/austin-city-shape.webp',
       heroForegroundAlt: {
         en: 'Austin skyline and lake landscape',
-        zh: '奥斯汀天际线与湖景',
+        zh: '奧斯汀天際線與湖景',
       },
       heroForegroundTransparent: true,
       heroBadge: {
         en: 'AUSTIN, TEXAS',
-        zh: '奥斯汀，德州',
+        zh: '奧斯汀，德州',
       },
       heroBadgeSubcopy: {
         en: 'Austin listings only',
-        zh: '仅奥斯汀本地条目',
+        zh: '僅奧斯汀本地條目',
       },
       focusTitle: {
         en: 'Austin Focused',
-        zh: '奥斯汀聚焦',
+        zh: '奧斯汀聚焦',
       },
       focusBody: {
         en: 'Austin, Cedar Park, Round Rock, Pflugerville',
-        zh: '奥斯汀、雪松公园、朗德罗克、普弗拉格维尔',
+        zh: '奧斯汀、雪松公園、朗德羅克、普弗拉格維爾',
       },
       featuredCards: [
         {
           slug: 'house-of-three-gorges-austin',
           badge: 'Austin',
           categoryEn: 'Dining',
-          categoryZh: '餐厅美食',
+          categoryZh: '餐廳美食',
           nameEn: 'House of Three Gorges',
-          nameZh: '三峡人家',
+          nameZh: '三峽人家',
           imageUrl: '/city-site-images/house-of-three-gorges-austin.webp',
           rating: 'Local',
           reviewCount: 0,
@@ -1265,9 +1265,9 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
           slug: 'h-mart-austin',
           badge: 'Lakeline',
           categoryEn: 'Shopping',
-          categoryZh: '购物零售',
+          categoryZh: '購物零售',
           nameEn: 'H Mart Austin',
-          nameZh: 'H Mart 奥斯汀',
+          nameZh: 'H Mart 奧斯汀',
           imageUrl: '/city-site-images/h-mart-austin.webp',
           rating: 'Local',
           reviewCount: 0,
@@ -1280,9 +1280,9 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
           slug: 'austin-chinese-school',
           badge: 'Education',
           categoryEn: 'Education',
-          categoryZh: '教育学习',
+          categoryZh: '教育學習',
           nameEn: 'Austin Chinese School',
-          nameZh: '奥斯汀中文学校',
+          nameZh: '奧斯汀中文學校',
           imageUrl: '/city-site-images/austin-chinese-school.webp',
           rating: 'Local',
           reviewCount: 0,
@@ -1295,9 +1295,9 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
           slug: 'cheng-wooster-real-estate-austin',
           badge: 'Housing',
           categoryEn: 'Real Estate',
-          categoryZh: '地产服务',
+          categoryZh: '地產服務',
           nameEn: 'Cheng Wooster Real Estate',
-          nameZh: 'Cheng Wooster 奥斯汀房产',
+          nameZh: 'Cheng Wooster 奧斯汀房產',
           imageUrl: '/city-site-images/cheng-wooster-real-estate-austin.webp',
           rating: 'Local',
           reviewCount: 0,
@@ -1310,52 +1310,52 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       neighborhoods: [
         {
           city: 'Austin',
-          cityZh: '奥斯汀',
+          cityZh: '奧斯汀',
           regionEn: 'Central Texas',
           regionZh: '中德州',
           imageUrl: '/city-site-images/austin-skyline-lake.webp',
         },
         {
           city: 'Cedar Park',
-          cityZh: '雪松公园',
+          cityZh: '雪松公園',
           regionEn: 'Northwest Austin',
-          regionZh: '奥斯汀西北',
+          regionZh: '奧斯汀西北',
           imageUrl: '/city-site-images/cedar-park-market-street.webp',
         },
         {
           city: 'Round Rock',
-          cityZh: '朗德罗克',
+          cityZh: '朗德羅克',
           regionEn: 'North Austin Metro',
-          regionZh: '奥斯汀北都会区',
+          regionZh: '奧斯汀北都會區',
           imageUrl: '/city-site-images/round-rock-downtown.webp',
         },
         {
           city: 'Pflugerville',
-          cityZh: '普弗拉格维尔',
+          cityZh: '普弗拉格維爾',
           regionEn: 'Northeast Austin Metro',
-          regionZh: '奥斯汀东北都会区',
+          regionZh: '奧斯汀東北都會區',
           imageUrl: '/city-site-images/pflugerville-lake-trail.webp',
         },
       ],
       mapImageUrl: '/city-site-images/pflugerville-lake-trail.webp',
       mapImageAlt: {
         en: 'Austin area source map',
-        zh: '奥斯汀地区来源地图',
+        zh: '奧斯汀地區來源地圖',
       },
       relocationImageUrl: '/city-site-images/austin-newcomer-services.webp',
       relocationImageAlt: {
         en: 'Austin relocation and services guide',
-        zh: '奥斯汀安家与服务指南',
+        zh: '奧斯汀安家與服務指南',
       },
       storyCards: [
         {
           title: {
             en: 'Austin news desk starts with Central Texas sources',
-            zh: '奥斯汀新闻室从中德州本地来源开始',
+            zh: '奧斯汀新聞室從中德州本地來源開始',
           },
           bodyText: {
             en: 'Short bilingual briefs cover schools, restaurants, services, housing, and community resources.',
-            zh: '简短双语摘要覆盖学校、餐饮、服务、住房与社区资源。',
+            zh: '簡短雙語摘要覆蓋學校、餐飲、服務、住房與社區資源。',
           },
           date: {
             en: 'May 30, 2026',
@@ -1365,11 +1365,11 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         {
           title: {
             en: 'Northwest Austin corridor watch',
-            zh: '奥斯汀西北走廊观察',
+            zh: '奧斯汀西北走廊觀察',
           },
           bodyText: {
             en: 'Research Boulevard, Lakeline, Cedar Park, and family routines get clearer context.',
-            zh: 'Research Boulevard、Lakeline、Cedar Park 与家庭生活路线有更清楚的脉络。',
+            zh: 'Research Boulevard、Lakeline、Cedar Park 與家庭生活路線有更清楚的脈絡。',
           },
           date: {
             en: 'May 30, 2026',
@@ -1379,11 +1379,11 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
         {
           title: {
             en: 'Round Rock and Pflugerville resources expand coverage',
-            zh: 'Round Rock 与 Pflugerville 资源扩展覆盖',
+            zh: 'Round Rock 與 Pflugerville 資源擴展覆蓋',
           },
           bodyText: {
             en: 'North-metro dining, services, and community resources are separated from central Austin.',
-            zh: '北部都会区餐饮、服务与社区资源和奥斯汀市中心分开呈现。',
+            zh: '北部都會區餐飲、服務與社區資源和奧斯汀市中心分開呈現。',
           },
           date: {
             en: 'May 30, 2026',
@@ -1393,11 +1393,11 @@ export const siteProfiles: Record<SiteKey, SiteProfile> = {
       ],
       newcomerTitle: {
         en: 'New to Austin',
-        zh: '初到奥斯汀',
+        zh: '初到奧斯汀',
       },
       newcomerBody: {
         en: 'Start with restaurants, Asian groceries, Chinese schools, community groups, health providers, housing help, and tax support built from Austin-specific public sources.',
-        zh: '从中餐、亚洲超市、中文学校、社区组织、健康服务、住房与报税支持开始；资料来自奥斯汀本地公开来源。',
+        zh: '從中餐、亞洲超市、中文學校、社區組織、健康服務、住房與報稅支持開始；資料來自奧斯汀本地公開來源。',
       },
     },
   },
@@ -1429,12 +1429,12 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
     countryCode: 'US',
     supportedLocales: ['en', 'zh'],
     brandName: 'Unconfigured City Site',
-    brandNameZh: '未配置城市站点',
+    brandNameZh: '未配置城市站點',
     brandParts: {
       enPrefix: 'City',
       enAccent: 'Site',
       zhPrefix: '城市',
-      zhAccent: '站点',
+      zhAccent: '站點',
     },
     regionName: 'Unconfigured',
     regionNameZh: '未配置',
@@ -1444,11 +1444,11 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
     },
     localCoverageLabel: {
       en: 'No city data connected',
-      zh: '尚未接入城市数据',
+      zh: '尚未接入城市數據',
     },
     description: {
       en: 'This hostname is not connected to a live city configuration and cannot serve default ChineseArizona content.',
-      zh: '此主机名尚未连接可上线的城市配置，不能提供默认 ChineseArizona 内容。',
+      zh: '此主機名尚未連接可上線的城市配置，不能提供默認 ChineseArizona 內容。',
     },
     directory: {
       categorySlugs: [],
@@ -1484,11 +1484,11 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
     seo: {
       title: {
         en: 'Unconfigured City Site',
-        zh: '未配置城市站点',
+        zh: '未配置城市站點',
       },
       description: {
         en: 'City-specific SEO copy is required before this hostname can launch.',
-        zh: '此主机名上线前必须配置城市专属 SEO 文案。',
+        zh: '此主機名上線前必須配置城市專屬 SEO 文案。',
       },
       canonicalBaseUrl: origin,
     },
@@ -1508,11 +1508,11 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
       },
       kicker: {
         en: 'This hostname is intentionally blocked from default content fallback',
-        zh: '此主机名已阻止默认内容回退',
+        zh: '此主機名已阻止默認內容回退',
       },
       intro: {
         en: 'Add city-specific business, article, SEO, branding, and runtime settings before launch.',
-        zh: '上线前请添加城市专属商家、文章、SEO、品牌与运行设置。',
+        zh: '上線前請添加城市專屬商家、文章、SEO、品牌與運行設置。',
       },
       citySelectSuffix: { en: '', zh: '' },
       defaultSearchCity: '',
@@ -1526,7 +1526,7 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
       heroForegroundImageUrl: '/globe.svg',
       heroForegroundAlt: {
         en: 'Unconfigured city mark',
-        zh: '未配置城市标记',
+        zh: '未配置城市標記',
       },
       heroBadge: {
         en: 'UNCONFIGURED',
@@ -1534,7 +1534,7 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
       },
       heroBadgeSubcopy: {
         en: 'No default fallback',
-        zh: '无默认回退',
+        zh: '無默認回退',
       },
       focusTitle: {
         en: 'Config Required',
@@ -1542,27 +1542,27 @@ function createUnconfiguredSiteProfile(host: string): SiteProfile {
       },
       focusBody: {
         en: 'City content sources missing',
-        zh: '缺少城市内容来源',
+        zh: '缺少城市內容來源',
       },
       featuredCards: [],
       neighborhoods: [],
       mapImageUrl: '/globe.svg',
       mapImageAlt: {
         en: 'Unconfigured map placeholder',
-        zh: '未配置地图占位',
+        zh: '未配置地圖佔位',
       },
       relocationImageUrl: '/window.svg',
       relocationImageAlt: {
         en: 'Unconfigured relocation placeholder',
-        zh: '未配置搬迁占位',
+        zh: '未配置搬遷佔位',
       },
       newcomerTitle: {
         en: 'Launch Blocked',
-        zh: '上线已阻止',
+        zh: '上線已阻止',
       },
       newcomerBody: {
         en: 'This profile exists only to prevent accidental fallback to ChineseArizona content.',
-        zh: '此配置仅用于防止意外回退到 ChineseArizona 内容。',
+        zh: '此配置僅用於防止意外回退到 ChineseArizona 內容。',
       },
     },
   };

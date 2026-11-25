@@ -556,7 +556,7 @@ export function CommunityPageView({ locale, site = defaultSiteProfile }: Communi
           }
           description={
             locale === 'zh'
-              ? '此城市設定必須先接入自己的學校、教會、活動與商家資料；平台不会回退顯示 ChineseArizona 社群內容。'
+              ? '此城市設定必須先接入自己的學校、教會、活動與商家資料；平台不會回退顯示 ChineseArizona 社群內容。'
               : 'This city config must connect its own schools, churches, events, and business data first; the platform will not fall back to ChineseArizona community content.'
           }
         />

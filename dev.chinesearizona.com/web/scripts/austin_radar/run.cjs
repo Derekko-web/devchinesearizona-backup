@@ -20,7 +20,7 @@ function resolveDefaultRuntimePath(relativePath) {
 process.env.RADAR_CITY_KEY = process.env.RADAR_CITY_KEY || 'austin';
 process.env.RADAR_BRAND_NAME = process.env.RADAR_BRAND_NAME || 'ChineseAustin';
 process.env.RADAR_REGION_NAME = process.env.RADAR_REGION_NAME || 'Austin';
-process.env.RADAR_REGION_NAME_ZH = process.env.RADAR_REGION_NAME_ZH || '奥斯汀';
+process.env.RADAR_REGION_NAME_ZH = process.env.RADAR_REGION_NAME_ZH || '奧斯汀';
 process.env.RADAR_REGION_PLACES =
   process.env.RADAR_REGION_PLACES ||
   'Austin, Round Rock, Cedar Park, Pflugerville, Georgetown, Leander, Travis County, Williamson County, Central Texas';
