@@ -17,7 +17,7 @@ describe('workflow hardening', () => {
   it('makes scheduled content jobs reproducible and persistent', () => {
     const workflow = fs.readFileSync(contentJobsPath, 'utf8');
 
-    expect(workflow).toContain('actions/setup-python@v6');
+    expect(workflow).toContain('actions/setup-python@v7');
     expect(workflow).toContain('name: dev-content');
     expect(workflow).toContain('python3 -m pip install --target .python-packages -r requirements.txt');
     expect(workflow).toContain('actions/upload-artifact@v7');
@@ -79,7 +79,7 @@ describe('workflow hardening', () => {
     expect(workflow).toContain('python-scraper-tests:');
     expect(workflow).toContain("if: needs.changes.outputs.python_scraper == 'true'");
     expect(workflow).toContain('cache-dependency-path: dev.chinesearizona.com/web/requirements.txt');
-    expect(workflow).toContain('actions/setup-python@v6');
+    expect(workflow).toContain('actions/setup-python@v7');
     expect(workflow).toContain('npm run scrape:test');
 
     expect(workflow).toContain('wordpress-theme:');
