@@ -124,8 +124,8 @@ function oppositeCopy(locale: Locale, en: string, zh: string) {
 
 function badgeText(locale: Locale, badge: string) {
   const badgeZh: Record<string, string> = {
-    Verified: '认证',
-    Claimed: '已认领',
+    Verified: '認證',
+    Claimed: '已認領',
   };
 
   return copy(locale, badge, badgeZh[badge] ?? badge);
@@ -277,7 +277,7 @@ function FeaturedBusinessCard({
         ) : (
           <div className="flex items-center gap-2 text-sm font-semibold text-[#6f5b50]">
             <MapPin className="h-4 w-4 text-brand-600" />
-            <span>{copy(locale, 'Local source', '本地来源')}</span>
+            <span>{copy(locale, 'Local source', '本地來源')}</span>
           </div>
         )}
 
@@ -303,7 +303,7 @@ function NeighborhoodCard({
     <Link
       href={buildDirectoryHref(locale, { city: spot.city })}
       className="homepage-card group relative overflow-hidden rounded-[16px] border border-[#decdbb] bg-[#d3bca7] shadow-[0_18px_44px_-38px_rgba(71,47,25,0.45)]"
-      aria-label={copy(locale, `${spot.city} neighborhood`, `${spot.cityZh} 社区`)}
+      aria-label={copy(locale, `${spot.city} neighborhood`, `${spot.cityZh} 社區`)}
     >
       <div className="relative h-[108px] overflow-hidden sm:h-[116px]">
         <img
@@ -323,7 +323,7 @@ function NeighborhoodCard({
           </p>
         </div>
       </div>
-      <span className="sr-only">{copy(locale, `${spot.city} neighborhood`, `${spot.cityZh} 社区`)}</span>
+      <span className="sr-only">{copy(locale, `${spot.city} neighborhood`, `${spot.cityZh} 社區`)}</span>
     </Link>
   );
 }
@@ -397,48 +397,48 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
     {
       slug: 'real-estate',
       labelEn: 'Real Estate',
-      labelZh: '地产服务',
+      labelZh: '地產服務',
       icon: categoryBySlug.get('real-estate')?.icon ?? 'briefcase',
     },
     {
       slug: 'legal-finance',
       labelEn: 'Legal',
-      labelZh: '法律服务',
+      labelZh: '法律服務',
       icon: categoryBySlug.get('legal-finance')?.icon ?? 'briefcase',
     },
     {
       slug: 'legal-finance',
       labelEn: 'Finance',
-      labelZh: '金融保险',
+      labelZh: '金融保險',
       icon: categoryBySlug.get('legal-finance')?.icon ?? 'briefcase',
     },
     {
       slug: 'medical',
       labelEn: 'Healthcare',
-      labelZh: '医疗健康',
+      labelZh: '醫療健康',
       icon: categoryBySlug.get('medical')?.icon ?? 'briefcase',
     },
     {
       slug: 'education',
       labelEn: 'Education',
-      labelZh: '教育培训',
+      labelZh: '教育培訓',
       icon: categoryBySlug.get('education')?.icon ?? 'briefcase',
     },
     {
       slug: 'home-services',
       labelEn: 'Home Services',
-      labelZh: '家居服务',
+      labelZh: '家居服務',
       icon: categoryBySlug.get('home-services')?.icon ?? 'briefcase',
     },
     {
       slug: 'local-services',
       labelEn: 'Auto',
-      labelZh: '汽车服务',
+      labelZh: '汽車服務',
       icon: categoryBySlug.get('local-services')?.icon ?? 'briefcase',
     },
     {
       labelEn: 'More',
-      labelZh: '更多分类',
+      labelZh: '更多分類',
       icon: categoryBySlug.get('shopping')?.icon ?? 'briefcase',
     },
   ];
@@ -479,11 +479,11 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                       <input
                         type="text"
                         name="q"
-                        placeholder={copy(locale, 'Search businesses or services', '搜索商家、服务或关键词')}
+                        placeholder={copy(locale, 'Search businesses or services', '搜索商家、服務或關鍵詞')}
                         className="w-full bg-transparent text-[13px] font-medium text-[#3a2b23] outline-none placeholder:text-[#8f7a6d]"
                       />
                       <span className="mt-1 block text-[11px] leading-none text-[#ab978a]">
-                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜索商家、服务与关键词')}
+                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜索商家、服務與關鍵詞')}
                       </span>
                     </span>
                   </label>
@@ -525,9 +525,9 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
               <div className="homepage-rise homepage-rise-delay-3 mt-3.5">
                 <p className="text-[13px] text-[#816f62]">
-                  {copy(locale, 'Popular searches', '热门搜索')}
+                  {copy(locale, 'Popular searches', '熱門搜索')}
                   <span className="mx-2 text-[#c7ae9a]">/</span>
-                  {oppositeCopy(locale, 'Popular discovery', '热门发现')}
+                  {oppositeCopy(locale, 'Popular discovery', '熱門發現')}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {popularCategories.map((category) => (
@@ -549,16 +549,16 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                     <p className="text-[13px] font-semibold text-[#271c16]">
                       {formatCompactCount(verifiedCount, locale)}
                     </p>
-                    <p className="text-[13px] font-medium text-[#3a2b23]">{copy(locale, 'Verified Businesses', '认证商家')}</p>
-                    <p className="text-xs text-[#8b786c]">{copy(locale, 'Trusted local directory', '可信本地目录')}</p>
+                    <p className="text-[13px] font-medium text-[#3a2b23]">{copy(locale, 'Verified Businesses', '認證商家')}</p>
+                    <p className="text-xs text-[#8b786c]">{copy(locale, 'Trusted local directory', '可信本地目錄')}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3 sm:px-3">
                   <BilingualSupportIcon className="mt-1 h-14 w-14 flex-shrink-0" />
                   <div>
-                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'Bilingual Support', '双语支持')}</p>
-                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'English + Chinese service', '中英双语服务')}</p>
+                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'Bilingual Support', '雙語支持')}</p>
+                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'English + Chinese service', '中英雙語服務')}</p>
                   </div>
                 </div>
 
@@ -617,8 +617,8 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
           <div className="grid xl:grid-cols-[1.24fr_0.86fr]">
             <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
               <HomeSectionHeading
-                title={copy(locale, 'Featured Businesses', '精选商家')}
-                subtitle={oppositeCopy(locale, 'Featured Businesses', '精选商家')}
+                title={copy(locale, 'Featured Businesses', '精選商家')}
+                subtitle={oppositeCopy(locale, 'Featured Businesses', '精選商家')}
               />
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -634,10 +634,10 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
             <div className="flex h-full flex-col p-6 sm:p-7">
               <HomeSectionHeading
-                title={copy(locale, 'Explore by Neighborhood', '按社区探索')}
-                subtitle={oppositeCopy(locale, 'Explore by Neighborhood', '按社区探索')}
+                title={copy(locale, 'Explore by Neighborhood', '按社區探索')}
+                subtitle={oppositeCopy(locale, 'Explore by Neighborhood', '按社區探索')}
                 href={withLocale(locale, '/business')}
-                hrefLabel={copy(locale, 'View map', '查看地图')}
+                hrefLabel={copy(locale, 'View map', '查看地圖')}
               />
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -661,9 +661,9 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                     className="inline-flex items-center gap-3 rounded-[16px] border border-[#e0d2c1] bg-white/96 px-4 py-2.5 text-[#32251d] shadow-[0_14px_30px_-18px_rgba(70,47,26,0.35)] transition-colors hover:border-brand-200 hover:text-brand-600"
                   >
                     <span className="flex flex-col leading-none">
-                      <span className="text-[13px] font-semibold">{copy(locale, 'Explore all areas', '探索所有区域')}</span>
+                      <span className="text-[13px] font-semibold">{copy(locale, 'Explore all areas', '探索所有區域')}</span>
                       <span className="mt-1 text-[11px] text-[#8d7768]">
-                        {oppositeCopy(locale, 'Explore all areas', '探索所有区域')}
+                        {oppositeCopy(locale, 'Explore all areas', '探索所有區域')}
                       </span>
                     </span>
                     <span className="flex h-8 w-8 items-center justify-center rounded-full border border-[#dfcebd] text-[#655043]">
@@ -680,8 +680,8 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
           <div className="grid xl:grid-cols-[1.14fr_0.92fr_0.88fr]">
             <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
               <HomeSectionHeading
-                title={copy(locale, 'News & Community', '新闻与社区')}
-                subtitle={oppositeCopy(locale, 'News & Community', '新闻与社区')}
+                title={copy(locale, 'News & Community', '新聞與社區')}
+                subtitle={oppositeCopy(locale, 'News & Community', '新聞與社區')}
                 href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
                 hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
               />
@@ -695,8 +695,8 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
             <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
               <HomeSectionHeading
-                title={copy(locale, 'Trusted Services', '优选服务')}
-                subtitle={oppositeCopy(locale, 'Trusted Services', '优选服务')}
+                title={copy(locale, 'Trusted Services', '優選服務')}
+                subtitle={oppositeCopy(locale, 'Trusted Services', '優選服務')}
                 href={withLocale(locale, '/business')}
                 hrefLabel={copy(locale, 'View all', '查看全部')}
               />

@@ -529,6 +529,8 @@ describe('radar ui', () => {
     const html = renderToStaticMarkup(await CommunityRadarPageView({ locale: 'en', searchParams: {} }));
 
     expect(html).toContain('All Arizona News');
+    expect(html.match(/<h1\b/g)).toHaveLength(1);
+    expect(html).toContain('<h1 class="sr-only">Arizona News</h1>');
     expect(html).toContain('href="/en/news?lane=chinese"');
     expect(html).toContain('href="/en/news?lane=openings"');
     expect(html).toContain('href="/en/news?lane=community"');

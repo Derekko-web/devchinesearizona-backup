@@ -10,7 +10,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin City Council, housing, transit, land use, and civic-service updates that affect local residents.",
-      "zh": "用于奥斯汀市议会、住房、交通、土地使用与市政服务相关本地更新。"
+      "zh": "用於奧斯汀市議會、住房、交通、土地使用與市政服務相關本地更新。"
     }
   },
   {
@@ -30,7 +30,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin public radio coverage of civic life, schools, transportation, and community issues across Central Texas.",
-      "zh": "用于奥斯汀公共广播关于市民生活、学校、交通与中德州社区议题的报道。"
+      "zh": "用於奧斯汀公共廣播關於市民生活、學校、交通與中德州社區議題的報道。"
     }
   },
   {
@@ -44,7 +44,7 @@
     "cadence": "5m",
     "notes": {
       "en": "Use for Austin restaurant, retail, plaza, and small-business opening signals.",
-      "zh": "用于奥斯汀餐厅、零售、商业广场与小企业开店讯号。"
+      "zh": "用於奧斯汀餐廳、零售、商業廣場與小企業開店訊號。"
     }
   },
   {
@@ -58,7 +58,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin food, restaurant, cafe, bar, and dining-neighborhood updates.",
-      "zh": "用于奥斯汀餐饮、餐厅、咖啡店、酒吧与美食街区更新。"
+      "zh": "用於奧斯汀餐飲、餐廳、咖啡店、酒吧與美食街區更新。"
     }
   },
   {
@@ -72,7 +72,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin Chinese-language community news, events, and local publication items from the long-running Texas Capital News.",
-      "zh": "用于德州首府新闻的奥斯汀中文社区新闻、活动与本地刊物内容。"
+      "zh": "用於德州首府新聞的奧斯汀中文社區新聞、活動與本地刊物內容。"
     }
   },
   {
@@ -86,7 +86,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin real estate, development, zoning, downtown housing, and urban-neighborhood signals.",
-      "zh": "用于奥斯汀房地产、开发、分区、市中心住房与城市社区讯号。"
+      "zh": "用於奧斯汀房地產、開發、分區、市中心住房與城市社區訊號。"
     }
   },
   {
@@ -100,7 +100,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for University of Texas at Austin campus, research, student, and regional workforce updates.",
-      "zh": "用于德州大学奥斯汀分校校园、研究、学生与区域人才相关更新。"
+      "zh": "用於德州大學奧斯汀分校校園、研究、學生與區域人才相關更新。"
     }
   },
   {
@@ -113,7 +113,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use as an official Austin city source for public safety, utilities, mobility, permits, and community-program updates.",
-      "zh": "作为奥斯汀市政府官方来源，用于公共安全、公用事业、交通、许可与社区项目更新。"
+      "zh": "作為奧斯汀市政府官方來源，用于公共安全、公用事業、交通、許可與社區項目更新。"
     }
   },
   {
@@ -126,7 +126,7 @@
     "cadence": "hourly",
     "notes": {
       "en": "Use for Austin-Bergstrom International Airport route, construction, traveler, and international access updates.",
-      "zh": "用于奥斯汀伯格斯特国际机场航线、施工、旅客与国际出行更新。"
+      "zh": "用於奧斯汀伯格斯特國際機場航線、施工、旅客與國際出行更新。"
     }
   },
   {
@@ -139,7 +139,7 @@
     "cadence": "5m",
     "notes": {
       "en": "Use only for repeated public Austin trend signals. Do not reuse post text, comments, screenshots, or media.",
-      "zh": "只用于反复出现的奥斯汀公开趋势讯号，不得重用贴文、评论、截图或媒体。"
+      "zh": "只用於反覆出現的奧斯汀公開趨勢訊號，不得重用貼文、評論、截圖或媒體。"
     }
   }
 ]
