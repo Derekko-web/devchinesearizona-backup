@@ -13,6 +13,12 @@ import { getPublishedDiscoverArticles, discoveryCategories } from '@/lib/discove
 import { getDirectoryBusinesses, shouldNoIndexDirectoryBusiness } from '@/lib/directory';
 import { getHiddenArizonaEntries, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
 import { advertisePath } from '@/lib/advertise';
+import {
+  cityCategoryPath,
+  getMetroCategorySummaries,
+  isIndexableListingCount,
+  metroCategoryPath,
+} from '@/lib/metro-categories';
 import { publisherPageSlugs } from '@/lib/publisher-pages';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
@@ -72,7 +78,18 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
   const businessRoutes = directoryBusinesses
     .filter((business) => !shouldNoIndexDirectoryBusiness(business))
     .map((business) => `/business/${business.slug}`);
+  // Sparse category pages (one or two listings) are noindex, so they stay out of the sitemap too.
+  const metroCategorySummaries = await getMetroCategorySummaries(site, directoryBusinesses);
+  const categoryRoutes = metroCategorySummaries
+    .filter((summary) => summary.indexable)
+    .flatMap((summary) => [
+      metroCategoryPath(summary.category.slug),
+      ...summary.cities
+        .filter((city) => isIndexableListingCount(city.count))
+        .map((city) => cityCategoryPath(city.city, summary.category.slug)),
+    ]);
   const dynamicRoutes = [
+    ...categoryRoutes,
     ...businessRoutes,
     ...(canShowArizonaOnlyContent
       ? discoveryCategories.map((category) => `/discover-arizona/${category.slug}`)

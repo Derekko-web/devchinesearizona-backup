@@ -10,7 +10,6 @@ import {
   isLegacyArticle,
   resolveArticleArchiveFilters,
   type ArticleArchiveSearchParams,
-  getBusinessCategories,
   getCommunityPostBySlug,
   getEventBySlug,
   getGuideBySlug,
@@ -22,6 +21,18 @@ import { getDirectoryBusinessBySlug, shouldNoIndexDirectoryBusiness } from '@/li
 import { getHiddenArizonaEntryBySlug, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
 import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-localization';
 import { t } from '@/lib/i18n';
+import {
+  findMetroCategoryCity,
+  formatListingCountLine,
+  getCityCategoryTitle,
+  getLocalizedCityName,
+  getMetroCategoryIntro,
+  getMetroCategoryPageData,
+  getMetroCategoryTitle,
+  isIndexableListingCount,
+  metroCategoryPath,
+  slugifyCity,
+} from '@/lib/metro-categories';
 import { getPublisherPageCopy, type PublisherPageSlug } from '@/lib/publisher-pages';
 import { buildMetadata } from '@/lib/seo';
 import {
@@ -508,31 +519,53 @@ export async function businessMetadata(
   });
 }
 
-export function cityCategoryMetadata(
+export async function metroCategoryMetadata(
+  locale: Locale,
+  categorySlug: string,
+  site: SiteProfile = defaultSiteProfile
+): Promise<Metadata | null> {
+  const data = await getMetroCategoryPageData(categorySlug, site);
+  if (!data) {
+    return null;
+  }
+
+  const { summary } = data;
+  return buildMetadata({
+    title: `${getMetroCategoryTitle(summary.category, site, locale)} | ${site.brandName}`,
+    description: `${getMetroCategoryIntro(summary.category, site, locale)} ${formatListingCountLine(summary, locale)}${
+      locale === 'zh' ? '。' : '.'
+    }`,
+    path: metroCategoryPath(summary.category.slug),
+    locale,
+    site,
+    noIndex: !summary.indexable,
+  });
+}
+
+// City-by-category pages stay out of search until they hold enough listings to stand on their own.
+export async function cityCategoryMetadata(
   locale: Locale,
   city: string,
   categorySlug: string,
   site: SiteProfile = defaultSiteProfile
-): Metadata | null {
-  if (!hasLiveDirectoryData(site)) {
+): Promise<Metadata | null> {
+  const data = await getMetroCategoryPageData(categorySlug, site);
+  if (!data) {
     return null;
   }
 
-  const category = getBusinessCategories().find(
-    (item) => item.slug === categorySlug && site.directory.categorySlugs.includes(item.slug)
-  );
-  if (!category) {
-    return null;
-  }
+  const { summary } = data;
+  const resolvedCity = findMetroCategoryCity(summary, city);
+  const cityLabel = resolvedCity ? getLocalizedCityName(resolvedCity.city, site, locale) : city;
+  const listingCount = resolvedCity?.count ?? 0;
 
-  const title = `${t(category.name, locale)} ${locale === 'zh' ? `在 ${city}` : `in ${city}`} | ${site.brandName}`;
   return buildMetadata({
-    title,
-    description: t(category.description, locale),
-    path: `/business/${city}/${category.slug}`,
+    title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale)} | ${site.brandName}`,
+    description: t(summary.category.description, locale),
+    path: `/business/${resolvedCity?.slug ?? slugifyCity(city)}/${summary.category.slug}`,
     locale,
     site,
-    noIndex: true,
+    noIndex: !isIndexableListingCount(listingCount),
   });
 }
 
