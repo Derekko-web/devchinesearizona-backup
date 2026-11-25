@@ -320,7 +320,7 @@ export function validateDirectoryAdBudgetCents(value: number) {
 
 export function isDirectoryAdEligiblePath(path: string) {
   const parsed = parseDirectoryAdPath(path);
-  return parsed.kind === 'directory' || parsed.kind === 'city_category';
+  return parsed.kind === 'directory' || parsed.kind === 'city_category' || parsed.kind === 'metro_category';
 }
 
 function parseDirectoryAdPath(path: string) {
@@ -352,6 +352,14 @@ function parseDirectoryAdPath(path: string) {
       category: undefined,
       city: undefined,
       kind: 'other' as const,
+    };
+  }
+
+  if (root === 'business' && remainingPartCount === 3 && parts[offset + 1] === 'category' && parts[offset + 2]) {
+    return {
+      category: parts[offset + 2],
+      city: undefined,
+      kind: 'metro_category' as const,
     };
   }
 
@@ -1172,6 +1180,11 @@ function campaignMatchesPath(campaign: DirectoryAdCampaignRow, pagePath: string)
   const parsed = parseDirectoryAdPath(pagePath);
   if (parsed.kind === 'directory') {
     return true;
+  }
+
+  // The metro page lists every city, so any campaign for this category can appear there.
+  if (parsed.kind === 'metro_category') {
+    return normalizeString(parsed.category) === normalizeString(campaign.scope_category);
   }
 
   if (parsed.kind !== 'city_category' || !parsed.city || !parsed.category) {

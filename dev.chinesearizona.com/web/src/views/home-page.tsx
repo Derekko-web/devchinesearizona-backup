@@ -16,6 +16,7 @@ import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesAsync } from '@/lib/content';
 import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { t } from '@/lib/i18n';
+import { metroCategoryPath } from '@/lib/metro-categories';
 import { withLocale } from '@/lib/routing';
 import {
   defaultSiteProfile,
@@ -717,7 +718,13 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                   return (
                     <Link
                       key={`${tile.labelEn}-${index}`}
-                      href={tile.slug ? buildDirectoryHref(locale, { category: tile.slug }) : withLocale(locale, '/business')}
+                      href={
+                        tile.slug && categoryBySlug.has(tile.slug)
+                          ? withLocale(locale, metroCategoryPath(tile.slug))
+                          : tile.slug
+                            ? buildDirectoryHref(locale, { category: tile.slug })
+                            : withLocale(locale, '/business')
+                      }
                       className="homepage-card flex min-h-[94px] flex-col items-center justify-start gap-2 rounded-[18px] px-2 py-1.5 text-center transition-colors hover:text-brand-600"
                     >
                       <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full ${circleStyles[index % circleStyles.length]}`}>

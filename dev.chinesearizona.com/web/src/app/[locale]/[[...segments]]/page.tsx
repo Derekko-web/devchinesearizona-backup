@@ -32,6 +32,7 @@ import {
   hiddenArizonaEntryMetadata,
   hiddenArizonaMetadata,
   homeMetadata,
+  metroCategoryMetadata,
   profileMetadata,
   publisherPageMetadata,
   relocationMetadata,
@@ -60,6 +61,7 @@ import {
   GuideDetailPageView,
   HiddenArizonaDetailPageView,
   HiddenArizonaHubPageView,
+  MetroCategoryPageView,
   NewsArchivePageView,
   ProfilePageView,
   RelocationGuidePageView,
@@ -149,8 +151,12 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
     return (await businessMetadata(locale, segments[1], site)) ?? {};
   }
 
+  if (segments[0] === 'business' && segments[1] === 'category' && segments[2] && segments.length === 3) {
+    return (await metroCategoryMetadata(locale, segments[2], site)) ?? {};
+  }
+
   if (segments[0] === 'business' && segments[1] && segments[2]) {
-    return cityCategoryMetadata(locale, segments[1], segments[2], site) ?? {};
+    return (await cityCategoryMetadata(locale, segments[1], segments[2], site)) ?? {};
   }
 
   if (segments[0] === 'directory' && segments.length === 1) {
@@ -162,7 +168,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'directory' && segments[1] && segments[2]) {
-    return cityCategoryMetadata(locale, segments[1], segments[2], site) ?? {};
+    return (await cityCategoryMetadata(locale, segments[1], segments[2], site)) ?? {};
   }
 
   if (segments[0] === 'relocation-guide' && segments.length === 1) {
@@ -299,6 +305,12 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments[0] === 'business' && segments.length === 2) {
     const rendered = await BusinessDetailPageView({ locale, slug: segments[1], site });
+    if (!rendered) notFound();
+    return rendered;
+  }
+
+  if (segments[0] === 'business' && segments[1] === 'category' && segments[2] && segments.length === 3) {
+    const rendered = await MetroCategoryPageView({ locale, category: segments[2], site });
     if (!rendered) notFound();
     return rendered;
   }

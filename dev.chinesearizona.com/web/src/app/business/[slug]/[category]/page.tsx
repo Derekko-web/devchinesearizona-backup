@@ -14,7 +14,7 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps) {
   const { slug, category } = await params;
   const site = await getCurrentSiteProfile();
-  return cityCategoryMetadata('en', slug, category, site) ?? {};
+  return (await cityCategoryMetadata('en', slug, category, site)) ?? {};
 }
 
 export default async function Page({ params }: PageProps) {

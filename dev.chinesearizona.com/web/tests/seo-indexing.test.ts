@@ -87,10 +87,10 @@ describe('indexing signals', () => {
     expect(metadata.robots).toEqual({ index: false, follow: false });
   });
 
-  it('keeps city and category filter pages out of the sitemap', async () => {
+  it('keeps sparse city and category pages out of the sitemap', async () => {
     const entries = await buildSitemap();
     const urls = entries.map((entry) => entry.url);
-    const metadata = cityCategoryMetadata('en', 'phoenix', 'real-estate');
+    const metadata = await cityCategoryMetadata('en', 'phoenix', 'real-estate');
 
     expect(urls).not.toContain('https://chinesearizona.com/business/phoenix/real-estate');
     expect(metadata?.robots).toEqual({ index: false, follow: false });
