@@ -10,9 +10,11 @@ import {
 import Link from 'next/link';
 
 import { CategoryIcon } from '@/components/CategoryIcon';
+import { IllustrationLabel } from '@/components/IllustrationLabel';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesAsync } from '@/lib/content';
+import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { t } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import {
@@ -235,14 +237,24 @@ function FeaturedBusinessCard({
       className="homepage-card group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#e7d8ca] bg-[#fffdfa] shadow-[0_20px_44px_-40px_rgba(80,54,29,0.5)]"
     >
       <div className="relative h-[112px] overflow-hidden bg-[#efe3d4] sm:h-[118px]">
-        <img
-          src={card.imageUrl}
-          alt={copy(locale, card.nameEn, card.nameZh)}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-          decoding="async"
-          referrerPolicy="no-referrer"
-        />
+        {card.imageUrl ? (
+          <img
+            src={card.imageUrl}
+            alt={copy(locale, card.nameEn, card.nameZh)}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div
+            aria-hidden="true"
+            className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#efe3d4,#f8efe2)] text-3xl font-semibold text-[#9a826f]"
+          >
+            {card.nameEn.trim().charAt(0).toUpperCase()}
+          </div>
+        )}
+        {isIllustrationImageUrl(card.imageUrl) ? <IllustrationLabel locale={locale} position="bottom-right" /> : null}
         <div className="absolute left-3 top-3 rounded-full bg-[#5f8640] px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm">
           {badgeText(locale, card.badge)}
         </div>
