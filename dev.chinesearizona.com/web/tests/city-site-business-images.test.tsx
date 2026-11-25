@@ -205,5 +205,11 @@ describe('city-site business images', () => {
     expect(sfBayDetail).toContain('/city-site-images/api-legal-outreach-san-francisco.webp');
     expect(sfBayDetail).not.toContain('/city-site-images/sf-bay-community-hero.webp');
     expect(sfBayDetail).not.toContain('Temporary image');
+    // No made-up menu items or prices on business pages.
+    for (const detail of [austinDetail, laDetail, sfBayDetail]) {
+      expect(detail).not.toContain('Signature drink');
+      expect(detail).not.toContain('Primary service');
+      expect(detail).not.toContain('$5.75');
+    }
   });
 });

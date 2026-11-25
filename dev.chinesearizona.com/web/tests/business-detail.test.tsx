@@ -65,4 +65,22 @@ describe('BusinessDetailPageView', () => {
     expect(html).not.toContain('"addressRegion":"AZ"');
     expect(html).not.toContain('https://chinesearizona.com/en/business/lunasia-dim-sum-house-alhambra');
   });
+
+  it('shows the full description once, in the About section, not again in the top section', async () => {
+    const [{ BusinessDetailPageView }, { siteProfiles }, { getDirectoryBusinessBySlug }] = await Promise.all([
+      import('@/views/site-pages'),
+      import('@/lib/site-config'),
+      import('@/lib/directory'),
+    ]);
+    const site = siteProfiles['los-angeles'];
+    const slug = 'lunasia-dim-sum-house-alhambra';
+    const business = await getDirectoryBusinessBySlug(slug, { site });
+    expect(business).toBeDefined();
+
+    const html = renderToStaticMarkup(await BusinessDetailPageView({ locale: 'en', slug, site }));
+    const visibleHtml = html.replace(/<script[\s\S]*?<\/script>/g, '');
+    const description = renderToStaticMarkup(<>{business!.description.en}</>);
+
+    expect(visibleHtml.split(description).length - 1).toBe(1);
+  });
 });

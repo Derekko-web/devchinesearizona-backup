@@ -239,6 +239,8 @@ describe('directory moderation', () => {
     expect(insertedBusiness?.status).toBe('live');
     expect(insertedBusiness?.verification_state).toBe('claimed');
     expect(insertedBusiness?.owner_profile_id).toBe('profile-1');
+    // The claim's contact email is private (used for verification), so it must not become the public listing email.
+    expect(insertedBusiness?.email).toBeNull();
     expect(insertedBusiness?.hero_image).toBe('https://example.com/storefront.jpg');
     expect(insertedBusiness?.gallery).toEqual([
       'https://example.com/interior.jpg',
