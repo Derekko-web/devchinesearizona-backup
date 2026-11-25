@@ -4,7 +4,7 @@ Maintained by **Derek Ko**.
 
 The web application for a bilingual community directory and multi-city content
 platform. It includes business listings and claims, account flows, moderation,
-shop and advertising features, and automated directory and article ingestion.
+advertising features, and automated directory and article ingestion.
 The interface uses Next.js and React; background ingestion tools use Node.js
 and Python.
 

@@ -101,7 +101,7 @@ describe('public chrome', () => {
     const navbarHtml = renderToStaticMarkup(<Navbar />);
     const footerHtml = renderToStaticMarkup(<Footer />);
 
-    expect(navbarHtml).toContain('/zh/shop');
+    expect(navbarHtml).not.toContain('/shop');
     expect(navbarHtml).toContain('/zh/business');
     expect(navbarHtml).toContain('商家');
     expect(navbarHtml).toContain('Business');
@@ -114,11 +114,10 @@ describe('public chrome', () => {
 
     expect(navbarHtml).not.toContain('/dashboard');
     expect(navbarHtml).not.toContain('/admin');
-    expect(navbarHtml).not.toContain('/shop/sell');
 
     expect(footerHtml).not.toContain('/dashboard');
     expect(footerHtml).not.toContain('/admin');
-    expect(footerHtml).not.toContain('/shop/sell');
+    expect(footerHtml).not.toContain('/shop');
     expect(footerHtml).toContain('/zh/privacy');
     expect(footerHtml).toContain('/zh/contact');
     expect(footerHtml).toContain('/zh/editorial-policy');
@@ -161,14 +160,12 @@ describe('public chrome', () => {
 
     expect(navbarSource).not.toContain("path: '/discover-arizona'");
     expect(navbarSource).not.toContain("hash: 'events'");
-    expect(navbarSource.lastIndexOf("path: '/relocation-guide'")).toBeGreaterThan(
-      navbarSource.lastIndexOf("path: '/shop'")
-    );
+    expect(navbarSource.lastIndexOf("path: '/relocation-guide'")).toBe(navbarSource.lastIndexOf("path: '"));
   });
 
-  it('hides shop from public chrome in production until launch is enabled', async () => {
+  it('shows no Shop links even when the old shop launch flag is still set', async () => {
     env.NODE_ENV = 'production';
-    delete env.NEXT_PUBLIC_SHOP_PUBLIC_ENABLED;
+    env.NEXT_PUBLIC_SHOP_PUBLIC_ENABLED = '1';
     vi.resetModules();
 
     const Navbar = (await import('@/components/Navbar')).default;
@@ -177,8 +174,8 @@ describe('public chrome', () => {
     const navbarHtml = renderToStaticMarkup(<Navbar />);
     const footerHtml = renderToStaticMarkup(<Footer />);
 
-    expect(navbarHtml).not.toContain('/zh/shop');
-    expect(footerHtml).not.toContain('/zh/shop');
+    expect(navbarHtml).not.toContain('/shop');
+    expect(footerHtml).not.toContain('/shop');
     expect(navbarHtml).toMatch(/<a href="\/zh\/auth\/login\?next=%2Fzh%2Fcommunity" aria-label="收藏"/);
   });
 });

@@ -13,7 +13,6 @@ import { buildAuthPath, buildJoinPath } from '@/lib/auth';
 import { getNewsPath } from '@/lib/arizona-news';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { localeLangAttribute } from '@/lib/i18n';
-import { isShopPublicLaunchEnabled } from '@/lib/shop-launch';
 import { appendSearch, localeFromPath, withLocale } from '@/lib/routing';
 import { defaultSiteProfile, hasLiveNewsData, type SiteProfile } from '@/lib/site-config';
 
@@ -87,18 +86,12 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
   const locale = localeFromPath(pathname);
   const currentPath = appendSearch(pathname, currentSearch);
   const { isLoading, signOut, user } = useAuth();
-  const shopEnabled = isShopPublicLaunchEnabled();
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
   const loginHref = buildAuthPath(locale, currentPath);
   const joinHref = buildJoinPath(locale, currentPath);
   const dashboardHref = withLocale(locale, '/dashboard');
   const editProfileHref = withLocale(locale, '/dashboard/profile');
-  const myListsHref = withLocale(locale, '/shop/watchlist');
-  const favoritesHref = user
-    ? shopEnabled
-      ? myListsHref
-      : withLocale(locale, '/community')
-    : loginHref;
+  const favoritesHref = user ? withLocale(locale, '/community') : loginHref;
   const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const mobileOpen = mobileMenuPath === currentPath;
@@ -126,15 +119,6 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
             path: getNewsPath(site),
             label: locale === 'zh' ? `${site.regionNameZh}新聞` : 'News',
             subLabel: oppositeCopy(locale, 'News', '新聞資訊'),
-          },
-        ]
-      : []),
-    ...(shopEnabled
-      ? [
-          {
-            path: '/shop',
-            label: locale === 'zh' ? '市集' : 'Shop',
-            subLabel: oppositeCopy(locale, 'Curated finds', '好物精選'),
           },
         ]
       : []),
@@ -280,14 +264,6 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
                       >
                         {locale === 'zh' ? '個人檔案' : 'Profile'}
                       </Link>
-                      {shopEnabled ? (
-                        <Link
-                          href={myListsHref}
-                          className="rounded-2xl px-3 py-2 text-sm font-semibold text-[#2c2019] transition-colors hover:bg-[#f4ede3] hover:text-brand-600"
-                        >
-                          {locale === 'zh' ? '我的清單' : 'My Lists'}
-                        </Link>
-                      ) : null}
                       <button
                         type="button"
                         onClick={handleSignOut}
@@ -433,14 +409,6 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
                     >
                       {locale === 'zh' ? '個人檔案' : 'Profile'}
                     </Link>
-                    {shopEnabled ? (
-                      <Link
-                        href={myListsHref}
-                        className="inline-flex items-center justify-center rounded-[24px] border border-[#d6c2af] bg-white px-4 py-3 text-sm font-semibold text-[#3a2a22] transition-colors hover:border-brand-300 hover:text-brand-600"
-                      >
-                        {locale === 'zh' ? '我的清單' : 'My Lists'}
-                      </Link>
-                    ) : null}
                     <button
                       type="button"
                       onClick={handleSignOut}

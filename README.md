@@ -3,7 +3,7 @@
 Maintained by **Derek Ko**.
 
 A bilingual community directory and content platform with business discovery,
-account and claim flows, moderation, shop and advertising features, and
+account and claim flows, moderation, advertising features, and
 multi-city publishing and data-import pipelines.
 
 ## Repository layout

@@ -1053,8 +1053,8 @@ export function AuthPageClient({
         <>
           <p className="mt-4 text-xs leading-5 text-[#7a6a5b]">
             {locale === 'zh'
-              ? '建立帳號後，你就能認領商家、發佈社群內容、儲存搜尋與使用 Shop 功能。'
-              : 'Creating an account lets you claim listings, publish in the community, save searches, and use shop features.'}
+              ? '建立帳號後，你就能認領商家、發佈社群內容與儲存搜尋。'
+              : 'Creating an account lets you claim listings, publish in the community, and save searches.'}
           </p>
 
           <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">

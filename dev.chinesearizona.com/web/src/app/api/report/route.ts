@@ -55,11 +55,7 @@ export async function POST(request: NextRequest) {
     reason: body.reason,
   });
   const path =
-    body.entityType === 'business'
-      ? '/business'
-      : body.entityType?.startsWith('shop_')
-        ? '/shop'
-        : '/community';
+    body.entityType === 'business' ? '/business' : '/community';
   recordAnalyticsEvent('report_submission', body.entitySlug, path);
 
   return json({
