@@ -86,6 +86,58 @@ export function isSupabaseServiceConfigured(): boolean {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
+const SUPABASE_PROBE_TIMEOUT_MS = 2500;
+
+export type SupabaseProbeResult = {
+  ok: boolean;
+  message: string;
+};
+
+// Runs one real query against a publicly readable table, so a paused,
+// deleted, misconfigured or hanging Supabase project shows up as unhealthy
+// instead of only checking that the env vars are present.
+export async function probeSupabase(): Promise<SupabaseProbeResult> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = getSupabasePublicKey();
+
+  if (!url || !key) {
+    return { ok: false, message: 'Supabase is not configured, so it was not queried.' };
+  }
+
+  try {
+    const response = await fetch(
+      `${url.replace(/\/+$/, '')}/rest/v1/business_categories?select=id&limit=1`,
+      {
+        headers: { apikey: key },
+        signal: AbortSignal.timeout(SUPABASE_PROBE_TIMEOUT_MS),
+      }
+    );
+    await response.body?.cancel();
+
+    if (!response.ok) {
+      return { ok: false, message: `Supabase rejected a test query (HTTP ${response.status}).` };
+    }
+
+    return { ok: true, message: 'Supabase answered a test query.' };
+  } catch (error) {
+    if (error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError')) {
+      return {
+        ok: false,
+        message: `Supabase did not answer within ${SUPABASE_PROBE_TIMEOUT_MS}ms.`,
+      };
+    }
+
+    const code = (error as { cause?: { code?: unknown } } | null)?.cause?.code;
+    return {
+      ok: false,
+      message:
+        typeof code === 'string'
+          ? `Supabase could not be reached (${code}).`
+          : 'Supabase could not be reached.',
+    };
+  }
+}
+
 export function getSupabaseClient() {
   if (!isSupabaseConfigured()) {
     return null;
