@@ -909,21 +909,30 @@ async function upsertDirectoryAdCampaignFromCheckout(input: {
 }) {
   const client = requireDirectoryAdServiceClient();
 
-  const { data: existingBySession } = await client
+  // Any failed read or write throws so the webhook answers non-2xx and Stripe
+  // retries the event, instead of the payment silently never starting a campaign.
+  const { data: existingBySession, error: sessionLookupError } = await client
     .from('directory_ad_campaigns')
     .select('id')
     .eq('stripe_checkout_session_id', input.checkoutSessionId)
     .maybeSingle();
 
+  if (sessionLookupError) {
+    throw new Error('Unable to check whether this sponsorship checkout was already saved.');
+  }
+
   if (existingBySession) {
     return;
   }
 
-  const { data: business } = await client
+  const { data: business, error: businessLookupError } = await client
     .from('businesses')
     .select('id, owner_profile_id, city')
     .eq('id', input.businessId)
     .maybeSingle();
+  if (businessLookupError) {
+    throw new Error('Unable to load the business for this sponsorship.');
+  }
   if (!business || business.owner_profile_id !== input.ownerProfileId) {
     throw new Error('Unable to confirm the business owner for this sponsorship.');
   }
@@ -933,11 +942,15 @@ async function upsertDirectoryAdCampaignFromCheckout(input: {
   const endsAt = addDays(now, DIRECTORY_AD_CAMPAIGN_DURATION_DAYS).toISOString();
 
   if (input.existingCampaignId) {
-    const { data: existing } = await client
+    const { data: existing, error: existingLookupError } = await client
       .from('directory_ad_campaigns')
       .select('*')
       .eq('id', input.existingCampaignId)
       .maybeSingle();
+
+    if (existingLookupError) {
+      throw new Error('Unable to load the sponsorship campaign to top up.');
+    }
 
     if (existing) {
       const resolvedExisting = (
@@ -950,7 +963,7 @@ async function upsertDirectoryAdCampaignFromCheckout(input: {
             ? 'active'
             : 'exhausted';
 
-      await client
+      const { error: topUpError } = await client
         .from('directory_ad_campaigns')
         .update({
           budget_cents: resolvedExisting.budget_cents + input.budgetCents,
@@ -961,11 +974,14 @@ async function upsertDirectoryAdCampaignFromCheckout(input: {
           updated_at: nowIso(),
         })
         .eq('id', resolvedExisting.id);
+      if (topUpError) {
+        throw new Error('Unable to save the sponsorship top-up.');
+      }
       return;
     }
   }
 
-  await client.from('directory_ad_campaigns').insert({
+  const { error: insertError } = await client.from('directory_ad_campaigns').insert({
     business_id: input.businessId,
     owner_profile_id: input.ownerProfileId,
     status: 'active',
@@ -981,6 +997,9 @@ async function upsertDirectoryAdCampaignFromCheckout(input: {
     created_at: startsAt,
     updated_at: startsAt,
   });
+  if (insertError) {
+    throw new Error('Unable to save the sponsorship campaign.');
+  }
 }
 
 export async function createDirectoryAdCheckoutForProfile(input: {
