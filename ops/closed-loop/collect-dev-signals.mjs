@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'no
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { recentServerErrorLines } from './access-log-health.mjs';
 import { recentCronAnomalyLines } from './cron-log-health.mjs';
 import { evaluatePm2Health, pm2ProcessState } from './pm2-health.mjs';
 import {
@@ -257,11 +258,9 @@ function collectAccessLogFindings() {
   const accessLog = process.env.CLOSED_LOOP_ACCESS_LOG || '/var/www/dev.chinesearizona.com/logs/access.log';
   const sampleSize = Number(process.env.CLOSED_LOOP_ACCESS_LOG_SAMPLE || 5000);
   const threshold = Number(process.env.CLOSED_LOOP_5XX_THRESHOLD || 5);
+  const windowMinutes = Number(process.env.CLOSED_LOOP_5XX_WINDOW_MINUTES || 60);
   const lines = tail(accessLog, sampleSize).split(/\r?\n/).filter(Boolean);
-  const failures = lines.filter((line) => {
-    const parts = line.split(/\s+/);
-    return /^5\d\d$/.test(parts[8] || '');
-  });
+  const failures = recentServerErrorLines(lines, { windowMinutes });
 
   if (failures.length < threshold) {
     return [];
@@ -272,7 +271,7 @@ function collectAccessLogFindings() {
       'nginx-5xx',
       'dev.chinesearizona.com has elevated 5xx responses',
       [
-        `5xx responses in last ${lines.length} access-log lines: ${failures.length}`,
+        `5xx responses in the last ${windowMinutes} minutes (from the last ${lines.length} access-log lines): ${failures.length}`,
         '',
         'Recent samples:',
         '',
