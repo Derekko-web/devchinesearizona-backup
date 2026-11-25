@@ -73,7 +73,7 @@ describe('workflow hardening', () => {
     expect(manualWorkflow).not.toContain('branches:');
   });
 
-  it('adds path-aware Python scraper and WordPress theme checks to Dev CI', () => {
+  it('adds path-aware Python scraper checks to Dev CI', () => {
     const workflow = fs.readFileSync(ciWorkflowPath, 'utf8');
 
     expect(workflow).toContain('python-scraper-tests:');
@@ -81,12 +81,7 @@ describe('workflow hardening', () => {
     expect(workflow).toContain('cache-dependency-path: dev.chinesearizona.com/web/requirements.txt');
     expect(workflow).toContain('actions/setup-python@v6');
     expect(workflow).toContain('npm run scrape:test');
-
-    expect(workflow).toContain('wordpress-theme:');
-    expect(workflow).toContain("if: needs.changes.outputs.wordpress_theme == 'true'");
-    expect(workflow).toContain('chinesearizona.com/public/wp-content/themes/twentytwentyfive');
-    expect(workflow).toContain('npm audit --audit-level=moderate');
-    expect(workflow).toContain('npm run build');
+    expect(workflow).not.toMatch(/wordpress/i);
   });
 
   it('adds dependency update and dependency-review coverage', () => {
@@ -97,15 +92,15 @@ describe('workflow hardening', () => {
     expect(dependencyReview).toContain('npm run security:audit');
     expect(dependencyReview).toContain('continue-on-error: true');
     expect(dependencyReview).toContain('fail-on-severity: moderate');
-    expect(dependencyReview).toContain('chinesearizona.com/public/wp-content/themes/twentytwentyfive/package-lock.json');
+    expect(dependencyReview).not.toContain('chinesearizona.com/public');
     expect(dependabot).toContain('package-ecosystem: npm');
     expect(dependabot).toContain('exclude-patterns:');
     expect(dependabot).toContain('- stripe');
     expect(dependabot).toContain('dependency-name: undici');
     expect(dependabot).toContain('dependency-name: eslint');
     expect(dependabot).toContain('version-update:semver-major');
-    expect(dependabot).toContain('directory: /chinesearizona.com/public/wp-content/themes/twentytwentyfive');
-    expect(dependabot).toContain('wordpress-theme-npm-security-and-minor');
+    expect(dependabot).not.toContain('chinesearizona.com/public');
+    expect(dependabot).not.toMatch(/wordpress/i);
     expect(dependabot).toContain('package-ecosystem: pip');
     expect(dependabot).toContain('package-ecosystem: github-actions');
   });

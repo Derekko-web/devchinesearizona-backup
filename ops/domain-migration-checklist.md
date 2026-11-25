@@ -37,7 +37,7 @@ Prepared on 2026-04-17 for these domains:
 
 ## Notes about this server
 
-- `chinesearizona.com` is currently a single-site WordPress install behind nginx on `127.0.0.1:8080`.
+- `chinesearizona.com` is served by the Next.js app: nginx on `127.0.0.1:8080` proxies it to the host router on port `3000`. The old WordPress install is no longer used.
 - `dev.chinesearizona.com` is a separate app proxied to port `3000`.
 - An outer Traefik proxy handles ports `80` and `443`, so both Traefik and nginx need host routing entries for new domains.
 - Because this shell does not have passwordless `sudo`, the Traefik and nginx install steps are prepared but not yet applied.
