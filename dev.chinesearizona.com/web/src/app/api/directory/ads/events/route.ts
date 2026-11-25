@@ -3,15 +3,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { recordDirectoryAdEvent } from '@/lib/directory-ads';
 import { resolveLocale } from '@/lib/i18n';
 import { checkRateLimit } from '@/lib/rate-limit';
-
-function requesterKey(request: NextRequest) {
-  return request.headers.get('x-forwarded-for') ?? 'local-request';
-}
+import { getClientAddress } from '@/lib/request-url';
 
 export async function POST(request: NextRequest) {
   const locale = resolveLocale(request.headers.get('x-locale') ?? undefined);
-  const key = requesterKey(request);
-  if (!checkRateLimit(`directory-ad-events:${key}`, 180, 60_000)) {
+  const visitorAddress = getClientAddress(request);
+  if (!checkRateLimit(`directory-ad-events:${visitorAddress}`, 180, 60_000)) {
     return NextResponse.json(
       {
         message:
@@ -50,6 +47,7 @@ export async function POST(request: NextRequest) {
       eventType: body.eventType,
       pagePath: body.pagePath,
       sessionId: body.sessionId,
+      visitorAddress,
     });
 
     return NextResponse.json(result);
