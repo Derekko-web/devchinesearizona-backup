@@ -3,7 +3,7 @@ import 'server-only';
 import Stripe from 'stripe';
 
 let stripeClient: Stripe | null | undefined;
-export const STRIPE_API_VERSION = '2026-03-25.dahlia';
+export const STRIPE_API_VERSION = '2026-06-24.dahlia';
 
 export function isStripeConfigured(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY);
