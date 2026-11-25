@@ -88,3 +88,58 @@ loop stays unattended:
 - `dev-runtime`: restrict deployment branches to `main` or protected branches
   only. Keep runtime-operator secrets such as
   `DEV_VPS_RUNTIME_EGRESS_USER` and `DEV_VPS_RUNTIME_EGRESS_SSH_KEY` here.
+- `production`: the one environment with a required reviewer (Derek), so
+  every production deploy waits for a click. Turn off "Prevent self-review" so
+  the person who starts a run can approve it. Restrict deployment branches to
+  `main`. Keep `PROD_VPS_HOST`, `PROD_VPS_PORT`, `PROD_VPS_USER`,
+  `PROD_VPS_SSH_KEY` and `PROD_VPS_SSH_KNOWN_HOSTS` here, not in `dev`.
+
+## Production deploys (chinesearizona.com)
+
+Production deploys run only through the manual `Deploy Prod` workflow
+(`.github/workflows/deploy-prod.yml`). It runs
+`ops/deploy-prod/deploy-prod.sh` on the VPS. Nobody edits `/var/www` by hand.
+
+**Deploy.** In GitHub, open Actions > Deploy Prod > Run workflow and leave
+`action=deploy`. Leave `sha` empty to ship the commit dev is running now, then
+approve the run in the `production` environment. The run:
+
+1. refuses any SHA that is not on `main`, has no successful Dev CI run, or has
+   not shipped to dev through Deploy Dev;
+2. runs `npm run verify` on that SHA;
+3. builds it in `/var/www/chinesearizona.com/releases/<sha>/` while the live
+   site keeps serving. It waits for the VPS build lock that Deploy Dev also
+   takes, so two builds never run at once;
+4. points `current` at the new release, restarts `main-chinesearizona`, waits
+   for `/api/health` to report the new SHA, and runs `smoke:dev` against
+   `https://chinesearizona.com`;
+5. if a check fails, points `current` back at the release that was live and
+   restarts again.
+
+**Roll back.** Run Deploy Prod with `action=rollback`. With `sha` empty it
+switches to the previous release. Nothing is rebuilt, so the switch takes
+seconds. Run it again to go forward again. To pick an older release, pass a
+SHA that is still in `releases/`. The last 3 releases are kept, plus whatever
+`current` and `previous` point at.
+
+**Layout on the VPS** (`/var/www/chinesearizona.com`):
+
+- `releases/<sha>/`: a built copy of `dev.chinesearizona.com/web`, extracted
+  with `git archive` from the `/var/www` repository. Dev's working tree is never
+  checked out or changed.
+- `releases/legacy-20260517`: a link to `app/`, the hand-copied app that ran
+  before this pipeline. The first deploy creates it and leaves `app/` in place
+  as the first rollback target.
+- `shared/.env.local`: the production env (Supabase production project, Stripe
+  keys), linked into every release. The first deploy copies it from
+  `app/.env.local`.
+- `shared/main-ecosystem.config.cjs`: the pm2 config from the live release
+  (tracked as `chinesearizona.com/main-ecosystem.config.cjs`). It leaves
+  `RADAR_STORAGE_MODE` unset, so Arizona news keeps coming from Supabase.
+- `current`, `previous`: links to the live release and the rollback target.
+- Runtime data lives in `/var/www/runtime-data/chinesearizona.com/web`. It is
+  seeded from repo fixtures only when a file is missing and is never copied from
+  dev.
+
+**Logs.** Each run's output is in the Deploy Prod run in GitHub Actions. App
+logs are in `~/.pm2/logs/main-chinesearizona-*.log` on the VPS.
