@@ -513,7 +513,9 @@ export async function approveBusinessClaim(input: ClaimApprovalInput): Promise<C
         description_en: description,
         city: resolvedCity,
         region: resolvedCity,
-        email: textOrUndefined(claim.email) ?? null,
+        // The claim's contact email is private: owners use it to verify, not to publish.
+        // Owners can add a public business email later from their dashboard.
+        email: null,
         hero_image: resolvedPhotos.heroImage ?? null,
         gallery: resolvedPhotos.gallery,
         verified: true,
