@@ -12,6 +12,7 @@ import {
 import { getPublishedDiscoverArticles, discoveryCategories } from '@/lib/discover-arizona';
 import { getDirectoryBusinesses, shouldNoIndexDirectoryBusiness } from '@/lib/directory';
 import { getHiddenArizonaEntries, getHiddenArizonaEntryPath } from '@/lib/hidden-arizona';
+import { advertisePath } from '@/lib/advertise';
 import { publisherPageSlugs } from '@/lib/publisher-pages';
 import { absoluteUrl, buildAlternates } from '@/lib/seo';
 import { withLocale } from '@/lib/routing';
@@ -54,6 +55,7 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
     site.news.archivePath,
     '/community',
     '/add-business',
+    advertisePath,
     ...publisherPageSlugs.map((slug) => `/${slug}`),
   ];
   const [directoryBusinesses, articles, discoverArticles] = await Promise.all([

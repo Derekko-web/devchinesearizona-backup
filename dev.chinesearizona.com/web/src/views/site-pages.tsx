@@ -86,6 +86,7 @@ import { getDiscoverAdminQueue } from '@/lib/discover-arizona';
 import { getRadarAdminSnapshotAsync, getRadarHeroImageFallback } from '@/lib/radar';
 import { isSupabaseServiceConfigured } from '@/lib/supabase';
 import { shouldRenderAdSensePlacement } from '@/lib/adsense';
+import { advertisePath } from '@/lib/advertise';
 import {
   countActiveDirectoryFilters,
   getDirectoryPage,
@@ -298,7 +299,13 @@ function DirectorySponsoredDisclosure({ locale }: { locale: Locale }) {
     <p className="text-xs leading-5 text-slate-500">
       {locale === 'zh'
         ? '贊助排序只會影響目錄列表中的顯示順序，不會改變商家的驗證、編輯或審核狀態。'
-        : 'Sponsored placement only affects browse-page ordering and does not change verification, editorial, or review status.'}
+        : 'Sponsored placement only affects browse-page ordering and does not change verification, editorial, or review status.'}{' '}
+      <Link
+        href={`${withLocale(locale, advertisePath)}#sponsored`}
+        className="font-semibold text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-800"
+      >
+        {locale === 'zh' ? '了解「贊助」的意思' : 'What Sponsored means'}
+      </Link>
     </p>
   );
 }
@@ -1442,6 +1449,12 @@ export async function BusinessDetailPageView({
                           {locale === 'zh' ? '查看網站' : 'Visit website'}
                         </a>
                       ) : null}
+                      <Link
+                        href={withLocale(locale, advertisePath)}
+                        className="inline-flex h-10 items-center justify-center rounded-md border border-[#d7cabe] bg-white px-4 text-sm font-semibold text-[#3d342e] transition hover:border-[#bd2730] hover:text-[#bd2730]"
+                      >
+                        {locale === 'zh' ? '推廣這家商家' : 'Promote this business'}
+                      </Link>
                     </div>
                     <div className="mt-5 max-w-2xl">
                       <ReportIssueForm entitySlug={business.slug} entityType="business" locale={locale} />
@@ -3822,6 +3835,23 @@ export async function AddBusinessPageView({
                     ))}
                   </ul>
                 </div>
+              </div>
+
+              <div id="advertise-plans" className="mt-5 border border-[#ded2c5] bg-[#fbf7f0] p-5">
+                <h2 className="text-xl font-semibold leading-tight text-[#2c2722] [font-family:var(--font-display)]">
+                  {locale === 'zh' ? '想讓更多顧客找到你？' : 'Want more customers to find you?'}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#6d6258]">
+                  {locale === 'zh'
+                    ? '認領永遠免費。可選的付費方案提供更多照片、中英雙語介紹或清楚標示的贊助版位，價格公開透明。'
+                    : 'Claiming stays free. Optional paid plans add photos, an English and Chinese write-up or a clearly labeled sponsored spot, with prices published up front.'}
+                </p>
+                <Link
+                  href={withLocale(locale, advertisePath)}
+                  className="mt-4 inline-flex h-10 items-center justify-center rounded-md border border-[#bd2730] bg-white px-4 text-sm font-semibold text-[#bd2730] transition hover:bg-[#bd2730] hover:text-white"
+                >
+                  {locale === 'zh' ? '查看方案與價格' : 'See plans and prices'}
+                </Link>
               </div>
             </aside>
           </div>
