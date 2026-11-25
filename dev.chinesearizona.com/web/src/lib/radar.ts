@@ -234,8 +234,16 @@ function siteEnvKey(site: SiteProfile): string {
   return site.key.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
 }
 
+// Same relative path as the Arizona store in scripts/arizona_radar/run.cjs.
+const ARIZONA_RADAR_STORE_PATH = path.join('data', 'radar-runtime', 'store.json');
+
 function resolveRuntimePath(site: SiteProfile): string {
-  const configuredPath = site.news.articleDataSource.path;
+  // City sites keep their radar store at news.articleDataSource.path. Arizona's
+  // articleDataSource is src/data/generated-local-articles.json, the article
+  // list the content jobs own, so writing the store (or its Supabase mirror)
+  // there replaced that list. Use the worker's store path instead.
+  const configuredPath =
+    site.key === defaultSiteProfile.key ? ARIZONA_RADAR_STORE_PATH : site.news.articleDataSource.path;
   if (configuredPath) {
     if (path.isAbsolute(configuredPath)) {
       return configuredPath;

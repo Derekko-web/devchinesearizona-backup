@@ -283,6 +283,19 @@ go_live() {
   wait_until_serving "$name" && smoke_release "$name"
 }
 
+repair_local_articles() {
+  # Older builds overwrote the runtime local article list with the radar store.
+  # Runs after the new release serves, so the old server can't overwrite it again.
+  local name="$1"
+  local script="$RELEASES_DIR/$name/scripts/arizona_radar/restore_local_articles_runtime.cjs"
+  if [ ! -f "$script" ]; then
+    return 0
+  fi
+  if ! (export_runtime_env && node "$script"); then
+    log "Could not check the runtime local article list."
+  fi
+}
+
 record_history() {
   printf '%s\n' "$1" >> "$HISTORY_FILE"
 }
@@ -324,6 +337,7 @@ cmd_deploy() {
     if [ -n "$before" ] && [ "$before" != "$sha" ]; then
       ln -sfn "releases/$before" "$PREVIOUS_LINK"
     fi
+    repair_local_articles "$sha"
     record_history "$sha"
     prune_releases
     log "Deployed $sha to $SITE_URL."
