@@ -106,6 +106,8 @@ export async function DiscoverArizonaHubPageView({ locale }: { locale: Locale })
       <section className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div>
+            {/* Page-level heading for search engines and screen readers. */}
+            <h1 className="sr-only">{locale === 'zh' ? '探索亞利桑那' : 'Discover Arizona'}</h1>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-700">
               {locale === 'zh' ? '分類入口' : 'Category lanes'}
             </p>

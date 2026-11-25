@@ -2596,6 +2596,8 @@ export async function CommunityRadarPageView({
 
   return sectionContainer(
     <div className="py-10 md:py-14">
+      {/* Page-level heading for search engines and screen readers; the visible layout starts with the topic bar. */}
+      <h1 className="sr-only">{siteNewsLabel(site, locale)}</h1>
       <div className={showSidebarAd ? 'grid gap-8 xl:grid-cols-[minmax(0,1fr),320px] xl:items-start' : ''}>
         <div className="space-y-10">
           <nav
