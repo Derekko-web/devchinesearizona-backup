@@ -45,10 +45,13 @@ import { DashboardAccessNotice } from '@/components/auth/DashboardAccessNotice';
 import { BusinessClaimApprovalCard } from '@/components/admin/BusinessClaimApprovalCard';
 import { DiscoverArizonaAdminPanel } from '@/components/admin/DiscoverArizonaAdminPanel';
 import { RadarAdminPanel } from '@/components/admin/RadarAdminPanel';
+import { BusinessContactClickTracker } from '@/components/directory/BusinessContactClickTracker';
+import { AdminLeadOverview, OwnerLeadSummary } from '@/components/directory/BusinessLeadPanels';
 import { BusinessPhotoEditor } from '@/components/directory/BusinessPhotoEditor';
 import { DirectoryAdCampaignPanel } from '@/components/directory/DirectoryAdCampaignPanel';
 import { OwnedBusinessDeleteButton } from '@/components/directory/OwnedBusinessDeleteButton';
 import { BusinessClaimForm } from '@/components/forms/BusinessClaimForm';
+import { BusinessInquiryForm } from '@/components/forms/BusinessInquiryForm';
 import { CommunityPostComposer } from '@/components/forms/CommunityPostComposer';
 import { ReportIssueForm } from '@/components/forms/ReportIssueForm';
 import { resolveArticleText, resolveLocalizedTextList } from '@/lib/article-localization';
@@ -83,6 +86,7 @@ import { getDiscoverAdminQueue } from '@/lib/discover-arizona';
 import { getRadarAdminSnapshotAsync, getRadarHeroImageFallback } from '@/lib/radar';
 import { isSupabaseServiceConfigured } from '@/lib/supabase';
 import { shouldRenderAdSensePlacement } from '@/lib/adsense';
+import { advertisePath } from '@/lib/advertise';
 import {
   countActiveDirectoryFilters,
   getDirectoryPage,
@@ -91,6 +95,12 @@ import {
   getDirectoryCategories,
   getDirectoryFilterOptions,
 } from '@/lib/directory';
+import {
+  businessLeadsEnabled,
+  getBusinessLeadCounts,
+  getRecentBusinessInquiries,
+  isInquiryCategory,
+} from '@/lib/business-leads';
 import { selectRealBusinessPhotos } from '@/lib/business-photos';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import {
@@ -304,7 +314,13 @@ function DirectorySponsoredDisclosure({ locale }: { locale: Locale }) {
     <p className="text-xs leading-5 text-slate-500">
       {locale === 'zh'
         ? '贊助排序只會影響目錄列表中的顯示順序，不會改變商家的驗證、編輯或審核狀態。'
-        : 'Sponsored placement only affects browse-page ordering and does not change verification, editorial, or review status.'}
+        : 'Sponsored placement only affects browse-page ordering and does not change verification, editorial, or review status.'}{' '}
+      <Link
+        href={`${withLocale(locale, advertisePath)}#sponsored`}
+        className="font-semibold text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-800"
+      >
+        {locale === 'zh' ? '了解「贊助」的意思' : 'What Sponsored means'}
+      </Link>
     </p>
   );
 }
@@ -1042,9 +1058,12 @@ export async function BusinessDetailPageView({
   const popularityBadge = isMostPopularDirectoryBusiness(business);
   const menuOrWebsiteHref = menuHref ?? websiteHref;
   const usesCityGeneratedImages = site.key === 'austin' || site.key === 'los-angeles' || site.key === 'sf-bay';
+  const leadsEnabled = businessLeadsEnabled(site);
+  const showInquiryForm = leadsEnabled && isInquiryCategory(business.categorySlug);
   return (
     <div className="bg-[#f7f1e8] text-[#2c2722]">
       <JsonLd data={localBusinessJsonLd} />
+      {leadsEnabled ? <BusinessContactClickTracker businessSlug={business.slug} /> : null}
 
       <section className="relative overflow-hidden border-b border-[#ded5c9] bg-[#f7f1e8]">
         <div className="absolute right-0 top-20 hidden h-72 w-[28rem] rounded-l-[9rem] bg-[#f1bf97] opacity-80 lg:block" />
@@ -1168,6 +1187,7 @@ export async function BusinessDetailPageView({
               {business.phone && phoneLink ? (
                 <a
                   href={phoneLink}
+                  data-contact-action="call"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#bd2730] px-5 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(189,39,48,0.24)] transition hover:bg-[#a91f27] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bd2730]/35"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
@@ -1190,6 +1210,7 @@ export async function BusinessDetailPageView({
                   href={directionsHref}
                   target="_blank"
                   rel="noreferrer"
+                  data-contact-action="directions"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[#d7cabe] bg-white px-4 text-sm font-semibold text-[#3d342e] transition hover:border-[#bd2730] hover:text-[#bd2730] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bd2730]/25"
                 >
                   <Route className="h-4 w-4" aria-hidden="true" />
@@ -1202,10 +1223,21 @@ export async function BusinessDetailPageView({
                   href={menuOrWebsiteHref}
                   target="_blank"
                   rel="noreferrer"
+                  data-contact-action="website"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[#d7cabe] bg-white px-4 text-sm font-semibold text-[#3d342e] transition hover:border-[#bd2730] hover:text-[#bd2730] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bd2730]/25"
                 >
                   <Utensils className="h-4 w-4" aria-hidden="true" />
                   {menuHref ? (locale === 'zh' ? '菜單／下單' : 'Menu / order') : locale === 'zh' ? '官方網站' : 'Website'}
+                </a>
+              ) : null}
+
+              {showInquiryForm ? (
+                <a
+                  href="#inquiry"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-md border border-[#bd2730] bg-white px-4 text-sm font-semibold text-[#bd2730] transition hover:bg-[#bd2730] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bd2730]/25"
+                >
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  {locale === 'zh' ? '詢價' : 'Request a quote'}
                 </a>
               ) : null}
 
@@ -1435,11 +1467,18 @@ export async function BusinessDetailPageView({
                           href={websiteHref}
                           target="_blank"
                           rel="noreferrer"
+                          data-contact-action="website"
                           className="inline-flex h-10 items-center justify-center rounded-md border border-[#d7cabe] bg-white px-4 text-sm font-semibold text-[#3d342e] transition hover:border-[#bd2730] hover:text-[#bd2730]"
                         >
                           {locale === 'zh' ? '查看網站' : 'Visit website'}
                         </a>
                       ) : null}
+                      <Link
+                        href={withLocale(locale, advertisePath)}
+                        className="inline-flex h-10 items-center justify-center rounded-md border border-[#d7cabe] bg-white px-4 text-sm font-semibold text-[#3d342e] transition hover:border-[#bd2730] hover:text-[#bd2730]"
+                      >
+                        {locale === 'zh' ? '推廣這家商家' : 'Promote this business'}
+                      </Link>
                     </div>
                     <div className="mt-5 max-w-2xl">
                       <ReportIssueForm entitySlug={business.slug} entityType="business" locale={locale} />
@@ -1451,6 +1490,20 @@ export async function BusinessDetailPageView({
           </div>
 
           <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+            {showInquiryForm ? (
+              <section
+                id="inquiry"
+                className="scroll-mt-24 rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]"
+              >
+                <BusinessInquiryForm
+                  businessName={displayName}
+                  businessSlug={business.slug}
+                  locale={locale}
+                  privacyHref={withLocale(locale, '/privacy')}
+                />
+              </section>
+            ) : null}
+
             <section className="overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
               <div className="relative h-48 overflow-hidden bg-[#e8efe5]">
                 <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(92,111,91,0.14)_1px,transparent_1px),linear-gradient(0deg,rgba(92,111,91,0.14)_1px,transparent_1px)] bg-[size:46px_46px]" />
@@ -1476,6 +1529,7 @@ export async function BusinessDetailPageView({
                     href={directionsHref}
                     target="_blank"
                     rel="noreferrer"
+                    data-contact-action="directions"
                     className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md border border-[#bd2730] bg-white text-sm font-semibold text-[#bd2730] transition hover:bg-[#bd2730] hover:text-white"
                   >
                     <Route className="h-4 w-4" aria-hidden="true" />
@@ -1491,7 +1545,7 @@ export async function BusinessDetailPageView({
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-[#bd2730]" aria-hidden="true" />
                   {business.phone && phoneLink ? (
-                    <a href={phoneLink} className="font-semibold text-[#bd2730] hover:text-[#8f1c22]">
+                    <a href={phoneLink} data-contact-action="call" className="font-semibold text-[#bd2730] hover:text-[#8f1c22]">
                       {business.phone}
                     </a>
                   ) : (
@@ -1511,7 +1565,13 @@ export async function BusinessDetailPageView({
                 <div className="flex items-center gap-3">
                   <Globe2 className="h-4 w-4 text-[#5f554c]" aria-hidden="true" />
                   {contactWebsite ? (
-                    <a href={contactWebsite} target="_blank" rel="noreferrer" className="transition hover:text-[#bd2730]">
+                    <a
+                      href={contactWebsite}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-contact-action="website"
+                      className="transition hover:text-[#bd2730]"
+                    >
                       {contactWebsiteLabel}
                     </a>
                   ) : (
@@ -4140,6 +4200,23 @@ export async function AddBusinessPageView({
                   </ul>
                 </div>
               </div>
+
+              <div id="advertise-plans" className="mt-5 border border-[#ded2c5] bg-[#fbf7f0] p-5">
+                <h2 className="text-xl font-semibold leading-tight text-[#2c2722] [font-family:var(--font-display)]">
+                  {locale === 'zh' ? '想讓更多顧客找到你？' : 'Want more customers to find you?'}
+                </h2>
+                <p className="mt-3 text-sm leading-6 text-[#6d6258]">
+                  {locale === 'zh'
+                    ? '認領永遠免費。可選的付費方案提供更多照片、中英雙語介紹或清楚標示的贊助版位，價格公開透明。'
+                    : 'Claiming stays free. Optional paid plans add photos, an English and Chinese write-up or a clearly labeled sponsored spot, with prices published up front.'}
+                </p>
+                <Link
+                  href={withLocale(locale, advertisePath)}
+                  className="mt-4 inline-flex h-10 items-center justify-center rounded-md border border-[#bd2730] bg-white px-4 text-sm font-semibold text-[#bd2730] transition hover:bg-[#bd2730] hover:text-white"
+                >
+                  {locale === 'zh' ? '查看方案與價格' : 'See plans and prices'}
+                </Link>
+              </div>
             </aside>
           </div>
         </div>
@@ -4480,7 +4557,13 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
   const adCampaignsByBusinessId: Map<string, DirectoryAdCampaign> = profile
     ? await getDirectoryAdCampaignsForOwnerBusinesses(profile.id, managedBusinesses)
     : new Map<string, DirectoryAdCampaign>();
-  const directoryAdsAvailability = await getDirectoryAdsAvailability();
+  const managedBusinessIds = managedBusinesses.map((business) => business.id);
+  const [directoryAdsAvailability, leadCounts, recentInquiries] = await Promise.all([
+    getDirectoryAdsAvailability(),
+    getBusinessLeadCounts({ businessIds: managedBusinessIds }),
+    getRecentBusinessInquiries({ businessIds: managedBusinessIds, limit: 10 }),
+  ]);
+  const showLeadSummary = managedBusinesses.length > 0 && isSupabaseServiceConfigured();
   const directoryAdsMode = directoryAdsAvailability.mode;
   const adsAvailable = directoryAdsMode !== 'read_only';
   const recentReviews = managedBusinesses.flatMap((business) => getBusinessReviews(business.slug));
@@ -4764,6 +4847,15 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
             </section>
           ) : null}
 
+          {showLeadSummary ? (
+            <OwnerLeadSummary
+              businesses={managedBusinesses}
+              counts={leadCounts}
+              inquiries={recentInquiries}
+              locale={locale}
+            />
+          ) : null}
+
           {managedBusinesses.length > 0 ? (
             <section id="your-businesses" className="space-y-5 rounded-[1.6rem] border border-slate-200/80 bg-white/75 p-5 shadow-[0_22px_55px_rgba(74,49,27,0.07)] sm:p-6">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -4826,6 +4918,8 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     signalDeskSummary,
     discoverAdminQueue,
     radarAdminSnapshot,
+    adminLeadCounts,
+    adminRecentInquiries,
   ] = await Promise.all([
     Promise.resolve(getAdminSnapshot()),
     getPendingBusinessClaimsSnapshot(),
@@ -4836,6 +4930,8 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     Promise.resolve(getSignalDeskSummary()),
     getDiscoverAdminQueue(),
     getRadarAdminSnapshotAsync(),
+    getBusinessLeadCounts({ limit: 100 }),
+    getRecentBusinessInquiries({ limit: 20 }),
   ]);
   const discoverWriteEnabled = isSupabaseServiceConfigured();
   const moderationQueueCount = moderationReports.length + snapshot.flaggedPosts.length;
@@ -5112,6 +5208,8 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
           </div>
         </div>
       </section>
+
+      <AdminLeadOverview counts={adminLeadCounts} inquiries={adminRecentInquiries} locale={locale} />
 
       <section id="admin-editorial" className="space-y-4">
         <div className="space-y-2">
