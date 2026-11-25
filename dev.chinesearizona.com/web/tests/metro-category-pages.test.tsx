@@ -100,7 +100,7 @@ describe('metro category pages', () => {
     expect(html).toContain('Sponsored');
     expect(html).toContain('贊助');
     expect(html).toContain('Sponsor this category');
-    expect(html).toContain('href="/en/add-business"');
+    expect(html).toContain('href="/en/advertise?plan=sponsored-category#contact"');
   });
 
   it('moves sponsored listings into the labeled spot at the top without repeating them', async () => {

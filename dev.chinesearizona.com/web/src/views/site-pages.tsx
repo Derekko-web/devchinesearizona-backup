@@ -1803,7 +1803,7 @@ function SponsoredCategorySpots({
               : 'This sponsored spot is open. Put your business at the top of this page.'}
           </p>
           <Link
-            href={withLocale(locale, '/add-business')}
+            href={`${withLocale(locale, advertisePath)}?plan=sponsored-category#contact`}
             className="inline-flex items-center rounded-[14px] border border-brand-200 bg-white px-4 py-2 text-sm font-semibold text-brand-700 transition-colors hover:border-brand-400"
           >
             {locale === 'zh' ? '成為贊助商家' : 'Sponsor this category'}
