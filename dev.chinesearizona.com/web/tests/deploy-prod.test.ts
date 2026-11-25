@@ -86,6 +86,11 @@ function commit(label: string) {
   const web = path.join(repoDir, 'dev.chinesearizona.com', 'web');
   writeFile(path.join(web, 'package.json'), JSON.stringify({ label, name: 'web' }));
   writeFile(path.join(web, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'), `{"label":"${label}"}`);
+  writeFile(path.join(web, 'src', 'data', 'generated-local-articles.json'), `[{"slug":"${label}"}]`);
+  writeFile(
+    path.join(web, 'scripts', 'arizona_radar', 'restore_local_articles_runtime.cjs'),
+    fs.readFileSync(path.join(process.cwd(), 'scripts', 'arizona_radar', 'restore_local_articles_runtime.cjs'), 'utf8')
+  );
   writeFile(path.join(repoDir, 'chinesearizona.com', 'main-ecosystem.config.cjs'), `// ${label}\n`);
   git(['add', '-A']);
   git(['commit', '-q', '-m', label]);
@@ -202,6 +207,15 @@ describe('deploy-prod.sh deploy', () => {
     expect(
       fs.readFileSync(path.join(runtimeRoot, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'), 'utf8')
     ).toBe('live');
+  });
+
+  it('repairs a runtime article list that an older build overwrote with the radar store', () => {
+    const articlesPath = path.join(runtimeRoot, 'src', 'data', 'generated-local-articles.json');
+    writeFile(articlesPath, '{"version":1,"articles":[],"runs":[]}');
+
+    deploy(shas[0]);
+
+    expect(JSON.parse(fs.readFileSync(articlesPath, 'utf8'))).toEqual([{ slug: 'one' }]);
   });
 
   it('switches back to the release that was live when smoke fails', () => {

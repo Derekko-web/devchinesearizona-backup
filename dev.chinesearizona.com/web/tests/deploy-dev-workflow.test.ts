@@ -153,3 +153,17 @@ describe('Deploy Dev dirty tree guard', () => {
     expect(gitignore).toContain('/runtime-data/');
   });
 });
+
+describe('Deploy Dev local article repair', () => {
+  it('repairs the runtime local article list after the new code serves and before smoke', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+    const wait = workflow.indexOf('wait_for_app_ready "$DEPLOY_SHA" || true');
+    const repair = workflow.indexOf('node scripts/arizona_radar/restore_local_articles_runtime.cjs');
+    const smoke = workflow.indexOf('if ! npm run smoke:dev; then');
+
+    expect(wait).toBeGreaterThan(-1);
+    expect(repair).toBeGreaterThan(wait);
+    expect(smoke).toBeGreaterThan(repair);
+    expect(workflow).toContain('export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"');
+  });
+});
