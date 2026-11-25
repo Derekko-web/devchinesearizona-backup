@@ -38,6 +38,28 @@ by `tests/next-eslint-root-dirs.test.ts`. React Hooks linting remains pinned to
 7.0.1 to preserve the existing rule set during the security update. Revisit these
 overrides when upgrading the lint configuration.
 
+## Business leads (inquiries and click counts)
+
+Listings in real estate, legal and finance (including insurance), medical
+(including dental), education, and home services show a short "Ask a question /
+Request a quote / 詢價" form. Every main-site listing counts Call, Website, and
+Directions clicks, once per visitor per button per day. Owners see their monthly
+counts in `/dashboard`; staff see counts per listing and recent inquiries in
+`/admin`. Tables: `business_inquiries` and `business_contact_clicks`
+(`supabase/migrations/20261125_setup_business_leads.sql`).
+
+Inquiries are saved even when email is off. To email each one to the listing
+owner (or to the admin while the listing is unclaimed), set these in the
+server's `.env.local`:
+
+- `RESEND_API_KEY`: a Resend API key with a verified sending domain.
+- `EMAIL_FROM`: the sender, for example `ChineseArizona <leads@chinesearizona.com>`.
+- `ADMIN_NOTIFICATION_EMAIL`: where leads for unclaimed listings go.
+
+Leads are free. Never bill per inquiry or per closed deal: for real estate and
+mortgage that is required by RESPA section 8, so sponsors there pay flat
+advertising fees only.
+
 ## Arizona Radar Freshness
 
 `/news` reads published Arizona Radar items from Supabase when service credentials are configured, with `data/radar-runtime/store.json` as the local mirror/fallback. The normal refresh path is `scripts/arizona_radar/cron_sync.sh`, which loads `dev.chinesearizona.com/web/.env.local` on the host and runs:
