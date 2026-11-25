@@ -16,6 +16,11 @@ export function buildRobots(site: SiteProfile = defaultSiteProfile): MetadataRou
         '/zh/dashboard',
         '/en/admin',
         '/zh/admin',
+        // Sign-in pages carry a `next` link back to the page the visitor came
+        // from, so crawling them only produces endless URL variations.
+        '/auth',
+        '/en/auth',
+        '/zh/auth',
       ],
     },
     sitemap: absoluteUrl('/sitemap.xml', site),

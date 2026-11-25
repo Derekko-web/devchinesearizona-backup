@@ -78,6 +78,20 @@ describe('auth helpers', () => {
     );
   });
 
+  it('never nests a Google sign-in URL inside another sign-in link', () => {
+    const nestedGoogle = '/en/auth/google?next=%2Fen%2Fauth%2Fgoogle%3Fnext%3D%252Fnews%252Fsome-story';
+
+    expect(resolvePostAuthPath('zh', nestedGoogle)).toBe('/zh');
+    expect(buildAuthPath('zh', nestedGoogle)).toBe('/zh/auth/login');
+    expect(buildJoinPath('en', '/zh/auth/google?next=%2Fnews')).toBe('/en/auth/join');
+    expect(buildGoogleAuthPath('en', '/auth/google')).toBe('/en/auth/google?next=%2Fen');
+    expect(buildAuthPath('en', '/en/auth/')).toBe('/en/auth/login');
+  });
+
+  it('still keeps next for ordinary pages whose names start with auth', () => {
+    expect(buildAuthPath('en', '/en/authors')).toBe('/en/auth/login?next=%2Fen%2Fauthors');
+  });
+
   it('falls back to the localized home page when next is missing or points at auth', () => {
     expect(resolvePostAuthPath('en')).toBe('/en');
     expect(resolvePostAuthPath('zh', '/zh/auth')).toBe('/zh');
