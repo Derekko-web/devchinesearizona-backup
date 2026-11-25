@@ -71,6 +71,21 @@ describe('Deploy Dev readiness', () => {
   });
 });
 
+describe('Deploy Dev build hygiene', () => {
+  it('clears stale next dev types before every VPS build', () => {
+    const workflow = fs.readFileSync(workflowPath, 'utf8');
+    const lines = workflow.split('\n').map((line) => line.trim());
+    const buildLines = lines.flatMap((line, index) => (line === 'npm run build' ? [index] : []));
+
+    // One build for the deploy, one for the rollback.
+    expect(buildLines).toHaveLength(2);
+    for (const buildLine of buildLines) {
+      const preceding = lines.slice(Math.max(0, buildLine - 3), buildLine);
+      expect(preceding).toContain('rm -rf .next/dev');
+    }
+  });
+});
+
 describe('Deploy Dev gate', () => {
   it('requires every deploy target to be a main SHA with successful Dev CI', () => {
     const workflow = fs.readFileSync(workflowPath, 'utf8');

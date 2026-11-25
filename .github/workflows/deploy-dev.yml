@@ -319,6 +319,10 @@ jobs:
           export GENERATED_LOCAL_ARTICLES_PATH="$runtime_data_root/src/data/generated-local-articles.json"
           npm ci
           node scripts/arizona_radar/repair_current_article_images.cjs --strict
+          # tsconfig includes .next/dev/types, which only `next dev` writes. A
+          # stale copy still imports deleted routes and fails the type check.
+          # The production server never reads .next/dev.
+          rm -rf .next/dev
           npm run build
 
           app_health_url="http://127.0.0.1:3002/api/health"
@@ -382,6 +386,7 @@ jobs:
             # still names the failed deploy.
             export SMOKE_EXPECTED_GIT_SHA="$previous_sha"
             npm ci
+            rm -rf .next/dev
             npm run build
             pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
             pm2 save
