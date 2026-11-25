@@ -55,6 +55,12 @@ ops/generated/
 
 # Main-domain deployment copy; source of truth lives in dev.chinesearizona.com/web.
 chinesearizona.com/app/
+# Deploy Prod release folders on the VPS. They must stay untracked so Deploy
+# Dev's clean-tree check on /var/www keeps passing.
+chinesearizona.com/releases/
+chinesearizona.com/shared/
+chinesearizona.com/current
+chinesearizona.com/previous
 
 # Local runtime/generated state.
 /runtime-data/
