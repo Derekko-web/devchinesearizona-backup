@@ -1158,8 +1158,8 @@ export async function BusinessDetailPageView({
                 <span>{cityStateLabel}</span>
               </div>
 
+              {/* Only the short description up top; the full text lives in the About section below. */}
               <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
-              <p className="mt-1 max-w-xl text-sm leading-6 text-[#766b61]">{t(business.description, locale)}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {serviceHighlights.slice(0, 4).map((highlight) => (
