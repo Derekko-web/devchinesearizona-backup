@@ -199,6 +199,24 @@ describe('deploy-prod.sh deploy', () => {
     expect(log).toContain(`npm run smoke:dev sha=${shas[0]} base=https://chinesearizona.com skip=1`);
   });
 
+  it('also smoke checks the city domains once they point at the production app', () => {
+    const citySite = path.join(tmp, 'chineseaustin.com.conf');
+    writeFile(citySite, 'location / {\n    proxy_pass http://127.0.0.1:3000;\n}\n');
+
+    deploy(shas[0], { PROD_CITY_NGINX_SITE: citySite });
+
+    expect(stubLog()).toContain(`npm run smoke:dev sha=${shas[0]} base=https://chinesearizona.com skip=0`);
+  });
+
+  it('skips the city domains while they still point at the dev app', () => {
+    const citySite = path.join(tmp, 'chineseaustin.com.conf');
+    writeFile(citySite, 'location / {\n    proxy_pass http://127.0.0.1:3002;\n}\n');
+
+    deploy(shas[0], { PROD_CITY_NGINX_SITE: citySite });
+
+    expect(stubLog()).toContain(`npm run smoke:dev sha=${shas[0]} base=https://chinesearizona.com skip=1`);
+  });
+
   it('does not overwrite runtime data that already exists', () => {
     writeFile(path.join(runtimeRoot, 'data', 'sites', 'austin', 'radar-runtime', 'store.json'), 'live');
 

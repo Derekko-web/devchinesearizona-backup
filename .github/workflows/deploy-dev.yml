@@ -370,6 +370,10 @@ jobs:
           # overwrite it again.
           node scripts/arizona_radar/restore_local_articles_runtime.cjs || echo "Could not check the runtime local article list." >&2
 
+          # The city domains are served by the production app (#373), so the dev
+          # deploy only checks dev.chinesearizona.com.
+          export SMOKE_SKIP_PUBLIC_DOMAINS=1
+
           rollback_to_previous_sha() {
             if [ "$previous_sha" = "$DEPLOY_SHA" ]; then
               echo "Smoke failed, but previous SHA matches deploy SHA; no rollback target is available." >&2
