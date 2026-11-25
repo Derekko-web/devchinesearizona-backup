@@ -13,6 +13,14 @@ on:
       sha:
         description: Exact commit SHA already deployed to the VPS. Defaults to the selected ref.
         required: false
+      run_now:
+        description: Run every city worker once after applying. first runs them only on the first install; the weekly timers handle normal runs.
+        type: choice
+        options:
+          - first
+          - always
+          - never
+        default: first
 
 permissions:
   contents: read
@@ -30,6 +38,9 @@ jobs:
       name: dev-runtime
     env:
       DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || inputs.sha || github.sha }}
+      # Deploys only (re)install the workers and timers. Running all four city
+      # workers after every merge spent AI quota and published off-schedule.
+      RADAR_HERMES_RUN_NOW: ${{ inputs.run_now || 'first' }}
       VPS_HOST: ${{ secrets.DEV_VPS_HOST }}
       VPS_PORT: ${{ secrets.DEV_VPS_PORT || '22' }}
       VPS_SSH_KEY: ${{ secrets.DEV_VPS_RUNTIME_EGRESS_SSH_KEY }}
@@ -78,6 +89,10 @@ jobs:
 
       - name: Apply radar Hermes runtime egress
         run: |
+          case "$RADAR_HERMES_RUN_NOW" in
+            first|always|never) ;;
+            *) echo "Invalid run_now value." >&2; exit 1 ;;
+          esac
           ssh -i ~/.ssh/runtime_egress_key \
             -p "$VPS_PORT" \
             -o BatchMode=yes \
@@ -86,7 +101,7 @@ jobs:
             -o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING" \
             -o UserKnownHostsFile="$HOME/.ssh/known_hosts" \
             "$VPS_USER@$VPS_HOST" \
-            "DEPLOY_SHA=$DEPLOY_SHA RADAR_HERMES_RUN_NOW=always bash -s" <<'REMOTE'
+            "DEPLOY_SHA=$DEPLOY_SHA RADAR_HERMES_RUN_NOW=$RADAR_HERMES_RUN_NOW bash -s" <<'REMOTE'
           set -euo pipefail
 
           web_root=/var/www/dev.chinesearizona.com/web
