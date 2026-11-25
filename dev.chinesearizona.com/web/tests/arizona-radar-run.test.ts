@@ -808,6 +808,73 @@ describe('Arizona Radar feed fallback', () => {
     expect(capturedPrompt).toContain('Project LeanNation Lake Pleasant is under construction');
   });
 
+  it('records a failed run when the feed rewrite fails and nothing else was collected', async () => {
+    // A broken AI sign-in used to end as "completed" with nothing published,
+    // which hid the outage from monitoring.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-05-29T05:00:00.000Z'));
+    vi.stubEnv('NODE_ENV', 'test');
+    process.env.RADAR_STORAGE_MODE = 'file';
+    mockPublicDnsResolution();
+
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-feed-rewrite-failure-'));
+    const hermesBin = path.join(tempDir, 'hermes-unauthorized');
+    const storePath = path.join(tempDir, 'store.json');
+    fs.writeFileSync(
+      hermesBin,
+      [
+        '#!/usr/bin/env node',
+        'process.stderr.write("Error: Error code: 401 - token expired\\n");',
+        'process.exit(1);',
+      ].join('\n'),
+      'utf8'
+    );
+    fs.chmodSync(hermesBin, 0o755);
+
+    const fixture = fs.readFileSync(path.join(__dirname, 'fixtures', 'whatnow-phoenix-feed.xml'), 'utf8');
+    const articleFixture = fs.readFileSync(
+      path.join(__dirname, 'fixtures', 'whatnow-phoenix-article.html'),
+      'utf8'
+    );
+    globalThis.fetch = vi.fn(async (url: string | URL | Request) => {
+      if (String(url) === 'https://whatnow.com/phoenix/feed/') {
+        return new Response(fixture, {
+          status: 200,
+          headers: { 'content-type': 'application/rss+xml; charset=utf-8' },
+        });
+      }
+      return new Response(articleFixture, {
+        status: 200,
+        headers: { 'content-type': 'text/html; charset=utf-8' },
+      });
+    }) as typeof fetch;
+
+    await expect(
+      runWorker({
+        command: 'run',
+        draftMultiplier: 1,
+        feedTimeoutMs: 1000,
+        fixturePath: '',
+        hermesBin,
+        hermesMaxTurns: 1,
+        hermesTimeoutMs: 5000,
+        lookbackHours: 360,
+        maxItems: 10,
+        retryEmpty: false,
+        sourceBatchSize: 0,
+        sourceDiscovery: false,
+        sourceSlugs: 'what-now-phoenix',
+        storePath,
+      })
+    ).rejects.toThrow(/401/);
+
+    const store = JSON.parse(fs.readFileSync(storePath, 'utf8')) as {
+      runs: Array<Record<string, unknown>>;
+    };
+    expect(store.runs[0]).toMatchObject({ status: 'failed' });
+    expect(String(store.runs[0].errorMessage)).toContain('401');
+  });
+
   it('passes Brightspot article body text into Austin feed rewrite prompts', async () => {
     vi.stubEnv('NODE_ENV', 'test');
     process.env.RADAR_STORAGE_MODE = 'file';

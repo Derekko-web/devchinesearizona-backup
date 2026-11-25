@@ -11,6 +11,7 @@ const nftablesPath = path.join(egressRoot, 'nftables', 'radar-hermes-worker.nft'
 const readmePath = path.join(egressRoot, 'README.md');
 const rolloutPlanPath = path.join(egressRoot, 'rollout-plan.md');
 const applyRuntimePath = path.join(egressRoot, 'apply-runtime-deploy.sh');
+const envOverridePath = path.join(egressRoot, 'install-app-env-override.sh');
 const runtimeWorkflowPath = path.join(repoRoot, '.github', 'workflows', 'radar-hermes-runtime-egress.yml');
 const launcherPath = path.join(process.cwd(), 'scripts', 'radar_hermes', 'run_or_start_systemd.cjs');
 
@@ -32,6 +33,30 @@ const deniedRanges = [
   'fe80::/10',
   'ff00::/8',
 ];
+
+describe('Radar/Hermes worker app environment', () => {
+  it('points only the Arizona worker at the production database, keeping the city env file last', () => {
+    const script = fs.readFileSync(envOverridePath, 'utf8');
+
+    // Arizona news is published on chinesearizona.com, which reads the
+    // production Supabase project.
+    expect(script).toContain('/etc/systemd/system/radar-hermes-worker@arizona.service.d');
+    expect(script).toContain('/var/www/chinesearizona.com/shared/.env.local');
+
+    const arizonaDropin = script.slice(script.indexOf('$arizona_dropin_path'));
+    const devEnv = arizonaDropin.indexOf('EnvironmentFile=-$web_root/$env_name');
+    const prodEnv = arizonaDropin.indexOf('EnvironmentFile=-$production_env_path');
+    const cityEnv = arizonaDropin.indexOf('EnvironmentFile=-/etc/chinesearizona/radar-hermes/%i.env');
+
+    expect(arizonaDropin).toMatch(/\[Service\]\nEnvironmentFile=\n/);
+    expect(devEnv).toBeGreaterThan(-1);
+    expect(prodEnv).toBeGreaterThan(devEnv);
+    expect(cityEnv).toBeGreaterThan(prodEnv);
+    // Instance drop-ins sort after the shared app-runtime-env.conf by name.
+    expect('production-env.conf' > 'app-runtime-env.conf').toBe(true);
+    expect(script).toContain('production-env.conf');
+  });
+});
 
 describe('Radar/Hermes egress policy templates', () => {
   it('keeps systemd worker execution behind the expected denied network ranges', () => {
@@ -95,7 +120,10 @@ describe('Radar/Hermes egress policy templates', () => {
     expect(runtimeWorkflow).toContain('-o StrictHostKeyChecking="$SSH_STRICT_HOST_KEY_CHECKING"');
     expect(runtimeWorkflow).toContain('-o UserKnownHostsFile="$HOME/.ssh/known_hosts"');
     expect(runtimeWorkflow).not.toContain('StrictHostKeyChecking=no');
-    expect(runtimeWorkflow).toContain('RADAR_HERMES_RUN_NOW=always');
+    // Deploys must not rerun every city worker; the weekly timers do that.
+    expect(runtimeWorkflow).toContain("RADAR_HERMES_RUN_NOW: ${{ inputs.run_now || 'first' }}");
+    expect(runtimeWorkflow).toContain('RADAR_HERMES_RUN_NOW=$RADAR_HERMES_RUN_NOW');
+    expect(runtimeWorkflow).not.toContain('RADAR_HERMES_RUN_NOW=always');
     expect(runtimeWorkflow).toContain('apply-runtime-deploy.sh');
     expect(runtimeWorkflow).toContain('current_sha="$(git rev-parse HEAD)"');
     expect(applyRuntime).toContain('backup_existing_runtime_state');

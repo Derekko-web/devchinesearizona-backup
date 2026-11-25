@@ -1440,6 +1440,7 @@ async function collectDraftsFromFeeds(manifest, options = {}) {
         timestamp: new Date().toISOString(),
       }) + '\n'
     );
+    options.onRewriteError?.(error);
     return [];
   }
 }
@@ -1869,9 +1870,13 @@ async function runWorker(args) {
         : 12;
 
   try {
+    let feedRewriteError;
     const feedDrafts = args.fixturePath
       ? []
       : await collectDraftsFromFeeds(activeManifest, {
+          onRewriteError: (error) => {
+            feedRewriteError = error;
+          },
           hermesBin: args.hermesBin,
           hermesMaxTurns: Math.min(hermesMaxTurns, 4),
           hermesTimeoutMs: args.hermesTimeoutMs,
@@ -1928,8 +1933,11 @@ async function runWorker(args) {
       timeoutMs: args.feedTimeoutMs,
       siteConfig,
     });
-    if (hermesError && filteredDrafts.length === 0) {
-      throw hermesError;
+    // A Hermes failure with nothing else collected (for example an expired AI
+    // sign-in) is a failed run, not a quiet "completed" with zero articles.
+    const collectionError = hermesError ?? feedRewriteError;
+    if (collectionError && filteredDrafts.length === 0) {
+      throw collectionError;
     }
     const finishedAt = new Date().toISOString();
     const applied = applyDraftsToStore(initialStore, filteredDrafts, {
