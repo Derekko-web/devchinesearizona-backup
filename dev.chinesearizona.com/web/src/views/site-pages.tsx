@@ -10,7 +10,6 @@ import {
   ExternalLink,
   FileWarning,
   Globe2,
-  ImageIcon,
   Mail,
   MapPin,
   MessageCircle,
@@ -92,6 +91,7 @@ import {
   getDirectoryCategories,
   getDirectoryFilterOptions,
 } from '@/lib/directory';
+import { selectRealBusinessPhotos } from '@/lib/business-photos';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import {
   getDirectoryAdCampaignsForOwnerBusinesses,
@@ -1015,8 +1015,8 @@ export async function BusinessDetailPageView({
   const businessImageCandidates = [resolvedImages.heroImage, ...resolvedImages.gallery].filter(
     (value): value is string => Boolean(value)
   );
-  const photoSlots = Array.from({ length: 4 }, (_, index) => businessImageCandidates[index]);
-  const aboutImage = resolvedImages.gallery[0] ?? resolvedImages.heroImage;
+  const realPhotos = selectRealBusinessPhotos(businessImageCandidates);
+  const aboutImage = selectRealBusinessPhotos([...resolvedImages.gallery, resolvedImages.heroImage], 1)[0];
   const primaryActionLabel = locale === 'zh' ? '撥打電話' : 'Call';
   const languageSummary =
     business.languages.length > 0
@@ -1027,68 +1027,6 @@ export async function BusinessDetailPageView({
   const popularityBadge = isMostPopularDirectoryBusiness(business);
   const menuOrWebsiteHref = menuHref ?? websiteHref;
   const usesCityGeneratedImages = site.key === 'austin' || site.key === 'los-angeles' || site.key === 'sf-bay';
-  const generatedImageSubtitle = usesCityGeneratedImages
-    ? locale === 'zh'
-      ? '城市指南圖像'
-      : 'City guide image'
-    : locale === 'zh'
-      ? '暫用圖像'
-      : 'Temporary image';
-  const menuShowcase =
-    business.categorySlug === 'dining'
-      ? [
-          {
-            title: locale === 'zh' ? '招牌飲品' : 'Signature drink',
-            subtitle: generatedImageSubtitle,
-            price: '$5.75',
-            imageUrl: resolvedImages.gallery[0] ?? resolvedImages.heroImage,
-          },
-          {
-            title: locale === 'zh' ? '手作點心' : 'House dessert',
-            subtitle: generatedImageSubtitle,
-            price: '$3.95',
-            imageUrl: resolvedImages.gallery[1],
-          },
-          {
-            title: locale === 'zh' ? '人氣主食' : 'Popular entree',
-            subtitle: generatedImageSubtitle,
-            price: '$10.95',
-            imageUrl: resolvedImages.gallery[2],
-          },
-          {
-            title: locale === 'zh' ? '季節推薦' : 'Seasonal pick',
-            subtitle: generatedImageSubtitle,
-            price: '$8.50',
-            imageUrl: resolvedImages.gallery[3],
-          },
-        ]
-      : [
-          {
-            title: locale === 'zh' ? '核心服務' : 'Primary service',
-            subtitle: generatedImageSubtitle,
-            price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: resolvedImages.gallery[0] ?? resolvedImages.heroImage,
-          },
-          {
-            title: locale === 'zh' ? '雙語協助' : 'Bilingual help',
-            subtitle: generatedImageSubtitle,
-            price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: resolvedImages.gallery[1],
-          },
-          {
-            title: locale === 'zh' ? '在地經驗' : 'Local guidance',
-            subtitle: generatedImageSubtitle,
-            price: locale === 'zh' ? '洽詢' : 'Ask',
-            imageUrl: resolvedImages.gallery[2],
-          },
-          {
-            title: locale === 'zh' ? '預約諮詢' : 'Consultation',
-            subtitle: generatedImageSubtitle,
-            price: locale === 'zh' ? '預約' : 'Book',
-            imageUrl: resolvedImages.gallery[3],
-          },
-        ];
-
   return (
     <div className="bg-[#f7f1e8] text-[#2c2722]">
       <JsonLd data={localBusinessJsonLd} />
@@ -1307,9 +1245,8 @@ export async function BusinessDetailPageView({
             <div className="sticky top-16 z-20 mb-7 flex gap-1 overflow-x-auto border-b border-[#ddd1c4] bg-[#f7f1e8]/95 py-2 backdrop-blur">
               {[
                 { id: '#overview', en: 'Overview', zh: '概覽' },
-                { id: '#menu', en: business.categorySlug === 'dining' ? 'Menu' : 'Services', zh: business.categorySlug === 'dining' ? '菜單' : '服務' },
                 { id: '#reviews', en: 'Reviews', zh: '評價' },
-                { id: '#photos', en: 'Photos', zh: '照片' },
+                ...(realPhotos.length > 0 ? [{ id: '#photos', en: 'Photos', zh: '照片' }] : []),
                 { id: '#community', en: 'Community', zh: '社區' },
               ].map((item, index) => (
                 <a
@@ -1364,71 +1301,6 @@ export async function BusinessDetailPageView({
               </div>
             </section>
 
-            <section id="menu" className="border-b border-[#e2d8cb] py-8">
-              <div className="mb-5 flex items-end justify-between gap-4">
-                <div>
-                  <h2 className="text-3xl font-semibold text-[#2c2722]">
-                    {business.categorySlug === 'dining'
-                      ? locale === 'zh'
-                        ? '熱門推薦'
-                        : 'Popular items'
-                      : locale === 'zh'
-                        ? '精選服務'
-                        : 'Featured services'}
-                  </h2>
-                  <p className="mt-2 text-sm text-[#6d6258]">
-                    {locale === 'zh'
-                      ? usesCityGeneratedImages
-                        ? '使用城市專屬圖像與現有商家資料呈現。'
-                        : '暫用實際資料與示意圖，之後可接入商家照片與菜單。'
-                      : usesCityGeneratedImages
-                        ? 'Uses city-specific generated images with available listing data.'
-                        : 'Uses available listing data with temporary placeholders until menu photos are connected.'}
-                  </p>
-                </div>
-                {menuOrWebsiteHref ? (
-                  <a
-                    href={menuOrWebsiteHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hidden text-sm font-semibold text-[#bd2730] hover:text-[#8f1c22] sm:inline-flex"
-                  >
-                    {locale === 'zh' ? '查看官方資訊' : 'View official info'}
-                  </a>
-                ) : null}
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                {menuShowcase.map((item) => (
-                  <article key={item.title} className="overflow-hidden rounded-lg border border-[#e2d8cb] bg-[#fbf7f0]">
-                    <div className="relative h-36 bg-[#eadfce]">
-                      {item.imageUrl ? (
-                        <BusinessImage
-                          imageUrl={item.imageUrl}
-                          label={item.title}
-                          locale={locale}
-                          category={category}
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full flex-col items-center justify-center bg-[linear-gradient(135deg,#eadfce,#f7f1e8)] text-[#8b8176]">
-                          <ImageIcon className="h-7 w-7" aria-hidden="true" />
-                          <span className="mt-2 text-xs font-semibold">{item.subtitle}</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex items-end justify-between gap-3 p-4">
-                      <div>
-                        <h3 className="font-semibold text-[#2c2722]">{item.title}</h3>
-                        <p className="mt-1 text-sm text-[#766b61]">{item.subtitle}</p>
-                      </div>
-                      <p className="font-semibold text-[#bd2730]">{item.price}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-
             <section id="reviews" className="grid gap-5 border-b border-[#e2d8cb] py-8 xl:grid-cols-[24rem_minmax(0,1fr)]">
               <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-6">
                 <p className="text-sm font-semibold text-[#8b8176]">{locale === 'zh' ? '顧客評價' : 'Customer reviews'}</p>
@@ -1476,27 +1348,25 @@ export async function BusinessDetailPageView({
               </div>
             </section>
 
-            <section id="photos" className="border-b border-[#e2d8cb] py-8">
-              <div className="mb-5 flex items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-3xl font-semibold text-[#2c2722]">{locale === 'zh' ? '照片' : 'Photos'}</h2>
-                  <p className="mt-2 text-sm text-[#6d6258]">
-                    {locale === 'zh'
-                      ? usesCityGeneratedImages
-                        ? '照片區使用城市專屬圖像，之後可接入商家照片。'
-                        : '缺少照片的位置先使用臨時佔位。'
-                      : usesCityGeneratedImages
-                        ? 'Photo slots use city-specific generated images until business photos are connected.'
-                        : 'Missing photo slots use temporary placeholders for now.'}
-                  </p>
+            {realPhotos.length > 0 ? (
+              <section id="photos" className="border-b border-[#e2d8cb] py-8">
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-3xl font-semibold text-[#2c2722]">{locale === 'zh' ? '照片' : 'Photos'}</h2>
+                    {usesCityGeneratedImages ? (
+                      <p className="mt-2 text-sm text-[#6d6258]">
+                        {locale === 'zh'
+                          ? '照片區使用城市專屬圖像，之後可接入商家照片。'
+                          : 'Photo slots use city-specific generated images until business photos are connected.'}
+                      </p>
+                    ) : null}
+                  </div>
+                  <Camera className="h-6 w-6 text-[#bd2730]" aria-hidden="true" />
                 </div>
-                <Camera className="h-6 w-6 text-[#bd2730]" aria-hidden="true" />
-              </div>
 
-              <div className="grid gap-3 sm:grid-cols-4">
-                {photoSlots.map((imageUrl, index) => (
-                  <div key={`${imageUrl ?? 'placeholder'}-${index}`} className="relative h-36 overflow-hidden rounded-lg border border-[#e2d8cb] bg-[#eadfce]">
-                    {imageUrl ? (
+                <div className="grid gap-3 sm:grid-cols-4">
+                  {realPhotos.map((imageUrl, index) => (
+                    <div key={`${imageUrl}-${index}`} className="relative h-36 overflow-hidden rounded-lg border border-[#e2d8cb] bg-[#eadfce]">
                       <BusinessImage
                         imageUrl={imageUrl}
                         label={`${displayName} ${locale === 'zh' ? '照片' : 'photo'} ${index + 1}`}
@@ -1504,16 +1374,11 @@ export async function BusinessDetailPageView({
                         category={category}
                         className="object-cover"
                       />
-                    ) : (
-                      <div className="flex h-full w-full flex-col items-center justify-center bg-[linear-gradient(135deg,#eadfce,#f8efe2)] text-[#8b8176]">
-                        <ImageIcon className="h-7 w-7" aria-hidden="true" />
-                        <span className="mt-2 text-xs font-semibold">{locale === 'zh' ? '暫用圖像' : 'Temporary image'}</span>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
             <section id="community" className="py-8">
               <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-6">
