@@ -83,7 +83,7 @@ describe('Deploy Dev gate', () => {
     expect(workflow).toContain('/actions/workflows/ci.yml/runs');
     expect(workflow).toContain('-f head_sha="$deploy_sha"');
     expect(workflow).toContain('Deploy Dev for main SHA $deploy_sha requires a successful Dev CI run first.');
-    expect(workflow).toContain('Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, scraper checks, and WordPress theme checks when applicable.');
+    expect(workflow).toContain('Dev CI is the deploy gate and includes ci-required, npm run verify, npm run e2e, and scraper checks when applicable.');
   });
 });
 

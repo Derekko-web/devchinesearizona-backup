@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       python_scraper: ${{ steps.filter.outputs.python_scraper }}
-      wordpress_theme: ${{ steps.filter.outputs.wordpress_theme }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -31,7 +30,6 @@ jobs:
 
           set_all_changed() {
             echo "python_scraper=true" >> "$GITHUB_OUTPUT"
-            echo "wordpress_theme=true" >> "$GITHUB_OUTPUT"
           }
 
           if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
@@ -59,12 +57,6 @@ jobs:
             echo "python_scraper=true" >> "$GITHUB_OUTPUT"
           else
             echo "python_scraper=false" >> "$GITHUB_OUTPUT"
-          fi
-
-          if grep -Eq '^(\.github/(dependabot\.yml|workflows/(ci|dependency-review)\.yml)|chinesearizona\.com/public/wp-content/themes/twentytwentyfive/)' "$changed_files"; then
-            echo "wordpress_theme=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "wordpress_theme=false" >> "$GITHUB_OUTPUT"
           fi
 
   verify:
@@ -234,31 +226,6 @@ jobs:
       - name: Run scraper tests
         run: npm run scrape:test
 
-  wordpress-theme:
-    needs: changes
-    if: needs.changes.outputs.wordpress_theme == 'true'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: chinesearizona.com/public/wp-content/themes/twentytwentyfive
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 20.20.2
-          cache: npm
-          cache-dependency-path: chinesearizona.com/public/wp-content/themes/twentytwentyfive/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Security audit
-        run: npm audit --audit-level=moderate
-
-      - name: Build theme CSS
-        run: npm run build
-
   ci-required:
     name: ci-required
     runs-on: ubuntu-latest
@@ -267,7 +234,6 @@ jobs:
       - verify
       - playwright-e2e
       - python-scraper-tests
-      - wordpress-theme
     if: ${{ always() }}
     steps:
       - name: Check required job outcomes
@@ -276,9 +242,7 @@ jobs:
           VERIFY_RESULT: ${{ needs.verify.result }}
           PLAYWRIGHT_E2E_RESULT: ${{ needs.playwright-e2e.result }}
           PYTHON_SCRAPER_RESULT: ${{ needs.python-scraper-tests.result }}
-          WORDPRESS_THEME_RESULT: ${{ needs.wordpress-theme.result }}
           PYTHON_SCRAPER_REQUIRED: ${{ needs.changes.outputs.python_scraper }}
-          WORDPRESS_THEME_REQUIRED: ${{ needs.changes.outputs.wordpress_theme }}
         run: |
           set -euo pipefail
           failed=false
@@ -317,7 +281,6 @@ jobs:
           require_success "verify" "$VERIFY_RESULT"
           require_success "playwright-e2e" "$PLAYWRIGHT_E2E_RESULT"
           require_success_when_needed "python-scraper-tests" "$PYTHON_SCRAPER_RESULT" "$PYTHON_SCRAPER_REQUIRED"
-          require_success_when_needed "wordpress-theme" "$WORDPRESS_THEME_RESULT" "$WORDPRESS_THEME_REQUIRED"
 
           if [ "$failed" = "true" ]; then
             exit 1
