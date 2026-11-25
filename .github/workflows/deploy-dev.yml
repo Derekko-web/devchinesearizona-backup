@@ -321,12 +321,40 @@ jobs:
           node scripts/arizona_radar/repair_current_article_images.cjs --strict
           npm run build
 
+          app_health_url="http://127.0.0.1:3002/api/health"
+
+          # PM2 runs the app in fork mode, so a reload stops the old process
+          # before the new one is listening and nginx answers 502 meanwhile.
+          # Wait until the new process serves the expected SHA. Smoke stays the
+          # pass/fail gate, so callers ignore a timeout here.
+          wait_for_app_ready() {
+            local expected_sha="$1"
+            local attempt
+            for attempt in $(seq 1 30); do
+              if node -e '
+          const [url, expected] = process.argv.slice(1);
+          fetch(url, { signal: AbortSignal.timeout(5000) })
+            .then((response) => response.json())
+            .then((body) => process.exit(body && body.gitSha === expected ? 0 : 1))
+            .catch(() => process.exit(1));
+          ' "$app_health_url" "$expected_sha"; then
+                echo "App is serving $expected_sha after $attempt readiness check(s)."
+                return 0
+              fi
+              sleep 2
+            done
+
+            echo "App did not serve $expected_sha within 60 seconds; running smoke anyway." >&2
+            return 1
+          }
+
           export GIT_SHA="$DEPLOY_SHA"
           export NEXT_PUBLIC_GIT_SHA="$DEPLOY_SHA"
           export BUILD_TIME="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
           export NEXT_PUBLIC_BUILD_TIME="$BUILD_TIME"
           pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
           pm2 save
+          wait_for_app_ready "$DEPLOY_SHA" || true
 
           rollback_to_previous_sha() {
             if [ "$previous_sha" = "$DEPLOY_SHA" ]; then
@@ -350,10 +378,14 @@ jobs:
             export NEXT_PUBLIC_GIT_SHA="$previous_sha"
             export BUILD_TIME="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
             export NEXT_PUBLIC_BUILD_TIME="$BUILD_TIME"
+            # smoke-dev.mjs prefers SMOKE_EXPECTED_GIT_SHA over DEPLOY_SHA, which
+            # still names the failed deploy.
+            export SMOKE_EXPECTED_GIT_SHA="$previous_sha"
             npm ci
             npm run build
             pm2 startOrReload ecosystem.config.cjs --only dev-chinesearizona --update-env
             pm2 save
+            wait_for_app_ready "$previous_sha" || true
             npm run smoke:dev
           }
 

@@ -24,6 +24,9 @@
 }
 
 :root {
+  --font-inter: "Inter Variable";
+  --font-noto-sans-tc: "Noto Sans TC Variable";
+  --font-cormorant: "Cormorant Garamond Variable";
   color-scheme: light;
 }
 

@@ -32,6 +32,7 @@ const originalEnv = {
 };
 
 afterEach(() => {
+  vi.unstubAllEnvs();
   vi.resetModules();
   vi.doUnmock('@/lib/supabase');
   for (const [key, value] of Object.entries(originalEnv)) {
@@ -152,7 +153,7 @@ function createStorageModuleWithFakeSupabase() {
 
 describe('Arizona Radar storage', () => {
   it('refreshes the app-side runtime store mirror after Supabase reads succeed', async () => {
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     process.env.RADAR_STORAGE_MODE = 'supabase';
 
     const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'radar-storage-app-'));
@@ -183,7 +184,7 @@ describe('Arizona Radar storage', () => {
 
   it('refreshes the local runtime store mirror after Supabase reads succeed', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     process.env.RADAR_STORAGE_MODE = 'supabase';
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
 
@@ -206,7 +207,7 @@ describe('Arizona Radar storage', () => {
 
   it('passes a ws transport to Supabase Realtime when Node lacks native WebSocket', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     process.env.RADAR_STORAGE_MODE = 'supabase';
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
 
@@ -244,7 +245,7 @@ describe('Arizona Radar storage', () => {
 
   it('refreshes the local runtime store mirror after Supabase writes succeed', async () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
-    process.env.NODE_ENV = 'production';
+    vi.stubEnv('NODE_ENV', 'production');
     process.env.RADAR_STORAGE_MODE = 'supabase';
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key';
 
