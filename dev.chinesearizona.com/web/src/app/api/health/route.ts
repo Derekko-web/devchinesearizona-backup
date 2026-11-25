@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { isStripeConfigured, getStripeWebhookSecret } from '@/lib/stripe';
-import { isSupabaseConfigured, isSupabaseServiceConfigured } from '@/lib/supabase';
+import { isSupabaseConfigured, isSupabaseServiceConfigured, probeSupabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,10 +25,13 @@ function envValue(name: string) {
 }
 
 export async function GET() {
+  const supabaseProbe = await probeSupabase();
+
   const checks = {
     app: check('Next.js route handler responded.', true),
     siteUrl: check('NEXT_PUBLIC_SITE_URL is configured.', Boolean(envValue('NEXT_PUBLIC_SITE_URL'))),
     supabasePublic: check('Supabase public client is configured.', isSupabaseConfigured()),
+    supabaseReachable: check(supabaseProbe.message, supabaseProbe.ok),
     supabaseService: check('Supabase service role is configured.', isSupabaseServiceConfigured(), false),
     stripeSecret: check('Stripe secret key is configured.', isStripeConfigured(), false),
     stripeWebhook: check('Stripe webhook secret is configured.', Boolean(getStripeWebhookSecret()), false),
