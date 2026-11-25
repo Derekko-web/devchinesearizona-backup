@@ -13,7 +13,8 @@ type TrustBadgesProps = {
 
 function copy(locale: Locale) {
   return {
-    mostPopular: locale === 'zh' ? '人氣熱門' : 'Most Popular',
+    // Hand-picked highlight, not a popularity ranking.
+    mostPopular: locale === 'zh' ? '精選' : 'Featured',
     sponsored: locale === 'zh' ? '贊助' : 'Sponsored',
     verified: locale === 'zh' ? '已驗證' : 'Verified',
     bilingual: locale === 'zh' ? '雙語服務' : 'Bilingual',
