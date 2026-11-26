@@ -24,6 +24,7 @@ import {
   hasRuntimeLogPattern,
   readRuntimeLogAppend,
 } from './runtime-log.mjs';
+import { checkRoute, checkRouteWithRetry, routeCheckSettings } from './route-check.mjs';
 import { arizonaRadarStorePath } from './runtime-paths.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -134,50 +135,19 @@ function finding(key, title, body, extraLabels = []) {
   };
 }
 
-async function checkRoute(path, baseUrl) {
-  const startedAt = Date.now();
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), Number(process.env.CLOSED_LOOP_TIMEOUT_MS || 15_000));
-  const url = `${baseUrl}${path}`;
+const routeCheck = routeCheckSettings(process.env);
 
-  try {
-    const response = await fetch(url, {
-      headers: {
-        'user-agent': 'ChineseArizona closed-loop collector',
-      },
-      signal: controller.signal,
-    });
-    const result = {
-      durationMs: Date.now() - startedAt,
-      ok: response.status >= 200 && response.status < 400,
-      path,
-      status: response.status,
-      url,
-    };
-
-    if (path === '/api/health' && response.headers.get('content-type')?.includes('application/json')) {
-      const health = await response.json();
-      result.healthOk = Boolean(health.ok);
-      result.gitSha = health.gitSha;
-      result.buildTime = health.buildTime;
-      result.ok = result.ok && result.healthOk;
-    }
-
-    return result;
-  } catch (error) {
-    return {
-      error: error instanceof Error ? error.message : String(error),
-      ok: false,
-      path,
-      url,
-    };
-  } finally {
-    clearTimeout(timeout);
-  }
+function smokeCheck(path, baseUrl) {
+  return checkRouteWithRetry(path, baseUrl, {
+    attempts: routeCheck.attempts,
+    check: (routePath, routeBase) =>
+      checkRoute(routePath, routeBase, { timeoutMs: routeCheck.timeoutMs }),
+    retryDelayMs: routeCheck.retryDelayMs,
+  });
 }
 
 async function collectSmokeFindings() {
-  const results = await Promise.all(requiredRoutes.map((path) => checkRoute(path, BASE_URL)));
+  const results = await Promise.all(requiredRoutes.map((path) => smokeCheck(path, BASE_URL)));
   const failures = results.filter((result) => !result.ok);
   if (failures.length === 0) {
     return [];
@@ -415,7 +385,7 @@ async function collectProdFindings() {
   const settings = prodSettings(process.env, { appRoot: APP_ROOT });
 
   const smokeResults = await Promise.all(
-    prodSmokeRoutes.map((path) => checkRoute(path, settings.baseUrl))
+    prodSmokeRoutes.map((path) => smokeCheck(path, settings.baseUrl))
   );
 
   const pm2State = readJsonFile(settings.pm2StateFile) ?? {};
