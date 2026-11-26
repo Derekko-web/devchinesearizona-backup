@@ -4,7 +4,6 @@ export { DirectoryPageView } from '@/views/directory-page';
 export { MetroCategoryPageView, CityCategoryPageView } from '@/views/category-pages';
 export { BusinessDetailPageView } from '@/views/business-detail-page';
 export { RelocationGuidePageView, GuideDetailPageView } from '@/views/guide-pages';
-export { CommunityPageView } from '@/views/community-hub-page';
 export { CommunityRadarPageView } from '@/views/radar-page';
 export { NewsArchivePageView, ArticleDetailPageView } from '@/views/news-pages';
 export { EventDetailPageView, CommunityPostDetailPageView } from '@/views/community-detail-pages';
