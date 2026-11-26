@@ -102,6 +102,15 @@ import {
   isInquiryCategory,
 } from '@/lib/business-leads';
 import { selectRealBusinessPhotos } from '@/lib/business-photos';
+import { MAX_BUSINESS_GALLERY_IMAGES } from '@/lib/business-media';
+import {
+  getAdminListingPlans,
+  getListingPlanAvailability,
+  getListingPlanStatesForOwnerBusinesses,
+} from '@/lib/listing-plans';
+import type { ListingPlanOwnerState } from '@/lib/listing-plan-offers';
+import { ListingPlanPanel } from '@/components/directory/ListingPlanPanel';
+import { AdminListingPlansPanel } from '@/components/directory/AdminListingPlansPanel';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import {
   getDirectoryAdCampaignsForOwnerBusinesses,
@@ -1046,7 +1055,11 @@ export async function BusinessDetailPageView({
   const businessImageCandidates = [resolvedImages.heroImage, ...resolvedImages.gallery].filter(
     (value): value is string => Boolean(value)
   );
-  const realPhotos = selectRealBusinessPhotos(businessImageCandidates);
+  // An Enhanced listing (paid plan, #408) shows every photo instead of the first 4.
+  const realPhotos = selectRealBusinessPhotos(
+    businessImageCandidates,
+    business.paidPlans?.includes('enhanced-listing') ? MAX_BUSINESS_GALLERY_IMAGES : 4
+  );
   const aboutImage = selectRealBusinessPhotos([...resolvedImages.gallery, resolvedImages.heroImage], 1)[0];
   const primaryActionLabel = locale === 'zh' ? '撥打電話' : 'Call';
   const languageSummary =
@@ -4415,6 +4428,9 @@ function ManagedBusinessWorkspaceRow({
   adsMode,
   campaign,
   readOnlyReason,
+  listingPlansAvailable,
+  listingPlansMockMode,
+  listingPlanStates,
 }: {
   business: Business;
   locale: Locale;
@@ -4422,6 +4438,9 @@ function ManagedBusinessWorkspaceRow({
   adsMode: DirectoryAdsRuntimeMode;
   campaign?: DirectoryAdCampaign;
   readOnlyReason?: DirectoryAdsUnavailableReason;
+  listingPlansAvailable: boolean;
+  listingPlansMockMode: boolean;
+  listingPlanStates: ListingPlanOwnerState[];
 }) {
   const detailHref = withLocale(locale, `/business/${business.slug}`);
   const photoCount = (business.heroImage ? 1 : 0) + business.gallery.length;
@@ -4516,6 +4535,13 @@ function ManagedBusinessWorkspaceRow({
 
         <div className="space-y-4">
           <BusinessPhotoEditor business={business} locale={locale} />
+          <ListingPlanPanel
+            available={listingPlansAvailable}
+            business={business}
+            locale={locale}
+            mockMode={listingPlansMockMode}
+            states={listingPlanStates}
+          />
           <DirectoryAdCampaignPanel
             adsAvailable={adsAvailable}
             adsMode={adsMode}
@@ -4558,10 +4584,18 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
     ? await getDirectoryAdCampaignsForOwnerBusinesses(profile.id, managedBusinesses)
     : new Map<string, DirectoryAdCampaign>();
   const managedBusinessIds = managedBusinesses.map((business) => business.id);
-  const [directoryAdsAvailability, leadCounts, recentInquiries] = await Promise.all([
+  const [
+    directoryAdsAvailability,
+    leadCounts,
+    recentInquiries,
+    listingPlanAvailability,
+    listingPlanStatesByBusinessId,
+  ] = await Promise.all([
     getDirectoryAdsAvailability(),
     getBusinessLeadCounts({ businessIds: managedBusinessIds }),
     getRecentBusinessInquiries({ businessIds: managedBusinessIds, limit: 10 }),
+    getListingPlanAvailability(),
+    getListingPlanStatesForOwnerBusinesses(managedBusinesses),
   ]);
   const showLeadSummary = managedBusinesses.length > 0 && isSupabaseServiceConfigured();
   const directoryAdsMode = directoryAdsAvailability.mode;
@@ -4883,6 +4917,9 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
                     campaign={adCampaignsByBusinessId.get(business.id)}
                     locale={locale}
                     readOnlyReason={directoryAdsAvailability.unavailableReason}
+                    listingPlansAvailable={listingPlanAvailability.mode !== 'read_only'}
+                    listingPlansMockMode={listingPlanAvailability.mode === 'mock'}
+                    listingPlanStates={listingPlanStatesByBusinessId.get(business.id) ?? []}
                   />
                 ))}
               </div>
@@ -4920,6 +4957,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     radarAdminSnapshot,
     adminLeadCounts,
     adminRecentInquiries,
+    adminListingPlans,
   ] = await Promise.all([
     Promise.resolve(getAdminSnapshot()),
     getPendingBusinessClaimsSnapshot(),
@@ -4932,6 +4970,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     getRadarAdminSnapshotAsync(),
     getBusinessLeadCounts({ limit: 100 }),
     getRecentBusinessInquiries({ limit: 20 }),
+    getAdminListingPlans(),
   ]);
   const discoverWriteEnabled = isSupabaseServiceConfigured();
   const moderationQueueCount = moderationReports.length + snapshot.flaggedPosts.length;
@@ -5210,6 +5249,8 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
       </section>
 
       <AdminLeadOverview counts={adminLeadCounts} inquiries={adminRecentInquiries} locale={locale} />
+
+      <AdminListingPlansPanel plans={adminListingPlans} locale={locale} />
 
       <section id="admin-editorial" className="space-y-4">
         <div className="space-y-2">

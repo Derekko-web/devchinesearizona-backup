@@ -3,6 +3,7 @@ import {
   businesses as fixtureBusinesses,
 } from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
+import { attachActiveListingPlans } from '@/lib/listing-plans';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import {
   compareMostPopularDirectoryBusinesses,
@@ -1101,7 +1102,9 @@ async function querySupabaseBusinesses(
   ]);
 
   return applyClientFilters(
-    await attachActiveDirectoryAdCampaigns(mergedRows.map(rowToBusiness)),
+    await attachActiveListingPlans(
+      await attachActiveDirectoryAdCampaigns(mergedRows.map(rowToBusiness))
+    ),
     filters,
     options
   );
@@ -1306,7 +1309,9 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
     }
 
     if (!error && data) {
-      const [business] = await attachActiveDirectoryAdCampaigns([rowToBusiness(data)]);
+      const [business] = await attachActiveListingPlans(
+        await attachActiveDirectoryAdCampaigns([rowToBusiness(data)])
+      );
       if (options.includeNonPublic || isPublicDirectoryBusiness(business)) {
         return business;
       }
