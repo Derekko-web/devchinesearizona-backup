@@ -11,7 +11,7 @@ This app is being platformized so city domains can share code, layouts, workflow
 
 ## City Config Checklist
 
-Add or update a profile in `src/lib/site-config.ts` with:
+Each city has its own profile file in `src/lib/site-profiles/` (for example `austin.ts`). A new city also needs its key added to `SiteKey` in `src/lib/site-profiles/types.ts` and its profile registered in `siteProfiles` in `src/lib/site-config.ts`. Add or update the city's profile with:
 
 - `domains`: apex and `www` hostnames for the city.
 - `cityName`, `stateRegion`, `stateCode`, `countryCode`.
