@@ -757,16 +757,6 @@ describe('radar ui', () => {
     expect(detailHtml).toContain('來源');
   });
 
-  it('renders the community teaser entry point for Arizona Radar', async () => {
-    writeRadarStore();
-    const { CommunityPageView } = await import('@/views/site-pages');
-
-    const html = renderToStaticMarkup(await CommunityPageView({ locale: 'en' }));
-
-    expect(html).toContain('Local news and content');
-    expect(html).toContain('/en/news/archive');
-  });
-
   it('renders admin kill-switch actions for radar controls', async () => {
     const { RadarAdminPanel } = await import('@/components/admin/RadarAdminPanel');
 

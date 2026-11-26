@@ -545,31 +545,6 @@ export function getCommunityTrendingArticles(limit = communityTrendingArticleSlu
   }).slice(0, limit);
 }
 
-export async function getCommunityTrendingArticlesAsync(
-  limit = communityTrendingArticleSlugs.length,
-  site: SiteProfile = defaultSiteProfile
-): Promise<Article[]> {
-  if (!canUseDefaultArticleFallback(site)) {
-    return (await getCurrentArticlesAsync(limit, site)).slice(0, limit);
-  }
-
-  const prioritized = (
-    await Promise.all(communityTrendingArticleSlugs.map((slug) => getArticleBySlugAsync(slug)))
-  ).filter((article): article is Article => Boolean(article));
-  const seen = new Set<string>();
-
-  return [...prioritized, ...(await getCurrentArticlesAsync())]
-    .filter((article) => {
-      if (seen.has(article.slug)) {
-        return false;
-      }
-
-      seen.add(article.slug);
-      return true;
-    })
-    .slice(0, limit);
-}
-
 export function getArticlePage(page: number, pageSize: number) {
   const normalizedPageSize = Math.max(1, pageSize);
   const articles = getArticles();
