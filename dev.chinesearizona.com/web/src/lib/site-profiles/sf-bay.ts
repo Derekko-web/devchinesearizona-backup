@@ -1,0 +1,333 @@
+import type { SiteFeaturedShowcaseCard, SiteNeighborhoodSpot, SiteProfile } from '@/lib/site-profiles/types';
+
+const sfBayNeighborhoods: SiteNeighborhoodSpot[] = [
+  {
+    city: 'San Francisco',
+    cityZh: '舊金山',
+    regionEn: 'Chinatown and downtown',
+    regionZh: '華埠與市中心',
+    imageUrl: '/city-site-images/sf-chinatown-bay.webp',
+  },
+  {
+    city: 'Oakland',
+    cityZh: '奧克蘭',
+    regionEn: 'East Bay',
+    regionZh: '東灣',
+    imageUrl: '/city-site-images/oakland-chinatown-street.webp',
+  },
+  {
+    city: 'San Jose',
+    cityZh: '聖荷西',
+    regionEn: 'South Bay',
+    regionZh: '南灣',
+    imageUrl: '/city-site-images/san-jose-silicon-valley-plaza.webp',
+  },
+  {
+    city: 'Cupertino',
+    cityZh: '庫比蒂諾',
+    regionEn: 'Silicon Valley',
+    regionZh: '矽谷',
+    imageUrl: '/city-site-images/cupertino-tech-avenue.webp',
+  },
+];
+
+const sfBayFeaturedCards: SiteFeaturedShowcaseCard[] = [
+  {
+    slug: 'r-g-lounge-san-francisco',
+    badge: 'Verified',
+    categoryEn: 'Dining',
+    categoryZh: '餐廳美食',
+    nameEn: 'R&G Lounge',
+    nameZh: '嶺南小館',
+    imageUrl: '/city-site-images/r-g-lounge-san-francisco.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '631 Kearny St',
+    line1Zh: '631 Kearny St',
+    line2En: 'San Francisco, CA 94108',
+    line2Zh: 'San Francisco, CA 94108',
+  },
+  {
+    slug: '99-ranch-market-cupertino',
+    badge: 'Verified',
+    categoryEn: 'Shopping',
+    categoryZh: '購物零售',
+    nameEn: '99 Ranch Market Cupertino',
+    nameZh: '大華超級市場 Cupertino',
+    imageUrl: '/city-site-images/99-ranch-market-cupertino.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '10425 S De Anza Blvd',
+    line1Zh: '10425 S De Anza Blvd',
+    line2En: 'Cupertino, CA 95014',
+    line2Zh: 'Cupertino, CA 95014',
+  },
+  {
+    slug: 'chinese-american-international-school-san-francisco',
+    badge: 'Verified',
+    categoryEn: 'Education',
+    categoryZh: '教育學習',
+    nameEn: 'Chinese American International School',
+    nameZh: '舊金山中美國際學校',
+    imageUrl: '/city-site-images/chinese-american-international-school-san-francisco.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: 'San Francisco',
+    line1Zh: '舊金山',
+    line2En: 'Bay Area education resource',
+    line2Zh: '灣區教育資源',
+  },
+  {
+    slug: 'asian-law-alliance-san-jose',
+    badge: 'Verified',
+    categoryEn: 'Legal',
+    categoryZh: '法律服務',
+    nameEn: 'Asian Law Alliance',
+    nameZh: 'Asian Law Alliance',
+    imageUrl: '/city-site-images/asian-law-alliance-san-jose.webp',
+    rating: 'Source-backed',
+    reviewCount: 0,
+    line1En: '991 W Hedding St',
+    line1Zh: '991 W Hedding St',
+    line2En: 'San Jose, CA 95126',
+    line2Zh: 'San Jose, CA 95126',
+  },
+];
+
+export const sfBaySiteProfile: SiteProfile = {
+  key: 'sf-bay',
+  launchState: 'live',
+  domains: ['chinesesfbay.com', 'www.chinesesfbay.com'],
+  domain: 'chinesesfbay.com',
+  url: 'https://chinesesfbay.com',
+  cityName: 'San Francisco',
+  stateRegion: 'San Francisco Bay Area',
+  stateCode: 'CA',
+  countryCode: 'US',
+  supportedLocales: ['en', 'zh'],
+  brandName: 'ChineseSFBay',
+  brandNameZh: '舊金山灣區華人',
+  brandParts: {
+    enPrefix: 'Chinese',
+    enAccent: 'SFBay',
+    zhPrefix: '灣區',
+    zhAccent: '華人',
+  },
+  regionName: 'SF Bay',
+  regionNameZh: '灣區',
+  guideTagline: {
+    en: 'SF Bay bilingual guide',
+    zh: '灣區雙語指南',
+  },
+  localCoverageLabel: {
+    en: 'Bay Area-first coverage',
+    zh: '灣區本地優先',
+  },
+  description: {
+    en: 'A bilingual San Francisco Bay Area platform for local Chinese community news, source-linked summaries, and practical city discovery.',
+    zh: '服務舊金山灣區華人社群的雙語平台，聚焦本地新聞、來源連結摘要與實用城市資訊。',
+  },
+  directory: {
+    categorySlugs: [
+      'dining',
+      'real-estate',
+      'local-services',
+      'education',
+      'medical',
+      'legal-finance',
+      'shopping',
+    ],
+    citySelectSuffix: { en: 'CA', zh: 'CA' },
+    defaultSearchCity: 'San Francisco',
+    launchCities: [
+      'San Francisco',
+      'Oakland',
+      'San Jose',
+      'Cupertino',
+      'Sunnyvale',
+      'Santa Clara',
+    ],
+    cityNamesZh: {
+      'San Francisco': '舊金山',
+      Oakland: '奧克蘭',
+      'San Jose': '聖荷西',
+      Cupertino: '庫比蒂諾',
+      Sunnyvale: '桑尼維爾',
+      'Santa Clara': '聖塔克拉拉',
+    },
+    listingSource: {
+      state: 'live',
+      label: 'SF Bay verified local directory fixtures',
+      kind: 'static-json',
+      path: 'src/data/generated-sf-bay-directory-businesses.json',
+      notes: 'SF Bay-only real business and community-service listings. This source never reads ChineseArizona fixture data.',
+    },
+    allowDefaultFallback: false,
+  },
+  news: {
+    routePath: '/news',
+    archivePath: '/news/archive',
+    articleDataSource: {
+      state: 'live',
+      label: 'SF Bay Radar and generated local summaries',
+      kind: 'runtime-json',
+      path: 'data/sf-bay-radar-runtime/store.json',
+      env: ['SF_BAY_RADAR_STORE_PATH'],
+      notes: 'SF Bay-only generated summary/link articles and runtime radar output. This site never reads the Arizona radar store.',
+    },
+    sourceManifest: {
+      state: 'live',
+      label: 'SF Bay Radar monitored sources',
+      kind: 'static-json',
+      path: 'src/data/sf-bay-radar-source-manifest.json',
+      notes: 'San Francisco Bay Area source manifest with local media, official, airport, business, and signal-only sources.',
+    },
+    allowDefaultFallback: false,
+  },
+  seo: {
+    title: {
+      en: 'ChineseSFBay | San Francisco Bay Area Chinese Directory, News, and Resources',
+      zh: 'ChineseSFBay | 舊金山灣區華人商家、新聞與生活資源',
+    },
+    description: {
+      en: 'Bilingual Bay Area Chinese directory listings, source-linked news summaries, and practical local discovery for San Francisco, Oakland, San Jose, Cupertino, Sunnyvale, Santa Clara, and nearby communities.',
+      zh: '為舊金山、奧克蘭、聖荷西、庫比蒂諾、桑尼維爾、聖塔克拉拉與灣區讀者整理雙語商家、本地新聞摘要與在地資訊。',
+    },
+    canonicalBaseUrl: 'https://chinesesfbay.com',
+  },
+  publisher: {
+    contactEmail: 'hello@chinesesfbay.com',
+    updatedLabel: {
+      en: 'Last updated: May 30, 2026',
+      zh: '最後更新：2026 年 5 月 30 日',
+    },
+  },
+  runtime: {
+    rootPath: '/var/www/chinesesfbay.com/web',
+    dataPath: '/var/www/chinesesfbay.com/data',
+    logsPath: '/var/www/chinesesfbay.com/logs',
+  },
+  home: {
+    headline: {
+      en: 'Your Guide to the SF Bay Chinese Community',
+      zh: '舊金山灣區華人生活指南',
+    },
+    kicker: {
+      en: 'Source-linked Bay Area news and local discovery',
+      zh: '有來源連結的灣區新聞與在地發現',
+    },
+    intro: {
+      en: 'Find SF Bay Chinese restaurants, Asian markets, schools, health services, legal help, housing support, and community resources.',
+      zh: '查找灣區中餐、亞洲超市、中文學校、健康服務、法律協助、住房支援與社區資源。',
+    },
+    citySelectSuffix: { en: 'CA', zh: 'CA' },
+    defaultSearchCity: 'San Francisco',
+    launchCities: [
+      'San Francisco',
+      'Oakland',
+      'San Jose',
+      'Cupertino',
+      'Sunnyvale',
+      'Santa Clara',
+    ],
+    cityNamesZh: {
+      'San Francisco': '舊金山',
+      Oakland: '奧克蘭',
+      'San Jose': '聖荷西',
+      Cupertino: '庫比蒂諾',
+      Sunnyvale: '桑尼維爾',
+      'Santa Clara': '聖塔克拉拉',
+    },
+    heroImageUrl: '/city-site-images/sf-bay-community-hero.webp',
+    heroImageAlt: {
+      en: 'SF Bay city launch image',
+      zh: '灣區城市首頁圖',
+    },
+    heroForegroundImageUrl: '/city-site-images/sf-bay-city-shape.webp',
+    heroForegroundAlt: {
+      en: 'San Francisco Bay skyline and bridge landscape',
+      zh: '舊金山灣區天際線與橋景',
+    },
+    heroForegroundTransparent: true,
+    heroBadge: {
+      en: 'SF BAY, CALIFORNIA',
+      zh: '舊金山灣區，加州',
+    },
+    heroBadgeSubcopy: {
+      en: 'Local source links only',
+      zh: '僅使用本地來源連結',
+    },
+    focusTitle: {
+      en: 'Bay Area Focused',
+      zh: '灣區聚焦',
+    },
+    focusBody: {
+      en: 'Local news, openings, official updates',
+      zh: '本地新聞、新店與官方更新',
+    },
+    featuredCards: sfBayFeaturedCards,
+    neighborhoods: sfBayNeighborhoods,
+    mapImageUrl: '/city-site-images/san-jose-silicon-valley-plaza.webp',
+    mapImageAlt: {
+      en: 'SF Bay local source guide image',
+      zh: '灣區本地來源指南圖片',
+    },
+    relocationImageUrl: '/city-site-images/sf-bay-newcomer-discovery.webp',
+    relocationImageAlt: {
+      en: 'SF Bay local discovery guide image',
+      zh: '灣區在地發現指南圖片',
+    },
+    storyCards: [
+      {
+        title: {
+          en: 'SF Bay source-linked news desk is live',
+          zh: '灣區附來源連結新聞室已上線',
+        },
+        bodyText: {
+          en: 'San Francisco, Oakland, San Jose, Peninsula, and South Bay summaries stay local.',
+          zh: '舊金山、奧克蘭、聖荷西、半島與南灣摘要保持本地化。',
+        },
+        date: {
+          en: 'May 30, 2026',
+          zh: '2026 年 5 月 30 日',
+        },
+      },
+      {
+        title: {
+          en: 'Bay Area directory separates city coverage',
+          zh: '灣區目錄分開整理各城市覆蓋',
+        },
+        bodyText: {
+          en: 'Chinatown, East Bay, South Bay, and Silicon Valley cards now use distinct signals.',
+          zh: '華埠、東灣、南灣與矽谷卡片現在使用不同本地訊號。',
+        },
+        date: {
+          en: 'May 30, 2026',
+          zh: '2026 年 5 月 30 日',
+        },
+      },
+      {
+        title: {
+          en: 'Community discovery focuses on Bay Area anchors',
+          zh: '社區探索聚焦灣區生活據點',
+        },
+        bodyText: {
+          en: 'Schools, services, groceries, legal help, and cultural resources are grouped by area.',
+          zh: '學校、服務、超市、法律協助與文化資源按地區整理。',
+        },
+        date: {
+          en: 'May 30, 2026',
+          zh: '2026 年 5 月 30 日',
+        },
+      },
+    ],
+    newcomerTitle: {
+      en: 'SF Bay Directory',
+      zh: '灣區商家目錄',
+    },
+    newcomerBody: {
+      en: 'ChineseSFBay now serves Bay Area directory listings and source-linked local summaries without falling back to Arizona content.',
+      zh: 'ChineseSFBay 現已接入灣區商家目錄與附來源連結的本地摘要，不回退到亞利桑那內容。',
+    },
+  },
+};
