@@ -4,6 +4,7 @@ import {
 } from '@/data/platform-data';
 import { attachActiveDirectoryAdCampaigns } from '@/lib/directory-ads';
 import { attachActiveListingPlans } from '@/lib/listing-plans';
+import { normalizeWeChatId, type PaymentFilter } from '@/lib/business-bilingual';
 import { applyBusinessDirectoryOverride } from '@/lib/business-directory-overrides';
 import {
   compareMostPopularDirectoryBusinesses,
@@ -34,6 +35,7 @@ export type DirectoryFilters = {
   category?: string;
   verifiedOnly?: boolean;
   language?: string;
+  payment?: PaymentFilter;
   minRating?: number;
   businessStatus?: DirectoryBusinessStatusFilter;
   newcomerFriendlyOnly?: boolean;
@@ -75,7 +77,7 @@ type DirectoryHoursRow = {
   value?: string | null;
 };
 
-type DirectoryBusinessRow = {
+export type DirectoryBusinessRow = {
   id: string;
   slug: string;
   category_id?: string | null;
@@ -97,6 +99,10 @@ type DirectoryBusinessRow = {
   gallery?: string[] | null;
   services_json?: Array<DirectoryLocalizedTextRow | string> | null;
   languages?: string[] | null;
+  wechat_id?: string | null;
+  accepts_wechat_pay?: boolean | null;
+  accepts_alipay?: boolean | null;
+  chinese_menu_or_forms?: boolean | null;
   search_aliases?: string[] | null;
   verified?: boolean | null;
   bilingual?: boolean | null;
@@ -189,7 +195,11 @@ const DIRECTORY_SELECT_FIELDS = `
   menu_url,
   services_json,
   price_range,
-  hours_json
+  hours_json,
+  wechat_id,
+  accepts_wechat_pay,
+  accepts_alipay,
+  chinese_menu_or_forms
 `;
 
 function normalize(value?: string | null): string {
@@ -225,6 +235,16 @@ const weekdayIndexByLabel: Record<string, number> = {
   sat: 6,
 };
 
+export function matchesPaymentFilter(business: Business, payment?: PaymentFilter): boolean {
+  if (payment === 'wechat-pay') {
+    return Boolean(business.acceptsWeChatPay);
+  }
+  if (payment === 'alipay') {
+    return Boolean(business.acceptsAlipay);
+  }
+  return true;
+}
+
 export function countActiveDirectoryFilters(filters: DirectoryFilters): number {
   let count = 0;
 
@@ -238,6 +258,9 @@ export function countActiveDirectoryFilters(filters: DirectoryFilters): number {
     count += 1;
   }
   if (filters.language) {
+    count += 1;
+  }
+  if (filters.payment) {
     count += 1;
   }
   if (filters.minRating) {
@@ -626,7 +649,7 @@ function mapFixtureCategory(slug: string): BusinessCategory | undefined {
   return businessCategories.find((category) => category.slug === slug);
 }
 
-function rowToBusiness(row: DirectoryBusinessRow): Business {
+export function rowToBusiness(row: DirectoryBusinessRow): Business {
   const category = categoryFromRow(row);
   const website = row.website ?? undefined;
   const verificationState = row.verification_state ?? (row.verified ? 'editor_verified' : 'unverified');
@@ -663,9 +686,13 @@ function rowToBusiness(row: DirectoryBusinessRow): Business {
     },
     services: parseServiceRows(row.services_json),
     languages: (row.languages ?? []) as Business['languages'],
+    wechatId: normalizeWeChatId(row.wechat_id),
+    acceptsWeChatPay: row.accepts_wechat_pay ?? false,
+    acceptsAlipay: row.accepts_alipay ?? false,
+    chineseMenuOrForms: row.chinese_menu_or_forms ?? false,
     searchAliases: row.search_aliases ?? [],
     verified: row.verified ?? verificationState !== 'unverified',
-    bilingual: row.bilingual ?? Boolean(row.languages?.some((item) => /mandarin|chinese|taiwanese/i.test(item))),
+    bilingual: row.bilingual ?? Boolean(row.languages?.some((item) => /mandarin|cantonese|chinese|taiwanese/i.test(item))),
     newcomerFriendly: row.newcomer_friendly ?? false,
     sponsored: row.sponsored ?? false,
     legacySponsored: row.sponsored ?? false,
@@ -899,6 +926,12 @@ export function applyDirectoryQueryFilters<T extends DirectorySupabaseQuery>(
     nextQuery = nextQuery.contains('languages', [filters.language]) as T;
   }
 
+  if (filters.payment === 'wechat-pay') {
+    nextQuery = nextQuery.eq('accepts_wechat_pay', true) as T;
+  } else if (filters.payment === 'alipay') {
+    nextQuery = nextQuery.eq('accepts_alipay', true) as T;
+  }
+
   if (filters.minRating) {
     nextQuery = nextQuery.gte('rating', filters.minRating) as T;
   }
@@ -971,6 +1004,10 @@ function applyClientFilters(
     }
 
     if (filters.language && !business.languages.includes(filters.language as never)) {
+      return false;
+    }
+
+    if (!matchesPaymentFilter(business, filters.payment)) {
       return false;
     }
 
@@ -1137,6 +1174,10 @@ function queryStaticBusinesses(
     }
 
     if (filters.language && !business.languages.includes(filters.language as never)) {
+      return false;
+    }
+
+    if (!matchesPaymentFilter(business, filters.payment)) {
       return false;
     }
 

@@ -111,6 +111,17 @@ import {
 import type { ListingPlanOwnerState } from '@/lib/listing-plan-offers';
 import { ListingPlanPanel } from '@/components/directory/ListingPlanPanel';
 import { AdminListingPlansPanel } from '@/components/directory/AdminListingPlansPanel';
+import { AdminBusinessDetailsEditor } from '@/components/directory/AdminBusinessDetailsEditor';
+import { BusinessBilingualDetailsEditor } from '@/components/directory/BusinessBilingualDetailsEditor';
+import {
+  acceptedPaymentNames,
+  chineseMaterialsLabel,
+  hasBilingualServiceDetails,
+  isPaymentFilter,
+  isSpokenLanguage,
+  paymentLabels,
+  type BusinessBilingualDetails,
+} from '@/lib/business-bilingual';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import {
   getDirectoryAdCampaignsForOwnerBusinesses,
@@ -203,6 +214,8 @@ type DirectorySearchParams = {
   q?: string;
   city?: string;
   category?: string;
+  language?: string;
+  payment?: string;
   minRating?: string;
   sort?: string;
   page?: string;
@@ -472,6 +485,8 @@ function buildDirectoryHref(
     q?: string;
     city?: string;
     category?: string;
+    language?: string;
+    payment?: string;
     minRating?: number;
     sort?: SortOption;
     page?: number;
@@ -488,6 +503,12 @@ function buildDirectoryHref(
   }
   if (values.category) {
     params.set('category', values.category);
+  }
+  if (values.language) {
+    params.set('language', values.language);
+  }
+  if (values.payment) {
+    params.set('payment', values.payment);
   }
   if (values.minRating) {
     params.set('minRating', String(values.minRating));
@@ -642,6 +663,8 @@ export async function DirectoryPageView({
     q: searchParams.q,
     city: searchParams.city,
     category: searchParams.category,
+    language: isSpokenLanguage(searchParams.language) ? searchParams.language : undefined,
+    payment: isPaymentFilter(searchParams.payment) ? searchParams.payment : undefined,
     minRating: parseDirectoryMinRating(searchParams.minRating),
     sort: parseDirectorySortOption(searchParams.sort),
   };
@@ -974,6 +997,14 @@ export async function BusinessDetailPageView({
 
   if (imageSet.length > 0) {
     localBusinessJsonLd.image = imageSet;
+  }
+  const spokenLanguages = business.languages.filter(isSpokenLanguage);
+  if (spokenLanguages.length > 0) {
+    localBusinessJsonLd.knowsLanguage = spokenLanguages;
+  }
+  const paymentNames = acceptedPaymentNames(business);
+  if (paymentNames.length > 0) {
+    localBusinessJsonLd.paymentAccepted = paymentNames.join(', ');
   }
   if (business.phone) {
     localBusinessJsonLd.telephone = business.phone;
@@ -1357,6 +1388,36 @@ export async function BusinessDetailPageView({
                     <p className="mt-1 text-lg font-semibold text-[#2c2722]">{languageSummary}</p>
                   </div>
                 </div>
+                {hasBilingualServiceDetails(business) ? (
+                  <div id="chinese-service" className="mt-3 rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-4">
+                    <p className="text-xs font-semibold text-[#8b8176]">
+                      {locale === 'zh' ? '華語服務' : 'Chinese-language service'}
+                    </p>
+                    <ul className="mt-2 flex flex-wrap gap-2 text-sm font-semibold text-[#2c2722]">
+                      {business.wechatId ? (
+                        <li className="rounded-md border border-[#e2d8cb] bg-white px-3 py-1.5">
+                          {locale === 'zh' ? '微信號：' : 'WeChat: '}
+                          <span className="font-mono">{business.wechatId}</span>
+                        </li>
+                      ) : null}
+                      {business.acceptsWeChatPay ? (
+                        <li className="rounded-md border border-[#e2d8cb] bg-white px-3 py-1.5">
+                          {locale === 'zh' ? `接受${paymentLabels['wechat-pay'].zh}` : `Accepts ${paymentLabels['wechat-pay'].en}`}
+                        </li>
+                      ) : null}
+                      {business.acceptsAlipay ? (
+                        <li className="rounded-md border border-[#e2d8cb] bg-white px-3 py-1.5">
+                          {locale === 'zh' ? `接受${paymentLabels.alipay.zh}` : `Accepts ${paymentLabels.alipay.en}`}
+                        </li>
+                      ) : null}
+                      {business.chineseMenuOrForms ? (
+                        <li className="rounded-md border border-[#e2d8cb] bg-white px-3 py-1.5">
+                          {chineseMaterialsLabel(business.categorySlug, locale)}
+                        </li>
+                      ) : null}
+                    </ul>
+                  </div>
+                ) : null}
               </div>
 
               <div className="relative min-h-60 overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#eadfce]">
@@ -4421,6 +4482,16 @@ function dashboardCampaignStatusLabel(status: DirectoryAdCampaign['status'], loc
   return locale === 'zh' ? labels[status].zh : labels[status].en;
 }
 
+function bilingualDetailsOf(business: Business): BusinessBilingualDetails {
+  return {
+    languages: business.languages,
+    wechatId: business.wechatId,
+    acceptsWeChatPay: Boolean(business.acceptsWeChatPay),
+    acceptsAlipay: Boolean(business.acceptsAlipay),
+    chineseMenuOrForms: Boolean(business.chineseMenuOrForms),
+  };
+}
+
 function ManagedBusinessWorkspaceRow({
   business,
   locale,
@@ -4535,6 +4606,12 @@ function ManagedBusinessWorkspaceRow({
 
         <div className="space-y-4">
           <BusinessPhotoEditor business={business} locale={locale} />
+          <BusinessBilingualDetailsEditor
+            businessSlug={business.slug}
+            categorySlug={business.categorySlug}
+            initialDetails={bilingualDetailsOf(business)}
+            locale={locale}
+          />
           <ListingPlanPanel
             available={listingPlansAvailable}
             business={business}
@@ -4958,6 +5035,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     adminLeadCounts,
     adminRecentInquiries,
     adminListingPlans,
+    adminDirectoryBusinesses,
   ] = await Promise.all([
     Promise.resolve(getAdminSnapshot()),
     getPendingBusinessClaimsSnapshot(),
@@ -4971,6 +5049,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     getBusinessLeadCounts({ limit: 100 }),
     getRecentBusinessInquiries({ limit: 20 }),
     getAdminListingPlans(),
+    getDirectoryBusinesses({}, { includeNonPublic: true, limit: 500 }),
   ]);
   const discoverWriteEnabled = isSupabaseServiceConfigured();
   const moderationQueueCount = moderationReports.length + snapshot.flaggedPosts.length;
@@ -5251,6 +5330,21 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
       <AdminLeadOverview counts={adminLeadCounts} inquiries={adminRecentInquiries} locale={locale} />
 
       <AdminListingPlansPanel plans={adminListingPlans} locale={locale} />
+
+      <AdminBusinessDetailsEditor
+        locale={locale}
+        listings={[...adminDirectoryBusinesses]
+          .sort((left, right) => left.name.en.localeCompare(right.name.en))
+          .map((business) => ({
+            slug: business.slug,
+            name: business.name.zh && business.name.zh !== business.name.en
+              ? `${business.name.en} ${business.name.zh}`
+              : business.name.en,
+            categorySlug: business.categorySlug,
+            city: business.city,
+            details: bilingualDetailsOf(business),
+          }))}
+      />
 
       <section id="admin-editorial" className="space-y-4">
         <div className="space-y-2">

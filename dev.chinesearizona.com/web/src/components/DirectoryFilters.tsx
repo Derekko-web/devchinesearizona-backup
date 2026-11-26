@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { ChevronDown, RotateCcw, Search } from 'lucide-react';
 
+import { paymentFilterOptions, paymentLabels, spokenLanguageOptions } from '@/lib/business-bilingual';
 import { countActiveDirectoryFilters } from '@/lib/directory';
+import { languageLabel } from '@/lib/i18n';
 import { withLocale } from '@/lib/routing';
 import type { BusinessCategory, Locale, SortOption } from '@/lib/types';
 
@@ -13,6 +15,8 @@ type DirectoryFiltersProps = {
     q?: string;
     city?: string;
     category?: string;
+    language?: string;
+    payment?: 'wechat-pay' | 'alipay';
     minRating?: number;
     sort?: SortOption;
   };
@@ -104,6 +108,36 @@ export function DirectoryFilters({
           {categories.map((category) => (
             <option key={category.slug} value={category.slug}>
               {category.name[locale]}
+            </option>
+          ))}
+        </SelectField>
+
+        <SelectField
+          id="language"
+          name="language"
+          label={locale === 'zh' ? '語言' : 'Language'}
+          defaultValue={values.language ?? ''}
+        >
+          <option value="">{locale === 'zh' ? '不限語言' : 'Any language'}</option>
+          {spokenLanguageOptions
+            .filter((language) => language !== 'English')
+            .map((language) => (
+              <option key={language} value={language}>
+                {languageLabel(language, locale)}
+              </option>
+            ))}
+        </SelectField>
+
+        <SelectField
+          id="payment"
+          name="payment"
+          label={locale === 'zh' ? '付款方式' : 'Payment'}
+          defaultValue={values.payment ?? ''}
+        >
+          <option value="">{locale === 'zh' ? '不限付款方式' : 'Any payment'}</option>
+          {paymentFilterOptions.map((payment) => (
+            <option key={payment} value={payment}>
+              {locale === 'zh' ? paymentLabels[payment].zh : paymentLabels[payment].en}
             </option>
           ))}
         </SelectField>
