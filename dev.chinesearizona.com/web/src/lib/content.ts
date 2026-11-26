@@ -20,7 +20,6 @@ import { t } from '@/lib/i18n';
 import {
   getAnalyticsSummary,
   getBusinessClaims,
-  getCommunitySubmissions,
   getEntityReportCount,
   getModerationReports,
 } from '@/lib/runtime-store';
@@ -757,8 +756,7 @@ export function getEventBySlug(slug: string): Event | undefined {
 }
 
 export function getCommunityPosts(type?: CommunityPostType): CommunityPost[] {
-  const allPosts = [...communityPosts, ...getCommunitySubmissions()];
-  const enrichedPosts = allPosts.map((post) => ({
+  const enrichedPosts = communityPosts.map((post) => ({
     ...post,
     reportCount: post.reportCount + getEntityReportCount(post.slug),
   }));
@@ -769,9 +767,7 @@ export function getCommunityPosts(type?: CommunityPostType): CommunityPost[] {
 }
 
 export function getCommunityPostBySlug(type: CommunityPostType, slug: string): CommunityPost | undefined {
-  const post = [...communityPosts, ...getCommunitySubmissions()].find(
-    (item) => item.type === type && item.slug === slug
-  );
+  const post = communityPosts.find((item) => item.type === type && item.slug === slug);
 
   if (!post) {
     return undefined;
@@ -796,7 +792,7 @@ export function getBusinessesByOwner(ownerProfileSlug: string): Business[] {
 }
 
 export function getPostsByAuthor(authorSlug: string): CommunityPost[] {
-  return [...communityPosts, ...getCommunitySubmissions()].filter((post) => post.authorSlug === authorSlug);
+  return communityPosts.filter((post) => post.authorSlug === authorSlug);
 }
 
 export function getRelatedBusinesses(
