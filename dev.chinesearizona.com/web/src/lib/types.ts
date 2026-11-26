@@ -9,7 +9,7 @@ export type LocalizedText = {
   zh?: string | null;
 };
 
-export type LanguageOption = 'English' | 'Mandarin' | 'Traditional Chinese' | 'Taiwanese';
+export type LanguageOption = 'English' | 'Mandarin' | 'Cantonese' | 'Traditional Chinese' | 'Taiwanese';
 
 export type CategoryIcon =
   | 'home'
@@ -115,6 +115,11 @@ export type Business = {
   description: LocalizedText;
   services: LocalizedText[];
   languages: LanguageOption[];
+  // Bilingual details (issue #411).
+  wechatId?: string;
+  acceptsWeChatPay?: boolean;
+  acceptsAlipay?: boolean;
+  chineseMenuOrForms?: boolean;
   searchAliases: string[];
   verified: boolean;
   bilingual: boolean;

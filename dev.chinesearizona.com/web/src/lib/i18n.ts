@@ -64,6 +64,7 @@ export function languageLabel(language: LanguageOption | string, locale: Locale)
   const labels: Record<string, LocalizedText> = {
     English: { en: 'English', 'zh': '英文' },
     Mandarin: { en: 'Mandarin', 'zh': '國語' },
+    Cantonese: { en: 'Cantonese', 'zh': '粵語' },
     'Traditional Chinese': { en: 'Traditional Chinese', 'zh': '繁體中文' },
     Taiwanese: { en: 'Taiwanese', 'zh': '台語' },
   };

@@ -83,4 +83,54 @@ describe('BusinessDetailPageView', () => {
 
     expect(visibleHtml.split(description).length - 1).toBe(1);
   });
+
+  it('shows bilingual details and puts languages and payments in the structured data (#411)', async () => {
+    const directory = await import('@/lib/directory');
+    const { siteProfiles } = await import('@/lib/site-config');
+    const site = siteProfiles['los-angeles'];
+    const slug = 'lunasia-dim-sum-house-alhambra';
+    const business = await directory.getDirectoryBusinessBySlug(slug, { site });
+    const spy = vi.spyOn(directory, 'getDirectoryBusinessBySlug').mockResolvedValue({
+      ...business!,
+      categorySlug: 'dining',
+      languages: ['Cantonese', 'Mandarin', 'English'],
+      wechatId: 'lunasia_dimsum',
+      acceptsWeChatPay: true,
+      acceptsAlipay: true,
+      chineseMenuOrForms: true,
+    });
+
+    try {
+      const { BusinessDetailPageView } = await import('@/views/site-pages');
+      const zh = renderToStaticMarkup(await BusinessDetailPageView({ locale: 'zh', slug, site }));
+      const en = renderToStaticMarkup(await BusinessDetailPageView({ locale: 'en', slug, site }));
+
+      expect(zh).toContain('華語服務');
+      expect(zh).toContain('lunasia_dimsum');
+      expect(zh).toContain('接受微信支付');
+      expect(zh).toContain('接受支付寶');
+      expect(zh).toContain('提供中文菜單');
+      expect(en).toContain('Chinese-language service');
+      expect(en).toContain('Accepts WeChat Pay');
+      expect(en).toContain('"knowsLanguage":["Cantonese","Mandarin","English"]');
+      expect(en).toContain('"paymentAccepted":"WeChat Pay, Alipay"');
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it('hides the Chinese-language service box when no details are filled in', async () => {
+    const { BusinessDetailPageView } = await import('@/views/site-pages');
+    const { siteProfiles } = await import('@/lib/site-config');
+    const html = renderToStaticMarkup(
+      await BusinessDetailPageView({
+        locale: 'en',
+        slug: 'lunasia-dim-sum-house-alhambra',
+        site: siteProfiles['los-angeles'],
+      })
+    );
+
+    expect(html).not.toContain('Chinese-language service');
+    expect(html).not.toContain('paymentAccepted');
+  });
 });
