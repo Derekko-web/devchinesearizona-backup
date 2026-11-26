@@ -1,4 +1,4 @@
-import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
+import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import type { Locale } from '@/lib/types';
 
 export const advertisePath = '/advertise';
@@ -56,6 +56,19 @@ export const featuredLabel = 'Featured / 精選';
 
 function pick(locale: Locale, text: AdvertiseText): string {
   return locale === 'zh' ? text.zh : text.en;
+}
+
+// Plans an owner can pay for online from the dashboard (#408). Only sites whose
+// listings live in the database have owner dashboards, so city sites that read
+// static listings keep the inquiry form for every plan.
+export const onlineCheckoutPlanIds: readonly AdvertisePlanId[] = ['enhanced-listing', 'sponsored-category'];
+
+export function hasOnlineCheckout(site: SiteProfile = defaultSiteProfile): boolean {
+  return hasLiveDirectoryData(site);
+}
+
+export function isOnlineCheckoutPlan(planId: AdvertisePlanId, site: SiteProfile = defaultSiteProfile): boolean {
+  return hasOnlineCheckout(site) && onlineCheckoutPlanIds.includes(planId);
 }
 
 export function isAdvertisePlanId(value: unknown): value is AdvertisePlanId {
@@ -233,10 +246,15 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
       en: `Reach Chinese-speaking families, newcomers and students across ${site.regionName}. Prices are published up front, and every paid spot is labeled.`,
       zh: `觸及${site.regionNameZh}的華人家庭、新移民與留學生。價格公開透明，所有付費版位都清楚標示。`,
     }),
-    checkoutNote: pick(locale, {
-      en: 'Online checkout is coming soon. For now, send an inquiry and we will set things up with you.',
-      zh: '線上付款即將推出。目前請先送出詢問，我們會與你聯絡安排。',
-    }),
+    checkoutNote: hasOnlineCheckout(site)
+      ? pick(locale, {
+          en: 'Claimed businesses can buy the Enhanced listing and the Sponsored category spot online from their dashboard. For other plans, send an inquiry and we will set things up with you.',
+          zh: '已認領的商家可在商家後台線上購買「進階商家頁」與「分類贊助版位」。其他方案請送出詢問，我們會與你聯絡安排。',
+        })
+      : pick(locale, {
+          en: 'Online checkout is coming soon. For now, send an inquiry and we will set things up with you.',
+          zh: '線上付款即將推出。目前請先送出詢問，我們會與你聯絡安排。',
+        }),
     plansHeading: pick(locale, { en: 'Plans and prices', zh: '方案與價格' }),
     plansIntro: pick(locale, {
       en: 'All prices are in US dollars. Founding offers are for the first 10 businesses that sign up.',
@@ -308,6 +326,7 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
       }),
     },
     claimCta: pick(locale, { en: 'Claim your free listing', zh: '免費認領商家' }),
+    buyCta: pick(locale, { en: 'Buy online in your dashboard', zh: '在商家後台線上購買' }),
     askCta: pick(locale, { en: 'Ask about this plan', zh: '詢問這個方案' }),
   };
 }

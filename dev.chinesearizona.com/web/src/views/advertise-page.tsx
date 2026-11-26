@@ -7,6 +7,7 @@ import {
   formatAdvertisePrice,
   getAdvertisePageCopy,
   getAdvertisePlans,
+  isOnlineCheckoutPlan,
   sponsoredLabel,
   type AdvertisePlan,
 } from '@/lib/advertise';
@@ -93,6 +94,7 @@ export function AdvertisePageView({
   const plans = getAdvertisePlans(site);
   const advertiseHref = withLocale(locale, advertisePath);
   const claimHref = withLocale(locale, '/add-business');
+  const dashboardHref = withLocale(locale, '/dashboard');
 
   return (
     <main className="min-h-screen bg-[#fbf7f0] text-[#2d211b]">
@@ -135,8 +137,20 @@ export function AdvertisePageView({
               key={plan.id}
               plan={plan}
               locale={locale}
-              ctaHref={plan.prices.length === 0 ? claimHref : `${advertiseHref}?plan=${plan.id}#contact`}
-              ctaLabel={plan.prices.length === 0 ? copy.claimCta : copy.askCta}
+              ctaHref={
+                plan.prices.length === 0
+                  ? claimHref
+                  : isOnlineCheckoutPlan(plan.id, site)
+                    ? dashboardHref
+                    : `${advertiseHref}?plan=${plan.id}#contact`
+              }
+              ctaLabel={
+                plan.prices.length === 0
+                  ? copy.claimCta
+                  : isOnlineCheckoutPlan(plan.id, site)
+                    ? copy.buyCta
+                    : copy.askCta
+              }
             />
           ))}
         </div>

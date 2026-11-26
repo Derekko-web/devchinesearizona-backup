@@ -159,7 +159,17 @@ describe('AdvertisePageView', () => {
       expect(html).toContain('id="wechat"');
       expect(html).toContain(locale === 'zh' ? '微信號即將公布' : 'Our WeChat ID is coming soon');
       expect(html).toContain(`href="/${locale}/add-business"`);
-      expect(html).toContain(`href="/${locale}/advertise?plan=enhanced-listing#contact"`);
+      // Owners on a site with database listings buy online from the dashboard (#408).
+      // City sites with static listings keep the inquiry form for every plan.
+      if (site.directory.listingSource.state === 'live') {
+        expect(html).toContain(`href="/${locale}/dashboard"`);
+        expect(html).toContain(locale === 'zh' ? '在商家後台線上購買' : 'Buy online in your dashboard');
+        expect(html).not.toContain(`href="/${locale}/advertise?plan=enhanced-listing#contact"`);
+        expect(html).toContain(`href="/${locale}/advertise?plan=boost#contact"`);
+      } else {
+        expect(html).toContain(`href="/${locale}/advertise?plan=enhanced-listing#contact"`);
+        expect(html).not.toContain(locale === 'zh' ? '在商家後台線上購買' : 'Buy online in your dashboard');
+      }
       for (const otherEmail of allContactEmails.filter((email) => email !== site.publisher.contactEmail)) {
         expect(html).not.toContain(otherEmail);
       }

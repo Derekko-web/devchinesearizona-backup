@@ -1,3 +1,5 @@
+import type { ListingPlanId } from '@/lib/listing-plan-offers';
+
 export const locales = ['en', 'zh'] as const;
 
 export type Locale = (typeof locales)[number];
@@ -132,6 +134,8 @@ export type Business = {
     value: string;
   }>;
   activeDirectoryAdCampaign?: DirectoryAdCampaign;
+  // Paid listing plans running right now (issue #408).
+  paidPlans?: ListingPlanId[];
   coordinates?: {
     lat: number;
     lng: number;

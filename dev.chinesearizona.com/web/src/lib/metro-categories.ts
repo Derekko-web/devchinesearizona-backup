@@ -282,11 +282,20 @@ export function findMetroCategoryCity(
 }
 
 // Sponsored listings get the labeled spots at the top; everything else stays in the organic list.
+// Businesses that bought the sponsored category plan (#408) are seated first, since
+// the plan is sold as one of these spots; other sponsored listings fill what is left.
 export function splitSponsoredListings(
   listings: Business[],
   maxSpots = MAX_SPONSORED_CATEGORY_SPOTS
 ): { sponsored: Business[]; organic: Business[] } {
-  const sponsored = listings.filter((business) => business.sponsored).slice(0, maxSpots);
+  const candidates = listings.filter((business) => business.sponsored);
+  const planHolders = candidates.filter((business) =>
+    business.paidPlans?.includes('sponsored-category')
+  );
+  const others = candidates.filter(
+    (business) => !business.paidPlans?.includes('sponsored-category')
+  );
+  const sponsored = [...planHolders, ...others].slice(0, maxSpots);
   const sponsoredIds = new Set(sponsored.map((business) => business.id));
 
   return {
