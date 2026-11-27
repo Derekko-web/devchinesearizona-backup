@@ -159,8 +159,8 @@ describe('HomePageView', () => {
     expect(html).toContain('Featured Businesses');
     expect(html).toContain('Explore by Neighborhood');
     expect(html).toContain('Trusted Services');
-    expect(html).toContain('/en/business');
-    expect(html).toContain('/en/relocation-guide');
+    expect(html).toContain('/business');
+    expect(html).toContain('/relocation-guide');
   });
 
   it('uses the freshest generated Arizona articles for News & Community cards', async () => {
@@ -212,7 +212,7 @@ describe('HomePageView', () => {
     expect(html).toContain('Austin school and services source summary');
     expect(html).toContain('Round Rock community source summary');
     expect(html).toContain('Central Texas business source summary');
-    expect(html).toContain('/en/news/austin-homepage-news-1');
+    expect(html).toContain('/news/austin-homepage-news-1');
     expect(html).not.toContain('Austin news desk starts with Central Texas sources');
     expect(html).toContain('/city-site-images/austin-skyline-lake.webp');
     expect(html).toContain('/city-site-images/cedar-park-market-street.webp');
@@ -250,12 +250,12 @@ describe('HomePageView', () => {
     expect(html).toContain('Los Angeles community source summary');
     expect(html).toContain('San Gabriel Valley services source summary');
     expect(html).toContain('LA small business source summary');
-    expect(html).toContain('/en/news/los-angeles-homepage-news-1');
+    expect(html).toContain('/news/los-angeles-homepage-news-1');
     expect(html).not.toContain('LA opening radar starts with source-linked local summaries');
     expect(html).toContain('/city-site-images/la-chinatown-downtown.webp');
     expect(html).toContain('/city-site-images/alhambra-main-street.webp');
-    expect(html).not.toContain('/en/los-angeles-news/los-angeles-opening-radar-local-source-watch');
-    expect(html).not.toContain('/en/los-angeles-news/sgv-housing-transit-watch-source-linked-summaries');
+    expect(html).not.toContain('/los-angeles-news/los-angeles-opening-radar-local-source-watch');
+    expect(html).not.toContain('/los-angeles-news/sgv-housing-transit-watch-source-linked-summaries');
     expect(html).not.toContain('Bido Cafe');
     expect(html).not.toContain('Hedy Li');
     expect(html).not.toContain('/directory-ai-replacements/');
@@ -293,7 +293,7 @@ describe('HomePageView', () => {
     expect(html).toContain('SF Bay community source summary');
     expect(html).toContain('South Bay services source summary');
     expect(html).toContain('East Bay local source summary');
-    expect(html).toContain('/en/news/sf-bay-homepage-news-1');
+    expect(html).toContain('/news/sf-bay-homepage-news-1');
     expect(html).not.toContain('SF Bay source-linked news desk is live');
     expect(html).not.toContain('Bay Area directory separates city coverage');
     expect(html).not.toContain('Community discovery focuses on Bay Area anchors');

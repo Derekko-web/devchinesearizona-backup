@@ -588,8 +588,8 @@ describe('createListingPlanCheckoutForProfile', () => {
       locale: 'en',
       // Raw braces: Stripe only fills in the session ID when they are not encoded (#449).
       success_url:
-        'https://chinesearizona.com/en/dashboard?listingPlan=success&business=lotus-kitchen&session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://chinesearizona.com/en/dashboard?listingPlan=cancelled&business=lotus-kitchen',
+        'https://chinesearizona.com/dashboard?listingPlan=success&business=lotus-kitchen&session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://chinesearizona.com/dashboard?listingPlan=cancelled&business=lotus-kitchen',
       metadata: {
         checkout_kind: 'listing_plan',
         plan_id: 'sponsored-category',

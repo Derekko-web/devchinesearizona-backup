@@ -185,7 +185,7 @@ describe('AdminListingPlansPanel', () => {
     );
 
     expect(html).toContain('Paid listing plans');
-    expect(html).toContain('href="/en/business/lotus-kitchen"');
+    expect(html).toContain('href="/business/lotus-kitchen"');
     expect(html).toContain('Sponsored category spot');
     expect(html).toContain('restaurants');
     expect(html).toContain('Founding');

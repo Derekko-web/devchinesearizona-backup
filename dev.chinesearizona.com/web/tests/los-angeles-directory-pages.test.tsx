@@ -65,7 +65,7 @@ describe('Los Angeles directory pages', () => {
     expect(html).toContain('Lunasia Dim Sum House');
     expect(html).toContain('Chinatown Service Center');
     expect(html).toContain('Los Angeles, CA');
-    expect(html).toContain('/en/add-business');
+    expect(html).toContain('/add-business');
     expect(html).not.toContain('directory data is not connected yet');
     expect(html).not.toContain('Bido Cafe');
     expect(html).not.toContain('Phoenix, AZ');

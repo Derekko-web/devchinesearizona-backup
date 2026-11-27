@@ -73,7 +73,7 @@ describe('directory UI', () => {
 
     expect(html).toContain('R&amp;G Lounge');
     expect(html).toContain('Asian Health Services');
-    expect(html).toContain('/en/add-business');
+    expect(html).toContain('/add-business');
     expect(html).not.toContain('directory data is not connected yet');
     expect(html).not.toContain('Bido Cafe');
     expect(html).not.toContain('ChineseArizona listings');
@@ -96,7 +96,7 @@ describe('directory UI', () => {
     const html = renderToStaticMarkup(element);
 
     expect(html).toContain('ChineseSFBay');
-    expect(html).toContain('https://chinesesfbay.com/en/business?q={search_term_string}');
+    expect(html).toContain('https://chinesesfbay.com/business?q={search_term_string}');
     expect(html).not.toContain('ChineseArizona');
     expect(html).not.toContain('https://chinesearizona.com');
   });
