@@ -84,8 +84,12 @@ export const healthInsuranceArizonaGuide: Guide = {
       title: { en: 'Marketplace and Medicaid rules for immigrants', zh: '移民適用的 Marketplace 與 Medicaid 規定' },
       bullets: [
         {
-          en: 'Lawfully present immigrants can buy Marketplace coverage. "Lawfully present" includes qualified non-citizens, several humanitarian statuses, and people with valid non-immigrant visas. DACA recipients are not eligible for Marketplace coverage.',
-          zh: '合法居留的移民都可以購買 Marketplace 保險。「合法居留」包括合格非公民、多種人道身分，以及持有效非移民簽證的人。DACA 身分者不能投保 Marketplace。',
+          en: 'HealthCare.gov\'s page on lawfully present immigrants says they can buy Marketplace coverage, and that "lawfully present" includes qualified non-citizens, several humanitarian statuses, and people with valid non-immigrant visas.',
+          zh: 'HealthCare.gov 的「合法居留移民」頁面說明，合法居留的移民可以購買 Marketplace 保險；「合法居留」包括合格非公民、多種人道身分，以及持有效非移民簽證的人。',
+        },
+        {
+          en: 'HealthCare.gov\'s immigration status page lists work visas (it names H1, H-2A, and H-2B) and student visas among the statuses that may buy Marketplace coverage, and notes that DACA recipients are not eligible for Marketplace coverage.',
+          zh: 'HealthCare.gov 的「移民身分」頁面把工作簽證（頁面列出 H1、H-2A、H-2B）與學生簽證列為可購買 Marketplace 保險的身分，並註明 DACA 身分者不能投保 Marketplace。',
         },
         {
           en: 'Arizona\'s Medicaid program is AHCCCS, and KidsCare is its program for children. Under federal rules, green card holders who meet state income and residency rules are generally eligible for Medicaid and CHIP only after a 5-year waiting period from the date they became qualified non-citizens. Green card holders who were previously refugees or asylees do not have that wait.',

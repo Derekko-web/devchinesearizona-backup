@@ -1,5 +1,6 @@
 import type { Guide } from '@/lib/types';
 
+import { chineseSpeakingDoctorDentistGuide } from './chinese-speaking-doctor-dentist';
 import { firstArizonaSummerGuide } from './first-arizona-summer-home';
 import { firstHomeMetroPhoenixGuide } from './first-home-metro-phoenix';
 import { healthInsuranceArizonaGuide } from './health-insurance-arizona';
@@ -20,4 +21,5 @@ export const newcomerGuides: Guide[] = [
   firstArizonaSummerGuide,
   immigrationLegalHelpGuide,
   willsEstateArizonaGuide,
+  chineseSpeakingDoctorDentistGuide,
 ];
