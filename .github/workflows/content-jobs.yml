@@ -1,16 +1,17 @@
 name: Dev Content Jobs
 
+# Manual only. Live listings come from the database and nothing loads this
+# output into it, so the daily run was retired (#439). Review the output
+# before using any of it.
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '15 10 * * *'
 
 permissions:
   contents: write
   pull-requests: write
 
 concurrency:
-  group: dev-content-jobs-${{ github.event.schedule || github.run_id }}
+  group: dev-content-jobs-${{ github.run_id }}
   cancel-in-progress: false
 
 jobs:
