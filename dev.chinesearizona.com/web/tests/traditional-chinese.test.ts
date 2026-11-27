@@ -70,4 +70,16 @@ describe('Traditional Chinese copy', () => {
 
     expect(offenders).toEqual([]);
   });
+
+  // The daily signal desk job copies this hand-written file into
+  // src/data/generated-local-articles.json. It sits outside src/, so it is
+  // checked here: a Simplified character must fail in pull request CI, not
+  // in the daily job.
+  it('uses no Simplified-only characters in the signal desk input file', () => {
+    const inputPath = path.join(process.cwd(), 'data', 'signal-desk-staging', 'source-signals.json');
+    const strings: string[] = [];
+    collectJsonStrings(JSON.parse(fs.readFileSync(inputPath, 'utf8')), undefined, strings);
+
+    expect(simplifiedCharacters(strings.join('\n'))).toEqual([]);
+  });
 });
