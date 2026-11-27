@@ -1421,11 +1421,17 @@ export async function getDirectoryFilterOptions(site: SiteProfile = defaultSiteP
       businesses.flatMap((business) => business.languages)
     )
   ).sort((left, right) => left.localeCompare(right));
+  // Listings per category, so pages can tell which category landing pages are indexable.
+  const categoryCounts = businesses.reduce<Record<string, number>>((counts, business) => {
+    counts[business.categorySlug] = (counts[business.categorySlug] ?? 0) + 1;
+    return counts;
+  }, {});
 
   return {
     categories,
     cities,
     languages,
+    categoryCounts,
   };
 }
 
