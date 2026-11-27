@@ -23,6 +23,7 @@ import { HousingListingsSection } from '@/components/HousingListingsSection';
 import { TrackedLink } from '@/components/TrackedLink';
 import { resolveLocalizedTextList } from '@/lib/article-localization';
 import {
+  getBusinessCategories,
   getCurrentArticlesAsync,
   getGuideBySlug,
   getGuides,
@@ -39,11 +40,12 @@ import {
   t,
 } from '@/lib/i18n';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
+import { getMetroCategoryHeading, metroCategoryPath } from '@/lib/metro-categories';
 import { absoluteUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
 import { withLocale } from '@/lib/routing';
 import { defaultSiteProfile } from '@/lib/site-config';
-import type { Business, Guide, Locale } from '@/lib/types';
+import type { Business, BusinessCategory, Guide, Locale } from '@/lib/types';
 import { ArticleMetaRow } from '@/views/site-page-shared';
 
 export async function RelocationGuidePageView({ locale }: { locale: Locale }) {
@@ -549,6 +551,10 @@ export async function GuideDetailPageView({ locale, slug }: { locale: Locale; sl
   const quickChecklist = guide.quickChecklist ?? [];
   const detailSections = guide.detailSections ?? [];
   const practicalNotes = guide.practicalNotes ?? [];
+  const directoryPrompt = guide.directoryPrompt;
+  const directoryCategories = (directoryPrompt?.categorySlugs ?? [])
+    .map((categorySlug) => getBusinessCategories().find((category) => category.slug === categorySlug))
+    .filter((category): category is BusinessCategory => Boolean(category));
 
   return (
     <div className="overflow-x-hidden bg-[#fcf8f1] text-[#261b15]">
@@ -670,6 +676,38 @@ export async function GuideDetailPageView({ locale, slug }: { locale: Locale; sl
                     </li>
                   ))}
                 </ul>
+              </section>
+            ) : null}
+
+            {directoryPrompt ? (
+              <section className="border-b border-[#dfcdbb] py-8" data-testid="guide-directory-prompt">
+                <h2 className="text-2xl font-semibold text-[#2b1f18] [font-family:var(--font-display)]">
+                  {locale === 'zh' ? '找專業人士協助' : 'Find a professional'}
+                </h2>
+                <p className="mt-3 max-w-3xl text-sm leading-7 text-[#6a5547]">{t(directoryPrompt.note, locale)}</p>
+                {directoryCategories.length > 0 ? (
+                  <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                    {directoryCategories.map((category) => (
+                      <li key={`${guide.slug}-directory-${category.slug}`} className="border-t border-[#eadccd] pt-3">
+                        <Link
+                          href={withLocale(locale, metroCategoryPath(category.slug))}
+                          className="group inline-flex items-center gap-2 text-base font-semibold text-[#2b1f18] hover:text-brand-700"
+                        >
+                          {getMetroCategoryHeading(category, locale)}
+                          <ChevronRight className="h-4 w-4 text-brand-700" aria-hidden="true" />
+                        </Link>
+                        <Link
+                          href={withLocale(locale, `/business?category=${category.slug}`)}
+                          className="mt-1 block text-sm text-[#7b6658] hover:text-brand-700"
+                        >
+                          {locale === 'zh'
+                            ? `在商家名錄搜尋「${t(category.name, locale)}」`
+                            : `Search ${category.name.en} in the directory`}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </section>
             ) : null}
           </article>

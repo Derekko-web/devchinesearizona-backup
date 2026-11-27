@@ -375,6 +375,13 @@ export type GuideDetailSection = {
   bullets: LocalizedText[];
 };
 
+// A short "general information, not advice" note plus the directory
+// categories where readers can find a professional for the topic.
+export type GuideDirectoryPrompt = {
+  note: LocalizedText;
+  categorySlugs: string[];
+};
+
 export type Guide = {
   slug: string;
   section: 'moving' | 'housing' | 'utilities' | 'schools' | 'healthcare' | 'transportation' | 'community' | 'safety';
@@ -389,6 +396,7 @@ export type Guide = {
   detailSections?: GuideDetailSection[];
   practicalNotes?: LocalizedText[];
   officialResources: ResourceLink[];
+  directoryPrompt?: GuideDirectoryPrompt;
   relatedBusinessSlugs: string[];
   relatedEventSlugs: string[];
 };
