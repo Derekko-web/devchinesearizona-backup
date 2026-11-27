@@ -8,6 +8,7 @@ import {
   cityCategoryPath,
   findMetroCategoryCity,
   formatListingCountLine,
+  getCityCategoryIntro,
   getCityCategoryTitle,
   getLocalizedCityName,
   getMetroCategoryHeading,
@@ -397,9 +398,41 @@ export async function CityCategoryPageView({
   const cityCategoryPagePath = withLocale(locale, `/business/${citySlug}/${categoryRecord.slug}`);
   const cityLabel = resolvedCity ? getLocalizedCityName(resolvedCity.city, site, locale) : city;
   const metroTitle = getMetroCategoryTitle(categoryRecord, site, locale);
+  const cityTitle = getCityCategoryTitle(categoryRecord, cityLabel, site, locale);
+  const canonicalCityPath = `/business/${citySlug}/${categoryRecord.slug}`;
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { name: locale === 'zh' ? '首頁' : 'Home', path: '/' },
+        { name: locale === 'zh' ? '華人商家' : 'Chinese Businesses', path: '/business' },
+        { name: getMetroCategoryHeading(categoryRecord, locale), path: metroCategoryPath(categoryRecord.slug) },
+        { name: cityLabel, path: canonicalCityPath },
+      ].map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: absoluteUrl(localeCanonicalPath(locale, item.path), site),
+      })),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: cityTitle,
+      numberOfItems: listings.length,
+      itemListElement: listings.slice(0, 50).map((business, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: t(business.name, locale),
+        url: absoluteUrl(localeCanonicalPath(locale, `/business/${business.slug}`), site),
+      })),
+    },
+  ];
 
   return sectionContainer(
     <div className="space-y-8 py-12">
+      <JsonLd data={jsonLd} />
       <div className="max-w-3xl space-y-3">
         <CategoryBreadcrumb
           locale={locale}
@@ -409,10 +442,10 @@ export async function CityCategoryPageView({
             { label: cityLabel },
           ]}
         />
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900">
-          {getCityCategoryTitle(categoryRecord, cityLabel, site, locale)}
-        </h1>
-        <p className="text-base leading-7 text-slate-600">{t(categoryRecord.description, locale)}</p>
+        <h1 className="text-4xl font-bold tracking-tight text-slate-900">{cityTitle}</h1>
+        <p className="text-base leading-7 text-slate-600">
+          {getCityCategoryIntro(categoryRecord, cityLabel, site, locale)}
+        </p>
       </div>
 
       <CategoryCityFilters locale={locale} site={site} summary={summary} activeCitySlug={resolvedCity?.slug} />

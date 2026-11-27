@@ -21,15 +21,26 @@ import { OwnerLeadSummary } from '@/components/directory/BusinessLeadPanels';
 import { BusinessPhotoEditor } from '@/components/directory/BusinessPhotoEditor';
 import { DirectoryAdCampaignPanel } from '@/components/directory/DirectoryAdCampaignPanel';
 import { OwnedBusinessDeleteButton } from '@/components/directory/OwnedBusinessDeleteButton';
+import {
+  OwnerNextSteps,
+  buildOwnerUpgradeTarget,
+  type OwnerUpgradeTarget,
+} from '@/components/directory/OwnerNextSteps';
 import { getBusinessReviews } from '@/lib/content';
 import { isSupabaseServiceConfigured } from '@/lib/supabase';
 import { getDirectoryBusinesses } from '@/lib/directory';
 import { getBusinessLeadCounts, getRecentBusinessInquiries } from '@/lib/business-leads';
 import {
+  confirmListingPlanCheckoutForProfile,
   getListingPlanAvailability,
   getListingPlanStatesForOwnerBusinesses,
 } from '@/lib/listing-plans';
-import type { ListingPlanOwnerState } from '@/lib/listing-plan-offers';
+import {
+  listingPlanReturnMessage,
+  type ListingPlanCheckoutOutcome,
+  type ListingPlanOwnerState,
+} from '@/lib/listing-plan-offers';
+import { getPendingBusinessClaimsForProfile } from '@/lib/directory-moderation';
 import { ListingPlanPanel } from '@/components/directory/ListingPlanPanel';
 import { BusinessBilingualDetailsEditor } from '@/components/directory/BusinessBilingualDetailsEditor';
 import {
@@ -179,6 +190,8 @@ function ManagedBusinessWorkspaceRow({
   listingPlansAvailable,
   listingPlansMockMode,
   listingPlanStates,
+  checkoutOutcome,
+  defaultOpen,
 }: {
   business: Business;
   locale: Locale;
@@ -189,6 +202,10 @@ function ManagedBusinessWorkspaceRow({
   listingPlansAvailable: boolean;
   listingPlansMockMode: boolean;
   listingPlanStates: ListingPlanOwnerState[];
+  checkoutOutcome?: ListingPlanCheckoutOutcome;
+  // Open when it's the owner's only listing or the one they just paid for or
+  // asked to see, so plans and payment notes are not hidden (#451).
+  defaultOpen: boolean;
 }) {
   const detailHref = withLocale(locale, `/business/${business.slug}`);
   const photoCount = (business.heroImage ? 1 : 0) + business.gallery.length;
@@ -204,16 +221,23 @@ function ManagedBusinessWorkspaceRow({
       : 'Unverified';
   const placementLabel = campaign
     ? dashboardCampaignStatusLabel(campaign.status, locale)
-    : business.sponsored || business.legacySponsored
+    : business.paidPlans?.includes('sponsored-category')
       ? locale === 'zh'
-        ? '人工精選'
-        : 'Manual placement'
-      : locale === 'zh'
-        ? '未啟用'
-        : 'Not active';
+        ? '贊助版位'
+        : 'Sponsored spot'
+      : business.sponsored || business.legacySponsored
+        ? locale === 'zh'
+          ? '人工精選'
+          : 'Manual placement'
+        : locale === 'zh'
+          ? '未啟用'
+          : 'Not active';
 
   return (
-    <details className="group overflow-hidden rounded-[1.2rem] border border-slate-200/80 bg-white/80 shadow-[0_18px_45px_rgba(74,49,27,0.055)] transition duration-300 open:bg-white open:shadow-[0_24px_60px_rgba(74,49,27,0.08)]">
+    <details
+      id={`listing-${business.slug}`}
+      open={defaultOpen}
+      className="group overflow-hidden rounded-[1.2rem] border border-slate-200/80 bg-white/80 shadow-[0_18px_45px_rgba(74,49,27,0.055)] transition duration-300 open:bg-white open:shadow-[0_24px_60px_rgba(74,49,27,0.08)]">
       <summary className="grid cursor-pointer list-none gap-4 px-4 py-4 outline-none transition duration-300 hover:bg-[#fff8ef] focus-visible:ring-2 focus-visible:ring-brand-200 sm:grid-cols-[minmax(0,1.45fr)_0.65fr_0.65fr_0.65fr_auto] sm:items-center [&::-webkit-details-marker]:hidden">
         <div className="flex min-w-0 items-center gap-3">
           <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-[#eadccb]">
@@ -292,6 +316,7 @@ function ManagedBusinessWorkspaceRow({
           <ListingPlanPanel
             available={listingPlansAvailable}
             business={business}
+            checkoutOutcome={checkoutOutcome}
             locale={locale}
             mockMode={listingPlansMockMode}
             states={listingPlanStates}
@@ -311,11 +336,52 @@ function ManagedBusinessWorkspaceRow({
   );
 }
 
-export async function DashboardPageView({ locale }: { locale: Locale }) {
+// Query string Stripe Checkout sends owners back with, plus `business` to open
+// one listing's plans from the next-step card.
+export type DashboardSearchParams = {
+  business?: string;
+  listingPlan?: string;
+  session_id?: string;
+};
+
+// Saves the plan as soon as the owner is back from a paid checkout, without
+// waiting for the webhook (#449). A failure here only falls back to the
+// webhook, so it never breaks the dashboard.
+async function confirmReturnedPlanCheckout(
+  profileId: string | undefined,
+  searchParams: DashboardSearchParams
+): Promise<ListingPlanCheckoutOutcome | undefined> {
+  if (!profileId || searchParams.listingPlan !== 'success' || !searchParams.session_id) {
+    return undefined;
+  }
+
+  try {
+    return await confirmListingPlanCheckoutForProfile({
+      checkoutSessionId: searchParams.session_id,
+      profileId,
+    });
+  } catch (error) {
+    console.error('[dashboard] Unable to confirm the returned plan checkout:', error);
+    return undefined;
+  }
+}
+
+export async function DashboardPageView({
+  locale,
+  searchParams = {},
+}: {
+  locale: Locale;
+  searchParams?: DashboardSearchParams;
+}) {
   const user = await getServerUserFromCookies();
   const normalizedUserEmail = user?.email?.trim().toLowerCase() ?? '';
+  const profilePromise = user ? ensureProfileForAuthUser(user) : Promise.resolve(null);
+  // Confirm before loading listings so a plan bought a moment ago shows as on.
+  const planCheckoutOutcome = await profilePromise.then((loadedProfile) =>
+    confirmReturnedPlanCheckout(loadedProfile?.id, searchParams)
+  );
   const [profile, ownerBusinesses] = await Promise.all([
-    user ? ensureProfileForAuthUser(user) : Promise.resolve(null),
+    profilePromise,
     getDirectoryBusinesses({}, { includeNonPublic: true, limit: 500 }),
   ]);
   const managedBusinesses = profile
@@ -344,13 +410,35 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
     recentInquiries,
     listingPlanAvailability,
     listingPlanStatesByBusinessId,
+    pendingClaims,
   ] = await Promise.all([
     getDirectoryAdsAvailability(),
     getBusinessLeadCounts({ businessIds: managedBusinessIds }),
     getRecentBusinessInquiries({ businessIds: managedBusinessIds, limit: 10 }),
     getListingPlanAvailability(),
     getListingPlanStatesForOwnerBusinesses(managedBusinesses),
+    profile ? getPendingBusinessClaimsForProfile(profile.id) : Promise.resolve([]),
   ]);
+  const listingPlansAvailable = listingPlanAvailability.mode !== 'read_only';
+  const focusBusinessSlug =
+    managedBusinesses.length === 1 ? managedBusinesses[0].slug : searchParams.business;
+  const returnedFrom =
+    searchParams.listingPlan === 'success' || searchParams.listingPlan === 'cancelled'
+      ? searchParams.listingPlan
+      : undefined;
+  const returnNotice =
+    returnedFrom && managedBusinesses.some((business) => business.slug === searchParams.business)
+      ? listingPlanReturnMessage(returnedFrom, planCheckoutOutcome, locale)
+      : undefined;
+  const upgradeTargets = listingPlansAvailable
+    ? managedBusinesses
+        // The listing just paid for gets the payment note, not another offer.
+        .filter((business) => !(returnedFrom === 'success' && business.slug === searchParams.business))
+        .map((business) =>
+          buildOwnerUpgradeTarget(business, listingPlanStatesByBusinessId.get(business.id) ?? [], locale)
+        )
+        .filter((target): target is OwnerUpgradeTarget => target !== null)
+    : [];
   const showLeadSummary = managedBusinesses.length > 0 && isSupabaseServiceConfigured();
   const directoryAdsMode = directoryAdsAvailability.mode;
   const adsAvailable = directoryAdsMode !== 'read_only';
@@ -371,6 +459,14 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
 
   return sectionContainer(
     <div className="space-y-8 py-10 sm:py-12 lg:py-14">
+      {/* The owner's next step comes first: a payment note, a claim under review or an upgrade (#451). */}
+      <OwnerNextSteps
+        dashboardPath={withLocale(locale, '/dashboard')}
+        locale={locale}
+        pendingClaims={pendingClaims}
+        returnNotice={returnNotice}
+        upgradeTargets={upgradeTargets}
+      />
       <section className="relative overflow-hidden rounded-[2rem] border border-[#e5d7c8] bg-[#fffdfa] shadow-[0_30px_80px_rgba(74,49,27,0.09)]">
         <div className="absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,#662116,#b87f3d,#f7e8d0)]" />
         <div className="grid gap-8 p-6 sm:p-8 xl:grid-cols-[minmax(0,1.16fr)_minmax(320px,0.84fr)] xl:p-10">
@@ -671,9 +767,11 @@ export async function DashboardPageView({ locale }: { locale: Locale }) {
                     campaign={adCampaignsByBusinessId.get(business.id)}
                     locale={locale}
                     readOnlyReason={directoryAdsAvailability.unavailableReason}
-                    listingPlansAvailable={listingPlanAvailability.mode !== 'read_only'}
+                    listingPlansAvailable={listingPlansAvailable}
                     listingPlansMockMode={listingPlanAvailability.mode === 'mock'}
                     listingPlanStates={listingPlanStatesByBusinessId.get(business.id) ?? []}
+                    checkoutOutcome={business.slug === searchParams.business ? planCheckoutOutcome : undefined}
+                    defaultOpen={business.slug === focusBusinessSlug}
                   />
                 ))}
               </div>
