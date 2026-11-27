@@ -58,9 +58,31 @@ While fetching sites, five listing websites turned out to redirect to gambling-s
 
 The one-line notes are under 180 characters, so these pages stay out of the index until someone confirms the businesses are open and finds their current websites.
 
+## Website scan (all listings)
+
+After the enrichment, every listing website (103 at the time) was fetched twice: once as a normal browser, and once with Google's crawler user agent, because hacked sites often show spam only to Google. Each page was checked for gambling-spam words, parked-domain pages, redirects to another domain, and errors. Page titles were also read by hand to catch domains resold to an unrelated business. The whole database was also searched for spam words in names, descriptions and search aliases.
+
+No site showed spam only to Google. These listings were fixed (batch 6 below):
+
+| Slug | What the listed website does now | Change |
+|---|---|---|
+| `cha-tea-mesa` | chateaboba.com redirects to an Indonesian slot-gambling site | `website` null |
+| `cyclo-vietnamese-cuisine-chandler` | ordercyclo.com redirects to an Indonesian slot-gambling site | `website` null (this listing has no phone, so it now has no contact method; it stays public only because it is editor-verified) |
+| `diamond-chinese-restaurant-phoenix` | diamondcntogo.com is not registered to anyone; the description was Thai slot-gambling spam | `website` null; description replaced with a one-line address note |
+| `yin-s-chinese-restaurant-phoenix` | yinschineseaz.com sends visitors through a parked-domain ad router (parklogic) | `website` null |
+| `chou-s-kitchen-chandler` | chouskitchen.com is a GoDaddy parking page | `website` null (phone and email remain; page stays indexable) |
+| `beijing-chinese-food-chandler` | beijingchandleraz.com is a GoDaddy parking page | `website` null |
+| `asian-garden-express-glendale` | asiangardenexpressglendale.com is not registered; anyone could buy it | `website` null |
+| `bao-chow-tempe` | baochow.com is not registered; anyone could buy it | `website` null |
+| `big-wa-chinese-tempe` | its `search_aliases` still held the spam phrase VOCs在线监测系统 | alias removed |
+
+Left alone, but worth a look: `liyuen-phoenix` (domain on registrar hold), `szechuan-chinese-glendale` (domain registered but has no DNS), `ikkyu-tucson` (hosting "almost here" placeholder) and `china-way-restaurant-chandler` (HTTPS does not answer). These domains still belong to someone, so they are not an immediate hijack risk. Seven restaurant sites behind a Vercel bot checkpoint, plus the CVS, McDonald's, 99 Ranch and eHotPot pages, refused automated requests and could not be checked.
+
+After these fixes: 95 listings have a website, 48 business pages are indexable (unchanged), and no listing text matches the spam word list.
+
 ## Rollback
 
-`listing-enrichment-2026-11-before.json` (next to this file) holds the previous value of every column this work changed, for all 50 rows. Restoring a row means writing those values back with an `update ... where slug = ...`.
+`listing-enrichment-2026-11-before.json` (next to this file) holds the previous value of every column this work changed, for all 58 rows (50 in the enrichment and first safety fixes, 8 more from the website scan). Restoring a row means writing those values back with an `update ... where slug = ...`.
 
 ## Listings and sources
 
@@ -144,13 +166,15 @@ Picked in the order real estate, legal and finance, medical, education, home ser
 | CVS (3), Walgreens (3), BMO, H&R Block, MidFirst Bank, Global Credit Union, Arizona Central Credit Union, LoanMax, Banner Urgent Care, SimonMed, Miracle-Ear, Discover Vein & Vascular, Ace Hardware, Discount Tire, FedEx Office, The UPS Store, USA Tae Kwon Do | Chains and franchises. Their own store pages already cover them and they are low value for this directory, so they were deferred in favor of independent and Chinese-community businesses. |
 | `china-chili-phoenix`, `desert-jade-phoenix`, `wong-s-chinese-dining-phoenix`, `hing-loon-chinese-express-glendale` | Site text is too thin (menus are images) to write 180+ characters of verified copy. |
 | `king-wong-chinese-food-phoenix`, `china-jade-tempe`, `dragon-express-mesa`, `new-hong-kong-phoenix`, `ming-gee-chinese-food-restaurant-glendale`, `beijing-express-tempe`, `china-pasta-house-tucson`, `chen-wok-phoenix` | Sites sit behind a bot checkpoint and carry only generic ordering-platform copy. |
-| `asian-garden-express-glendale`, `bao-chow-tempe`, `diamond-chinese-restaurant-phoenix`, `flamingo-palace-phoenix`, `szechuan-chinese-glendale`, `china-way-restaurant-chandler`, `liyuen-phoenix` | Website did not load. |
-| `ehotpot-tucson`, `beijing-chinese-food-chandler`, `yin-s-chinese-restaurant-phoenix`, `chou-s-kitchen-chandler` | Website blocked the request or returned an empty script-only page. |
+| `asian-garden-express-glendale`, `bao-chow-tempe`, `diamond-chinese-restaurant-phoenix` | Domain is no longer registered (link removed, see website scan). |
+| `flamingo-palace-phoenix`, `szechuan-chinese-glendale`, `china-way-restaurant-chandler`, `liyuen-phoenix` | Website did not load over HTTPS at the time. Flamingo Palace loads over plain HTTP and can go in the next batch. |
+| `ehotpot-tucson` | Website refuses automated requests (403). |
+| `beijing-chinese-food-chandler`, `yin-s-chinese-restaurant-phoenix`, `chou-s-kitchen-chandler` | Domain is parked (link removed, see website scan). |
 
 ## Follow-ups
 
-1. Check whether the five safety-fix restaurants are still open and find their current websites.
-2. Scan the remaining listing websites for hijacked domains. About 70 of the 103 listing websites were fetched here; the rest (chains, shopping, beauty and faith listings, and restaurants not picked) were not.
+1. Check whether the 13 restaurants whose links were removed are still open, and add their current websites if they have one.
+2. Re-run the website scan every few months; domains keep lapsing.
 3. Eight listings have `Traditional Chinese` in `languages`, which is a script, not a spoken language. Worth a cleanup pass.
 4. AAABA's official address is 531 E Thomas Rd, Suite 200, Phoenix 85012 (its contact page); the listing still shows a P.O. box.
 5. Next batch: the skipped restaurants above once their sites can be read, then chains if wanted.
@@ -644,4 +668,25 @@ where slug = 'chen-s-noodle-house-tempe' and status in ('live','stale');
 ```
 
 </details>
+
+### Batch 6: website scan fixes
+
+```sql
+-- Website scan fixes: links to gambling redirects, parked domains, or domains nobody owns.
+update public.businesses set website = null, last_updated = now()
+where slug in ('cha-tea-mesa', 'cyclo-vietnamese-cuisine-chandler', 'chou-s-kitchen-chandler',
+  'beijing-chinese-food-chandler', 'yin-s-chinese-restaurant-phoenix', 'asian-garden-express-glendale',
+  'bao-chow-tempe');
+
+update public.businesses set website = null,
+  description_en = $enr$Diamond Chinese Restaurant is a restaurant listed at 4402 N 7th Ave in Phoenix.$enr$,
+  short_description_en = $enr$Diamond Chinese Restaurant is a restaurant listed at 4402 N 7th Ave in Phoenix.$enr$,
+  last_updated = now()
+where slug = 'diamond-chinese-restaurant-phoenix';
+
+update public.businesses set search_aliases = array_remove(search_aliases, 'VOCs在线监测系统'), last_updated = now()
+where slug = 'big-wa-chinese-tempe';
+```
+
+The connector timed out on the first try (nothing applied), so this ran again as two calls with the same statements.
 
