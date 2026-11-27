@@ -55,7 +55,7 @@ Same two-pass check as the "Website scan" in `listing-enrichment-2026-11.md`: ea
 - Browser and Googlebot saw the same page on 12 sites. comparioninsurance.com and remax.com return 403 to the Googlebot user agent from a non-Google address; that is their bot protection, not cloaking (the browser fetch shows the agent's normal profile).
 - None of the 14 websites is one of the domains removed in the enrichment work (bigwatempe.com, azhotpot.com, nanzhounoodlemesa.com, kwansmesa.com, the81hongkongcafe.com, chateaboba.com, ordercyclo.com, diamondcntogo.com, yinschineseaz.com, chouskitchen.com, beijingchandleraz.com, asiangardenexpressglendale.com, baochow.com).
 
-## Corrections to existing listings
+## Corrections to existing listings (issue #470)
 
 Sales found wrong facts on listings we are about to pitch. Each was checked against the business's own website or an official source. Fixes are in `listing-expansion-2026-11-corrections.sql` (applied to dev on 2026-11-27, pages checked on dev.chinesearizona.com); `listing-expansion-2026-11-corrections-rollback.sql` writes back the production values captured the same day. Slugs are unchanged, so no URL changes.
 
