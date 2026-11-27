@@ -10,6 +10,9 @@ import {
   speaksChinese,
 } from '@/lib/business-seo';
 import { siteProfiles } from '@/lib/site-config';
+import type { Business } from '@/lib/types';
+
+type SeoBusiness = Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages' | 'bilingual'>;
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: ReactNode; [key: string]: unknown }) => (
@@ -31,7 +34,7 @@ vi.mock('@/components/forms/ReportIssueForm', () => ({
   ReportIssueForm: ({ entitySlug }: { entitySlug: string }) => <div data-report-issue={entitySlug} />,
 }));
 
-const realtor = {
+const realtor: SeoBusiness = {
   name: { en: 'Hedy Li', zh: 'Hedy Li' },
   city: 'Phoenix',
   categorySlug: 'real-estate',
@@ -39,7 +42,7 @@ const realtor = {
   bilingual: false,
 };
 
-const clinic = {
+const clinic: SeoBusiness = {
   name: { en: 'Desert Clinic', zh: '沙漠診所' },
   city: 'Tucson',
   categorySlug: 'medical',
