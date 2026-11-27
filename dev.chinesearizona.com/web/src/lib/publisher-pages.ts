@@ -185,6 +185,11 @@ export function getPublisherPageCopy(
               'We use information to operate the site, maintain accounts, review business claims, publish and correct listings, moderate community submissions, prevent abuse, process marketplace or advertising transactions, and improve reader experience.',
               '我們使用資料來營運網站、維護帳號、審核商家認領、發布與修正商家資料、審核社群投稿、防止濫用、處理市集或廣告交易，以及改善讀者體驗。'
             ),
+            copy(
+              locale,
+              'If you sign up for our newsletter, we keep your email address, language, the page you signed up from, and when you agreed, and use them only to send the newsletter. We do not sell or share the list. You can unsubscribe at any time.',
+              '若你訂閱電子報，我們會保存你的電子郵件、語言、訂閱時所在的頁面與同意時間，僅用於寄送電子報。我們不會出售或分享訂閱名單，你可以隨時取消訂閱。'
+            ),
           ],
         },
         {
