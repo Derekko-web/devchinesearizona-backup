@@ -97,6 +97,10 @@ type PageProps = {
     businessSlug?: string;
     page?: string;
     plan?: string;
+    // Dashboard return from Stripe Checkout (#449, #451).
+    business?: string;
+    listingPlan?: string;
+    session_id?: string;
   }>;
 };
 
@@ -462,7 +466,13 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
 
   if (segments[0] === 'dashboard') {
     await requireAuthenticatedPageUser(locale, withLocale(locale, '/dashboard'));
-    return <DashboardPageView locale={locale} />;
+    const query = await searchParams;
+    return (
+      <DashboardPageView
+        locale={locale}
+        searchParams={{ business: query.business, listingPlan: query.listingPlan, session_id: query.session_id }}
+      />
+    );
   }
 
   if (segments[0] === 'admin') {

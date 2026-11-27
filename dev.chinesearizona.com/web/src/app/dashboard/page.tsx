@@ -1,11 +1,15 @@
 import { dashboardMetadata } from '@/lib/page-metadata';
 import { requireAuthenticatedPageUser } from '@/lib/page-auth';
-import { DashboardPageView } from '@/views/site-pages';
+import { DashboardPageView, type DashboardSearchParams } from '@/views/site-pages';
 
 export const metadata = dashboardMetadata('en');
 export const dynamic = 'force-dynamic';
 
-export default async function Page() {
+type PageProps = {
+  searchParams: Promise<DashboardSearchParams>;
+};
+
+export default async function Page({ searchParams }: PageProps) {
   await requireAuthenticatedPageUser('en', '/dashboard');
-  return <DashboardPageView locale="en" />;
+  return <DashboardPageView locale="en" searchParams={await searchParams} />;
 }

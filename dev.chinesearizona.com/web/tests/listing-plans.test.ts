@@ -8,6 +8,7 @@ import {
   findListingPlanOffer,
   formatListingPlanUsd,
   listingPlanOffers,
+  listingPlanReturnMessage,
   qualifiesForFoundingPrice,
 } from '@/lib/listing-plan-offers';
 import { splitSponsoredListings } from '@/lib/metro-categories';
@@ -155,10 +156,17 @@ function planResolver(fixture: Fixture): Resolver {
 
 async function loadPlans(
   resolve: Resolver,
-  { mode = 'stripe', sessionUrl = 'https://checkout.stripe.test/cs_new' }: { mode?: string; sessionUrl?: string | null } = {}
+  {
+    mode = 'stripe',
+    sessionUrl = 'https://checkout.stripe.test/cs_new',
+    retrievedSession,
+  }: { mode?: string; sessionUrl?: string | null; retrievedSession?: Partial<Stripe.Checkout.Session> } = {}
 ) {
+  // A fresh module per load, so one test can load several setups.
+  vi.resetModules();
   const fake = createFakeClient(resolve);
   const createSession = vi.fn().mockResolvedValue({ id: 'cs_new', url: sessionUrl });
+  const retrieveSession = vi.fn().mockResolvedValue(retrievedSession ?? {});
   vi.doMock('@/lib/supabase', () => ({
     getSupabaseServiceClient: () => fake.client,
     isSupabaseServiceConfigured: () => true,
@@ -167,12 +175,12 @@ async function loadPlans(
     getDirectoryAdsRuntimeMode: () => mode,
   }));
   vi.doMock('@/lib/stripe', () => ({
-    getStripeClient: () => ({ checkout: { sessions: { create: createSession } } }),
+    getStripeClient: () => ({ checkout: { sessions: { create: createSession, retrieve: retrieveSession } } }),
     isStripeConfigured: () => true,
   }));
   const plans = await import('@/lib/listing-plans');
   plans.resetListingPlanSchemaCache();
-  return { plans, createSession, ...fake };
+  return { plans, createSession, retrieveSession, ...fake };
 }
 
 beforeEach(() => {
@@ -453,6 +461,105 @@ describe('handleListingPlanStripeEvent', () => {
   });
 });
 
+describe('confirmListingPlanCheckoutForProfile (#449)', () => {
+  const metadata = {
+    checkout_kind: 'listing_plan',
+    plan_id: 'enhanced-listing',
+    plan_interval: 'year',
+    business_id: 'b-1',
+    owner_profile_id: 'profile-1',
+    founding: 'true',
+    price_cents: '9900',
+    scope_category: '',
+  };
+  const paidSession = {
+    id: 'cs_test_paid123',
+    amount_total: 9_900,
+    metadata,
+    payment_intent: 'pi_paid',
+    payment_status: 'paid',
+  } as Partial<Stripe.Checkout.Session>;
+
+  it('saves a paid plan when the owner comes back, without waiting for the webhook', async () => {
+    const { plans, calls, retrieveSession } = await loadPlans(planResolver({ business: { id: 'b-1' } }), {
+      retrievedSession: paidSession,
+    });
+
+    await expect(
+      plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId: 'cs_test_paid123', profileId: 'profile-1' })
+    ).resolves.toBe('saved');
+
+    expect(retrieveSession).toHaveBeenCalledWith('cs_test_paid123');
+    const insert = calls.find((call) => hasOp(call, 'insert'));
+    expect(opArgs(insert!, 'insert')[0]).toMatchObject({
+      amount_cents: 9_900,
+      founding: true,
+      plan_id: 'enhanced-listing',
+      stripe_checkout_session_id: 'cs_test_paid123',
+    });
+  });
+
+  it('does nothing more when the webhook already saved it', async () => {
+    const { plans, calls } = await loadPlans(
+      planResolver({ business: { id: 'b-1' }, existingSession: { id: 'plan-1' } }),
+      { retrievedSession: paidSession }
+    );
+
+    await expect(
+      plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId: 'cs_test_paid123', profileId: 'profile-1' })
+    ).resolves.toBe('duplicate');
+    expect(calls.some((call) => hasOp(call, 'insert'))).toBe(false);
+  });
+
+  it('waits for a bank payment that has not cleared', async () => {
+    const { plans, calls } = await loadPlans(planResolver({ business: { id: 'b-1' } }), {
+      retrievedSession: { ...paidSession, payment_status: 'unpaid' },
+    });
+
+    await expect(
+      plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId: 'cs_test_paid123', profileId: 'profile-1' })
+    ).resolves.toBe('pending');
+    expect(calls).toHaveLength(0);
+  });
+
+  it("ignores another owner's session, ad checkouts and malformed IDs", async () => {
+    const other = await loadPlans(planResolver({ business: { id: 'b-1' } }), { retrievedSession: paidSession });
+    await expect(
+      other.plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId: 'cs_test_paid123', profileId: 'profile-2' })
+    ).resolves.toBe('ignored');
+    expect(other.calls).toHaveLength(0);
+
+    const ad = await loadPlans(planResolver({ business: { id: 'b-1' } }), {
+      retrievedSession: { ...paidSession, metadata: { ...metadata, checkout_kind: 'directory_ad' } },
+    });
+    await expect(
+      ad.plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId: 'cs_test_paid123', profileId: 'profile-1' })
+    ).resolves.toBe('ignored');
+    expect(ad.calls).toHaveLength(0);
+
+    const malformed = await loadPlans(planResolver({}), { retrievedSession: paidSession });
+    for (const checkoutSessionId of ['{CHECKOUT_SESSION_ID}', 'pi_123', 'cs_test_../../x', '']) {
+      await expect(
+        malformed.plans.confirmListingPlanCheckoutForProfile({ checkoutSessionId, profileId: 'profile-1' })
+      ).resolves.toBe('ignored');
+    }
+    expect(malformed.retrieveSession).not.toHaveBeenCalled();
+  });
+});
+
+describe('listingPlanReturnMessage', () => {
+  it('tells the owner the plan is on, still processing, or coming, in English and Chinese', () => {
+    expect(listingPlanReturnMessage('success', 'saved', 'en').message).toContain('Your plan is now on.');
+    expect(listingPlanReturnMessage('success', 'duplicate', 'zh').message).toContain('你的方案已經啟用');
+    expect(listingPlanReturnMessage('success', 'pending', 'en').message).toContain('bank payment is still processing');
+    expect(listingPlanReturnMessage('success', undefined, 'en').message).toContain('turns on within a minute');
+    expect(listingPlanReturnMessage('cancelled', undefined, 'zh')).toEqual({
+      tone: 'error',
+      message: '已取消結帳，沒有收取任何費用。',
+    });
+  });
+});
+
 describe('createListingPlanCheckoutForProfile', () => {
   const input = {
     baseUrl: 'https://chinesearizona.com',
@@ -478,7 +585,10 @@ describe('createListingPlanCheckoutForProfile', () => {
     expect(params).toMatchObject({
       mode: 'payment',
       customer_email: 'owner@example.com',
-      success_url: 'https://chinesearizona.com/en/dashboard?listingPlan=success&business=lotus-kitchen',
+      locale: 'en',
+      // Raw braces: Stripe only fills in the session ID when they are not encoded (#449).
+      success_url:
+        'https://chinesearizona.com/en/dashboard?listingPlan=success&business=lotus-kitchen&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://chinesearizona.com/en/dashboard?listingPlan=cancelled&business=lotus-kitchen',
       metadata: {
         checkout_kind: 'listing_plan',
@@ -541,6 +651,18 @@ describe('createListingPlanCheckoutForProfile', () => {
     vi.resetModules();
     const readOnly = await loadPlans(planResolver({}), { mode: 'read_only' });
     await expect(readOnly.plans.createListingPlanCheckoutForProfile(input)).rejects.toMatchObject({ status: 503 });
+  });
+
+  it('opens a Traditional Chinese checkout page for the Chinese dashboard', async () => {
+    const { plans, createSession } = await loadPlans(planResolver({}));
+
+    await plans.createListingPlanCheckoutForProfile({ ...input, locale: 'zh' });
+
+    expect(createSession.mock.calls[0][0]).toMatchObject({
+      locale: 'zh-TW',
+      success_url:
+        'https://chinesearizona.com/zh/dashboard?listingPlan=success&business=lotus-kitchen&session_id={CHECKOUT_SESSION_ID}',
+    });
   });
 
   it('turns the plan on directly in local test mode without calling Stripe', async () => {

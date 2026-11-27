@@ -9,7 +9,9 @@ import {
   listingPlanIds,
   listingPlanNames,
   listingPlanPriceCents,
+  listingPlanReturnMessage,
   listingPlanTermLabel,
+  type ListingPlanCheckoutOutcome,
   type ListingPlanId,
   type ListingPlanInterval,
   type ListingPlanOwnerState,
@@ -19,6 +21,8 @@ import type { Business, Locale } from '@/lib/types';
 type ListingPlanPanelProps = {
   available: boolean;
   business: Pick<Business, 'slug' | 'status' | 'verificationState'>;
+  // What the server found when the owner came back from Checkout (#449).
+  checkoutOutcome?: ListingPlanCheckoutOutcome;
   locale: Locale;
   mockMode?: boolean;
   states: ListingPlanOwnerState[];
@@ -44,7 +48,14 @@ function formatDate(value: string, locale: Locale) {
   }).format(new Date(value));
 }
 
-export function ListingPlanPanel({ available, business, locale, mockMode, states }: ListingPlanPanelProps) {
+export function ListingPlanPanel({
+  available,
+  business,
+  checkoutOutcome,
+  locale,
+  mockMode,
+  states,
+}: ListingPlanPanelProps) {
   const zh = locale === 'zh';
   const [busy, setBusy] = useState<string | null>(null);
   const [status, setStatus] = useState<StatusMessage | null>(null);
@@ -56,21 +67,11 @@ export function ListingPlanPanel({ available, business, locale, mockMode, states
       return;
     }
 
-    const outcome = params.get('listingPlan');
-    if (outcome === 'success') {
-      setStatus({
-        tone: 'success',
-        message: zh
-          ? '已收到付款，謝謝！方案會在一分鐘內啟用，重新整理頁面即可看到。'
-          : 'Payment received, thank you! Your plan turns on within a minute. Refresh this page to see it.',
-      });
-    } else if (outcome === 'cancelled') {
-      setStatus({
-        tone: 'error',
-        message: zh ? '已取消結帳，沒有收取任何費用。' : 'Checkout was cancelled. You were not charged.',
-      });
+    const returned = params.get('listingPlan');
+    if (returned === 'success' || returned === 'cancelled') {
+      setStatus(listingPlanReturnMessage(returned, checkoutOutcome, locale));
     }
-  }, [business.slug, zh]);
+  }, [business.slug, checkoutOutcome, locale]);
 
   async function buy(planId: ListingPlanId, interval: ListingPlanInterval) {
     setBusy(`${planId}:${interval}`);
@@ -105,7 +106,11 @@ export function ListingPlanPanel({ available, business, locale, mockMode, states
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" data-testid="listing-plan-panel">
+    <div
+      id={`plans-${business.slug}`}
+      className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+      data-testid="listing-plan-panel"
+    >
       <div className="space-y-2">
         <div className="inline-flex rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">
           {zh ? '商家方案' : 'Listing plans'}

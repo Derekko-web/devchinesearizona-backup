@@ -636,6 +636,43 @@ export async function getPendingBusinessClaimsSnapshot(): Promise<BusinessClaim[
   return getBusinessClaims().filter((claim) => claim.status === 'pending');
 }
 
+export type OwnerPendingClaim = {
+  id: string;
+  businessName: string;
+  businessSlug?: string;
+  createdAt: string;
+};
+
+// Claims this owner sent that staff have not reviewed yet, so the dashboard
+// can say "under review" instead of showing nothing (#451).
+export async function getPendingBusinessClaimsForProfile(profileId: string): Promise<OwnerPendingClaim[]> {
+  const client = getSupabaseServiceClient();
+  if (!client || !profileId) {
+    return [];
+  }
+
+  const { data, error } = await client
+    .from('business_claims')
+    .select('id, business_name, business_slug, created_at')
+    .eq('profile_id', profileId)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error || !Array.isArray(data)) {
+    return [];
+  }
+
+  return (data as Array<{ id: string; business_name: string; business_slug: string | null; created_at: string }>).map(
+    (claim) => ({
+      id: claim.id,
+      businessName: claim.business_name,
+      businessSlug: claim.business_slug ?? undefined,
+      createdAt: claim.created_at,
+    })
+  );
+}
+
 export async function getModerationReportsSnapshot(): Promise<ModerationReport[]> {
   const client = getSupabaseServiceClient() ?? getSupabaseClient();
   if (client) {
