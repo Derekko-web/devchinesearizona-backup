@@ -11,6 +11,7 @@ import {
   listingPlanNames,
   listingPlanPriceCents,
   qualifiesForFoundingPrice,
+  type ListingPlanCheckoutOutcome,
   type ListingPlanId,
   type ListingPlanInterval,
   type ListingPlanOwnerState,
@@ -402,6 +403,13 @@ function dashboardReturnUrl(
   return url.toString();
 }
 
+// Stripe swaps in the session ID only when the braces are not URL-encoded, so
+// the placeholder is appended as plain text. The dashboard uses it to save the
+// plan as soon as the owner is back (#449).
+function stripeSuccessUrl(locale: Locale, businessSlug: string, baseUrl = siteUrl) {
+  return `${dashboardReturnUrl(locale, businessSlug, 'success', baseUrl)}&session_id={CHECKOUT_SESSION_ID}`;
+}
+
 function mockId(prefix: 'cs_test' | 'pi_test') {
   return `${prefix}_listing_plan_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
@@ -591,7 +599,7 @@ export async function createListingPlanCheckoutForProfile(input: {
   const term = offer.interval === 'year' ? '1 year' : '1 month';
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
-    success_url: dashboardReturnUrl(locale, business.slug, 'success', input.baseUrl),
+    success_url: stripeSuccessUrl(locale, business.slug, input.baseUrl),
     cancel_url: dashboardReturnUrl(locale, business.slug, 'cancelled', input.baseUrl),
     line_items: [
       {
@@ -615,6 +623,8 @@ export async function createListingPlanCheckoutForProfile(input: {
     ],
     metadata,
     customer_email: input.userEmail ?? undefined,
+    // Chinese-speaking owners pay on a Traditional Chinese checkout page.
+    locale: locale === 'zh' ? 'zh-TW' : 'en',
     expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
   });
 
@@ -625,27 +635,29 @@ export async function createListingPlanCheckoutForProfile(input: {
   return { message: 'Plan checkout created.', mode: 'redirect', url: session.url };
 }
 
-async function finalizeListingPlanCheckout(session: Stripe.Checkout.Session) {
+async function finalizeListingPlanCheckout(
+  session: Stripe.Checkout.Session
+): Promise<ListingPlanCheckoutOutcome> {
   const metadata = session.metadata ?? {};
   if (metadata.checkout_kind !== CHECKOUT_KIND) {
-    return;
+    return 'ignored';
   }
 
   // A delayed payment method (bank debit) completes checkout before the money
   // arrives. The plan turns on when `checkout.session.async_payment_succeeded`
   // reports the payment.
   if (session.payment_status === 'unpaid') {
-    return;
+    return 'pending';
   }
 
   const planId = metadata.plan_id;
   const interval = metadata.plan_interval;
   if (!isListingPlanId(planId) || !isListingPlanInterval(interval) || !metadata.business_id) {
     console.error('[listing-plans] Checkout session has unusable plan metadata:', session.id);
-    return;
+    return 'ignored';
   }
 
-  await recordListingPlanPurchase({
+  return recordListingPlanPurchase({
     amountCents: session.amount_total ?? Number(metadata.price_cents ?? 0),
     businessId: metadata.business_id,
     checkoutSessionId: session.id,
@@ -656,6 +668,33 @@ async function finalizeListingPlanCheckout(session: Stripe.Checkout.Session) {
     planId,
     scopeCategory: metadata.scope_category || null,
   });
+}
+
+const CHECKOUT_SESSION_ID_PATTERN = /^cs_(?:test|live)_[A-Za-z0-9]{1,250}$/;
+
+// Saves the plan when the owner comes back from Stripe Checkout, so a paid
+// plan never depends only on the webhook arriving (#449). It runs the same
+// save as the webhook, and whichever comes second does nothing. Only the
+// owner the checkout was made for can trigger it.
+export async function confirmListingPlanCheckoutForProfile(input: {
+  checkoutSessionId: string;
+  profileId: string;
+}): Promise<ListingPlanCheckoutOutcome> {
+  if (!CHECKOUT_SESSION_ID_PATTERN.test(input.checkoutSessionId) || !isSupabaseServiceConfigured()) {
+    return 'ignored';
+  }
+
+  const stripe = getStripeClient();
+  if (!stripe) {
+    return 'ignored';
+  }
+
+  const session = await stripe.checkout.sessions.retrieve(input.checkoutSessionId);
+  if (session.metadata?.owner_profile_id !== input.profileId) {
+    return 'ignored';
+  }
+
+  return finalizeListingPlanCheckout(session);
 }
 
 export async function handleListingPlanStripeEvent(event: Stripe.Event) {

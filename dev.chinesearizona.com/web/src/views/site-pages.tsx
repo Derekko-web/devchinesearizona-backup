@@ -9,7 +9,7 @@ export { NewsArchivePageView, ArticleDetailPageView } from '@/views/news-pages';
 export { EventDetailPageView, CommunityPostDetailPageView } from '@/views/community-detail-pages';
 export { AddBusinessPageView } from '@/views/add-business-page';
 export { ProfilePageView } from '@/views/profile-page';
-export { DashboardPageView } from '@/views/dashboard-page';
+export { DashboardPageView, type DashboardSearchParams } from '@/views/dashboard-page';
 export { AdminPageView } from '@/views/admin-page';
 export { HiddenArizonaDetailPageView, HiddenArizonaHubPageView } from '@/views/hidden-arizona';
 export {
