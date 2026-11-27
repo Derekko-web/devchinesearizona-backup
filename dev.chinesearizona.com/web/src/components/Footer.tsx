@@ -54,6 +54,19 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
     { href: '/terms', label: locale === 'zh' ? '條款' : 'Terms' },
     { href: '/editorial-policy', label: locale === 'zh' ? '編輯政策' : 'Editorial Policy' },
   ];
+  // Every page links to the landing pages of the categories professionals pay
+  // for, so search engines find and rank them. Plain labels: not every listing
+  // in a category has said it offers Chinese-language service.
+  const professionalCategoryLinks =
+    site.directory.listingSource.state === 'live'
+      ? [
+          { slug: 'real-estate', label: locale === 'zh' ? '地產經紀' : 'Realtors' },
+          { slug: 'legal-finance', label: locale === 'zh' ? '律師與會計師' : 'Lawyers & Accountants' },
+          { slug: 'medical', label: locale === 'zh' ? '醫師與診所' : 'Doctors & Clinics' },
+          { slug: 'education', label: locale === 'zh' ? '中文學校與補習' : 'Schools & Tutoring' },
+          { slug: 'home-services', label: locale === 'zh' ? '居家維修' : 'Home Services' },
+        ].filter((item) => site.directory.categorySlugs.includes(item.slug))
+      : [];
 
   return (
     <footer className="w-full border-t border-[#dccab6] bg-[#faf6f0] text-[#4a382d]">
@@ -102,6 +115,23 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
             </div>
           </div>
         </div>
+        {professionalCategoryLinks.length > 0 ? (
+          <nav
+            aria-label={locale === 'zh' ? '專業服務分類' : 'Professional services'}
+            className="mx-auto mt-2 flex max-w-[1480px] flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-[#e5d8ca] pt-2 text-[11px] text-[#745f52]"
+          >
+            <span className="font-semibold text-[#2d211b]">{locale === 'zh' ? '找專業服務' : 'Find a professional'}</span>
+            {professionalCategoryLinks.map((item) => (
+              <Link
+                key={item.slug}
+                href={withLocale(locale, `/business/category/${item.slug}`)}
+                className="transition-colors hover:text-brand-600"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
         <div className="mx-auto mt-2 flex max-w-[1480px] flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-[#e5d8ca] pt-2 text-[11px] font-semibold text-[#745f52]">
           {[...footerLinks, ...publisherLinks].map((item) => (
             <Link
