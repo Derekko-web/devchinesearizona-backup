@@ -119,6 +119,58 @@ describe('BusinessDetailPageView', () => {
     }
   });
 
+  it('offers the claim flow on any main-site listing without an owner (#448)', async () => {
+    const { canClaimBusiness } = await import('@/views/business-detail-page');
+    const { defaultSiteProfile, siteProfiles } = await import('@/lib/site-config');
+
+    expect(canClaimBusiness({ verificationState: 'editor_verified' }, defaultSiteProfile)).toBe(true);
+    expect(canClaimBusiness({ verificationState: 'unverified' }, defaultSiteProfile)).toBe(true);
+    expect(
+      canClaimBusiness({ verificationState: 'editor_verified', ownerProfileSlug: 'owner' }, defaultSiteProfile)
+    ).toBe(false);
+    expect(canClaimBusiness({ verificationState: 'claimed' }, defaultSiteProfile)).toBe(false);
+    // City sites can't connect an owner to a verified listing, so they keep the old rule.
+    expect(canClaimBusiness({ verificationState: 'editor_verified' }, siteProfiles['los-angeles'])).toBe(false);
+    expect(canClaimBusiness({ verificationState: 'unverified' }, siteProfiles['los-angeles'])).toBe(true);
+  });
+
+  it('shows a bilingual "claim this listing free" prompt on an unclaimed verified listing (#448)', async () => {
+    const directory = await import('@/lib/directory');
+    const { defaultSiteProfile } = await import('@/lib/site-config');
+    const [sample] = await directory.getDirectoryBusinesses({}, { site: defaultSiteProfile, limit: 1 });
+    expect(sample).toBeDefined();
+    const unclaimed = { ...sample, verificationState: 'editor_verified' as const, ownerProfileSlug: undefined };
+    const spy = vi.spyOn(directory, 'getDirectoryBusinessBySlug').mockResolvedValue(unclaimed);
+
+    try {
+      const { BusinessDetailPageView } = await import('@/views/site-pages');
+      const render = async (locale: 'en' | 'zh') =>
+        renderToStaticMarkup(
+          await BusinessDetailPageView({ locale, slug: sample.slug, site: defaultSiteProfile })
+        );
+      const claimHref = `/add-business?businessSlug=${encodeURIComponent(sample.slug)}`;
+
+      const en = await render('en');
+      expect(en).toContain('data-testid="claim-listing-prompt"');
+      expect(en).toContain('Is this your business?');
+      expect(en).toContain('Claim this listing free');
+      expect(en).toContain(`href="/en${claimHref}`);
+      expect(en).not.toContain('Business owners can still use the claim flow');
+
+      const zh = await render('zh');
+      expect(zh).toContain('這是你的商家嗎？');
+      expect(zh).toContain('免費認領此商家');
+      expect(zh).toContain(`href="/zh${claimHref}`);
+
+      spy.mockResolvedValue({ ...unclaimed, ownerProfileSlug: 'grace-lin' });
+      const claimed = await render('en');
+      expect(claimed).not.toContain('claim-listing-prompt');
+      expect(claimed).not.toContain('Claim this listing');
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
   it('hides the Chinese-language service box when no details are filled in', async () => {
     const { BusinessDetailPageView } = await import('@/views/site-pages');
     const { siteProfiles } = await import('@/lib/site-config');

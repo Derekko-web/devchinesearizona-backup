@@ -4,6 +4,7 @@ import { BadgeCheck, Heart, Languages, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { NewsletterSignupForm } from '@/components/NewsletterSignupForm';
 import { localeFromPath, withLocale } from '@/lib/routing';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
@@ -106,28 +107,11 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
                 </p>
               </div>
 
-              <form
-                className="flex w-full max-w-[400px] min-w-0 shrink-0 flex-col gap-2 sm:flex-row lg:w-auto lg:min-w-[320px] lg:max-w-[400px]"
-                action="#"
-              >
-                <label className="sr-only" htmlFor="footer-newsletter-email">
-                  {locale === 'zh' ? '電子郵件' : 'Email'}
-                </label>
-                <div className="min-w-0 flex-1">
-                  <input
-                    id="footer-newsletter-email"
-                    type="email"
-                    placeholder={locale === 'zh' ? '輸入你的信箱' : 'Enter your email'}
-                    className="h-10 min-w-0 w-full rounded-[10px] border border-[#dccbbc] bg-white px-3 text-[13px] text-[#352720] outline-none placeholder:text-[#9a897e] focus:border-brand-300"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[10px] bg-brand-600 px-4 text-[13px] font-semibold text-white transition-colors hover:bg-brand-700"
-                >
-                  {locale === 'zh' ? '訂閱' : 'Subscribe'}
-                </button>
-              </form>
+              <NewsletterSignupForm
+                locale={locale}
+                brandName={site.brandName}
+                privacyHref={withLocale(locale, '/privacy')}
+              />
             </div>
           </div>
         </div>
