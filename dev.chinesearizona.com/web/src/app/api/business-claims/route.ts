@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { requireApiUser, withApiAuthSession } from '@/lib/api-auth';
+import { notifyAdminOfBusinessClaim } from '@/lib/claim-notifications';
 import { parseBusinessPhotoSet } from '@/lib/business-media';
 import { submitBusinessClaim } from '@/lib/directory-moderation';
 import { resolveLocale } from '@/lib/i18n';
@@ -79,6 +80,8 @@ export async function POST(request: NextRequest) {
     });
 
     recordAnalyticsEvent('claim_submission', claim.businessSlug ?? claim.businessName, '/add-business');
+    // Best effort: the claim is saved even if this email fails or email is off (#464).
+    await notifyAdminOfBusinessClaim(claim);
 
     return json({
       message:

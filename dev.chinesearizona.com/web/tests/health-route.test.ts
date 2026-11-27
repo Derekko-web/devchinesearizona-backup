@@ -126,3 +126,36 @@ describe('GET /api/health Supabase reachability', () => {
     expect(body.checks.supabaseReachable).toMatchObject({ ok: false, required: true });
   });
 });
+
+describe('GET /api/health email checks (#464)', () => {
+  it('shows email as off without failing the health check', async () => {
+    configureSupabase(await startFakeSupabase('healthy'));
+    vi.stubEnv('RESEND_API_KEY', '');
+    vi.stubEnv('EMAIL_FROM', '');
+    vi.stubEnv('ADMIN_NOTIFICATION_EMAIL', '');
+
+    const response = await GET();
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.checks.email).toMatchObject({ ok: false, required: false });
+    expect(body.checks.email.message).toContain('nobody is emailed');
+    expect(body.checks.adminNotificationEmail).toMatchObject({ ok: false, required: false });
+  });
+
+  it('shows email as on once Resend and the admin address are set', async () => {
+    configureSupabase(await startFakeSupabase('healthy'));
+    vi.stubEnv('RESEND_API_KEY', 're_test_key');
+    vi.stubEnv('EMAIL_FROM', 'ChineseArizona <leads@chinesearizona.com>');
+    vi.stubEnv('ADMIN_NOTIFICATION_EMAIL', 'admin@chinesearizona.com');
+
+    const body = await (await GET()).json();
+
+    expect(body.checks.email).toMatchObject({ ok: true, required: false });
+    expect(body.checks.adminNotificationEmail).toMatchObject({ ok: true, required: false });
+    // Configuration state only: never the key or the addresses themselves.
+    expect(JSON.stringify(body)).not.toContain('re_test_key');
+    expect(JSON.stringify(body)).not.toContain('admin@chinesearizona.com');
+  });
+});

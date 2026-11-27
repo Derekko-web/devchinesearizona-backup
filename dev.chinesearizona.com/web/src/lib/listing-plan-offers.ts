@@ -96,6 +96,50 @@ export function listingPlanTermLabel(interval: ListingPlanInterval, locale: Loca
   return interval === 'year' ? '1 year' : '1 month';
 }
 
+// What happened to a checkout reported by the webhook or by the owner's
+// return from Stripe: the plan was saved now, was already saved, waits for a
+// delayed payment, or the session was not a usable plan purchase (#449).
+export type ListingPlanCheckoutOutcome = 'saved' | 'duplicate' | 'pending' | 'ignored';
+
+// The note an owner sees on the dashboard after Stripe Checkout sends them
+// back. `outcome` is unknown when the return could not be checked.
+export function listingPlanReturnMessage(
+  returned: 'success' | 'cancelled',
+  outcome: ListingPlanCheckoutOutcome | undefined,
+  locale: Locale
+): { message: string; tone: 'error' | 'success' } {
+  const zh = locale === 'zh';
+  if (returned === 'cancelled') {
+    return {
+      tone: 'error',
+      message: zh ? '已取消結帳，沒有收取任何費用。' : 'Checkout was cancelled. You were not charged.',
+    };
+  }
+
+  if (outcome === 'saved' || outcome === 'duplicate') {
+    return {
+      tone: 'success',
+      message: zh ? '已收到付款，謝謝！你的方案已經啟用。' : 'Payment received, thank you! Your plan is now on.',
+    };
+  }
+
+  if (outcome === 'pending') {
+    return {
+      tone: 'success',
+      message: zh
+        ? '謝謝！你的銀行付款仍在處理中，款項確認後方案會自動啟用。'
+        : 'Thank you! Your bank payment is still processing. The plan turns on by itself once the payment clears.',
+    };
+  }
+
+  return {
+    tone: 'success',
+    message: zh
+      ? '已收到付款，謝謝！方案會在一分鐘內啟用，重新整理頁面即可看到。'
+      : 'Payment received, thank you! Your plan turns on within a minute. Refresh this page to see it.',
+  };
+}
+
 // What the owner dashboard needs to show one plan for one listing.
 export type ListingPlanOwnerState = {
   planId: ListingPlanId;

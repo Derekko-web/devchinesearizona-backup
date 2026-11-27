@@ -69,7 +69,7 @@ import { absoluteUrl, resolveAbsoluteAssetUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
 import { withLocale } from '@/lib/routing';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
-import type { Locale } from '@/lib/types';
+import type { Business, Locale } from '@/lib/types';
 
 function formatCityStateLabel(city: string, site: SiteProfile): string {
   return site.stateCode ? `${city}, ${site.stateCode}` : city;
@@ -78,6 +78,21 @@ function formatCityStateLabel(city: string, site: SiteProfile): string {
 function formatCityRegionLabel(city: string, site: SiteProfile): string {
   const region = site.stateCode || site.stateRegion;
   return region ? `${city.toUpperCase()}, ${region.toUpperCase()}` : city.toUpperCase();
+}
+
+// A listing can be claimed while no owner is connected to it. Editors verify
+// most listings before anyone claims them, so "editor verified" still means
+// "unclaimed". City sites read static files and can't connect an owner, so
+// there only unverified listings offer the claim flow, as before (#448).
+export function canClaimBusiness(
+  business: Pick<Business, 'ownerProfileSlug' | 'verificationState'>,
+  site: Pick<SiteProfile, 'key'>
+): boolean {
+  if (business.ownerProfileSlug || business.verificationState === 'claimed') {
+    return false;
+  }
+
+  return site.key === defaultSiteProfile.key || business.verificationState === 'unverified';
 }
 
 export async function BusinessDetailPageView({
@@ -233,6 +248,7 @@ export async function BusinessDetailPageView({
   const usesCityGeneratedImages = site.key === 'austin' || site.key === 'los-angeles' || site.key === 'sf-bay';
   const leadsEnabled = businessLeadsEnabled(site);
   const showInquiryForm = leadsEnabled && isInquiryCategory(business.categorySlug);
+  const showClaimPrompt = canClaimBusiness(business, site);
   return (
     <div className="bg-[#f7f1e8] text-[#2c2722]">
       <JsonLd data={localBusinessJsonLd} />
@@ -441,6 +457,34 @@ export async function BusinessDetailPageView({
               </a>
             </div>
 
+            {showClaimPrompt ? (
+              <div
+                data-testid="claim-listing-prompt"
+                className="flex flex-col gap-3 rounded-lg border border-[#bd2730]/30 bg-[#fff6ef] px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#bd2730]" aria-hidden="true" />
+                  <p className="text-sm leading-6 text-[#4b4038]">
+                    <span className="font-semibold text-[#2c2722]">
+                      {locale === 'zh' ? '這是你的商家嗎？' : 'Is this your business?'}
+                    </span>{' '}
+                    {locale === 'zh'
+                      ? '免費認領，即可更新資料、加入照片，並查看有多少客人聯絡你。'
+                      : 'Claim it free to update your details, add photos and see how many customers contact you.'}
+                  </p>
+                </div>
+                <Link
+                  href={claimHref}
+                  className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-md bg-[#bd2730] px-4 text-sm font-semibold text-white transition hover:bg-[#a91f27] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bd2730]/35"
+                >
+                  {locale === 'zh' ? '免費認領此商家' : 'Claim this listing free'}
+                  <span className="text-xs font-medium text-white/75">
+                    {locale === 'zh' ? 'Claim free' : '免費認領'}
+                  </span>
+                </Link>
+              </div>
+            ) : null}
+
             <div className="grid gap-3 text-sm sm:grid-cols-2 xl:grid-cols-4">
               <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
                 <MapPin className="h-5 w-5 text-[#bd2730]" aria-hidden="true" />
@@ -632,21 +676,21 @@ export async function BusinessDetailPageView({
                   <div>
                     <h2 className="text-2xl font-semibold text-[#2c2722]">{locale === 'zh' ? '社區資料修正' : 'Community corrections'}</h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-[#6d6258]">
-                      {business.verificationState === 'unverified'
+                      {showClaimPrompt
                         ? locale === 'zh'
-                          ? '如果這是你的商家，請認領它；如果資訊有誤，請送出回報。'
-                          : 'If this is your business, claim it. If anything is wrong, send a correction for review.'
+                          ? '如果這是你的商家，歡迎免費認領；如果資訊有誤，請送出回報。'
+                          : 'If this is your business, claim it free. If anything is wrong, send a correction for review.'
                         : locale === 'zh'
-                          ? '若資料有誤，請回報給管理端；商家擁有者也可透過認領流程要求更新。'
-                          : 'If any detail is wrong, send a correction. Business owners can still use the claim flow to request updates.'}
+                          ? '若資料有誤，請送出回報，我們審核後會更新。'
+                          : 'If any detail is wrong, send a correction and we will review it.'}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-3">
-                      {business.verificationState === 'unverified' ? (
+                      {showClaimPrompt ? (
                         <Link
                           href={claimHref}
                           className="inline-flex h-10 items-center justify-center rounded-md bg-[#bd2730] px-4 text-sm font-semibold text-white transition hover:bg-[#a91f27]"
                         >
-                          {locale === 'zh' ? '認領這筆商家' : 'Claim this listing'}
+                          {locale === 'zh' ? '免費認領此商家' : 'Claim this listing free'}
                         </Link>
                       ) : null}
                       {websiteHref ? (

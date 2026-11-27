@@ -4,6 +4,7 @@ import { Heart, Languages, MapPin, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { NewsletterSignupForm } from '@/components/NewsletterSignupForm';
 import { localeFromPath, withLocale } from '@/lib/routing';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
@@ -54,6 +55,19 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
     { href: '/terms', label: locale === 'zh' ? '條款' : 'Terms' },
     { href: '/editorial-policy', label: locale === 'zh' ? '編輯政策' : 'Editorial Policy' },
   ];
+  // Every page links to the landing pages of the categories professionals pay
+  // for, so search engines find and rank them. Plain labels: not every listing
+  // in a category has said it offers Chinese-language service.
+  const professionalCategoryLinks =
+    site.directory.listingSource.state === 'live'
+      ? [
+          { slug: 'real-estate', label: locale === 'zh' ? '地產經紀' : 'Realtors' },
+          { slug: 'legal-finance', label: locale === 'zh' ? '律師與會計師' : 'Lawyers & Accountants' },
+          { slug: 'medical', label: locale === 'zh' ? '醫師與診所' : 'Doctors & Clinics' },
+          { slug: 'education', label: locale === 'zh' ? '中文學校與補習' : 'Schools & Tutoring' },
+          { slug: 'home-services', label: locale === 'zh' ? '居家維修' : 'Home Services' },
+        ].filter((item) => site.directory.categorySlugs.includes(item.slug))
+      : [];
 
   return (
     <footer className="w-full border-t border-[#dccab6] bg-[#faf6f0] text-[#4a382d]">
@@ -94,31 +108,31 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
                 </p>
               </div>
 
-              <form
-                className="flex w-full max-w-[400px] min-w-0 shrink-0 flex-col gap-2 sm:flex-row lg:w-auto lg:min-w-[320px] lg:max-w-[400px]"
-                action="#"
-              >
-                <label className="sr-only" htmlFor="footer-newsletter-email">
-                  {locale === 'zh' ? '電子郵件' : 'Email'}
-                </label>
-                <div className="min-w-0 flex-1">
-                  <input
-                    id="footer-newsletter-email"
-                    type="email"
-                    placeholder={locale === 'zh' ? '輸入你的信箱' : 'Enter your email'}
-                    className="h-10 min-w-0 w-full rounded-[10px] border border-[#dccbbc] bg-white px-3 text-[13px] text-[#352720] outline-none placeholder:text-[#9a897e] focus:border-brand-300"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[10px] bg-brand-600 px-4 text-[13px] font-semibold text-white transition-colors hover:bg-brand-700"
-                >
-                  {locale === 'zh' ? '訂閱' : 'Subscribe'}
-                </button>
-              </form>
+              <NewsletterSignupForm
+                locale={locale}
+                brandName={site.brandName}
+                privacyHref={withLocale(locale, '/privacy')}
+              />
             </div>
           </div>
         </div>
+        {professionalCategoryLinks.length > 0 ? (
+          <nav
+            aria-label={locale === 'zh' ? '專業服務分類' : 'Professional services'}
+            className="mx-auto mt-2 flex max-w-[1480px] flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-[#e5d8ca] pt-2 text-[11px] text-[#745f52]"
+          >
+            <span className="font-semibold text-[#2d211b]">{locale === 'zh' ? '找專業服務' : 'Find a professional'}</span>
+            {professionalCategoryLinks.map((item) => (
+              <Link
+                key={item.slug}
+                href={withLocale(locale, `/business/category/${item.slug}`)}
+                className="transition-colors hover:text-brand-600"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
         <div className="mx-auto mt-2 flex max-w-[1480px] flex-wrap items-center justify-center gap-x-4 gap-y-1 border-t border-[#e5d8ca] pt-2 text-[11px] font-semibold text-[#745f52]">
           {[...footerLinks, ...publisherLinks].map((item) => (
             <Link

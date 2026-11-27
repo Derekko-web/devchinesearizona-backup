@@ -11,6 +11,7 @@ import {
 } from '@/lib/directory';
 import { isPaymentFilter, isSpokenLanguage } from '@/lib/business-bilingual';
 import { t } from '@/lib/i18n';
+import { isIndexableListingCount, metroCategoryPath } from '@/lib/metro-categories';
 import { absoluteUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
 import { withLocale } from '@/lib/routing';
@@ -96,7 +97,7 @@ export async function DirectoryPageView({
     sort: parseDirectorySortOption(searchParams.sort),
   };
   const directoryPagePath = withLocale(locale, '/business');
-  const [{ categories, cities }, directoryPage] = await Promise.all([
+  const [{ categories, cities, categoryCounts }, directoryPage] = await Promise.all([
     getDirectoryFilterOptions(site),
     getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { site, usePaidPromotion: true }),
   ]);
@@ -288,7 +289,13 @@ export async function DirectoryPageView({
             {quickCategories.map((category) => (
               <Link
                 key={category.slug}
-                href={buildDirectoryHref(locale, { category: category.slug })}
+                // Categories with enough listings have an indexable landing page; send
+                // shoppers (and search engines) there instead of a filtered copy of /business.
+                href={
+                  isIndexableListingCount(categoryCounts[category.slug] ?? 0)
+                    ? withLocale(locale, metroCategoryPath(category.slug))
+                    : buildDirectoryHref(locale, { category: category.slug })
+                }
                 className="homepage-card inline-flex items-center rounded-full bg-[#f2e6d9] px-3.5 py-2 text-sm font-semibold text-[#5f4b3f] transition-colors hover:bg-[#ecdbc9] hover:text-brand-700"
               >
                 {t(category.name, locale)}

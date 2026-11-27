@@ -196,6 +196,31 @@ export function getMetroCategoryIntro(category: BusinessCategory, site: SiteProf
   return pick(locale, template).replace('{metro}', getMetroLabel(site, locale));
 }
 
+// Same intro as the metro-wide page, about one city: "...across Mesa, AZ."
+export function getCityCategoryIntro(
+  category: BusinessCategory,
+  cityLabel: string,
+  site: SiteProfile,
+  locale: Locale
+): string {
+  const template = categoryCopy[category.slug]?.intro;
+  if (!template) {
+    return t(category.description, locale);
+  }
+
+  const place = locale === 'en' && site.stateCode ? `${cityLabel}, ${site.stateCode}` : cityLabel;
+  return pick(locale, template).replace('{metro}', place);
+}
+
+// "3 listings in Mesa" / "梅薩共 3 筆商家"
+export function formatCityListingCountLine(count: number, cityLabel: string, locale: Locale): string {
+  if (locale === 'zh') {
+    return `${cityLabel}共 ${count} 筆商家`;
+  }
+
+  return `${count} ${count === 1 ? 'listing' : 'listings'} in ${cityLabel}`;
+}
+
 export function getMetroCategoryTitle(category: BusinessCategory, site: SiteProfile, locale: Locale): string {
   const heading = getMetroCategoryHeading(category, locale);
   const metro = getMetroLabel(site, locale);
