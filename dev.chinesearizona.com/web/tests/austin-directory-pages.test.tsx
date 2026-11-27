@@ -120,7 +120,7 @@ describe('Austin directory pages', () => {
     });
     const html = renderToStaticMarkup(rendered);
 
-    expect(html).toContain('https://chineseaustin.com/en/business/house-of-three-gorges-austin');
+    expect(html).toContain('https://chineseaustin.com/business/house-of-three-gorges-austin');
     expect(html).toContain('"addressRegion":"TX"');
     expect(html).toContain('Austin, TX');
     expect(html).toContain('AUSTIN, TX');

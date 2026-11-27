@@ -200,7 +200,7 @@ describe('indexing signals', () => {
     expect(addMetadata.alternates?.canonical).toBe('https://chineseaustin.com/add-business');
     expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
 
-    expect(business?.title).toBe('House of Three Gorges | ChineseAustin');
+    expect(business?.title).toBe('House of Three Gorges – Chinese-Speaking Restaurant & Food in Austin, TX | ChineseAustin');
     expect(business?.alternates?.canonical).toBe(
       'https://chineseaustin.com/business/house-of-three-gorges-austin'
     );
@@ -223,7 +223,7 @@ describe('indexing signals', () => {
     expect(addMetadata.alternates?.canonical).toBe('https://chinesesfbay.com/add-business');
     expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
 
-    expect(business?.title).toBe('R&G Lounge | ChineseSFBay');
+    expect(business?.title).toBe('R&G Lounge – Chinese-Speaking Restaurant & Food in San Francisco, CA | ChineseSFBay');
     expect(business?.alternates?.canonical).toBe(
       'https://chinesesfbay.com/business/r-g-lounge-san-francisco'
     );
