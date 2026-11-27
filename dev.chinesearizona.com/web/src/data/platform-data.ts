@@ -11,6 +11,7 @@ import type {
   SignalDeskQueueItem,
 } from '@/lib/types';
 import { businessReviewOverrides } from '@/data/business-review-overrides';
+import { newcomerGuides } from '@/data/guides';
 import generatedAustinLocalArticles from '@/data/generated-austin-local-articles.json';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLosAngelesLocalArticles from '@/data/generated-los-angeles-local-articles.json';
@@ -2229,6 +2230,7 @@ export const guides: Guide[] = [
     relatedBusinessSlugs: ['chen-cpa-associates', 'desert-bridge-relocation', 'profix-home-services'],
     relatedEventSlugs: [],
   },
+  ...newcomerGuides,
 ];
 
 export const localArticles: Article[] = unwrapJsonArray(
