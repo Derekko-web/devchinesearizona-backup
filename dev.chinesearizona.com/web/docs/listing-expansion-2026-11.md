@@ -152,7 +152,7 @@ Roughly 95 named candidates were looked at. Besides the 14 added, these did not 
 | Large-firm or out-of-area pages with no Phoenix office | 4 | A national law firm's machine-translated Phoenix page; insurance and mortgage people based in California or Colorado |
 | Stale or retired | 2 | A Chinese school blog with no current date; a dentist listed as retired |
 
-Systematic scans that found few or no new names: all State Farm agent pages in the eight cities (220 agents, 2 Chinese speakers, both added), Farmers (169 agents, none), American Family (90 agents, none), Merrill office rosters (83 advisers, 3 added).
+Systematic scans that found few or no new names: all State Farm agent pages in the eight cities plus 18 other metro cities (264 agents after re-fetching pages that were first rate-limited; 2 Chinese speakers, both added), Farmers (169 agents, none), American Family (90 agents, none), Merrill office rosters (83 advisers, 3 added).
 
 Names and leads that were not verified are kept in the company's private listings folder, not in this repo.
 
