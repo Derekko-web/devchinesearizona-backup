@@ -220,6 +220,38 @@ describe('metro category metadata and sitemap', () => {
 });
 
 describe('city category pages', () => {
+  it('describes each city page with its own city, intro and listing count', async () => {
+    const mesa = await cityCategoryMetadata('en', 'mesa', 'dining');
+    const mesaZh = await cityCategoryMetadata('zh', 'mesa', 'dining');
+    const chandler = await cityCategoryMetadata('en', 'chandler', 'dining');
+
+    expect(mesa?.description).toBe(
+      'Chinese restaurants, bakeries, bubble tea, and Asian grocery anchors across Mesa, AZ, from regional cooking to everyday takeout. Open a listing for hours, menus, and directions. 76 listings in Mesa.'
+    );
+    expect(mesaZh?.description).toContain('梅薩的中餐廳');
+    expect(mesaZh?.description).toContain('梅薩共 76 筆商家。');
+    expect(chandler?.description).not.toBe(mesa?.description);
+  });
+
+  it('adds breadcrumb and item list structured data with canonical URLs', async () => {
+    const rendered = await CityCategoryPageView({ locale: 'zh', city: 'mesa', category: 'dining', site: siteProfiles.arizona });
+    const html = rendered ? renderToStaticMarkup(rendered) : '';
+    const blocks = Array.from(html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/g)).flatMap(
+      (match) => JSON.parse(match[1])
+    );
+    const breadcrumb = blocks.find((block) => block['@type'] === 'BreadcrumbList');
+    const itemList = blocks.find((block) => block['@type'] === 'ItemList');
+
+    expect(breadcrumb.itemListElement.map((item: { item: string }) => item.item)).toEqual([
+      'https://chinesearizona.com/zh',
+      'https://chinesearizona.com/zh/business',
+      'https://chinesearizona.com/zh/business/category/dining',
+      'https://chinesearizona.com/zh/business/mesa/dining',
+    ]);
+    expect(itemList.numberOfItems).toBe(76);
+    expect(itemList.itemListElement[0].url).toMatch(/^https:\/\/chinesearizona\.com\/zh\/business\//);
+  });
+
   it('links back to the metro page and highlights the active city filter', async () => {
     const rendered = await CityCategoryPageView({ locale: 'en', city: 'mesa', category: 'dining', site: siteProfiles.arizona });
     const html = rendered ? renderToStaticMarkup(rendered) : '';

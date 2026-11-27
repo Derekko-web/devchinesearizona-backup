@@ -23,7 +23,9 @@ import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-l
 import { t } from '@/lib/i18n';
 import {
   findMetroCategoryCity,
+  formatCityListingCountLine,
   formatListingCountLine,
+  getCityCategoryIntro,
   getCityCategoryTitle,
   getLocalizedCityName,
   getMetroCategoryIntro,
@@ -561,7 +563,11 @@ export async function cityCategoryMetadata(
 
   return buildMetadata({
     title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale)} | ${site.brandName}`,
-    description: t(summary.category.description, locale),
+    description: `${getCityCategoryIntro(summary.category, cityLabel, site, locale)} ${formatCityListingCountLine(
+      listingCount,
+      cityLabel,
+      locale
+    )}${locale === 'zh' ? '。' : '.'}`,
     path: `/business/${resolvedCity?.slug ?? slugifyCity(city)}/${summary.category.slug}`,
     locale,
     site,
