@@ -1,4 +1,4 @@
-import { Clock3, DollarSign, ExternalLink, Mail, MapPin, Navigation, Phone, Star } from 'lucide-react';
+import { Clock3, DollarSign, ExternalLink, Mail, MapPin, Navigation, Phone } from 'lucide-react';
 import Link from 'next/link';
 
 import { BusinessImage } from '@/components/BusinessImage';
@@ -14,6 +14,7 @@ import { getBusinessCategories } from '@/lib/content';
 import { getDirectoryAiReplacementCardObjectPosition } from '@/lib/directory-ai-replacements';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import { descriptiveImageAlt, formatDate, t } from '@/lib/i18n';
+import { getListingTrustLevel, hasChineseSpokenLanguage } from '@/lib/listing-trust';
 import { phoneHref } from '@/lib/phone';
 import { withLocale } from '@/lib/routing';
 import type { Business, BusinessCategory, Locale } from '@/lib/types';
@@ -53,8 +54,6 @@ export function BusinessCard({
   const locationLabel =
     localizedLocationLabel ?? business.address ?? business.serviceAreaText ?? `${business.city}, AZ`;
   const websiteLabel = business.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-  const hasReviews = business.reviewCount > 0;
-  const hasRating = business.rating > 0;
   const phoneLink = phoneHref(business.phone);
   const emailHref = business.email ? `mailto:${business.email}` : undefined;
   const directionsHref = getBusinessDirectionsUrl(business, stateLabel);
@@ -106,10 +105,9 @@ export function BusinessCard({
             <TrustBadges
               locale={locale}
               mostPopular={isMostPopular}
-              verified={business.verified}
-              bilingual={business.bilingual}
+              bilingual={hasChineseSpokenLanguage(business.languages)}
               sponsored={business.sponsored}
-              verificationState={business.verificationState}
+              trustLevel={getListingTrustLevel(business)}
               status={business.status}
             />
           </div>
@@ -119,21 +117,6 @@ export function BusinessCard({
           </p>
 
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm text-[#776357]">
-            {hasReviews ? (
-              <div className="flex items-center gap-1.5">
-                <Star className="h-4 w-4 fill-[#f0ad48] text-[#f0ad48]" />
-                {hasRating ? (
-                  <>
-                    <span className="font-semibold text-[#31231c]">{business.rating.toFixed(1)}</span>
-                    <span>({business.reviewCount})</span>
-                  </>
-                ) : (
-                  <span className="font-semibold text-[#31231c]">
-                    {business.reviewCount} {locale === 'zh' ? '則評論' : 'reviews'}
-                  </span>
-                )}
-              </div>
-            ) : null}
             <div className="flex items-center gap-1.5">
               <MapPin className="h-4 w-4 text-brand-600" />
               <span>{locationLabel}</span>

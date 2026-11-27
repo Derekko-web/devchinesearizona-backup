@@ -17,7 +17,6 @@ type DirectoryFiltersProps = {
     category?: string;
     language?: string;
     payment?: 'wechat-pay' | 'alipay';
-    minRating?: number;
     sort?: SortOption;
   };
 };
@@ -142,17 +141,6 @@ export function DirectoryFilters({
           ))}
         </SelectField>
 
-        <SelectField
-          id="minRating"
-          name="minRating"
-          label={locale === 'zh' ? '最低評分' : 'Minimum rating'}
-          defaultValue={values.minRating ? String(values.minRating) : ''}
-        >
-          <option value="">{locale === 'zh' ? '不限評分' : 'Any rating'}</option>
-          <option value="4">4.0+</option>
-          <option value="4.5">4.5+</option>
-        </SelectField>
-
         <div className="space-y-2">
           <SelectField
             id="sort"
@@ -161,8 +149,6 @@ export function DirectoryFilters({
             defaultValue={values.sort ?? 'featured'}
           >
             <option value="featured">{locale === 'zh' ? '贊助優先' : 'Sponsored first'}</option>
-            <option value="rating">{locale === 'zh' ? '評分最高' : 'Highest rated'}</option>
-            <option value="reviewed">{locale === 'zh' ? '評論最多' : 'Most reviewed'}</option>
             <option value="alphabetical">{locale === 'zh' ? '依字母排序' : 'A-Z'}</option>
             <option value="distance" disabled={!values.city}>
               {locale === 'zh'

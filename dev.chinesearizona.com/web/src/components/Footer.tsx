@@ -1,6 +1,6 @@
 'use client';
 
-import { BadgeCheck, Heart, Languages, MapPin } from 'lucide-react';
+import { Heart, Languages, MapPin, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -28,9 +28,10 @@ export default function Footer({ site = defaultSiteProfile }: { site?: SiteProfi
       tone: 'text-[#c98938] bg-[#f7eedc]',
     },
     {
-      icon: BadgeCheck,
-      title: locale === 'zh' ? '認證可信' : 'Verified & Trusted',
-      subtitle: oppositeCopy(locale, 'Real listings with context', '認證可靠'),
+      // Not "Verified": most listings come from public sources (issue #457).
+      icon: Tag,
+      title: locale === 'zh' ? '標示清楚' : 'Clear labels',
+      subtitle: oppositeCopy(locale, 'Sponsored is always marked', '贊助一律標示'),
       tone: 'text-[#6e8b68] bg-[#e8f0e5]',
     },
     {
