@@ -1,4 +1,4 @@
-import type { BusinessClaim, CommunityPost, ModerationReport } from '@/lib/types';
+import type { BusinessClaim, ModerationReport } from '@/lib/types';
 
 export type AnalyticsEvent = {
   id: string;
@@ -11,7 +11,6 @@ export type AnalyticsEvent = {
 const analyticsEvents: AnalyticsEvent[] = [];
 const businessClaims: BusinessClaim[] = [];
 const moderationReports: ModerationReport[] = [];
-const communitySubmissions: CommunityPost[] = [];
 const entityReportCounts = new Map<string, number>();
 
 function randomId(prefix: string): string {
@@ -71,46 +70,6 @@ export function createBusinessClaim(
 
 export function getBusinessClaims(): BusinessClaim[] {
   return businessClaims;
-}
-
-type CreateCommunityPostInput = Pick<
-  CommunityPost,
-  'type' | 'title' | 'excerpt' | 'body' | 'city' | 'price' | 'linkUrl'
-> & {
-  authorSlug: string;
-};
-
-export function createCommunityPost(input: CreateCommunityPostInput): CommunityPost {
-  const slugBase = input.title.en
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-
-  const createdAt = new Date().toISOString();
-  const post = {
-    slug: `${slugBase}-${communitySubmissions.length + 1}`,
-    type: input.type,
-    title: input.title,
-    excerpt: input.excerpt,
-    body: input.body,
-    authorSlug: input.authorSlug,
-    city: input.city,
-    createdAt,
-    updatedAt: createdAt,
-    reportCount: 0,
-    autoHidden: false,
-    trustLevel: 'new' as const,
-    price: input.price,
-    tags: ['user-submission'],
-    linkUrl: input.linkUrl,
-  };
-
-  communitySubmissions.push(post);
-  return post;
-}
-
-export function getCommunitySubmissions(): CommunityPost[] {
-  return communitySubmissions;
 }
 
 export function createModerationReport(

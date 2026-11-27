@@ -52,8 +52,8 @@ describe('Dev CI homepage smoke check', () => {
 
     expect(workflow).toContain('python-scraper-tests:');
     expect(workflow).toContain("if: needs.changes.outputs.python_scraper == 'true'");
-    expect(workflow).toContain('data/(scrape-staging|signal-desk-staging)/');
-    expect(workflow).toContain('generated-(scraped-businesses|directory-businesses|plaza-businesses|business-image-overrides|local-articles|signal-desk-queue)');
+    expect(workflow).toContain('data/scrape-staging/');
+    expect(workflow).toContain('generated-(scraped-businesses|directory-businesses|plaza-businesses|business-image-overrides)');
     expect(workflow).toContain('cache-dependency-path: dev.chinesearizona.com/web/requirements.txt');
     expect(workflow).toContain('python3 -m pip install --target .python-packages -r requirements.txt');
     expect(workflow).toContain('npm run scrape:test');

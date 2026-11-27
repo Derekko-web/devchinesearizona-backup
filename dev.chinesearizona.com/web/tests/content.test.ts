@@ -10,7 +10,6 @@ import {
   getArticleBySlugAsync,
   getBusinesses,
   getCommunityPostBySlug,
-  getCommunityPosts,
   getCurrentArticlesAsync,
   getLegacyArticles,
   isLegacyArticle,
@@ -18,7 +17,7 @@ import {
 } from '@/lib/content';
 import { articleMetadata, communityNewsMetadata } from '@/lib/page-metadata';
 import { siteProfiles } from '@/lib/site-config';
-import { createCommunityPost, createModerationReport } from '@/lib/runtime-store';
+import { createModerationReport } from '@/lib/runtime-store';
 
 const originalRadarStorePath = process.env.RADAR_STORE_PATH;
 const originalAustinRadarStorePath = process.env.AUSTIN_RADAR_STORE_PATH;
@@ -70,33 +69,6 @@ describe('content selectors', () => {
 
     expect(results).toHaveLength(1);
     expect(results[0]?.slug).toBe('elite-az-realty-team');
-  });
-
-  it('includes runtime community submissions in the public feed', () => {
-    const post = createCommunityPost({
-      type: 'board',
-      title: {
-        en: 'Test Runtime Post',
-        zh: '測試即時貼文',
-      },
-      excerpt: {
-        en: 'Runtime feed coverage',
-        zh: '即時社群串接',
-      },
-      body: [
-        {
-          en: 'This post exists to prove runtime submissions are merged into the community feed.',
-          zh: '這則貼文用來驗證即時提交會被併入社群列表。',
-        },
-      ],
-      authorSlug: 'newcomer-derek',
-      city: 'Mesa',
-      price: undefined,
-      linkUrl: 'https://example.com/runtime-post',
-    });
-
-    const results = getCommunityPosts('board');
-    expect(results.some((item) => item.slug === post.slug)).toBe(true);
   });
 
   it('marks reported community posts as noindex', () => {

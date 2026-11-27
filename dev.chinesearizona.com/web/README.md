@@ -106,7 +106,9 @@ loop stays unattended:
   the VPS deploy secrets here.
 - `dev-content`: restrict deployment branches to `main` or protected branches
   only. Do not store VPS SSH deploy secrets here; content jobs should only open
-  PRs and upload Actions artifacts.
+  PRs and upload Actions artifacts. The `Dev Content Jobs` workflow runs by
+  hand only; its daily run was retired because live listings come from the
+  database, not from the scrape output.
 - `dev-runtime`: restrict deployment branches to `main` or protected branches
   only. Keep runtime-operator secrets such as
   `DEV_VPS_RUNTIME_EGRESS_USER` and `DEV_VPS_RUNTIME_EGRESS_SSH_KEY` here.

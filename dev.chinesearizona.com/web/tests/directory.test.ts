@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import arizonaDirectoryBusinesses from '@/data/generated-directory-businesses.json';
+import arizonaScrapedBusinesses from '@/data/generated-scraped-businesses.json';
 import sfBayDirectoryBusinesses from '@/data/generated-sf-bay-directory-businesses.json';
 import losAngelesDirectoryBusinesses from '@/data/los-angeles-directory-businesses.json';
 import austinDirectoryBusinesses from '@/data/sites/austin/businesses.json';
@@ -216,6 +218,15 @@ afterEach(() => {
 });
 
 describe('directory trust gates', () => {
+  it('keeps scraped gambling spam out of the Arizona fallback listings', () => {
+    const spamPattern = /slot online|situs slot|slot gacor|slot777|maxwin|sportsbook|live casino/i;
+    const offenders = [...arizonaScrapedBusinesses, ...arizonaDirectoryBusinesses]
+      .filter((business) => spamPattern.test(JSON.stringify(business)))
+      .map((business) => business.slug);
+
+    expect(offenders).toEqual([]);
+  });
+
   it('rejects placeholder domains and 555 phone numbers', () => {
     expect(hasPlaceholderDomain('https://example.com/business')).toBe(true);
     expect(hasPlaceholderDomain('https://realbusiness.com')).toBe(false);

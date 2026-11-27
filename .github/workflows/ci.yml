@@ -53,7 +53,7 @@ jobs:
           changed_files="$RUNNER_TEMP/changed-files.txt"
           git diff --name-only "$base_sha" "$head_sha" > "$changed_files"
 
-          if grep -Eq '^(\.github/workflows/(ci|content-jobs)\.yml|dev\.chinesearizona\.com/web/(requirements\.txt|package(-lock)?\.json|scripts/|data/(scrape-staging|signal-desk-staging)/|src/data/generated-(scraped-businesses|directory-businesses|plaza-businesses|business-image-overrides|local-articles|signal-desk-queue)\.json))' "$changed_files"; then
+          if grep -Eq '^(\.github/workflows/(ci|content-jobs)\.yml|dev\.chinesearizona\.com/web/(requirements\.txt|package(-lock)?\.json|scripts/|data/scrape-staging/|src/data/generated-(scraped-businesses|directory-businesses|plaza-businesses|business-image-overrides)\.json))' "$changed_files"; then
             echo "python_scraper=true" >> "$GITHUB_OUTPUT"
           else
             echo "python_scraper=false" >> "$GITHUB_OUTPUT"

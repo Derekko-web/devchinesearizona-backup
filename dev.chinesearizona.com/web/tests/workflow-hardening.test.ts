@@ -14,9 +14,14 @@ const packageJsonPath = path.join(process.cwd(), 'package.json');
 const plazaDirectoryExportPath = path.join(process.cwd(), 'scripts', 'plaza_directory_site_export.py');
 
 describe('workflow hardening', () => {
-  it('makes scheduled content jobs reproducible and persistent', () => {
+  it('makes manual content jobs reproducible and persistent', () => {
     const workflow = fs.readFileSync(contentJobsPath, 'utf8');
 
+    // Manual only: live listings come from the database, so a daily run only
+    // piled up unmerged branches (#439).
+    expect(workflow).toContain('workflow_dispatch:');
+    expect(workflow).not.toContain('schedule');
+    expect(workflow).not.toContain('cron:');
     expect(workflow).toContain('actions/setup-python@v7');
     expect(workflow).toContain('name: dev-content');
     expect(workflow).toContain('python3 -m pip install --target .python-packages -r requirements.txt');

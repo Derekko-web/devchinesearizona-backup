@@ -20,7 +20,6 @@ import { t } from '@/lib/i18n';
 import {
   getAnalyticsSummary,
   getBusinessClaims,
-  getCommunitySubmissions,
   getEntityReportCount,
   getModerationReports,
 } from '@/lib/runtime-store';
@@ -545,31 +544,6 @@ export function getCommunityTrendingArticles(limit = communityTrendingArticleSlu
   }).slice(0, limit);
 }
 
-export async function getCommunityTrendingArticlesAsync(
-  limit = communityTrendingArticleSlugs.length,
-  site: SiteProfile = defaultSiteProfile
-): Promise<Article[]> {
-  if (!canUseDefaultArticleFallback(site)) {
-    return (await getCurrentArticlesAsync(limit, site)).slice(0, limit);
-  }
-
-  const prioritized = (
-    await Promise.all(communityTrendingArticleSlugs.map((slug) => getArticleBySlugAsync(slug)))
-  ).filter((article): article is Article => Boolean(article));
-  const seen = new Set<string>();
-
-  return [...prioritized, ...(await getCurrentArticlesAsync())]
-    .filter((article) => {
-      if (seen.has(article.slug)) {
-        return false;
-      }
-
-      seen.add(article.slug);
-      return true;
-    })
-    .slice(0, limit);
-}
-
 export function getArticlePage(page: number, pageSize: number) {
   const normalizedPageSize = Math.max(1, pageSize);
   const articles = getArticles();
@@ -782,8 +756,7 @@ export function getEventBySlug(slug: string): Event | undefined {
 }
 
 export function getCommunityPosts(type?: CommunityPostType): CommunityPost[] {
-  const allPosts = [...communityPosts, ...getCommunitySubmissions()];
-  const enrichedPosts = allPosts.map((post) => ({
+  const enrichedPosts = communityPosts.map((post) => ({
     ...post,
     reportCount: post.reportCount + getEntityReportCount(post.slug),
   }));
@@ -794,9 +767,7 @@ export function getCommunityPosts(type?: CommunityPostType): CommunityPost[] {
 }
 
 export function getCommunityPostBySlug(type: CommunityPostType, slug: string): CommunityPost | undefined {
-  const post = [...communityPosts, ...getCommunitySubmissions()].find(
-    (item) => item.type === type && item.slug === slug
-  );
+  const post = communityPosts.find((item) => item.type === type && item.slug === slug);
 
   if (!post) {
     return undefined;
@@ -821,7 +792,7 @@ export function getBusinessesByOwner(ownerProfileSlug: string): Business[] {
 }
 
 export function getPostsByAuthor(authorSlug: string): CommunityPost[] {
-  return [...communityPosts, ...getCommunitySubmissions()].filter((post) => post.authorSlug === authorSlug);
+  return communityPosts.filter((post) => post.authorSlug === authorSlug);
 }
 
 export function getRelatedBusinesses(
