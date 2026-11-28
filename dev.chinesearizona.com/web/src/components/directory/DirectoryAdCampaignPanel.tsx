@@ -223,7 +223,7 @@ export function DirectoryAdCampaignPanel({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-2">
           <div className="inline-flex rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">
-            {locale === 'zh' ? 'Sponsored placement' : 'Sponsored placement'}
+            {locale === 'zh' ? '目錄贊助曝光' : 'Sponsored placement'}
           </div>
           <h3 className="text-lg font-semibold text-slate-900">
             {t(business.name, locale)}
