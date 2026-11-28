@@ -1,5 +1,6 @@
 import type { Guide } from '@/lib/types';
 
+import { arrivingForTsmcGuide } from './arriving-for-tsmc';
 import { chineseClassesForKidsGuide } from './chinese-classes-for-kids';
 import { chineseSpeakingDoctorDentistGuide } from './chinese-speaking-doctor-dentist';
 import { firstArizonaSummerGuide } from './first-arizona-summer-home';
@@ -25,6 +26,7 @@ export const newcomerGuides: Guide[] = [
   willsEstateArizonaGuide,
   chineseSpeakingDoctorDentistGuide,
   chineseClassesForKidsGuide,
+  arrivingForTsmcGuide,
 ];
 
 // Dated, time-bound pages (events, seasons). Kept apart from the evergreen
