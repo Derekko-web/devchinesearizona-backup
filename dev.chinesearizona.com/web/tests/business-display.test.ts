@@ -113,6 +113,21 @@ describe('business display helpers', () => {
         }),
         'en'
       )
-    ).toEqual(['Delivery', 'Family Dinner Catering', 'Online ordering']);
+    ).toEqual(['Family Dinner Catering', 'Online ordering', 'Delivery']);
+  });
+
+  it('never shows a service label cut down to a fragment', () => {
+    const highlights = (business: Partial<Business>) => getBusinessServiceHighlights(businessFixture(business), 'en');
+
+    expect(highlights({ categorySlug: 'legal-finance', services: [{ en: 'Finance and practical support' }] })).not.toContain(
+      'And Practical Support'
+    );
+    expect(highlights({ categorySlug: 'medical', services: [{ en: 'Health and medical support' }] })).not.toContain(
+      'Health And Support'
+    );
+    expect(highlights({ categorySlug: 'real-estate', services: [{ en: 'Chinese-Speaking Realtor' }] })).not.toContain(
+      'Speaking Realtor'
+    );
+    expect(highlights({ services: [{ en: 'Located in Mekong Plaza' }] })).toContain('Located in Mekong Plaza');
   });
 });
