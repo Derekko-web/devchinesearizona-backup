@@ -118,14 +118,17 @@ jobs:
 
           # A Deploy Dev run can succeed without deploying (it skips stale SHAs),
           # so look for a run whose deploy step itself succeeded.
+          # Filter by conclusion here, not with the API's status=success: for a
+          # run that finished minutes earlier GitHub returned an empty list with
+          # that filter and the run without it (#519).
           dev_run_ids="$(
             gh api \
               --method GET \
+              --paginate \
               "/repos/$GITHUB_REPOSITORY/actions/workflows/deploy-dev.yml/runs" \
               -f head_sha="$DEPLOY_SHA" \
-              -f status=success \
-              -f per_page=20 \
-              --jq '.workflow_runs[].id'
+              -f per_page=100 \
+              --jq '.workflow_runs[] | select(.conclusion == "success") | .id'
           )"
           for run_id in $dev_run_ids; do
             step_conclusion="$(

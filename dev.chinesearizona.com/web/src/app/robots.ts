@@ -4,6 +4,9 @@ import { absoluteUrl } from '@/lib/seo';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 
+const facetParams = ['q', 'kind', 'city', 'tag', 'view', 'category', 'language', 'payment', 'minRating', 'sort'];
+const facetDisallowRules = facetParams.flatMap((param) => [`/*?${param}=`, `/*&${param}=`]);
+
 export function buildRobots(site: SiteProfile = defaultSiteProfile): MetadataRoute.Robots {
   return {
     rules: {
@@ -21,6 +24,10 @@ export function buildRobots(site: SiteProfile = defaultSiteProfile): MetadataRou
         '/auth',
         '/en/auth',
         '/zh/auth',
+        // Filter and search combinations on the directory and Hidden Arizona.
+        // They canonicalise to the unfiltered page and are noindex; crawling
+        // every combination only loads the server.
+        ...facetDisallowRules,
       ],
     },
     sitemap: absoluteUrl('/sitemap.xml', site),

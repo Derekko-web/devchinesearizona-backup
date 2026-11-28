@@ -3,8 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { localeFromPath, stripLocaleFromPath, switchLocaleInPathname, withLocale } from '@/lib/routing';
 
 describe('routing helpers', () => {
-  it('prefixes localized paths for both supported locales', () => {
-    expect(withLocale('en', '/business')).toBe('/en/business');
+  it('keeps English at the unprefixed canonical URL and prefixes Chinese', () => {
+    expect(withLocale('en', '/business')).toBe('/business');
+    expect(withLocale('en', '/')).toBe('/');
+    expect(withLocale('en', 'about')).toBe('/about');
+    expect(withLocale('zh', '/')).toBe('/zh');
     expect(withLocale('zh', '/business')).toBe('/zh/business');
     expect(withLocale('zh', '/hidden-arizona')).toBe('/zh/hidden-arizona');
   });
@@ -15,7 +18,8 @@ describe('routing helpers', () => {
   });
 
   it('switches locales while preserving the path', () => {
-    expect(switchLocaleInPathname('/zh/community', 'en')).toBe('/en/community');
+    expect(switchLocaleInPathname('/zh/community', 'en')).toBe('/community');
+    expect(switchLocaleInPathname('/en/community', 'zh')).toBe('/zh/community');
     expect(switchLocaleInPathname('/business/elite-az-realty-team', 'zh')).toBe(
       '/zh/business/elite-az-realty-team'
     );
@@ -26,7 +30,7 @@ describe('routing helpers', () => {
 
   it('preserves query params when switching locales', () => {
     expect(switchLocaleInPathname('/zh/business', 'en', 'city=Mesa&language=Mandarin')).toBe(
-      '/en/business?city=Mesa&language=Mandarin'
+      '/business?city=Mesa&language=Mandarin'
     );
   });
 

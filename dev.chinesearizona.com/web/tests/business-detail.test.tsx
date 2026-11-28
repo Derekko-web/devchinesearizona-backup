@@ -155,7 +155,7 @@ describe('BusinessDetailPageView', () => {
       expect(en).toContain('data-testid="claim-listing-prompt"');
       expect(en).toContain('Is this your business?');
       expect(en).toContain('Claim this listing free');
-      expect(en).toContain(`href="/en${claimHref}`);
+      expect(en).toContain(`href="${claimHref}`);
       expect(en).not.toContain('Business owners can still use the claim flow');
 
       const zh = await render('zh');

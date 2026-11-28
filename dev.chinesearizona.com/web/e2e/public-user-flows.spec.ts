@@ -2,7 +2,7 @@ import { expect, test, devices } from '@playwright/test';
 
 test.describe('public navigation and localization', () => {
   test('desktop primary navigation moves between core public sections', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/');
 
     await expect(page).toHaveTitle(/ChineseArizona/);
     await expect(
@@ -11,17 +11,17 @@ test.describe('public navigation and localization', () => {
 
     const primaryNav = page.locator('nav').first();
     await primaryNav.getByRole('link', { name: 'Business 商家' }).click();
-    await expect(page).toHaveURL(/\/en\/business$/);
+    await expect(page).toHaveURL(/\/business$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Chinese Businesses' })).toBeVisible();
 
     await primaryNav.getByRole('link', { name: 'Community 社區' }).click();
-    await expect(page).toHaveURL(/\/en\/community$/);
+    await expect(page).toHaveURL(/\/community$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Find your people in Arizona.' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Chinese Schools' })).toBeVisible();
   });
 
   test('locale switching preserves the current directory filters', async ({ page }) => {
-    await page.goto('/en/business?q=china%20chili&city=Phoenix&category=dining&sort=featured');
+    await page.goto('/business?q=china%20chili&city=Phoenix&category=dining&sort=featured');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Chinese Businesses' })).toBeVisible();
     await expect(page.getByRole('heading', { level: 3, name: 'China Chili' })).toBeVisible();
@@ -53,7 +53,7 @@ test.describe('mobile navigation', () => {
   });
 
   test('opens the mobile menu and navigates through visible menu links', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/');
 
     const menuButton = page.getByRole('button', { name: 'Open menu' });
     await expect(menuButton).toBeVisible();
@@ -67,14 +67,14 @@ test.describe('mobile navigation', () => {
     await expect(mobileBusinessLink).toBeVisible();
     await mobileBusinessLink.click();
 
-    await expect(page).toHaveURL(/\/en\/business$/);
+    await expect(page).toHaveURL(/\/business$/);
     await expect(page.getByRole('heading', { level: 1, name: 'Chinese Businesses' })).toBeVisible();
   });
 });
 
 test.describe('directory discovery', () => {
   test('searches, filters, and opens a business detail page', async ({ page }) => {
-    await page.goto('/en/business');
+    await page.goto('/business');
 
     const filters = page.getByRole('complementary');
     await filters.getByLabel('Search').fill('china chili');
@@ -82,7 +82,7 @@ test.describe('directory discovery', () => {
     await filters.getByLabel('Category').selectOption('dining');
     await filters.getByRole('button', { name: 'Apply filters' }).click();
 
-    await expect(page).toHaveURL(/\/en\/business\?/);
+    await expect(page).toHaveURL(/\/business\?/);
     await expect(page.getByText(/^Showing \d+-\d+ of \d+$/)).toBeVisible();
 
     const filteredUrl = new URL(page.url());
@@ -98,7 +98,7 @@ test.describe('directory discovery', () => {
 
     await chinaChiliListing.getByRole('link', { name: 'View full profile' }).click();
 
-    await expect(page).toHaveURL(/\/en\/business\/china-chili-phoenix$/);
+    await expect(page).toHaveURL(/\/business\/china-chili-phoenix$/);
     await expect(page.getByRole('heading', { level: 1, name: 'China Chili' })).toBeVisible();
     await expect(page.getByRole('link', { name: /Call \(602\) 266-4463/ })).toHaveAttribute(
       'href',
@@ -119,7 +119,7 @@ test.describe('directory discovery', () => {
 
     try {
       const page = await context.newPage();
-      await page.goto('/en/business');
+      await page.goto('/business');
 
       await expect(page.getByRole('link', { name: /ChineseAustin Austin bilingual guide/ })).toBeVisible();
       await expect(page.getByRole('heading', { level: 3, name: 'House of Three Gorges' })).toBeVisible();
@@ -133,30 +133,30 @@ test.describe('directory discovery', () => {
 
 test.describe('signed-out auth and form validation', () => {
   test('redirects protected dashboard access to login with the next path intact', async ({ page }) => {
-    await page.goto('/en/dashboard');
+    await page.goto('/dashboard');
 
-    await expect(page).toHaveURL(/\/en\/auth\/login\?next=%2Fen%2Fdashboard$/);
+    await expect(page).toHaveURL(/\/auth\/login\?next=%2Fdashboard$/);
     await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Join' })).toHaveAttribute(
       'href',
-      '/en/auth/join?next=%2Fen%2Fdashboard'
+      '/auth/join?next=%2Fdashboard'
     );
   });
 
   test('keeps add-business submission behind a signed-out account prompt', async ({ page }) => {
-    await page.goto('/en/add-business?businessName=China%20Chili&businessSlug=china-chili-phoenix');
+    await page.goto('/add-business?businessName=China%20Chili&businessSlug=china-chili-phoenix');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Claim or add a business' })).toBeVisible();
     await expect(page.getByText('Account required')).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Log in to claim or add a business' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'Log in or sign up' })).toHaveAttribute(
       'href',
-      /\/en\/auth\/login\?next=%2Fen%2Fadd-business/
+      /\/auth\/login\?next=%2Fadd-business/
     );
   });
 
   test('validates login form fields before attempting authentication', async ({ page }) => {
-    await page.goto('/en/auth/login');
+    await page.goto('/auth/login');
     await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
 
     await page.getByLabel('Email address').fill('not-an-email');

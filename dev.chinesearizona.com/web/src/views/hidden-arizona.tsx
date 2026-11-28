@@ -299,12 +299,11 @@ export async function HiddenArizonaHubPageView({
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
         <div className="flex flex-wrap gap-2">
           {tabs.map((tab) => {
+            // Each facet link sets one filter and drops the others, so crawlers can
+            // reach a few hundred URLs, not every kind × city × tag × view mix.
             const href = buildHubHref(locale, {
               q: filters.q,
               kind: tab.kind === 'all' ? undefined : tab.kind,
-              city: tab.kind === 'place' ? filters.city : undefined,
-              tag: filters.tag,
-              view: tab.kind === 'place' ? viewMode : undefined,
             });
             const active = tab.kind === activeKind;
             return (
@@ -369,11 +368,8 @@ export async function HiddenArizonaHubPageView({
             <div className="flex flex-wrap gap-2">
               {featuredCities.map((city) => {
                 const href = buildHubHref(locale, {
-                  q: filters.q,
-                  kind: activeKind === 'place' ? 'place' : undefined,
+                  kind: 'place',
                   city: filters.city === city.value ? undefined : city.value,
-                  tag: filters.tag,
-                  view: showMapToggle ? viewMode : undefined,
                 });
                 const active = filters.city === city.value;
                 return (
@@ -398,11 +394,8 @@ export async function HiddenArizonaHubPageView({
                 <div className="mt-3 flex flex-wrap gap-2">
                   {overflowCities.map((city) => {
                     const href = buildHubHref(locale, {
-                      q: filters.q,
-                      kind: activeKind === 'place' ? 'place' : undefined,
+                      kind: 'place',
                       city: filters.city === city.value ? undefined : city.value,
-                      tag: filters.tag,
-                      view: showMapToggle ? viewMode : undefined,
                     });
                     const active = filters.city === city.value;
                     return (
@@ -439,11 +432,7 @@ export async function HiddenArizonaHubPageView({
             <div className="flex flex-wrap gap-2">
               {featuredTags.map((tag) => {
                 const href = buildHubHref(locale, {
-                  q: filters.q,
-                  kind: activeKind === 'all' ? undefined : activeKind,
-                  city: filters.city,
                   tag: filters.tag === tag.value ? undefined : tag.value,
-                  view: showMapToggle ? viewMode : undefined,
                 });
                 const active = filters.tag === tag.value;
                 return (
@@ -468,11 +457,7 @@ export async function HiddenArizonaHubPageView({
                 <div className="mt-3 flex flex-wrap gap-2">
                   {overflowTags.map((tag) => {
                     const href = buildHubHref(locale, {
-                      q: filters.q,
-                      kind: activeKind === 'all' ? undefined : activeKind,
-                      city: filters.city,
                       tag: filters.tag === tag.value ? undefined : tag.value,
-                      view: showMapToggle ? viewMode : undefined,
                     });
                     const active = filters.tag === tag.value;
                     return (
@@ -509,12 +494,8 @@ export async function HiddenArizonaHubPageView({
             <div className="inline-flex rounded-full border border-slate-200 bg-white p-1">
               {(['list', 'map'] as const).map((mode) => {
                 const href = buildHubHref(locale, {
-                  q: filters.q,
                   kind: 'place',
-                  city: filters.city,
-                  tag: filters.tag,
                   view: mode,
-                  page: currentPage > 1 ? String(currentPage) : undefined,
                 });
                 const active = viewMode === mode;
                 return (

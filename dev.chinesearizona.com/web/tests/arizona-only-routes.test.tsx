@@ -127,14 +127,14 @@ describe('Arizona-only route guards', () => {
         locale: 'en',
         segments: ['local-news', 'archive'],
         searchParams: { lane: 'community' },
-        expectedUrl: '/en/news/archive?lane=community',
+        expectedUrl: '/news/archive?lane=community',
       },
       {
         host: 'chineselosangeles.com',
         locale: 'en',
         segments: ['los-angeles-news', 'la-source-summary'],
         searchParams: {},
-        expectedUrl: '/en/news/la-source-summary',
+        expectedUrl: '/news/la-source-summary',
       },
     ];
 

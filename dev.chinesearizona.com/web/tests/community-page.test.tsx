@@ -32,7 +32,7 @@ describe('CommunityPageView', () => {
     expect(html).not.toContain('Festivals, tournaments, and recurring community dates');
     expect(html).not.toContain('The strongest community calendar mixes big annual festivals with smaller sport and culture events.');
     expect(html).toContain('Phoenix Wushu Nationals 2026');
-    expect(html).toContain('/en/add-business');
+    expect(html).toContain('/add-business');
   });
 
   it('does not serve Arizona community resources for placeholder city sites', async () => {

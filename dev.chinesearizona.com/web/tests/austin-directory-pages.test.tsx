@@ -69,7 +69,7 @@ describe('Austin directory pages', () => {
     expect(html).toContain('Austin Chinese School');
     expect(html).toContain('Austin, TX');
     expect(html).toContain('Cedar Park');
-    expect(html).toContain('/en/add-business');
+    expect(html).toContain('/add-business');
     expect(html).not.toContain('directory data is not connected yet');
     expect(html).not.toContain('Hedy Li');
     expect(html).not.toContain('Phoenix');

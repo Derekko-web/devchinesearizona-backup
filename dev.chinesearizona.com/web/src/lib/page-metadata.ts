@@ -23,7 +23,9 @@ import { getHiddenArizonaEntryBySlug, getHiddenArizonaEntryPath } from '@/lib/hi
 import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-localization';
 import { t } from '@/lib/i18n';
 import {
+  countChineseSpeakingListings,
   findMetroCategoryCity,
+  formatChineseSpeakingCountLine,
   formatCityListingCountLine,
   formatListingCountLine,
   getCityCategoryIntro,
@@ -32,6 +34,7 @@ import {
   getMetroCategoryIntro,
   getMetroCategoryPageData,
   getMetroCategoryTitle,
+  hasChineseSpeakingSection,
   isIndexableListingCount,
   metroCategoryPath,
   slugifyCity,
@@ -52,9 +55,19 @@ type DirectoryMetadataSearchParams = {
   q?: string;
   city?: string;
   category?: string;
+  language?: string;
+  payment?: string;
   minRating?: string;
   sort?: string;
   page?: string;
+};
+
+type HiddenArizonaMetadataSearchParams = {
+  q?: string;
+  kind?: string;
+  city?: string;
+  tag?: string;
+  view?: string;
 };
 
 function parseDirectoryPageNumber(value?: string): number {
@@ -164,6 +177,8 @@ export function directoryMetadata(
     searchParams?.q?.trim() ||
       searchParams?.city ||
       searchParams?.category ||
+      searchParams?.language ||
+      searchParams?.payment ||
       searchParams?.minRating ||
       (searchParams?.sort && searchParams.sort !== 'featured')
   );
@@ -185,6 +200,8 @@ export function directoryMetadata(
     path: pathWithPage,
     locale,
     site,
+    // Filtered copies of the directory stay out of search; category landing pages rank instead.
+    noIndex: hasFilteredQuery,
   });
 }
 
@@ -396,7 +413,12 @@ export function relocationMetadata(locale: Locale): Metadata {
   });
 }
 
-export function hiddenArizonaMetadata(locale: Locale): Metadata {
+// Filtered hub views (kind, city, tag, map, search) stay out of search; the
+// hub and the entry pages are what rank.
+export function hiddenArizonaMetadata(locale: Locale, searchParams?: HiddenArizonaMetadataSearchParams): Metadata {
+  const isFiltered = Boolean(
+    searchParams?.q?.trim() || searchParams?.kind || searchParams?.city || searchParams?.tag || searchParams?.view
+  );
   return buildMetadata({
     title: locale === 'zh' ? '亞利桑那秘境 | ChineseArizona' : 'Hidden Arizona | ChineseArizona',
     description:
@@ -405,6 +427,7 @@ export function hiddenArizonaMetadata(locale: Locale): Metadata {
         : 'A bilingual hub for licensed Atlas Obscura Arizona places, stories, lists, and itineraries.',
     path: '/hidden-arizona',
     locale,
+    noIndex: isFiltered,
   });
 }
 
@@ -533,12 +556,17 @@ export async function metroCategoryMetadata(
     return null;
   }
 
-  const { summary } = data;
+  const { summary, listings } = data;
+  // "Chinese-speaking" only when 3+ listings on this page record a Chinese spoken language.
+  const chineseSpeaking = hasChineseSpeakingSection(listings);
+  const chineseLine = chineseSpeaking
+    ? ` ${formatChineseSpeakingCountLine(countChineseSpeakingListings(listings), locale)}`
+    : '';
   return buildMetadata({
-    title: `${getMetroCategoryTitle(summary.category, site, locale)} | ${site.brandName}`,
+    title: `${getMetroCategoryTitle(summary.category, site, locale, { chineseSpeaking })} | ${site.brandName}`,
     description: `${getMetroCategoryIntro(summary.category, site, locale)} ${formatListingCountLine(summary, locale)}${
       locale === 'zh' ? '。' : '.'
-    }`,
+    }${chineseLine}`,
     path: metroCategoryPath(summary.category.slug),
     locale,
     site,
@@ -562,14 +590,21 @@ export async function cityCategoryMetadata(
   const resolvedCity = findMetroCategoryCity(summary, city);
   const cityLabel = resolvedCity ? getLocalizedCityName(resolvedCity.city, site, locale) : city;
   const listingCount = resolvedCity?.count ?? 0;
+  const cityListings = resolvedCity
+    ? data.listings.filter((business) => slugifyCity(business.city) === resolvedCity.slug)
+    : [];
+  const chineseSpeaking = hasChineseSpeakingSection(cityListings);
+  const chineseLine = chineseSpeaking
+    ? ` ${formatChineseSpeakingCountLine(countChineseSpeakingListings(cityListings), locale)}`
+    : '';
 
   return buildMetadata({
-    title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale)} | ${site.brandName}`,
+    title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale, { chineseSpeaking })} | ${site.brandName}`,
     description: `${getCityCategoryIntro(summary.category, cityLabel, site, locale)} ${formatCityListingCountLine(
       listingCount,
       cityLabel,
       locale
-    )}${locale === 'zh' ? '。' : '.'}`,
+    )}${locale === 'zh' ? '。' : '.'}${chineseLine}`,
     path: `/business/${resolvedCity?.slug ?? slugifyCity(city)}/${summary.category.slug}`,
     locale,
     site,

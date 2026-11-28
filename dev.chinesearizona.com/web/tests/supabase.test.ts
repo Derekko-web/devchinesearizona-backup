@@ -69,9 +69,27 @@ describe('supabase config helpers', () => {
     ).toBe(getSupabaseAuthUnavailableMessage('en'));
   });
 
-  it('preserves normal Supabase validation errors', () => {
+  it('preserves Supabase validation errors it has no translation for', () => {
     expect(
-      getSupabaseAuthErrorMessage(new Error('Invalid login credentials'), 'en', 'Fallback')
-    ).toBe('Invalid login credentials');
+      getSupabaseAuthErrorMessage(new Error('Signups not allowed for this instance'), 'en', 'Fallback')
+    ).toBe('Signups not allowed for this instance');
+  });
+});
+
+describe('localizeSupabaseAuthMessage (#469)', () => {
+  it('turns the common Supabase Auth messages into plain English and Traditional Chinese', async () => {
+    const { localizeSupabaseAuthMessage, getSupabaseAuthErrorMessage } = await import('@/lib/supabase');
+
+    expect(localizeSupabaseAuthMessage('User already registered', 'zh')).toBe('這個 Email 已經註冊過了，請直接登入。');
+    expect(localizeSupabaseAuthMessage('Email address "owner@test.example" is invalid', 'zh')).toContain('無法收信');
+    expect(localizeSupabaseAuthMessage('Email address "owner@test.example" is invalid', 'en')).toContain('can’t receive mail');
+    expect(localizeSupabaseAuthMessage('Password should be at least 6 characters.', 'zh')).toBe('密碼至少需要 6 個字元。');
+    expect(localizeSupabaseAuthMessage('Email not confirmed', 'zh')).toContain('使用 Google 繼續');
+    expect(localizeSupabaseAuthMessage('email rate limit exceeded', 'en')).toContain('Too many attempts');
+    expect(localizeSupabaseAuthMessage('For security purposes, you can only request this after 42 seconds.', 'zh')).toBe(
+      '為了帳號安全，請等 42 秒後再試。'
+    );
+    expect(localizeSupabaseAuthMessage('Something new from Supabase', 'zh')).toBe('Something new from Supabase');
+    expect(getSupabaseAuthErrorMessage({ message: 'Invalid login credentials' }, 'zh', 'fallback')).toBe('Email 或密碼不正確。');
   });
 });

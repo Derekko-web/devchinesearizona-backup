@@ -30,6 +30,7 @@ export function BusinessClaimForm({
   const [heroImage, setHeroImage] = useState('');
   const [galleryText, setGalleryText] = useState('');
   const [status, setStatus] = useState<string | null>(null);
+  const [statusTone, setStatusTone] = useState<'success' | 'error'>('error');
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [uploadingField, setUploadingField] = useState<'hero' | 'gallery' | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -106,12 +107,14 @@ export function BusinessClaimForm({
 
   async function handleSubmit(formData: FormData) {
     if (!user) {
+      setStatusTone('error');
       setStatus(locale === 'zh' ? '請先登入，再提交這個商家申請。' : 'Please log in before submitting this business request.');
       return;
     }
 
     const verification = String(formData.get('humanCheck') ?? '').trim();
     if (verification !== humanAnswer) {
+      setStatusTone('error');
       setStatus(locale === 'zh' ? '驗證答案不正確，請再試一次。' : 'Human verification failed. Please try again.');
       return;
     }
@@ -131,6 +134,7 @@ export function BusinessClaimForm({
     });
 
     const data = (await response.json()) as { message: string };
+    setStatusTone(response.ok ? 'success' : 'error');
     setStatus(data.message);
     setIsSubmitting(false);
   }
@@ -409,7 +413,22 @@ export function BusinessClaimForm({
           </button>
         </div>
 
-        {status ? (
+        {status && statusTone === 'success' ? (
+          <div
+            className="border-l-4 border-emerald-600 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800"
+            aria-live="polite"
+            data-testid="claim-submitted"
+          >
+            <p>{status}</p>
+            <a
+              href={`/${locale}/dashboard`}
+              className="mt-2 inline-block font-semibold text-emerald-900 underline underline-offset-4"
+            >
+              {locale === 'zh' ? '前往商家後台查看進度' : 'See it in your dashboard'}
+            </a>
+          </div>
+        ) : null}
+        {status && statusTone === 'error' ? (
           <p className="border-l-4 border-[#bd2730] bg-[#f7f1e8] px-4 py-3 text-sm font-semibold text-[#8f1c22]" aria-live="polite">
             {status}
           </p>
