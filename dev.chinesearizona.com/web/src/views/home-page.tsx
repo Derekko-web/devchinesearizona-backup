@@ -19,6 +19,7 @@ import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { t } from '@/lib/i18n';
 import { getListingTrustLevel, listingTrustExplanation, listingTrustLabel, type ListingTrustLevel } from '@/lib/listing-trust';
 import { metroCategoryPath } from '@/lib/metro-categories';
+import { isNewsFresh } from '@/lib/news-freshness';
 import { withLocale } from '@/lib/routing';
 import {
   defaultSiteProfile,
@@ -40,6 +41,8 @@ type HomeStoryCard = {
   title: string;
   bodyText: string;
   date: string;
+  // Machine-readable date, for hiding a stale news block.
+  publishedAt?: string;
   image?: string | null;
 };
 
@@ -363,6 +366,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
           title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
           bodyText: stripStoryCardLeadIn(copy(locale, article.excerpt.en, article.excerpt.zh ?? article.excerpt.en)),
           date: formatCardDate(article.publishedAt, locale),
+          publishedAt: article.publishedAt,
           image: article.heroImage,
         }))
     : [];
@@ -376,6 +380,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
         title: copy(locale, story.title.en, story.title.zh),
         bodyText: copy(locale, story.bodyText.en, story.bodyText.zh),
         date: copy(locale, story.date.en, story.date.zh),
+        publishedAt: story.date.en,
       }))
     : [];
   const storyCards =
@@ -384,6 +389,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
       : configuredStoryCards
           .filter((story, index, stories) => stories.findIndex((candidate) => candidate.href === story.href && candidate.title === story.title) === index)
           .slice(0, 3);
+  const showNews = storyCards.length > 0 && isNewsFresh(storyCards.map((story) => story.publishedAt));
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
@@ -676,21 +682,23 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
         </section>
 
         <section className="overflow-hidden border-b border-[#dccbbb] bg-[#fcf8f1]">
-          <div className="grid xl:grid-cols-[1.14fr_0.92fr_0.88fr]">
-            <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
-              <HomeSectionHeading
-                title={copy(locale, 'News & Community', '新聞與社區')}
-                subtitle={oppositeCopy(locale, 'News & Community', '新聞與社區')}
-                href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
-                hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
-              />
+          <div className={showNews ? 'grid xl:grid-cols-[1.14fr_0.92fr_0.88fr]' : 'grid xl:grid-cols-[1fr_1fr]'}>
+            {showNews ? (
+              <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
+                <HomeSectionHeading
+                  title={copy(locale, 'News & Community', '新聞與社區')}
+                  subtitle={oppositeCopy(locale, 'News & Community', '新聞與社區')}
+                  href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
+                  hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
+                />
 
-              <div className="mt-5 grid gap-4 md:grid-cols-3">
-                {storyCards.map((story) => (
-                  <StoryCard key={story.href} story={story} />
-                ))}
+                <div className="mt-5 grid gap-4 md:grid-cols-3">
+                  {storyCards.map((story) => (
+                    <StoryCard key={story.href} story={story} />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : null}
 
             <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
               <HomeSectionHeading

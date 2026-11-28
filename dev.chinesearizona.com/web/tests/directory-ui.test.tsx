@@ -117,9 +117,9 @@ describe('directory UI', () => {
     expect(element).not.toBeNull();
     expect(html).toContain('San Francisco, CA');
     expect(html).toContain('SAN FRANCISCO, CA');
-    expect(html).toContain('https://chinesesfbay.com/en/business/r-g-lounge-san-francisco');
+    expect(html).toContain('https://chinesesfbay.com/business/r-g-lounge-san-francisco');
     expect(html).toContain('"addressRegion":"CA"');
-    expect(html).not.toContain('https://chinesearizona.com/en/business/r-g-lounge-san-francisco');
+    expect(html).not.toContain('https://chinesearizona.com/business/r-g-lounge-san-francisco');
     expect(html).not.toContain('San Francisco, AZ');
     expect(html).not.toContain('SAN FRANCISCO, ARIZONA');
     expect(html).not.toContain('"addressRegion":"AZ"');

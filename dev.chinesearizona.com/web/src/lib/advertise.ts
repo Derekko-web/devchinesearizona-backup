@@ -297,10 +297,6 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
           zh: '月繳與週繳方案：可隨時取消。取消後不再自動續約，目前已付費的期間會持續到期末。',
         }),
         pick(locale, {
-          en: 'Unused pay-per-click budget is refunded on request.',
-          zh: '未使用的按點擊付費預算，可申請退還。',
-        }),
-        pick(locale, {
           en: 'One-time services can be cancelled for a full refund before we start the work.',
           zh: '一次性服務在我們開始製作前取消，可全額退款。',
         }),

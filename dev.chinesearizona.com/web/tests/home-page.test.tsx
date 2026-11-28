@@ -62,7 +62,8 @@ function writeHomepageRadarStore({
   const storePath = path.join(directory, 'store.json');
   const articles = titles.map((title, index) => {
     const slug = `${slugPrefix}-${index + 1}`;
-    const publishedAt = `2026-06-06T${String(17 - index).padStart(2, '0')}:00:00.000Z`;
+    // Recent, so the homepage treats the news desk as active (it hides stories older than 30 days).
+    const publishedAt = new Date(Date.now() - (index + 1) * 60 * 60 * 1000).toISOString();
 
     return {
       id: `${slug}-article`,
@@ -150,6 +151,29 @@ afterEach(() => {
 });
 
 describe('HomePageView', () => {
+  it('hides News & Community when the newest story is more than 30 days old, and shows it again when news resumes', async () => {
+    const [{ HomePageView }, { getCurrentArticlesAsync }] = await Promise.all([
+      import('@/views/home-page'),
+      import('@/lib/content'),
+    ]);
+    const newest = Math.max(...(await getCurrentArticlesAsync()).map((article) => Date.parse(article.publishedAt)));
+    const day = 24 * 60 * 60 * 1000;
+
+    vi.useFakeTimers({ toFake: ['Date'] });
+    try {
+      vi.setSystemTime(newest + 31 * day);
+      const stale = renderToStaticMarkup(await HomePageView({ locale: 'zh' }));
+      expect(stale).not.toContain('新聞與社區');
+      expect(stale).toContain('優選服務');
+
+      vi.setSystemTime(newest + 29 * day);
+      const fresh = renderToStaticMarkup(await HomePageView({ locale: 'zh' }));
+      expect(fresh).toContain('新聞與社區');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('renders the redesigned landing page sections', async () => {
     const { HomePageView } = await import('@/views/home-page');
 
@@ -168,8 +192,11 @@ describe('HomePageView', () => {
       import('@/views/home-page'),
       import('@/lib/content'),
     ]);
-
+    const newest = Math.max(...(await getCurrentArticlesAsync()).map((article) => Date.parse(article.publishedAt)));
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(newest + 24 * 60 * 60 * 1000);
     const html = renderToStaticMarkup(await HomePageView({ locale: 'en' }));
+    vi.useRealTimers();
     const expectedStoryTitles = (await getCurrentArticlesAsync())
       .filter((article, index, articles) => articles.findIndex((candidate) => candidate.slug === article.slug) === index)
       .filter((article) => hasLatinCharacters(article.title.en) && !hasCjkCharacters(article.title.en))
