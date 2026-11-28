@@ -85,7 +85,7 @@ describe('Los Angeles directory pages', () => {
     });
     const html = renderToStaticMarkup(rendered);
 
-    expect(html).toContain('https://chineselosangeles.com/en/business/lunasia-dim-sum-house-alhambra');
+    expect(html).toContain('https://chineselosangeles.com/business/lunasia-dim-sum-house-alhambra');
     expect(html).toContain('"addressRegion":"CA"');
     expect(html).toContain('Alhambra, CA');
     expect(html).toContain('ALHAMBRA, CA');
@@ -123,12 +123,12 @@ describe('Los Angeles directory pages', () => {
 
     expect(addMetadata.title).toBe('Add or Claim a Business | ChineseLosAngeles');
     expect(addMetadata.alternates?.canonical).toBe('https://chineselosangeles.com/add-business');
-    expect(business?.title).toBe('Lunasia Dim Sum House | ChineseLosAngeles');
+    expect(business?.title).toBe('Lunasia Dim Sum House – Chinese-Speaking Restaurant & Food in Alhambra, CA | ChineseLosAngeles');
     expect(business?.alternates?.canonical).toBe(
       'https://chineselosangeles.com/business/lunasia-dim-sum-house-alhambra'
     );
     expect(addBusinessHtml).toContain('ChineseLosAngeles business directory');
-    expect(addBusinessHtml).toContain('Help trusted Los Angeles Chinese businesses get found');
+    expect(addBusinessHtml).toContain('Claim your business page. It&#x27;s free.');
     expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
     expect(addBusinessHtml).not.toContain('ChineseArizona business directory');
   });

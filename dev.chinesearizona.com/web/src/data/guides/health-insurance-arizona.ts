@@ -47,7 +47,7 @@ export const healthInsuranceArizonaGuide: Guide = {
     },
     {
       en: 'Before you pick a plan, check that your doctors, children\'s pediatrician, and nearest hospital are in its network.',
-      zh: '選計畫前，先確認你的醫師、孩子的小兒科醫師與最近的醫院都在該計畫的網絡內。',
+      zh: '選計畫前，先確認你的醫師、孩子的小兒科醫師與最近的醫院都在該計畫的網路內。',
     },
     {
       en: 'If you moved to Arizona from another state or a new county, check whether you qualify for a Special Enrollment Period outside Open Enrollment.',
@@ -64,11 +64,11 @@ export const healthInsuranceArizonaGuide: Guide = {
       bullets: [
         {
           en: 'HMO plans usually cover care only from doctors who work for or contract with the HMO, and generally do not cover out-of-network care except in an emergency. EPO plans also cover only in-network care except in emergencies.',
-          zh: 'HMO 通常只給付與該 HMO 合作的醫師，除了急診之外，網絡外的醫療一般不給付。EPO 同樣只給付網絡內的醫療，急診除外。',
+          zh: 'HMO 通常只給付與該 HMO 合作的醫師，除了急診之外，網路外的醫療一般不給付。EPO 同樣只給付網路內的醫療，急診除外。',
         },
         {
           en: 'PPO plans cost you less when you use in-network providers, and let you see out-of-network providers without a referral for an additional cost. POS plans require a referral from your primary care doctor to see a specialist.',
-          zh: 'PPO 在網絡內看診比較便宜，也可以不經轉診去看網絡外的醫師，但要多付費用。POS 則要先由家庭醫師轉診才能看專科。',
+          zh: 'PPO 在網路內看診比較便宜，也可以不經轉診去看網路外的醫師，但要多付費用。POS 則要先由家庭醫師轉診才能看專科。',
         },
         {
           en: 'The metal levels describe cost sharing, not quality. On average the plan pays about 60% of covered costs for Bronze, 70% for Silver, 80% for Gold, and 90% for Platinum, and you pay the rest.',
@@ -118,7 +118,7 @@ export const healthInsuranceArizonaGuide: Guide = {
         },
         {
           en: 'If you start a job with health benefits, compare the employer plan\'s premium, deductible, and network with a Marketplace plan before you decide. Visa holders do not get Marketplace savings in 2027, so the employer plan may well cost less.',
-          zh: '如果新工作有提供健康保險，先比較僱主方案與 Marketplace 計畫的保費、自付額與網絡。2027 年簽證持有人拿不到 Marketplace 補助，僱主方案很可能比較便宜。',
+          zh: '如果新工作有提供健康保險，先比較僱主方案與 Marketplace 計畫的保費、自付額與網路。2027 年簽證持有人拿不到 Marketplace 補助，僱主方案很可能比較便宜。',
         },
       ],
     },

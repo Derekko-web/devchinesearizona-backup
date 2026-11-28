@@ -154,10 +154,18 @@ describe('AdvertisePageView', () => {
       expect(html).toContain('Sponsored / 贊助');
       expect(html).toContain(locale === 'zh' ? '評論與評分絕不販售' : 'Reviews and ratings are never for sale');
       expect(html).toContain(locale === 'zh' ? '退款與取消政策' : 'Refunds and cancellation');
+      // Pay-per-click is not on the price list and is hidden from owners (#468).
+      expect(html).not.toMatch(/pay-per-click|按點擊付費/i);
       expect(html).toContain('id="sponsored"');
       expect(html).toContain('id="advertise-inquiry"');
       expect(html).toContain('id="wechat"');
       expect(html).toContain(locale === 'zh' ? '微信號即將公布' : 'Our WeChat ID is coming soon');
+      // The form sends to our server; the email app is only a second option (#474).
+      expect(html).toContain(locale === 'zh' ? '送出詢問' : 'Send inquiry');
+      expect(html).toContain(locale === 'zh' ? '一個工作天內回覆' : 'We reply within one business day.');
+      expect(html).toContain(locale === 'zh' ? '用郵件程式開啟這則訊息' : 'Open this message in your email app');
+      expect(html).toContain('name="company_website"');
+      expect(html).not.toContain(locale === 'zh' ? '用 Email 送出詢問' : 'Send inquiry by email');
       expect(html).toContain(`href="/${locale}/add-business"`);
       // Owners on a site with database listings buy online from the dashboard (#408).
       // City sites with static listings keep the inquiry form for every plan.

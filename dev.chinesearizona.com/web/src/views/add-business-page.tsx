@@ -102,13 +102,8 @@ export async function AddBusinessPageView({
     : locale === 'zh'
       ? `${site.brandName} 商家目錄`
       : `${site.brandName} business directory`;
-  const heroLead = isDefaultSite
-    ? locale === 'zh'
-      ? '讓可信的亞利桑那華人商家被找到、被維護、被驗證。'
-      : 'Help trusted Arizona Chinese businesses get found, maintained, and verified.'
-    : locale === 'zh'
-      ? `讓可信的${site.regionNameZh}華人商家被找到、被維護、被驗證。`
-      : `Help trusted ${site.regionName} Chinese businesses get found, maintained, and verified.`;
+  // Says what an owner can do here, not what the platform does (issue #509).
+  const heroLead = locale === 'zh' ? '認領你的商家頁面，完全免費。' : "Claim your business page. It's free.";
   const heroImageSrc = isDefaultSite
     ? '/directory-ai-replacements/lee-lee-oriental-supermarket-chandler.webp'
     : site.home.heroImageUrl;
