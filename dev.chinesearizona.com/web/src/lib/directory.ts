@@ -19,6 +19,7 @@ import type {
   SortOption,
   VerificationState,
 } from '@/lib/types';
+import { CHINESE_SPOKEN_LANGUAGE_VALUES, matchesLanguageFilter } from '@/lib/listing-trust';
 import { formatPhoneNumber } from '@/lib/phone';
 import { getDirectoryAiReplacementImage, resolveDirectoryHeroImage } from '@/lib/directory-ai-replacements';
 import {
@@ -885,6 +886,7 @@ type DirectorySupabaseQuery = {
   limit(count: number): DirectorySupabaseQuery;
   neq(column: string, value: unknown): DirectorySupabaseQuery;
   order(column: string, options: { ascending: boolean }): DirectorySupabaseQuery;
+  overlaps(column: string, value: readonly unknown[]): DirectorySupabaseQuery;
   textSearch(
     column: string,
     query: string,
@@ -922,7 +924,9 @@ export function applyDirectoryQueryFilters<T extends DirectorySupabaseQuery>(
     nextQuery = nextQuery.neq('verification_state', 'unverified') as T;
   }
 
-  if (filters.language) {
+  if (filters.language === 'Chinese') {
+    nextQuery = nextQuery.overlaps('languages', [...CHINESE_SPOKEN_LANGUAGE_VALUES]) as T;
+  } else if (filters.language) {
     nextQuery = nextQuery.contains('languages', [filters.language]) as T;
   }
 
@@ -1003,7 +1007,7 @@ function applyClientFilters(
       return false;
     }
 
-    if (filters.language && !business.languages.includes(filters.language as never)) {
+    if (filters.language && !matchesLanguageFilter(business.languages, filters.language)) {
       return false;
     }
 
@@ -1173,7 +1177,7 @@ function queryStaticBusinesses(
       return false;
     }
 
-    if (filters.language && !business.languages.includes(filters.language as never)) {
+    if (filters.language && !matchesLanguageFilter(business.languages, filters.language)) {
       return false;
     }
 
