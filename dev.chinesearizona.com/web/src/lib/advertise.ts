@@ -301,8 +301,8 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
           zh: '一次性服務在我們開始製作前取消，可全額退款。',
         }),
         pick(locale, {
-          en: `To cancel or ask for a refund, email ${email}.`,
-          zh: `如需取消或退款，請寄信至 ${email}。`,
+          en: `To cancel or ask for a refund, send us a message with the form below, or email ${email}.`,
+          zh: `如需取消或退款，請用下方表單留言給我們，或寄信至 ${email}。`,
         }),
       ],
     },
@@ -317,8 +317,8 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
       wechatHeading: pick(locale, { en: 'WeChat', zh: '微信' }),
       wechatId: advertiseWeChatId,
       wechatPending: pick(locale, {
-        en: 'Our WeChat ID is coming soon. Email us and we will add you on WeChat.',
-        zh: '微信號即將公布。請先寄信給我們，我們會主動加你微信。',
+        en: 'Our WeChat ID is coming soon. Leave your WeChat ID in the form and we will add you.',
+        zh: '微信號即將公布。請在表單留下你的微信號，我們會主動加你。',
       }),
     },
     claimCta: pick(locale, { en: 'Claim your free listing', zh: '免費認領商家' }),
