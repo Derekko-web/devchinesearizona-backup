@@ -11,7 +11,7 @@ import type {
   SignalDeskQueueItem,
 } from '@/lib/types';
 import { businessReviewOverrides } from '@/data/business-review-overrides';
-import { newcomerGuides } from '@/data/guides';
+import { newcomerGuides, seasonalGuides } from '@/data/guides';
 import generatedAustinLocalArticles from '@/data/generated-austin-local-articles.json';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLosAngelesLocalArticles from '@/data/generated-los-angeles-local-articles.json';
@@ -2231,6 +2231,7 @@ export const guides: Guide[] = [
     relatedEventSlugs: [],
   },
   ...newcomerGuides,
+  ...seasonalGuides,
 ];
 
 export const localArticles: Article[] = unwrapJsonArray(
@@ -2268,6 +2269,108 @@ export const signalDeskQueue = generatedSignalDeskQueue as SignalDeskQueueItem[]
 export const articles: Article[] = localArticles;
 
 export const events: Event[] = [
+  {
+    slug: 'ccaarizona-chinese-new-year-festival-2027',
+    title: { en: 'CCAArizona 37th Annual Chinese New Year Festival 2027', zh: 'CCAArizona 第 37 屆農曆新年文化節（2027）' },
+    excerpt: {
+      en: 'The Chinese Cultural Association of Arizona, formerly Phoenix Chinese Week, holds its 37th annual Chinese New Year Festival at Tempe Beach Park on February 6 and 7, 2027.',
+      zh: 'Chinese Cultural Association of Arizona（CCAArizona，原 Phoenix Chinese Week）將於 2027 年 2 月 6 日與 7 日，在 Tempe Beach Park 舉辦第 37 屆農曆新年文化節。',
+    },
+    description: [
+      {
+        en: 'The organizer\'s page lists Saturday, February 6, 2027, from 9 a.m. to 5 p.m. and Sunday, February 7, from 10 a.m. to 5 p.m. at Tempe Beach Park, with traditional performances, food, local vendors, and family-friendly activities for the Year of the Sheep.',
+        zh: '主辦單位網頁列出的時間是 2027 年 2 月 6 日（星期六）上午 9 點至下午 5 點，以及 2 月 7 日（星期日）上午 10 點至下午 5 點，地點在 Tempe Beach Park，內容包括傳統表演、美食、在地攤商與親子活動，迎接羊年。',
+      },
+      {
+        en: 'The organizer says tickets go on sale in December 2026. Check its page for admission details before you go.',
+        zh: '主辦單位表示門票於 2026 年 12 月開賣。出發前請到主辦單位網頁確認入場資訊。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Chinese Cultural Association of Arizona (CCAArizona)',
+    verifiedOrganizer: true,
+    venueName: 'Tempe Beach Park',
+    address: 'Tempe Beach Park, Tempe, AZ',
+    city: 'Tempe',
+    startDate: '2027-02-06T09:00:00-07:00',
+    endDate: '2027-02-07T17:00:00-07:00',
+    ticketUrl: 'https://phoenixchineseweek.org/',
+    languageNote: {
+      en: 'Times, tickets, and the program come from the organizer\'s page as of November 27, 2026. Check it again before you go.',
+      zh: '時間、票務與節目依主辦單位網頁 2026 年 11 月 27 日的內容整理，出發前請再確認。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'spring festival', 'ccaarizona', 'tempe', '2027'],
+  },
+  {
+    slug: 'phoenix-food-fair-lunar-new-year-2027',
+    title: { en: 'Phoenix Food Fair: Lunar New Year Edition 2027', zh: 'Phoenix Food Fair 農曆新年版（2027）' },
+    excerpt: {
+      en: 'A Lunar New Year food fair and lantern festival at Kiwanis Park in Tempe on January 23 and 24, 2027, from 3 to 8 p.m. both days.',
+      zh: '2027 年 1 月 23 日與 24 日在 Tempe 的 Kiwanis Park 舉辦的農曆新年美食市集與燈會，兩天都是下午 3 點至晚上 8 點。',
+    },
+    description: [
+      {
+        en: 'The organizer\'s page lists January 23 and 24, 2027, from 3 to 8 p.m. each day at Kiwanis Park, 5992 S All America Way, Tempe, and promotes a lantern festival along with the food fair.',
+        zh: '主辦單位網頁列出的日期是 2027 年 1 月 23 日與 24 日，每天下午 3 點至晚上 8 點，地點在 Tempe 的 Kiwanis Park（5992 S All America Way），除了美食市集也有燈會。',
+      },
+      {
+        en: 'Admission is sold as wristbands on the organizer\'s site.',
+        zh: '入場以手環形式在主辦單位網站販售。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Phoenix Food Fair',
+    verifiedOrganizer: true,
+    venueName: 'Kiwanis Park',
+    address: '5992 S All America Way, Tempe, AZ 85283',
+    city: 'Tempe',
+    startDate: '2027-01-23T15:00:00-07:00',
+    endDate: '2027-01-24T20:00:00-07:00',
+    ticketUrl: 'https://www.phxfoodfair.com/',
+    languageNote: {
+      en: 'Dates, hours, and admission types come from the organizer\'s page as of November 27, 2026.',
+      zh: '日期、時間與入場方式依主辦單位網頁 2026 年 11 月 27 日的內容整理。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'food fair', 'lantern festival', 'tempe', '2027'],
+  },
+  {
+    slug: 'tarwater-elementary-lunar-new-year-2027',
+    title: { en: 'Tarwater Elementary Lunar New Year Celebration 2027', zh: 'Tarwater 小學 2027 農曆新年慶祝活動' },
+    excerpt: {
+      en: 'A school-community Lunar New Year celebration at Tarwater Elementary in Chandler on Friday, January 29, 2027, from 5:30 to 8 p.m.',
+      zh: '2027 年 1 月 29 日（星期五）晚上 5 點半至 8 點，在 Chandler 的 Tarwater 小學舉辦的學校與社區農曆新年慶祝活動。',
+    },
+    description: [
+      {
+        en: 'The City of Chandler calendar describes it as a school-community event that brings together students, families, staff, alumni, and community organizations to celebrate Chinese language and culture, with student performances, cultural activities, art lessons, and interactive booths.',
+        zh: 'Chandler 市政府活動行事曆說明，這是一場集合在校學生、家長、教職員、校友與社區團體的學校與社區活動，慶祝中文與中華文化，內容有學生表演、文化活動、藝術課程與互動攤位。',
+      },
+      {
+        en: 'Graduates of the school\'s Dual Language Immersion program return as youth vendors, volunteers, performers, and activity leaders.',
+        zh: '學校雙語沉浸課程的國高中畢業生，會回來擔任青年攤商、志工、表演者與活動帶領人。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Tarwater Elementary School (City of Chandler calendar)',
+    verifiedOrganizer: true,
+    venueName: 'Tarwater Elementary School',
+    address: '2300 S Gardner Dr., Chandler, AZ 85286',
+    city: 'Chandler',
+    startDate: '2027-01-29T17:30:00-07:00',
+    endDate: '2027-01-29T20:00:00-07:00',
+    ticketUrl: 'https://www.chandleraz.gov/connection-and-impact/lunar-new-year-festival',
+    languageNote: {
+      en: 'Details come from the City of Chandler calendar listing as of November 27, 2026.',
+      zh: '資訊依 Chandler 市政府活動行事曆 2026 年 11 月 27 日的內容整理。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'school', 'chandler', '2027'],
+  },
   {
     slug: 'spring-festival-gala-arizona-art-academy-2026',
     title: { en: '2026 Spring Festival Gala: Chinese New Year Show', 'zh': '2026 春節聯歡晚會：中國新年演出' },
