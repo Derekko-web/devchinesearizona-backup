@@ -8,9 +8,12 @@ Status:
 |---|---|---|
 | Batch 1: 14 listings (`listing-expansion-2026-11.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): 256 → 270 rows, indexable 48 → 62, 14/14 rows match dev by md5 |
 | Corrections (`listing-expansion-2026-11-corrections.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): indexable 62 → 64; pre-check confirmed production held the rollback's before-values |
-| Batch 2a: 8 physicians + 2 language fixes (`listing-expansion-2026-11-batch2a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Batch 2a: 8 physicians + 2 language fixes (`listing-expansion-2026-11-batch2a*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval, both files): 270 → 278 rows, indexable 64 → 72, 8/8 rows match dev by md5 |
 | Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 | Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval (production rows from batch 1) |
+| Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| AZ Hope Chinese School language fix (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | **Not applied** (prepared only, per CEO) | Not applied; CEO decision |
 
 ## Result
 
@@ -177,21 +180,21 @@ The other 18 are independent businesses or schools, though three of them are unv
 
 Under the CEO's widened evidence rule (2026-11-27): language may come from the directory of the organisation a professional works in, here Banner Health's Find a Doctor (`doctors.bannerhealth.com`, filtered by language). Each listing's copy ends with "Languages as listed in Banner Health's Find a Doctor directory, checked November 2026" (and the same in Chinese).
 
-Second source for address and phone: the CEO asked for the professional's own site or the state licence board. The Arizona Medical Board and the Arizona State Board of Dental Examiners both return HTTP 403 to automated lookups, so the **federal NPI registry (NPPES)** was used as the official second source instead. **CEO decision needed:** if the NPI registry does not count, these 8 rows need a manual board lookup before production.
+Second source for address and phone: the CEO asked for the professional's own site or the state licence board. The Arizona Medical Board and the Arizona State Board of Dental Examiners both return HTTP 403 to automated lookups, so the **federal NPI registry (NPPES)** was used as the official second source instead. The CEO confirmed on 2026-11-28 that the NPI registry counts as the second source for address.
 
 Banner's directory lists 27 Chinese-speaking providers (23 Mandarin, 3 Cantonese, 2 "Chinese"; some overlap). Of those:
 
 | Outcome | Count | Providers |
 |---|---|---|
 | Added: practice in the eight cities, NPI registry location matches Banner's | 8 | Albert Hsia (Chandler), Alan Wang, Jen-Jung Pan, Jimmy Chim, Rong Bai (Phoenix), David Wang (Chandler), Jennifer Yu-Hsien Huang (Peoria), Mimi Chao (Mesa) |
-| Skipped: NPI registry still shows an older address (Cleveland, Stanford, San Antonio, Gilbert or another Phoenix site) | 7 | I-Hui Chiang, Rong Guo, Rosanne Marie Kho, Wilber Su, Ying Li, Michael Lee, Qing Zhao |
-| Skipped: NPI address differs from Banner's (same phone) | 1 | Angela Feng (Mesa) |
+| Skipped here: NPI registry still shows an older address (Cleveland, Stanford, San Antonio, Gilbert or another Phoenix site). **Added in batch 2c.** | 7 | I-Hui Chiang, Rong Guo, Rosanne Marie Kho, Wilber Su, Ying Li, Michael Lee, Qing Zhao |
+| Skipped here: NPI address differs from Banner's (same phone). **Added in batch 2c.** | 1 | Angela Feng (Mesa) |
 | Skipped: primary practice outside the eight cities (Tucson, Maricopa, Sun City West, Colorado) | 10 | |
 | Skipped: diagnostic radiologist (no direct appointments) | 1 | John Chang |
 
 Notes:
 
-- `alan-wang-md-phoenix` has no phone: Banner shows a central scheduling line and the NPI registry a clinic line, so neither confirms the other. The listing links to his Banner profile for booking.
+- `alan-wang-md-phoenix` was published with no phone: Banner shows a central scheduling line and the NPI registry a clinic line, so neither confirmed the other. Under the CEO's later decision (employer directory counts for phone), `listing-expansion-2026-11-batch2c-corrections.sql` adds Banner's "Preferred Phone Number", (833) 929-2418.
 - `jimmy-chim-md-phoenix` is Cantonese; the other seven are Mandarin. Hokkien and Min Nan listed for two skipped providers were not mapped to `Taiwanese`.
 - These are employees of a large health system. They add Mandarin- and Cantonese-speaking specialists the community asks about, but they are unlikely to buy advertising.
 - Website scan: the Banner profile URLs load normally for a browser and return 403 to the Googlebot user agent from a non-Google address (bot protection, as with Comparion and RE/MAX in batch 1); no spam, parking or redirects.
@@ -251,9 +254,68 @@ The first drafts used gendered pronouns ("she", "his", 他/她) for people whose
 - Batch 2a and 2b SQL in this PR are already pronoun-free (the 8 batch 2a rows in dev were updated to match).
 - Six batch 1 rows are already in **production** with the old copy: `joseph-lau-state-farm-chandler`, `katie-lau-state-farm-mesa`, `tak-sun-comparion-insurance-chandler`, `ling-zhu-phoenix`, `christy-crouse-scottsdale`, `jean-woodland-scottsdale`. `listing-expansion-2026-11-batch1-pronoun-fix.sql` rewrites their four description fields, each update guarded on the current English description; the rollback restores the current text. Applied to dev; production waits for CEO approval.
 
+## Batch 2c: Banner physicians with an out-of-date NPI record (issue #487)
+
+These are the 8 Banner Health providers that batch 2a skipped because the NPI registry still showed an older practice address. The CEO decided on 2026-11-28 that for employed clinicians the employer's own directory counts for both address and phone, and is preferred when it disagrees with the NPI registry. **For all 8, the address and phone come from the Banner provider page**, not the NPI registry. Language evidence and the closing line in the copy are the same as batch 2a. Copy uses names, not pronouns.
+
+| Slug | City | Specialty (as Banner lists it) | Languages | Phone on the Banner page |
+|---|---|---|---|---|
+| `i-hui-chiang-md-phoenix` | Phoenix | Cardiology, interventional cardiology | English, Mandarin (Banner also lists Hokkien and French) | (602) 521-3090, Heart Institute |
+| `wilber-su-md-phoenix` | Phoenix | Cardiac electrophysiology | English, Mandarin | (602) 521-3090, Heart Institute |
+| `rosanne-kho-md-phoenix` | Phoenix | Minimally invasive gynecologic surgery | English, Mandarin | (602) 521-5700, Women's Institute |
+| `ying-li-md-phoenix` | Phoenix | Radiation oncology (Banner MD Anderson) | English, Mandarin | (480) 256-6444, Banner MD Anderson scheduling |
+| `michael-lee-md-phoenix` | Phoenix | Hematology and medical oncology (Banner MD Anderson) | English, Mandarin, Cantonese | (480) 256-6444, Banner MD Anderson scheduling |
+| `qing-zhao-md-chandler` | Chandler | Breast medical oncology, hematology (Banner MD Anderson at Banner Ocotillo) | English, Mandarin | (480) 256-6444, Banner MD Anderson scheduling |
+| `rong-guo-md-glendale` | Glendale | Endocrinology, diabetes and metabolism | English, Mandarin | (623) 248-2108, Banner Health Center plus |
+| `angela-feng-do-mesa` | Mesa | Family medicine | English, Cantonese | (480) 827-5500, Banner Health Clinic |
+
+Sources: each row's `website` is its Banner provider page (for example https://doctors.bannerhealth.com/provider/i-hui-chiang/1458854); the full list is in `listing-expansion-2026-11-batch2c.sql`.
+
+Checked on dev after insert: all 8 English and `/zh/` pages return 200 with no `noindex` (a known non-indexable listing on the same site shows `noindex, nofollow`); English descriptions are 536 to 769 characters; no Simplified characters; duplicate check against production (slug, name, phone, Banner URL): no duplicate people. Phones are clinic lines, so some repeat: three share Banner MD Anderson's scheduling line (the copy says it is the scheduling line), and I-Hui Chiang and Wilber Su share the Heart Institute line with batch 2a's Rong Bai. Website scan: same as batch 2a (browser loads, Googlebot user agent gets 403 from a non-Google address).
+
+To apply to production after approval: pre-check none of the 8 slugs exist; run `listing-expansion-2026-11-batch2c.sql`; post-check 8 rows and indexable +8 (72 → 80 if batch 2b is not applied first). Rollback: `listing-expansion-2026-11-batch2c-rollback.sql`.
+
+## Corrections, batch 2c
+
+`listing-expansion-2026-11-batch2c-corrections.sql` (applied to dev 2026-11-28; production waits for approval):
+
+| Listing | Finding | Change |
+|---|---|---|
+| `az-hope-chinese-school-chandler` | The CEO saw the page say 簡體中文 while the tags showed 繁體中文. The school's own About page says "Our goal is to offer instruction in Chinese culture and simplified Chinese" (https://www.azhopechineseschool.org/school/page/about). The tag came from `Traditional Chinese` in `languages`. | Remove `Traditional Chinese` from `languages` and `Traditional Chinese` and 繁體 from `search_aliases`. Languages become English, Mandarin. The zh page now shows no 繁體中文 tag. |
+| `alan-wang-md-phoenix` | Published in batch 2a with no phone (see above). | Add Banner's preferred phone, (833) 929-2418. |
+
+The rollback file writes back the production values from 2026-11-28 (AZ Hope's three languages and eleven aliases; Alan Wang's empty phone).
+
+## Chain listings to hide (prepared, not applied)
+
+The CEO asked for a list of national and regional chain listings with no Chinese-language service, and SQL that takes them off the public site without deleting them. **Nothing has been run, on dev or production.**
+
+How it hides them: `listing-expansion-2026-11-chains-suppress.sql` sets `status = 'suppressed'`, a value the `businesses_status_check` constraint already allows. The app only shows rows with status `live` or `stale` (the directory queries filter `.in('status', ['live','stale'])` and `isPublicDirectoryBusiness()` rejects any other status), so suppressed rows drop out of lists, search, the sitemap and their own page, but stay in the table. The update is guarded on `status = 'live'`. `listing-expansion-2026-11-chains-suppress-rollback.sql` sets the same 47 slugs back to `live`.
+
+Checked on production (read-only, 2026-11-28): all 47 exist and are `live`; none is claimed by an owner, sponsored or featured; **none is indexable today**, so the indexable count stays at 72. Public rows would go from 266 to 219.
+
+| Category | Count | Listings (slug) |
+|---|---|---|
+| dining | 19 | `carl-s-jr-peoria`, `denny-s-chandler`, `filiberto-s-mesa`, `firehouse-subs-mesa`, `jack-in-the-box-chandler`, `jack-in-the-box-mesa`, `krispy-kreme-mesa`, `little-caesars-mesa`, `little-caesars-peoria`, `los-favoritos-taco-shop-chandler`, `mcdonald-s-chandler`, `mcdonald-s-mesa`, `oregano-s-pizza-bistro-mesa`, `pizza-hut-express-mesa`, `salad-and-go-chandler`, `subway-chandler`, `subway-peoria`, `taco-bell-mesa`, `wendy-s-mesa` |
+| shopping | 6 | `1-800-flowers-mesa`, `circle-k-chandler`, `circle-k-mesa`, `circle-k-tucson`, `fry-s-fuel-peoria`, `target-mesa` |
+| medical | 10 | `banner-urgent-care-peoria`, `cvs-pharmacy-chandler`, `cvs-pharmacy-mesa`, `cvs-pharmacy-peoria`, `discover-vein-and-vascular-chandler`, `miracle-ear-chandler`, `simon-med-mesa`, `walgreens-chandler`, `walgreens-chandler-2`, `walgreens-tucson` |
+| legal-finance | 6 | `arizona-central-credit-union-chandler`, `bmo-chandler`, `global-credit-union-peoria`, `h-and-r-block-peoria`, `loanmax-mesa`, `midfirst-bank-peoria` |
+| home-services | 2 | `ace-hardware-peoria`, `discount-tire-mesa` |
+| local-services | 2 | `fedex-office-chandler`, `the-ups-store-chandler` |
+| beauty-wellness | 1 | `sola-salons-chandler` |
+| education | 1 | `usa-tae-kwon-do-chandler` |
+
+Kept on purpose:
+
+- Asian supermarkets and Asian or Chinese-owned chains: 99 Ranch, H Mart, Lee Lee, Mekong Supermarket, 85°C, Paris Baguette, Meet Fresh, Haidilao, Kura Sushi, MINISO, Daiso, Teso Life, Kinokuniya and similar.
+- **`panda-express-peoria` is left out for a CEO call.** Its parent, Panda Restaurant Group, is led by co-founders Andrew and Peggy Cherng (pandarg.com) and serves American Chinese food, so it may count as Chinese-owned. Add the slug to both files if it should be hidden.
+- Single-location plaza shops that are not chains (Claw Zone, Diamond National, Name Brand Exchange, Racing Collectibles).
+- The three associations and the student club listed earlier (not chains).
+
 ## Follow-ups
 
-1. Decide whether insurer provider directories (Delta Dental, BCBS Arizona, Humana and similar) count as an official source for language. If yes, about 40 more dentists and physicians in the eight cities could be added quickly; many are independent practices.
-2. Add a "Chinese (dialect not stated)" option, or ask the two owners above to pick a dialect, so the language filter can find them.
-3. Next batch: owner-run home services, auto, tutoring, movers and travel agencies. These rarely state languages on a website; they need a different source (owner sign-ups, community referrals).
+1. ~~Decide whether insurer provider directories count.~~ Decided 2026-11-27/28: employer and insurer directories count with a second source; NPI registry counts for address; employer directory counts for address and phone.
+2. Add a "Chinese (dialect not stated)" option, or ask the two owners above to pick a dialect, so the language filter can find them. (Done on the data side: the CEO decided `{English, Chinese}`.)
+3. Owner-run home services, auto, tutoring, movers and travel agencies: parked by the CEO. A list of real but unverifiable ones went to Derek privately.
 4. eXp Realty and several brokerages block automated page fetches. A human check of those agents' pages would add more Mandarin-speaking realtors.
+5. Other health systems' directories (Dignity, HonorHealth, Mayo) block automated fetches or need JavaScript, so physicians from those systems still need a human lookup.
