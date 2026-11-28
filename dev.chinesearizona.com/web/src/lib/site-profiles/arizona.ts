@@ -138,6 +138,10 @@ export const arizonaSiteProfile: SiteProfile = {
       Mesa: '梅薩',
       Gilbert: '吉爾伯特',
       Scottsdale: '斯科茨代爾',
+      // Cities that already have listings, so Chinese titles name them in Chinese.
+      Peoria: '皮奧里亞',
+      Glendale: '格蘭岱爾',
+      Tucson: '土桑',
     },
     listingSource: {
       state: 'live',
@@ -261,7 +265,7 @@ export const arizonaSiteProfile: SiteProfile = {
     },
     newcomerBody: {
       en: 'Your guide to settling in, finding services, schools, and more.',
-      zh: '從學校到服務，把安家路線上需要的信息整理清楚。',
+      zh: '從學校到服務，把安家路線上需要的資訊整理清楚。',
     },
   },
 };

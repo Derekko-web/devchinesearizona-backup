@@ -149,7 +149,7 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
         zh: '創始優惠：前 10 家商家半價（$29.50／月 或 $295／年）',
       },
       summary: {
-        en: `One of the top 3 spots in a ${site.regionName} category, always labeled "${sponsoredLabel}".`,
+        en: `One of the top 3 spots in one ${site.regionName} category, always labeled "${sponsoredLabel}".`,
         zh: `${site.regionNameZh}分類頁前 3 名版位之一，一律標示「${sponsoredLabel}」。`,
       },
       includes: [
@@ -295,10 +295,6 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
         pick(locale, {
           en: 'Monthly and weekly plans: cancel anytime. Cancelling stops the next renewal, and your current period runs to its end.',
           zh: '月繳與週繳方案：可隨時取消。取消後不再自動續約，目前已付費的期間會持續到期末。',
-        }),
-        pick(locale, {
-          en: 'Unused pay-per-click budget is refunded on request.',
-          zh: '未使用的按點擊付費預算，可申請退還。',
         }),
         pick(locale, {
           en: 'One-time services can be cancelled for a full refund before we start the work.',

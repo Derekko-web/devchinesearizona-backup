@@ -13,6 +13,7 @@ import {
   buildPostAuthRedirectUrl,
   buildResetPasswordPath,
   getBrowserAuthBaseUrl,
+  pendingSignupMessage,
   resolvePostAuthPath,
   type AuthPageKind,
 } from '@/lib/auth';
@@ -53,12 +54,6 @@ function statusClasses(tone: StatusTone): string {
   }
 
   return 'border-brand-200 bg-brand-50 text-brand-700';
-}
-
-function pendingSignupMessage(locale: Locale): string {
-  return locale === 'zh'
-    ? '如果這個 email 是新的，請檢查信箱中的確認連結；如果你先前已建立帳號，請直接登入。'
-    : 'If this email is new, check your inbox for a confirmation link. If you already have an account, log in instead.';
 }
 
 function passwordLoginHint(locale: Locale): string {
@@ -882,26 +877,31 @@ export function AuthPageClient({
         </div>
       ) : null}
 
-      {!isJoinPage ? (
-        <>
-          <a
-            href={googleAuthHref}
-            onClick={handleGoogleSignIn}
-            aria-disabled={isBusy}
-            className={`mt-6 inline-flex w-full items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-3 text-base font-semibold text-[#2f241d] transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 ${
-              isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
-            }`}
-          >
-            {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
-          </a>
-
-          <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">
-            <span className="h-px flex-1 bg-[#eadfd1]" />
-            <span>{locale === 'zh' ? '或' : 'OR'}</span>
-            <span className="h-px flex-1 bg-[#eadfd1]" />
-          </div>
-        </>
+      {/* Google comes first on both pages: it needs no confirmation email (#471). */}
+      <a
+        href={googleAuthHref}
+        onClick={handleGoogleSignIn}
+        aria-disabled={isBusy}
+        data-testid="google-auth-first"
+        className={`mt-6 inline-flex w-full items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-3 text-base font-semibold text-[#2f241d] transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 ${
+          isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
+        }`}
+      >
+        {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
+      </a>
+      {isJoinPage ? (
+        <p className="mt-2 text-center text-xs leading-5 text-[#7a6a5b]">
+          {locale === 'zh'
+            ? '商家主理人最快的方式：不必等確認信，馬上就能認領商家。'
+            : 'Fastest for business owners: no confirmation email to wait for, so you can claim your business right away.'}
+        </p>
       ) : null}
+
+      <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">
+        <span className="h-px flex-1 bg-[#eadfd1]" />
+        <span>{locale === 'zh' ? '或' : 'OR'}</span>
+        <span className="h-px flex-1 bg-[#eadfd1]" />
+      </div>
 
       <form
         action={mode === 'signup' ? signupFallbackAction : loginFallbackAction}
@@ -1053,34 +1053,28 @@ export function AuthPageClient({
       </form>
 
       {isJoinPage ? (
-        <>
-          <p className="mt-4 text-xs leading-5 text-[#7a6a5b]">
-            {locale === 'zh'
-              ? '建立帳號後，你就能認領商家、發佈社群內容與儲存搜尋。'
-              : 'Creating an account lets you claim listings, publish in the community, and save searches.'}
-          </p>
-
-          <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#c2b5a7]">
-            <span className="h-px flex-1 bg-[#eadfd1]" />
-            <span>{locale === 'zh' ? '或' : 'OR'}</span>
-            <span className="h-px flex-1 bg-[#eadfd1]" />
-          </div>
-
-          <a
-            href={googleAuthHref}
-            onClick={handleGoogleSignIn}
-            aria-disabled={isBusy}
-            className={`mt-6 inline-flex w-full items-center justify-center rounded-[16px] border border-[#d6c2af] bg-white px-5 py-3 text-base font-semibold text-[#2f241d] transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 ${
-              isBusy ? 'pointer-events-none cursor-not-allowed opacity-60' : ''
-            }`}
-          >
-            {locale === 'zh' ? '使用 Google 繼續' : 'Continue with Google'}
-          </a>
-        </>
+        <p className="mt-4 text-xs leading-5 text-[#7a6a5b]">
+          {locale === 'zh'
+            ? '建立帳號後，你就能認領商家、發佈社群內容與儲存搜尋。'
+            : 'Creating an account lets you claim listings, publish in the community, and save searches.'}
+        </p>
       ) : null}
 
       {status ? (
         <p className={`mt-4 rounded-2xl border px-4 py-3 text-sm font-medium ${statusClasses(status.tone)}`}>{status.message}</p>
+      ) : null}
+
+      {isJoinPage && status?.tone === 'success' ? (
+        <p className="mt-3 text-sm leading-6 text-[#6f5e4e]" data-testid="signup-help">
+          {locale === 'zh' ? '還是卡住了？' : 'Still stuck? '}
+          <Link
+            href={`/${locale}/advertise#contact`}
+            className="font-semibold text-brand-700 underline underline-offset-4 transition-colors hover:text-brand-900"
+          >
+            {locale === 'zh' ? '用這個表單留言給我們' : 'Send us a message with this form'}
+          </Link>
+          {locale === 'zh' ? '，我們會在一個工作天內回覆。' : ' and we will reply within one business day.'}
+        </p>
       ) : null}
 
       {!isJoinPage ? (

@@ -19,6 +19,7 @@ import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { t } from '@/lib/i18n';
 import { getListingTrustLevel, listingTrustExplanation, listingTrustLabel, type ListingTrustLevel } from '@/lib/listing-trust';
 import { metroCategoryPath } from '@/lib/metro-categories';
+import { isNewsFresh } from '@/lib/news-freshness';
 import { withLocale } from '@/lib/routing';
 import {
   defaultSiteProfile,
@@ -40,6 +41,8 @@ type HomeStoryCard = {
   title: string;
   bodyText: string;
   date: string;
+  // Machine-readable date, for hiding a stale news block.
+  publishedAt?: string;
   image?: string | null;
 };
 
@@ -363,6 +366,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
           title: stripStoryCardLeadIn(copy(locale, article.title.en, article.title.zh ?? article.title.en)),
           bodyText: stripStoryCardLeadIn(copy(locale, article.excerpt.en, article.excerpt.zh ?? article.excerpt.en)),
           date: formatCardDate(article.publishedAt, locale),
+          publishedAt: article.publishedAt,
           image: article.heroImage,
         }))
     : [];
@@ -376,6 +380,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
         title: copy(locale, story.title.en, story.title.zh),
         bodyText: copy(locale, story.bodyText.en, story.bodyText.zh),
         date: copy(locale, story.date.en, story.date.zh),
+        publishedAt: story.date.en,
       }))
     : [];
   const storyCards =
@@ -384,6 +389,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
       : configuredStoryCards
           .filter((story, index, stories) => stories.findIndex((candidate) => candidate.href === story.href && candidate.title === story.title) === index)
           .slice(0, 3);
+  const showNews = storyCards.length > 0 && isNewsFresh(storyCards.map((story) => story.publishedAt));
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
@@ -474,11 +480,11 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                       <input
                         type="text"
                         name="q"
-                        placeholder={copy(locale, 'Search businesses or services', '搜索商家、服務或關鍵詞')}
+                        placeholder={copy(locale, 'Search businesses or services', '搜尋商家、服務或關鍵字')}
                         className="w-full bg-transparent text-[13px] font-medium text-[#3a2b23] outline-none placeholder:text-[#8f7a6d]"
                       />
                       <span className="mt-1 block text-[11px] leading-none text-[#ab978a]">
-                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜索商家、服務與關鍵詞')}
+                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜尋商家、服務與關鍵字')}
                       </span>
                     </span>
                   </label>
@@ -509,9 +515,9 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                   >
                     <Search className="h-4.5 w-4.5" />
                     <span className="flex flex-col items-start leading-none">
-                      <span className="text-base font-semibold">{copy(locale, 'Search', '搜索')}</span>
+                      <span className="text-base font-semibold">{copy(locale, 'Search', '搜尋')}</span>
                       <span className="mt-1 text-[10px] font-medium tracking-[0.08em] text-white/80">
-                        {oppositeCopy(locale, 'Search', '搜索')}
+                        {oppositeCopy(locale, 'Search', '搜尋')}
                       </span>
                     </span>
                   </button>
@@ -520,7 +526,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
               <div className="homepage-rise homepage-rise-delay-3 mt-3.5">
                 <p className="text-[13px] text-[#816f62]">
-                  {copy(locale, 'Popular searches', '熱門搜索')}
+                  {copy(locale, 'Popular searches', '熱門搜尋')}
                   <span className="mx-2 text-[#c7ae9a]">/</span>
                   {oppositeCopy(locale, 'Popular discovery', '熱門發現')}
                 </p>
@@ -552,8 +558,8 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                 <div className="flex items-start gap-3 sm:px-3">
                   <BilingualSupportIcon className="mt-1 h-14 w-14 flex-shrink-0" />
                   <div>
-                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'Bilingual Support', '雙語支持')}</p>
-                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'English + Chinese service', '中英雙語服務')}</p>
+                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'English + Chinese', '中英雙語')}</p>
+                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'Switch languages on any page', '每頁都能切換中英文')}</p>
                   </div>
                 </div>
 
@@ -676,21 +682,23 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
         </section>
 
         <section className="overflow-hidden border-b border-[#dccbbb] bg-[#fcf8f1]">
-          <div className="grid xl:grid-cols-[1.14fr_0.92fr_0.88fr]">
-            <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
-              <HomeSectionHeading
-                title={copy(locale, 'News & Community', '新聞與社區')}
-                subtitle={oppositeCopy(locale, 'News & Community', '新聞與社區')}
-                href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
-                hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
-              />
+          <div className={showNews ? 'grid xl:grid-cols-[1.14fr_0.92fr_0.88fr]' : 'grid xl:grid-cols-[1fr_1fr]'}>
+            {showNews ? (
+              <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
+                <HomeSectionHeading
+                  title={copy(locale, 'News & Community', '新聞與社區')}
+                  subtitle={oppositeCopy(locale, 'News & Community', '新聞與社區')}
+                  href={newsIsLive ? getLocalizedNewsPath(locale, site) : undefined}
+                  hrefLabel={newsIsLive ? copy(locale, 'View all', '查看全部') : undefined}
+                />
 
-              <div className="mt-5 grid gap-4 md:grid-cols-3">
-                {storyCards.map((story) => (
-                  <StoryCard key={story.href} story={story} />
-                ))}
+                <div className="mt-5 grid gap-4 md:grid-cols-3">
+                  {storyCards.map((story) => (
+                    <StoryCard key={story.href} story={story} />
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : null}
 
             <div className="p-6 sm:p-7 xl:border-r xl:border-[#e3d4c5]">
               <HomeSectionHeading
