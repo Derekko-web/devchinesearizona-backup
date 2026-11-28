@@ -159,6 +159,11 @@ class FakeDirectoryQuery {
     return this;
   }
 
+  overlaps(column: string, value: readonly unknown[]) {
+    this.calls.push({ method: 'overlaps', args: [column, value] });
+    return this;
+  }
+
   textSearch(
     column: string,
     query: string,

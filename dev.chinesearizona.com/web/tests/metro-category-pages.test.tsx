@@ -72,8 +72,8 @@ describe('metro category pages', () => {
   it('renders the Arizona realtor page in English with intro, listings, and city filters', async () => {
     const html = await renderMetro('en', 'real-estate');
 
-    expect(html).toContain('Chinese-Speaking Realtors in Phoenix Metro &amp; Arizona');
-    expect(html).toContain('大鳳凰城與亞利桑那華人地產經紀');
+    expect(html).toContain('Realtors &amp; Real Estate in Phoenix Metro &amp; Arizona');
+    expect(html).toContain('大鳳凰城與亞利桑那房地產經紀');
     expect(html).toContain('4 listings across 3 cities');
     expect(html).toContain('Hedy Li');
     expect(html).toContain('Grace Tung');
@@ -86,7 +86,7 @@ describe('metro category pages', () => {
   it('renders the same page in Chinese with Chinese city names', async () => {
     const html = await renderMetro('zh', 'real-estate');
 
-    expect(html).toContain('大鳳凰城與亞利桑那華人地產經紀');
+    expect(html).toContain('大鳳凰城與亞利桑那房地產經紀');
     expect(html).toContain('共 4 筆商家，分布於 3 個城市');
     expect(html).toContain('鳳凰城');
     expect(html).toContain('吉爾伯特');
@@ -106,7 +106,7 @@ describe('metro category pages', () => {
   it('moves sponsored listings into the labeled spot at the top without repeating them', async () => {
     sponsorState.slugs.add('charlotte-chang-peoria');
     const html = (await renderMetro('en', 'real-estate')) ?? '';
-    const sponsoredSection = html.slice(html.indexOf('id="sponsored-category-spots"'), html.indexOf('All Chinese-Speaking Realtors'));
+    const sponsoredSection = html.slice(html.indexOf('id="sponsored-category-spots"'), html.indexOf('All Realtors &amp; Real Estate'));
 
     expect(sponsoredSection).toContain('Charlotte Chang');
     expect(html.split('Charlotte Chang</a>').length - 1).toBe(1);
@@ -127,7 +127,7 @@ describe('metro category pages', () => {
   it('renders a category the Arizona config lists even before it has listings, and 404s unknown ones', async () => {
     const moving = await renderMetro('en', 'moving');
 
-    expect(moving).toContain('Chinese-Speaking Movers in Phoenix Metro &amp; Arizona');
+    expect(moving).toContain('Movers in Phoenix Metro &amp; Arizona');
     expect(moving).toContain('This category is still growing');
     expect(await renderMetro('en', 'not-a-category')).toBeNull();
     expect(await renderMetro('en', 'travel')).toBeNull();
@@ -142,12 +142,12 @@ describe('metro category pages', () => {
     expect(austin).toContain('Chinese Restaurants in Greater Austin');
     expect(austin).toContain('House of Three Gorges');
     expect(austin).toContain('href="/en/business/cedar-park/dining"');
-    expect(austinZh).toContain('大奧斯汀地區華語醫師與診所');
+    expect(austinZh).toContain('大奧斯汀地區醫師與診所');
     expect(austinZh).toContain('Austin Quan Yin');
     expect(losAngeles).toContain('大洛杉磯地區中餐廳與美食');
     expect(losAngeles).toContain('href="/zh/business/monterey-park/dining"');
     expect(losAngeles).toContain('蒙特利公園');
-    expect(sfBay).toContain('Chinese-Speaking Doctors &amp; Clinics in the SF Bay Area');
+    expect(sfBay).toContain('Doctors &amp; Clinics in the SF Bay Area');
     expect(sfBay).toContain('Asian Health Services');
 
     for (const html of [austin, austinZh, losAngeles, sfBay]) {
@@ -169,10 +169,10 @@ describe('metro category metadata and sitemap', () => {
     const zh = await metroCategoryMetadata('zh', 'real-estate');
     const moving = await metroCategoryMetadata('en', 'moving');
 
-    expect(en?.title).toBe('Chinese-Speaking Realtors in Phoenix Metro & Arizona | ChineseArizona');
+    expect(en?.title).toBe('Realtors & Real Estate in Phoenix Metro & Arizona | ChineseArizona');
     expect(en?.robots).toBeUndefined();
     expect(en?.alternates?.canonical).toBe('https://chinesearizona.com/business/category/real-estate');
-    expect(zh?.title).toBe('大鳳凰城與亞利桑那華人地產經紀 | ChineseArizona');
+    expect(zh?.title).toBe('大鳳凰城與亞利桑那房地產經紀 | ChineseArizona');
     expect(zh?.alternates?.canonical).toBe('https://chinesearizona.com/zh/business/category/real-estate');
     expect(moving?.robots).toEqual({ index: false, follow: false });
     expect(await metroCategoryMetadata('en', 'not-a-category')).toBeNull();
@@ -184,7 +184,7 @@ describe('metro category metadata and sitemap', () => {
     const spaced = await cityCategoryMetadata('en', 'monterey%20park', 'dining', siteProfiles['los-angeles']);
 
     expect(sparse?.robots).toEqual({ index: false, follow: false });
-    expect(sparse?.title).toBe('Chinese-Speaking Realtors in Phoenix, AZ | ChineseArizona');
+    expect(sparse?.title).toBe('Realtors & Real Estate in Phoenix, AZ | ChineseArizona');
     expect(dense?.robots).toBeUndefined();
     expect(dense?.title).toBe('梅薩中餐廳與美食 | ChineseArizona');
     expect(dense?.alternates?.canonical).toBe('https://chinesearizona.com/zh/business/mesa/dining');
@@ -304,12 +304,35 @@ describe('links into metro category pages', () => {
     const html = rendered ? renderToStaticMarkup(rendered) : '';
 
     expect(html).toContain('href="/zh/business/category/real-estate"');
-    expect(html).toContain('大鳳凰城與亞利桑那華人地產經紀');
+    expect(html).toContain('大鳳凰城與亞利桑那房地產經紀');
     expect(html).toContain('href="/zh/business/phoenix/real-estate"');
   });
 
   it('counts sponsored clicks on metro pages as eligible directory placements', () => {
     expect(isDirectoryAdEligiblePath('/en/business/category/real-estate')).toBe(true);
     expect(isDirectoryAdEligiblePath('/business/category/dining')).toBe(true);
+  });
+});
+
+describe('category headings make no language claim about every listing (#480)', () => {
+  it('keeps "Chinese-speaking" / 華語 / 華人 out of every category heading and intro', async () => {
+    const [{ getMetroCategoryHeading, getMetroCategoryIntro }, { getDirectoryCategories }] = await Promise.all([
+      import('@/lib/metro-categories'),
+      import('@/lib/directory'),
+    ]);
+
+    for (const site of Object.values(siteProfiles)) {
+      for (const category of await getDirectoryCategories(site)) {
+        for (const locale of ['en', 'zh'] as const) {
+          const text = `${getMetroCategoryHeading(category, locale)} ${getMetroCategoryIntro(category, site, locale)}`;
+          expect(text, `${site.key}/${category.slug}/${locale}`).not.toMatch(/chinese-speaking|mandarin-speaking|華語|華人(地產|律師|在地|居家|搬家|旅遊|美容)/i);
+        }
+      }
+    }
+
+    const medical = (await getDirectoryCategories(siteProfiles.arizona)).find((category) => category.slug === 'medical');
+    expect(medical).toBeDefined();
+    expect(getMetroCategoryHeading(medical!, 'en')).toBe('Doctors & Clinics');
+    expect(getMetroCategoryHeading(medical!, 'zh')).toBe('醫師與診所');
   });
 });

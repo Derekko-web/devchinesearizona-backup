@@ -5,9 +5,10 @@
 
 import type { LanguageOption, Locale } from '@/lib/types';
 
-// Spoken languages an owner can pick. Older listings may also carry
-// "Traditional Chinese"; saving keeps any value not offered here.
-export const spokenLanguageOptions = ['Mandarin', 'Cantonese', 'Taiwanese', 'English'] as const satisfies readonly LanguageOption[];
+// Spoken languages an owner can pick. "Chinese" is for a source that does not
+// name a dialect. Older listings may also carry "Traditional Chinese" (written,
+// not spoken); saving keeps any value not offered here.
+export const spokenLanguageOptions = ['Mandarin', 'Cantonese', 'Taiwanese', 'Chinese', 'English'] as const satisfies readonly LanguageOption[];
 export type SpokenLanguage = (typeof spokenLanguageOptions)[number];
 
 export const paymentFilterOptions = ['wechat-pay', 'alipay'] as const;
