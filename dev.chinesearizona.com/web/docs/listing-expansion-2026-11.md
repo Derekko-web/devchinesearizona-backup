@@ -12,12 +12,13 @@ Status:
 | Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 278 → 286 rows, indexable 72 → 80, 8/8 rows match dev and the file by md5 |
 | Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check confirmed all 6 held the guarded text; 6/6 now match the file by md5 |
 | Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 286 → 294 rows, indexable 80 → 88, 8/8 rows match dev and the file by md5 |
-| Batch 3a: 7 north Valley physicians (`listing-expansion-2026-11-batch3a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Batch 3a: 7 north Valley physicians (`listing-expansion-2026-11-batch3a*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 299 → 306 rows, indexable 93 → 100, 7/7 rows match the file by md5 (first attempt timed out at the connector; a check showed nothing written, then the same file was run again) |
 | AZ Hope language fix and Alan Wang phone (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check matched the rollback values; both rows now match dev |
 | Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 47 rows `live` → `suppressed`; none claimed or paid; indexable unchanged at 88 |
 | Hide Panda Express (`listing-expansion-2026-11-panda-express-suppress*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO decision and approval): 1 row `live` → `suppressed` |
-| Batch 3b: 4 Taiwanese food listings near TSMC (`listing-expansion-2026-11-batch3b*.sql`, issue #523) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
-| Corrections 3b: Greater Phoenix Chinese Christian School (`listing-expansion-2026-11-batch3b-corrections*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Batch 3b: 4 Taiwanese food listings near TSMC (`listing-expansion-2026-11-batch3b*.sql`, issue #523) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval, with corrections 3b): 294 → 299 rows, indexable 88 → 93, 5/5 rows match the files by md5 |
+| Corrections 3b: Greater Phoenix Chinese Christian School (`listing-expansion-2026-11-batch3b-corrections*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval, counted with batch 3b above) |
+| Batch 4: 7 businesses advertising in Chinese in Next Weekly (`listing-expansion-2026-11-batch4*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 
 Production after all of the above (2026-11-28): 294 rows, 232 `live`, 234 public (`live` or `stale`), 48 `suppressed` (none claimed, sponsored or featured), 88 indexable. Suppressed pages return 404 with `noindex` and are not in the sitemap.
 
@@ -381,6 +382,34 @@ To apply to production after approval: pre-check none of the 4 slugs exist; run 
 | Hola Hello Ni Hao Language Preschool | No website of its own found (only course directories and a Voyage Phoenix interview with the founder); no address confirmed. | **Not added.** |
 
 To apply: run `listing-expansion-2026-11-batch3b-corrections.sql` (1 insert, `on conflict do nothing`). Rollback: `listing-expansion-2026-11-batch3b-corrections-rollback.sql`.
+
+## Batch 4: businesses that advertise in Chinese (issue #487)
+
+From Sales' second prospect list (`next-20.md`, private), the businesses marked "not on our site". These businesses already pay to reach Chinese-speaking customers, so they are Sales' warmest prospects.
+
+**Evidence rule for this batch (CEO, 2026-11-28):** a current ad that the business itself placed in a Chinese-language publication counts as the business's own statement that it serves customers in Chinese. The publication is **Next Weekly 亞利桑那州壹週報**, "AZ Yellow Page" (https://www.nextweeklyaz.com/azyellowpage), an online directory of paid ads with no issue date. Sales read it on 2026-11-27. The site shows a bot check ("Checking Your Request") to automated readers, so it was not opened directly again; the ad details were re-confirmed on 2026-11-28 through a search index's copy of that page. Each listing's copy ends with "Advertises in Chinese in Next Weekly (亞利桑那州壹週報), checked November 2026". A specific language is recorded only where the ad names it; where the ad says only "Chinese", `languages` is `{English, Chinese}`. The lawyer's copy states only the services the ad lists. No gendered pronouns; every address is an office.
+
+| Slug | Category | City | Languages | Address and phone | Second source |
+|---|---|---|---|---|---|
+| `desert-river-realty-phoenix` | real-estate | Phoenix (85051) | English, Chinese (ad names no dialect) | Ad: 10000 N 31st Ave, Suite D218; (602) 266-1238 | Sales found the Arizona Department of Real Estate entity record (licence 28924) with the same address and phone through a search; AZRE blocks automated reads, so it was not re-opened |
+| `grace-chen-cpa-tempe` | legal-finance | Tempe | English, Mandarin, Cantonese | Ad: 2435 E Southern Ave, Suite 1; 480-756-0232 | None found: the firm's website redirects to an HTTPS address that does not load |
+| `api-dental-group-phoenix` | medical (dental) | Phoenix (85015) | English, Mandarin, Cantonese | Practice website contact page: 6605 N 19th Ave, Suite F; (602) 995-6041 | NPI 1043232929 gives the same address and phone. The ad gives 6619 N 19th Ave; the copy says so |
+| `law-offices-of-david-dai-tempe` | legal-finance (immigration law) | Tempe | English, Mandarin | Ad: 2121 S Mill Ave, #206; 480-517-0888 | None readable (no firm website; State Bar and Avvo block automated reads). Avvo facts Sales noted are not used |
+| `jeffrey-chow-dds-gilbert` | medical (periodontics) | Gilbert | English, Chinese (ad names no dialect) | Ad: 2450 E Guadalupe Rd, #104; (480) 635-8787 | NPI 1992764666 (updated July 2026) matches |
+| `jc-financial-services-phoenix` | legal-finance (bookkeeping, tax) | Phoenix (85017) | English, Mandarin, Cantonese (copy also names Shanghainese) | Ad: 6201 N 35th Ave, #B3; 602-237-7211 | None found. The ad's Chinese heading 陳陽會計師 is quoted, not used as a title |
+| `dobson-warner-dentistry-chandler` | medical (dental) | Chandler | English, Mandarin, Cantonese (copy also names Vietnamese, Spanish, Tagalog) | Ad: 2051 W Warner Rd, #23; 480-917-0181; hours from the ad | No NPI organisation record found under this name |
+
+Websites: only API Dental has one (http://www.apidentalphoenix.com/, served over HTTP; HTTPS does not connect). Two-pass check: the same page for a browser and the Googlebot user agent, no spam or parking. Checked on dev: all 7 English and `/zh/` pages return 200 with no `noindex`; dev rows match the SQL by md5. Duplicate check against production (slug, name, phone, address): none.
+
+Not added from the same list:
+
+| Prospect | Why not |
+|---|---|
+| Copeland Insurance Group (Felicitas and Harry Fong) | The ad has no office address, and its details (phones, Toishanese) could not be re-confirmed from the search copy of the page; no website found |
+| Quality Auto Services (Gary 安) | The ad did not appear in the search copy of the page, so its details could not be re-confirmed; no website found |
+| Yuxuan "Korō" Xia (eXp Realty) | Not a Next Weekly advertiser. The only source is a personal GitHub-hosted page with an out-of-state phone; the eXp Realty profile is behind a bot check |
+
+To apply to production after approval: pre-check none of the 7 slugs exist; run `listing-expansion-2026-11-batch4.sql`; post-check 7 rows and indexable +7. Rollback: `listing-expansion-2026-11-batch4-rollback.sql`.
 
 ## Follow-ups
 
