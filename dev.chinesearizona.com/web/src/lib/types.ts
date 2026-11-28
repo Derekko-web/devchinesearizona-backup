@@ -9,7 +9,8 @@ export type LocalizedText = {
   zh?: string | null;
 };
 
-export type LanguageOption = 'English' | 'Mandarin' | 'Cantonese' | 'Traditional Chinese' | 'Taiwanese';
+// 'Chinese' is recorded when a source says Chinese without naming a dialect.
+export type LanguageOption = 'English' | 'Mandarin' | 'Cantonese' | 'Taiwanese' | 'Chinese' | 'Traditional Chinese';
 
 export type CategoryIcon =
   | 'home'
