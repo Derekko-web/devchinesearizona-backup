@@ -38,7 +38,7 @@ describe('i18n helpers', () => {
   it('normalizes the Chinese locale without tying it to Taiwan', () => {
     expect(resolveLocale('zh-TW')).toBe('zh');
     expect(localeName('zh', 'en')).toBe('Chinese');
-    expect(localeLangAttribute('zh')).toBe('zh-Hant');
+    expect(localeLangAttribute('zh')).toBe('zh-Hant-TW');
   });
 
   it('falls back to English when Chinese content is missing', () => {

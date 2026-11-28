@@ -1,6 +1,9 @@
 import { defaultLocale, isLocale } from '@/lib/i18n';
 import type { Locale } from '@/lib/types';
 
+// Request header the proxy sets with the page language for the root layout.
+export const PAGE_LOCALE_HEADER = 'x-page-locale';
+
 // English pages live at the unprefixed URL, which is the canonical one in the
 // sitemap and hreflang tags; /en/... permanently redirects there (see proxy.ts).
 // Chinese pages live under /zh.
