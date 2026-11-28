@@ -2,8 +2,9 @@ import { arizonaOnlyMetadata, requireArizonaOnlySite } from '@/lib/arizona-only-
 import { hiddenArizonaMetadata } from '@/lib/page-metadata';
 import { HiddenArizonaHubPageView } from '@/views/hidden-arizona';
 
-export async function generateMetadata() {
-  return arizonaOnlyMetadata('en', '/hidden-arizona', () => hiddenArizonaMetadata('en'), 'Hidden Arizona');
+export async function generateMetadata({ searchParams }: PageProps) {
+  const query = await searchParams;
+  return arizonaOnlyMetadata('en', '/hidden-arizona', () => hiddenArizonaMetadata('en', query), 'Hidden Arizona');
 }
 
 type PageProps = {

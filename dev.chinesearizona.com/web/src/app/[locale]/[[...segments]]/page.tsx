@@ -185,7 +185,7 @@ export async function generateMetadata({ params, searchParams }: PageProps) {
   }
 
   if (segments[0] === 'hidden-arizona' && segments.length === 1) {
-    return hiddenArizonaMetadata(locale);
+    return hiddenArizonaMetadata(locale, query);
   }
 
   if (segments[0] === 'hidden-arizona' && segments[1] && segments[2]) {

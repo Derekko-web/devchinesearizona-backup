@@ -5,7 +5,7 @@ import { Heart, Menu, Plus, UserRound, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, type MouseEvent } from 'react';
 
 import { useAuth } from '@/components/auth/AuthProvider';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
@@ -87,8 +87,21 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
   const currentPath = appendSearch(pathname, currentSearch);
   const { isLoading, signOut, user } = useAuth();
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
-  const loginHref = buildAuthPath(locale, currentPath);
-  const joinHref = buildJoinPath(locale, currentPath);
+  // The rendered links carry no per-page return path, so crawlers see one
+  // sign-in URL instead of one per page and filter combination (they walked
+  // ~35k of them in two weeks). A click still brings the visitor back here.
+  const loginHref = buildAuthPath(locale);
+  const joinHref = buildJoinPath(locale);
+  const loginReturnHref = buildAuthPath(locale, currentPath);
+  const joinReturnHref = buildJoinPath(locale, currentPath);
+  const followWithReturn = (returnHref: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+
+    event.preventDefault();
+    router.push(returnHref);
+  };
   const dashboardHref = withLocale(locale, '/dashboard');
   const editProfileHref = withLocale(locale, '/dashboard/profile');
   const favoritesHref = user ? withLocale(locale, '/community') : loginHref;
@@ -221,6 +234,7 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
 
               <Link
                 href={favoritesHref}
+                {...(user ? {} : { rel: 'nofollow', onClick: followWithReturn(loginReturnHref) })}
                 aria-label={locale === 'zh' ? '收藏' : 'Favorites'}
                 className="group inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c3af] bg-[#fbf4ea] text-[#c4312d] transition-colors hover:border-[#d6c3af] hover:text-[#c4312d]"
               >
@@ -278,6 +292,8 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
                 <div className="relative">
                   <Link
                     href={loginHref}
+                    rel="nofollow"
+                    onClick={followWithReturn(loginReturnHref)}
                     aria-label={locale === 'zh' ? '登入' : 'Log In'}
                     className="peer inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d6c2af] bg-white text-[#3a2a22] shadow-sm transition-colors hover:border-brand-300 hover:text-brand-600"
                   >
@@ -287,12 +303,16 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
                   <div className="invisible pointer-events-none absolute right-0 top-full z-10 w-44 -translate-y-2 rounded-[24px] border border-[#decdbc] bg-[#fffaf3] p-2 opacity-0 shadow-[0_28px_60px_-34px_rgba(72,54,31,0.38)] transition-all peer-hover:pointer-events-auto peer-hover:visible peer-hover:translate-y-0 peer-hover:opacity-100 peer-focus:pointer-events-auto peer-focus:visible peer-focus:translate-y-0 peer-focus:opacity-100 hover:pointer-events-auto hover:visible hover:translate-y-0 hover:opacity-100 focus-within:pointer-events-auto focus-within:visible focus-within:translate-y-0 focus-within:opacity-100">
                     <Link
                       href={loginHref}
+                      rel="nofollow"
+                      onClick={followWithReturn(loginReturnHref)}
                       className="block rounded-2xl px-4 py-3 text-sm font-semibold text-[#362821] transition-colors hover:bg-[#f5ede3] hover:text-brand-600"
                     >
                       {locale === 'zh' ? '登入' : 'Log In'}
                     </Link>
                     <Link
                       href={joinHref}
+                      rel="nofollow"
+                      onClick={followWithReturn(joinReturnHref)}
                       className="mt-1 block rounded-2xl px-4 py-3 text-sm font-semibold text-[#362821] transition-colors hover:bg-[#f5ede3] hover:text-brand-600"
                     >
                       {locale === 'zh' ? '加入' : 'Join'}
@@ -372,6 +392,7 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
 
                 <Link
                   href={favoritesHref}
+                  {...(user ? {} : { rel: 'nofollow', onClick: followWithReturn(loginReturnHref) })}
                   className="group inline-flex h-11 items-center justify-center gap-2 rounded-[24px] border border-[#d6c2af] bg-white px-4 text-sm font-semibold text-[#c4312d] transition-colors hover:border-[#d6c2af] hover:text-[#c4312d]"
                 >
                   <Heart className="h-4 w-4 transition-colors group-hover:fill-current" aria-hidden="true" />
@@ -421,12 +442,16 @@ export default function Navbar({ site = defaultSiteProfile }: { site?: SiteProfi
                   <div className="grid gap-2 sm:grid-cols-2">
                     <Link
                       href={loginHref}
+                      rel="nofollow"
+                      onClick={followWithReturn(loginReturnHref)}
                       className="inline-flex items-center justify-center rounded-[24px] border border-[#d6c2af] bg-white px-4 py-3 text-sm font-semibold text-[#3a2a22] transition-colors hover:border-brand-300 hover:text-brand-600"
                     >
                       {locale === 'zh' ? '登入' : 'Log In'}
                     </Link>
                     <Link
                       href={joinHref}
+                      rel="nofollow"
+                      onClick={followWithReturn(joinReturnHref)}
                       className="inline-flex items-center justify-center rounded-[24px] bg-brand-50 px-4 py-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
                     >
                       {locale === 'zh' ? '加入' : 'Join'}
