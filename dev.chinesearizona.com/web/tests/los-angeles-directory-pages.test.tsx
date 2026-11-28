@@ -128,7 +128,7 @@ describe('Los Angeles directory pages', () => {
       'https://chineselosangeles.com/business/lunasia-dim-sum-house-alhambra'
     );
     expect(addBusinessHtml).toContain('ChineseLosAngeles business directory');
-    expect(addBusinessHtml).toContain('Help trusted Los Angeles Chinese businesses get found');
+    expect(addBusinessHtml).toContain('Claim your business page. It&#x27;s free.');
     expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
     expect(addBusinessHtml).not.toContain('ChineseArizona business directory');
   });

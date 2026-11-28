@@ -108,7 +108,7 @@ const ownedBusinessRow = {
   city: 'Chandler',
   status: 'live',
   verification_state: 'claimed',
-  category: { slug: 'restaurants' },
+  category: { slug: 'restaurants', name_en: 'Dining' },
 };
 
 type Fixture = {
@@ -628,6 +628,10 @@ describe('createListingPlanCheckoutForProfile', () => {
       unit_amount: 29_500,
       product_data: { name: 'Sponsored category spot (1 year)' },
     });
+    // The receipt names the category, not its slug (#469); the metadata keeps the slug.
+    expect(params.line_items[0].price_data.product_data.description).toBe(
+      'Lotus Kitchen · Chandler · Dining · Founding sponsor price'
+    );
   });
 
   it('charges the full price once 10 businesses have the founding offer', async () => {

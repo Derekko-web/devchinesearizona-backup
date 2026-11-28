@@ -19,7 +19,6 @@ import { EmptyState } from '@/components/EmptyState';
 import { DashboardAccessNotice } from '@/components/auth/DashboardAccessNotice';
 import { OwnerLeadSummary } from '@/components/directory/BusinessLeadPanels';
 import { BusinessPhotoEditor } from '@/components/directory/BusinessPhotoEditor';
-import { DirectoryAdCampaignPanel } from '@/components/directory/DirectoryAdCampaignPanel';
 import { OwnedBusinessDeleteButton } from '@/components/directory/OwnedBusinessDeleteButton';
 import {
   OwnerNextSteps,
@@ -43,12 +42,7 @@ import {
 import { getPendingBusinessClaimsForProfile } from '@/lib/directory-moderation';
 import { ListingPlanPanel } from '@/components/directory/ListingPlanPanel';
 import { BusinessBilingualDetailsEditor } from '@/components/directory/BusinessBilingualDetailsEditor';
-import {
-  getDirectoryAdCampaignsForOwnerBusinesses,
-  getDirectoryAdsAvailability,
-  type DirectoryAdsRuntimeMode,
-  type DirectoryAdsUnavailableReason,
-} from '@/lib/directory-ads';
+import { getDirectoryAdCampaignsForOwnerBusinesses } from '@/lib/directory-ads';
 import {
   descriptiveImageAlt,
   directoryStatusLabel,
@@ -183,10 +177,7 @@ function dashboardCampaignStatusLabel(status: DirectoryAdCampaign['status'], loc
 function ManagedBusinessWorkspaceRow({
   business,
   locale,
-  adsAvailable,
-  adsMode,
   campaign,
-  readOnlyReason,
   listingPlansAvailable,
   listingPlansMockMode,
   listingPlanStates,
@@ -195,10 +186,7 @@ function ManagedBusinessWorkspaceRow({
 }: {
   business: Business;
   locale: Locale;
-  adsAvailable: boolean;
-  adsMode: DirectoryAdsRuntimeMode;
   campaign?: DirectoryAdCampaign;
-  readOnlyReason?: DirectoryAdsUnavailableReason;
   listingPlansAvailable: boolean;
   listingPlansMockMode: boolean;
   listingPlanStates: ListingPlanOwnerState[];
@@ -321,14 +309,9 @@ function ManagedBusinessWorkspaceRow({
             mockMode={listingPlansMockMode}
             states={listingPlanStates}
           />
-          <DirectoryAdCampaignPanel
-            adsAvailable={adsAvailable}
-            adsMode={adsMode}
-            business={business}
-            initialCampaign={campaign}
-            locale={locale}
-            readOnlyReason={readOnlyReason}
-          />
+          {/* The pay-per-click "Sponsored placement" panel is hidden (#468): it is not on the
+              approved price list, and per-click billing conflicts with the flat-fee rule for
+              realtors. DirectoryAdCampaignPanel and its API stay in the code for later. */}
           <OwnedBusinessDeleteButton business={business} locale={locale} />
         </div>
       </div>
@@ -405,14 +388,12 @@ export async function DashboardPageView({
     : new Map<string, DirectoryAdCampaign>();
   const managedBusinessIds = managedBusinesses.map((business) => business.id);
   const [
-    directoryAdsAvailability,
     leadCounts,
     recentInquiries,
     listingPlanAvailability,
     listingPlanStatesByBusinessId,
     pendingClaims,
   ] = await Promise.all([
-    getDirectoryAdsAvailability(),
     getBusinessLeadCounts({ businessIds: managedBusinessIds }),
     getRecentBusinessInquiries({ businessIds: managedBusinessIds, limit: 10 }),
     getListingPlanAvailability(),
@@ -440,8 +421,6 @@ export async function DashboardPageView({
         .filter((target): target is OwnerUpgradeTarget => target !== null)
     : [];
   const showLeadSummary = managedBusinesses.length > 0 && isSupabaseServiceConfigured();
-  const directoryAdsMode = directoryAdsAvailability.mode;
-  const adsAvailable = directoryAdsMode !== 'read_only';
   const recentReviews = managedBusinesses.flatMap((business) => getBusinessReviews(business.slug));
   const claimBusinessHref = withLocale(locale, '/add-business');
   const editProfileHref = withLocale(locale, '/dashboard/profile');
@@ -449,13 +428,13 @@ export async function DashboardPageView({
   const accountName = profile?.name ?? user?.email ?? (locale === 'zh' ? '主理人' : 'Owner');
   const accountRoleLabel = profileRoleLabel(profile?.role ?? 'member', locale);
   const firstName = accountName.split(/\s+/)[0] || accountName;
-  const adsReadinessLabel = adsAvailable
+  const plansReadinessLabel = listingPlansAvailable
     ? locale === 'zh'
-      ? '廣告可用'
-      : 'Ads ready'
+      ? '方案可購買'
+      : 'Plans open'
     : locale === 'zh'
-      ? '廣告設定中'
-      : 'Ads read-only';
+      ? '方案即將開放'
+      : 'Plans coming soon';
 
   return sectionContainer(
     <div className="space-y-8 py-10 sm:py-12 lg:py-14">
@@ -633,7 +612,7 @@ export async function DashboardPageView({
                   </h2>
                 </div>
                 <span className="rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-800">
-                  {adsReadinessLabel}
+                  {plansReadinessLabel}
                 </span>
               </div>
               <ul className="mt-5">
@@ -657,8 +636,8 @@ export async function DashboardPageView({
                   description={
                     managedBusinesses.length > 0
                       ? locale === 'zh'
-                        ? '在下方商家區塊補充圖片、資料與廣告設定。'
-                        : 'Use the business workspace below for photos, details, and ads.'
+                        ? '在下方商家區塊補充圖片、資料與方案。'
+                        : 'Use the business workspace below for photos, details and plans.'
                       : locale === 'zh'
                         ? '等第一筆商家連結後再補充圖片與資料。'
                         : 'Add richer details once the first listing is connected.'
@@ -667,17 +646,17 @@ export async function DashboardPageView({
                 />
                 <DashboardChecklistItem
                   icon={<CircleDollarSign className="h-4 w-4" />}
-                  title={locale === 'zh' ? '確認推廣狀態' : 'Check promotion status'}
+                  title={locale === 'zh' ? '商家方案' : 'Listing plans'}
                   description={
-                    adsAvailable
+                    listingPlansAvailable
                       ? locale === 'zh'
-                        ? '目錄廣告工具已可使用。'
-                        : 'Directory ad tools are available for eligible listings.'
+                        ? '可在下方各商家區塊購買進階商家頁與分類贊助版位。'
+                        : 'Buy the Enhanced listing or a Sponsored category spot from each listing below.'
                       : locale === 'zh'
-                        ? '廣告工具目前以唯讀模式顯示。'
-                        : 'Ad tools are currently shown in read-only mode.'
+                        ? '線上購買方案尚未開放。'
+                        : 'Online plan checkout is not open yet.'
                   }
-                  active={adsAvailable}
+                  active={listingPlansAvailable && managedBusinesses.length > 0}
                 />
               </ul>
             </aside>
@@ -761,12 +740,9 @@ export async function DashboardPageView({
                 {managedBusinesses.map((business) => (
                   <ManagedBusinessWorkspaceRow
                     key={business.id}
-                    adsAvailable={adsAvailable}
-                    adsMode={directoryAdsMode}
                     business={business}
                     campaign={adCampaignsByBusinessId.get(business.id)}
                     locale={locale}
-                    readOnlyReason={directoryAdsAvailability.unavailableReason}
                     listingPlansAvailable={listingPlansAvailable}
                     listingPlansMockMode={listingPlanAvailability.mode === 'mock'}
                     listingPlanStates={listingPlanStatesByBusinessId.get(business.id) ?? []}

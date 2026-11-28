@@ -338,13 +338,15 @@ type OwnedBusiness = {
   name_en: string;
   city: string;
   categorySlug: string;
+  // Shown on the Stripe receipt instead of the slug (#469).
+  categoryName: string;
 };
 
 async function getOwnedLiveBusiness(profileId: string, businessSlug: string, locale: Locale): Promise<OwnedBusiness> {
   const { data, error } = await requireServiceClient()
     .from('businesses')
     .select(
-      'id, slug, owner_profile_id, name_en, city, status, verification_state, category:business_categories!inner (slug)'
+      'id, slug, owner_profile_id, name_en, city, status, verification_state, category:business_categories!inner (slug, name_en)'
     )
     .eq('slug', businessSlug)
     .maybeSingle();
@@ -361,7 +363,7 @@ async function getOwnedLiveBusiness(profileId: string, businessSlug: string, loc
     city: string;
     status: string;
     verification_state?: string | null;
-    category?: { slug: string } | Array<{ slug: string }> | null;
+    category?: { slug: string; name_en?: string | null } | Array<{ slug: string; name_en?: string | null }> | null;
   };
 
   if (row.owner_profile_id !== profileId) {
@@ -389,6 +391,7 @@ async function getOwnedLiveBusiness(profileId: string, businessSlug: string, loc
     name_en: row.name_en,
     city: row.city,
     categorySlug: category?.slug ?? '',
+    categoryName: category?.name_en?.trim() || category?.slug || '',
   };
 }
 
@@ -613,7 +616,7 @@ export async function createListingPlanCheckoutForProfile(input: {
             description: [
               business.name_en,
               business.city,
-              offer.planId === 'sponsored-category' ? business.categorySlug : '',
+              offer.planId === 'sponsored-category' ? business.categoryName : '',
               founding ? 'Founding sponsor price' : '',
             ]
               .filter(Boolean)

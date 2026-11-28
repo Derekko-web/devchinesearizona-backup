@@ -196,13 +196,16 @@ describe('city-site business images', () => {
 
     expect(austinDirectory).toContain('/city-site-images/house-of-three-gorges-austin.webp');
     expect(austinDirectory).not.toContain('Placeholder');
-    expect(austinDetail).toContain('/city-site-images/house-of-three-gorges-austin.webp');
+    // A business page shows no AI-made picture in place of its own photo (#473).
+    // (Cards for other businesses under "similar businesses" are unchanged.)
+    expect(austinDetail).not.toContain('/city-site-images/house-of-three-gorges-austin.webp');
     expect(austinDetail).not.toContain('/city-site-images/austin-community-hero.webp');
-    expect(laDetail).toContain('/city-site-images/kit-leung-cpa-alhambra.webp');
+    expect(austinDetail).not.toContain('Placeholder');
+    expect(laDetail).not.toContain('/city-site-images/kit-leung-cpa-alhambra.webp');
     expect(laDetail).not.toContain('/city-site-images/los-angeles-community-hero.webp');
     expect(laDetail).not.toContain('Los Angeles Legal &amp; Finance guide image for Kit Leung CPA');
     expect(laDetail).not.toContain('Temporary image');
-    expect(sfBayDetail).toContain('/city-site-images/api-legal-outreach-san-francisco.webp');
+    expect(sfBayDetail).not.toContain('/city-site-images/api-legal-outreach-san-francisco.webp');
     expect(sfBayDetail).not.toContain('/city-site-images/sf-bay-community-hero.webp');
     expect(sfBayDetail).not.toContain('Temporary image');
     // No made-up menu items or prices on business pages.

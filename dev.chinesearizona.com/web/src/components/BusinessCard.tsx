@@ -11,7 +11,7 @@ import {
   getBusinessServiceHighlights,
 } from '@/lib/business-display';
 import { getBusinessCategories } from '@/lib/content';
-import { getDirectoryAiReplacementCardObjectPosition } from '@/lib/directory-ai-replacements';
+import { getDirectoryAiReplacementCardObjectPosition, isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { isMostPopularDirectoryBusiness } from '@/lib/directory-highlights';
 import { descriptiveImageAlt, formatDate, t } from '@/lib/i18n';
 import { getListingTrustLevel, hasChineseSpokenLanguage } from '@/lib/listing-trust';
@@ -24,6 +24,8 @@ type BusinessCardProps = {
   locale: Locale;
   category?: BusinessCategory;
   imageUrlOverride?: string | null;
+  // Business pages show no AI illustration in place of a photo (#473).
+  hideIllustration?: boolean;
   imageAltOverride?: string;
   enableSponsoredClickTracking?: boolean;
   localizedShortDescription?: string;
@@ -37,6 +39,7 @@ export function BusinessCard({
   locale,
   category: providedCategory,
   imageUrlOverride,
+  hideIllustration = false,
   imageAltOverride,
   enableSponsoredClickTracking = false,
   localizedShortDescription,
@@ -65,12 +68,13 @@ export function BusinessCard({
   const hasQuickDetails =
     Boolean(business.priceRange) || hoursPreview.items.length > 0 || serviceHighlights.length > 0;
   const cardImageObjectPosition = getDirectoryAiReplacementCardObjectPosition(business.slug);
+  const cardImageUrl = imageUrlOverride ?? business.heroImage;
 
   return (
     <article className="homepage-card group grid overflow-hidden rounded-[22px] border border-[#e3d3c2] bg-[#fffdfa] shadow-[0_24px_58px_-48px_rgba(74,49,27,0.54)] sm:grid-cols-[190px_minmax(0,1fr)]">
       <div className="relative min-h-[190px] w-full overflow-hidden bg-[#eadccb] sm:h-full">
         <BusinessImage
-          imageUrl={imageUrlOverride ?? business.heroImage}
+          imageUrl={hideIllustration && isIllustrationImageUrl(cardImageUrl) ? undefined : cardImageUrl}
           label={imageAltOverride ?? descriptiveImageAlt(t(business.name, locale), 'business', locale)}
           locale={locale}
           category={category}
