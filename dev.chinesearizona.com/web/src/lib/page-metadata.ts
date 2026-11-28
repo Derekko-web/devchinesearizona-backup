@@ -23,7 +23,9 @@ import { getHiddenArizonaEntryBySlug, getHiddenArizonaEntryPath } from '@/lib/hi
 import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-localization';
 import { t } from '@/lib/i18n';
 import {
+  countChineseSpeakingListings,
   findMetroCategoryCity,
+  formatChineseSpeakingCountLine,
   formatCityListingCountLine,
   formatListingCountLine,
   getCityCategoryIntro,
@@ -32,6 +34,7 @@ import {
   getMetroCategoryIntro,
   getMetroCategoryPageData,
   getMetroCategoryTitle,
+  hasChineseSpeakingSection,
   isIndexableListingCount,
   metroCategoryPath,
   slugifyCity,
@@ -533,12 +536,17 @@ export async function metroCategoryMetadata(
     return null;
   }
 
-  const { summary } = data;
+  const { summary, listings } = data;
+  // "Chinese-speaking" only when 3+ listings on this page record a Chinese spoken language.
+  const chineseSpeaking = hasChineseSpeakingSection(listings);
+  const chineseLine = chineseSpeaking
+    ? ` ${formatChineseSpeakingCountLine(countChineseSpeakingListings(listings), locale)}`
+    : '';
   return buildMetadata({
-    title: `${getMetroCategoryTitle(summary.category, site, locale)} | ${site.brandName}`,
+    title: `${getMetroCategoryTitle(summary.category, site, locale, { chineseSpeaking })} | ${site.brandName}`,
     description: `${getMetroCategoryIntro(summary.category, site, locale)} ${formatListingCountLine(summary, locale)}${
       locale === 'zh' ? '。' : '.'
-    }`,
+    }${chineseLine}`,
     path: metroCategoryPath(summary.category.slug),
     locale,
     site,
@@ -562,14 +570,21 @@ export async function cityCategoryMetadata(
   const resolvedCity = findMetroCategoryCity(summary, city);
   const cityLabel = resolvedCity ? getLocalizedCityName(resolvedCity.city, site, locale) : city;
   const listingCount = resolvedCity?.count ?? 0;
+  const cityListings = resolvedCity
+    ? data.listings.filter((business) => slugifyCity(business.city) === resolvedCity.slug)
+    : [];
+  const chineseSpeaking = hasChineseSpeakingSection(cityListings);
+  const chineseLine = chineseSpeaking
+    ? ` ${formatChineseSpeakingCountLine(countChineseSpeakingListings(cityListings), locale)}`
+    : '';
 
   return buildMetadata({
-    title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale)} | ${site.brandName}`,
+    title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale, { chineseSpeaking })} | ${site.brandName}`,
     description: `${getCityCategoryIntro(summary.category, cityLabel, site, locale)} ${formatCityListingCountLine(
       listingCount,
       cityLabel,
       locale
-    )}${locale === 'zh' ? '。' : '.'}`,
+    )}${locale === 'zh' ? '。' : '.'}${chineseLine}`,
     path: `/business/${resolvedCity?.slug ?? slugifyCity(city)}/${summary.category.slug}`,
     locale,
     site,

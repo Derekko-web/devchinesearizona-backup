@@ -7,7 +7,9 @@ import { advertisePath } from '@/lib/advertise';
 import {
   cityCategoryPath,
   findMetroCategoryCity,
+  formatChineseSpeakingHeading,
   formatListingCountLine,
+  formatOtherListingsHeading,
   getCityCategoryIntro,
   getCityCategoryTitle,
   getLocalizedCityName,
@@ -15,8 +17,10 @@ import {
   getMetroCategoryIntro,
   getMetroCategoryPageData,
   getMetroCategoryTitle,
+  hasChineseSpeakingSection,
   metroCategoryPath,
   slugifyCity,
+  splitChineseSpeakingListings,
   splitSponsoredListings,
   type MetroCategorySummary,
 } from '@/lib/metro-categories';
@@ -194,6 +198,49 @@ function CategoryBreadcrumb({
   );
 }
 
+// Listings that record a Chinese spoken language first, under their own
+// heading, then the rest. Only used when the page has enough of them (#480).
+function ChineseSpeakingListingGroups({
+  locale,
+  site,
+  category,
+  listings,
+  pagePath,
+}: {
+  locale: Locale;
+  site: SiteProfile;
+  category: BusinessCategory;
+  listings: Business[];
+  pagePath: string;
+}) {
+  const { chineseSpeaking, others } = splitChineseSpeakingListings(listings);
+  const groups = [
+    { key: 'chinese-speaking', heading: formatChineseSpeakingHeading(category, chineseSpeaking.length, locale), items: chineseSpeaking },
+    { key: 'other', heading: formatOtherListingsHeading(others.length, locale), items: others },
+  ].filter((group) => group.items.length > 0);
+
+  return (
+    <>
+      {groups.map((group) => (
+        <div key={group.key} className="space-y-4" data-listing-group={group.key}>
+          <h3 className="text-xl font-semibold text-[#2c2722]">{group.heading}</h3>
+          {group.items.map((business) => (
+            <DirectoryListingCard
+              key={business.id}
+              business={business}
+              category={category}
+              locale={locale}
+              pagePath={pagePath}
+              site={site}
+              stateCode={site.stateCode}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
+}
+
 export async function MetroCategoryPageView({
   locale,
   category,
@@ -303,6 +350,14 @@ export async function MetroCategoryPageView({
                     ? '目前還沒有公開商家，歡迎提交你信任的在地服務者。'
                     : 'There are no public listings here yet. Submit the providers you trust and help build local coverage.'
                 }
+              />
+            ) : hasChineseSpeakingSection(listings) ? (
+              <ChineseSpeakingListingGroups
+                locale={locale}
+                site={site}
+                category={categoryRecord}
+                listings={organic}
+                pagePath={pagePath}
               />
             ) : (
               organic.map((business) => (
@@ -470,6 +525,16 @@ export async function CityCategoryPageView({
               : 'There are no public listings here yet. Submit the providers you trust and help build local coverage.'
           }
         />
+      ) : hasChineseSpeakingSection(listings) ? (
+        <div className="space-y-8">
+          <ChineseSpeakingListingGroups
+            locale={locale}
+            site={site}
+            category={categoryRecord}
+            listings={listings}
+            pagePath={cityCategoryPagePath}
+          />
+        </div>
       ) : (
         <div className="space-y-4">
           {listings.map((business) => (
