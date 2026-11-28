@@ -126,6 +126,7 @@ export async function BusinessDetailPageView({
       },
       {
         excludeSlug: business.slug,
+        locale,
         site,
       }
     ),

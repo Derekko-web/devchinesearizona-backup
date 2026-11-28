@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import '@fontsource-variable/inter/wght.css';
 import '@fontsource-variable/noto-sans-tc/wght.css';
 import '@fontsource-variable/cormorant-garamond/wght.css';
@@ -6,7 +7,9 @@ import './globals.css';
 import { AppShell } from '@/components/AppShell';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 import { getAdSenseClientId } from '@/lib/adsense';
+import { localeLangAttribute } from '@/lib/i18n';
 import { buildSiteVerification } from '@/lib/seo';
+import { PAGE_LOCALE_HEADER } from '@/lib/routing';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 
 const adSenseClientId = getAdSenseClientId();
@@ -39,10 +42,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const site = await getCurrentSiteProfile();
+  const pageLocale = (await headers()).get(PAGE_LOCALE_HEADER) === 'zh' ? 'zh' : 'en';
 
   return (
     <html
-      lang="en"
+      lang={localeLangAttribute(pageLocale)}
       translate="no"
       className="notranslate"
       suppressHydrationWarning

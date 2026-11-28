@@ -31,16 +31,28 @@ const localizedSitemapLocales = locales.filter((locale) => locale !== 'en');
 
 type SitemapEntry = MetadataRoute.Sitemap[number];
 
+// A real change date or none at all: a lastmod that is always "now" teaches
+// search engines to ignore it (finding 14).
+function parseLastModified(...values: Array<string | undefined | null>): Date | undefined {
+  const times = values
+    .map((value) => (value ? Date.parse(value) : Number.NaN))
+    .filter((time) => Number.isFinite(time));
+  return times.length > 0 ? new Date(Math.max(...times)) : undefined;
+}
+
+// Hidden Arizona entries with almost no text of their own stay out (two lists hold ~100 characters).
+const MIN_HIDDEN_ARIZONA_BODY_CHARACTERS = 300;
+
 function buildSitemapEntry(
   url: string,
   path: string,
-  generatedAt: Date,
+  lastModified: Date | undefined,
   priority: number,
   site: SiteProfile
 ): SitemapEntry {
   return {
     url,
-    lastModified: generatedAt,
+    ...(lastModified ? { lastModified } : {}),
     changeFrequency: 'weekly',
     priority,
     alternates: {
@@ -69,15 +81,33 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
     getCurrentArticlesAsync(undefined, site),
     canShowArizonaOnlyContent ? getPublishedDiscoverArticles() : Promise.resolve([]),
   ]);
-  const hiddenArizonaEntries = canShowArizonaOnlyContent ? getHiddenArizonaEntries() : [];
+  const hiddenArizonaEntries = (canShowArizonaOnlyContent ? getHiddenArizonaEntries() : []).filter(
+    (entry) =>
+      entry.body.reduce((total, block) => total + (block?.en?.length ?? 0), 0) >= MIN_HIDDEN_ARIZONA_BODY_CHARACTERS
+  );
   const guides = canShowArizonaOnlyContent ? getGuides() : [];
   const events = canShowArizonaOnlyContent ? getEvents() : [];
   const communityPosts = canShowArizonaOnlyContent
     ? getCommunityPosts().filter((post) => !shouldNoIndexCommunityPost(post))
     : [];
-  const businessRoutes = directoryBusinesses
-    .filter((business) => !shouldNoIndexDirectoryBusiness(business))
-    .map((business) => `/business/${business.slug}`);
+  const lastModifiedByPath = new Map<string, Date>();
+  const noteLastModified = (path: string, ...values: Array<string | undefined | null>) => {
+    const date = parseLastModified(...values);
+    const current = lastModifiedByPath.get(path);
+    if (date && (!current || date > current)) {
+      lastModifiedByPath.set(path, date);
+    }
+  };
+  const indexableBusinesses = directoryBusinesses.filter((business) => !shouldNoIndexDirectoryBusiness(business));
+  const businessRoutes = indexableBusinesses.map((business) => `/business/${business.slug}`);
+  for (const business of directoryBusinesses) {
+    // A category page changes when any listing on it does.
+    noteLastModified(metroCategoryPath(business.categorySlug), business.lastUpdated);
+    noteLastModified(cityCategoryPath(business.city, business.categorySlug), business.lastUpdated);
+  }
+  for (const business of indexableBusinesses) {
+    noteLastModified(`/business/${business.slug}`, business.lastUpdated);
+  }
   // Sparse category pages (one or two listings) are noindex, so they stay out of the sitemap too.
   const metroCategorySummaries = await getMetroCategorySummaries(site, directoryBusinesses);
   const categoryRoutes = metroCategorySummaries
@@ -91,8 +121,11 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
   const dynamicRoutes = [
     ...categoryRoutes,
     ...businessRoutes,
+    // Discover Arizona category pages with no published articles are near-empty.
     ...(canShowArizonaOnlyContent
-      ? discoveryCategories.map((category) => `/discover-arizona/${category.slug}`)
+      ? discoveryCategories
+          .filter((category) => discoverArticles.some((article) => article.primaryCategory === category.slug))
+          .map((category) => `/discover-arizona/${category.slug}`)
       : []),
     ...discoverArticles.map((article) => `/discover-arizona/${article.primaryCategory}/${article.slug}`),
     ...hiddenArizonaEntries.map((entry) => getHiddenArizonaEntryPath(entry)),
@@ -104,20 +137,36 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
     ),
   ];
 
+  for (const article of discoverArticles) {
+    noteLastModified(`/discover-arizona/${article.primaryCategory}/${article.slug}`, article.updatedAt, article.publishedAt);
+    noteLastModified(`/discover-arizona/${article.primaryCategory}`, article.updatedAt, article.publishedAt);
+  }
+  for (const entry of hiddenArizonaEntries) {
+    noteLastModified(getHiddenArizonaEntryPath(entry), entry.updatedAt, entry.publishedAt);
+  }
+  for (const guide of guides) {
+    noteLastModified(`/relocation-guide/${guide.slug}`, guide.updatedAt, guide.publishedAt);
+  }
+  for (const article of articles) {
+    noteLastModified(getNewsArticlePath(site, article.slug), article.updatedAt, article.publishedAt);
+  }
+  for (const post of communityPosts) {
+    noteLastModified(`/community/${post.type === 'classified' ? 'classifieds' : 'board'}/${post.slug}`, post.updatedAt);
+  }
+
   const allRoutes = Array.from(
     new Set([
       ...staticRoutes,
       ...dynamicRoutes,
     ])
   );
-  const generatedAt = new Date();
 
   const localizedEntries = allRoutes.flatMap((path) =>
     localizedSitemapLocales.map((locale) => ({
       ...buildSitemapEntry(
         absoluteUrl(withLocale(locale, path), site),
         path,
-        generatedAt,
+        lastModifiedByPath.get(path),
         path === '/' ? 1 : 0.7,
         site
       ),
@@ -125,7 +174,7 @@ export async function buildSitemap(site: SiteProfile = defaultSiteProfile): Prom
   );
 
   const xDefaultEntries = allRoutes.map((path) =>
-    buildSitemapEntry(absoluteUrl(path, site), path, generatedAt, path === '/' ? 1 : 0.6, site)
+    buildSitemapEntry(absoluteUrl(path, site), path, lastModifiedByPath.get(path), path === '/' ? 1 : 0.6, site)
   );
 
   return [...xDefaultEntries, ...localizedEntries];

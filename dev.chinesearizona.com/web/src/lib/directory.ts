@@ -16,10 +16,11 @@ import type {
   BusinessCategory,
   DirectoryBusinessStatusFilter,
   DirectoryStatus,
+  Locale,
   SortOption,
   VerificationState,
 } from '@/lib/types';
-import { CHINESE_SPOKEN_LANGUAGE_VALUES, matchesLanguageFilter } from '@/lib/listing-trust';
+import { CHINESE_SPOKEN_LANGUAGE_VALUES, hasOwnerClaim, matchesLanguageFilter } from '@/lib/listing-trust';
 import { formatPhoneNumber } from '@/lib/phone';
 import { getDirectoryAiReplacementImage, resolveDirectoryHeroImage } from '@/lib/directory-ai-replacements';
 import {
@@ -28,6 +29,7 @@ import {
   getCitySiteContextImage,
 } from '@/lib/city-site-business-images';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
+import { cachedDirectoryRead } from '@/lib/directory-cache';
 import { getSupabaseClient, getSupabaseServiceClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export type DirectoryFilters = {
@@ -47,6 +49,10 @@ type DirectoryQueryOptions = {
   excludeSlug?: string;
   includeNonPublic?: boolean;
   limit?: number;
+  // The page's language, for ordering by "has a description in this language".
+  locale?: Locale;
+  // Static and fixture data only: skip ordering (lookups by slug).
+  unsorted?: boolean;
   site?: SiteProfile;
   usePaidPromotion?: boolean;
 };
@@ -578,6 +584,53 @@ export function compareFeaturedSignals(left: Business, right: Business, usePaidP
   return 0;
 }
 
+function hasCjkText(value?: string | null): boolean {
+  return Boolean(value && /[\u3400-\u9fff]/.test(value));
+}
+
+// How complete a listing is, for ordering: a phone, a website, opening hours
+// and a real description in the page's language (one point each).
+const listingDetailScoreCache: Record<Locale, WeakMap<Business, number>> = {
+  en: new WeakMap(),
+  zh: new WeakMap(),
+};
+const listingNameCollator = new Intl.Collator('en', { sensitivity: 'base' });
+
+export function listingDetailScore(business: Business, locale: Locale = 'en'): number {
+  const cached = listingDetailScoreCache[locale].get(business);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const hasPhone = Boolean(business.phone && !hasPlaceholderPhone(business.phone));
+  const hasWebsite = Boolean(business.website && !hasPlaceholderDomain(business.website));
+  const hasHours = business.hours.length > 0;
+  const hasDescription =
+    !hasGeneratedDirectoryCopy(business) &&
+    (locale === 'zh' ? hasCjkText(business.description.zh) : hasSubstantialDirectoryCopy(business));
+
+  const score = Number(hasPhone) + Number(hasWebsite) + Number(hasHours) + Number(hasDescription);
+  listingDetailScoreCache[locale].set(business, score);
+  return score;
+}
+
+// The order after hand-picked, paid and Sponsored signals (issue #478): listings
+// an owner has claimed, then more complete listings, then name. Ratings never
+// order listings: the stored numbers were copied from Google, not collected here.
+export function compareListingsByOwnerAndDetail(left: Business, right: Business, locale: Locale = 'en'): number {
+  const ownerDelta = Number(hasOwnerClaim(right)) - Number(hasOwnerClaim(left));
+  if (ownerDelta !== 0) {
+    return ownerDelta;
+  }
+
+  const detailDelta = listingDetailScore(right, locale) - listingDetailScore(left, locale);
+  if (detailDelta !== 0) {
+    return detailDelta;
+  }
+
+  return listingNameCollator.compare(left.name.en, right.name.en);
+}
+
 function toCategoryRecord(row: DirectoryCategoryRow): BusinessCategory {
   return {
     slug: row.slug,
@@ -834,6 +887,7 @@ function sortBusinesses(
   sort: SortOption,
   referencePoint?: Coordinates,
   options: {
+    locale?: Locale;
     usePaidPromotion?: boolean;
   } = {}
 ): number {
@@ -853,25 +907,6 @@ function sortBusinesses(
     }
   }
 
-  if (sort === 'rating') {
-    const ratingDelta = right.rating - left.rating;
-    if (ratingDelta !== 0) {
-      return ratingDelta;
-    }
-
-    const reviewDelta = right.reviewCount - left.reviewCount;
-    if (reviewDelta !== 0) {
-      return reviewDelta;
-    }
-  }
-
-  if (sort === 'reviewed') {
-    const reviewDelta = right.reviewCount - left.reviewCount;
-    if (reviewDelta !== 0) {
-      return reviewDelta;
-    }
-  }
-
   if (sort === 'newest') {
     const updatedDelta = new Date(right.lastUpdated).getTime() - new Date(left.lastUpdated).getTime();
     if (updatedDelta !== 0) {
@@ -884,12 +919,7 @@ function sortBusinesses(
     return featuredSignalDelta;
   }
 
-  const ratingDelta = right.rating - left.rating;
-  if (ratingDelta !== 0) {
-    return ratingDelta;
-  }
-
-  return right.reviewCount - left.reviewCount;
+  return compareListingsByOwnerAndDetail(left, right, options.locale);
 }
 
 type DirectorySupabaseQuery = {
@@ -974,16 +1004,6 @@ export function applyDirectoryQuerySort<T extends Pick<DirectorySupabaseQuery, '
   query: T,
   sort: SortOption
 ): T {
-  if (sort === 'rating') {
-    return query
-      .order('rating', { ascending: false })
-      .order('review_count', { ascending: false }) as unknown as T;
-  }
-
-  if (sort === 'reviewed') {
-    return query.order('review_count', { ascending: false }) as unknown as T;
-  }
-
   if (sort === 'alphabetical') {
     return query.order('name_en', { ascending: true }) as unknown as T;
   }
@@ -992,10 +1012,13 @@ export function applyDirectoryQuerySort<T extends Pick<DirectorySupabaseQuery, '
     return query.order('last_updated', { ascending: false }) as unknown as T;
   }
 
+  // No rating or review_count: those numbers are not from reviews on this site.
+  // Ascending puts listings with an owner first (Postgres sorts NULLs last).
   return query
     .order('featured', { ascending: false })
     .order('sponsored', { ascending: false })
-    .order('rating', { ascending: false }) as unknown as T;
+    .order('owner_profile_id', { ascending: true })
+    .order('name_en', { ascending: true }) as unknown as T;
 }
 
 function applyClientFilters(
@@ -1138,6 +1161,12 @@ async function querySupabaseMostPopularBusinesses(
   return result.error || !result.data ? null : result.data;
 }
 
+function directoryCacheKey(kind: string, filters: DirectoryFilters, options: DirectoryQueryOptions): string {
+  const { site, ...rest } = options;
+  return `${kind}:${(site ?? defaultSiteProfile).key}:${JSON.stringify(filters)}:${JSON.stringify(rest)}`;
+}
+
+// Cached for a minute and shared across requests (#524); writes clear it.
 async function querySupabaseBusinesses(
   filters: DirectoryFilters,
   options: DirectoryQueryOptions = {}
@@ -1146,6 +1175,19 @@ async function querySupabaseBusinesses(
     return null;
   }
 
+  const cached = await cachedDirectoryRead(
+    directoryCacheKey('businesses', filters, options),
+    () => loadSupabaseBusinesses(filters, options),
+    { shouldCache: (value) => value !== null }
+  );
+  // A fresh array per caller, so no caller can reorder another's results.
+  return cached ? [...cached] : null;
+}
+
+async function loadSupabaseBusinesses(
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Promise<Business[] | null> {
   const data = await runSupabaseBusinessQueryWithFallback(filters, options);
   if (!data) {
     return null;
@@ -1243,9 +1285,11 @@ function queryStaticBusinesses(
     return haystack.includes(search);
   });
 
-  return filtered
-    .sort((left, right) => sortBusinesses(left, right, sort, referencePoint, options))
-    .slice(0, options.limit);
+  // A lookup by slug needs no order; sorting every listing per lookup is slow.
+  const ordered = options.unsorted
+    ? filtered
+    : filtered.sort((left, right) => sortBusinesses(left, right, sort, referencePoint, options));
+  return ordered.slice(0, options.limit);
 }
 
 function queryFixtureBusinesses(filters: DirectoryFilters, options: DirectoryQueryOptions = {}): Business[] {
@@ -1321,6 +1365,39 @@ export async function getDirectoryPage(
   };
 }
 
+// One listing by slug with its active plans and campaigns, or null when the
+// query fails or finds nothing (then the caller falls back to fixtures).
+async function loadSupabaseBusinessBySlug(
+  client: NonNullable<ReturnType<typeof getDirectoryDbClient>>,
+  slug: string
+): Promise<Business | null> {
+  const initialResult = await client
+    .from('businesses')
+    .select(DIRECTORY_SELECT_FIELDS)
+    .eq('slug', slug)
+    .maybeSingle();
+  let data = initialResult.data as DirectoryBusinessRow | null;
+  let error = initialResult.error;
+
+  if (error || !data) {
+    const legacyResult = await client
+      .from('businesses')
+      .select(BASE_DIRECTORY_SELECT_FIELDS)
+      .eq('slug', slug)
+      .maybeSingle();
+
+    data = legacyResult.data as DirectoryBusinessRow | null;
+    error = legacyResult.error;
+  }
+
+  if (error || !data) {
+    return null;
+  }
+
+  const [business] = await attachActiveListingPlans(await attachActiveDirectoryAdCampaigns([rowToBusiness(data)]));
+  return business ?? null;
+}
+
 export async function getDirectoryBusinessBySlug(slug: string, options: DirectoryQueryOptions = {}): Promise<Business | undefined> {
   const site = options.site ?? defaultSiteProfile;
   if (!hasLiveDirectoryData(site)) {
@@ -1328,7 +1405,7 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
   }
 
   if (!shouldUseDefaultDirectorySource(site)) {
-    const business = querySiteStaticBusinesses(site, {}, { ...options, includeNonPublic: true }).find(
+    const business = querySiteStaticBusinesses(site, {}, { ...options, includeNonPublic: true, unsorted: true }).find(
       (item) => item.slug === slug
     );
     if (!business) {
@@ -1339,7 +1416,7 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
   }
 
   if (fixtureBusinessesEnabled()) {
-    const business = queryFixtureBusinesses({}, { includeNonPublic: true }).find((item) => item.slug === slug);
+    const business = queryFixtureBusinesses({}, { includeNonPublic: true, unsorted: true }).find((item) => item.slug === slug);
     if (!business) {
       return undefined;
     }
@@ -1349,29 +1426,13 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
 
   const client = getDirectoryDbClient();
   if (client) {
-    const initialResult = await client
-      .from('businesses')
-      .select(DIRECTORY_SELECT_FIELDS)
-      .eq('slug', slug)
-      .maybeSingle();
-    let data = initialResult.data as DirectoryBusinessRow | null;
-    let error = initialResult.error;
+    const business = await cachedDirectoryRead(
+      `business:${site.key}:${slug}`,
+      () => loadSupabaseBusinessBySlug(client, slug),
+      { shouldCache: (value) => value !== null }
+    );
 
-    if (error || !data) {
-      const legacyResult = await client
-        .from('businesses')
-        .select(BASE_DIRECTORY_SELECT_FIELDS)
-        .eq('slug', slug)
-        .maybeSingle();
-
-      data = legacyResult.data as DirectoryBusinessRow | null;
-      error = legacyResult.error;
-    }
-
-    if (!error && data) {
-      const [business] = await attachActiveListingPlans(
-        await attachActiveDirectoryAdCampaigns([rowToBusiness(data)])
-      );
+    if (business) {
       if (options.includeNonPublic || isPublicDirectoryBusiness(business)) {
         return business;
       }
@@ -1403,13 +1464,20 @@ export async function getDirectoryCategories(site: SiteProfile = defaultSiteProf
 
   const client = getDirectoryDbClient();
   if (client) {
-    const { data, error } = await client
-      .from('business_categories')
-      .select('slug, name_en, name_zh_tw, description_en, description_zh_tw, icon')
-      .order('name_en', { ascending: true });
+    const categories = await cachedDirectoryRead(
+      'categories',
+      async () => {
+        const { data, error } = await client
+          .from('business_categories')
+          .select('slug, name_en, name_zh_tw, description_en, description_zh_tw, icon')
+          .order('name_en', { ascending: true });
+        return !error && data ? data.map((row) => toCategoryRecord(row as DirectoryCategoryRow)) : null;
+      },
+      { shouldCache: (value) => value !== null }
+    );
 
-    if (!error && data) {
-      return data.map((row) => toCategoryRecord(row as DirectoryCategoryRow));
+    if (categories) {
+      return [...categories];
     }
   }
 

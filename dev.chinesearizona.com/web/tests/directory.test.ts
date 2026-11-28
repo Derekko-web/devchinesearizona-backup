@@ -7,7 +7,9 @@ import losAngelesDirectoryBusinesses from '@/data/los-angeles-directory-business
 import austinDirectoryBusinesses from '@/data/sites/austin/businesses.json';
 import {
   applyDirectoryQueryFilters,
+  applyDirectoryQuerySort,
   compareFeaturedSignals,
+  compareListingsByOwnerAndDetail,
   countActiveDirectoryFilters,
   getDirectoryBusinessBySlug,
   getDirectoryBusinesses,
@@ -305,7 +307,7 @@ describe('directory trust gates', () => {
         city: 'Mesa',
         minRating: 4.5,
         businessStatus: 'open_now',
-        sort: 'rating',
+        sort: 'alphabetical',
         newcomerFriendlyOnly: true,
       })
     ).toBe(6);
@@ -379,6 +381,44 @@ describe('directory trust gates', () => {
         args: ['search_document', 'family doctor', { config: 'simple', type: 'websearch' }],
       },
     ]);
+  });
+
+  it('never orders listings by rating or review count, in the query or in code (#478)', () => {
+    const query = new FakeDirectoryQuery();
+    applyDirectoryQuerySort(query, 'featured');
+
+    expect(query.calls).toEqual([
+      { method: 'order', args: ['featured', { ascending: false }] },
+      { method: 'order', args: ['sponsored', { ascending: false }] },
+      { method: 'order', args: ['owner_profile_id', { ascending: true }] },
+      { method: 'order', args: ['name_en', { ascending: true }] },
+    ]);
+
+    const highlyRated = businessFixture({ slug: 'a', name: { en: 'Alpha' }, rating: 5, reviewCount: 900 });
+    const unrated = businessFixture({ slug: 'b', name: { en: 'Beta' }, rating: 0, reviewCount: 0 });
+    // Same details otherwise, so name decides, not the copied rating.
+    expect(compareListingsByOwnerAndDetail(unrated, highlyRated)).toBeGreaterThan(0);
+    expect(compareListingsByOwnerAndDetail(highlyRated, unrated)).toBeLessThan(0);
+  });
+
+  it('orders owner-claimed listings first, then more complete ones, then by name', () => {
+    const longDescription = { en: 'A full description of the practice, its services and who it serves. '.repeat(4) };
+    const thin = businessFixture({ slug: 'thin', name: { en: 'Aaa Thin' }, website: undefined, hours: [] });
+    const complete = businessFixture({
+      slug: 'complete',
+      name: { en: 'Zzz Complete' },
+      hours: [{ label: 'Mon-Fri', value: '9:00 AM - 6:00 PM' }],
+      description: longDescription,
+    });
+    const claimedThin = businessFixture({ slug: 'claimed', name: { en: 'Mmm Claimed' }, ownerProfileSlug: 'grace-lin', website: undefined });
+
+    const ordered = [thin, complete, claimedThin].sort((left, right) => compareListingsByOwnerAndDetail(left, right));
+    expect(ordered.map((item) => item.slug)).toEqual(['claimed', 'complete', 'thin']);
+
+    // On Chinese pages a Chinese description counts; an English-only one does not.
+    const chineseDescription = businessFixture({ slug: 'zh', name: { en: 'Zzz Chinese' }, description: { en: 'Short.', zh: '提供中文服務的家庭診所，接受預約。' } });
+    const englishOnly = businessFixture({ slug: 'en-only', name: { en: 'Aaa English' }, description: longDescription });
+    expect(compareListingsByOwnerAndDetail(chineseDescription, englishOnly, 'zh')).toBeLessThan(0);
   });
 
   it('prioritizes active paid campaigns ahead of legacy sponsored listings when paid promotion is enabled', () => {

@@ -12,9 +12,12 @@ Status:
 | Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 278 → 286 rows, indexable 72 → 80, 8/8 rows match dev and the file by md5 |
 | Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check confirmed all 6 held the guarded text; 6/6 now match the file by md5 |
 | Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 286 → 294 rows, indexable 80 → 88, 8/8 rows match dev and the file by md5 |
+| Batch 3a: 7 north Valley physicians (`listing-expansion-2026-11-batch3a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 | AZ Hope language fix and Alan Wang phone (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check matched the rollback values; both rows now match dev |
 | Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 47 rows `live` → `suppressed`; none claimed or paid; indexable unchanged at 88 |
 | Hide Panda Express (`listing-expansion-2026-11-panda-express-suppress*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO decision and approval): 1 row `live` → `suppressed` |
+| Batch 3b: 4 Taiwanese food listings near TSMC (`listing-expansion-2026-11-batch3b*.sql`, issue #523) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Corrections 3b: Greater Phoenix Chinese Christian School (`listing-expansion-2026-11-batch3b-corrections*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 
 Production after all of the above (2026-11-28): 294 rows, 232 `live`, 234 public (`live` or `stale`), 48 `suppressed` (none claimed, sponsored or featured), 88 indexable. Suppressed pages return 404 with `noindex` and are not in the sitemap.
 
@@ -278,6 +281,33 @@ Checked on dev after insert: all 8 English and `/zh/` pages return 200 with no `
 
 To apply to production after approval: pre-check none of the 8 slugs exist; run `listing-expansion-2026-11-batch2c.sql`; post-check 8 rows and indexable +8 (72 → 80 if batch 2b is not applied first). Rollback: `listing-expansion-2026-11-batch2c-rollback.sql`.
 
+## Batch 3a: north Valley physicians (issue #487)
+
+The CEO asked for independent practices in the north Valley (Peoria, Glendale, north Phoenix, Surprise), where Taiwanese families are settling for TSMC. Names came from a lead list that collects insurer-directory language data (pp8188.com); that list is **not** used as evidence. Each listing below rests on the language stated on the practice's or employer's own provider page (CEO rule a), and the copy ends with which page and the check date. Address and phone come from that page; the federal NPI registry is the second source, and where they differ the provider page is used (CEO decision). No gendered pronouns; every street address is a medical office.
+
+| Slug | City | Practice | Languages | Address/phone source | Sources |
+|---|---|---|---|---|---|
+| `jenny-ho-do-glendale` | Glendale | Bookmark Medical (family medicine, all ages) | English, Mandarin | Provider page (NPI shows a 2016 Olive Ave address; provider page used). Page said not accepting new patients; the copy says so | https://www.bookmarkmedical.com/providers/jenny-ho<br>NPI 1427315506 |
+| `qi-zhang-md-glendale` | Glendale | Desert West OB/GYN | English, Mandarin | Main office address matches NPI; phone (602) 978-1500 from the practice site (NPI has 602-678-1500) | https://desertwestobgyn.com/providers/qi-zhang-md-facog<br>NPI 1285773887 |
+| `jinmeng-zhang-md-peoria` | Peoria | U.S. Dermatology Partners (dermatology) | English, Mandarin | Provider page and NPI agree on address and phone | https://www.usdermatologypartners.com/provider/jinmeng-zhang-md/<br>NPI 1740694926 |
+| `vicky-chen-yang-md-peoria` | Peoria | HonorHealth (primary care) | English, Mandarin | HonorHealth page and NPI agree | https://www.honorhealth.com/physicians/vicky-chen-yang<br>NPI 1033159207 |
+| `lin-zhao-md-phoenix` | Phoenix (far north) | HonorHealth (family and preventive medicine) | English, Mandarin | HonorHealth page (NPI shows a Scottsdale office; HonorHealth used); zip left out because HonorHealth does not show one | https://www.honorhealth.com/physicians/lin-zhao<br>NPI 1629563622 |
+| `alfredo-lim-md-phoenix` | Phoenix (north-central) | HonorHealth (internal medicine) | English, Cantonese | HonorHealth address; phone matches NPI; zip left out as above | https://www.honorhealth.com/physicians/alfredo-lim<br>NPI 1225002371 |
+| `da-wei-liao-md-phoenix` | Phoenix (north) | Independent pulmonary and critical care office; HonorHealth medical staff | English, Mandarin | HonorHealth page shows no office address, so the address is from NPI (updated October 2025); phone matches both. Copy says so | https://www.honorhealth.com/physicians/da-wei-liao<br>NPI 1053379263 |
+
+Checked on dev: all 7 English and `/zh/` pages return 200 with no `noindex`; copy matches the SQL by md5; duplicate check against production (slug, name, phone, provider site): none. Website scan: all four provider sites load for a browser and the Googlebot user agent; no spam, parking or redirects.
+
+Not added from the same lead list, and why:
+
+| Lead | Why not |
+|---|---|
+| Glendale, Peoria and Surprise dentists (Chu-Chi Wang, Henry Yu, Tzuyu Meng, Olivia Chow, Kevin Leong) and Frederick Lin (north Phoenix) | Language only from insurer directories; no practice site found that states it (Olivia Chow's NPI record is in San Diego) |
+| Howard Tay, Lixian Zou, Hui John Zhao | HonorHealth states the language but shows no office address, and the NPI address is 2016-2022 or its phone differs |
+| Bryant Kao (Anthem), Daniel Chang, Hong Cui, Eric Chen, Peter Young | Anthem is outside the site's city list; the others have language only from an insurer directory, or the NPI record points elsewhere |
+| Keng-Yu Chuang (Glendale) | Practice site blocks automated reading (403) |
+
+To apply to production after approval: pre-check none of the 7 slugs exist; run `listing-expansion-2026-11-batch3a.sql`; post-check 7 rows and indexable +7. Rollback: `listing-expansion-2026-11-batch3a-rollback.sql`.
+
 ## Corrections, batch 2c
 
 `listing-expansion-2026-11-batch2c-corrections.sql` (applied to dev 2026-11-28; production waits for approval):
@@ -316,6 +346,41 @@ Kept on purpose:
 - The two associations and the student club listed earlier (not chains; CEO: keep as they are).
 - The three unverified listings (Beijing Acupuncture, Hi-Tech Dentistry, YJP Spine Center) stay until Derek checks them in person.
 - The first line of `listing-expansion-2026-11-chains-suppress.sql` still says "PREPARED, NOT APPLIED"; it was left as approved and applied unchanged.
+
+## Batch 3b: Taiwanese food near TSMC (issue #523)
+
+For readers (Marketing post, Editor guide). Started from press coverage of TSMC families: Taiwan's Central News Agency on Taiwan MaMa (December 2025, https://focustaiwan.tw/business/202512070010), KJZZ on TSMC and Taiwan (September 2026), Phoenix Magazine's "Taipei of the Desert" (September 2026) and the Arizona Republic on 85°C in Glendale (early 2025). Each listing was then confirmed on the business's own website or the chain's official store finder; facts in the copy come from those pages, and press facts are attributed to the outlet. Restaurants do not state a language of service, so `languages` is `{English}` (the convention for dining rows) and `bilingual` is false. Copy has no gendered pronouns.
+
+| Slug | City | What | Address and phone source | Sources |
+|---|---|---|---|---|
+| `taiwan-mama-deer-valley-phoenix` | Phoenix (Deer Valley) | Taiwanese bento, popcorn chicken, braised pork rice, boba | Own site's Locations page: 822 E Union Hills Dr, D-16; +1 623-204-0919; 11 a.m.-9 p.m., closed Mondays (New Times gives the same address) | https://ustaiwanmama.com/locations/<br>https://focustaiwan.tw/business/202512070010 |
+| `tofu-king-late-night-phoenix` | Phoenix | Taiwanese restaurant, stinky tofu, karaoke rooms, catering | Own site: 2855 W Cactus Rd, Suite 2; (623) 692-2816 | https://www.tofukingphoenix.com/about |
+| `cactiflower-phoenix` | Phoenix | Taiwanese boxed meals, takeout | Own site footer: 15414 N 19th Ave, Suite O; 562 205 8613; Tue-Sat 1-7 p.m. (the site's hidden structured data has another 562 number; the visible footer is used) | https://www.cactiflower.com/<br>KJZZ 2026-09-29; Phoenix Magazine 2026-09-01 |
+| `85c-bakery-cafe-arrowhead-glendale` | Glendale | Taiwanese bakery chain | Official store finder: 7280 W Bell Rd, Glendale 85308. **No phone published:** the store finder gives 669-271-8585 for both this store and Avondale, while the Arizona Republic printed 602-708-3645, so neither confirms the other | https://www.85cbakerycafe.com/location/ |
+
+Checked on dev: all 4 English and `/zh/` pages return 200 with no `noindex`; copy matches the SQL file by md5; duplicate check against production (slug, phone, website, name, address): none. Website scan: no spam or parked pages. ustaiwanmama.com returns 403 to the Googlebot user agent from a non-Google address, and the two Wix sites (Tofu King, CactiFlower) return 403 to a bare browser user agent but 200 to a full one; both are bot protection, not cloaking.
+
+Considered and not added:
+
+| Place | Why not |
+|---|---|
+| Taiwan Bistro (named in press) | Its directory address is 2855 W Cactus Rd, Suite 2, now Tofu King & Late Night; no current site of its own |
+| Sharetea (Desert Ridge), DaYung's Tea (Deer Valley) | Named in press; store lists on the official sites load only by script and could not be read, so the address is not confirmed on an official page yet |
+| 99 Ranch Market at Arrowhead (The Mosaic) | Not open yet; already in the table as `planned` with the Bafang, The Alley and other food-hall tenants |
+| Pu'er Taiwan Tea & Coffee, OWL OWL Boba x Chick (Glendale); Asiana Market, GS Supermarket (Glendale) | No website of their own (Asiana's domain is parked) |
+| Bee Happy Boba Tea & Pho (Peoria) | Vietnamese-style; no website of its own |
+| Fat Daddy Chicken, Din Tai Fung, Chun Shui Tang, Bafang Dumpling | Named in press, but no confirmed location in north Phoenix, Peoria or Glendale (Fat Daddy's site is a placeholder; Din Tai Fung is in Scottsdale) |
+
+To apply to production after approval: pre-check none of the 4 slugs exist; run `listing-expansion-2026-11-batch3b.sql`; post-check 4 rows and indexable +4. Rollback: `listing-expansion-2026-11-batch3b-rollback.sql`.
+
+## Corrections, batch 3b: schools from the Chinese-classes guide
+
+| School | Finding | Change |
+|---|---|---|
+| Greater Phoenix Chinese Christian School (鳳城華人基督教會中文學校), Chandler | The school's own page (https://gpccs-arizona.blogspot.com/) gives 890 W. Ray Road, Chandler, 480-280-1419, founded 1983, Traditional and Simplified Chinese, children's, bilingual and adult classes. The page is undated; the church's own site (https://gpccc.org/, 2026) confirms the 890 W Ray Rd address. | New row `greater-phoenix-chinese-christian-school-chandler` (education, `{English, Chinese}`), copy says the page is undated and to call first. Student numbers on the page are left out as possibly stale. |
+| Hola Hello Ni Hao Language Preschool | No website of its own found (only course directories and a Voyage Phoenix interview with the founder); no address confirmed. | **Not added.** |
+
+To apply: run `listing-expansion-2026-11-batch3b-corrections.sql` (1 insert, `on conflict do nothing`). Rollback: `listing-expansion-2026-11-batch3b-corrections-rollback.sql`.
 
 ## Follow-ups
 

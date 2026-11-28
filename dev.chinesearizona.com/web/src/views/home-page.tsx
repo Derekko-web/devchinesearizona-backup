@@ -16,11 +16,13 @@ import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
 import { getBusinessCategories, getCurrentArticlesAsync } from '@/lib/content';
 import { getDirectoryBusinesses } from '@/lib/directory';
 import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
-import { t } from '@/lib/i18n';
+import { localeLangAttribute, t } from '@/lib/i18n';
 import { getListingTrustLevel, listingTrustExplanation, listingTrustLabel, type ListingTrustLevel } from '@/lib/listing-trust';
 import { metroCategoryPath } from '@/lib/metro-categories';
 import { isNewsFresh } from '@/lib/news-freshness';
 import { withLocale } from '@/lib/routing';
+import { JsonLd } from '@/lib/schema';
+import { absoluteUrl } from '@/lib/seo';
 import {
   defaultSiteProfile,
   hasLiveDirectoryData,
@@ -342,6 +344,33 @@ function StoryCard({ story }: { story: HomeStoryCard }) {
   );
 }
 
+// Who publishes the site and what it is, for search engines (finding 14).
+export function buildHomeJsonLd(site: SiteProfile, locale: Locale): Array<Record<string, unknown>> {
+  const organizationId = `${site.url}/#organization`;
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': organizationId,
+      name: site.brandName,
+      alternateName: site.brandNameZh,
+      url: site.url,
+      logo: absoluteUrl('/apple-touch-icon.png', site),
+      email: site.publisher.contactEmail,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': `${site.url}/#website`,
+      name: site.brandName,
+      alternateName: site.brandNameZh,
+      url: absoluteUrl(locale === 'zh' ? '/zh' : '/', site),
+      inLanguage: localeLangAttribute(locale),
+      publisher: { '@id': organizationId },
+    },
+  ];
+}
+
 export async function HomePageView({ locale, site = defaultSiteProfile }: HomePageViewProps) {
   const home = site.home;
   const directoryIsLive = hasLiveDirectoryData(site);
@@ -446,6 +475,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
   return (
     <div className="flex-1 overflow-x-hidden bg-transparent pb-0 text-[#261b15]">
+      <JsonLd data={buildHomeJsonLd(site, locale)} />
       <div className="px-0 pt-0">
         <section className="overflow-hidden border-b border-[#dccbbb] bg-[#fcf8f1]">
           <div className="grid xl:grid-cols-[0.90fr_1.10fr]">

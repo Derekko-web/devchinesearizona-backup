@@ -15,6 +15,7 @@ import type {
   Locale,
   ProfileRole,
 } from '@/lib/types';
+import { invalidateDirectoryCache } from '@/lib/directory-cache';
 
 type DirectoryAdCampaignRow = {
   id: string;
@@ -923,7 +924,7 @@ function buildMockStripeId(prefix: 'cs_test' | 'pi_test') {
   return `${prefix}_directory_ads_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
-async function upsertDirectoryAdCampaignFromCheckout(input: {
+async function upsertDirectoryAdCampaignFromCheckoutWrite(input: {
   budgetCents: number;
   businessId: string;
   checkoutSessionId: string;
@@ -1118,7 +1119,7 @@ export async function createDirectoryAdCheckoutForProfile(input: {
   };
 }
 
-export async function updateDirectoryAdCampaignStatusForProfile(input: {
+async function updateDirectoryAdCampaignStatusForProfileWrite(input: {
   action: 'pause' | 'resume' | 'cancel';
   campaignId: string;
   profileId: string;
@@ -1404,5 +1405,23 @@ export async function handleDirectoryAdStripeEvent(event: Stripe.Event) {
       break;
     default:
       break;
+  }
+}
+
+// Writes that change what a listing shows clear the shared directory cache (#524),
+// so the owner and visitors see the change on the next page load.
+async function upsertDirectoryAdCampaignFromCheckout(...args: Parameters<typeof upsertDirectoryAdCampaignFromCheckoutWrite>) {
+  try {
+    return await upsertDirectoryAdCampaignFromCheckoutWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
+}
+
+export async function updateDirectoryAdCampaignStatusForProfile(...args: Parameters<typeof updateDirectoryAdCampaignStatusForProfileWrite>) {
+  try {
+    return await updateDirectoryAdCampaignStatusForProfileWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
   }
 }
