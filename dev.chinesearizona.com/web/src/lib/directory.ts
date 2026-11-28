@@ -29,6 +29,7 @@ import {
   getCitySiteContextImage,
 } from '@/lib/city-site-business-images';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
+import { cachedDirectoryRead } from '@/lib/directory-cache';
 import { getSupabaseClient, getSupabaseServiceClient, isSupabaseConfigured } from '@/lib/supabase';
 
 export type DirectoryFilters = {
@@ -1160,6 +1161,12 @@ async function querySupabaseMostPopularBusinesses(
   return result.error || !result.data ? null : result.data;
 }
 
+function directoryCacheKey(kind: string, filters: DirectoryFilters, options: DirectoryQueryOptions): string {
+  const { site, ...rest } = options;
+  return `${kind}:${(site ?? defaultSiteProfile).key}:${JSON.stringify(filters)}:${JSON.stringify(rest)}`;
+}
+
+// Cached for a minute and shared across requests (#524); writes clear it.
 async function querySupabaseBusinesses(
   filters: DirectoryFilters,
   options: DirectoryQueryOptions = {}
@@ -1168,6 +1175,19 @@ async function querySupabaseBusinesses(
     return null;
   }
 
+  const cached = await cachedDirectoryRead(
+    directoryCacheKey('businesses', filters, options),
+    () => loadSupabaseBusinesses(filters, options),
+    { shouldCache: (value) => value !== null }
+  );
+  // A fresh array per caller, so no caller can reorder another's results.
+  return cached ? [...cached] : null;
+}
+
+async function loadSupabaseBusinesses(
+  filters: DirectoryFilters,
+  options: DirectoryQueryOptions = {}
+): Promise<Business[] | null> {
   const data = await runSupabaseBusinessQueryWithFallback(filters, options);
   if (!data) {
     return null;
@@ -1345,6 +1365,39 @@ export async function getDirectoryPage(
   };
 }
 
+// One listing by slug with its active plans and campaigns, or null when the
+// query fails or finds nothing (then the caller falls back to fixtures).
+async function loadSupabaseBusinessBySlug(
+  client: NonNullable<ReturnType<typeof getDirectoryDbClient>>,
+  slug: string
+): Promise<Business | null> {
+  const initialResult = await client
+    .from('businesses')
+    .select(DIRECTORY_SELECT_FIELDS)
+    .eq('slug', slug)
+    .maybeSingle();
+  let data = initialResult.data as DirectoryBusinessRow | null;
+  let error = initialResult.error;
+
+  if (error || !data) {
+    const legacyResult = await client
+      .from('businesses')
+      .select(BASE_DIRECTORY_SELECT_FIELDS)
+      .eq('slug', slug)
+      .maybeSingle();
+
+    data = legacyResult.data as DirectoryBusinessRow | null;
+    error = legacyResult.error;
+  }
+
+  if (error || !data) {
+    return null;
+  }
+
+  const [business] = await attachActiveListingPlans(await attachActiveDirectoryAdCampaigns([rowToBusiness(data)]));
+  return business ?? null;
+}
+
 export async function getDirectoryBusinessBySlug(slug: string, options: DirectoryQueryOptions = {}): Promise<Business | undefined> {
   const site = options.site ?? defaultSiteProfile;
   if (!hasLiveDirectoryData(site)) {
@@ -1373,29 +1426,13 @@ export async function getDirectoryBusinessBySlug(slug: string, options: Director
 
   const client = getDirectoryDbClient();
   if (client) {
-    const initialResult = await client
-      .from('businesses')
-      .select(DIRECTORY_SELECT_FIELDS)
-      .eq('slug', slug)
-      .maybeSingle();
-    let data = initialResult.data as DirectoryBusinessRow | null;
-    let error = initialResult.error;
+    const business = await cachedDirectoryRead(
+      `business:${site.key}:${slug}`,
+      () => loadSupabaseBusinessBySlug(client, slug),
+      { shouldCache: (value) => value !== null }
+    );
 
-    if (error || !data) {
-      const legacyResult = await client
-        .from('businesses')
-        .select(BASE_DIRECTORY_SELECT_FIELDS)
-        .eq('slug', slug)
-        .maybeSingle();
-
-      data = legacyResult.data as DirectoryBusinessRow | null;
-      error = legacyResult.error;
-    }
-
-    if (!error && data) {
-      const [business] = await attachActiveListingPlans(
-        await attachActiveDirectoryAdCampaigns([rowToBusiness(data)])
-      );
+    if (business) {
       if (options.includeNonPublic || isPublicDirectoryBusiness(business)) {
         return business;
       }
@@ -1427,13 +1464,20 @@ export async function getDirectoryCategories(site: SiteProfile = defaultSiteProf
 
   const client = getDirectoryDbClient();
   if (client) {
-    const { data, error } = await client
-      .from('business_categories')
-      .select('slug, name_en, name_zh_tw, description_en, description_zh_tw, icon')
-      .order('name_en', { ascending: true });
+    const categories = await cachedDirectoryRead(
+      'categories',
+      async () => {
+        const { data, error } = await client
+          .from('business_categories')
+          .select('slug, name_en, name_zh_tw, description_en, description_zh_tw, icon')
+          .order('name_en', { ascending: true });
+        return !error && data ? data.map((row) => toCategoryRecord(row as DirectoryCategoryRow)) : null;
+      },
+      { shouldCache: (value) => value !== null }
+    );
 
-    if (!error && data) {
-      return data.map((row) => toCategoryRecord(row as DirectoryCategoryRow));
+    if (categories) {
+      return [...categories];
     }
   }
 
