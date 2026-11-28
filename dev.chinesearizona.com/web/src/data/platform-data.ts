@@ -11,7 +11,7 @@ import type {
   SignalDeskQueueItem,
 } from '@/lib/types';
 import { businessReviewOverrides } from '@/data/business-review-overrides';
-import { newcomerGuides } from '@/data/guides';
+import { newcomerGuides, seasonalGuides } from '@/data/guides';
 import generatedAustinLocalArticles from '@/data/generated-austin-local-articles.json';
 import generatedDirectoryBusinesses from '@/data/generated-directory-businesses.json';
 import generatedLosAngelesLocalArticles from '@/data/generated-los-angeles-local-articles.json';
@@ -1011,14 +1011,14 @@ export const guides: Guide[] = [
     section: 'transportation',
     title: { en: 'Arizona Driver License, ID, Vehicle Title, and Registration Setup', zh: '亞利桑那駕照、身分證、車輛 title 與 registration 辦理' },
     excerpt: {
-      en: 'What new residents should prepare for MVD, Travel ID, emissions testing, Arizona insurance, and vehicle paperwork.',
-      zh: '整理新居民辦理 MVD、Travel ID、排放檢測、亞利桑那車險與車輛文件前要準備的事。',
+      en: 'What new residents should prepare for MVD, Travel ID, emissions testing, Arizona insurance, and vehicle paperwork, including what Taiwan and China licence holders need to know.',
+      zh: '整理新居民辦理 MVD、Travel ID、排放檢測、亞利桑那車險與車輛文件前要準備的事，也說明持台灣與中國駕照的人該怎麼辦。',
     },
     heroImage:
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
-    readTime: '10 min',
+    readTime: '12 min',
     publishedAt: '2026-04-01T12:00:00.000Z',
-    updatedAt: '2026-05-14T12:00:00.000Z',
+    updatedAt: '2026-11-27T22:00:00.000Z',
     body: [
       {
         en: 'Arizona MVD is manageable if you treat it as a document problem. The common delays are missing residency proof, mismatched legal names, insurance that is still tied to another state, and emissions testing that should have happened before the registration visit.',
@@ -1115,6 +1115,55 @@ export const guides: Guide[] = [
           },
         ],
       },
+      {
+        title: { en: 'Coming from Taiwan, China, or another country', zh: '持台灣、中國或其他國家駕照的人' },
+        intro: {
+          en: 'From ADOT/MVD pages on foreign applicants, foreign reciprocity, and knowledge tests, in the versions published between November 2025 and July 2026. Rules can change, so confirm on the linked ADOT pages before you go.',
+          zh: '以下整理自 ADOT/MVD 的外國申請人、外國駕照互惠與筆試頁面（2025 年 11 月至 2026 年 7 月間公布的版本）。規定可能調整，出發前請到下方 ADOT 連結確認。',
+        },
+        bullets: [
+          {
+            en: 'Visiting: ADOT says that if you are visiting Arizona temporarily, you can legally drive with a valid driver license from your home country. An International Driving Permit is not required but is recommended because it is printed in English, and an international permit used alone must be issued by a country other than the United States.',
+            zh: '短期來訪：ADOT 表示，暫時來亞利桑那的訪客可以合法使用本國有效駕照開車。國際駕照不是必要的，但建議準備，因為上面有英文；若單獨使用國際駕照，必須是美國以外的國家核發。',
+          },
+          {
+            en: 'When you need an Arizona license: ADOT lists working in Arizona (except seasonal agricultural work), enrolling children in school at resident tuition rates, operating a business with an Arizona office, or staying in Arizona seven months or more in a calendar year.',
+            zh: '什麼時候要換亞利桑那駕照：ADOT 列出的情況包括在亞利桑那工作（季節性農業工作除外）、孩子以居民學費入學、經營在亞利桑那設有辦公室的事業，或在同一曆年內住滿七個月以上。',
+          },
+          {
+            en: 'Taiwan: ADOT\'s reciprocity list says applicants with a current, valid Taiwan driver license who are 18 or older may not need the written test or the road test. Canada, Germany, and South Korea (18 or older) are the other countries on the list.',
+            zh: '台灣駕照：ADOT 的互惠名單寫明，持有效台灣駕照且年滿 18 歲的申請人，可能免考筆試與路考。名單上的其他國家是加拿大、德國與南韓（南韓同樣須年滿 18 歲）。',
+          },
+          {
+            en: 'China and other countries: ADOT says all other countries require both the written and the road test for a new Arizona license. A license from mainland China or Hong Kong is not on the reciprocity list, so plan to take both tests.',
+            zh: '中國與其他國家駕照：ADOT 表示，其他國家的駕照申請亞利桑那新駕照時，筆試與路考都要考。中國大陸與香港的駕照不在互惠名單上，所以請準備兩項考試。',
+          },
+          {
+            en: 'Written test in Chinese: ADOT lists Mandarin among the 11 languages for the written test, with English, German, Vietnamese, Spanish, Arabic, Russian, Italian, French, Tagalog, and Korean. ADOT does not say whether the Mandarin version uses Traditional or Simplified characters, and Cantonese is not listed.',
+            zh: '中文筆試：ADOT 列出的 11 種筆試語言包含國語（Mandarin），其他為英文、德文、越南文、西班牙文、阿拉伯文、俄文、義大利文、法文、他加祿語與韓文。ADOT 沒有說明國語版本使用繁體或簡體字，名單上也沒有粵語。',
+          },
+          {
+            en: 'The written test has 30 multiple-choice questions on a touch screen with audio assist, drawn from the Arizona Driver License Manual, and you need 80 percent to pass. ADOT says no appointment is needed for the written test. If a written test is not available in a language you read, a verbal test may be considered, by appointment.',
+            zh: '筆試共 30 題選擇題，用觸控螢幕作答，並有語音輔助，題目出自《亞利桑那駕照手冊》，須答對 80% 才及格。ADOT 表示筆試不需預約。如果沒有你看得懂的語言版本，可能可以改考口試，須預約。',
+          },
+          {
+            en: 'If you have never had a US license, ADOT says you must pass the written or verbal knowledge test before you schedule a road test, unless reciprocity exempts you.',
+            zh: '從未持有美國駕照的人，ADOT 說必須先通過筆試或口試，才能預約路考，除非符合互惠免考。',
+          },
+          {
+            en: 'Documents: all applicants need proof that their presence is authorized under federal law and proof of Arizona residency. A Social Security number may be required depending on your class type, Employment Authorization Card holders must provide one, and F-1 or J-1 students must also bring Form I-20 or DS-2019.',
+            zh: '文件：所有申請人都要提供聯邦法律認可的合法居留證明與亞利桑那居住證明。依身分類別可能需要社會安全號碼；持工作許可卡（EAD）的人一定要提供；F-1 或 J-1 學生另須攜帶 Form I-20 或 DS-2019。',
+          },
+          {
+            en: 'ADOT says your Arizona license expires on the same date as your authorized presence document, so you will renew with updated immigration documents when your status is extended.',
+            zh: 'ADOT 表示，亞利桑那駕照的到期日與你的合法居留文件相同，身分延長後要帶新的移民文件辦理更新。',
+          },
+          {
+            en: 'ADOT\'s foreign applicant pages do not say whether a Taiwan license must be translated or verified. Ask MVD before your visit so you bring everything the first time.',
+            zh: 'ADOT 的外國申請人頁面沒有說明台灣駕照是否需要翻譯或驗證。去 MVD 之前請先詢問，第一次就把文件帶齊。',
+          },
+        ],
+      },
     ],
     practicalNotes: [
       {
@@ -1150,6 +1199,26 @@ export const guides: Guide[] = [
       {
         label: { en: 'Arizona insurance requirements', zh: '亞利桑那車險要求' },
         url: 'https://azdot.gov/faq/what-mandatory-insurance',
+        source: 'Arizona Department of Transportation',
+      },
+      {
+        label: { en: 'Driver licenses for foreign applicants', zh: '外國申請人駕照' },
+        url: 'https://azdot.gov/mvd/services/driver-license-ID/driver-license-foreign-applicants',
+        source: 'Arizona Department of Transportation',
+      },
+      {
+        label: { en: 'Countries with driver license reciprocity', zh: '駕照互惠國家' },
+        url: 'https://azdot.gov/mvd/services/driver-services/tests-manuals-and-driving-schools/foreign-reciprocity',
+        source: 'Arizona Department of Transportation',
+      },
+      {
+        label: { en: 'Written and verbal knowledge tests (languages)', zh: '筆試與口試（考試語言）' },
+        url: 'https://azdot.gov/mvd/services/driver-services/written-and-verbal-tests',
+        source: 'Arizona Department of Transportation',
+      },
+      {
+        label: { en: 'Driving in Arizona with a license from another country', zh: '持外國駕照在亞利桑那開車' },
+        url: 'https://azdot.gov/faq/what-needed-person-another-country-drive-arizona',
         source: 'Arizona Department of Transportation',
       },
     ],
@@ -2231,6 +2300,7 @@ export const guides: Guide[] = [
     relatedEventSlugs: [],
   },
   ...newcomerGuides,
+  ...seasonalGuides,
 ];
 
 export const localArticles: Article[] = unwrapJsonArray(
@@ -2268,6 +2338,108 @@ export const signalDeskQueue = generatedSignalDeskQueue as SignalDeskQueueItem[]
 export const articles: Article[] = localArticles;
 
 export const events: Event[] = [
+  {
+    slug: 'ccaarizona-chinese-new-year-festival-2027',
+    title: { en: 'CCAArizona 37th Annual Chinese New Year Festival 2027', zh: 'CCAArizona 第 37 屆農曆新年文化節（2027）' },
+    excerpt: {
+      en: 'The Chinese Cultural Association of Arizona, formerly Phoenix Chinese Week, holds its 37th annual Chinese New Year Festival at Tempe Beach Park on February 6 and 7, 2027.',
+      zh: 'Chinese Cultural Association of Arizona（CCAArizona，原 Phoenix Chinese Week）將於 2027 年 2 月 6 日與 7 日，在 Tempe Beach Park 舉辦第 37 屆農曆新年文化節。',
+    },
+    description: [
+      {
+        en: 'The organizer\'s page lists Saturday, February 6, 2027, from 9 a.m. to 5 p.m. and Sunday, February 7, from 10 a.m. to 5 p.m. at Tempe Beach Park, with traditional performances, food, local vendors, and family-friendly activities for the Year of the Sheep.',
+        zh: '主辦單位網頁列出的時間是 2027 年 2 月 6 日（星期六）上午 9 點至下午 5 點，以及 2 月 7 日（星期日）上午 10 點至下午 5 點，地點在 Tempe Beach Park，內容包括傳統表演、美食、在地攤商與親子活動，迎接羊年。',
+      },
+      {
+        en: 'The organizer says tickets go on sale in December 2026. Check its page for admission details before you go.',
+        zh: '主辦單位表示門票於 2026 年 12 月開賣。出發前請到主辦單位網頁確認入場資訊。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Chinese Cultural Association of Arizona (CCAArizona)',
+    verifiedOrganizer: true,
+    venueName: 'Tempe Beach Park',
+    address: 'Tempe Beach Park, Tempe, AZ',
+    city: 'Tempe',
+    startDate: '2027-02-06T09:00:00-07:00',
+    endDate: '2027-02-07T17:00:00-07:00',
+    ticketUrl: 'https://phoenixchineseweek.org/',
+    languageNote: {
+      en: 'Times, tickets, and the program come from the organizer\'s page as of November 27, 2026. Check it again before you go.',
+      zh: '時間、票務與節目依主辦單位網頁 2026 年 11 月 27 日的內容整理，出發前請再確認。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'spring festival', 'ccaarizona', 'tempe', '2027'],
+  },
+  {
+    slug: 'phoenix-food-fair-lunar-new-year-2027',
+    title: { en: 'Phoenix Food Fair: Lunar New Year Edition 2027', zh: 'Phoenix Food Fair 農曆新年版（2027）' },
+    excerpt: {
+      en: 'A Lunar New Year food fair and lantern festival at Kiwanis Park in Tempe on January 23 and 24, 2027, from 3 to 8 p.m. both days.',
+      zh: '2027 年 1 月 23 日與 24 日在 Tempe 的 Kiwanis Park 舉辦的農曆新年美食市集與燈會，兩天都是下午 3 點至晚上 8 點。',
+    },
+    description: [
+      {
+        en: 'The organizer\'s page lists January 23 and 24, 2027, from 3 to 8 p.m. each day at Kiwanis Park, 5992 S All America Way, Tempe, and promotes a lantern festival along with the food fair.',
+        zh: '主辦單位網頁列出的日期是 2027 年 1 月 23 日與 24 日，每天下午 3 點至晚上 8 點，地點在 Tempe 的 Kiwanis Park（5992 S All America Way），除了美食市集也有燈會。',
+      },
+      {
+        en: 'Admission is sold as wristbands on the organizer\'s site.',
+        zh: '入場以手環形式在主辦單位網站販售。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Phoenix Food Fair',
+    verifiedOrganizer: true,
+    venueName: 'Kiwanis Park',
+    address: '5992 S All America Way, Tempe, AZ 85283',
+    city: 'Tempe',
+    startDate: '2027-01-23T15:00:00-07:00',
+    endDate: '2027-01-24T20:00:00-07:00',
+    ticketUrl: 'https://www.phxfoodfair.com/',
+    languageNote: {
+      en: 'Dates, hours, and admission types come from the organizer\'s page as of November 27, 2026.',
+      zh: '日期、時間與入場方式依主辦單位網頁 2026 年 11 月 27 日的內容整理。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'food fair', 'lantern festival', 'tempe', '2027'],
+  },
+  {
+    slug: 'tarwater-elementary-lunar-new-year-2027',
+    title: { en: 'Tarwater Elementary Lunar New Year Celebration 2027', zh: 'Tarwater 小學 2027 農曆新年慶祝活動' },
+    excerpt: {
+      en: 'A school-community Lunar New Year celebration at Tarwater Elementary in Chandler on Friday, January 29, 2027, from 5:30 to 8 p.m.',
+      zh: '2027 年 1 月 29 日（星期五）晚上 5 點半至 8 點，在 Chandler 的 Tarwater 小學舉辦的學校與社區農曆新年慶祝活動。',
+    },
+    description: [
+      {
+        en: 'The City of Chandler calendar describes it as a school-community event that brings together students, families, staff, alumni, and community organizations to celebrate Chinese language and culture, with student performances, cultural activities, art lessons, and interactive booths.',
+        zh: 'Chandler 市政府活動行事曆說明，這是一場集合在校學生、家長、教職員、校友與社區團體的學校與社區活動，慶祝中文與中華文化，內容有學生表演、文化活動、藝術課程與互動攤位。',
+      },
+      {
+        en: 'Graduates of the school\'s Dual Language Immersion program return as youth vendors, volunteers, performers, and activity leaders.',
+        zh: '學校雙語沉浸課程的國高中畢業生，會回來擔任青年攤商、志工、表演者與活動帶領人。',
+      },
+    ],
+    heroImage:
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
+    organizer: 'Tarwater Elementary School (City of Chandler calendar)',
+    verifiedOrganizer: true,
+    venueName: 'Tarwater Elementary School',
+    address: '2300 S Gardner Dr., Chandler, AZ 85286',
+    city: 'Chandler',
+    startDate: '2027-01-29T17:30:00-07:00',
+    endDate: '2027-01-29T20:00:00-07:00',
+    ticketUrl: 'https://www.chandleraz.gov/connection-and-impact/lunar-new-year-festival',
+    languageNote: {
+      en: 'Details come from the City of Chandler calendar listing as of November 27, 2026.',
+      zh: '資訊依 Chandler 市政府活動行事曆 2026 年 11 月 27 日的內容整理。',
+    },
+    relatedBusinessSlugs: [],
+    tags: ['lunar new year', 'school', 'chandler', '2027'],
+  },
   {
     slug: 'spring-festival-gala-arizona-art-academy-2026',
     title: { en: '2026 Spring Festival Gala: Chinese New Year Show', 'zh': '2026 春節聯歡晚會：中國新年演出' },
