@@ -1,6 +1,7 @@
 import { parseBilingualDetails, type BilingualDetailsInput } from '@/lib/business-bilingual';
 import type { Locale, ProfileRole } from '@/lib/types';
 import { getSupabaseServiceClient } from '@/lib/supabase';
+import { invalidateDirectoryCache } from '@/lib/directory-cache';
 
 type OwnedBusinessRow = {
   id: string;
@@ -8,7 +9,7 @@ type OwnedBusinessRow = {
   owner_profile_id?: string | null;
 };
 
-export async function updateBusinessPhotosForProfile(input: {
+async function updateBusinessPhotosForProfileWrite(input: {
   businessSlug: string;
   profileId: string;
   role: ProfileRole;
@@ -54,7 +55,7 @@ export async function updateBusinessPhotosForProfile(input: {
   };
 }
 
-export async function deleteBusinessForProfile(input: {
+async function deleteBusinessForProfileWrite(input: {
   businessSlug: string;
   profileId: string;
   role: ProfileRole;
@@ -92,7 +93,7 @@ export async function deleteBusinessForProfile(input: {
 
 // Saves the bilingual details for a listing (issue #411). Owners edit their
 // own listings; moderators and admins can edit any listing.
-export async function updateBusinessBilingualDetailsForProfile(input: {
+async function updateBusinessBilingualDetailsForProfileWrite(input: {
   businessSlug: string;
   profileId: string;
   role: ProfileRole;
@@ -140,4 +141,30 @@ export async function updateBusinessBilingualDetailsForProfile(input: {
   }
 
   return { businessSlug: business.slug, details };
+}
+
+// Writes that change what a listing shows clear the shared directory cache (#524),
+// so the owner and visitors see the change on the next page load.
+export async function updateBusinessPhotosForProfile(...args: Parameters<typeof updateBusinessPhotosForProfileWrite>) {
+  try {
+    return await updateBusinessPhotosForProfileWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
+}
+
+export async function deleteBusinessForProfile(...args: Parameters<typeof deleteBusinessForProfileWrite>) {
+  try {
+    return await deleteBusinessForProfileWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
+}
+
+export async function updateBusinessBilingualDetailsForProfile(...args: Parameters<typeof updateBusinessBilingualDetailsForProfileWrite>) {
+  try {
+    return await updateBusinessBilingualDetailsForProfileWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
 }

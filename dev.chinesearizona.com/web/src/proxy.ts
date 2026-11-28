@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { localeFromPath, PAGE_LOCALE_HEADER } from '@/lib/routing';
 import { resolveSiteProfileFromHost, shouldNoIndexSiteProfile } from '@/lib/site-config';
 
 const apexHost = 'chinesearizona.com';
@@ -56,6 +57,14 @@ function publicRequestOrigin(request: Pick<NextRequest, 'headers' | 'nextUrl'>):
   return `${protocol}://${host}`;
 }
 
+// Tells the root layout the page language, so <html lang> is right in the
+// server HTML crawlers read. Always overwritten, never taken from the client.
+function nextWithPageLocale(request: NextRequest): NextResponse {
+  const headers = new Headers(request.headers);
+  headers.set(PAGE_LOCALE_HEADER, localeFromPath(request.nextUrl.pathname));
+  return NextResponse.next({ request: { headers } });
+}
+
 export function shouldEmitNoIndexHeader(host?: string | null): boolean {
   return shouldNoIndexSiteProfile(resolveSiteProfileFromHost(host));
 }
@@ -83,7 +92,7 @@ export function proxy(request: NextRequest) {
       return withNoIndexHeader(NextResponse.redirect(targetUrl, 308), requestHost);
     }
 
-    return withNoIndexHeader(NextResponse.next(), requestHost);
+    return withNoIndexHeader(nextWithPageLocale(request), requestHost);
   }
 
   const targetUrl = request.nextUrl.clone();

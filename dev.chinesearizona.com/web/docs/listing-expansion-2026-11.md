@@ -16,6 +16,8 @@ Status:
 | AZ Hope language fix and Alan Wang phone (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check matched the rollback values; both rows now match dev |
 | Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 47 rows `live` → `suppressed`; none claimed or paid; indexable unchanged at 88 |
 | Hide Panda Express (`listing-expansion-2026-11-panda-express-suppress*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO decision and approval): 1 row `live` → `suppressed` |
+| Batch 3b: 4 Taiwanese food listings near TSMC (`listing-expansion-2026-11-batch3b*.sql`, issue #523) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Corrections 3b: Greater Phoenix Chinese Christian School (`listing-expansion-2026-11-batch3b-corrections*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 
 Production after all of the above (2026-11-28): 294 rows, 232 `live`, 234 public (`live` or `stale`), 48 `suppressed` (none claimed, sponsored or featured), 88 indexable. Suppressed pages return 404 with `noindex` and are not in the sitemap.
 
@@ -344,6 +346,41 @@ Kept on purpose:
 - The two associations and the student club listed earlier (not chains; CEO: keep as they are).
 - The three unverified listings (Beijing Acupuncture, Hi-Tech Dentistry, YJP Spine Center) stay until Derek checks them in person.
 - The first line of `listing-expansion-2026-11-chains-suppress.sql` still says "PREPARED, NOT APPLIED"; it was left as approved and applied unchanged.
+
+## Batch 3b: Taiwanese food near TSMC (issue #523)
+
+For readers (Marketing post, Editor guide). Started from press coverage of TSMC families: Taiwan's Central News Agency on Taiwan MaMa (December 2025, https://focustaiwan.tw/business/202512070010), KJZZ on TSMC and Taiwan (September 2026), Phoenix Magazine's "Taipei of the Desert" (September 2026) and the Arizona Republic on 85°C in Glendale (early 2025). Each listing was then confirmed on the business's own website or the chain's official store finder; facts in the copy come from those pages, and press facts are attributed to the outlet. Restaurants do not state a language of service, so `languages` is `{English}` (the convention for dining rows) and `bilingual` is false. Copy has no gendered pronouns.
+
+| Slug | City | What | Address and phone source | Sources |
+|---|---|---|---|---|
+| `taiwan-mama-deer-valley-phoenix` | Phoenix (Deer Valley) | Taiwanese bento, popcorn chicken, braised pork rice, boba | Own site's Locations page: 822 E Union Hills Dr, D-16; +1 623-204-0919; 11 a.m.-9 p.m., closed Mondays (New Times gives the same address) | https://ustaiwanmama.com/locations/<br>https://focustaiwan.tw/business/202512070010 |
+| `tofu-king-late-night-phoenix` | Phoenix | Taiwanese restaurant, stinky tofu, karaoke rooms, catering | Own site: 2855 W Cactus Rd, Suite 2; (623) 692-2816 | https://www.tofukingphoenix.com/about |
+| `cactiflower-phoenix` | Phoenix | Taiwanese boxed meals, takeout | Own site footer: 15414 N 19th Ave, Suite O; 562 205 8613; Tue-Sat 1-7 p.m. (the site's hidden structured data has another 562 number; the visible footer is used) | https://www.cactiflower.com/<br>KJZZ 2026-09-29; Phoenix Magazine 2026-09-01 |
+| `85c-bakery-cafe-arrowhead-glendale` | Glendale | Taiwanese bakery chain | Official store finder: 7280 W Bell Rd, Glendale 85308. **No phone published:** the store finder gives 669-271-8585 for both this store and Avondale, while the Arizona Republic printed 602-708-3645, so neither confirms the other | https://www.85cbakerycafe.com/location/ |
+
+Checked on dev: all 4 English and `/zh/` pages return 200 with no `noindex`; copy matches the SQL file by md5; duplicate check against production (slug, phone, website, name, address): none. Website scan: no spam or parked pages. ustaiwanmama.com returns 403 to the Googlebot user agent from a non-Google address, and the two Wix sites (Tofu King, CactiFlower) return 403 to a bare browser user agent but 200 to a full one; both are bot protection, not cloaking.
+
+Considered and not added:
+
+| Place | Why not |
+|---|---|
+| Taiwan Bistro (named in press) | Its directory address is 2855 W Cactus Rd, Suite 2, now Tofu King & Late Night; no current site of its own |
+| Sharetea (Desert Ridge), DaYung's Tea (Deer Valley) | Named in press; store lists on the official sites load only by script and could not be read, so the address is not confirmed on an official page yet |
+| 99 Ranch Market at Arrowhead (The Mosaic) | Not open yet; already in the table as `planned` with the Bafang, The Alley and other food-hall tenants |
+| Pu'er Taiwan Tea & Coffee, OWL OWL Boba x Chick (Glendale); Asiana Market, GS Supermarket (Glendale) | No website of their own (Asiana's domain is parked) |
+| Bee Happy Boba Tea & Pho (Peoria) | Vietnamese-style; no website of its own |
+| Fat Daddy Chicken, Din Tai Fung, Chun Shui Tang, Bafang Dumpling | Named in press, but no confirmed location in north Phoenix, Peoria or Glendale (Fat Daddy's site is a placeholder; Din Tai Fung is in Scottsdale) |
+
+To apply to production after approval: pre-check none of the 4 slugs exist; run `listing-expansion-2026-11-batch3b.sql`; post-check 4 rows and indexable +4. Rollback: `listing-expansion-2026-11-batch3b-rollback.sql`.
+
+## Corrections, batch 3b: schools from the Chinese-classes guide
+
+| School | Finding | Change |
+|---|---|---|
+| Greater Phoenix Chinese Christian School (鳳城華人基督教會中文學校), Chandler | The school's own page (https://gpccs-arizona.blogspot.com/) gives 890 W. Ray Road, Chandler, 480-280-1419, founded 1983, Traditional and Simplified Chinese, children's, bilingual and adult classes. The page is undated; the church's own site (https://gpccc.org/, 2026) confirms the 890 W Ray Rd address. | New row `greater-phoenix-chinese-christian-school-chandler` (education, `{English, Chinese}`), copy says the page is undated and to call first. Student numbers on the page are left out as possibly stale. |
+| Hola Hello Ni Hao Language Preschool | No website of its own found (only course directories and a Voyage Phoenix interview with the founder); no address confirmed. | **Not added.** |
+
+To apply: run `listing-expansion-2026-11-batch3b-corrections.sql` (1 insert, `on conflict do nothing`). Rollback: `listing-expansion-2026-11-batch3b-corrections-rollback.sql`.
 
 ## Follow-ups
 
