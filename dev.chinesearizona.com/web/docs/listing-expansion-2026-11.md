@@ -32,7 +32,7 @@ By category (existing `business_categories`; no new categories were created):
 | `real-estate` | 4 | Residential and commercial realtors |
 | `medical` | 1 | Dental practice (dental has no category of its own; it sits under Medical like the existing dentists) |
 
-By city: Chandler 4, Scottsdale 5, Phoenix 3, Mesa 1, Gilbert 1, Tempe 1. None yet in Glendale or Peoria (Ling Zhu, Phoenix, lists Peoria and Glendale in her service area).
+By city: Chandler 4, Scottsdale 4, Phoenix 3, Mesa 1, Gilbert 1, Tempe 1. None yet in Glendale or Peoria (Ling Zhu, Phoenix, lists Peoria and Glendale in her service area).
 
 Checked on dev after insert:
 
