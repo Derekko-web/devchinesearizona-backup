@@ -775,7 +775,7 @@ export function isPublicDirectoryBusiness(business: Business): boolean {
   return business.verificationState === 'editor_verified';
 }
 
-function hasGeneratedDirectoryCopy(business: Business): boolean {
+export function hasGeneratedDirectoryCopy(business: Business): boolean {
   const copy = `${business.shortDescription.en} ${business.description.en}`;
   return /generated from plaza directory sources|direct business contact details may still be incomplete/i.test(copy);
 }
@@ -799,6 +799,21 @@ export function shouldNoIndexDirectoryBusiness(business: Business): boolean {
   }
 
   return !hasSubstantialDirectoryCopy(business);
+}
+
+// "Similar businesses" on a business page (issue #473): same category, same
+// city first, and only listings with real details (ones we let search engines
+// index), so a thin import never points at another thin one.
+export function selectSimilarBusinesses(business: Business, candidates: Business[], limit = 2): Business[] {
+  const sensible = candidates.filter(
+    (candidate) =>
+      candidate.slug !== business.slug &&
+      candidate.categorySlug === business.categorySlug &&
+      !shouldNoIndexDirectoryBusiness(candidate)
+  );
+  const sameCity = sensible.filter((candidate) => candidate.city === business.city);
+  const otherCities = sensible.filter((candidate) => candidate.city !== business.city);
+  return [...sameCity, ...otherCities].slice(0, limit);
 }
 
 export function qualifiesForHomepageFeature(business: Business): boolean {

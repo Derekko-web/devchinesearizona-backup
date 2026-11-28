@@ -120,11 +120,18 @@ export function formatBusinessServiceHighlightLabel(
     return undefined;
   }
 
+  // Show a label whole or not at all. Dropping the city, category or generic
+  // words left fragments such as "And Practical Support" (from "Finance and
+  // practical support") and "Speaking Realtor" (issue #473).
+  if (usefulTokens.length !== sourceTokens.length) {
+    return undefined;
+  }
+
   if (hasCjkText(localized)) {
     return localized;
   }
 
-  if (!isMostlyLowercase(localized) && usefulTokens.length === meaningfulTokens.length) {
+  if (!isMostlyLowercase(localized)) {
     return localized;
   }
 

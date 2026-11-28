@@ -38,7 +38,10 @@ import {
   getDirectoryBusinesses,
   getDirectoryBusinessBySlug,
   getDirectoryCategories,
+  hasGeneratedDirectoryCopy,
+  selectSimilarBusinesses,
 } from '@/lib/directory';
+import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { businessLeadsEnabled, isInquiryCategory } from '@/lib/business-leads';
 import { selectRealBusinessPhotos } from '@/lib/business-photos';
 import { MAX_BUSINESS_GALLERY_IMAGES } from '@/lib/business-media';
@@ -113,25 +116,30 @@ export async function BusinessDetailPageView({
     return null;
   }
 
-  const [categories, relatedCategoryBusinesses] = await Promise.all([
+  const [categories, sameCategoryBusinesses] = await Promise.all([
     getDirectoryCategories(site),
     getDirectoryBusinesses(
       {
         category: business.categorySlug,
-        city: business.city,
         sort: 'featured',
       },
       {
         excludeSlug: business.slug,
-        limit: 2,
         site,
       }
     ),
   ]);
+  const relatedCategoryBusinesses = selectSimilarBusinesses(business, sameCategoryBusinesses);
+  const relatedAllInSameCity =
+    relatedCategoryBusinesses.length > 0 && relatedCategoryBusinesses.every((item) => item.city === business.city);
   const category = categories.find((item) => item.slug === business.categorySlug);
   const owner = business.ownerProfileSlug ? getProfileBySlug(business.ownerProfileSlug) : undefined;
   const businessReviews = getBusinessReviews(slug);
+  // Plaza imports carry an English paragraph saying they were generated; the page
+  // shows one honest line in its language instead, and structured data omits it.
+  const hasGeneratedCopy = hasGeneratedDirectoryCopy(business);
   const imageSet = [business.heroImage, ...business.gallery]
+    .filter((value) => !isIllustrationImageUrl(value))
     .map((value) => resolveAbsoluteAssetUrl(value, site))
     .filter((value): value is string => Boolean(value));
   const claimHref = withLocale(
@@ -152,7 +160,7 @@ export async function BusinessDetailPageView({
     '@type': 'LocalBusiness',
     name: business.name.en,
     alternateName: business.name.zh,
-    description: business.description.en,
+    description: hasGeneratedCopy ? undefined : business.description.en,
     url: businessDetailUrl,
   };
 
@@ -213,15 +221,11 @@ export async function BusinessDetailPageView({
   const trustLabel = t(listingTrustLabel(trustLevel), locale);
   const trustExplanation = t(listingTrustExplanation(trustLevel), locale);
   const speaksChinese = hasChineseSpokenLanguage(business.languages);
-  const firstHoursLabel =
-    hoursPreview.items[0] ?? (locale === 'zh' ? '營業時間待補充' : 'Hours not listed yet');
-  const contactEmail = business.email ?? (locale === 'zh' ? '電子郵件待補充' : 'Email not listed');
+  // Rows we have no data for are hidden, not marked "pending" (issue #473).
+  const firstHoursLabel = hoursPreview.items[0];
   const contactWebsite = websiteHref ?? business.website;
-  const contactWebsiteLabel = contactWebsite
-    ? contactWebsite.replace(/^https?:\/\//, '').replace(/\/$/, '')
-    : locale === 'zh'
-      ? '網站待補充'
-      : 'Website not listed';
+  const contactWebsiteLabel = contactWebsite?.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const hasContactDetails = Boolean((business.phone && phoneLink) || business.email || contactWebsite);
   const resolvedImages = resolveCitySiteBusinessImages(business, site, {
     category,
     locale,
@@ -235,17 +239,13 @@ export async function BusinessDetailPageView({
     businessImageCandidates,
     business.paidPlans?.includes('enhanced-listing') ? MAX_BUSINESS_GALLERY_IMAGES : 4
   );
+  // Only real photos: no AI illustration stands in for the business (#473).
+  const heroPhoto = realPhotos[0];
   const aboutImage = selectRealBusinessPhotos([...resolvedImages.gallery, resolvedImages.heroImage], 1)[0];
   const primaryActionLabel = locale === 'zh' ? '撥打電話' : 'Call';
-  const languageSummary =
-    business.languages.length > 0
-      ? formatLanguageList(business.languages, locale)
-      : locale === 'zh'
-        ? '語言資訊待補充'
-        : 'Language details pending';
+  const languageSummary = business.languages.length > 0 ? formatLanguageList(business.languages, locale) : undefined;
   const popularityBadge = isMostPopularDirectoryBusiness(business);
   const menuOrWebsiteHref = menuHref ?? websiteHref;
-  const usesCityGeneratedImages = site.key === 'austin' || site.key === 'los-angeles' || site.key === 'sf-bay';
   const leadsEnabled = businessLeadsEnabled(site);
   const showInquiryForm = leadsEnabled && isInquiryCategory(business.categorySlug);
   const showClaimPrompt = canClaimBusiness(business, site);
@@ -324,7 +324,9 @@ export async function BusinessDetailPageView({
               </div>
 
               {/* Only the short description up top; the full text lives in the About section below. */}
-              <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
+              {hasGeneratedCopy ? null : (
+                <p className="mt-5 max-w-xl text-base leading-7 text-[#5f554c]">{t(business.shortDescription, locale)}</p>
+              )}
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {serviceHighlights.slice(0, 4).map((highlight) => (
@@ -337,9 +339,11 @@ export async function BusinessDetailPageView({
                     <span className="rounded-md border border-[#e0d4c7] bg-white/65 px-3 py-1.5 text-xs font-semibold text-[#51483f]">
                       {categoryLabel}
                     </span>
-                    <span className="rounded-md border border-[#e0d4c7] bg-white/65 px-3 py-1.5 text-xs font-semibold text-[#51483f]">
-                      {languageSummary}
-                    </span>
+                    {languageSummary ? (
+                      <span className="rounded-md border border-[#e0d4c7] bg-white/65 px-3 py-1.5 text-xs font-semibold text-[#51483f]">
+                        {languageSummary}
+                      </span>
+                    ) : null}
                   </>
                 ) : null}
               </div>
@@ -347,8 +351,8 @@ export async function BusinessDetailPageView({
 
             <div className="relative min-h-[19rem] overflow-hidden bg-[#d8c7b5] lg:min-h-[25rem]">
               <BusinessImage
-                imageUrl={resolvedImages.heroImage}
-                label={resolvedImages.usesContextualFallback ? resolvedImages.altLabel : descriptiveImageAlt(displayName, 'business', locale)}
+                imageUrl={heroPhoto}
+                label={heroPhoto ? descriptiveImageAlt(displayName, 'business', locale) : categoryLabel}
                 locale={locale}
                 category={category}
                 priority
@@ -387,16 +391,7 @@ export async function BusinessDetailPageView({
                   {primaryActionLabel}
                   <span className="text-white/80">{business.phone}</span>
                 </a>
-              ) : (
-                <button
-                  type="button"
-                  disabled
-                  className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#d9cfc2] px-5 text-sm font-semibold text-[#766b61]"
-                >
-                  <Phone className="h-4 w-4" aria-hidden="true" />
-                  {locale === 'zh' ? '電話待補充' : 'Phone pending'}
-                </button>
-              )}
+              ) : null}
 
               {directionsHref ? (
                 <a
@@ -490,18 +485,24 @@ export async function BusinessDetailPageView({
                 <MapPin className="h-5 w-5 text-[#bd2730]" aria-hidden="true" />
                 <span className="line-clamp-2">{addressLabel}</span>
               </div>
-              <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
-                <Clock3 className="h-5 w-5 text-[#4d744b]" aria-hidden="true" />
-                <span className="line-clamp-2">{firstHoursLabel}</span>
-              </div>
-              <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
-                <MessageCircle className="h-5 w-5 text-[#8b5b19]" aria-hidden="true" />
-                <span>{speaksChinese ? (locale === 'zh' ? '雙語服務' : 'Bilingual support') : languageSummary}</span>
-              </div>
-              <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
-                <CircleDollarSign className="h-5 w-5 text-[#5b5047]" aria-hidden="true" />
-                <span>{business.priceRange ?? (locale === 'zh' ? '價位待補充' : 'Price pending')}</span>
-              </div>
+              {firstHoursLabel ? (
+                <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
+                  <Clock3 className="h-5 w-5 text-[#4d744b]" aria-hidden="true" />
+                  <span className="line-clamp-2">{firstHoursLabel}</span>
+                </div>
+              ) : null}
+              {speaksChinese || languageSummary ? (
+                <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
+                  <MessageCircle className="h-5 w-5 text-[#8b5b19]" aria-hidden="true" />
+                  <span>{speaksChinese ? (locale === 'zh' ? '雙語服務' : 'Bilingual support') : languageSummary}</span>
+                </div>
+              ) : null}
+              {business.priceRange ? (
+                <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
+                  <CircleDollarSign className="h-5 w-5 text-[#5b5047]" aria-hidden="true" />
+                  <span>{business.priceRange}</span>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -532,7 +533,10 @@ export async function BusinessDetailPageView({
               ))}
             </div>
 
-            <section id="overview" className="grid gap-6 border-b border-[#e2d8cb] pb-8 lg:grid-cols-[minmax(0,1fr)_24rem]">
+            <section
+              id="overview"
+              className={`grid gap-6 border-b border-[#e2d8cb] pb-8 ${aboutImage ? 'lg:grid-cols-[minmax(0,1fr)_24rem]' : ''}`}
+            >
               <div>
                 <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-[#bd2730]">
                   <Store className="h-4 w-4" aria-hidden="true" />
@@ -541,7 +545,24 @@ export async function BusinessDetailPageView({
                 <h2 className="text-3xl font-semibold text-[#2c2722]">
                   {locale === 'zh' ? `關於 ${displayName}` : `About ${displayName}`}
                 </h2>
-                <p className="mt-4 max-w-3xl text-base leading-8 text-[#5f554c]">{t(business.description, locale)}</p>
+                {hasGeneratedCopy ? (
+                  <p className="mt-4 max-w-3xl text-base leading-8 text-[#5f554c]">
+                    {locale === 'zh' ? '我們還沒有這家商家的詳細資料。' : "We don't have details for this business yet."}
+                    {canClaimBusiness(business, site) ? (
+                      <>
+                        {' '}
+                        <Link
+                          href={claimHref}
+                          className="font-semibold text-[#bd2730] underline decoration-[#bd2730]/30 underline-offset-4 hover:text-[#8f1c22]"
+                        >
+                          {locale === 'zh' ? '是你的商家嗎？免費認領即可補上。' : 'Is this your business? Claim it free to add them.'}
+                        </Link>
+                      </>
+                    ) : null}
+                  </p>
+                ) : (
+                  <p className="mt-4 max-w-3xl text-base leading-8 text-[#5f554c]">{t(business.description, locale)}</p>
+                )}
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-4">
                     <p className="text-xs font-semibold text-[#8b8176]">{locale === 'zh' ? '城市' : 'City'}</p>
@@ -560,10 +581,12 @@ export async function BusinessDetailPageView({
                       <p className="mt-1 text-lg font-semibold text-[#2c2722]">{categoryLabel}</p>
                     )}
                   </div>
-                  <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-4">
-                    <p className="text-xs font-semibold text-[#8b8176]">{locale === 'zh' ? '語言' : 'Languages'}</p>
-                    <p className="mt-1 text-lg font-semibold text-[#2c2722]">{languageSummary}</p>
-                  </div>
+                  {languageSummary ? (
+                    <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-4">
+                      <p className="text-xs font-semibold text-[#8b8176]">{locale === 'zh' ? '語言' : 'Languages'}</p>
+                      <p className="mt-1 text-lg font-semibold text-[#2c2722]">{languageSummary}</p>
+                    </div>
+                  ) : null}
                 </div>
                 {hasBilingualServiceDetails(business) ? (
                   <div id="chinese-service" className="mt-3 rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-4">
@@ -597,15 +620,17 @@ export async function BusinessDetailPageView({
                 ) : null}
               </div>
 
-              <div className="relative min-h-60 overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#eadfce]">
-                <BusinessImage
-                  imageUrl={aboutImage}
-                  label={resolvedImages.usesContextualFallback ? resolvedImages.altLabel : descriptiveImageAlt(displayName, 'business', locale)}
-                  locale={locale}
-                  category={category}
-                  className="object-cover"
-                />
-              </div>
+              {aboutImage ? (
+                <div className="relative min-h-60 overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#eadfce]">
+                  <BusinessImage
+                    imageUrl={aboutImage}
+                    label={descriptiveImageAlt(displayName, 'business', locale)}
+                    locale={locale}
+                    category={category}
+                    className="object-cover"
+                  />
+                </div>
+              ) : null}
             </section>
 
             {/* Reviews collected on this site only; no star summary until we have some (#457). */}
@@ -640,13 +665,6 @@ export async function BusinessDetailPageView({
                 <div className="mb-5 flex items-center justify-between gap-4">
                   <div>
                     <h2 className="text-3xl font-semibold text-[#2c2722]">{locale === 'zh' ? '照片' : 'Photos'}</h2>
-                    {usesCityGeneratedImages ? (
-                      <p className="mt-2 text-sm text-[#6d6258]">
-                        {locale === 'zh'
-                          ? '照片區使用城市專屬圖像，之後可接入商家照片。'
-                          : 'Photo slots use city-specific generated images until business photos are connected.'}
-                      </p>
-                    ) : null}
                   </div>
                   <Camera className="h-6 w-6 text-[#bd2730]" aria-hidden="true" />
                 </div>
@@ -770,51 +788,47 @@ export async function BusinessDetailPageView({
               </div>
             </section>
 
-            <section className="rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
-              <h2 className="mb-4 text-lg font-semibold text-[#2c2722]">{locale === 'zh' ? '聯絡資訊' : 'Contact'}</h2>
-              <div className="space-y-3 text-sm text-[#5f554c]">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-[#bd2730]" aria-hidden="true" />
+            {hasContactDetails ? (
+              <section className="rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
+                <h2 className="mb-4 text-lg font-semibold text-[#2c2722]">{locale === 'zh' ? '聯絡資訊' : 'Contact'}</h2>
+                <div className="space-y-3 text-sm text-[#5f554c]">
                   {business.phone && phoneLink ? (
-                    <a href={phoneLink} data-contact-action="call" className="font-semibold text-[#bd2730] hover:text-[#8f1c22]">
-                      {business.phone}
-                    </a>
-                  ) : (
-                    <span>{locale === 'zh' ? '電話待補充' : 'Phone not listed'}</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-[#5f554c]" aria-hidden="true" />
+                    <div className="flex items-center gap-3">
+                      <Phone className="h-4 w-4 text-[#bd2730]" aria-hidden="true" />
+                      <a href={phoneLink} data-contact-action="call" className="font-semibold text-[#bd2730] hover:text-[#8f1c22]">
+                        {business.phone}
+                      </a>
+                    </div>
+                  ) : null}
                   {business.email && emailHref ? (
-                    <a href={emailHref} className="transition hover:text-[#bd2730]">
-                      {contactEmail}
-                    </a>
-                  ) : (
-                    <span>{contactEmail}</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-3">
-                  <Globe2 className="h-4 w-4 text-[#5f554c]" aria-hidden="true" />
+                    <div className="flex items-center gap-3">
+                      <Mail className="h-4 w-4 text-[#5f554c]" aria-hidden="true" />
+                      <a href={emailHref} className="transition hover:text-[#bd2730]">
+                        {business.email}
+                      </a>
+                    </div>
+                  ) : null}
                   {contactWebsite ? (
-                    <a
-                      href={contactWebsite}
-                      target="_blank"
-                      rel="noreferrer"
-                      data-contact-action="website"
-                      className="transition hover:text-[#bd2730]"
-                    >
-                      {contactWebsiteLabel}
-                    </a>
-                  ) : (
-                    <span>{contactWebsiteLabel}</span>
-                  )}
+                    <div className="flex items-center gap-3">
+                      <Globe2 className="h-4 w-4 text-[#5f554c]" aria-hidden="true" />
+                      <a
+                        href={contactWebsite}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-contact-action="website"
+                        className="transition hover:text-[#bd2730]"
+                      >
+                        {contactWebsiteLabel}
+                      </a>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-            </section>
+              </section>
+            ) : null}
 
-            <section className="rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
-              <h2 className="mb-4 text-lg font-semibold text-[#2c2722]">{locale === 'zh' ? '營業時間' : 'Business hours'}</h2>
-              {business.hours.length > 0 ? (
+            {business.hours.length > 0 ? (
+              <section className="rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
+                <h2 className="mb-4 text-lg font-semibold text-[#2c2722]">{locale === 'zh' ? '營業時間' : 'Business hours'}</h2>
                 <div className="space-y-2">
                   {business.hours.map((row) => (
                     <div key={row.label} className="flex items-center justify-between gap-4 rounded-md bg-[#f7f1e8] px-3 py-2 text-sm">
@@ -823,12 +837,8 @@ export async function BusinessDetailPageView({
                     </div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-sm leading-6 text-[#6d6258]">
-                  {locale === 'zh' ? '商家尚未提供結構化營業時間。' : 'Structured hours have not been added yet.'}
-                </p>
-              )}
-            </section>
+              </section>
+            ) : null}
 
             {owner ? (
               <section className="rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
@@ -873,11 +883,12 @@ export async function BusinessDetailPageView({
           </aside>
         </div>
 
-        {relatedCategoryBusinesses.length > 0 || category ? (
+        {/* Hidden when no listing in the category is worth suggesting (#473). */}
+        {relatedCategoryBusinesses.length > 0 ? (
           <section className="mt-8 space-y-4 border-t border-[#e2d8cb] pt-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-2xl font-semibold text-[#2c2722]">
-                {relatedCategoryBusinesses.length > 0
+                {relatedAllInSameCity
                   ? locale === 'zh'
                     ? '同城市／分類的其他選擇'
                     : 'More options in the same city and category'
@@ -910,6 +921,7 @@ export async function BusinessDetailPageView({
                   key={item.id}
                   business={item}
                   locale={locale}
+                  hideIllustration
                   localizedLocationLabel={item.address ?? item.serviceAreaText ?? `${item.city}, ${site.stateCode}`}
                   stateLabel={site.stateCode || site.stateRegion}
                 />
