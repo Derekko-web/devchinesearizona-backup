@@ -58,10 +58,11 @@ describe('BusinessDetailPageView', () => {
     );
 
     expect(html).toContain('Lunasia Dim Sum House');
-    expect(html).toContain('Verified by ChineseLosAngeles');
+    expect(html).toContain('ChineseLosAngeles will check and update it');
+    expect(html).toContain('Listed from public sources');
     expect(html).toContain('"addressRegion":"CA"');
     expect(html).toContain('https://chineselosangeles.com/en/business/lunasia-dim-sum-house-alhambra');
-    expect(html).not.toContain('Verified by ChineseArizona');
+    expect(html).not.toContain('ChineseArizona will check');
     expect(html).not.toContain('"addressRegion":"AZ"');
     expect(html).not.toContain('https://chinesearizona.com/en/business/lunasia-dim-sum-house-alhambra');
   });

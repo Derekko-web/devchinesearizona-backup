@@ -4,7 +4,7 @@ import {
   ChevronRight,
   MapPin,
   Search,
-  Star,
+  Store,
   SunMedium,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -13,9 +13,11 @@ import { CategoryIcon } from '@/components/CategoryIcon';
 import { IllustrationLabel } from '@/components/IllustrationLabel';
 import { getLocalizedNewsArticlePath, getLocalizedNewsPath } from '@/lib/arizona-news';
 import { canServeArizonaOnlyContent } from '@/lib/arizona-only-routes';
-import { getBusinessCategories, getBusinessesForSite, getCurrentArticlesAsync } from '@/lib/content';
+import { getBusinessCategories, getCurrentArticlesAsync } from '@/lib/content';
+import { getDirectoryBusinesses } from '@/lib/directory';
 import { isIllustrationImageUrl } from '@/lib/directory-ai-replacements';
 import { t } from '@/lib/i18n';
+import { getListingTrustLevel, listingTrustExplanation, listingTrustLabel, type ListingTrustLevel } from '@/lib/listing-trust';
 import { metroCategoryPath } from '@/lib/metro-categories';
 import { withLocale } from '@/lib/routing';
 import {
@@ -89,16 +91,15 @@ function LocalFocusIcon({ site, className }: { site: SiteProfile; className?: st
   );
 }
 
-function VerifiedBusinessIcon({ className }: { className?: string }) {
+// A plain storefront: the count is of listed businesses, not verified ones.
+function ListedBusinessIcon({ className }: { className?: string }) {
   return (
-    <img
-      src="/hero-icons/verified-shield.png"
-      alt=""
+    <span
       aria-hidden="true"
-      className={`${className ?? ''} object-contain`}
-      loading="eager"
-      decoding="async"
-    />
+      className={`${className ?? ''} flex items-center justify-center rounded-full bg-[#fff0dd] text-[#d28a35]`}
+    >
+      <Store className="h-7 w-7" />
+    </span>
   );
 }
 
@@ -121,15 +122,6 @@ function copy(locale: Locale, en: string, zh: string) {
 
 function oppositeCopy(locale: Locale, en: string, zh: string) {
   return locale === 'zh' ? en : zh;
-}
-
-function badgeText(locale: Locale, badge: string) {
-  const badgeZh: Record<string, string> = {
-    Verified: '認證',
-    Claimed: '已認領',
-  };
-
-  return copy(locale, badge, badgeZh[badge] ?? badge);
 }
 
 function formatCompactCount(value: number, locale: Locale) {
@@ -225,12 +217,15 @@ function HomeSectionHeading({
 function FeaturedBusinessCard({
   card,
   locale,
+  trustLevel,
 }: {
   card: FeaturedShowcaseCard;
   locale: Locale;
+  // From the listing itself; undefined when the card has no live listing.
+  trustLevel?: ListingTrustLevel;
 }) {
   const href = card.href ?? `/business/${card.slug}`;
-  const hasReviewSignal = card.reviewCount > 0 && /^\d/.test(card.rating);
+  const showVerified = trustLevel === 'owner_verified';
 
   return (
     <Link
@@ -256,9 +251,18 @@ function FeaturedBusinessCard({
           </div>
         )}
         {isIllustrationImageUrl(card.imageUrl) ? <IllustrationLabel locale={locale} position="bottom-right" /> : null}
-        <div className="absolute left-3 top-3 rounded-full bg-[#5f8640] px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm">
-          {badgeText(locale, card.badge)}
-        </div>
+        {showVerified ? (
+          <div
+            title={t(listingTrustExplanation('owner_verified'), locale)}
+            className="absolute left-3 top-3 rounded-full bg-[#5f8640] px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm"
+          >
+            {t(listingTrustLabel('owner_verified'), locale)}
+          </div>
+        ) : card.badge ? (
+          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-semibold text-[#5d4a3f] shadow-sm">
+            {card.badge}
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 px-3.5 py-3">
@@ -268,19 +272,6 @@ function FeaturedBusinessCard({
             {copy(locale, card.nameEn, card.nameZh)}
           </h3>
         </div>
-
-        {hasReviewSignal ? (
-          <div className="flex items-center gap-2 text-sm text-[#6f5b50]">
-            <Star className="h-4 w-4 fill-[#f2af4b] text-[#f2af4b]" />
-            <span className="font-semibold text-[#372922]">{card.rating}</span>
-            <span>({card.reviewCount})</span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 text-sm font-semibold text-[#6f5b50]">
-            <MapPin className="h-4 w-4 text-brand-600" />
-            <span>{copy(locale, 'Local source', '本地來源')}</span>
-          </div>
-        )}
 
         <div className="mt-auto text-[13px] leading-5 text-[#726055]">
           <p>{copy(locale, card.line1En, card.line1Zh)}</p>
@@ -353,7 +344,10 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
   const directoryIsLive = hasLiveDirectoryData(site);
   const newsIsLive = hasLiveNewsData(site);
   const canShowArizonaOnlyLinks = canServeArizonaOnlyContent(site);
-  const allBusinesses = directoryIsLive ? getBusinessesForSite(locale, site, { sort: 'featured' }) : [];
+  // The live directory (the database on Arizona), so the count and the featured
+  // cards' badges match what the business pages say.
+  const directoryListings = directoryIsLive ? await getDirectoryBusinesses({}, { limit: 1000, site }) : [];
+  const listingBySlug = new Map(directoryListings.map((business) => [business.slug, business]));
   const currentArticles = newsIsLive ? await getCurrentArticlesAsync(undefined, site) : [];
   const categories = getBusinessCategories().filter((category) =>
     site.directory.categorySlugs.includes(category.slug)
@@ -393,7 +387,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
   const popularCategories = popularSearchSlugs
     .map((slug) => categoryBySlug.get(slug))
     .filter((category): category is BusinessCategory => Boolean(category));
-  const verifiedCount = allBusinesses.filter((business) => business.verified).length;
+  const listedCount = directoryListings.length;
   const trustedServiceTiles: TrustedServiceTile[] = [
     {
       slug: 'real-estate',
@@ -545,13 +539,13 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
               <div className="homepage-rise homepage-rise-delay-3 mt-5 grid gap-3 sm:grid-cols-3 sm:divide-x sm:divide-[#e7d8ca]">
                 <div className="flex items-start gap-3 sm:pr-3">
-                  <VerifiedBusinessIcon className="h-14 w-14 flex-shrink-0" />
+                  <ListedBusinessIcon className="h-14 w-14 flex-shrink-0" />
                   <div>
                     <p className="text-[13px] font-semibold text-[#271c16]">
-                      {formatCompactCount(verifiedCount, locale)}
+                      {formatCompactCount(listedCount, locale)}
                     </p>
-                    <p className="text-[13px] font-medium text-[#3a2b23]">{copy(locale, 'Verified Businesses', '認證商家')}</p>
-                    <p className="text-xs text-[#8b786c]">{copy(locale, 'Trusted local directory', '可信本地目錄')}</p>
+                    <p className="text-[13px] font-medium text-[#3a2b23]">{copy(locale, 'Listed businesses', '收錄商家')}</p>
+                    <p className="text-xs text-[#8b786c]">{copy(locale, 'Owners can claim free', '業主可免費認領')}</p>
                   </div>
                 </div>
 
@@ -623,13 +617,17 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
               />
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                {home.featuredCards.map((card) => (
-                  <FeaturedBusinessCard
-                    key={card.slug}
-                    card={card}
-                    locale={locale}
-                  />
-                ))}
+                {home.featuredCards.map((card) => {
+                  const listing = listingBySlug.get(card.slug);
+                  return (
+                    <FeaturedBusinessCard
+                      key={card.slug}
+                      card={card}
+                      locale={locale}
+                      trustLevel={listing ? getListingTrustLevel(listing) : undefined}
+                    />
+                  );
+                })}
               </div>
             </div>
 

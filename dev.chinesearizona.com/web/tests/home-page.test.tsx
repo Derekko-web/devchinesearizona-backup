@@ -204,7 +204,9 @@ describe('HomePageView', () => {
 
     expect(html).toContain('Austin&#x27;s Chinese Community Guide');
     expect(html).toContain('Find Austin-area Chinese restaurants');
-    expect(html).toContain('323+');
+    expect(html).toContain('322+');
+    expect(html).toContain('Listed businesses');
+    expect(html).not.toContain('Verified Businesses');
     expect(html).toContain('House of Three Gorges');
     expect(html).toContain('H Mart Austin');
     expect(html).toContain('Austin school and services source summary');
@@ -241,7 +243,7 @@ describe('HomePageView', () => {
     const html = renderToStaticMarkup(await HomePageView({ locale: 'en', site: siteProfiles['los-angeles'] }));
 
     expect(html).toContain('Los Angeles Chinese Community Guide');
-    expect(html).toContain('331+');
+    expect(html).toContain('328+');
     expect(html).toContain('Lunasia Dim Sum House');
     expect(html).toContain('Chinatown Service Center');
     expect(html).toContain('San Gabriel');
@@ -283,7 +285,7 @@ describe('HomePageView', () => {
     expect(html).toContain('Your Guide to the SF Bay Chinese Community');
     expect(html).toContain('Find SF Bay Chinese restaurants');
     expect(html).not.toContain('Follow local summaries for San Francisco');
-    expect(html).toContain('336+');
+    expect(html).toContain('335+');
     expect(html).toContain('R&amp;G Lounge');
     expect(html).toContain('99 Ranch Market Cupertino');
     expect(html).toContain('Chinese American International School');

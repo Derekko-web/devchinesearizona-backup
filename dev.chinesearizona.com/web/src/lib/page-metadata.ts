@@ -23,7 +23,9 @@ import { resolveLocalizedHiddenArizonaSummaryText } from '@/lib/hidden-arizona-l
 import { t } from '@/lib/i18n';
 import {
   findMetroCategoryCity,
+  formatCityListingCountLine,
   formatListingCountLine,
+  getCityCategoryIntro,
   getCityCategoryTitle,
   getLocalizedCityName,
   getMetroCategoryIntro,
@@ -177,8 +179,8 @@ export function directoryMetadata(
     title,
     description:
       locale === 'zh'
-        ? `可依城市、分類與評分篩選的${site.regionNameZh}華人商家。`
-        : `Chinese businesses in ${site.regionName}, filterable by city, category, and rating.`,
+        ? `可依城市、分類與語言篩選的${site.regionNameZh}華人商家。`
+        : `Chinese businesses in ${site.regionName}, filterable by city, category, and language spoken.`,
     path: pathWithPage,
     locale,
     site,
@@ -561,7 +563,11 @@ export async function cityCategoryMetadata(
 
   return buildMetadata({
     title: `${getCityCategoryTitle(summary.category, cityLabel, site, locale)} | ${site.brandName}`,
-    description: t(summary.category.description, locale),
+    description: `${getCityCategoryIntro(summary.category, cityLabel, site, locale)} ${formatCityListingCountLine(
+      listingCount,
+      cityLabel,
+      locale
+    )}${locale === 'zh' ? '。' : '.'}`,
     path: `/business/${resolvedCity?.slug ?? slugifyCity(city)}/${summary.category.slug}`,
     locale,
     site,

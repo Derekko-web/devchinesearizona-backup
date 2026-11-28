@@ -27,15 +27,15 @@ export type SiteNeighborhoodSpot = {
 export type SiteFeaturedShowcaseCard = {
   slug: string;
   href?: string;
-  badge: string;
+  // A neutral context tag such as a neighborhood. Never a trust claim: the
+  // homepage reads "Verified" from the listing itself (issue #457).
+  badge?: string;
   categoryEn: string;
   categoryZh: string;
   nameEn: string;
   nameZh: string;
   // Empty shows neutral art.
   imageUrl: string;
-  rating: string;
-  reviewCount: number;
   line1En: string;
   line1Zh: string;
   line2En: string;

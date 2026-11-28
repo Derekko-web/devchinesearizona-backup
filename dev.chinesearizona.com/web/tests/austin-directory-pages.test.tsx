@@ -124,12 +124,13 @@ describe('Austin directory pages', () => {
     expect(html).toContain('"addressRegion":"TX"');
     expect(html).toContain('Austin, TX');
     expect(html).toContain('AUSTIN, TX');
-    expect(html).toContain('Verified by ChineseAustin');
+    expect(html).toContain('ChineseAustin will check and update it');
+    expect(html).toContain('Listed from public sources');
     expect(html).not.toContain('https://chinesearizona.com/business/house-of-three-gorges-austin');
     expect(html).not.toContain('"addressRegion":"AZ"');
     expect(html).not.toContain('Austin, AZ');
     expect(html).not.toContain('AUSTIN, ARIZONA');
-    expect(html).not.toContain('Verified by ChineseArizona');
+    expect(html).not.toContain('ChineseArizona will check');
   });
 
   it('renders Austin add-business copy without Arizona fallback content', async () => {

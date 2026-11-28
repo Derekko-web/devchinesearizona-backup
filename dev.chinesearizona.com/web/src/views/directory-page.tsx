@@ -11,6 +11,7 @@ import {
 } from '@/lib/directory';
 import { isPaymentFilter, isSpokenLanguage } from '@/lib/business-bilingual';
 import { t } from '@/lib/i18n';
+import { isIndexableListingCount, metroCategoryPath } from '@/lib/metro-categories';
 import { absoluteUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
 import { withLocale } from '@/lib/routing';
@@ -34,10 +35,10 @@ type DirectorySearchParams = {
   page?: string;
 };
 
+// No rating or review sorts: the stored numbers are not from reviews on this
+// site, so they may not order listings either (issue #457).
 const directorySortOptions: SortOption[] = [
   'featured',
-  'rating',
-  'reviewed',
   'alphabetical',
   'distance',
   'newest',
@@ -53,15 +54,6 @@ function parseDirectorySortOption(value?: string): SortOption {
   }
 
   return 'featured';
-}
-
-function parseDirectoryMinRating(value?: string): number | undefined {
-  if (!value) {
-    return undefined;
-  }
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
 export async function DirectoryPageView({
@@ -102,11 +94,10 @@ export async function DirectoryPageView({
     category: searchParams.category,
     language: isSpokenLanguage(searchParams.language) ? searchParams.language : undefined,
     payment: isPaymentFilter(searchParams.payment) ? searchParams.payment : undefined,
-    minRating: parseDirectoryMinRating(searchParams.minRating),
     sort: parseDirectorySortOption(searchParams.sort),
   };
   const directoryPagePath = withLocale(locale, '/business');
-  const [{ categories, cities }, directoryPage] = await Promise.all([
+  const [{ categories, cities, categoryCounts }, directoryPage] = await Promise.all([
     getDirectoryFilterOptions(site),
     getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { site, usePaidPromotion: true }),
   ]);
@@ -251,7 +242,6 @@ export async function DirectoryPageView({
             className="homepage-rise homepage-rise-delay-1 mt-5 overflow-hidden rounded-[22px] border border-[#e3d3c2] bg-white shadow-[0_24px_54px_-44px_rgba(79,53,29,0.5)]"
           >
             {filters.category ? <input type="hidden" name="category" value={filters.category} /> : null}
-            {filters.minRating ? <input type="hidden" name="minRating" value={String(filters.minRating)} /> : null}
             {filters.sort && filters.sort !== 'featured' ? <input type="hidden" name="sort" value={filters.sort} /> : null}
             <div className="grid gap-px bg-[#eadbcc] md:grid-cols-[minmax(0,1fr)_170px_132px]">
               <label className="flex min-w-0 items-center gap-3 bg-white px-4 py-3.5">
@@ -299,7 +289,13 @@ export async function DirectoryPageView({
             {quickCategories.map((category) => (
               <Link
                 key={category.slug}
-                href={buildDirectoryHref(locale, { category: category.slug })}
+                // Categories with enough listings have an indexable landing page; send
+                // shoppers (and search engines) there instead of a filtered copy of /business.
+                href={
+                  isIndexableListingCount(categoryCounts[category.slug] ?? 0)
+                    ? withLocale(locale, metroCategoryPath(category.slug))
+                    : buildDirectoryHref(locale, { category: category.slug })
+                }
                 className="homepage-card inline-flex items-center rounded-full bg-[#f2e6d9] px-3.5 py-2 text-sm font-semibold text-[#5f4b3f] transition-colors hover:bg-[#ecdbc9] hover:text-brand-700"
               >
                 {t(category.name, locale)}
