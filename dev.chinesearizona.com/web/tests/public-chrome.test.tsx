@@ -176,6 +176,16 @@ describe('public chrome', () => {
 
     expect(navbarHtml).not.toContain('/shop');
     expect(footerHtml).not.toContain('/shop');
-    expect(navbarHtml).toMatch(/<a href="\/zh\/auth\/login\?next=%2Fzh%2Fcommunity" aria-label="收藏"/);
+    expect(navbarHtml).toMatch(/<a href="\/zh\/auth\/login" rel="nofollow" aria-label="收藏"/);
+  });
+
+  it('renders sign-in links without a per-page return path, so crawlers see one URL', async () => {
+    const Navbar = (await import('@/components/Navbar')).default;
+
+    const navbarHtml = renderToStaticMarkup(<Navbar />);
+
+    expect(navbarHtml).not.toContain('next=');
+    expect(navbarHtml).toMatch(/href="\/zh\/auth\/login" rel="nofollow"/);
+    expect(navbarHtml).toMatch(/href="\/zh\/auth\/join" rel="nofollow"/);
   });
 });
