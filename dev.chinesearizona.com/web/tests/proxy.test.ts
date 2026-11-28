@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  englishCanonicalPath,
   proxy,
   shouldBypassApexRedirect,
   shouldEmitNoIndexHeader,
@@ -23,6 +24,9 @@ function buildRequest(
     method: options.method ?? 'GET',
     nextUrl: {
       pathname: nextUrl.pathname,
+      search: nextUrl.search,
+      protocol: nextUrl.protocol,
+      host: nextUrl.host,
       clone: () => new URL(url),
     },
   };
@@ -112,5 +116,60 @@ describe('proxy host handling', () => {
 
     expect(shouldRejectServerActionRequest(request as never)).toBe(true);
     expect(response.status).toBe(400);
+  });
+});
+
+describe('English URLs', () => {
+  it('maps /en and /en/... to the unprefixed English URL and leaves everything else alone', () => {
+    expect(englishCanonicalPath('/en')).toBe('/');
+    expect(englishCanonicalPath('/en/')).toBe('/');
+    expect(englishCanonicalPath('/en/business/category/medical')).toBe('/business/category/medical');
+    expect(englishCanonicalPath('/english-classes')).toBeNull();
+    expect(englishCanonicalPath('/zh/business')).toBeNull();
+    expect(englishCanonicalPath('/business')).toBeNull();
+    expect(englishCanonicalPath(undefined)).toBeNull();
+  });
+
+  it('permanently redirects /en pages to the unprefixed URL, keeping the query string', () => {
+    const response = proxy(
+      buildRequest('https://chinesearizona.com/en/business?category=medical&page=2', 'chinesearizona.com') as never
+    );
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe('https://chinesearizona.com/business?category=medical&page=2');
+  });
+
+  it('uses the public scheme and host behind our proxies, not the internal address', () => {
+    const response = proxy(
+      buildRequest('http://127.0.0.1:3001/en/business', 'chinesearizona.com', {
+        headers: { 'x-forwarded-proto': 'https' },
+      }) as never
+    );
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe('https://chinesearizona.com/business');
+  });
+
+  it('redirects the bare /en home page to /', () => {
+    const response = proxy(buildRequest('https://chinesearizona.com/en', 'chinesearizona.com') as never);
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe('https://chinesearizona.com/');
+  });
+
+  it('strips /en in the same hop as the www redirect', () => {
+    const response = proxy(
+      buildRequest('https://www.chinesearizona.com/en/news?lane=chinese', 'www.chinesearizona.com') as never
+    );
+
+    expect(response.status).toBe(308);
+    expect(response.headers.get('location')).toBe('https://chinesearizona.com/news?lane=chinese');
+  });
+
+  it('keeps serving Chinese pages under /zh', () => {
+    const response = proxy(buildRequest('https://chinesearizona.com/zh/business', 'chinesearizona.com') as never);
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get('location')).toBeNull();
   });
 });

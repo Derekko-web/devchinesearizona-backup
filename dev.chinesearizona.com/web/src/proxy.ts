@@ -32,6 +32,30 @@ export function shouldRejectServerActionRequest(request: Pick<NextRequest, 'head
   return request.method === 'POST' && request.headers.has(serverActionHeader);
 }
 
+// "/en" or "/en/business?x" -> "/" or "/business?x". English pages are served
+// at the unprefixed URL; the /en copies only split ranking signals.
+export function englishCanonicalPath(pathname?: string | null): string | null {
+  if (!pathname || (pathname !== '/en' && !pathname.startsWith('/en/'))) {
+    return null;
+  }
+
+  return pathname.slice(3) || '/';
+}
+
+function firstHeaderValue(value: string | null): string | null {
+  const first = value?.split(',')[0]?.trim();
+  return first ? first : null;
+}
+
+// Traefik terminates TLS and nginx passes the Host header through, so the
+// app itself sees plain http; redirects must use the public scheme and host.
+function publicRequestOrigin(request: Pick<NextRequest, 'headers' | 'nextUrl'>): string {
+  const protocol =
+    firstHeaderValue(request.headers.get('x-forwarded-proto')) ?? request.nextUrl.protocol.replace(/:$/, '');
+  const host = firstHeaderValue(request.headers.get('host')) ?? request.nextUrl.host;
+  return `${protocol}://${host}`;
+}
+
 export function shouldEmitNoIndexHeader(host?: string | null): boolean {
   return shouldNoIndexSiteProfile(resolveSiteProfileFromHost(host));
 }
@@ -51,8 +75,14 @@ export function proxy(request: NextRequest) {
 
   const requestHost = request.headers.get('host');
   const host = normalizeHost(requestHost);
+  const englishPath = englishCanonicalPath(request.nextUrl.pathname);
 
   if (!shouldRedirectToApex(host) || shouldBypassApexRedirect(request.nextUrl.pathname)) {
+    if (englishPath) {
+      const targetUrl = new URL(`${englishPath}${request.nextUrl.search}`, publicRequestOrigin(request));
+      return withNoIndexHeader(NextResponse.redirect(targetUrl, 308), requestHost);
+    }
+
     return withNoIndexHeader(NextResponse.next(), requestHost);
   }
 
@@ -60,6 +90,9 @@ export function proxy(request: NextRequest) {
   targetUrl.protocol = 'https';
   targetUrl.hostname = apexHost;
   targetUrl.port = '';
+  if (englishPath) {
+    targetUrl.pathname = englishPath;
+  }
 
   return NextResponse.redirect(targetUrl, 308);
 }
