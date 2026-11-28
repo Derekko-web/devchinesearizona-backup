@@ -122,7 +122,11 @@ export function DirectoryFilters({
             .filter((language) => language !== 'English')
             .map((language) => (
               <option key={language} value={language}>
-                {languageLabel(language, locale)}
+                {language === 'Chinese'
+                  ? locale === 'zh'
+                    ? '中文（不限方言）'
+                    : 'Chinese (any dialect)'
+                  : languageLabel(language, locale)}
               </option>
             ))}
         </SelectField>
