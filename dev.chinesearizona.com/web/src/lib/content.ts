@@ -50,6 +50,7 @@ import type {
   SortOption,
 } from '@/lib/types';
 import { compareMostPopularDirectoryBusinesses } from '@/lib/directory-highlights';
+import { matchesLanguageFilter } from '@/lib/listing-trust';
 
 type BusinessFilters = {
   q?: string;
@@ -376,7 +377,7 @@ function filterBusinesses(
       return false;
     }
 
-    if (language && !business.languages.some((item) => item === language)) {
+    if (language && !matchesLanguageFilter(business.languages, language)) {
       return false;
     }
 
