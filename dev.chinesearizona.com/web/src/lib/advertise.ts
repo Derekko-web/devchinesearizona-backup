@@ -297,16 +297,12 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
           zh: '月繳與週繳方案：可隨時取消。取消後不再自動續約，目前已付費的期間會持續到期末。',
         }),
         pick(locale, {
-          en: 'Unused pay-per-click budget is refunded on request.',
-          zh: '未使用的按點擊付費預算，可申請退還。',
-        }),
-        pick(locale, {
           en: 'One-time services can be cancelled for a full refund before we start the work.',
           zh: '一次性服務在我們開始製作前取消，可全額退款。',
         }),
         pick(locale, {
-          en: `To cancel or ask for a refund, email ${email}.`,
-          zh: `如需取消或退款，請寄信至 ${email}。`,
+          en: `To cancel or ask for a refund, send us a message with the form below, or email ${email}.`,
+          zh: `如需取消或退款，請用下方表單留言給我們，或寄信至 ${email}。`,
         }),
       ],
     },
@@ -321,8 +317,8 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
       wechatHeading: pick(locale, { en: 'WeChat', zh: '微信' }),
       wechatId: advertiseWeChatId,
       wechatPending: pick(locale, {
-        en: 'Our WeChat ID is coming soon. Email us and we will add you on WeChat.',
-        zh: '微信號即將公布。請先寄信給我們，我們會主動加你微信。',
+        en: 'Our WeChat ID is coming soon. Leave your WeChat ID in the form and we will add you.',
+        zh: '微信號即將公布。請在表單留下你的微信號，我們會主動加你。',
       }),
     },
     claimCta: pick(locale, { en: 'Claim your free listing', zh: '免費認領商家' }),
