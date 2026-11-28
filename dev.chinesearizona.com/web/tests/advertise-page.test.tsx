@@ -154,6 +154,8 @@ describe('AdvertisePageView', () => {
       expect(html).toContain('Sponsored / 贊助');
       expect(html).toContain(locale === 'zh' ? '評論與評分絕不販售' : 'Reviews and ratings are never for sale');
       expect(html).toContain(locale === 'zh' ? '退款與取消政策' : 'Refunds and cancellation');
+      // Pay-per-click is not on the price list and is hidden from owners (#468).
+      expect(html).not.toMatch(/pay-per-click|按點擊付費/i);
       expect(html).toContain('id="sponsored"');
       expect(html).toContain('id="advertise-inquiry"');
       expect(html).toContain('id="wechat"');
