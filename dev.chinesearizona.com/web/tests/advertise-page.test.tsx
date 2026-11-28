@@ -156,6 +156,12 @@ describe('AdvertisePageView', () => {
       expect(html).toContain(locale === 'zh' ? '退款與取消政策' : 'Refunds and cancellation');
       // Pay-per-click is not on the price list and is hidden from owners (#468).
       expect(html).not.toMatch(/pay-per-click|按點擊付費/i);
+      // Verified means an approved owner claim, free or paid, so it is not sold with Enhanced (#472).
+      expect(html).toContain(
+        locale === 'zh' ? '免費認領：核准認領後即可更新資料，並顯示「認證商家」標章' : 'get the Verified badge once we approve your claim'
+      );
+      expect(html).not.toContain(locale === 'zh' ? '確認資料後顯示驗證標章' : 'Verified badge once we confirm your details');
+      expect(html).toContain(locale === 'zh' ? '創始年度方案附贈代寫雙語商家介紹' : 'Done-for-you bilingual write-up included with a founding year');
       expect(html).toContain('id="sponsored"');
       expect(html).toContain('id="advertise-inquiry"');
       expect(html).toContain('id="wechat"');

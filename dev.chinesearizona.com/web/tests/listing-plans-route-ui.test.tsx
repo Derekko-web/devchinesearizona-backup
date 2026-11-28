@@ -127,6 +127,10 @@ describe('ListingPlanPanel', () => {
     );
 
     expect(html).toContain('Active until Nov 26, 2027');
+    // Enhanced is described by what only it gives; Verified comes from the free claim (#472).
+    expect(html).toContain('Your logo and up to 12 photos');
+    expect(html).toContain('A done-for-you bilingual write-up is included with a founding year.');
+    expect(html).not.toMatch(/verified badge/i);
     expect(html).toContain('Renew 1 year · $99');
     expect(html).toContain('$199');
     expect(html).toContain('Founding price (first 10 businesses, kept on renewal)');

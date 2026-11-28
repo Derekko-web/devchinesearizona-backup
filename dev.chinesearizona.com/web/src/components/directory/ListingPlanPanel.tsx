@@ -32,8 +32,8 @@ type StatusMessage = { message: string; tone: 'error' | 'success' };
 
 const planDescriptions: Record<ListingPlanId, { en: string; zh: string }> = {
   'enhanced-listing': {
-    en: 'Shows all your photos (up to 12) on your page instead of 4. A bilingual write-up is free with a founding year.',
-    zh: '商家頁可顯示全部照片（最多 12 張，原本為 4 張）。創始年度方案免費贈送雙語商家介紹代寫。',
+    en: 'Your logo and up to 12 photos on your page instead of 4, and a description in both English and Chinese. A done-for-you bilingual write-up is included with a founding year.',
+    zh: '商家頁可放商標與最多 12 張照片（原本為 4 張），並有中英雙語商家介紹。創始年度方案附贈代寫雙語商家介紹。',
   },
   'sponsored-category': {
     en: `One of the ${SPONSORED_CATEGORY_PLAN_LIMIT} labeled "Sponsored / 贊助" spots at the top of your category page. It never changes reviews, ratings or verification.`,
