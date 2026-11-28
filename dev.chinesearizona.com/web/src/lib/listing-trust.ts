@@ -63,9 +63,23 @@ export function listingTrustExplanation(level: ListingTrustLevel): LocalizedText
   return listingTrustCopy[level].explanation;
 }
 
-const chineseSpokenLanguages = new Set(['mandarin', 'cantonese', 'taiwanese', 'chinese']);
+// As stored in `businesses.languages`. "Chinese" means a source said Chinese
+// without naming a dialect; it counts the same as the others.
+export const CHINESE_SPOKEN_LANGUAGE_VALUES = ['Mandarin', 'Cantonese', 'Taiwanese', 'Chinese'] as const;
+
+const chineseSpokenLanguages = new Set(CHINESE_SPOKEN_LANGUAGE_VALUES.map((language) => language.toLowerCase()));
 
 // "Traditional Chinese" is a written language, so it does not count as spoken.
 export function hasChineseSpokenLanguage(languages: readonly string[]): boolean {
   return languages.some((language) => chineseSpokenLanguages.has(language.trim().toLowerCase()));
+}
+
+// The directory's language filter. Choosing "Chinese" means any Chinese spoken
+// language; a named dialect matches only that dialect.
+export function matchesLanguageFilter(languages: readonly string[], filter: string): boolean {
+  if (filter === 'Chinese') {
+    return hasChineseSpokenLanguage(languages);
+  }
+
+  return languages.includes(filter);
 }

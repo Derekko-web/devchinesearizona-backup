@@ -175,3 +175,54 @@ describe('listing trust rules (#457)', () => {
     expect(html).not.toContain('Most reviewed');
   });
 });
+
+describe('the Chinese language value (#485)', () => {
+  it('treats Chinese like Mandarin, Cantonese or Taiwanese for Bilingual and the "any Chinese" filter', async () => {
+    const { hasChineseSpokenLanguage, matchesLanguageFilter } = await import('@/lib/listing-trust');
+
+    expect(hasChineseSpokenLanguage(['English', 'Chinese'])).toBe(true);
+    expect(matchesLanguageFilter(['English', 'Chinese'], 'Chinese')).toBe(true);
+    expect(matchesLanguageFilter(['Cantonese'], 'Chinese')).toBe(true);
+    expect(matchesLanguageFilter(['English', 'Traditional Chinese'], 'Chinese')).toBe(false);
+    // A source that only said "Chinese" does not tell us the dialect.
+    expect(matchesLanguageFilter(['English', 'Chinese'], 'Mandarin')).toBe(false);
+    expect(matchesLanguageFilter(['Mandarin'], 'Mandarin')).toBe(true);
+  });
+
+  it('asks the database for any Chinese spoken language when the filter is Chinese', async () => {
+    const { applyDirectoryQueryFilters } = await import('@/lib/directory');
+    const calls: Array<[string, unknown[]]> = [];
+    const query = new Proxy(
+      {},
+      {
+        get: (_target, method: string) => (...args: unknown[]) => {
+          calls.push([method, args]);
+          return query;
+        },
+      }
+    ) as Parameters<typeof applyDirectoryQueryFilters>[0];
+
+    applyDirectoryQueryFilters(query, { language: 'Chinese' });
+    expect(calls).toContainEqual(['overlaps', ['languages', ['Mandarin', 'Cantonese', 'Taiwanese', 'Chinese']]]);
+  });
+
+  it('shows the Bilingual badge and the 中文 label for a listing recorded as English and Chinese', async () => {
+    const { BusinessCard } = await import('@/components/BusinessCard');
+    const { languageLabel } = await import('@/lib/i18n');
+
+    const html = renderToStaticMarkup(<BusinessCard business={listing({ languages: ['English', 'Chinese'] })} locale="en" />);
+    expect(html).toContain('Bilingual');
+    expect(languageLabel('Chinese', 'zh')).toBe('中文');
+  });
+
+  it('offers "Chinese (any dialect)" in the directory language filter', async () => {
+    const { DirectoryFilters } = await import('@/components/DirectoryFilters');
+
+    expect(renderToStaticMarkup(<DirectoryFilters locale="en" categories={[]} cities={[]} values={{}} />)).toContain(
+      'Chinese (any dialect)'
+    );
+    expect(renderToStaticMarkup(<DirectoryFilters locale="zh" categories={[]} cities={[]} values={{}} />)).toContain(
+      '中文（不限方言）'
+    );
+  });
+});
