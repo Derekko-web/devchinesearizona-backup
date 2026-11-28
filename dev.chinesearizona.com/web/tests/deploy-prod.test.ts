@@ -359,6 +359,19 @@ describe('Deploy Prod workflow', () => {
     expect(workflow).toContain('npm run verify');
   });
 
+  it('finds dev deploy runs by SHA and filters on their conclusion itself (#519)', () => {
+    const start = workflow.indexOf('dev_run_ids="$(');
+    const devQuery = workflow.slice(start, workflow.indexOf(')"', start));
+
+    expect(start).toBeGreaterThan(-1);
+    expect(devQuery).toContain('/actions/workflows/deploy-dev.yml/runs');
+    expect(devQuery).toContain('-f head_sha="$DEPLOY_SHA"');
+    expect(devQuery).toContain('--paginate');
+    expect(devQuery).toContain('select(.conclusion == "success")');
+    // GitHub's status=success filter returned no runs for a dev deploy that had just finished.
+    expect(devQuery).not.toContain('status=success');
+  });
+
   it('uses its own secrets and never trusts unknown host keys', () => {
     for (const secret of [
       'PROD_VPS_HOST',
