@@ -127,7 +127,11 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
       },
       includes: [
         { en: 'Name, address, phone, hours and category', zh: '名稱、地址、電話、營業時間與分類' },
-        { en: 'Free owner claim and updates after review', zh: '審核後可免費認領與更新資料' },
+        // "Verified / 認證商家" means an approved owner claim, free or paid (#472).
+        {
+          en: 'Claim free: update your details and get the Verified badge once we approve your claim',
+          zh: '免費認領：核准認領後即可更新資料，並顯示「認證商家」標章',
+        },
       ],
       labeledSponsored: false,
     },
@@ -146,7 +150,10 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
       includes: [
         { en: 'Logo and more photos', zh: '商標與更多照片' },
         { en: 'Description in both English and Chinese', zh: '中英雙語商家介紹' },
-        { en: 'Verified badge once we confirm your details', zh: '確認資料後顯示驗證標章' },
+        {
+          en: 'Done-for-you bilingual write-up included with a founding year',
+          zh: '創始年度方案附贈代寫雙語商家介紹',
+        },
       ],
       labeledSponsored: false,
     },

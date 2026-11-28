@@ -82,7 +82,7 @@ describe('OwnerNextSteps', () => {
     expect(en).toContain('Your claim is under review');
     expect(en).toContain('Golden Dragon');
     expect(en).toContain('Next step: bring more customers to Lotus Kitchen');
-    expect(en).toContain('An Enhanced listing ($99/year)');
+    expect(en).toContain('An Enhanced listing ($99/year) adds your logo, more photos and a description in both languages');
     expect(en).toContain('from $29.50/month');
     expect(en).toContain('Founding price for the first 10 businesses');
     expect(en).toContain('href="/en/dashboard?business=lotus-kitchen#plans-lotus-kitchen"');

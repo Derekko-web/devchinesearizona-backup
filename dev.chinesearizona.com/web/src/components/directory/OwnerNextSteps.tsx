@@ -139,8 +139,8 @@ export function OwnerNextSteps({
               </h2>
               <p className="max-w-3xl text-sm leading-6 text-slate-700">
                 {zh
-                  ? `你的商家頁已上線。進階商家頁（${formatListingPlanUsd(target.enhancedPriceCents)}／年）可顯示全部照片`
-                  : `Your listing is live. An Enhanced listing (${formatListingPlanUsd(target.enhancedPriceCents)}/year) shows all your photos`}
+                  ? `你的商家頁已上線。進階商家頁（${formatListingPlanUsd(target.enhancedPriceCents)}／年）可放商標、更多照片與中英雙語介紹`
+                  : `Your listing is live. An Enhanced listing (${formatListingPlanUsd(target.enhancedPriceCents)}/year) adds your logo, more photos and a description in both languages`}
                 {target.sponsoredMonthPriceCents !== undefined
                   ? zh
                     ? `；分類贊助版位（${formatListingPlanUsd(target.sponsoredMonthPriceCents)}／月起）讓你出現在分類頁最上方，並清楚標示「贊助」。`

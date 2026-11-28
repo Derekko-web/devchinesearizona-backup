@@ -13,7 +13,8 @@ function formatDate(value: string, locale: Locale) {
 }
 
 // Paid listing plans that have not ended yet (issue #408), so the admin can
-// confirm details for the verified badge and send founding write-ups.
+// add the logo and photos and send founding write-ups. The Verified badge comes
+// from an approved claim, not from a plan (#472).
 export function AdminListingPlansPanel({ plans, locale }: { plans: AdminListingPlan[]; locale: Locale }) {
   const zh = locale === 'zh';
 
