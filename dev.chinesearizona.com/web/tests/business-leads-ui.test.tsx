@@ -40,7 +40,7 @@ describe('business page leads', () => {
     expect(html).toContain('詢價');
     expect(html).toContain('name="company_website"');
     expect(html).toContain('By sending, you agree that we share your name');
-    expect(html).toContain('href="/en/privacy"');
+    expect(html).toContain('href="/privacy"');
     expect(html).toContain('data-contact-action="call"');
     expect(html).toContain('data-contact-action="directions"');
   });
@@ -143,7 +143,7 @@ describe('lead panels', () => {
     const html = renderToStaticMarkup(<AdminLeadOverview counts={counts} inquiries={inquiries} locale="en" />);
 
     expect(html).toContain('Listing leads this month');
-    expect(html).toContain('href="/en/business/elite-az-realty-team"');
+    expect(html).toContain('href="/business/elite-az-realty-team"');
     expect(html).toContain('Unclaimed');
     expect(html).toContain('>12<');
     expect(html).toContain('Not emailed. Forward it by hand');

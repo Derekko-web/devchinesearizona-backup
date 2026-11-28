@@ -18,7 +18,7 @@ import {
   type AuthPageKind,
 } from '@/lib/auth';
 import { persistServerSession } from '@/lib/client-auth';
-import { getSupabaseBrowserClient } from '@/lib/supabase';
+import { getSupabaseBrowserClient, localizeSupabaseAuthMessage } from '@/lib/supabase';
 import type { Locale } from '@/lib/types';
 import { useAuth } from './AuthProvider';
 
@@ -503,7 +503,7 @@ export function AuthPageClient({
 
         if (error) {
           setStatus({
-            message: error.message,
+            message: localizeSupabaseAuthMessage(error.message, locale),
             tone: 'error',
           });
           return;
@@ -529,7 +529,10 @@ export function AuthPageClient({
 
       if (error) {
         setStatus({
-          message: error.message === 'Invalid login credentials' ? passwordLoginHint(locale) : error.message,
+          message:
+            error.message === 'Invalid login credentials'
+              ? passwordLoginHint(locale)
+              : localizeSupabaseAuthMessage(error.message, locale),
           tone: 'error',
         });
         return;
@@ -590,7 +593,7 @@ export function AuthPageClient({
 
     if (error) {
       setStatus({
-        message: error.message,
+        message: localizeSupabaseAuthMessage(error.message, locale),
         tone: 'error',
       });
       return;
@@ -698,7 +701,7 @@ export function AuthPageClient({
       const { error } = await client.auth.updateUser({ password });
       if (error) {
         setStatus({
-          message: error.message,
+          message: localizeSupabaseAuthMessage(error.message, locale),
           tone: 'error',
         });
         return;

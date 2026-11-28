@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { AdvertiseInquiryForm } from '@/components/forms/AdvertiseInquiryForm';
 import {
+  advertiseContactPerson,
   advertisePath,
   formatAdvertisePrice,
   getAdvertisePageCopy,
@@ -15,16 +16,27 @@ import { withLocale } from '@/lib/routing';
 import { defaultSiteProfile, type SiteProfile } from '@/lib/site-config';
 import type { Locale } from '@/lib/types';
 
+function foundingSpotsText(spotsLeft: number, locale: Locale) {
+  if (spotsLeft <= 0) {
+    return locale === 'zh' ? '10 個創始名額已滿' : 'All 10 founding spots are taken';
+  }
+
+  return locale === 'zh' ? `創始名額剩 ${spotsLeft} / 10 個` : `${spotsLeft} of 10 founding spots left`;
+}
+
 function PlanCard({
   plan,
   locale,
   ctaHref,
   ctaLabel,
+  foundingSpotsLeft,
 }: {
   plan: AdvertisePlan;
   locale: Locale;
-  ctaHref: string;
+  ctaHref?: string;
   ctaLabel: string;
+  // Counted from paid plans the same way checkout sets the founding price.
+  foundingSpotsLeft?: number;
 }) {
   const zh = locale === 'zh';
   const [firstPrice, ...otherPrices] = plan.prices;
@@ -53,9 +65,17 @@ function PlanCard({
           {formatAdvertisePrice(price, locale)}
         </p>
       ))}
-      {plan.foundingOffer ? (
+      {plan.foundingOffer && foundingSpotsLeft !== 0 ? (
         <p className="mt-3 rounded-[6px] bg-[#f7eedc] px-2.5 py-1.5 text-xs font-semibold leading-5 text-[#8a5a1f]">
           {zh ? plan.foundingOffer.zh : plan.foundingOffer.en}
+        </p>
+      ) : null}
+      {plan.foundingOffer && foundingSpotsLeft !== undefined ? (
+        <p
+          data-testid={`founding-spots-${plan.id}`}
+          className="mt-1.5 text-xs font-semibold text-[#8a5a1f] [font-variant-numeric:tabular-nums]"
+        >
+          {foundingSpotsText(foundingSpotsLeft, locale)}
         </p>
       ) : null}
 
@@ -70,12 +90,18 @@ function PlanCard({
       </ul>
 
       <div className="mt-auto pt-5">
-        <Link
-          href={ctaHref}
-          className="inline-flex h-10 w-full items-center justify-center rounded-[8px] border border-brand-600 px-4 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-600 hover:text-white"
-        >
-          {ctaLabel}
-        </Link>
+        {ctaHref ? (
+          <Link
+            href={ctaHref}
+            className="inline-flex h-10 w-full items-center justify-center rounded-[8px] border border-brand-600 px-4 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-600 hover:text-white"
+          >
+            {ctaLabel}
+          </Link>
+        ) : (
+          <span className="inline-flex h-10 w-full items-center justify-center rounded-[8px] border border-[#e4d6c7] px-4 text-sm font-semibold text-[#8a7668]">
+            {ctaLabel}
+          </span>
+        )}
       </div>
     </article>
   );
@@ -85,10 +111,13 @@ export function AdvertisePageView({
   locale,
   site = defaultSiteProfile,
   searchParams,
+  foundingSpotsLeft,
 }: {
   locale: Locale;
   site?: SiteProfile;
   searchParams?: { plan?: string };
+  // Main site only, where plans are sold online; undefined hides the counter.
+  foundingSpotsLeft?: Partial<Record<string, number>>;
 }) {
   const copy = getAdvertisePageCopy(locale, site);
   const plans = getAdvertisePlans(site);
@@ -138,19 +167,24 @@ export function AdvertisePageView({
               plan={plan}
               locale={locale}
               ctaHref={
-                plan.prices.length === 0
-                  ? claimHref
-                  : isOnlineCheckoutPlan(plan.id, site)
-                    ? dashboardHref
-                    : `${advertiseHref}?plan=${plan.id}#contact`
+                plan.comingLater
+                  ? undefined
+                  : plan.prices.length === 0
+                    ? claimHref
+                    : isOnlineCheckoutPlan(plan.id, site)
+                      ? dashboardHref
+                      : `${advertiseHref}?plan=${plan.id}#contact`
               }
               ctaLabel={
-                plan.prices.length === 0
-                  ? copy.claimCta
-                  : isOnlineCheckoutPlan(plan.id, site)
-                    ? copy.buyCta
-                    : copy.askCta
+                plan.comingLater
+                  ? copy.comingLaterCta
+                  : plan.prices.length === 0
+                    ? copy.claimCta
+                    : isOnlineCheckoutPlan(plan.id, site)
+                      ? copy.buyCta
+                      : copy.askCta
               }
+              foundingSpotsLeft={isOnlineCheckoutPlan(plan.id, site) ? foundingSpotsLeft?.[plan.id] : undefined}
             />
           ))}
         </div>
@@ -194,6 +228,29 @@ export function AdvertisePageView({
           </div>
 
           <aside className="grid h-fit gap-4 lg:mt-[4.5rem]">
+            {advertiseContactPerson.name ? (
+              <div className="rounded-[8px] border border-[#e4d6c7] bg-white p-5" data-testid="advertise-contact-person">
+                <p className="text-sm font-semibold text-[#2d211b]">{copy.whoRunsThisHeading}</p>
+                <p className="mt-2 text-base font-semibold text-[#2d211b]">{advertiseContactPerson.name}</p>
+                {advertiseContactPerson.role.en ? (
+                  <p className="text-sm text-[#6b5a50]">
+                    {locale === 'zh' ? advertiseContactPerson.role.zh : advertiseContactPerson.role.en}
+                  </p>
+                ) : null}
+                {advertiseContactPerson.phone ? (
+                  <p className="mt-2 text-sm text-[#2d211b]">
+                    {locale === 'zh' ? '電話：' : 'Phone: '}
+                    {advertiseContactPerson.phone}
+                  </p>
+                ) : null}
+                {advertiseContactPerson.wechat ? (
+                  <p className="text-sm text-[#2d211b]">
+                    {locale === 'zh' ? '微信：' : 'WeChat: '}
+                    {advertiseContactPerson.wechat}
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
             <div className="rounded-[8px] border border-[#e4d6c7] bg-white p-5">
               <p className="flex items-center gap-2 text-sm font-semibold text-[#2d211b]">
                 <Mail className="h-4 w-4 text-brand-600" aria-hidden="true" />

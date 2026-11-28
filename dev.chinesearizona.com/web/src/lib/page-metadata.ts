@@ -52,9 +52,19 @@ type DirectoryMetadataSearchParams = {
   q?: string;
   city?: string;
   category?: string;
+  language?: string;
+  payment?: string;
   minRating?: string;
   sort?: string;
   page?: string;
+};
+
+type HiddenArizonaMetadataSearchParams = {
+  q?: string;
+  kind?: string;
+  city?: string;
+  tag?: string;
+  view?: string;
 };
 
 function parseDirectoryPageNumber(value?: string): number {
@@ -164,6 +174,8 @@ export function directoryMetadata(
     searchParams?.q?.trim() ||
       searchParams?.city ||
       searchParams?.category ||
+      searchParams?.language ||
+      searchParams?.payment ||
       searchParams?.minRating ||
       (searchParams?.sort && searchParams.sort !== 'featured')
   );
@@ -185,6 +197,8 @@ export function directoryMetadata(
     path: pathWithPage,
     locale,
     site,
+    // Filtered copies of the directory stay out of search; category landing pages rank instead.
+    noIndex: hasFilteredQuery,
   });
 }
 
@@ -396,7 +410,12 @@ export function relocationMetadata(locale: Locale): Metadata {
   });
 }
 
-export function hiddenArizonaMetadata(locale: Locale): Metadata {
+// Filtered hub views (kind, city, tag, map, search) stay out of search; the
+// hub and the entry pages are what rank.
+export function hiddenArizonaMetadata(locale: Locale, searchParams?: HiddenArizonaMetadataSearchParams): Metadata {
+  const isFiltered = Boolean(
+    searchParams?.q?.trim() || searchParams?.kind || searchParams?.city || searchParams?.tag || searchParams?.view
+  );
   return buildMetadata({
     title: locale === 'zh' ? '亞利桑那秘境 | ChineseArizona' : 'Hidden Arizona | ChineseArizona',
     description:
@@ -405,6 +424,7 @@ export function hiddenArizonaMetadata(locale: Locale): Metadata {
         : 'A bilingual hub for licensed Atlas Obscura Arizona places, stories, lists, and itineraries.',
     path: '/hidden-arizona',
     locale,
+    noIndex: isFiltered,
   });
 }
 

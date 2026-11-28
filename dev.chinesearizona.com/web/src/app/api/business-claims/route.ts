@@ -83,11 +83,16 @@ export async function POST(request: NextRequest) {
     // Best effort: the claim is saved even if this email fails or email is off (#464).
     await notifyAdminOfBusinessClaim(claim);
 
+    // A request without a listing is a new business, not a claim (#469).
+    const isClaim = Boolean(claim.businessSlug);
     return json({
-      message:
-        locale === 'zh'
-          ? '已收到申請。我們會先驗證 Email、檢查重複資料，並以後續步驟與你聯繫。'
-          : 'Claim request received. We will verify the email, review duplicate matches, and follow up with the next steps.',
+      message: isClaim
+        ? locale === 'zh'
+          ? '已收到你的認領申請。我們會人工審核，通常在一個工作天內完成。核准後，這家商家會出現在你的商家後台。'
+          : 'Claim request received. We review every claim by hand, usually within one business day. Once it is approved, the listing appears in your dashboard.'
+        : locale === 'zh'
+          ? '已收到你的新增商家申請。我們會人工審核，通常在一個工作天內完成。核准後，商家會上架並出現在你的商家後台。'
+          : 'New business request received. We review every request by hand, usually within one business day. Once it is approved, the listing goes live and appears in your dashboard.',
     });
   } catch (error) {
     return json(
