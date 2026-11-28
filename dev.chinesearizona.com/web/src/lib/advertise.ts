@@ -149,7 +149,7 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
         zh: '創始優惠：前 10 家商家半價（$29.50／月 或 $295／年）',
       },
       summary: {
-        en: `One of the top 3 spots in a ${site.regionName} category, always labeled "${sponsoredLabel}".`,
+        en: `One of the top 3 spots in one ${site.regionName} category, always labeled "${sponsoredLabel}".`,
         zh: `${site.regionNameZh}分類頁前 3 名版位之一，一律標示「${sponsoredLabel}」。`,
       },
       includes: [

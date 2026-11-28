@@ -480,11 +480,11 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                       <input
                         type="text"
                         name="q"
-                        placeholder={copy(locale, 'Search businesses or services', '搜索商家、服務或關鍵詞')}
+                        placeholder={copy(locale, 'Search businesses or services', '搜尋商家、服務或關鍵字')}
                         className="w-full bg-transparent text-[13px] font-medium text-[#3a2b23] outline-none placeholder:text-[#8f7a6d]"
                       />
                       <span className="mt-1 block text-[11px] leading-none text-[#ab978a]">
-                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜索商家、服務與關鍵詞')}
+                        {oppositeCopy(locale, 'Search businesses, services, and keywords', '搜尋商家、服務與關鍵字')}
                       </span>
                     </span>
                   </label>
@@ -515,9 +515,9 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                   >
                     <Search className="h-4.5 w-4.5" />
                     <span className="flex flex-col items-start leading-none">
-                      <span className="text-base font-semibold">{copy(locale, 'Search', '搜索')}</span>
+                      <span className="text-base font-semibold">{copy(locale, 'Search', '搜尋')}</span>
                       <span className="mt-1 text-[10px] font-medium tracking-[0.08em] text-white/80">
-                        {oppositeCopy(locale, 'Search', '搜索')}
+                        {oppositeCopy(locale, 'Search', '搜尋')}
                       </span>
                     </span>
                   </button>
@@ -526,7 +526,7 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
 
               <div className="homepage-rise homepage-rise-delay-3 mt-3.5">
                 <p className="text-[13px] text-[#816f62]">
-                  {copy(locale, 'Popular searches', '熱門搜索')}
+                  {copy(locale, 'Popular searches', '熱門搜尋')}
                   <span className="mx-2 text-[#c7ae9a]">/</span>
                   {oppositeCopy(locale, 'Popular discovery', '熱門發現')}
                 </p>
@@ -558,8 +558,8 @@ export async function HomePageView({ locale, site = defaultSiteProfile }: HomePa
                 <div className="flex items-start gap-3 sm:px-3">
                   <BilingualSupportIcon className="mt-1 h-14 w-14 flex-shrink-0" />
                   <div>
-                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'Bilingual Support', '雙語支持')}</p>
-                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'English + Chinese service', '中英雙語服務')}</p>
+                    <p className="text-[13px] font-semibold text-[#3a2b23]">{copy(locale, 'English + Chinese', '中英雙語')}</p>
+                    <p className="text-[13px] text-[#6f5c50]">{copy(locale, 'Switch languages on any page', '每頁都能切換中英文')}</p>
                   </div>
                 </div>
 
