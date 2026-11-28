@@ -617,8 +617,6 @@ export type ModerationReport = {
 
 export type SortOption =
   | 'featured'
-  | 'rating'
-  | 'reviewed'
   | 'alphabetical'
   | 'distance'
   | 'newest';

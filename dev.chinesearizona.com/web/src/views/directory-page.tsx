@@ -99,7 +99,7 @@ export async function DirectoryPageView({
   const directoryPagePath = withLocale(locale, '/business');
   const [{ categories, cities, categoryCounts }, directoryPage] = await Promise.all([
     getDirectoryFilterOptions(site),
-    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { site, usePaidPromotion: true }),
+    getDirectoryPage(filters, requestedPage, DIRECTORY_PAGE_SIZE, { locale, site, usePaidPromotion: true }),
   ]);
   const listings = directoryPage.businesses;
   const activeFilterCount = countActiveDirectoryFilters(filters);
