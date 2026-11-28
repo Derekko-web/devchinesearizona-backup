@@ -2,12 +2,13 @@
 
 New listings for Chinese-speaking professionals in metro Phoenix: insurance agents, CPAs, realtors, financial advisers, a dentist and an immigration lawyer. The goal was 60. **14 met the bar and are added in this batch.** The rest of the candidates found could not be verified from a first-party source (see "Considered and skipped").
 
-Status on 2026-11-27:
+Status:
 
-| Where | State |
-|---|---|
-| Dev Supabase (`rddmdbcrputlsfurqkac`) | 14 rows inserted, pages checked on dev.chinesearizona.com |
-| Production (`pxgapnyrrwaiacgcmtks`) | **Not applied.** SQL ready in `listing-expansion-2026-11.sql`; the CEO applies it after spot-checks |
+| Change | Dev (`rddmdbcrputlsfurqkac`) | Production (`pxgapnyrrwaiacgcmtks`) |
+|---|---|---|
+| Batch 1: 14 listings (`listing-expansion-2026-11.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): 256 → 270 rows, indexable 48 → 62, 14/14 rows match dev by md5 |
+| Corrections (`listing-expansion-2026-11-corrections.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): indexable 62 → 64; pre-check confirmed production held the rollback's before-values |
+| Batch 2a: 8 physicians + 2 language fixes (`listing-expansion-2026-11-batch2a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 
 ## Result
 
@@ -169,6 +170,47 @@ Production has 43 listings in medical, legal-finance, education, real-estate, ho
 | Associations and clubs (not businesses) | Arizona Asian American Bar Association; Asian Real Estate Association of America Greater Phoenix; Asian American Journalists Association at ASU (student club) |
 
 The other 18 are independent businesses or schools, though three of them are unverified (Beijing Acupuncture, Hi-Tech Dentistry and YJP Spine Center; see above).
+
+## Batch 2a: Chinese-speaking physicians (issue #487)
+
+Under the CEO's widened evidence rule (2026-11-27): language may come from the directory of the organisation a professional works in, here Banner Health's Find a Doctor (`doctors.bannerhealth.com`, filtered by language). Each listing's copy ends with "Languages as listed in Banner Health's Find a Doctor directory, checked November 2026" (and the same in Chinese).
+
+Second source for address and phone: the CEO asked for the professional's own site or the state licence board. The Arizona Medical Board and the Arizona State Board of Dental Examiners both return HTTP 403 to automated lookups, so the **federal NPI registry (NPPES)** was used as the official second source instead. **CEO decision needed:** if the NPI registry does not count, these 8 rows need a manual board lookup before production.
+
+Banner's directory lists 27 Chinese-speaking providers (23 Mandarin, 3 Cantonese, 2 "Chinese"; some overlap). Of those:
+
+| Outcome | Count | Providers |
+|---|---|---|
+| Added: practice in the eight cities, NPI registry location matches Banner's | 8 | Albert Hsia (Chandler), Alan Wang, Jen-Jung Pan, Jimmy Chim, Rong Bai (Phoenix), David Wang (Chandler), Jennifer Yu-Hsien Huang (Peoria), Mimi Chao (Mesa) |
+| Skipped: NPI registry still shows an older address (Cleveland, Stanford, San Antonio, Gilbert or another Phoenix site) | 7 | I-Hui Chiang, Rong Guo, Rosanne Marie Kho, Wilber Su, Ying Li, Michael Lee, Qing Zhao |
+| Skipped: NPI address differs from Banner's (same phone) | 1 | Angela Feng (Mesa) |
+| Skipped: primary practice outside the eight cities (Tucson, Maricopa, Sun City West, Colorado) | 10 | |
+| Skipped: diagnostic radiologist (no direct appointments) | 1 | John Chang |
+
+Notes:
+
+- `alan-wang-md-phoenix` has no phone: Banner shows a central scheduling line and the NPI registry a clinic line, so neither confirms the other. The listing links to his Banner profile for booking.
+- `jimmy-chim-md-phoenix` is Cantonese; the other seven are Mandarin. Hokkien and Min Nan listed for two skipped providers were not mapped to `Taiwanese`.
+- These are employees of a large health system. They add Mandarin- and Cantonese-speaking specialists the community asks about, but they are unlikely to buy advertising.
+- Website scan: the Banner profile URLs load normally for a browser and return 403 to the Googlebot user agent from a non-Google address (bot protection, as with Comparion and RE/MAX in batch 1); no spam, parking or redirects.
+- Duplicate check against all 270 production rows (slug, phone, name, Banner URL): none.
+
+| Slug | City | Languages | Sources |
+|---|---|---|---|
+| `albert-hsia-do-chandler` | Chandler | English, Mandarin | https://doctors.bannerhealth.com/provider/albert-hsia/2297991<br>NPI 1518313196 |
+| `alan-wang-md-phoenix` | Phoenix | English, Mandarin | https://doctors.bannerhealth.com/provider/alan-wang/776227<br>NPI 1417395799 |
+| `david-wang-md-chandler` | Chandler | English, Mandarin | https://doctors.bannerhealth.com/provider/david-wang/2298021<br>NPI 1942341912 |
+| `jen-jung-pan-md-phoenix` | Phoenix | English, Mandarin | https://doctors.bannerhealth.com/provider/jen-jung-pan/517728<br>NPI 1811073166 |
+| `jennifer-huang-md-peoria` | Peoria | English, Mandarin | https://doctors.bannerhealth.com/provider/jennifer-yu-hsien-huang/453430<br>NPI 1922235530 |
+| `jimmy-chim-md-phoenix` | Phoenix | English, Cantonese | https://doctors.bannerhealth.com/provider/jimmy-chim/2718699<br>NPI 1255534871 |
+| `mimi-chao-md-mesa` | Mesa | English, Mandarin | https://doctors.bannerhealth.com/provider/mimi-chao/3213249<br>NPI 1609091602 |
+| `rong-bai-md-phoenix` | Phoenix | English, Mandarin | https://doctors.bannerhealth.com/provider/rong-bai/3155057<br>NPI 1487224093 |
+
+NPI records: `https://npiregistry.cms.hhs.gov/api/?version=2.1&number=<NPI>`.
+
+Also in this batch, per the CEO's decision that "Chinese" without a dialect is recorded as `{English, Chinese}`: `listing-expansion-2026-11-batch2a-corrections.sql` sets `languages` to `{English, Chinese}` for `cpa-worldwide-tax-service-chandler` and `apex-dental-care-gilbert` (guarded on the current value `{English}`); the rollback file restores `{English}`.
+
+To apply to production after approval: pre-check that none of the 8 slugs exist; run `listing-expansion-2026-11-batch2a.sql`, then `listing-expansion-2026-11-batch2a-corrections.sql`; post-check 8 rows present and indexable +8 (both corrected rows are already indexable). Rollback: `listing-expansion-2026-11-batch2a-rollback.sql` and `listing-expansion-2026-11-batch2a-corrections-rollback.sql`.
 
 ## Follow-ups
 
