@@ -67,6 +67,7 @@ export function languageLabel(language: LanguageOption | string, locale: Locale)
     Cantonese: { en: 'Cantonese', 'zh': '粵語' },
     'Traditional Chinese': { en: 'Traditional Chinese', 'zh': '繁體中文' },
     Taiwanese: { en: 'Taiwanese', 'zh': '台語' },
+    Chinese: { en: 'Chinese', 'zh': '中文' },
   };
 
   return labels[language]?.[locale] ?? language;
