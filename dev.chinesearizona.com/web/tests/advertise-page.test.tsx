@@ -166,16 +166,16 @@ describe('AdvertisePageView', () => {
       expect(html).toContain(locale === 'zh' ? '用郵件程式開啟這則訊息' : 'Open this message in your email app');
       expect(html).toContain('name="company_website"');
       expect(html).not.toContain(locale === 'zh' ? '用 Email 送出詢問' : 'Send inquiry by email');
-      expect(html).toContain(`href="/${locale}/add-business"`);
+      expect(html).toContain(`href="${locale === 'zh' ? '/zh' : ''}/add-business"`);
       // Owners on a site with database listings buy online from the dashboard (#408).
       // City sites with static listings keep the inquiry form for every plan.
       if (site.directory.listingSource.state === 'live') {
-        expect(html).toContain(`href="/${locale}/dashboard"`);
+        expect(html).toContain(`href="${locale === 'zh' ? '/zh' : ''}/dashboard"`);
         expect(html).toContain(locale === 'zh' ? '在商家後台線上購買' : 'Buy online in your dashboard');
-        expect(html).not.toContain(`href="/${locale}/advertise?plan=enhanced-listing#contact"`);
-        expect(html).toContain(`href="/${locale}/advertise?plan=boost#contact"`);
+        expect(html).not.toContain(`href="${locale === 'zh' ? '/zh' : ''}/advertise?plan=enhanced-listing#contact"`);
+        expect(html).toContain(`href="${locale === 'zh' ? '/zh' : ''}/advertise?plan=boost#contact"`);
       } else {
-        expect(html).toContain(`href="/${locale}/advertise?plan=enhanced-listing#contact"`);
+        expect(html).toContain(`href="${locale === 'zh' ? '/zh' : ''}/advertise?plan=enhanced-listing#contact"`);
         expect(html).not.toContain(locale === 'zh' ? '在商家後台線上購買' : 'Buy online in your dashboard');
       }
       for (const otherEmail of allContactEmails.filter((email) => email !== site.publisher.contactEmail)) {
@@ -220,7 +220,7 @@ describe('links to the Advertise page', () => {
 
     expect(zhHtml).toContain('href="/zh/advertise"');
     expect(zhHtml).toContain('廣告合作');
-    expect(enHtml).toContain('href="/en/advertise"');
+    expect(enHtml).toContain('href="/advertise"');
     expect(enHtml).toContain('>Advertise<');
   });
 
@@ -242,7 +242,7 @@ describe('links to the Advertise page', () => {
     expect(businessHtml).toContain('href="/zh/advertise"');
     expect(businessHtml).toContain('推廣這家商家');
     expect(claimHtml).toContain('id="advertise-plans"');
-    expect(claimHtml).toContain('href="/en/advertise"');
+    expect(claimHtml).toContain('href="/advertise"');
     expect(claimHtml).toContain('See plans and prices');
   });
 });

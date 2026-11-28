@@ -1,9 +1,16 @@
 import { defaultLocale, isLocale } from '@/lib/i18n';
 import type { Locale } from '@/lib/types';
 
+// English pages live at the unprefixed URL, which is the canonical one in the
+// sitemap and hreflang tags; /en/... permanently redirects there (see proxy.ts).
+// Chinese pages live under /zh.
 export function withLocale(locale: Locale, path: string): string {
   if (!path.startsWith('/')) {
     return withLocale(locale, `/${path}`);
+  }
+
+  if (locale === defaultLocale) {
+    return path;
   }
 
   return path === '/' ? `/${locale}` : `/${locale}${path}`;

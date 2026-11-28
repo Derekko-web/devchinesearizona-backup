@@ -77,9 +77,9 @@ describe('metro category pages', () => {
     expect(html).toContain('4 listings across 3 cities');
     expect(html).toContain('Hedy Li');
     expect(html).toContain('Grace Tung');
-    expect(html).toContain('href="/en/business/phoenix/real-estate"');
-    expect(html).toContain('href="/en/business/gilbert/real-estate"');
-    expect(html).toContain('href="/en/business/category/real-estate"');
+    expect(html).toContain('href="/business/phoenix/real-estate"');
+    expect(html).toContain('href="/business/gilbert/real-estate"');
+    expect(html).toContain('href="/business/category/real-estate"');
     expect(html).toContain('"@type":"ItemList"');
   });
 
@@ -100,7 +100,7 @@ describe('metro category pages', () => {
     expect(html).toContain('Sponsored');
     expect(html).toContain('贊助');
     expect(html).toContain('Sponsor this category');
-    expect(html).toContain('href="/en/advertise?plan=sponsored-category#contact"');
+    expect(html).toContain('href="/advertise?plan=sponsored-category#contact"');
   });
 
   it('moves sponsored listings into the labeled spot at the top without repeating them', async () => {
@@ -141,7 +141,7 @@ describe('metro category pages', () => {
 
     expect(austin).toContain('Chinese Restaurants in Greater Austin');
     expect(austin).toContain('House of Three Gorges');
-    expect(austin).toContain('href="/en/business/cedar-park/dining"');
+    expect(austin).toContain('href="/business/cedar-park/dining"');
     expect(austinZh).toContain('大奧斯汀地區醫師與診所');
     expect(austinZh).toContain('Austin Quan Yin');
     expect(losAngeles).toContain('大洛杉磯地區中餐廳與美食');
@@ -257,8 +257,8 @@ describe('city category pages', () => {
     const html = rendered ? renderToStaticMarkup(rendered) : '';
 
     expect(html).toContain('Chinese Restaurants in Mesa, AZ');
-    expect(html).toContain('href="/en/business/category/dining"');
-    expect(html).toMatch(/href="\/en\/business\/mesa\/dining" aria-current="page"/);
+    expect(html).toContain('href="/business/category/dining"');
+    expect(html).toMatch(/href="\/business\/mesa\/dining" aria-current="page"/);
     expect(html).toContain('Showing 76 public listings');
   });
 
@@ -291,8 +291,8 @@ describe('links into metro category pages', () => {
     const arizona = renderToStaticMarkup(await HomePageView({ locale: 'en', site: siteProfiles.arizona }));
     const losAngeles = renderToStaticMarkup(await HomePageView({ locale: 'zh', site: siteProfiles['los-angeles'] }));
 
-    expect(arizona).toContain('href="/en/business/category/real-estate"');
-    expect(arizona).toContain('href="/en/business/category/home-services"');
+    expect(arizona).toContain('href="/business/category/real-estate"');
+    expect(arizona).toContain('href="/business/category/home-services"');
     expect(losAngeles).toContain('href="/zh/business/category/medical"');
     // LA does not offer home services, so that tile keeps the filtered directory link.
     expect(losAngeles).toContain('href="/zh/business?category=home-services&amp;sort=featured"');

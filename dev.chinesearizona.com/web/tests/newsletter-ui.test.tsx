@@ -29,7 +29,7 @@ describe('footer newsletter form', () => {
     expect(html).toContain('name="website"');
     expect(html).toContain('tabindex="-1"');
     expect(html).toContain('By subscribing, you agree to get email updates from ChineseArizona. Unsubscribe anytime.');
-    expect(html).toMatch(/href="\/en\/privacy"[^>]*>Privacy</);
+    expect(html).toMatch(/href="\/privacy"[^>]*>Privacy</);
   });
 
   it('uses Chinese copy on Chinese pages', async () => {

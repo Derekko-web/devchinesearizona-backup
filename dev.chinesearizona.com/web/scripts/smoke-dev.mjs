@@ -145,10 +145,8 @@ export function buildSmokeChecks(env = process.env) {
       id: 'dev:home',
       requiredText: ['ChineseArizona'],
     }),
-    route(baseUrl, '/en', {
-      id: 'dev:english-home',
-      requiredText: ['ChineseArizona'],
-    }),
+    // English pages live at the unprefixed URL; /en permanently redirects there.
+    redirect(baseUrl, '/en', '/', 'dev:english-home-redirect'),
     route(baseUrl, '/zh', {
       id: 'dev:chinese-home',
       requiredText: ['ChineseArizona'],

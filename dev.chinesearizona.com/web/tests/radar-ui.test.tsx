@@ -531,12 +531,12 @@ describe('radar ui', () => {
     expect(html).toContain('All Arizona News');
     expect(html.match(/<h1\b/g)).toHaveLength(1);
     expect(html).toContain('<h1 class="sr-only">Arizona News</h1>');
-    expect(html).toContain('href="/en/news?lane=chinese"');
-    expect(html).toContain('href="/en/news?lane=openings"');
-    expect(html).toContain('href="/en/news?lane=community"');
-    expect(html).not.toContain('href="/en/news?lane=housing"');
-    expect(html).not.toContain('href="/en/news?lane=official"');
-    expect(html).not.toContain('href="/en/news?lane=social"');
+    expect(html).toContain('href="/news?lane=chinese"');
+    expect(html).toContain('href="/news?lane=openings"');
+    expect(html).toContain('href="/news?lane=community"');
+    expect(html).not.toContain('href="/news?lane=housing"');
+    expect(html).not.toContain('href="/news?lane=official"');
+    expect(html).not.toContain('href="/news?lane=social"');
     expect(html).not.toContain('Social posts');
     expect(html).toContain('mesa-radar-housing-pulse');
     expect(html).toContain('Read article');
@@ -612,7 +612,7 @@ describe('radar ui', () => {
     expect(html).toContain('All SF Bay News');
     expect(html).toContain('SF Bay Chinese community services: immigrant rights, seniors, and legal help');
     expect(html).toContain('East Bay dining openings: milk tea, noodles, cafes, and Chinatown corridors');
-    expect(html).not.toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
+    expect(html).not.toContain('/news/sf-bay-chinatown-downtown-resource-watch');
     expect(html).not.toContain('mesa-radar-housing-pulse');
     expect(html).not.toContain('Phoenix Sky Harbor');
     expect(html).not.toContain('All Arizona News');
@@ -685,7 +685,7 @@ describe('radar ui', () => {
     );
 
     expect(feedHtml).toContain('All Austin News');
-    expect(feedHtml).toContain('/en/news/austin-transit-summary');
+    expect(feedHtml).toContain('/news/austin-transit-summary');
     expect(detailHtml).toContain('Back to Austin News');
     expect(detailHtml).toContain('Austin Monitor');
     expect(detailHtml).toContain('This page is an editorial summary');
@@ -724,14 +724,14 @@ describe('radar ui', () => {
     );
 
     expect(feedHtml).toContain('All SF Bay News');
-    expect(feedHtml).toContain('/en/news/sf-bay-transit-summary');
+    expect(feedHtml).toContain('/news/sf-bay-transit-summary');
     expect(feedHtml).not.toContain('There are no public items for this filter yet');
-    expect(feedHtml).not.toContain('/en/news/sf-bay-chinatown-downtown-resource-watch');
+    expect(feedHtml).not.toContain('/news/sf-bay-chinatown-downtown-resource-watch');
     expect(feedHtml).not.toContain('mesa-radar-housing-pulse');
     expect(feedHtml).not.toContain('Phoenix Sky Harbor');
     expect(feedHtml).not.toContain('Arizona News');
     expect(archiveHtml).toContain('The SF Bay News homepage');
-    expect(archiveHtml).toContain('/en/news/sf-bay-transit-summary');
+    expect(archiveHtml).toContain('/news/sf-bay-transit-summary');
     expect(detailHtml).toContain('Back to SF Bay News');
     expect(detailHtml).toContain('The San Francisco Standard');
     expect(detailHtml).toContain('This page is an editorial summary');

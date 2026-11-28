@@ -71,10 +71,10 @@ describe('auth helpers', () => {
 
   it('never builds an off-site post-auth destination', () => {
     expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en', '/\\example.com')).toBe(
-      'https://chinesearizona.com/en'
+      'https://chinesearizona.com/'
     );
     expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en', '/\t/example.com')).toBe(
-      'https://chinesearizona.com/en'
+      'https://chinesearizona.com/'
     );
   });
 
@@ -83,39 +83,39 @@ describe('auth helpers', () => {
 
     expect(resolvePostAuthPath('zh', nestedGoogle)).toBe('/zh');
     expect(buildAuthPath('zh', nestedGoogle)).toBe('/zh/auth/login');
-    expect(buildJoinPath('en', '/zh/auth/google?next=%2Fnews')).toBe('/en/auth/join');
-    expect(buildGoogleAuthPath('en', '/auth/google')).toBe('/en/auth/google?next=%2Fen');
-    expect(buildAuthPath('en', '/en/auth/')).toBe('/en/auth/login');
+    expect(buildJoinPath('en', '/zh/auth/google?next=%2Fnews')).toBe('/auth/join');
+    expect(buildGoogleAuthPath('en', '/auth/google')).toBe('/auth/google?next=%2F');
+    expect(buildAuthPath('en', '/en/auth/')).toBe('/auth/login');
   });
 
   it('still keeps next for ordinary pages whose names start with auth', () => {
-    expect(buildAuthPath('en', '/en/authors')).toBe('/en/auth/login?next=%2Fen%2Fauthors');
+    expect(buildAuthPath('en', '/authors')).toBe('/auth/login?next=%2Fauthors');
   });
 
   it('falls back to the localized home page when next is missing or points at auth', () => {
-    expect(resolvePostAuthPath('en')).toBe('/en');
+    expect(resolvePostAuthPath('en')).toBe('/');
     expect(resolvePostAuthPath('zh', '/zh/auth')).toBe('/zh');
-    expect(resolvePostAuthPath('en', '/auth')).toBe('/en');
-    expect(resolvePostAuthPath('en', '/en/auth/login')).toBe('/en');
+    expect(resolvePostAuthPath('en', '/auth')).toBe('/');
+    expect(resolvePostAuthPath('en', '/en/auth/login')).toBe('/');
     expect(resolvePostAuthPath('zh', '/zh/auth/join')).toBe('/zh');
   });
 
   it('builds localized auth links and keeps the return path', () => {
-    expect(buildAuthPath('en')).toBe('/en/auth/login');
-    expect(buildJoinPath('en')).toBe('/en/auth/join');
+    expect(buildAuthPath('en')).toBe('/auth/login');
+    expect(buildJoinPath('en')).toBe('/auth/join');
     expect(buildAuthPath('zh', '/zh/community?tab=events')).toBe('/zh/auth/login?next=%2Fzh%2Fcommunity%3Ftab%3Devents');
-    expect(buildAuthPath('en', '/en/auth/login')).toBe('/en/auth/login');
-    expect(buildGoogleAuthPath('en', '/en/community')).toBe('/en/auth/google?next=%2Fen%2Fcommunity');
+    expect(buildAuthPath('en', '/auth/login')).toBe('/auth/login');
+    expect(buildGoogleAuthPath('en', '/community')).toBe('/auth/google?next=%2Fcommunity');
     expect(buildAuthCompletePath('zh', 'join', '/zh/dashboard/profile')).toBe('/zh/auth/join?complete=1&next=%2Fzh%2Fdashboard%2Fprofile');
   });
 
   it('builds absolute post-auth destinations without routing back through auth', () => {
-    expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en')).toBe('https://chinesearizona.com/en');
+    expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'en')).toBe('https://chinesearizona.com/');
     expect(buildPostAuthRedirectUrl('https://chinesearizona.com', 'zh', '/zh/community')).toBe(
       'https://chinesearizona.com/zh/community'
     );
-    expect(buildAuthCompleteUrl('https://localhost:3000', 'en', 'login', '/en/community')).toBe(
-      'http://localhost:3000/en/auth/login?complete=1&next=%2Fen%2Fcommunity'
+    expect(buildAuthCompleteUrl('https://localhost:3000', 'en', 'login', '/community')).toBe(
+      'http://localhost:3000/auth/login?complete=1&next=%2Fcommunity'
     );
   });
 
