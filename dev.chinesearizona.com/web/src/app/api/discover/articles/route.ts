@@ -5,6 +5,7 @@ import { parseLineList, upsertDiscoverArticle } from '@/lib/discover-arizona';
 import { isDiscoveryCategory, isDiscoveryQueueStatus } from '@/lib/discovery-taxonomy';
 import { resolveLocale } from '@/lib/i18n';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { findSimplifiedOnlyCharacters } from '@/lib/traditional-chinese';
 import type { ProfileRole } from '@/lib/types';
 
 function requesterKey(request: NextRequest): string {
@@ -113,6 +114,30 @@ export async function POST(request: NextRequest) {
           locale === 'zh'
             ? '請補齊候選內容、分類、狀態與中英文文章欄位。'
             : 'Please provide the candidate, category, status, and bilingual article fields.',
+      },
+      { status: 400 }
+    );
+  }
+
+  // Chinese copy on the site is Traditional Chinese as used in Taiwan. Pasted
+  // drafts are often Simplified, so refuse them here instead of publishing them.
+  const chineseFields = [
+    { label: { en: 'Chinese title', zh: '中文標題' }, value: body.titleZh },
+    { label: { en: 'Chinese excerpt', zh: '中文摘要' }, value: body.excerptZh },
+    { label: { en: 'Chinese body', zh: '中文內文' }, value: body.bodyZh },
+  ]
+    .map((field) => ({ ...field, characters: findSimplifiedOnlyCharacters(field.value) }))
+    .filter((field) => field.characters.length > 0);
+
+  if (chineseFields.length > 0) {
+    const sample = [...new Set(chineseFields.flatMap((field) => field.characters))].slice(0, 12).join('');
+    const fieldList = chineseFields.map((field) => (locale === 'zh' ? field.label.zh : field.label.en));
+    return json(
+      {
+        message:
+          locale === 'zh'
+            ? `中文欄位必須使用台灣慣用的繁體中文。${fieldList.join('、')}含有簡體字：${sample}`
+            : `Chinese fields must be Traditional Chinese as used in Taiwan. Simplified characters found in ${fieldList.join(', ')}: ${sample}`,
       },
       { status: 400 }
     );
