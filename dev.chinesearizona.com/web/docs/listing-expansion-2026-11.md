@@ -12,6 +12,7 @@ Status:
 | Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 278 → 286 rows, indexable 72 → 80, 8/8 rows match dev and the file by md5 |
 | Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check confirmed all 6 held the guarded text; 6/6 now match the file by md5 |
 | Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 286 → 294 rows, indexable 80 → 88, 8/8 rows match dev and the file by md5 |
+| Batch 3a: 7 north Valley physicians (`listing-expansion-2026-11-batch3a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
 | AZ Hope language fix and Alan Wang phone (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check matched the rollback values; both rows now match dev |
 | Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 47 rows `live` → `suppressed`; none claimed or paid; indexable unchanged at 88 |
 | Hide Panda Express (`listing-expansion-2026-11-panda-express-suppress*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO decision and approval): 1 row `live` → `suppressed` |
@@ -279,6 +280,33 @@ Sources: each row's `website` is its Banner provider page (for example https://d
 Checked on dev after insert: all 8 English and `/zh/` pages return 200 with no `noindex` (a known non-indexable listing on the same site shows `noindex, nofollow`); English descriptions are 536 to 769 characters; no Simplified characters; duplicate check against production (slug, name, phone, Banner URL): no duplicate people. Phones are clinic lines, so some repeat: three share Banner MD Anderson's scheduling line (the copy says it is the scheduling line), and I-Hui Chiang and Wilber Su share the Heart Institute line with batch 2a's Rong Bai. Website scan: same as batch 2a (browser loads, Googlebot user agent gets 403 from a non-Google address).
 
 To apply to production after approval: pre-check none of the 8 slugs exist; run `listing-expansion-2026-11-batch2c.sql`; post-check 8 rows and indexable +8 (72 → 80 if batch 2b is not applied first). Rollback: `listing-expansion-2026-11-batch2c-rollback.sql`.
+
+## Batch 3a: north Valley physicians (issue #487)
+
+The CEO asked for independent practices in the north Valley (Peoria, Glendale, north Phoenix, Surprise), where Taiwanese families are settling for TSMC. Names came from a lead list that collects insurer-directory language data (pp8188.com); that list is **not** used as evidence. Each listing below rests on the language stated on the practice's or employer's own provider page (CEO rule a), and the copy ends with which page and the check date. Address and phone come from that page; the federal NPI registry is the second source, and where they differ the provider page is used (CEO decision). No gendered pronouns; every street address is a medical office.
+
+| Slug | City | Practice | Languages | Address/phone source | Sources |
+|---|---|---|---|---|---|
+| `jenny-ho-do-glendale` | Glendale | Bookmark Medical (family medicine, all ages) | English, Mandarin | Provider page (NPI shows a 2016 Olive Ave address; provider page used). Page said not accepting new patients; the copy says so | https://www.bookmarkmedical.com/providers/jenny-ho<br>NPI 1427315506 |
+| `qi-zhang-md-glendale` | Glendale | Desert West OB/GYN | English, Mandarin | Main office address matches NPI; phone (602) 978-1500 from the practice site (NPI has 602-678-1500) | https://desertwestobgyn.com/providers/qi-zhang-md-facog<br>NPI 1285773887 |
+| `jinmeng-zhang-md-peoria` | Peoria | U.S. Dermatology Partners (dermatology) | English, Mandarin | Provider page and NPI agree on address and phone | https://www.usdermatologypartners.com/provider/jinmeng-zhang-md/<br>NPI 1740694926 |
+| `vicky-chen-yang-md-peoria` | Peoria | HonorHealth (primary care) | English, Mandarin | HonorHealth page and NPI agree | https://www.honorhealth.com/physicians/vicky-chen-yang<br>NPI 1033159207 |
+| `lin-zhao-md-phoenix` | Phoenix (far north) | HonorHealth (family and preventive medicine) | English, Mandarin | HonorHealth page (NPI shows a Scottsdale office; HonorHealth used); zip left out because HonorHealth does not show one | https://www.honorhealth.com/physicians/lin-zhao<br>NPI 1629563622 |
+| `alfredo-lim-md-phoenix` | Phoenix (north-central) | HonorHealth (internal medicine) | English, Cantonese | HonorHealth address; phone matches NPI; zip left out as above | https://www.honorhealth.com/physicians/alfredo-lim<br>NPI 1225002371 |
+| `da-wei-liao-md-phoenix` | Phoenix (north) | Independent pulmonary and critical care office; HonorHealth medical staff | English, Mandarin | HonorHealth page shows no office address, so the address is from NPI (updated October 2025); phone matches both. Copy says so | https://www.honorhealth.com/physicians/da-wei-liao<br>NPI 1053379263 |
+
+Checked on dev: all 7 English and `/zh/` pages return 200 with no `noindex`; copy matches the SQL by md5; duplicate check against production (slug, name, phone, provider site): none. Website scan: all four provider sites load for a browser and the Googlebot user agent; no spam, parking or redirects.
+
+Not added from the same lead list, and why:
+
+| Lead | Why not |
+|---|---|
+| Glendale, Peoria and Surprise dentists (Chu-Chi Wang, Henry Yu, Tzuyu Meng, Olivia Chow, Kevin Leong) and Frederick Lin (north Phoenix) | Language only from insurer directories; no practice site found that states it (Olivia Chow's NPI record is in San Diego) |
+| Howard Tay, Lixian Zou, Hui John Zhao | HonorHealth states the language but shows no office address, and the NPI address is 2016-2022 or its phone differs |
+| Bryant Kao (Anthem), Daniel Chang, Hong Cui, Eric Chen, Peter Young | Anthem is outside the site's city list; the others have language only from an insurer directory, or the NPI record points elsewhere |
+| Keng-Yu Chuang (Glendale) | Practice site blocks automated reading (403) |
+
+To apply to production after approval: pre-check none of the 7 slugs exist; run `listing-expansion-2026-11-batch3a.sql`; post-check 7 rows and indexable +7. Rollback: `listing-expansion-2026-11-batch3a-rollback.sql`.
 
 ## Corrections, batch 2c
 
