@@ -38,12 +38,16 @@ const metroLabels: Record<string, Copy> = {
 };
 
 // `{metro}` is replaced with the site's metro label.
+// Headings and intros describe the category, not the people in it: no
+// "Chinese-speaking" / 華語 / 華人 claim about every listing, because most
+// listings do not record a Chinese spoken language (issue #480). Each business
+// page shows the languages on record.
 const categoryCopy: Record<string, { heading: Copy; intro: Copy }> = {
   'real-estate': {
-    heading: { en: 'Chinese-Speaking Realtors', zh: '華人地產經紀' },
+    heading: { en: 'Realtors & Real Estate', zh: '房地產經紀' },
     intro: {
-      en: 'Real estate agents, mortgage help, and relocation support for Chinese-speaking families across {metro}. Each profile lists the languages spoken, service area, and how to get in touch.',
-      zh: '為{metro}華人家庭整理的地產經紀、貸款與搬遷協助。每個商家頁面都列出服務語言、服務區域與聯絡方式。',
+      en: 'Real estate agents, mortgage help, and relocation support across {metro}. Each profile shows the languages on record, service area, and how to get in touch.',
+      zh: '{metro}的地產經紀、貸款與搬遷協助。每個商家頁面都列出已知的服務語言、服務區域與聯絡方式。',
     },
   },
   dining: {
@@ -54,56 +58,56 @@ const categoryCopy: Record<string, { heading: Copy; intro: Copy }> = {
     },
   },
   medical: {
-    heading: { en: 'Chinese-Speaking Doctors & Clinics', zh: '華語醫師與診所' },
+    heading: { en: 'Doctors & Clinics', zh: '醫師與診所' },
     intro: {
-      en: 'Primary care, specialists, urgent care, and family health services for Chinese-speaking patients across {metro}. Confirm languages, insurance, and appointments directly with each office.',
-      zh: '{metro}服務華語病患的家庭醫師、專科與急診照護。請直接向診所確認語言、保險與預約細節。',
+      en: 'Primary care, specialists, urgent care, pharmacies, and family health services across {metro}. Each profile shows the languages on record; confirm languages, insurance, and appointments directly with each office.',
+      zh: '{metro}的家庭醫師、專科、急診、藥局與家庭健康服務。每個商家頁面列出已知的服務語言；請直接向診所確認語言、保險與預約細節。',
     },
   },
   'legal-finance': {
-    heading: { en: 'Chinese-Speaking Lawyers & Accountants', zh: '華人律師與會計師' },
+    heading: { en: 'Lawyers, Accountants & Insurance', zh: '律師、會計與保險' },
     intro: {
-      en: 'Immigration, tax, business setup, insurance, and financial planning help for the Chinese community across {metro}. Compare providers and check each profile for languages and contact details.',
-      zh: '{metro}華人社群常用的移民、報稅、公司設立、保險與理財服務。比較各家服務，並在商家頁面確認語言與聯絡方式。',
+      en: 'Immigration, tax, business setup, insurance, and financial planning help across {metro}. Compare providers and check each profile for languages and contact details.',
+      zh: '{metro}的移民、報稅、公司設立、保險與理財服務。比較各家服務，並在商家頁面確認語言與聯絡方式。',
     },
   },
   education: {
-    heading: { en: 'Chinese Schools & Tutoring', zh: '中文學校與補習' },
+    heading: { en: 'Schools & Tutoring', zh: '學校與補習' },
     intro: {
       en: 'Chinese language schools, tutoring, test prep, and enrichment programs for families across {metro}.',
       zh: '{metro}家庭常用的中文學校、課業補習、考試準備與才藝課程。',
     },
   },
   shopping: {
-    heading: { en: 'Asian Markets & Chinese Shops', zh: '亞洲超市與華人商店' },
+    heading: { en: 'Asian Markets & Shops', zh: '亞洲超市與商店' },
     intro: {
       en: 'Asian supermarkets, bookstores, gift shops, and everyday retail across {metro}.',
       zh: '{metro}的亞洲超市、書店、禮品店與日常零售。',
     },
   },
   'local-services': {
-    heading: { en: 'Chinese-Speaking Local Services', zh: '華人在地服務' },
+    heading: { en: 'Local Services', zh: '在地服務' },
     intro: {
       en: 'Shipping, travel, printing, auto, and practical neighborhood services across {metro}.',
       zh: '{metro}的寄件、旅遊、印刷、汽車與日常社區服務。',
     },
   },
   'home-services': {
-    heading: { en: 'Chinese-Speaking Home Services', zh: '華人居家維修' },
+    heading: { en: 'Home Services', zh: '居家維修' },
     intro: {
       en: 'HVAC, plumbing, electrical, and move-in repair help across {metro}.',
       zh: '{metro}的冷暖氣、水電與入住前維修服務。',
     },
   },
   moving: {
-    heading: { en: 'Chinese-Speaking Movers', zh: '華人搬家服務' },
+    heading: { en: 'Movers', zh: '搬家服務' },
     intro: {
       en: 'Movers, settling-in help, and newcomer logistics across {metro}.',
       zh: '{metro}的搬家公司、安家協助與新移民生活安排。',
     },
   },
   'beauty-wellness': {
-    heading: { en: 'Chinese Beauty & Wellness', zh: '華人美容養生' },
+    heading: { en: 'Beauty & Wellness', zh: '美容養生' },
     intro: {
       en: 'Salons, massage, skincare, and personal wellness services across {metro}.',
       zh: '{metro}的髮廊、按摩、保養與個人養生服務。',
@@ -117,7 +121,7 @@ const categoryCopy: Record<string, { heading: Copy; intro: Copy }> = {
     },
   },
   travel: {
-    heading: { en: 'Chinese-Speaking Travel Services', zh: '華人旅遊服務' },
+    heading: { en: 'Travel Services', zh: '旅遊服務' },
     intro: {
       en: 'Flights, ticketing, and family travel help across {metro}.',
       zh: '{metro}的機票、票務與家庭旅遊協助。',
@@ -184,7 +188,7 @@ export function getMetroCategoryHeading(category: BusinessCategory, locale: Loca
     return pick(locale, copy.heading);
   }
 
-  return locale === 'zh' ? `華人${t(category.name, 'zh')}` : `Chinese ${category.name.en}`;
+  return t(category.name, locale);
 }
 
 export function getMetroCategoryIntro(category: BusinessCategory, site: SiteProfile, locale: Locale): string {
