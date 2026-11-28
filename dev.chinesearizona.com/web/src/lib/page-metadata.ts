@@ -179,8 +179,8 @@ export function directoryMetadata(
     title,
     description:
       locale === 'zh'
-        ? `可依城市、分類與評分篩選的${site.regionNameZh}華人商家。`
-        : `Chinese businesses in ${site.regionName}, filterable by city, category, and rating.`,
+        ? `可依城市、分類與語言篩選的${site.regionNameZh}華人商家。`
+        : `Chinese businesses in ${site.regionName}, filterable by city, category, and language spoken.`,
     path: pathWithPage,
     locale,
     site,

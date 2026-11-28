@@ -330,7 +330,7 @@ export async function MetroCategoryPageView({
                 href={buildDirectoryHref(locale, { category: categoryRecord.slug })}
                 className="inline-flex items-center rounded-[14px] border border-[#d9c8b6] bg-white px-4 py-2 font-semibold text-[#5c493d] transition-colors hover:border-brand-200 hover:text-brand-700"
               >
-                {locale === 'zh' ? '依評分與條件篩選' : 'Filter by rating and more'}
+                {locale === 'zh' ? '依城市與語言篩選' : 'Filter by city and language'}
               </Link>
               <TrackedLink
                 href={withLocale(locale, '/add-business')}

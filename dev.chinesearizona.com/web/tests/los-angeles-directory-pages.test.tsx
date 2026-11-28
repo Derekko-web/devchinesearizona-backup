@@ -89,10 +89,11 @@ describe('Los Angeles directory pages', () => {
     expect(html).toContain('"addressRegion":"CA"');
     expect(html).toContain('Alhambra, CA');
     expect(html).toContain('ALHAMBRA, CA');
-    expect(html).toContain('Verified by ChineseLosAngeles');
+    expect(html).toContain('ChineseLosAngeles will check and update it');
+    expect(html).toContain('Listed from public sources');
     expect(html).not.toContain('https://chinesearizona.com/business/lunasia-dim-sum-house-alhambra');
     expect(html).not.toContain('"addressRegion":"AZ"');
-    expect(html).not.toContain('Verified by ChineseArizona');
+    expect(html).not.toContain('ChineseArizona will check');
   });
 
   it('uses LA domain values for sitemap, SEO metadata, and add-business copy', async () => {

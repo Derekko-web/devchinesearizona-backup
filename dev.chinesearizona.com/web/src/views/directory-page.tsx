@@ -35,10 +35,10 @@ type DirectorySearchParams = {
   page?: string;
 };
 
+// No rating or review sorts: the stored numbers are not from reviews on this
+// site, so they may not order listings either (issue #457).
 const directorySortOptions: SortOption[] = [
   'featured',
-  'rating',
-  'reviewed',
   'alphabetical',
   'distance',
   'newest',
@@ -54,15 +54,6 @@ function parseDirectorySortOption(value?: string): SortOption {
   }
 
   return 'featured';
-}
-
-function parseDirectoryMinRating(value?: string): number | undefined {
-  if (!value) {
-    return undefined;
-  }
-
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
 export async function DirectoryPageView({
@@ -103,7 +94,6 @@ export async function DirectoryPageView({
     category: searchParams.category,
     language: isSpokenLanguage(searchParams.language) ? searchParams.language : undefined,
     payment: isPaymentFilter(searchParams.payment) ? searchParams.payment : undefined,
-    minRating: parseDirectoryMinRating(searchParams.minRating),
     sort: parseDirectorySortOption(searchParams.sort),
   };
   const directoryPagePath = withLocale(locale, '/business');
@@ -252,7 +242,6 @@ export async function DirectoryPageView({
             className="homepage-rise homepage-rise-delay-1 mt-5 overflow-hidden rounded-[22px] border border-[#e3d3c2] bg-white shadow-[0_24px_54px_-44px_rgba(79,53,29,0.5)]"
           >
             {filters.category ? <input type="hidden" name="category" value={filters.category} /> : null}
-            {filters.minRating ? <input type="hidden" name="minRating" value={String(filters.minRating)} /> : null}
             {filters.sort && filters.sort !== 'featured' ? <input type="hidden" name="sort" value={filters.sort} /> : null}
             <div className="grid gap-px bg-[#eadbcc] md:grid-cols-[minmax(0,1fr)_170px_132px]">
               <label className="flex min-w-0 items-center gap-3 bg-white px-4 py-3.5">

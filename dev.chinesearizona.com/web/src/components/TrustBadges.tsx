@@ -1,13 +1,14 @@
-import { directoryStatusLabel, verificationStateLabel } from '@/lib/i18n';
-import type { DirectoryStatus, Locale, VerificationState } from '@/lib/types';
+import { directoryStatusLabel, t } from '@/lib/i18n';
+import { listingTrustExplanation, listingTrustLabel, type ListingTrustLevel } from '@/lib/listing-trust';
+import type { DirectoryStatus, Locale } from '@/lib/types';
 
 type TrustBadgesProps = {
   locale: Locale;
   mostPopular?: boolean;
-  verified?: boolean;
+  // Pass hasChineseSpokenLanguage(business.languages), not the bilingual column.
   bilingual?: boolean;
   sponsored?: boolean;
-  verificationState?: VerificationState;
+  trustLevel?: ListingTrustLevel;
   status?: DirectoryStatus;
 };
 
@@ -16,18 +17,22 @@ function copy(locale: Locale) {
     // Hand-picked highlight, not a popularity ranking.
     mostPopular: locale === 'zh' ? '精選' : 'Featured',
     sponsored: locale === 'zh' ? '贊助' : 'Sponsored',
-    verified: locale === 'zh' ? '已驗證' : 'Verified',
     bilingual: locale === 'zh' ? '雙語服務' : 'Bilingual',
   };
 }
 
+const trustLevelClassName: Record<ListingTrustLevel, string> = {
+  owner_verified: 'bg-emerald-50 text-emerald-700',
+  public_sources: 'bg-stone-100 text-stone-600',
+  unverified: 'bg-rose-50 text-rose-700',
+};
+
 export function TrustBadges({
   locale,
   mostPopular,
-  verified,
   bilingual,
   sponsored,
-  verificationState,
+  trustLevel,
   status,
 }: TrustBadgesProps) {
   const labels = copy(locale);
@@ -44,21 +49,12 @@ export function TrustBadges({
           {labels.sponsored}
         </span>
       ) : null}
-      {verificationState ? (
+      {trustLevel ? (
         <span
-          className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
-            verificationState === 'unverified'
-              ? 'bg-rose-50 text-rose-700'
-              : verificationState === 'claimed'
-                ? 'bg-sky-50 text-sky-700'
-                : 'bg-emerald-50 text-emerald-700'
-          }`}
+          title={t(listingTrustExplanation(trustLevel), locale)}
+          className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${trustLevelClassName[trustLevel]}`}
         >
-          {verificationStateLabel(verificationState, locale)}
-        </span>
-      ) : verified ? (
-        <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-          {labels.verified}
+          {t(listingTrustLabel(trustLevel), locale)}
         </span>
       ) : null}
       {bilingual ? (

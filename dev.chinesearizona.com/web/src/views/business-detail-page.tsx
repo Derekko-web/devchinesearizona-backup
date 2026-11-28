@@ -57,8 +57,13 @@ import {
   descriptiveImageAlt,
   formatLanguageList,
   t,
-  verificationStateLabel,
 } from '@/lib/i18n';
+import {
+  getListingTrustLevel,
+  hasChineseSpokenLanguage,
+  listingTrustExplanation,
+  listingTrustLabel,
+} from '@/lib/listing-trust';
 import { phoneHref } from '@/lib/phone';
 import { absoluteUrl, resolveAbsoluteAssetUrl } from '@/lib/seo';
 import { JsonLd } from '@/lib/schema';
@@ -186,13 +191,8 @@ export async function BusinessDetailPageView({
       longitude: business.coordinates.lng,
     };
   }
-  if (business.reviewCount > 0 && business.rating > 0) {
-    localBusinessJsonLd.aggregateRating = {
-      '@type': 'AggregateRating',
-      ratingValue: business.rating,
-      reviewCount: business.reviewCount,
-    };
-  }
+  // No aggregateRating: we show ratings only from reviews collected on this site,
+  // and there are none yet (issue #457).
 
   const displayName = t(business.name, locale);
   const alternateName =
@@ -209,22 +209,10 @@ export async function BusinessDetailPageView({
     site.key === defaultSiteProfile.key ? 'ChineseArizona' : site.brandName;
   const verificationBrandLabelZh =
     site.key === defaultSiteProfile.key ? 'ChineseArizona' : site.brandNameZh;
-  const ratingLabel =
-    business.reviewCount > 0
-      ? business.rating > 0
-        ? `${business.rating.toFixed(1)}`
-        : `${business.reviewCount}`
-      : locale === 'zh'
-        ? '新收錄'
-        : 'New';
-  const reviewCountLabel =
-    business.reviewCount > 0
-      ? locale === 'zh'
-        ? `${business.reviewCount} 則評價`
-        : `${business.reviewCount} reviews`
-      : locale === 'zh'
-        ? '尚無公開評價'
-        : 'No public reviews yet';
+  const trustLevel = getListingTrustLevel(business);
+  const trustLabel = t(listingTrustLabel(trustLevel), locale);
+  const trustExplanation = t(listingTrustExplanation(trustLevel), locale);
+  const speaksChinese = hasChineseSpokenLanguage(business.languages);
   const firstHoursLabel =
     hoursPreview.items[0] ?? (locale === 'zh' ? '營業時間待補充' : 'Hours not listed yet');
   const contactEmail = business.email ?? (locale === 'zh' ? '電子郵件待補充' : 'Email not listed');
@@ -295,16 +283,27 @@ export async function BusinessDetailPageView({
           <div className="relative grid min-h-[25rem] overflow-hidden rounded-lg border border-[#dfd4c8] bg-[#fbf7f0] shadow-[0_24px_70px_rgba(85,58,28,0.12)] lg:grid-cols-[0.72fr_1.28fr]">
             <div className="relative z-10 flex flex-col justify-center px-6 py-8 sm:px-9 lg:py-10">
               <div className="mb-4 flex flex-wrap items-center gap-2">
-                {business.verified ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-md bg-[#4d744b] px-2.5 py-1 text-xs font-semibold text-white">
+                {trustLevel === 'owner_verified' ? (
+                  <span
+                    title={trustExplanation}
+                    className="inline-flex items-center gap-1.5 rounded-md bg-[#4d744b] px-2.5 py-1 text-xs font-semibold text-white"
+                  >
                     <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    {locale === 'zh' ? '認證商家' : 'Verified'}
+                    {trustLabel}
                   </span>
-                ) : null}
+                ) : (
+                  <span
+                    title={trustExplanation}
+                    className="inline-flex items-center rounded-md bg-[#efe7dc] px-2.5 py-1 text-xs font-semibold text-[#6d6258]"
+                  >
+                    {trustLabel}
+                  </span>
+                )}
                 {popularityBadge ? (
+                  // Hand-picked by our editors, not a popularity ranking (#393).
                   <span className="inline-flex items-center gap-1.5 rounded-md bg-[#d99633]/15 px-2.5 py-1 text-xs font-semibold text-[#8b5b19]">
                     <Star className="h-3.5 w-3.5 fill-current" aria-hidden="true" />
-                    {locale === 'zh' ? '熱門商家' : 'Popular'}
+                    {locale === 'zh' ? '精選' : 'Featured'}
                   </span>
                 ) : null}
                 <span className="rounded-md bg-[#efe7dc] px-2.5 py-1 text-xs font-semibold text-[#5b5047]">
@@ -319,16 +318,9 @@ export async function BusinessDetailPageView({
 
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-[#5f554c]">
                 <span className="inline-flex items-center gap-1.5 text-lg font-semibold text-[#2f2923]">
-                  {business.rating > 0 ? (
-                    <Star className="h-5 w-5 fill-[#d79526] text-[#d79526]" aria-hidden="true" />
-                  ) : (
-                    <Store className="h-5 w-5 text-[#b7282e]" aria-hidden="true" />
-                  )}
-                  {ratingLabel}
+                  <Store className="h-5 w-5 text-[#b7282e]" aria-hidden="true" />
+                  {cityStateLabel}
                 </span>
-                <span>{reviewCountLabel}</span>
-                <span className="h-1 w-1 rounded-full bg-[#b9aa99]" aria-hidden="true" />
-                <span>{cityStateLabel}</span>
               </div>
 
               {/* Only the short description up top; the full text lives in the About section below. */}
@@ -504,7 +496,7 @@ export async function BusinessDetailPageView({
               </div>
               <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
                 <MessageCircle className="h-5 w-5 text-[#8b5b19]" aria-hidden="true" />
-                <span>{business.bilingual ? (locale === 'zh' ? '雙語服務' : 'Bilingual support') : languageSummary}</span>
+                <span>{speaksChinese ? (locale === 'zh' ? '雙語服務' : 'Bilingual support') : languageSummary}</span>
               </div>
               <div className="flex min-h-14 items-center gap-3 rounded-lg border border-[#e2d8cb] bg-[#f7f1e8] px-4">
                 <CircleDollarSign className="h-5 w-5 text-[#5b5047]" aria-hidden="true" />
@@ -616,29 +608,9 @@ export async function BusinessDetailPageView({
               </div>
             </section>
 
-            <section id="reviews" className="grid gap-5 border-b border-[#e2d8cb] py-8 xl:grid-cols-[24rem_minmax(0,1fr)]">
-              <div className="rounded-lg border border-[#e2d8cb] bg-[#fbf7f0] p-6">
-                <p className="text-sm font-semibold text-[#8b8176]">{locale === 'zh' ? '顧客評價' : 'Customer reviews'}</p>
-                <div className="mt-3 flex items-end gap-3">
-                  <span className="text-5xl font-semibold text-[#2c2722]">{ratingLabel}</span>
-                  {business.rating > 0 ? <Star className="mb-2 h-8 w-8 fill-[#d79526] text-[#d79526]" aria-hidden="true" /> : null}
-                </div>
-                <p className="mt-2 text-sm text-[#6d6258]">{reviewCountLabel}</p>
-                <div className="mt-5 space-y-2">
-                  {[5, 4, 3].map((score) => {
-                    const width = business.rating > 0 ? `${Math.max(8, Math.min(100, (business.rating / 5) * 100 - (5 - score) * 16))}%` : '12%';
-                    return (
-                      <div key={score} className="flex items-center gap-3 text-xs text-[#766b61]">
-                        <span className="w-6">{score}</span>
-                        <div className="h-2 flex-1 overflow-hidden rounded-md bg-[#eadfce]">
-                          <div className="h-full rounded-md bg-[#d79526]" style={{ width }} />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
+            {/* Reviews collected on this site only; no star summary until we have some (#457). */}
+            <section id="reviews" className="border-b border-[#e2d8cb] py-8">
+              <h2 className="mb-4 text-sm font-semibold text-[#8b8176]">{locale === 'zh' ? '顧客評價' : 'Customer reviews'}</h2>
               <div className="space-y-3">
                 {businessReviews.length > 0 ? (
                   businessReviews.map((review) => (
@@ -878,30 +850,22 @@ export async function BusinessDetailPageView({
 
             <section className="rounded-lg border border-[#dfd4c8] bg-[#f4efe5] p-5 shadow-[0_18px_45px_rgba(84,58,32,0.08)]">
               <div className="flex gap-3">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#4d744b] text-white">
-                  <ShieldCheck className="h-5 w-5" aria-hidden="true" />
-                </div>
+                {trustLevel === 'owner_verified' ? (
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#4d744b] text-white">
+                    <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                ) : (
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#e6ddd1] text-[#6d6258]">
+                    <Store className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                )}
                 <div>
-                  <h2 className="font-semibold text-[#2c2722]">
+                  <h2 className="font-semibold text-[#2c2722]">{trustLabel}</h2>
+                  <p className="mt-1 text-sm leading-6 text-[#6d6258]">{trustExplanation}</p>
+                  <p className="mt-3 text-xs font-semibold text-[#6d6258]">
                     {locale === 'zh'
-                      ? `${verificationBrandLabelZh} 認證`
-                      : `Verified by ${verificationBrandLabel}`}
-                  </h2>
-                  <p className="mt-1 text-sm leading-6 text-[#6d6258]">
-                    {locale === 'zh'
-                      ? '此頁使用商家來源、社區線索與人工審核資料整理。'
-                      : 'This profile is assembled from business sources, community signals, and editorial review.'}
-                  </p>
-                  <p className="mt-3 text-xs font-semibold text-[#bd2730]">
-                    {business.verificationState
-                      ? verificationStateLabel(business.verificationState, locale)
-                      : business.verified
-                        ? locale === 'zh'
-                          ? '已驗證'
-                          : 'Verified'
-                        : locale === 'zh'
-                          ? '待驗證'
-                          : 'Pending verification'}
+                      ? `發現錯誤？請在本頁回報，${verificationBrandLabelZh} 會核對後更新。`
+                      : `Spotted a mistake? Report it on this page and ${verificationBrandLabel} will check and update it.`}
                   </p>
                 </div>
               </div>
