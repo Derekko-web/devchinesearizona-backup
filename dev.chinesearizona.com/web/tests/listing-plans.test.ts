@@ -560,6 +560,28 @@ describe('listingPlanReturnMessage', () => {
   });
 });
 
+describe('getFoundingSpotsLeft', () => {
+  it('counts founding spots left the same way checkout sets the founding price', async () => {
+    const foundingRows = [
+      { business_id: 'b-1', plan_id: 'enhanced-listing', founding: true },
+      // A renewal by the same business still counts once.
+      { business_id: 'b-1', plan_id: 'enhanced-listing', founding: true },
+      { business_id: 'b-2', plan_id: 'enhanced-listing', founding: true },
+      ...Array.from({ length: 10 }, (_, index) => ({
+        business_id: `s-${index}`,
+        plan_id: 'sponsored-category',
+        founding: true,
+      })),
+    ];
+    const { plans } = await loadPlans(planResolver({ foundingRows }));
+
+    await expect(plans.getFoundingSpotsLeft()).resolves.toEqual({
+      'enhanced-listing': 8,
+      'sponsored-category': 0,
+    });
+  });
+});
+
 describe('createListingPlanCheckoutForProfile', () => {
   const input = {
     baseUrl: 'https://chinesearizona.com',

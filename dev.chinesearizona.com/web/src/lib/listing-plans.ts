@@ -2,6 +2,7 @@ import type Stripe from 'stripe';
 
 import { getDirectoryAdsRuntimeMode, type DirectoryAdsRuntimeMode } from '@/lib/directory-ads';
 import {
+  LISTING_PLAN_FOUNDING_LIMIT,
   SPONSORED_CATEGORY_PLAN_LIMIT,
   addListingPlanTerm,
   findListingPlanOffer,
@@ -708,6 +709,29 @@ export async function handleListingPlanStripeEvent(event: Stripe.Event) {
       break;
     default:
       break;
+  }
+}
+
+// Founding spots left per plan, counted exactly the way checkout decides the
+// founding price (businesses with a founding row, refunded ones included), so
+// the number on /advertise never promises a price checkout won't give.
+// Undefined when the plans table can't be read: then no counter is shown.
+export async function getFoundingSpotsLeft(): Promise<Record<ListingPlanId, number> | undefined> {
+  if (!(await isListingPlansSchemaReady())) {
+    return undefined;
+  }
+
+  try {
+    const rows = await listFoundingRows();
+    return Object.fromEntries(
+      listingPlanIds.map((planId) => [
+        planId,
+        Math.max(0, LISTING_PLAN_FOUNDING_LIMIT - countFoundingBusinesses(rows, planId)),
+      ])
+    ) as Record<ListingPlanId, number>;
+  } catch (error) {
+    console.error('[listing-plans] Unable to count founding spots:', error);
+    return undefined;
   }
 }
 
