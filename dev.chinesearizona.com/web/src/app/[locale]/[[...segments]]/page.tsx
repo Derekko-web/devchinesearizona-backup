@@ -68,6 +68,8 @@ import {
   RelocationGuidePageView,
 } from '@/views/site-pages';
 import { AdvertisePageView } from '@/views/advertise-page';
+import { hasOnlineCheckout } from '@/lib/advertise';
+import { getFoundingSpotsLeft } from '@/lib/listing-plans';
 import { CommunityPageView } from '@/views/community-page';
 import { HomePageView } from '@/views/home-page';
 import { PublisherPageView } from '@/views/publisher-pages';
@@ -451,7 +453,15 @@ export default async function LocalizedPage({ params, searchParams }: PageProps)
   }
 
   if (segments[0] === 'advertise' && segments.length === 1) {
-    return <AdvertisePageView locale={locale} searchParams={await searchParams} site={site} />;
+    const foundingSpotsLeft = hasOnlineCheckout(site) ? await getFoundingSpotsLeft() : undefined;
+    return (
+      <AdvertisePageView
+        locale={locale}
+        searchParams={await searchParams}
+        site={site}
+        foundingSpotsLeft={foundingSpotsLeft}
+      />
+    );
   }
 
   if (segments[0] && segments.length === 1 && isPublisherPageSlug(segments[0])) {

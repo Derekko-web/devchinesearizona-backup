@@ -5,6 +5,7 @@ import { advertisePath, getAdvertisePageCopy } from '@/lib/advertise';
 
 import { getNewsArchivePath, getNewsArticlePath, getNewsPath } from '@/lib/arizona-news';
 import { resolveLocalizedBusinessDetailText } from '@/lib/business-localization';
+import { buildBusinessFallbackDescription, buildBusinessSeoTitle } from '@/lib/business-seo';
 import {
   getArticleBySlugAsync,
   isLegacyArticle,
@@ -531,8 +532,9 @@ export async function businessMetadata(
   const localizedBusinessText = await resolveLocalizedBusinessDetailText(business, locale);
 
   return buildMetadata({
-    title: `${t(business.name, locale)} | ${site.brandName}`,
-    description: localizedBusinessText.shortDescription,
+    title: buildBusinessSeoTitle(business, site, locale),
+    description:
+      localizedBusinessText.shortDescription.trim() || buildBusinessFallbackDescription(business, site, locale),
     path: `/business/${business.slug}`,
     locale,
     site,

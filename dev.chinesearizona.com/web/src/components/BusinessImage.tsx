@@ -52,9 +52,9 @@ export function BusinessImage({
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/80 text-brand-700 shadow-sm">
         <CategoryIcon icon={category?.icon ?? 'briefcase'} className="h-6 w-6" />
       </div>
-      <p className="mt-4 max-w-[14rem] text-sm font-semibold text-slate-700">{label}</p>
-      <p className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-500">
-        {locale === 'zh' ? '示意圖' : 'Placeholder'}
+      {/* No photo: show the category, not the photo's alt text or a "placeholder" caption (#473). */}
+      <p className="mt-4 max-w-[14rem] text-sm font-semibold text-slate-700">
+        {category ? (locale === 'zh' ? category.name.zh ?? category.name.en : category.name.en) : null}
       </p>
     </div>
   );

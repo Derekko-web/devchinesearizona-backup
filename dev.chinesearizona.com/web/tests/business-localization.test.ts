@@ -126,11 +126,9 @@ describe('business localization helpers', () => {
     const localizedDetail = await resolveLocalizedBusinessDetailText(business, 'zh');
 
     expect(localizedCard?.localizedText.locationLabel).toBe('翻譯：Phoenix Metro Area');
-    expect(localizedCard?.localizedText.serviceHighlights).toEqual([
-      '翻譯：Chinese-Speaking Realtor',
-      '翻譯：Phoenix Metro Area',
-      '翻譯：Investment Real Estate',
-    ]);
+    // Chips show a label whole or not at all (#473): "Chinese-Speaking Realtor"
+    // and "Phoenix Metro Area" would need the generic or city word cut out.
+    expect(localizedCard?.localizedText.serviceHighlights).toEqual(['翻譯：Investment Real Estate']);
     expect(localizedDetail.locationLabel).toBe('翻譯：Phoenix Metro Area');
     expect(localizedDetail.services).toEqual([
       '翻譯：Chinese-Speaking Realtor',

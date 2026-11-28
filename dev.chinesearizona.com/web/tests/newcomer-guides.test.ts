@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { describe, expect, it } from 'vitest';
 
 import { newcomerGuides } from '@/data/guides';
@@ -58,9 +61,17 @@ describe('newcomer guides', () => {
     }
   });
 
-  it('do not point readers to individual businesses', () => {
+  it('only link businesses that are already listed in the directory', () => {
+    const listed = new Set(
+      (JSON.parse(
+        fs.readFileSync(path.join(process.cwd(), 'src/data/generated-directory-businesses.json'), 'utf8')
+      ) as Array<{ slug: string }>).map((business) => business.slug)
+    );
+
     for (const guide of newcomerGuides) {
-      expect(guide.relatedBusinessSlugs, guide.slug).toEqual([]);
+      for (const slug of guide.relatedBusinessSlugs) {
+        expect(listed.has(slug), `${guide.slug}: ${slug}`).toBe(true);
+      }
     }
   });
 });
