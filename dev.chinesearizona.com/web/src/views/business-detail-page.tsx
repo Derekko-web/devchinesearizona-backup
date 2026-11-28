@@ -41,6 +41,7 @@ import {
 } from '@/lib/directory';
 import { businessLeadsEnabled, isInquiryCategory } from '@/lib/business-leads';
 import { selectRealBusinessPhotos } from '@/lib/business-photos';
+import { getBusinessSchemaType } from '@/lib/business-seo';
 import { MAX_BUSINESS_GALLERY_IMAGES } from '@/lib/business-media';
 import {
   acceptedPaymentNames,
@@ -145,11 +146,12 @@ export async function BusinessDetailPageView({
   const directionsHref = getBusinessDirectionsUrl(business, site.stateCode || site.stateRegion);
   const serviceHighlights = getBusinessServiceHighlights(business, locale);
   const hoursPreview = getBusinessHoursPreview(business.hours, locale);
-  const businessDetailPath = withLocale(locale, `/business/${business.slug}`);
-  const businessDetailUrl = absoluteUrl(businessDetailPath, site);
+  // Structured data points at the canonical URL: unprefixed English, /zh for Chinese.
+  const canonicalPath = (path: string) => (locale === 'zh' ? withLocale(locale, path) : path);
+  const businessDetailUrl = absoluteUrl(canonicalPath(`/business/${business.slug}`), site);
   const localBusinessJsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
+    '@type': getBusinessSchemaType(business.categorySlug),
     name: business.name.en,
     alternateName: business.name.zh,
     description: business.description.en,
@@ -195,6 +197,21 @@ export async function BusinessDetailPageView({
   // and there are none yet (issue #457).
 
   const displayName = t(business.name, locale);
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { name: locale === 'zh' ? '首頁' : 'Home', path: '/' },
+      { name: locale === 'zh' ? '華人商家' : 'Chinese Businesses', path: '/business' },
+      ...(category ? [{ name: t(category.name, locale), path: metroCategoryPath(category.slug) }] : []),
+      { name: displayName, path: `/business/${business.slug}` },
+    ].map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: absoluteUrl(canonicalPath(item.path), site),
+    })),
+  };
   const alternateName =
     business.name.zh && business.name.zh !== business.name.en
       ? business.name.zh
@@ -252,6 +269,7 @@ export async function BusinessDetailPageView({
   return (
     <div className="bg-[#f7f1e8] text-[#2c2722]">
       <JsonLd data={localBusinessJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       {leadsEnabled ? <BusinessContactClickTracker businessSlug={business.slug} /> : null}
 
       <section className="relative overflow-hidden border-b border-[#ded5c9] bg-[#f7f1e8]">
