@@ -22,6 +22,7 @@ import { siteUrl } from '@/lib/seo';
 import { getStripeClient, isStripeConfigured } from '@/lib/stripe';
 import { getSupabaseServiceClient, isSupabaseServiceConfigured } from '@/lib/supabase';
 import type { Business, Locale } from '@/lib/types';
+import { invalidateDirectoryCache } from '@/lib/directory-cache';
 
 export type ListingPlanRow = {
   id: string;
@@ -421,7 +422,7 @@ function mockId(prefix: 'cs_test' | 'pi_test') {
 // Saves one paid term. Safe to call twice for the same checkout: the second
 // call does nothing. A failed read or write throws, so the webhook answers
 // non-2xx and Stripe retries instead of a payment never turning a plan on.
-export async function recordListingPlanPurchase(input: {
+async function recordListingPlanPurchaseWrite(input: {
   amountCents: number;
   businessId: string;
   checkoutSessionId: string;
@@ -783,4 +784,14 @@ export async function getAdminListingPlans(limit = 50): Promise<AdminListingPlan
       live: isListingPlanRowLive(row, now),
     })
   );
+}
+
+// Writes that change what a listing shows clear the shared directory cache (#524),
+// so the owner and visitors see the change on the next page load.
+export async function recordListingPlanPurchase(...args: Parameters<typeof recordListingPlanPurchaseWrite>) {
+  try {
+    return await recordListingPlanPurchaseWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
 }
