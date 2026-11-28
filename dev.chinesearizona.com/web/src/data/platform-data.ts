@@ -261,7 +261,7 @@ export const businessCategories: BusinessCategory[] = [
     name: { en: 'Jobs & Career', zh: '工作職涯' },
     description: {
       en: 'Career support, resume help, and newcomer hiring navigation.',
-      zh: '職涯支援、履歷協助與新居民求職導航。',
+      zh: '職涯支援、履歷協助與新居民求職指引。',
     },
     icon: 'briefcase',
   },
@@ -629,7 +629,7 @@ const curatedBusinesses: Business[] = [
     services: [
       { en: 'Weekend Chinese school', 'zh': '週末中文班' },
       { en: 'Culture and dance programs', 'zh': '文化與舞蹈課程' },
-      { en: 'Parent newcomer network', 'zh': '家長新手互助網絡' },
+      { en: 'Parent newcomer network', 'zh': '家長新手互助網路' },
     ],
     languages: ['English', 'Mandarin', 'Traditional Chinese'],
     searchAliases: ['chinese school tempe', '中文學校', 'taiwanese family classes'],

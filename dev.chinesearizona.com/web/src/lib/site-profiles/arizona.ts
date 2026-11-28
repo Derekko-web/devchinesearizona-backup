@@ -261,7 +261,7 @@ export const arizonaSiteProfile: SiteProfile = {
     },
     newcomerBody: {
       en: 'Your guide to settling in, finding services, schools, and more.',
-      zh: '從學校到服務，把安家路線上需要的信息整理清楚。',
+      zh: '從學校到服務，把安家路線上需要的資訊整理清楚。',
     },
   },
 };
