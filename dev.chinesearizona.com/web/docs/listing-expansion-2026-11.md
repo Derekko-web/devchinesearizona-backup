@@ -47,6 +47,43 @@ Same as `listing-enrichment-2026-11.md`, plus:
 - Business addresses only. Two realtors work out of their brokerage office; the brokerage address is used.
 - Row shape matches existing rows: `region = 'Greater Phoenix'`, `verified = true`, `verification_state = 'editor_verified'`, `status = 'live'`, `bilingual = true`, `sponsored = false`, `featured = false`, `hero_image` left empty (no photos were copied).
 
+## Website scan (the 14 new websites)
+
+Same two-pass check as the "Website scan" in `listing-enrichment-2026-11.md`: each listed website was fetched once as a normal browser and once with Google's crawler user agent, and checked for gambling-spam words, parked-domain pages, redirects to another domain and errors. Titles were read by hand.
+
+- No spam, no parked pages, no cross-domain redirects on any of the 14. Two spam-word hits were false positives inside normal words ("judicial" on the R.O.I. Properties page, "specialists" on the Merrill pages).
+- Browser and Googlebot saw the same page on 12 sites. comparioninsurance.com and remax.com return 403 to the Googlebot user agent from a non-Google address; that is their bot protection, not cloaking (the browser fetch shows the agent's normal profile).
+- None of the 14 websites is one of the domains removed in the enrichment work (bigwatempe.com, azhotpot.com, nanzhounoodlemesa.com, kwansmesa.com, the81hongkongcafe.com, chateaboba.com, ordercyclo.com, diamondcntogo.com, yinschineseaz.com, chouskitchen.com, beijingchandleraz.com, asiangardenexpressglendale.com, baochow.com).
+
+## Corrections to existing listings (issue #470)
+
+Sales found wrong facts on listings we are about to pitch. Each was checked against the business's own website or an official source. Fixes are in `listing-expansion-2026-11-corrections.sql` (applied to dev on 2026-11-27, pages checked on dev.chinesearizona.com); `listing-expansion-2026-11-corrections-rollback.sql` writes back the production values captured the same day. Slugs are unchanged, so no URL changes.
+
+| Listing | Finding | Change |
+|---|---|---|
+| `eastern-art-academy-phoenix` | Its site gives 3029 N Alma School Rd, Suite 225, Chandler, AZ 85224 (footer and /chinese-class; the class page also lists 14891 N Northsight Blvd, Suite 129, Scottsdale). The listing said Phoenix with no address, and both English description fields held Simplified Chinese text copied from the site. The site's newest news is February 2021. | `city` Chandler, `address` set, `service_area_text` cleared; new English and Traditional Chinese copy from the site that says the site was last updated in 2021 and to call first; Simplified aliases converted to Traditional. Becomes indexable (the old text was under 180 characters). |
+| `hedy-li-phoenix` | Her site's title is "Chinese-Speaking Realtor in Phoenix Metro Area" and it calls her a "Chinese Realtor", but it never names Mandarin, Cantonese or Taiwanese. | **No data change.** `languages` cannot hold "Chinese" without a dialect (the site's options are English, Mandarin, Cantonese, Taiwanese), and the description already says Chinese-speaking. The cut-off "Speaking Realtor" chip Sales saw is built by the page code from the description, not stored data; that is a code fix. |
+| `axia-senior-insurance-advisors-chandler` | axiasiadvisors.com: (602) 344-9940, by appointment only at 625 W Southern Ave #E193, Mesa, AZ 85210, inside the Plaza Executive Suites building; email Info@BetterHealth.Insure. The listing had another phone, a Chandler Ranch plaza address and template text. | `phone`, `address`, `city` (Mesa), `email` updated; template copy replaced with English and Traditional Chinese copy from the site; aliases updated. Becomes indexable. |
+| `yjp-spine-center-mesa` | The federal NPI registry (NPPES) lists YJP Spine Center LLC, doing business as The Back Center Chiropractic, at 4920 W Thunderbird Rd, Suite 112, Glendale, AZ 85306, (623) 487-3444, record last updated 2020-11-19. No record or site shows a Mesa (Dobson Square) location. | **No change yet.** Flagged for Derek's in-person check at Dobson Square. If it is not there, the listing should move to the Glendale address above (or be removed). |
+| `phoenix-chinese-center-glendale` | Its website does not respond; no first-party or official source gives an address or city. | **No change.** City left as Glendale; still unverified. |
+| `beijing-acupuncture-and-health-center-mesa` | No website, no NPI registry record, no other trace online. | **No change, not deleted.** Flagged for Derek to check in person at Dobson Square (1116 S Dobson Rd). |
+
+### Simplified Chinese scan (all listings)
+
+All 256 production rows were scanned for Simplified-only characters in `name_zh_tw`, `short_description_zh_tw` and `description_zh_tw`, and also in the English fields and `search_aliases`. **No `*_zh_tw` field contains Simplified Chinese** (the 45 Chinese descriptions written on 2026-11-25 are Traditional). Simplified text was found in:
+
+| Listing | Field | Simplified | Traditional (now in the corrections SQL) |
+|---|---|---|---|
+| `eastern-art-academy-phoenix` | `short_description_en`, `description_en`, 5 aliases | Copied site text, e.g. 新东方中文艺术学院, 凤凰之春 | Rewritten (see above); aliases 新東方中文藝術學院, 鳳凰之春, 華人春晚, 藝術教育, 美中藝術教育交流 |
+| `az-hope-chinese-school-chandler` | alias | 记建校三十周年义工聚会 | 記建校三十周年義工聚會 |
+| `contemporary-chinese-school-of-arizona-tempe` | alias | 亚省现代中文学校24-25新学年开启 | 亞省現代中文學校24-25新學年開啟 |
+| `gilbert-chinese-church-gilbert` | alias | 邀请你与我们一起：真诚敬拜、研习圣经、彼此服事、传扬福音。 | 邀請你與我們一起：真誠敬拜、研習聖經、彼此服事、傳揚福音。 |
+| `tucson-christian-mandarin-church-tucson` | alias | 原創詩歌 这一刻我跟从了耶稣基督 … | 原創詩歌 這一刻我跟從了耶穌基督 … |
+
+The four aliases above are scraped headlines and slogans rather than useful search terms; converting them keeps search behaviour the same. Dropping them is a reasonable later cleanup. The check used a list of Simplified-only characters, so a rare character outside the list could be missed.
+
+With the 14 new listings and these corrections, production would go from 48 to 64 indexable business pages.
+
 ## How to apply to production
 
 1. Pre-check (expect 0 rows):
@@ -60,10 +97,13 @@ Same as `listing-enrichment-2026-11.md`, plus:
 2. Run `listing-expansion-2026-11.sql` (14 `insert ... on conflict (slug) do nothing` statements in one transaction). The category is looked up by slug, so the same file was used on dev. If the connector times out, run the statements in two halves; each is independent.
 3. Post-check: the query above returns 14 rows, and the indexable count query in `listing-enrichment-2026-11.md` goes up by 14.
 4. Spot-check a few pages, for example `/business/tak-sun-comparion-insurance-chandler` and `/zh/business/apex-dental-care-gilbert`.
+5. Run `listing-expansion-2026-11-corrections.sql` (6 updates in one transaction). Check `/business/eastern-art-academy-phoenix` shows Chandler and `/business/axia-senior-insurance-advisors-chandler` shows (602) 344-9940.
 
 ## Rollback
 
 `listing-expansion-2026-11-rollback.sql` deletes the 14 slugs, skipping any row an owner has claimed since (`owner_profile_id is null`). These are new rows, so there are no previous values to restore.
+
+`listing-expansion-2026-11-corrections-rollback.sql` writes back every changed column of the six corrected rows to its production value from 2026-11-27 (including a zero-width space that was in one Eastern Art Academy alias). Dev held older text for some of these rows before the corrections, so the rollback is for production only.
 
 ## Listings and sources
 
@@ -112,9 +152,23 @@ Roughly 95 named candidates were looked at. Besides the 14 added, these did not 
 | Large-firm or out-of-area pages with no Phoenix office | 4 | A national law firm's machine-translated Phoenix page; insurance and mortgage people based in California or Colorado |
 | Stale or retired | 2 | A Chinese school blog with no current date; a dentist listed as retired |
 
-Systematic scans that found few or no new names: all State Farm agent pages in the eight cities (220 agents, 2 Chinese speakers, both added), Farmers (169 agents, none), American Family (90 agents, none), Merrill office rosters (83 advisers, 3 added).
+Systematic scans that found few or no new names: all State Farm agent pages in the eight cities plus 18 other metro cities (264 agents after re-fetching pages that were first rate-limited; 2 Chinese speakers, both added), Farmers (169 agents, none), American Family (90 agents, none), Merrill office rosters (83 advisers, 3 added).
 
 Names and leads that were not verified are kept in the company's private listings folder, not in this repo.
+
+## Chains and organizations in the paying categories (for a CEO decision)
+
+Production has 43 listings in medical, legal-finance, education, real-estate, home-services and local-services (before this batch). 22 are national or regional chains, and 3 are associations or a student club:
+
+| Kind | Listings |
+|---|---|
+| Pharmacy chains | CVS Pharmacy (Chandler, Mesa, Peoria); Walgreens (Chandler ×2, Tucson) |
+| Health systems and multi-site medical | Banner Urgent Care (Peoria); SimonMed (Mesa); Miracle-Ear (Chandler, franchise); Discover Vein & Vascular (Chandler) |
+| Banks, credit unions, lenders, tax chains | BMO (Chandler); MidFirst Bank (Peoria); Arizona Central Credit Union (Chandler); Global Credit Union (Peoria; its listed phone is an Alaska 907 number); H&R Block (Peoria); LoanMax (Mesa, title loans) |
+| Retail and service chains | Ace Hardware (Peoria); Discount Tire (Mesa); FedEx Office (Chandler); The UPS Store (Chandler); USA Tae Kwon Do (Chandler) |
+| Associations and clubs (not businesses) | Arizona Asian American Bar Association; Asian Real Estate Association of America Greater Phoenix; Asian American Journalists Association at ASU (student club) |
+
+The other 18 are independent businesses or schools, though three of them are unverified (Beijing Acupuncture, Hi-Tech Dentistry and YJP Spine Center; see above).
 
 ## Follow-ups
 
