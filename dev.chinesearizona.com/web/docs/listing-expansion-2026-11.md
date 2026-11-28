@@ -9,11 +9,14 @@ Status:
 | Batch 1: 14 listings (`listing-expansion-2026-11.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): 256 → 270 rows, indexable 48 → 62, 14/14 rows match dev by md5 |
 | Corrections (`listing-expansion-2026-11-corrections.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): indexable 62 → 64; pre-check confirmed production held the rollback's before-values |
 | Batch 2a: 8 physicians + 2 language fixes (`listing-expansion-2026-11-batch2a*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval, both files): 270 → 278 rows, indexable 64 → 72, 8/8 rows match dev by md5 |
-| Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
-| Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval (production rows from batch 1) |
-| Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
-| AZ Hope Chinese School language fix (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
-| Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | **Not applied** (prepared only, per CEO) | Not applied; CEO decision |
+| Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 278 → 286 rows, indexable 72 → 80, 8/8 rows match dev and the file by md5 |
+| Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check confirmed all 6 held the guarded text; 6/6 now match the file by md5 |
+| Batch 2c: 8 physicians (`listing-expansion-2026-11-batch2c.sql`, issue #487) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 286 → 294 rows, indexable 80 → 88, 8/8 rows match dev and the file by md5 |
+| AZ Hope language fix and Alan Wang phone (`listing-expansion-2026-11-batch2c-corrections.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): pre-check matched the rollback values; both rows now match dev |
+| Hide 47 chain listings (`listing-expansion-2026-11-chains-suppress.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO approval): 47 rows `live` → `suppressed`; none claimed or paid; indexable unchanged at 88 |
+| Hide Panda Express (`listing-expansion-2026-11-panda-express-suppress*.sql`) | Applied 2026-11-28 | **Applied 2026-11-28** (CEO decision and approval): 1 row `live` → `suppressed` |
+
+Production after all of the above (2026-11-28): 294 rows, 232 `live`, 234 public (`live` or `stale`), 48 `suppressed` (none claimed, sponsored or featured), 88 indexable. Suppressed pages return 404 with `noindex` and are not in the sitemap.
 
 ## Result
 
@@ -286,9 +289,9 @@ To apply to production after approval: pre-check none of the 8 slugs exist; run 
 
 The rollback file writes back the production values from 2026-11-28 (AZ Hope's three languages and eleven aliases; Alan Wang's empty phone).
 
-## Chain listings to hide (prepared, not applied)
+## Chain listings to hide (applied 2026-11-28)
 
-The CEO asked for a list of national and regional chain listings with no Chinese-language service, and SQL that takes them off the public site without deleting them. **Nothing has been run, on dev or production.**
+The CEO asked for a list of national and regional chain listings with no Chinese-language service, and SQL that takes them off the public site without deleting them. The CEO approved the list on 2026-11-28 and it was applied to dev, then production, the same day (see the status table).
 
 How it hides them: `listing-expansion-2026-11-chains-suppress.sql` sets `status = 'suppressed'`, a value the `businesses_status_check` constraint already allows. The app only shows rows with status `live` or `stale` (the directory queries filter `.in('status', ['live','stale'])` and `isPublicDirectoryBusiness()` rejects any other status), so suppressed rows drop out of lists, search, the sitemap and their own page, but stay in the table. The update is guarded on `status = 'live'`. `listing-expansion-2026-11-chains-suppress-rollback.sql` sets the same 47 slugs back to `live`.
 
@@ -308,9 +311,11 @@ Checked on production (read-only, 2026-11-28): all 47 exist and are `live`; none
 Kept on purpose:
 
 - Asian supermarkets and Asian or Chinese-owned chains: 99 Ranch, H Mart, Lee Lee, Mekong Supermarket, 85°C, Paris Baguette, Meet Fresh, Haidilao, Kura Sushi, MINISO, Daiso, Teso Life, Kinokuniya and similar.
-- **`panda-express-peoria` is left out for a CEO call.** Its parent, Panda Restaurant Group, is led by co-founders Andrew and Peggy Cherng (pandarg.com) and serves American Chinese food, so it may count as Chinese-owned. Add the slug to both files if it should be hidden.
+- `panda-express-peoria` was first left out for a CEO call (its parent, Panda Restaurant Group, is led by co-founders Andrew and Peggy Cherng). **CEO decision 2026-11-28: suppress it too** — it is a national chain with no Chinese-language service on record, and it was the first listing a Taiwanese family saw on the Peoria dining page. `listing-expansion-2026-11-panda-express-suppress.sql` (guarded on `status = 'live'`, with rollback) covers every Panda Express row; on 2026-11-28 that was only the Peoria one. Singing Pandas Asian Restaurant & Bar (Chandler) is an independent restaurant and stays.
 - Single-location plaza shops that are not chains (Claw Zone, Diamond National, Name Brand Exchange, Racing Collectibles).
-- The three associations and the student club listed earlier (not chains).
+- The two associations and the student club listed earlier (not chains; CEO: keep as they are).
+- The three unverified listings (Beijing Acupuncture, Hi-Tech Dentistry, YJP Spine Center) stay until Derek checks them in person.
+- The first line of `listing-expansion-2026-11-chains-suppress.sql` still says "PREPARED, NOT APPLIED"; it was left as approved and applied unchanged.
 
 ## Follow-ups
 
