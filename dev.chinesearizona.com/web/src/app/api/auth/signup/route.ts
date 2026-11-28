@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-import { buildJoinPath, buildPostAuthRedirectUrl, sanitizeAuthRedirect } from '@/lib/auth';
+import { buildJoinPath, buildPostAuthRedirectUrl, pendingSignupMessage, sanitizeAuthRedirect } from '@/lib/auth';
 import { resolveLocale } from '@/lib/i18n';
 import { getRequestBaseUrl } from '@/lib/request-url';
 import { writeSessionCookies } from '@/lib/server-auth';
@@ -139,9 +139,7 @@ export async function POST(request: NextRequest) {
           ? locale === 'zh'
             ? '帳號已建立。請用同一組 email 與密碼登入。'
             : 'Account created. Log in with the same email and password to continue.'
-          : locale === 'zh'
-            ? '如果這個 email 是新的，請檢查信箱並點擊確認連結；如果你先前已建立帳號，請直接登入。'
-            : 'If this email is new, check your email and click the confirmation link. If you already have an account, log in instead.',
+          : pendingSignupMessage(locale),
       tone: 'success',
     })
   );

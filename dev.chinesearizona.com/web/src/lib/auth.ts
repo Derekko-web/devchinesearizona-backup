@@ -151,3 +151,12 @@ export function buildAuthCallbackPath(locale: Locale, nextPath?: string | null):
 export function buildAuthCallbackUrl(baseUrl: string, locale: Locale, nextPath?: string | null): string {
   return new URL(buildAuthCallbackPath(locale, nextPath), normalizeAuthBaseUrl(baseUrl)).toString();
 }
+
+// Shown after an email sign-up that still needs the confirmation link (#471).
+// Confirmation emails may not reach every inbox, so it says what to do next.
+// The signup API route uses the same wording for the no-JavaScript fallback.
+export function pendingSignupMessage(locale: Locale): string {
+  return locale === 'zh'
+    ? '我們已寄出確認信。請打開信中的確認連結，再回到這裡登入。幾分鐘內沒收到？請查看垃圾郵件匣，或改用上方的「使用 Google 繼續」，不需要確認信。如果你先前已建立帳號，請直接登入。'
+    : 'We sent you a confirmation email. Open it, click the link, then sign in here. No email after a few minutes? Check your spam folder, or use Continue with Google above, which needs no confirmation email. Already have an account? Sign in instead.';
+}
