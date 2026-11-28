@@ -13,6 +13,8 @@ import { getDirectoryBusinesses, getDirectoryCategories } from '@/lib/directory'
 import { getBusinessLeadCounts, getRecentBusinessInquiries } from '@/lib/business-leads';
 import { getAdminListingPlans } from '@/lib/listing-plans';
 import { AdminListingPlansPanel } from '@/components/directory/AdminListingPlansPanel';
+import { AdminAdvertiseInquiriesPanel } from '@/components/directory/AdminAdvertiseInquiriesPanel';
+import { getRecentAdvertiseInquiries } from '@/lib/advertise-inquiries';
 import { AdminBusinessDetailsEditor } from '@/components/directory/AdminBusinessDetailsEditor';
 import {
   getModerationReportsSnapshot,
@@ -50,6 +52,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     adminRecentInquiries,
     adminListingPlans,
     adminDirectoryBusinesses,
+    adminAdvertiseInquiries,
   ] = await Promise.all([
     Promise.resolve(getAdminSnapshot()),
     getPendingBusinessClaimsSnapshot(),
@@ -64,6 +67,7 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
     getRecentBusinessInquiries({ limit: 20 }),
     getAdminListingPlans(),
     getDirectoryBusinesses({}, { includeNonPublic: true, limit: 500 }),
+    getRecentAdvertiseInquiries(20),
   ]);
   const discoverWriteEnabled = isSupabaseServiceConfigured();
   const moderationQueueCount = moderationReports.length + snapshot.flaggedPosts.length;
@@ -340,6 +344,8 @@ export async function AdminPageView({ locale }: { locale: Locale }) {
           </div>
         </div>
       </section>
+
+      <AdminAdvertiseInquiriesPanel inquiries={adminAdvertiseInquiries} locale={locale} />
 
       <AdminLeadOverview counts={adminLeadCounts} inquiries={adminRecentInquiries} locale={locale} />
 

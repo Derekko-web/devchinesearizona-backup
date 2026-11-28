@@ -61,10 +61,10 @@ describe('BusinessDetailPageView', () => {
     expect(html).toContain('ChineseLosAngeles will check and update it');
     expect(html).toContain('Listed from public sources');
     expect(html).toContain('"addressRegion":"CA"');
-    expect(html).toContain('https://chineselosangeles.com/en/business/lunasia-dim-sum-house-alhambra');
+    expect(html).toContain('https://chineselosangeles.com/business/lunasia-dim-sum-house-alhambra');
     expect(html).not.toContain('ChineseArizona will check');
     expect(html).not.toContain('"addressRegion":"AZ"');
-    expect(html).not.toContain('https://chinesearizona.com/en/business/lunasia-dim-sum-house-alhambra');
+    expect(html).not.toContain('https://chinesearizona.com/business/lunasia-dim-sum-house-alhambra');
   });
 
   it('shows the full description once, in the About section, not again in the top section', async () => {
