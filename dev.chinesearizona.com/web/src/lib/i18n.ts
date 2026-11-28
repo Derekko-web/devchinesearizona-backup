@@ -47,8 +47,9 @@ export function t(value: LocalizedText, locale: Locale): string {
   return value.en;
 }
 
+// Traditional Chinese as used in Taiwan.
 export function localeLangAttribute(locale: Locale): string {
-  return locale === 'zh' ? 'zh-Hant' : 'en';
+  return locale === 'zh' ? 'zh-Hant-TW' : 'en';
 }
 
 export function localeName(locale: Locale, displayLocale: Locale = locale): string {
