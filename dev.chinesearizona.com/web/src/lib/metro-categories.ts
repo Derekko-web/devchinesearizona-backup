@@ -1,6 +1,7 @@
 import { businessCategories } from '@/data/platform-data';
 import { getDirectoryBusinesses, getDirectoryCategories } from '@/lib/directory';
 import { t } from '@/lib/i18n';
+import { hasChineseSpokenLanguage } from '@/lib/listing-trust';
 import { defaultSiteProfile, hasLiveDirectoryData, type SiteProfile } from '@/lib/site-config';
 import type { Business, BusinessCategory, Locale } from '@/lib/types';
 
@@ -136,6 +137,24 @@ const categoryCopy: Record<string, { heading: Copy; intro: Copy }> = {
   },
 };
 
+// A page may say "Chinese-speaking" only when enough of its own listings record
+// a Chinese spoken language; then those listings get their own section and the
+// title and description may say so. Below this, the plain wording stays (#480).
+export const MIN_CHINESE_SPEAKING_LISTINGS = 3;
+
+// What the Chinese-speaking listings in a category are, for the section heading
+// and the title. Falls back to the category heading.
+const chineseSpeakingNouns: Record<string, Copy> = {
+  'real-estate': { en: 'Realtors', zh: '房地產經紀' },
+  dining: { en: 'Restaurants', zh: '餐廳' },
+  medical: { en: 'Doctors & Clinics', zh: '醫師與診所' },
+  'legal-finance': { en: 'Lawyers, Accountants & Insurance', zh: '律師、會計與保險' },
+  education: { en: 'Schools & Tutors', zh: '學校與補習' },
+  shopping: { en: 'Shops & Markets', zh: '商店與超市' },
+  'faith-community': { en: 'Churches & Temples', zh: '教會與寺廟' },
+  jobs: { en: 'Career Services', zh: '職涯服務' },
+};
+
 function pick(locale: Locale, copy: Copy): string {
   return locale === 'zh' ? copy.zh : copy.en;
 }
@@ -225,9 +244,58 @@ export function formatCityListingCountLine(count: number, cityLabel: string, loc
   return `${count} ${count === 1 ? 'listing' : 'listings'} in ${cityLabel}`;
 }
 
-export function getMetroCategoryTitle(category: BusinessCategory, site: SiteProfile, locale: Locale): string {
-  const heading = getMetroCategoryHeading(category, locale);
+export function getChineseSpeakingNoun(category: BusinessCategory, locale: Locale): string {
+  const noun = chineseSpeakingNouns[category.slug];
+  return noun ? pick(locale, noun) : getMetroCategoryHeading(category, locale);
+}
+
+export function splitChineseSpeakingListings(listings: Business[]): {
+  chineseSpeaking: Business[];
+  others: Business[];
+} {
+  const chineseSpeaking = listings.filter((business) => hasChineseSpokenLanguage(business.languages));
+  const others = listings.filter((business) => !hasChineseSpokenLanguage(business.languages));
+  return { chineseSpeaking, others };
+}
+
+export function countChineseSpeakingListings(listings: Business[]): number {
+  return splitChineseSpeakingListings(listings).chineseSpeaking.length;
+}
+
+export function hasChineseSpeakingSection(listings: Business[]): boolean {
+  return countChineseSpeakingListings(listings) >= MIN_CHINESE_SPEAKING_LISTINGS;
+}
+
+// "Chinese-speaking doctors & clinics (5)" / 「會說中文的醫師與診所（5）」
+export function formatChineseSpeakingHeading(category: BusinessCategory, count: number, locale: Locale): string {
+  const noun = getChineseSpeakingNoun(category, locale);
+  return locale === 'zh' ? `會說中文的${noun}（${count}）` : `Chinese-speaking ${noun.toLowerCase()} (${count})`;
+}
+
+export function formatOtherListingsHeading(count: number, locale: Locale): string {
+  return locale === 'zh' ? `其他商家（${count}）` : `Other listings (${count})`;
+}
+
+// "5 of them are Chinese-speaking." / 「其中 5 家提供中文服務。」
+export function formatChineseSpeakingCountLine(count: number, locale: Locale): string {
+  return locale === 'zh' ? `其中 ${count} 家提供中文服務。` : `${count} of them are Chinese-speaking.`;
+}
+
+type CategoryTitleOptions = { chineseSpeaking?: boolean };
+
+export function getMetroCategoryTitle(
+  category: BusinessCategory,
+  site: SiteProfile,
+  locale: Locale,
+  options: CategoryTitleOptions = {}
+): string {
   const metro = getMetroLabel(site, locale);
+  if (options.chineseSpeaking) {
+    const noun = getChineseSpeakingNoun(category, locale);
+    return locale === 'zh' ? `${metro}${noun}・中文服務` : `Chinese-Speaking ${noun} in ${metro}`;
+  }
+
+  const heading = getMetroCategoryHeading(category, locale);
   return locale === 'zh' ? `${metro}${heading}` : `${heading} in ${metro}`;
 }
 
@@ -235,14 +303,17 @@ export function getCityCategoryTitle(
   category: BusinessCategory,
   cityLabel: string,
   site: SiteProfile,
-  locale: Locale
+  locale: Locale,
+  options: CategoryTitleOptions = {}
 ): string {
-  const heading = getMetroCategoryHeading(category, locale);
-  if (locale === 'zh') {
-    return `${cityLabel}${heading}`;
+  const place = locale === 'en' && site.stateCode ? `${cityLabel}, ${site.stateCode}` : cityLabel;
+  if (options.chineseSpeaking) {
+    const noun = getChineseSpeakingNoun(category, locale);
+    return locale === 'zh' ? `${cityLabel}${noun}・中文服務` : `Chinese-Speaking ${noun} in ${place}`;
   }
 
-  return site.stateCode ? `${heading} in ${cityLabel}, ${site.stateCode}` : `${heading} in ${cityLabel}`;
+  const heading = getMetroCategoryHeading(category, locale);
+  return locale === 'zh' ? `${cityLabel}${heading}` : `${heading} in ${place}`;
 }
 
 export function formatListingCountLine(summary: MetroCategorySummary, locale: Locale): string {
