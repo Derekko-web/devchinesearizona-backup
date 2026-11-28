@@ -12,7 +12,7 @@ import {
 import { siteProfiles } from '@/lib/site-config';
 import type { Business } from '@/lib/types';
 
-type SeoBusiness = Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages' | 'bilingual'>;
+type SeoBusiness = Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages'>;
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: { href: string; children: ReactNode; [key: string]: unknown }) => (
@@ -39,7 +39,6 @@ const realtor: SeoBusiness = {
   city: 'Phoenix',
   categorySlug: 'real-estate',
   languages: ['English', 'Mandarin'],
-  bilingual: false,
 };
 
 const clinic: SeoBusiness = {
@@ -47,7 +46,6 @@ const clinic: SeoBusiness = {
   city: 'Tucson',
   categorySlug: 'medical',
   languages: ['English'],
-  bilingual: false,
 };
 
 describe('business search titles', () => {
@@ -70,9 +68,17 @@ describe('business search titles', () => {
       'Desert Clinic – Medical & Health Care in Tucson, AZ | ChineseArizona'
     );
     // "Traditional Chinese" is a written language (menus), not a spoken one.
-    expect(speaksChinese({ languages: ['English', 'Traditional Chinese'], bilingual: false })).toBe(false);
-    expect(speaksChinese({ languages: ['English'], bilingual: true })).toBe(true);
-    expect(speaksChinese({ languages: ['Cantonese'], bilingual: false })).toBe(true);
+    expect(speaksChinese({ languages: ['English', 'Traditional Chinese'] })).toBe(false);
+    expect(speaksChinese({ languages: ['Cantonese'] })).toBe(true);
+    expect(speaksChinese({ languages: [] })).toBe(false);
+  });
+
+  it('ignores the bilingual flag, which is a scraper default and not evidence', () => {
+    const flaggedRestaurant = { ...clinic, categorySlug: 'dining', bilingual: true };
+    expect(speaksChinese(flaggedRestaurant)).toBe(false);
+    expect(buildBusinessSeoTitle(flaggedRestaurant, siteProfiles.arizona, 'en')).toBe(
+      'Desert Clinic – Restaurant & Food in Tucson, AZ | ChineseArizona'
+    );
   });
 
   it('handles a missing city and an unknown category', () => {

@@ -223,7 +223,7 @@ describe('indexing signals', () => {
     expect(addMetadata.alternates?.canonical).toBe('https://chinesesfbay.com/add-business');
     expect(JSON.stringify(addMetadata)).not.toContain('ChineseArizona');
 
-    expect(business?.title).toBe('R&G Lounge – Chinese-Speaking Restaurant & Food in San Francisco, CA | ChineseSFBay');
+    expect(business?.title).toBe('R&G Lounge – Restaurant & Food in San Francisco, CA | ChineseSFBay');
     expect(business?.alternates?.canonical).toBe(
       'https://chinesesfbay.com/business/r-g-lounge-san-francisco'
     );

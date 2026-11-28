@@ -1,5 +1,6 @@
 import { businessCategories } from '@/data/platform-data';
 import { t } from '@/lib/i18n';
+import { hasChineseSpokenLanguage } from '@/lib/listing-trust';
 import { getLocalizedCityName } from '@/lib/metro-categories';
 import type { SiteProfile } from '@/lib/site-config';
 import type { Business, Locale } from '@/lib/types';
@@ -42,8 +43,6 @@ const businessSchemaTypes: Record<string, string> = {
   jobs: 'EmploymentAgency',
 };
 
-const chineseSpokenLanguages = new Set(['Mandarin', 'Cantonese', 'Taiwanese', 'Chinese']);
-
 function pick(locale: Locale, copy: Copy): string {
   return locale === 'zh' ? copy.zh : copy.en;
 }
@@ -62,10 +61,10 @@ export function getBusinessSchemaType(categorySlug: string): string {
   return businessSchemaTypes[categorySlug] ?? 'LocalBusiness';
 }
 
-// "Chinese-speaking" only when the listing says so: a Chinese spoken language,
-// or the bilingual-service flag the listing card already shows as a badge.
-export function speaksChinese(business: Pick<Business, 'languages' | 'bilingual'>): boolean {
-  return business.bilingual || business.languages.some((language) => chineseSpokenLanguages.has(language));
+// "Chinese-speaking" / 中文服務 only when `languages` records a Chinese spoken
+// language (issue #457). The `bilingual` column is a scraper default, not evidence.
+export function speaksChinese(business: Pick<Business, 'languages'>): boolean {
+  return hasChineseSpokenLanguage(business.languages);
 }
 
 function cityLabel(business: Pick<Business, 'city'>, site: SiteProfile, locale: Locale): string {
@@ -84,7 +83,7 @@ function cityLabel(business: Pick<Business, 'city'>, site: SiteProfile, locale: 
 // EN: "Hedy Li – Chinese-Speaking Real Estate in Phoenix, AZ | ChineseArizona"
 // ZH: "Hedy Li｜鳳凰城房地產・中文服務 | ChineseArizona"
 export function buildBusinessSeoTitle(
-  business: Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages' | 'bilingual'>,
+  business: Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages'>,
   site: SiteProfile,
   locale: Locale
 ): string {
@@ -103,7 +102,7 @@ export function buildBusinessSeoTitle(
 
 // Used only when a listing has no short description of its own.
 export function buildBusinessFallbackDescription(
-  business: Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages' | 'bilingual'>,
+  business: Pick<Business, 'name' | 'city' | 'categorySlug' | 'languages'>,
   site: SiteProfile,
   locale: Locale
 ): string {
