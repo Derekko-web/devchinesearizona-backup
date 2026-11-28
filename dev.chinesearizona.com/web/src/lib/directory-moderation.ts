@@ -3,6 +3,7 @@ import { getDirectoryCategories } from '@/lib/directory';
 import { createBusinessClaim, createModerationReport, getBusinessClaims, getModerationReports } from '@/lib/runtime-store';
 import { getSupabaseClient, getSupabaseServiceClient } from '@/lib/supabase';
 import type { BusinessClaim, BusinessCategory, ModerationReport, ProfileRole } from '@/lib/types';
+import { invalidateDirectoryCache } from '@/lib/directory-cache';
 
 type ClaimInput = {
   businessSlug?: string;
@@ -396,7 +397,7 @@ export async function submitBusinessClaim(input: ClaimInput): Promise<BusinessCl
   });
 }
 
-export async function approveBusinessClaim(input: ClaimApprovalInput): Promise<ClaimApprovalResult> {
+async function approveBusinessClaimWrite(input: ClaimApprovalInput): Promise<ClaimApprovalResult> {
   const client = getSupabaseServiceClient();
   if (!client) {
     throw new Error('Business claim approval requires Supabase configuration.');
@@ -694,4 +695,14 @@ export async function getModerationReportsSnapshot(): Promise<ModerationReport[]
   }
 
   return getModerationReports();
+}
+
+// Writes that change what a listing shows clear the shared directory cache (#524),
+// so the owner and visitors see the change on the next page load.
+export async function approveBusinessClaim(...args: Parameters<typeof approveBusinessClaimWrite>) {
+  try {
+    return await approveBusinessClaimWrite(...args);
+  } finally {
+    invalidateDirectoryCache();
+  }
 }
