@@ -9,6 +9,8 @@ Status:
 | Batch 1: 14 listings (`listing-expansion-2026-11.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): 256 → 270 rows, indexable 48 → 62, 14/14 rows match dev by md5 |
 | Corrections (`listing-expansion-2026-11-corrections.sql`) | Applied 2026-11-27 | **Applied 2026-11-27** (CEO approval): indexable 62 → 64; pre-check confirmed production held the rollback's before-values |
 | Batch 2a: 8 physicians + 2 language fixes (`listing-expansion-2026-11-batch2a*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Batch 2b: 8 therapists (`listing-expansion-2026-11-batch2b*.sql`, issue #487) | Applied 2026-11-28 | Not applied; waiting for CEO approval |
+| Pronoun fix for 6 batch 1 rows (`listing-expansion-2026-11-batch1-pronoun-fix*.sql`) | Applied 2026-11-28 | Not applied; waiting for CEO approval (production rows from batch 1) |
 
 ## Result
 
@@ -211,6 +213,43 @@ NPI records: `https://npiregistry.cms.hhs.gov/api/?version=2.1&number=<NPI>`.
 Also in this batch, per the CEO's decision that "Chinese" without a dialect is recorded as `{English, Chinese}`: `listing-expansion-2026-11-batch2a-corrections.sql` sets `languages` to `{English, Chinese}` for `cpa-worldwide-tax-service-chandler` and `apex-dental-care-gilbert` (guarded on the current value `{English}`); the rollback file restores `{English}`.
 
 To apply to production after approval: pre-check that none of the 8 slugs exist; run `listing-expansion-2026-11-batch2a.sql`, then `listing-expansion-2026-11-batch2a-corrections.sql`; post-check 8 rows present and indexable +8 (both corrected rows are already indexable). Rollback: `listing-expansion-2026-11-batch2a-rollback.sql` and `listing-expansion-2026-11-batch2a-corrections-rollback.sql`.
+
+## Batch 2b: Chinese-speaking therapists (issue #487)
+
+Language evidence under the CEO's rule (b): the profile each therapist manages on Psychology Today, which states "I also speak …". Each listing's copy ends with "Languages as listed on this therapist's Psychology Today profile, checked November 2026" (and the same in Chinese). The office address on the profile was cross-checked against the federal NPI registry (state boards block automated lookups, as above).
+
+**No phone is published for these 8.** Psychology Today shows call-tracking numbers that never match the number in the NPI registry, so neither source confirms the other. Each listing links to the Psychology Today profile, which has the contact options. Category: `medical` (there is no mental-health category).
+
+Psychology Today's Mandarin and Cantonese filters for the eight cities returned 21 Arizona profiles (one in Tucson). Of the 20 in metro Phoenix:
+
+| Outcome | Count |
+|---|---|
+| Added: office address on the profile matches the NPI registry | 8 |
+| Skipped: no office address on the profile (online only or not shown) | 7 |
+| Skipped: NPI address differs from the profile, or no NPI record | 2 |
+| Skipped: pre-licensed; associates (not the therapist) speak Mandarin; lists more than a dozen languages (interpreter-style practice) | 3 |
+
+| Slug | City | Licence (Arizona) | Languages | Sources |
+|---|---|---|---|---|
+| `angela-liu-lpc-gilbert` | Gilbert | LPC-20942 | English, Mandarin | https://www.psychologytoday.com/us/therapists/angela-liu-gilbert-az/1816093<br>NPI 1124760897 |
+| `june-lin-lee-lmft-tempe` | Tempe | LMFT-16277 | English, Mandarin, Taiwanese | https://www.psychologytoday.com/us/therapists/june-lin-lee-tempe-az/795868<br>NPI 1093298499 |
+| `kuo-yi-chung-phd-mesa` | Mesa | Psychologist 4180 | English, Mandarin | https://www.psychologytoday.com/us/therapists/kuo-yi-chung-mesa-az/102064<br>NPI 1023242229 |
+| `michelle-fowler-lpc-mesa` | Mesa | LPC-20211 | English, Mandarin | https://www.psychologytoday.com/us/therapists/michelle-fowler-mesa-az/436792<br>NPI 1518516715 |
+| `petty-go-lamft-glendale` | Glendale | LAMFT-10655 | English, Mandarin, Taiwanese | https://www.psychologytoday.com/us/therapists/petty-p-go-glendale-az/780294<br>NPI 1407444136 |
+| `shiru-zhou-lpc-scottsdale` | Scottsdale | LPC-23802 | English, Mandarin | https://www.psychologytoday.com/us/therapists/shiru-zhou-scottsdale-az/1034137<br>NPI 1144936386 |
+| `wen-chien-lin-lpc-tempe` | Tempe | 15861 | English, Mandarin, Taiwanese | https://www.psychologytoday.com/us/therapists/wen-chien-lin-tempe-az/1590516<br>NPI 1194154583 |
+| `wiser-counseling-anna-liu-scottsdale` | Scottsdale | 16803 | English, Mandarin | https://www.psychologytoday.com/us/therapists/wiser-counseling-anna-liu-scottsdale-az/749949<br>NPI 1992081186 |
+
+Notes: two NPI records are old (June Lin-Lee 2018, Kuo-Yi Chung 2011) but still match the profile's office. Petty P. Go holds an associate licence (LAMFT), which the copy says. Website scan: Psychology Today pages load for a browser and return 403 to the Googlebot user agent and to repeated automated requests. Duplicate check against production (slug, name, address, any Psychology Today link): none. These therapists already pay Psychology Today for their profiles, so they are reasonable advertising prospects.
+
+To apply to production after approval: pre-check none of the 8 slugs exist; run `listing-expansion-2026-11-batch2b.sql`; post-check 8 rows and indexable +8. Rollback: `listing-expansion-2026-11-batch2b-rollback.sql`.
+
+## Pronoun fix (batch 1 and batch 2a)
+
+The first drafts used gendered pronouns ("she", "his", 他/她) for people whose sources never state their pronouns, which is a fact we should not invent. Copy now uses the person's name instead, or "the profile" / "the agency". Pronouns are kept only where the business's own page uses them (Jill Yen, the three Merrill advisers, and Apex Dental Care's page about Dr. Wang).
+
+- Batch 2a and 2b SQL in this PR are already pronoun-free (the 8 batch 2a rows in dev were updated to match).
+- Six batch 1 rows are already in **production** with the old copy: `joseph-lau-state-farm-chandler`, `katie-lau-state-farm-mesa`, `tak-sun-comparion-insurance-chandler`, `ling-zhu-phoenix`, `christy-crouse-scottsdale`, `jean-woodland-scottsdale`. `listing-expansion-2026-11-batch1-pronoun-fix.sql` rewrites their four description fields, each update guarded on the current English description; the rollback restores the current text. Applied to dev; production waits for CEO approval.
 
 ## Follow-ups
 
