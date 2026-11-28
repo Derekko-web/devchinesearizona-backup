@@ -144,7 +144,7 @@ describe('Austin directory pages', () => {
     );
 
     expect(html).toContain('ChineseAustin business directory');
-    expect(html).toContain('Help trusted Austin Chinese businesses get found');
+    expect(html).toContain('Claim your business page. It&#x27;s free.');
     expect(html).not.toContain('ChineseArizona business directory');
     expect(html).not.toContain('Arizona Chinese business storefront');
     expect(html).not.toContain('/directory-ai-replacements/lee-lee-oriental-supermarket-chandler.webp');

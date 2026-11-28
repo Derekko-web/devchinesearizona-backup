@@ -11,7 +11,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
   },
   excerpt: {
     en: 'How to search by insurance network and language, your right to a free medical interpreter, how dental coverage works for adults, children, and Medicare, and how to check a provider\'s license and avoid surprise bills.',
-    zh: '如何依保險網絡與語言找醫師、你有權免費使用醫療口譯、成人、兒童與 Medicare 的牙科保障差異，以及如何查證醫師執照、避免意外帳單。',
+    zh: '如何依保險網路與語言找醫師、你有權免費使用醫療口譯、成人、兒童與 Medicare 的牙科保障差異，以及如何查證醫師執照、避免意外帳單。',
   },
   heroImage:
     'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=1200&q=80',
@@ -21,7 +21,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
   body: [
     {
       en: 'For many families, a doctor who speaks Mandarin or Cantonese makes the difference between explaining symptoms clearly and nodding along. But language is only one filter. A doctor is only affordable if they are in your insurance network, close enough to reach when a child is sick, and taking new patients. The fastest search starts with your plan, not with a name from a group chat.',
-      zh: '對很多家庭來說，醫師會不會說國語或粵語，決定了你是能把症狀講清楚，還是只能點頭。不過語言只是條件之一：醫師要在你的保險網絡內才負擔得起，距離要近到孩子生病時去得了，還要有在收新病人。最快的找法是從你的保險計畫開始，而不是從群組裡聽來的名字開始。',
+      zh: '對很多家庭來說，醫師會不會說國語或粵語，決定了你是能把症狀講清楚，還是只能點頭。不過語言只是條件之一：醫師要在你的保險網路內才負擔得起，距離要近到孩子生病時去得了，還要有在收新病人。最快的找法是從你的保險計畫開始，而不是從群組裡聽來的名字開始。',
     },
     {
       en: 'If you cannot find a Chinese-speaking provider who fits, you still have options. Under a federal rule, health programs that receive federal financial assistance must provide language assistance free of charge, including a qualified interpreter when interpretation is needed. They may not require you to bring or pay for your own interpreter.',
@@ -35,7 +35,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
   quickChecklist: [
     {
       en: 'Start with your plan\'s provider directory and filter by location and specialty. Your network is the set of providers your plan has contracted with.',
-      zh: '先用保險計畫的醫師名錄，依地點與科別篩選。所謂網絡，就是與你的計畫簽約的醫療院所與醫師。',
+      zh: '先用保險計畫的醫師名錄，依地點與科別篩選。所謂網路，就是與你的計畫簽約的醫療院所與醫師。',
     },
     {
       en: 'Call the office before booking. Confirm it takes your exact plan, is accepting new patients, and whether the doctor or front desk staff speak Mandarin or Cantonese.',
@@ -55,7 +55,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
     },
     {
       en: 'Book a preventive visit early. In-network preventive services are generally covered at no cost to you.',
-      zh: '及早安排預防保健門診。網絡內的預防保健服務一般不需要自付費用。',
+      zh: '及早安排預防保健門診。網路內的預防保健服務一般不需要自付費用。',
     },
   ],
   detailSections: [
@@ -76,7 +76,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
         },
         {
           en: 'HealthCare.gov says that in most cases you will not pay a copayment or coinsurance for certain preventive services, such as immunizations and screening tests, from an in-network provider, even before you meet your deductible.',
-          zh: 'HealthCare.gov 說明，在網絡內接受特定預防保健服務（例如疫苗與篩檢），多數情況下不需要付共付額或共保額，即使還沒達到自付額也一樣。',
+          zh: 'HealthCare.gov 說明，在網路內接受特定預防保健服務（例如疫苗與篩檢），多數情況下不需要付共付額或共保額，即使還沒達到自付額也一樣。',
         },
       ],
     },
@@ -127,7 +127,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
         },
         {
           en: 'The federal No Surprises Act protects most insured people from unexpected out-of-network bills for emergency room visits, certain non-emergency care at in-network hospitals and surgery centers, and air ambulance services.',
-          zh: '聯邦《無意外帳單法》（No Surprises Act）保護多數有保險的人，避免在急診、於網絡內醫院或手術中心接受的特定非急診照護，以及空中救護時，收到意外的網絡外帳單。',
+          zh: '聯邦《無意外帳單法》（No Surprises Act）保護多數有保險的人，避免在急診、於網路內醫院或手術中心接受的特定非急診照護，以及空中救護時，收到意外的網路外帳單。',
         },
         {
           en: 'If you do not have or use insurance, providers usually must give you a good faith estimate when you schedule care in advance or ask for one. You may be able to dispute the bill if it is at least $400 more than the estimate.',
@@ -156,7 +156,7 @@ export const chineseSpeakingDoctorDentistGuide: Guide = {
   ],
   officialResources: [
     {
-      label: { en: 'What a provider network is', zh: '什麼是醫療網絡' },
+      label: { en: 'What a provider network is', zh: '什麼是醫療網路' },
       url: 'https://www.healthcare.gov/glossary/network/',
       source: 'HealthCare.gov',
     },

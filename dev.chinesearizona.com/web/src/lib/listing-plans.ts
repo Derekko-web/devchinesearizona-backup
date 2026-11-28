@@ -2,6 +2,7 @@ import type Stripe from 'stripe';
 
 import { getDirectoryAdsRuntimeMode, type DirectoryAdsRuntimeMode } from '@/lib/directory-ads';
 import {
+  LISTING_PLAN_FOUNDING_LIMIT,
   SPONSORED_CATEGORY_PLAN_LIMIT,
   addListingPlanTerm,
   findListingPlanOffer,
@@ -337,13 +338,15 @@ type OwnedBusiness = {
   name_en: string;
   city: string;
   categorySlug: string;
+  // Shown on the Stripe receipt instead of the slug (#469).
+  categoryName: string;
 };
 
 async function getOwnedLiveBusiness(profileId: string, businessSlug: string, locale: Locale): Promise<OwnedBusiness> {
   const { data, error } = await requireServiceClient()
     .from('businesses')
     .select(
-      'id, slug, owner_profile_id, name_en, city, status, verification_state, category:business_categories!inner (slug)'
+      'id, slug, owner_profile_id, name_en, city, status, verification_state, category:business_categories!inner (slug, name_en)'
     )
     .eq('slug', businessSlug)
     .maybeSingle();
@@ -360,7 +363,7 @@ async function getOwnedLiveBusiness(profileId: string, businessSlug: string, loc
     city: string;
     status: string;
     verification_state?: string | null;
-    category?: { slug: string } | Array<{ slug: string }> | null;
+    category?: { slug: string; name_en?: string | null } | Array<{ slug: string; name_en?: string | null }> | null;
   };
 
   if (row.owner_profile_id !== profileId) {
@@ -388,6 +391,7 @@ async function getOwnedLiveBusiness(profileId: string, businessSlug: string, loc
     name_en: row.name_en,
     city: row.city,
     categorySlug: category?.slug ?? '',
+    categoryName: category?.name_en?.trim() || category?.slug || '',
   };
 }
 
@@ -612,7 +616,7 @@ export async function createListingPlanCheckoutForProfile(input: {
             description: [
               business.name_en,
               business.city,
-              offer.planId === 'sponsored-category' ? business.categorySlug : '',
+              offer.planId === 'sponsored-category' ? business.categoryName : '',
               founding ? 'Founding sponsor price' : '',
             ]
               .filter(Boolean)
@@ -705,6 +709,29 @@ export async function handleListingPlanStripeEvent(event: Stripe.Event) {
       break;
     default:
       break;
+  }
+}
+
+// Founding spots left per plan, counted exactly the way checkout decides the
+// founding price (businesses with a founding row, refunded ones included), so
+// the number on /advertise never promises a price checkout won't give.
+// Undefined when the plans table can't be read: then no counter is shown.
+export async function getFoundingSpotsLeft(): Promise<Record<ListingPlanId, number> | undefined> {
+  if (!(await isListingPlansSchemaReady())) {
+    return undefined;
+  }
+
+  try {
+    const rows = await listFoundingRows();
+    return Object.fromEntries(
+      listingPlanIds.map((planId) => [
+        planId,
+        Math.max(0, LISTING_PLAN_FOUNDING_LIMIT - countFoundingBusinesses(rows, planId)),
+      ])
+    ) as Record<ListingPlanId, number>;
+  } catch (error) {
+    console.error('[listing-plans] Unable to count founding spots:', error);
+    return undefined;
   }
 }
 

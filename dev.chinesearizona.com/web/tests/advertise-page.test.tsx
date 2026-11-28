@@ -154,6 +154,8 @@ describe('AdvertisePageView', () => {
       expect(html).toContain('Sponsored / 贊助');
       expect(html).toContain(locale === 'zh' ? '評論與評分絕不販售' : 'Reviews and ratings are never for sale');
       expect(html).toContain(locale === 'zh' ? '退款與取消政策' : 'Refunds and cancellation');
+      // Pay-per-click is not on the price list and is hidden from owners (#468).
+      expect(html).not.toMatch(/pay-per-click|按點擊付費/i);
       expect(html).toContain('id="sponsored"');
       expect(html).toContain('id="advertise-inquiry"');
       expect(html).toContain('id="wechat"');
@@ -242,5 +244,50 @@ describe('links to the Advertise page', () => {
     expect(claimHtml).toContain('id="advertise-plans"');
     expect(claimHtml).toContain('href="/advertise"');
     expect(claimHtml).toContain('See plans and prices');
+  });
+});
+
+describe('AdvertisePageView founding counter and later plans', () => {
+  it('shows the exact founding spots left, closes a full offer and marks the newsletter slot as coming later', async () => {
+    const [{ AdvertisePageView }, { defaultSiteProfile }] = await Promise.all([
+      import('@/views/advertise-page'),
+      import('@/lib/site-config'),
+    ]);
+
+    const en = renderToStaticMarkup(
+      <AdvertisePageView
+        locale="en"
+        site={defaultSiteProfile}
+        foundingSpotsLeft={{ 'enhanced-listing': 7, 'sponsored-category': 0 }}
+      />
+    );
+    expect(en).toContain('7 of 10 founding spots left');
+    expect(en).toContain('All 10 founding spots are taken');
+    expect(en).toContain('Founding offer: $99/year for the first 10 businesses');
+    expect(en).not.toContain('Founding offer: half price');
+    expect(en).toContain('a founding price stays the same when you renew');
+    expect(en).toContain('Coming later');
+    expect(en).not.toContain('plan=newsletter-slot#contact');
+    // The "Who runs this" box waits for real details.
+    expect(en).not.toContain('advertise-contact-person');
+
+    const zh = renderToStaticMarkup(
+      <AdvertisePageView locale="zh" site={defaultSiteProfile} foundingSpotsLeft={{ 'enhanced-listing': 10, 'sponsored-category': 3 }} />
+    );
+    expect(zh).toContain('創始名額剩 10 / 10 個');
+    expect(zh).toContain('創始名額剩 3 / 10 個');
+    expect(zh).toContain('即將推出');
+    expect(zh).toContain('續約時維持創始價格');
+  });
+
+  it('shows no counter when the number is unknown', async () => {
+    const [{ AdvertisePageView }, { defaultSiteProfile }] = await Promise.all([
+      import('@/views/advertise-page'),
+      import('@/lib/site-config'),
+    ]);
+
+    const html = renderToStaticMarkup(<AdvertisePageView locale="en" site={defaultSiteProfile} />);
+    expect(html).not.toContain('founding spots');
+    expect(html).toContain('Founding offer: $99/year for the first 10 businesses');
   });
 });

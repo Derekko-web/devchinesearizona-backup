@@ -8,6 +8,16 @@ export const advertisePath = '/advertise';
 // Advertise page shows a "WeChat ID coming soon" note instead of an ID.
 export const advertiseWeChatId = '';
 
+// PLACEHOLDER for the CEO to fill once Derek gives the details (site feedback
+// section 9): who runs ChineseArizona, with a phone and WeChat. The "Who runs
+// this" box on /advertise stays hidden until `name` is filled in.
+export const advertiseContactPerson: { name: string; role: AdvertiseText; phone: string; wechat: string } = {
+  name: '',
+  role: { en: '', zh: '' },
+  phone: '',
+  wechat: '',
+};
+
 export type AdvertiseText = { en: string; zh: string };
 
 export type AdvertisePriceInterval = 'year' | 'month' | 'week' | 'send' | 'one-time';
@@ -41,6 +51,9 @@ export type AdvertisePlan = {
   includes: AdvertiseText[];
   // Paid placements always carry the "Sponsored / 贊助" label.
   labeledSponsored: boolean;
+  // Shown but not on sale yet (CEO decision 2026-11-27: the newsletter slot
+  // waits until the newsletter has subscribers).
+  comingLater?: boolean;
 };
 
 export type AdvertiseInquiryInput = {
@@ -149,7 +162,7 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
         zh: '創始優惠：前 10 家商家半價（$29.50／月 或 $295／年）',
       },
       summary: {
-        en: `One of the top 3 spots in a ${site.regionName} category, always labeled "${sponsoredLabel}".`,
+        en: `One of the top 3 spots in one ${site.regionName} category, always labeled "${sponsoredLabel}".`,
         zh: `${site.regionNameZh}分類頁前 3 名版位之一，一律標示「${sponsoredLabel}」。`,
       },
       includes: [
@@ -218,6 +231,7 @@ export function getAdvertisePlans(site: SiteProfile = defaultSiteProfile): Adver
         { en: `Labeled ${sponsoredLabel}`, zh: `標示 ${sponsoredLabel}` },
       ],
       labeledSponsored: true,
+      comingLater: true,
     },
     {
       id: 'sponsored-article',
@@ -257,8 +271,8 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
         }),
     plansHeading: pick(locale, { en: 'Plans and prices', zh: '方案與價格' }),
     plansIntro: pick(locale, {
-      en: 'All prices are in US dollars. Founding offers are for the first 10 businesses that sign up.',
-      zh: '所有價格以美元計。創始優惠僅限前 10 家加入的商家。',
+      en: 'All prices are in US dollars. Founding offers are for the first 10 businesses that sign up, and a founding price stays the same when you renew.',
+      zh: '所有價格以美元計。創始優惠僅限前 10 家加入的商家，續約時維持創始價格。',
     }),
     sponsored: {
       heading: pick(locale, { en: 'What "Sponsored" means', zh: '「贊助」是什麼意思' }),
@@ -297,10 +311,6 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
           zh: '月繳與週繳方案：可隨時取消。取消後不再自動續約，目前已付費的期間會持續到期末。',
         }),
         pick(locale, {
-          en: 'Unused pay-per-click budget is refunded on request.',
-          zh: '未使用的按點擊付費預算，可申請退還。',
-        }),
-        pick(locale, {
           en: 'One-time services can be cancelled for a full refund before we start the work.',
           zh: '一次性服務在我們開始製作前取消，可全額退款。',
         }),
@@ -328,6 +338,8 @@ export function getAdvertisePageCopy(locale: Locale, site: SiteProfile = default
     claimCta: pick(locale, { en: 'Claim your free listing', zh: '免費認領商家' }),
     buyCta: pick(locale, { en: 'Buy online in your dashboard', zh: '在商家後台線上購買' }),
     askCta: pick(locale, { en: 'Ask about this plan', zh: '詢問這個方案' }),
+    comingLaterCta: pick(locale, { en: 'Coming later', zh: '即將推出' }),
+    whoRunsThisHeading: pick(locale, { en: 'Who runs this', zh: '負責人' }),
   };
 }
 

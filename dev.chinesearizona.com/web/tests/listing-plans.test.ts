@@ -108,7 +108,7 @@ const ownedBusinessRow = {
   city: 'Chandler',
   status: 'live',
   verification_state: 'claimed',
-  category: { slug: 'restaurants' },
+  category: { slug: 'restaurants', name_en: 'Dining' },
 };
 
 type Fixture = {
@@ -560,6 +560,28 @@ describe('listingPlanReturnMessage', () => {
   });
 });
 
+describe('getFoundingSpotsLeft', () => {
+  it('counts founding spots left the same way checkout sets the founding price', async () => {
+    const foundingRows = [
+      { business_id: 'b-1', plan_id: 'enhanced-listing', founding: true },
+      // A renewal by the same business still counts once.
+      { business_id: 'b-1', plan_id: 'enhanced-listing', founding: true },
+      { business_id: 'b-2', plan_id: 'enhanced-listing', founding: true },
+      ...Array.from({ length: 10 }, (_, index) => ({
+        business_id: `s-${index}`,
+        plan_id: 'sponsored-category',
+        founding: true,
+      })),
+    ];
+    const { plans } = await loadPlans(planResolver({ foundingRows }));
+
+    await expect(plans.getFoundingSpotsLeft()).resolves.toEqual({
+      'enhanced-listing': 8,
+      'sponsored-category': 0,
+    });
+  });
+});
+
 describe('createListingPlanCheckoutForProfile', () => {
   const input = {
     baseUrl: 'https://chinesearizona.com',
@@ -606,6 +628,10 @@ describe('createListingPlanCheckoutForProfile', () => {
       unit_amount: 29_500,
       product_data: { name: 'Sponsored category spot (1 year)' },
     });
+    // The receipt names the category, not its slug (#469); the metadata keeps the slug.
+    expect(params.line_items[0].price_data.product_data.description).toBe(
+      'Lotus Kitchen · Chandler · Dining · Founding sponsor price'
+    );
   });
 
   it('charges the full price once 10 businesses have the founding offer', async () => {

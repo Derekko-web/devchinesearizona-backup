@@ -88,7 +88,7 @@ export const austinSiteProfile: SiteProfile = {
     },
     description: {
       en: 'Austin Chinese community news, source-linked local summaries, business resources, and bilingual newcomer context for Central Texas.',
-      zh: '奧斯汀華人社區新聞、附來源鏈接的本地摘要、商家資源與中德州雙語生活資訊。',
+      zh: '奧斯汀華人社區新聞、附來源連結的本地摘要、商家資源與中德州雙語生活資訊。',
     },
     canonicalBaseUrl: 'https://chineseaustin.com',
   },
@@ -297,7 +297,7 @@ export const austinSiteProfile: SiteProfile = {
     },
     newcomerBody: {
       en: 'Start with restaurants, Asian groceries, Chinese schools, community groups, health providers, housing help, and tax support built from Austin-specific public sources.',
-      zh: '從中餐、亞洲超市、中文學校、社區組織、健康服務、住房與報稅支持開始；資料來自奧斯汀本地公開來源。',
+      zh: '從中餐、亞洲超市、中文學校、社區組織、健康服務、住房與報稅協助開始；資料來自奧斯汀本地公開來源。',
     },
   },
 };

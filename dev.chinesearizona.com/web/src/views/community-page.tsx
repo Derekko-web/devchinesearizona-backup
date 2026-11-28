@@ -279,7 +279,7 @@ const pingPongClubs: CommunityResource[] = [
   {
     kind: 'pingpong',
     title: { en: 'Southern Arizona Table Tennis Association', zh: '南亞利桑那乒乓球協會' },
-    eyebrow: { en: 'Tucson-area club network', zh: 'Tucson 地區俱樂部網絡' },
+    eyebrow: { en: 'Tucson-area club network', zh: 'Tucson 地區俱樂部網路' },
     city: 'Tucson',
     address: 'Southern Arizona',
     imageUrl: '/community/pingpong/southern-arizona-table-tennis-association.jpg',
@@ -293,7 +293,7 @@ const pingPongClubs: CommunityResource[] = [
       { en: 'Best for regular players', zh: '適合固定打球者' },
     ],
     href: 'https://sattaonline.org/',
-    hrefLabel: { en: 'View network', zh: '查看網絡' },
+    hrefLabel: { en: 'View network', zh: '查看網路' },
   },
 ];
 

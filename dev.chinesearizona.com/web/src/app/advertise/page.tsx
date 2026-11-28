@@ -1,3 +1,5 @@
+import { hasOnlineCheckout } from '@/lib/advertise';
+import { getFoundingSpotsLeft } from '@/lib/listing-plans';
 import { advertiseMetadata } from '@/lib/page-metadata';
 import { getCurrentSiteProfile } from '@/lib/site-config.server';
 import { AdvertisePageView } from '@/views/advertise-page';
@@ -15,5 +17,13 @@ export async function generateMetadata() {
 
 export default async function Page({ searchParams }: PageProps) {
   const site = await getCurrentSiteProfile();
-  return <AdvertisePageView locale="en" site={site} searchParams={await searchParams} />;
+  const foundingSpotsLeft = hasOnlineCheckout(site) ? await getFoundingSpotsLeft() : undefined;
+  return (
+    <AdvertisePageView
+      locale="en"
+      site={site}
+      searchParams={await searchParams}
+      foundingSpotsLeft={foundingSpotsLeft}
+    />
+  );
 }
