@@ -50,6 +50,7 @@ import type {
   SortOption,
 } from '@/lib/types';
 import { compareMostPopularDirectoryBusinesses } from '@/lib/directory-highlights';
+import { compareListingsByOwnerAndDetail } from '@/lib/directory';
 import { matchesLanguageFilter } from '@/lib/listing-trust';
 
 type BusinessFilters = {
@@ -389,10 +390,6 @@ function filterBusinesses(
   });
 
   return filtered.sort((left, right) => {
-    if (sort === 'reviewed') {
-      return right.reviewCount - left.reviewCount;
-    }
-
     if (sort === 'newest') {
       return new Date(right.lastUpdated).getTime() - new Date(left.lastUpdated).getTime();
     }
@@ -412,7 +409,7 @@ function filterBusinesses(
       return sponsoredDelta;
     }
 
-    return right.rating - left.rating;
+    return compareListingsByOwnerAndDetail(left, right, locale);
   });
 }
 
